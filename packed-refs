@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled 
+b6d35f532875184c9ad46674b7d9cb1b77ed6fc0 refs/remotes/origin/gh-pages
+a8ddcb1983205fcdfcd3bce6ddcb5d6923b4106e refs/remotes/origin/master
+724ef7e2cdf15723c972e6f7e5b0f0f7a4939684 refs/remotes/origin/v0.3.0-release
+83801dc2ca32e4ae09c4b0fc4566f116a7803874 refs/remotes/origin/v0.3.1-release
+a8ddcb1983205fcdfcd3bce6ddcb5d6923b4106e refs/remotes/origin/v0.3.2-release
+42f06e2c5b9ed786f6be4cfcfccca5a0d7145532 refs/remotes/origin/warlock
+724ef7e2cdf15723c972e6f7e5b0f0f7a4939684 refs/tags/v0.3.0
