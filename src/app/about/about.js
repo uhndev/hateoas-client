@@ -1,7 +1,8 @@
 angular.module( 'dados.about', [
   'ui.router',
   'placeholders',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngform-builder'
 ])
 
 .config(function config( $stateProvider ) {

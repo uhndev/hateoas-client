@@ -3,6 +3,8 @@ angular.module( 'dados', [
   'templates-common',
   'dados.home',
   'dados.about',
+  'dados.list-editor',
+  'dados.formbuilder',
   'ui.router'
 ])
 

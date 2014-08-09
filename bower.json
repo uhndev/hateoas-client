@@ -13,7 +13,8 @@
     "JSONedit": "~0.1.0",
     "ng-table": "~0.3.3",
     "ngform-builder": "khchan/ngseed-form-builder",
-    "nglist-editor": "khchan/ngseed-list-editor"
+    "nglist-editor": "khchan/ngseed-list-editor",
+    "angular-ui-utils": "~0.1.1"
   },
   "resolutions": {
     "angular": "~1.3",
