@@ -1,7 +1,8 @@
-angular.module( 'ngBoilerplate.about', [
+angular.module( 'dados.about', [
   'ui.router',
   'placeholders',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngform-builder'
 ])
 
 .config(function config( $stateProvider ) {
@@ -24,6 +25,4 @@ angular.module( 'ngBoilerplate.about', [
     "And another choice for you.",
     "but wait! A third!"
   ];
-})
-
-;
+});
