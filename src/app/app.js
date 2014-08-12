@@ -8,7 +8,8 @@ angular.module( 'dados', [
 	'dados.formbuilder',
 	// 'dados.workflow',
 	'dados.error',
-	'ui.router'
+	'ui.router',
+	'dados.common.services.csrf'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {

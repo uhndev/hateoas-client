@@ -2,6 +2,7 @@ angular.module('dados.common.services.csrf', [])
   .constant('CSRF_API', 'http://localhost:1337/csrfToken')
   .factory('csrfRequestInterceptor' , [ '$q', '$injector', 'CSRF_API',
   function CsrfRequestInterceptor ($q , $injector, CSRF_URL) {
+    'use strict';
     var _token = false;
     return {
       request : function InterceptRequest(config){
