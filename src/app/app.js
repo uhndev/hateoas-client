@@ -6,7 +6,7 @@ angular.module( 'dados', [
 	'dados.about',
 	'dados.list-editor',
 	'dados.formbuilder',
-	// 'dados.workflow',
+	'dados.workflow',
 	'dados.error',
 	'ui.router',
 	'dados.common.services.csrf'
