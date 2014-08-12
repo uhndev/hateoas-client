@@ -67,6 +67,8 @@ module.exports = {
       'vendor/jquery/jquery.min.js',
       'vendor/jquery-ui/ui/minified/jquery-ui.min.js',
       'vendor/angular/angular.js',
+      'vendor/angular-loader/angular-loader.min.js',
+      'vendor/angular-resource/angular-resource.min.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
@@ -81,6 +83,7 @@ module.exports = {
     css: [
     ],
     assets: [
+      'vendor/bootstrap/dist/fonts/*'
     ]
   },
 };
