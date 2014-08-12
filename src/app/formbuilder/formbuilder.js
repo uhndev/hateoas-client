@@ -3,7 +3,7 @@ angular.module( 'dados.formbuilder', [
   'ui.bootstrap',
   'ui.sortable',
   'ui.validate',
-  'dados.common.services.rest',
+  'ngResource',
   'ngform-builder'
 ])
 
@@ -21,16 +21,13 @@ angular.module( 'dados.formbuilder', [
   });
 })
 
-.controller('FormBuilderCtrl', function ($scope, $timeout, $stateParams, RestService) {
+.controller('FormBuilderCtrl', function ($scope, $timeout, $resource, $stateParams) {
   $scope.alerts = [];
   $scope.form = {};
   $scope.formID = $stateParams.formID || '';
 
   var addAlert = function(msg) {
       $scope.alerts.push(msg);
-      $timeout(function() {
-          $scope.alerts.splice(0);
-      }, 5000);
   };
 
   if ($scope.formID !== '') {
@@ -40,13 +37,12 @@ angular.module( 'dados.formbuilder', [
   }
 
   $scope.saveForm = function() {
-    addAlert({msg: 'Saved form successfully!', type: 'success'}); 
-      // RestService.create('form', $scope.testForm, function(err) {
-      //     console.log(err);
-      //     addAlert({msg: err, type: 'danger'});
-      // }).then(function () {
-      //     addAlert({msg: 'Saved form successfully!', type: 'success'});
-      // });
+    var form = $resource('http://localhost:1337/form');
+    form.save($scope.form, function(resp) {
+      addAlert({msg: 'Saved form successfully!', type: 'success'});
+    }, function (err) {
+      addAlert({msg: err, type: 'danger'});
+    });
   };
 
   $scope.closeAlert = function(index) {
