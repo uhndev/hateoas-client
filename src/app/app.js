@@ -6,7 +6,8 @@ angular.module( 'dados', [
   'dados.list-editor',
   'dados.formbuilder',
   'dados.workflow',
-  'ui.router'
+  'ui.router',
+  'dados.common.services.csrf'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
