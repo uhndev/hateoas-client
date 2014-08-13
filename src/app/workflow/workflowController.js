@@ -21,18 +21,8 @@ function($scope, $filter, DEFAULT_LINK, Workflow) {
   };
   $scope.state = angular.copy(DEFAULT_STATE);
 
-  $scope.save = function(data) {
-    var state = new Workflow(data);
-    if (_.has(state, 'id')) {
-      state.$update();
-    } else {
-      state.$save();
-    }
-  };
-
-  $scope.archive = function(data) {
-    Workflow.remove(data);
-  };
+  $scope.save = Workflow.set;
+  $scope.archive = Workflow.archive;
 
   $scope.$watch('state.source.path', function(path) {
     if (!!path) {
