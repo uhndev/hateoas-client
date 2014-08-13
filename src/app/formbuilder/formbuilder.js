@@ -3,7 +3,8 @@ angular.module( 'dados.formbuilder', [
   'ui.bootstrap',
   'ui.sortable',
   'ui.validate',
-  'dados.common.services.rest',
+  'ngResource',
+  'dados.form.service',
   'ngform-builder'
 ])
 
@@ -21,32 +22,41 @@ angular.module( 'dados.formbuilder', [
   });
 })
 
-.controller('FormBuilderCtrl', function ($scope, $timeout, $stateParams, RestService) {
+.controller('FormBuilderCtrl', 
+function ($scope, $timeout, $resource, $stateParams, Form) {
   $scope.alerts = [];
   $scope.form = {};
   $scope.formID = $stateParams.formID || '';
 
   var addAlert = function(msg) {
       $scope.alerts.push(msg);
-      $timeout(function() {
-          $scope.alerts.splice(0);
-      }, 5000);
+  };
+
+  var success = function(data) {
+    addAlert({msg: 'Saved form successfully!', type: 'success'});
+  };
+
+  var error = function(err) {
+    addAlert({msg: err, type: 'danger'});
   };
 
   if ($scope.formID !== '') {
     // make rest call here to load form from ID
-    console.log('Loading form: ' + $scope.formID);
-    addAlert({msg: 'Loaded form '+$scope.formID+' successfully!', type: 'danger'});
+    Form.get({id: $scope.formID}).$promise.then(function(form) {
+       $scope.form = form;
+       addAlert({msg: 'Loaded form '+$scope.form.form_name+' successfully!', type: 'success'});
+    }, function(errResponse) {
+       addAlert({msg: 'Unable to load form! ' + err, type: 'danger'});
+    });
   }
 
   $scope.saveForm = function() {
-    addAlert({msg: 'Saved form successfully!', type: 'success'}); 
-      // RestService.create('form', $scope.testForm, function(err) {
-      //     console.log(err);
-      //     addAlert({msg: err, type: 'danger'});
-      // }).then(function () {
-      //     addAlert({msg: 'Saved form successfully!', type: 'success'});
-      // });
+    var form = new Form($scope.form);
+    if (_.has(form, 'id')) {
+      form.$update().then(success).catch(error);
+    } else {
+      form.$save().then(success).catch(error);
+    }
   };
 
   $scope.closeAlert = function(index) {

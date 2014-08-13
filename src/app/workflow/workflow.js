@@ -1,5 +1,6 @@
 angular.module('dados.workflow',
-            ['ui.router',
+            ['ui.ace',
+             'ui.router',
              'dados.workflow.controller',
              'JSONedit'])
        .config(['$stateProvider',
