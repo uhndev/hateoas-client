@@ -4,6 +4,7 @@ angular.module( 'dados.formbuilder', [
   'ui.sortable',
   'ui.validate',
   'ngResource',
+  'dados.form.service',
   'ngform-builder'
 ])
 
@@ -21,7 +22,8 @@ angular.module( 'dados.formbuilder', [
   });
 })
 
-.controller('FormBuilderCtrl', function ($scope, $timeout, $resource, $stateParams) {
+.controller('FormBuilderCtrl', 
+function ($scope, $timeout, $resource, $stateParams, Form) {
   $scope.alerts = [];
   $scope.form = {};
   $scope.formID = $stateParams.formID || '';
@@ -30,19 +32,31 @@ angular.module( 'dados.formbuilder', [
       $scope.alerts.push(msg);
   };
 
+  var success = function(data) {
+    addAlert({msg: 'Saved form successfully!', type: 'success'});
+  };
+
+  var error = function(err) {
+    addAlert({msg: err, type: 'danger'});
+  };
+
   if ($scope.formID !== '') {
     // make rest call here to load form from ID
-    console.log('Loading form: ' + $scope.formID);
-    addAlert({msg: 'Loaded form '+$scope.formID+' successfully!', type: 'danger'});
+    Form.get({id: $scope.formID}).$promise.then(function(form) {
+       $scope.form = form;
+       addAlert({msg: 'Loaded form '+$scope.form.form_name+' successfully!', type: 'success'});
+    }, function(errResponse) {
+       addAlert({msg: 'Unable to load form! ' + err, type: 'danger'});
+    });
   }
 
   $scope.saveForm = function() {
-    var form = $resource('http://localhost:1337/form');
-    form.save($scope.form, function(resp) {
-      addAlert({msg: 'Saved form successfully!', type: 'success'});
-    }, function (err) {
-      addAlert({msg: err, type: 'danger'});
-    });
+    var form = new Form($scope.form);
+    if (_.has(form, 'id')) {
+      form.$update().then(success).catch(error);
+    } else {
+      form.$save().then(success).catch(error);
+    }
   };
 
   $scope.closeAlert = function(index) {

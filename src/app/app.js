@@ -9,7 +9,7 @@ angular.module( 'dados', [
 	'dados.workflow',
 	'dados.error',
 	'ui.router',
-	'dados.common.services.csrf'
+	// 'dados.common.services.csrf'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
