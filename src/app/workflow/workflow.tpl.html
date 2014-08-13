@@ -20,7 +20,9 @@
   
   <h2>JSON Text Editor</h2>
   <div>
-    <textarea class="form-control" ng-model="state.string"></textarea>
+    <div ui-ace="{
+      mode: 'javascript',
+    }" ng-model="state.string"></div>
     <span class="red" ng-if="!wellFormed">JSON not well-formed!</span>
   </div>
 
