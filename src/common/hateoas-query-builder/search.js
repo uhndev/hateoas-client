@@ -4,10 +4,10 @@ angular.module('hateoas.queryBuilder',[])
   function queryBuilder() {
     //@link https://github.com/balderdashy/waterline-criteria/blob/master/lib/filters/where.js
     function searchController ($scope, $http) {
+      $scope.query = {};
       $scope.groupOperators = [ 'and', 'or' ];
       $scope.criteria = [
         'not',
-        'equals',
         'greaterThan',
         'greaterThanOrEqual',
         'lessThan',
@@ -16,6 +16,10 @@ angular.module('hateoas.queryBuilder',[])
         'endsWith',
         'contains',
         'like'];
+
+      $scope.search = function() {
+        
+      };
     }
 
     function postLink (scope, element, attribute, controller) {
@@ -27,11 +31,11 @@ angular.module('hateoas.queryBuilder',[])
     return {
       restrict: 'E',
       scope: {
-        fields: '&',
+        response: '&',
         callback: '&'
       },
       link: postLink
-    }
+    };
   }
 
-  ]);
+]);
