@@ -4,7 +4,7 @@ angular.module( 'dados', [
 	'dados.header',
 	'dados.home',
 	'dados.about',
-	'dados.list-editor',
+	'dados.forms',
 	'dados.formbuilder',
 	'dados.workflow',
 	'dados.error',
