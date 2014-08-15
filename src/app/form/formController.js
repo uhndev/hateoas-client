@@ -10,8 +10,16 @@ angular.module( 'dados.form.controller', [
   $scope.form = {};
   $scope.formID = $stateParams.formID || '';
 
+  $scope.list = [];
+  $scope.columns = [];
+  Form.query().$promise.then(function (forms) {
+    $scope.list = forms.items;
+  }, function (err) {
+    addAlert({msg: 'Unable to load forms ' + err, type: 'danger'});
+  });
+
   var addAlert = function(msg) {
-      $scope.alerts.push(msg);
+    $scope.alerts.push(msg);
   };
 
   var success = function(data) {
@@ -19,7 +27,7 @@ angular.module( 'dados.form.controller', [
   };
 
   var error = function(err) {
-    addAlert({msg: err, type: 'danger'});
+    addAlert({msg: err.data.raw.err, type: 'danger'});
   };  
   
   if ($scope.formID !== '') {
@@ -33,23 +41,10 @@ angular.module( 'dados.form.controller', [
   }
 
   $scope.saveForm = function() {
-    var form = new Form($scope.form);
-    if (_.has(form, 'id')) {
-      form.$update().then(success).catch(error);
-    } else {
-      form.$save().then(success).catch(error);
-    }
+    Form.set($scope.form, success, error);
   };
 
   $scope.closeAlert = function(index) {
-      $scope.alerts.splice(index, 1);
-  };  
-
-  $scope.list = [];
-  $scope.columns = [];
-  Form.query().$promise.then(function (forms) {
-    $scope.list = forms;
-  }, function (err) {
-    addAlert({msg: 'Unable to load forms ' + err, type: 'danger'});
-  });
+    $scope.alerts.splice(index, 1);
+  };
 });

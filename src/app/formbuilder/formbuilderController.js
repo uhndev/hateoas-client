@@ -7,8 +7,8 @@ angular.module( 'dados.formbuilder.controller', [
   'ngform-builder'
 ])
 
-.controller('FormBuilderCtrl', 
-function ($scope, $timeout, $stateParams, Form) {
+.controller('FormBuilderController', 
+function ($scope, $stateParams, Form) {
   $scope.alerts = [];
   $scope.form = {};
   $scope.formID = $stateParams.formID || '';
@@ -22,7 +22,7 @@ function ($scope, $timeout, $stateParams, Form) {
   };
 
   var error = function(err) {
-    addAlert({msg: err, type: 'danger'});
+    addAlert({msg: err.data.raw.err, type: 'danger'});
   };
 
   if ($scope.formID !== '') {
@@ -36,12 +36,7 @@ function ($scope, $timeout, $stateParams, Form) {
   }
 
   $scope.saveForm = function() {
-    var form = new Form($scope.form);
-    if (_.has(form, 'id')) {
-      form.$update().then(success).catch(error);
-    } else {
-      form.$save().then(success).catch(error);
-    }
+    Form.set($scope.form, success, error);
   };
 
   $scope.closeAlert = function(index) {
