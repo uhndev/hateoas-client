@@ -9,7 +9,7 @@ angular.module( 'dados.formbuilder', [
     url: '/formbuilder/:formID',
     views: {
       'main': {
-        controller: 'FormBuilderCtrl',
+        controller: 'FormBuilderController',
         templateUrl: 'formbuilder/formbuilder.tpl.html'     
       }
     },
