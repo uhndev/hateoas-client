@@ -8,7 +8,7 @@
       class="form-control"
       id="workflowState"
       ng-model="state.source"
-      ng-options="workflow as workflow.path for workflow in workflows">
+      ng-options="workflow as workflow.path for workflow in workflows.items">
       <option value="">-- New --</option>
     </select>
   </div>

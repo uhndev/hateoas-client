@@ -5,6 +5,7 @@ angular.module('dados.workflow.service', ['ngResource'])
 function WorkflowStateService (url, $resource) {
   'use strict';
   var Workflow = $resource(url + '/:id', {id : '@id'}, {
+    'query': { method: 'GET', isArray: false },
     'update' : { method: 'PUT' }
   });
 
