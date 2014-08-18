@@ -65,6 +65,7 @@ module.exports = {
       'vendor/sails.io.js/dist/sails.io.js',
       // angular dependencies
       'vendor/lodash/dist/lodash.min.js',
+      'vendor/angular-hateoas/hateoas.js',
       'vendor/jquery/jquery.min.js',
       'vendor/jquery/jquery.min.map',
       'vendor/jquery-ui/ui/minified/jquery-ui.min.js',

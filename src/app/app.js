@@ -7,8 +7,10 @@ angular.module( 'dados', [
 	'dados.forms',
 	'dados.formbuilder',
 	'dados.workflow',
+    'dados.person',
 	'dados.error',
 	'ui.router',
+    'hateoas.queryBuilder'
 	// 'dados.common.services.csrf'
 ])
 
