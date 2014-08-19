@@ -27,10 +27,10 @@ function ($scope, $stateParams, Form) {
 
   if ($scope.formID !== '') {
     // make rest call here to load form from ID
-    Form.get({id: $scope.formID}).$promise.then(function(form) {
+    Form.get({id: $scope.formID}).$promise.then(function (form) {
        $scope.form = form;
        addAlert({msg: 'Loaded form '+$scope.form.form_name+' successfully!', type: 'success'});
-    }, function(errResponse) {
+    }, function (err) {
        addAlert({msg: 'Unable to load form! ' + err, type: 'danger'});
     });
   }

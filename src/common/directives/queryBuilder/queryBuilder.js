@@ -63,7 +63,7 @@ angular.module('hateoas.queryBuilder', [])
       template: '&'
     },
     link: postLink,
-    templateUrl: 'queryBuilder/queryBuilder.tpl.html',
+    templateUrl: 'directives/queryBuilder/queryBuilder.tpl.html',
     controller: queryController
   };
 });

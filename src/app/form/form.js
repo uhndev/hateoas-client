@@ -7,7 +7,7 @@ angular.module( 'dados.forms', [
 .config(function config( $stateProvider ) {
   $stateProvider
   .state( 'forms', {
-    url: '/form/:formID',
+    url: '/forms',
     views: {
       'main': {
         controller: 'FormCtrl',

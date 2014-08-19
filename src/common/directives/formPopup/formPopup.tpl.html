@@ -1,0 +1,9 @@
+<div class="modal-body">
+	<div ng-show="error" class="text-center text-danger">
+		<h3>{{error}}</h3>
+		<div class="modal-footer">
+            <button class="btn btn-warning" ng-click="cancel()">Close</button>
+        </div>
+	</div>
+	<form-directive ng-if="!error" form="form" on-submit="ok()" on-cancel="cancel()"></form-directive>
+</div>

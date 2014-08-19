@@ -92,9 +92,11 @@ module.exports = {
       'vendor/nglist-editor/dist/nglist-editor.min.js'
     ],
     css: [
+      'vendor/font-awesome/css/font-awesome.min.css'
     ],
     assets: [
-      'vendor/bootstrap/dist/fonts/*'
+      'vendor/bootstrap/dist/fonts/*',
+      'vendor/font-awesome/fonts/*'
     ]
   },
 };

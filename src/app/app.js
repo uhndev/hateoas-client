@@ -1,6 +1,7 @@
 angular.module( 'dados', [
 	'templates-app',
 	'templates-common',
+	'dados.auth',
 	'dados.header',
 	'dados.home',
 	'dados.about',
