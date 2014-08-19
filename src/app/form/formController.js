@@ -1,6 +1,7 @@
 angular.module( 'dados.form.controller', [
   'ui.bootstrap',
   'dados.form.service',
+  'ngTable',
   'nglist-editor',
   'ngform-builder',
   'dados.common.directives.form-popup'
@@ -9,7 +10,7 @@ angular.module( 'dados.form.controller', [
 .controller('FormCtrl', function ($scope, $stateParams, Form) {
   $scope.alerts = [];
   $scope.form = {};
-  $scope.formID = '53f22587cb08d4b8093ddcf0';
+  $scope.formURL = 'http://localhost:1337/api/form/53f3a864e51118201fcc065f';
 
   $scope.list = [];
   $scope.columns = [];

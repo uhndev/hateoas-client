@@ -6,21 +6,27 @@ angular.module('dados.common.directives.form-popup', [
 .directive('formPopup', function () {
     return {
         restrict: 'E',
-        replace: true,
         scope: {
-            fid: '='
+            url: '='
         },
-        template: '<button class="btn btn-default" ng-click="open()">Open Form Modal</button>',
-        controller: 'FormPopupController'
+        template: '<button class="btn btn-default" ng-click="open()">{{text}}</button>',
+        controller: 'FormPopupController',
+        link: function (scope, element, attrs) {
+	        scope.text = attrs.text || 'Open';
+	    }
     };
 })
 
-.controller('FormPopupController', ['$scope', '$modal', 'Form',
-	function ($scope, $modal, Form) {
-		// Please note that $modalInstance represents a modal window (instance) dependency.
-		// It is not the same as the $modal service used above.
-		var ModalInstanceCtrl = function ($scope, $modalInstance, form) {
-			$scope.form = form;
+.controller('FormPopupController', ['$scope', '$resource', '$modal', 'Form',
+	function ($scope, $resource, $modal, Form) {
+		var ModalInstanceCtrl = function ($scope, $resource, $modalInstance, url) {
+			$scope.form = {};
+			var resource = $resource(url);
+			resource.get().$promise.then(function (form) {
+				$scope.form = form;
+			}, function(errResponse) {
+				$scope.error = 'Unable to load form!';
+			});
 
 			$scope.ok = function () {
 				console.log('ok');
@@ -32,13 +38,6 @@ angular.module('dados.common.directives.form-popup', [
 				$modalInstance.dismiss('cancel');
 			};
 		};
-		
-		$scope.form = {};
-		Form.get({id: $scope.fid}).$promise.then(function(form) {
-			$scope.form = form;
-		}, function(errResponse) {
-			console.log(errResponse);
-		});
 
 		$scope.open = function() {
 			var modalInstance = $modal.open({
@@ -46,8 +45,8 @@ angular.module('dados.common.directives.form-popup', [
 				controller: ModalInstanceCtrl,
 				size: 'lg',
 				resolve: {
-					form: function () {
-						return $scope.form;					
+					url: function () {
+						return $scope.url;					
 					}
 				}
 			});
