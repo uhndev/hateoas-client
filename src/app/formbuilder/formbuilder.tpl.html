@@ -1,4 +1,4 @@
-<div class="row">
+<div>
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 	<button type="button" class="btn btn-success pull-right" ng-click="saveForm()">Save Form</button>
 	<form-builder form="form"></form-builder>

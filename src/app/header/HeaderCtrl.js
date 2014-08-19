@@ -15,8 +15,10 @@ angular.module('dados.header', ['dados.common.services.authentication'])
      */
     function ($scope, $location, Authentication) {
         $scope.currentUser = Authentication.currentUser;
+        $scope.headerVisible = true;
 
         if (!$scope.currentUser) {
+            $scope.headerVisible = false;
             $location.url('/login');
         }
     }
