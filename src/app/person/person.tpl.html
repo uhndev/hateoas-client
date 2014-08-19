@@ -2,6 +2,61 @@
   <h1>
     People
   </h1>
-  <query-builder template="people.template" ng-if="people.template">
-  </query-builder>
+  <button type="button" class="btn btn-primary" 
+    ng-model="showAdvance" 
+    btn-checkbox 
+    btn-checkbox-true="1" 
+    btn-checkbox-false="0">
+    Advance Search
+  </button>
+  <table ng-table="tableParams" class="table">
+    <thead>
+      <tr>
+        <th ng-repeat="column in template.data"
+          class="text-center sortable" ng-class="{
+            'sort-asc': tableParams.isSortBy(column.rel, 'asc'),
+            'sort-desc': tableParams.isSortBy(column.rel, 'desc')
+          }" 
+          ng-click="tableParams.sorting(column.rel, tableParams.isSortBy(column.rel, 'asc') ? 'desc' : 'asc')">
+          {{ column.prompt }}
+        </th>
+        <th></th>
+      </tr>
+      <tr ng-hide="showAdvance">
+        <td ng-repeat="column in template.data">
+          <input type="text" 
+            class="form-control"
+            placeholder="Search {{ column.prompt }}"
+            ng-model="filters[column.rel]" />
+        </td>
+        <td>
+          <button class="btn btn-warning" ng-click="clearFilters()">
+            Reset
+          </button>
+        </td>
+      </tr>
+      <tr ng-show="showAdvance">
+        <td colspan="{{ template.data.length + 1 }}">
+          <query-builder 
+            template="resource.template" 
+            ng-model="query.where"
+            ng-if="resource.template">
+          </query-builder>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in $data">
+        <td ng-repeat="column in template.data"
+          sortable="column.rel">
+          {{ item[column.rel] }}
+        </td>
+        <td>
+          <button ng-click="select(item)">
+            Inspect
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

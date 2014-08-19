@@ -11,7 +11,7 @@ angular.module('hateoas.queryBuilder', [])
   .directive('queryBuilder', function() {
 
   function queryController($scope) {
-    $scope.query = {};
+    $scope.query = $scope.query || {};
 
     $scope.criteria = {
       'string': ['not', 'is', 'contains', 'like', 
@@ -22,6 +22,11 @@ angular.module('hateoas.queryBuilder', [])
     };
   
     $scope.groupOperators = ['and', 'or'];
+
+    $scope.reset = function() {
+      $scope.query = {};
+    };
+
     $scope.add = function (field, comparator, value) {
       if (/equals|is/i.test(comparator)) {
         $scope.query[field] = value;
@@ -54,8 +59,8 @@ angular.module('hateoas.queryBuilder', [])
   return {
     restrict: 'E',
     scope: {
-      template: '&',
-      callback: '&'
+      query: '=ngModel',
+      template: '&'
     },
     link: postLink,
     templateUrl: 'queryBuilder/queryBuilder.tpl.html',

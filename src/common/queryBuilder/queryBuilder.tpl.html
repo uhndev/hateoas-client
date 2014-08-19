@@ -1,42 +1,56 @@
 <div>
-  <fieldset>
-    <legend>Advance Search</legend> 
-    <ul ng-repeat="(property, expression) in query">
-     <li ng-if="expression|isString">
-        {{ property }} 
-        <i class="condition">
-          is
-        </i>
-        <b>
-          {{ expression | json }}
-        </b>
-      </li>
-      <li ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index">
-        {{ property }} 
-        <i> 
-          {{ cond }} 
-        </i>
-        <b ng-if="val|isArray">
-          {{ val.join(' or ') }} 
-        </b>
-        <b ng-if="!(val|isArray)">
-          {{ val }}
-        </b>
-      </li>
-    </ul>
-    <select ng-model="field" 
-      ng-options="field as field.prompt for field in fields">
-    </select>
-    <select ng-disabled="!!!field.type" 
-      ng-model="comparator" 
-      ng-options="criterion for criterion in criteria[field.type]">
-    </select>
-    <input ng-disabled="!!!field || !!!comparator" 
-      type="text" 
-      ng-model="value" />
+  <ul ng-repeat="(property, expression) in query">
+   <li ng-if="expression|isString">
+      {{ property }} 
+      <i class="condition">
+        is
+      </i>
+      <b>
+        {{ expression | json }}
+      </b>
+    </li>
+    <li ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index">
+      {{ property }} 
+      <i> 
+        {{ cond }} 
+      </i>
+      <b ng-if="val|isArray">
+        {{ val.join(' or ') }} 
+      </b>
+      <b ng-if="!(val|isArray)">
+        {{ val }}
+      </b>
+    </li>
+  </ul>
+  <form class="form-inline" role="form">
+    <div class="form-group">
+      <select ng-model="field" 
+        class="form-control"
+        ng-options="field as field.prompt for field in fields">
+      </select>
+    </div>
+    <div class="form-group">
+      <select ng-disabled="!!!field.type" 
+        class="form-control"
+        ng-model="comparator" 
+        ng-options="criterion for criterion in criteria[field.type]">
+      </select>
+    </div>
+    <div class="form-group">
+      <input ng-disabled="!!!field || !!!comparator" 
+        class="form-control"
+        type="text" 
+        ng-model="value" />
+    </div>
     <button ng-disabled="!!!field || !!!comparator || !!!value" 
+      class="btn btn-default"
       ng-click="add(field.rel, comparator, value)">
       Add
     </button>
-  </fieldset>
+    <button ng-disabled="!!!query"
+      class="btn btn-warning"
+      ng-click="reset">
+      Reset
+    </button>
+  </form>
 </div>
