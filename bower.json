@@ -19,7 +19,8 @@
     "angular-loader": "~1.2.22",
     "angular-sails": "~1.0.4",
     "sails.io.js": "~0.10.3",
-    "angular-ui-ace": "~0.1.1"
+    "angular-ui-ace": "~0.1.1",
+    "font-awesome": "~4.1.0"
   },
   "resolutions": {
     "angular": "~1.3",

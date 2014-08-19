@@ -65,6 +65,7 @@ module.exports = {
       'vendor/sails.io.js/dist/sails.io.js',
       // angular dependencies
       'vendor/lodash/dist/lodash.min.js',
+      'vendor/angular-hateoas/hateoas.js',
       'vendor/jquery/jquery.min.js',
       'vendor/jquery/jquery.min.map',
       'vendor/jquery-ui/ui/minified/jquery-ui.min.js',
@@ -91,9 +92,11 @@ module.exports = {
       'vendor/nglist-editor/dist/nglist-editor.min.js'
     ],
     css: [
+      'vendor/font-awesome/css/font-awesome.min.css'
     ],
     assets: [
-      'vendor/bootstrap/dist/fonts/*'
+      'vendor/bootstrap/dist/fonts/*',
+      'vendor/font-awesome/fonts/*'
     ]
   },
 };

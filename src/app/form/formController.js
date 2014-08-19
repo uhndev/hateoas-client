@@ -3,7 +3,7 @@ angular.module( 'dados.form.controller', [
   'dados.form.service',
   'nglist-editor',
   'ngform-builder',
-  'dados.common.directives.form-viewer'
+  'dados.common.directives.form-popup'
 ])
 
 .controller('FormCtrl', function ($scope, $stateParams, Form) {

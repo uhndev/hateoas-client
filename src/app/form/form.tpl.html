@@ -1,5 +1,5 @@
 <div class="row">
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-	<list-editor can-edit="false" list="list" columns="columns"></list-editor>
-	<form-viewer fid="formID"></form-viewer>
+	<list-editor canEdit="false" list="list" columns="columns"></list-editor>
+	<form-popup fid="formID"></form-popup>
 </div>
