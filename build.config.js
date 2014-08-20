@@ -70,6 +70,7 @@ module.exports = {
       'vendor/jquery/jquery.min.map',
       'vendor/jquery-ui/ui/minified/jquery-ui.min.js',
       'vendor/angular/angular.js',
+      'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/angular-loader/angular-loader.min.js',
       'vendor/angular-resource/angular-resource.min.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',

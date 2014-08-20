@@ -1,13 +1,34 @@
+/**
+ * Form Popup Directive
+ * --------------------
+ * Creates a button that opens a modal window that renders a given form by href.
+ * Note that the submit and cancel callbacks are passed all the way through to 
+ * the form-directive, which accepts its own pair of callbacks.
+ * 
+ * Attributes:
+ * url - href to the form object
+ * text - Text to appear on button
+ * onSubmit - callback function to execute on clicking submit
+ * onCancel - callback function to execute on clicking cancel
+ *
+ * Usage: <form-popup url="form.href" 
+ *                    text="Inspect" 
+ *                    on-submit="ok()" 
+ *                    on-cancel="cancel()">
+ *        </form-popup>
+ */
+
 angular.module('dados.common.directives.form-popup', [
-	'ui.bootstrap',
-	'ngform-builder',
+	'dados.common.directives.form-popup.controller'
 ])
 
 .directive('formPopup', function () {
     return {
         restrict: 'E',
         scope: {
-            url: '='
+            url: '=',
+            onSubmit: '&',
+            onCancel: '&'
         },
         template: '<button class="btn btn-default" ng-click="open()">{{text}}</button>',
         controller: 'FormPopupController',
@@ -15,47 +36,4 @@ angular.module('dados.common.directives.form-popup', [
 	        scope.text = attrs.text || 'Open';
 	    }
     };
-})
-
-.controller('FormPopupController', ['$scope', '$resource', '$modal', 'Form',
-	function ($scope, $resource, $modal, Form) {
-		var ModalInstanceCtrl = function ($scope, $resource, $modalInstance, url) {
-			$scope.form = {};
-			var resource = $resource(url);
-			resource.get().$promise.then(function (form) {
-				$scope.form = form;
-			}, function(errResponse) {
-				$scope.error = 'Unable to load form!';
-			});
-
-			$scope.ok = function () {
-				console.log('ok');
-				$modalInstance.close($scope.form);
-			};
-
-			$scope.cancel = function () {
-				console.log('cancel');
-				$modalInstance.dismiss('cancel');
-			};
-		};
-
-		$scope.open = function() {
-			var modalInstance = $modal.open({
-				templateUrl: 'directives/formPopup/formPopup.tpl.html',
-				controller: ModalInstanceCtrl,
-				size: 'lg',
-				resolve: {
-					url: function () {
-						return $scope.url;					
-					}
-				}
-			});
-
-			modalInstance.result.then(function (selectedItem) {
-				$scope.selected = selectedItem;
-			}, function () {
-				console.log('Modal dismissed at: ' + new Date());
-			});
-		};
-	}	
-]);
+});

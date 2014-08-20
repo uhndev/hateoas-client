@@ -10,12 +10,11 @@ HATEOAS = {
 
       Resource.set = function(data) {
         var resource = new Resource(data);
-        if (_.has(state, 'id')) {
-          resource.$update();
+        if (_.has(resource, 'id')) {
+          return resource.$update();
         } else {
-          resource.$save();
+          return resource.$save();
         }
-        return resource;
       };
     
       Resource.archive = function(data) {
