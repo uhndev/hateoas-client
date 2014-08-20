@@ -86,7 +86,6 @@ module.exports = {
       'vendor/ng-table/ng-table.min.js',
       'vendor/ng-table/ng-table.map',
       // plugins
-      'common/plugins/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/JSONedit/js/JSONEdit.js',
       'vendor/ngform-builder/dist/ngform-builder.min.js',
       'vendor/nglist-editor/dist/nglist-editor.min.js'

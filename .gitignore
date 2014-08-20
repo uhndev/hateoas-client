@@ -3,4 +3,7 @@
 build/
 bin/
 node_modules/
-vendor/
+vendor/*
+!vendor/angular-hateoas/
+!vendor/placeholders/
+!vendor/sails.io.js/
