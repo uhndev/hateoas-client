@@ -1,14 +1,22 @@
 <div>
   <h1>
     People
+    <small>
+      Total: {{ resource.total }}
+    </small>
   </h1>
-  <button type="button" class="btn btn-primary" 
-    ng-model="showAdvance" 
-    btn-checkbox 
-    btn-checkbox-true="1" 
-    btn-checkbox-false="0">
-    Advance Search
-  </button>
+  <query-builder 
+    template="resource.template" 
+    ng-model="query.where"
+    ng-if="resource.template">
+  </query-builder>
+  <div class="align-right">
+    <allow-nav
+      ng-if="allow"
+      data-allow="allow" 
+      data-selected="selected">
+    </allow-nav> 
+  </div>
   <table ng-table="tableParams" class="table">
     <thead>
       <tr>
@@ -20,41 +28,15 @@
           ng-click="tableParams.sorting(column.rel, tableParams.isSortBy(column.rel, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
-        <th></th>
-      </tr>
-      <tr ng-hide="showAdvance">
-        <td ng-repeat="column in template.data">
-          <input type="text" 
-            class="form-control"
-            placeholder="Search {{ column.prompt }}"
-            ng-model="filters[column.rel]" />
-        </td>
-        <td>
-          <button class="btn btn-warning" ng-click="clearFilters()">
-            Reset
-          </button>
-        </td>
-      </tr>
-      <tr ng-show="showAdvance">
-        <td colspan="{{ template.data.length + 1 }}">
-          <query-builder 
-            template="resource.template" 
-            ng-model="query.where"
-            ng-if="resource.template">
-          </query-builder>
-        </td>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in $data">
+      <tr ng-repeat="item in $data"
+        ng-click="select(item)"
+        ng-class="{'active': item === selected}">
         <td ng-repeat="column in template.data"
           sortable="column.rel">
-          {{ item[column.rel] }}
-        </td>
-        <td>
-          <button ng-click="select(item)">
-            Inspect
-          </button>
+          {{ item[column.rel] | formatter:column }}
         </td>
       </tr>
     </tbody>

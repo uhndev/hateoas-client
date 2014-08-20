@@ -1,0 +1,22 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-default" 
+    ng-click="create()"
+    ng-if="canCreate">
+    <i class="fa fa-file-o"></i>
+    Add
+  </button>
+  <button type="button" class="btn btn-default"
+    ng-click="update(selected)"
+    ng-disabled="!!!selected()"
+    ng-if="canUpdate">
+    <i class="fa fa-edit"></i>
+    Edit
+  </button>
+  <button type="button" class="btn btn-default"
+    ng-click="delete(selected)"
+    ng-disabled="!!!selected()"
+    ng-if="canDelete">
+    <i class="fa fa-trash-o"></i>
+    Remove
+  </button>
+</div>

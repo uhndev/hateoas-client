@@ -1,6 +1,5 @@
 angular.module('dados.person',
             ['ui.router',
-             'ngTable',
              'dados.person.controller'])
        .config(['$stateProvider',
 function workflowRoute ($stateProvider) {

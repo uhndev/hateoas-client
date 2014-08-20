@@ -1,24 +1,28 @@
 angular.module('dados.person.controller', 
-    ['dados.person.service', 'ngTable', 'dados.common.services.sails'])
+    ['ngTable', 'dados.common.services.sails'])
   .controller('PersonController', 
-    ['$scope', '$timeout', '$resource', 'Person', 'ngTableParams',
+    ['$scope', '$timeout', '$resource', 'ngTableParams',
      'sailsNgTable',
 
-  function($scope, $timeout, $resource, Resource, TableParams, SailsNgTable) {
-    $scope.filters = {};
-    $scope.clearFilters = function() {
-      $scope.filters = {};
-      $scope.tableParams.filter($scope.filters);
+  function($scope, $timeout, $resource, TableParams, SailsNgTable) {
+    var Resource = $resource('http://localhost:1337/api/person');
+
+    $scope.select = function(item) {
+      $scope.selected = ($scope.selected === item ? null : item);
     };
 
     $scope.query = { 'where' : {} };
-    $scope.$watchCollection('query.where', function(value) {
-      $scope.tableParams.reload();
-    });
-
-    $scope.showAdvance = 0;
-    $scope.$watch('showAdvance', function(value) {
-      $scope.query.where = {};
+    $scope.$watchCollection('query.where', function(newQuery, oldQuery) {
+      if (newQuery && !_.isEqual(newQuery, oldQuery)) {
+        // Page changes will trigger a reload. To reduce the calls to
+        // the server, force a reload only when the user is already on
+        // page 1.
+        if ($scope.tableParams.page() !== 1) {
+          $scope.tableParams.page(1);
+        } else {
+          $scope.tableParams.reload();
+        }
+      }
     });
 
     var TABLE_SETTINGS = {
@@ -31,7 +35,9 @@ angular.module('dados.person.controller',
       getData: function($defer, params) {
         var api = SailsNgTable.parse(params, $scope.query);
 
-        Resource.get(api, function(data) {
+        Resource.get(api, function(data, headers) {
+          $scope.selected = null;
+          $scope.allow = headers('allow');
           $scope.template = data.template;
           $scope.resource = angular.copy(data);
           $timeout(function() {

@@ -10,8 +10,10 @@ angular.module( 'dados', [
 	'dados.workflow',
     'dados.person',
 	'dados.error',
+    'dados.filters.formatter',
 	'ui.router',
-    'hateoas.queryBuilder'
+    'hateoas.queryBuilder',
+    'hateoas.allowNav'
 	// 'dados.common.services.csrf'
 ])
 
