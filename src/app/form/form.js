@@ -1,6 +1,5 @@
 angular.module( 'dados.forms', [
   'ui.router',
-  'nglist-editor',
   'dados.form.controller'
 ])
 

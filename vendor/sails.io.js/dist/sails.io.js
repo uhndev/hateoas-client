@@ -810,3 +810,4 @@ var io="undefined"==typeof module?{}:module.exports;(function(){(function(a,b){v
   return SailsIOClient();
 
 })();
+io.sails.url = 'http://localhost:1337';

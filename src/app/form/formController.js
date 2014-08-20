@@ -1,31 +1,55 @@
 angular.module( 'dados.form.controller', [
-  'ui.bootstrap',
-  'dados.form.service',
   'ngTable',
-  'nglist-editor',
-  'ngform-builder',
+  'dados.form.service',
+  'dados.common.services.sails',
   'dados.common.directives.form-popup'
 ])
 
-.controller('FormCtrl', function ($scope, $stateParams, Form) {
-  $scope.alerts = [];
-  $scope.form = {};
-  $scope.formURL = 'http://localhost:1337/api/form/53f3a864e51118201fcc065f';
+.controller('FormCtrl', ['$scope', '$timeout', '$resource', 'Form', 'ngTableParams', 'sailsNgTable',
+  function ($scope, $timeout, $resource, Resource, TableParams, SailsNgTable) {
+    $scope.filters = {};
+    $scope.clearFilters = function() {
+      $scope.filters = {};
+      $scope.tableParams.filter($scope.filters);
+    };
 
-  $scope.list = [];
-  $scope.columns = [];
+    $scope.ok = function () {
+      alert('OKAY CALLBACK');
+    };
 
-  Form.query().$promise.then(function (forms) {
-    $scope.list = forms.items;
-  }, function (err) {
-    addAlert({msg: 'Unable to load forms ' + err, type: 'danger'});
-  });
+    $scope.cancel = function () {
+      alert('CANCEL CALLBACK');
+    };
 
-  var addAlert = function(msg) {
-    $scope.alerts.push(msg);
-  };
+    $scope.query = { 'where' : {} };
+    $scope.$watchCollection('query.where', function(value) {
+      $scope.tableParams.reload();
+    });
 
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
-});
+    $scope.showAdvance = 0;
+    $scope.$watch('showAdvance', function(value) {
+      $scope.query.where = {};
+    });
+
+    var TABLE_SETTINGS = {
+      page: 1,
+      count: 10,
+      filter: $scope.filters
+    };
+
+    $scope.tableParams = new TableParams(TABLE_SETTINGS, { 
+      getData: function($defer, params) {
+        var api = SailsNgTable.parse(params, $scope.query);
+
+        Resource.get(api, function(data) {
+          $scope.template = data.template;
+          $scope.resource = angular.copy(data);
+          $timeout(function() {
+            params.total(data.total);
+            $defer.resolve(data.items);
+          });
+        });
+      }
+    });
+  }
+]);

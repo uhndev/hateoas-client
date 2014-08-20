@@ -41,5 +41,6 @@
   },
   "_source": "git://github.com/balderdashy/sails.io.js.git",
   "_target": "~0.10.3",
-  "_originalSource": "sails.io.js"
+  "_originalSource": "sails.io.js",
+  "_direct": true
 }
