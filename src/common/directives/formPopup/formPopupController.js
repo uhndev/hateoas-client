@@ -46,7 +46,12 @@ angular.module('dados.common.directives.form-popup.controller', [
 			});
 
 			modalInstance.result.then(function (data) {
-				console.log(data);
+				_.each(data.form_questions, function(question) {
+					// clean up carousel-added attribute
+					angular.copy(_.omit(question, 'active'), question);
+				});					
+				console.log('SAVE ANSWERSET HERE');
+				console.log(angular.copy(data));
 			}, function () {
 				console.log('Modal dismissed at: ' + new Date());
 			});
