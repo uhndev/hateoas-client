@@ -24,7 +24,7 @@ angular.module('dados.common.directives.form-popup', [
 
 .directive('formPopup', function () {
     return {
-        restrict: 'E',
+        restrict: 'AE',
         scope: {
             url: '=',
             onSubmit: '&',
@@ -32,8 +32,10 @@ angular.module('dados.common.directives.form-popup', [
         },
         template: '<button class="btn btn-default" ng-click="open()">{{text}}</button>',
         controller: 'FormPopupController',
-        link: function (scope, element, attrs) {
-	        scope.text = attrs.text || 'Open';
-	    }
+        link: {
+            pre: function (scope, element, attrs) {
+    	        scope.text = attrs.text || 'Open';
+            }
+        }
     };
 });

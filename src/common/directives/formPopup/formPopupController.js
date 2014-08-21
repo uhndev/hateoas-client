@@ -2,8 +2,9 @@ angular.module('dados.common.directives.form-popup.controller', [
 	'ngform-builder',
 ])
 
-.controller('FormPopupController', ['$scope', '$resource', '$modal', 'Form',
-	function ($scope, $resource, $modal, Form) {
+.controller('FormPopupController', ['$scope', '$resource', '$modal',
+	function ($scope, $resource, $modal) {
+
 		var ModalInstanceCtrl = function ($scope, $resource, $modalInstance, url, onSubmit, onCancel) {
 			$scope.form = {};
 			// retrieve form via href
@@ -46,10 +47,16 @@ angular.module('dados.common.directives.form-popup.controller', [
 			});
 
 			modalInstance.result.then(function (data) {
+				var answerSet = {
+					study_id: "1", 
+					subject_id: "2", 
+					formState: {},
+					expiresAt: new Date()
+				};
 				_.each(data.form_questions, function(question) {
-					// clean up carousel-added attribute
+					// extract question without metadata
 					angular.copy(_.omit(question, 'active'), question);
-				});					
+				});
 				console.log('SAVE ANSWERSET HERE');
 				console.log(angular.copy(data));
 			}, function () {

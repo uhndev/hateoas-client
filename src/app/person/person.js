@@ -21,8 +21,17 @@ function workflowRoute ($stateProvider) {
         },
         Actions: function() {
           return {
+            // Actions to be mapped to the form-popup directive
+            ok: function() {
+              console.log('OK CALLBACK');
+            },
+            cancel: function() {
+              console.log('CANCEL CALLBACK');
+            },
+            // Actions to be mapped to the allow-nav directive
             'create': function() {
               console.log("Creating");
+
             },
             'update': function(item) {
               console.log("Updating " + item);

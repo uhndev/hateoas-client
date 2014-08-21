@@ -29,6 +29,7 @@
           ng-click="tableParams.sorting(column.rel, tableParams.isSortBy(column.rel, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -38,6 +39,14 @@
         <td ng-repeat="column in template.data"
           sortable="column.rel">
           {{ item[column.rel] | formatter:column }}
+        </td>
+        <td>
+          <div ng-if="!item.form_name">
+            <form-popup url="template.href" text="Complete" on-submit="actions.ok()" on-cancel="actions.cancel()"></form-popup>
+          </div>
+          <div ng-if="item.form_name">
+            <form-popup url="item.href" text="Complete" on-submit="actions.ok()" on-cancel="actions.cancel()"></form-popup>
+          </div>
         </td>
       </tr>
     </tbody>

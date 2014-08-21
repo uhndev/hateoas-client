@@ -1,6 +1,6 @@
 angular.module( 'dados.forms', [
   'ui.router',
-  'dados.form.controller'
+  'hateoas.controller'
 ])
 
 .config(function config( $stateProvider ) {
@@ -9,10 +9,42 @@ angular.module( 'dados.forms', [
     url: '/forms',
     views: {
       'main': {
-        controller: 'FormCtrl',
-        templateUrl: 'form/form.tpl.html'     
+        templateUrl: 'hateoasClient/hateoas.tpl.html',
+        controller: 'HateoasController'
       }
     },
-    data:{ pageTitle: 'Form' }
+    data:{ pageTitle: 'Form' },
+    resolve: {
+      Resource: function($resource) {
+        return $resource('http://localhost:1337/api/form');
+      },
+      Actions: function($rootScope, $resource, $state) {
+        return {
+          // Actions to be mapped to the form-popup directive
+          ok: function() {
+            console.log('OK CALLBACK');
+          },
+          cancel: function() {
+            console.log('CANCEL CALLBACK');
+          },
+          // Actions to be mapped to the allow-nav directive
+          create: function() {
+            $state.go('formbuilder');
+          },
+          update: function(item) {
+            $state.go('formbuilder.edit', { formURL: item.href });
+          },
+          delete: function(item) {
+            if (confirm('Are you sure you want to delete: ' + 
+                         item.form_title + '?')) {
+              $resource(item.href).remove()
+              .$promise.then(function() {
+                $rootScope.$broadcast('hateoas.client.refresh');
+              });
+            }
+          }
+        };
+      }
+    }
   });
 });

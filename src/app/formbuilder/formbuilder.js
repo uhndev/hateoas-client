@@ -13,7 +13,12 @@ angular.module( 'dados.formbuilder', [
         templateUrl: 'formbuilder/formbuilder.tpl.html'     
       }
     },
-    data:{ pageTitle: 'Form Builder' }
+    data:{ pageTitle: 'Form Builder' },
+    resolve: {
+      Resource: function($resource) {
+        return $resource('http://localhost:1337/api/form');
+      }
+    }
   })
   .state( 'formbuilder.edit', {
     url: '/edit?formURL',

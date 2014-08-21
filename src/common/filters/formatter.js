@@ -16,6 +16,10 @@ angular.module('dados.filters.formatter', [])
         return input.substring(0, input.indexOf('T'));
       }
 
+      if (/array/i.test(template.type)) {
+        return input.length;
+      }
+
       if (/mrn/i.test(template.rel) && 
            String(input).length < 7) {
         return pad(input, 7);

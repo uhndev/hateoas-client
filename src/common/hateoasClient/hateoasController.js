@@ -1,11 +1,12 @@
 angular.module('hateoas.controller', 
-    ['ngTable', 'dados.common.services.sails'])
+    ['ngTable', 'dados.common.services.sails', 'dados.common.directives.form-popup'])
   .controller('HateoasController', 
     ['$scope', '$timeout', 'ngTableParams', 'sailsNgTable', 
      'Resource', 'Actions',
 
   function($scope, $timeout, TableParams, SailsNgTable, 
     Resource, Actions) {
+
     $scope.actions = Actions; 
 
     $scope.select = function(item) {
@@ -24,6 +25,10 @@ angular.module('hateoas.controller',
           $scope.tableParams.reload();
         }
       }
+    });
+
+    $scope.$on('hateoas.client.refresh', function(e) {
+      $scope.tableParams.reload();
     });
 
     var TABLE_SETTINGS = {
