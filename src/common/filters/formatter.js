@@ -20,6 +20,7 @@ angular.module('dados.filters.formatter', [])
            String(input).length < 7) {
         return pad(input, 7);
       }
+
       return input;
     };
   });
