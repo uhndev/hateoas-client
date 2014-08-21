@@ -9,6 +9,7 @@ angular.module( 'dados', [
 	'dados.formbuilder',
 	'dados.workflow',
     'dados.person',
+    'dados.study',
 	'dados.error',
     'dados.filters.formatter',
     'dados.filters.type',

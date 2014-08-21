@@ -1,10 +1,10 @@
 angular.module('hateoas.controller', 
     ['ngTable', 'dados.common.services.sails'])
   .controller('HateoasController', 
-    ['$scope', '$timeout', 'ngTableParams', 'sailsNgTable', 
+    ['$scope', 'ngTableParams', 'sailsNgTable', 
      'Resource', 'Actions',
 
-  function($scope, $timeout, TableParams, SailsNgTable, 
+  function($scope, TableParams, SailsNgTable, 
     Resource, Actions) {
     $scope.actions = Actions; 
 
@@ -33,6 +33,7 @@ angular.module('hateoas.controller',
     };
 
     $scope.tableParams = new TableParams(TABLE_SETTINGS, { 
+      counts: [],
       getData: function($defer, params) {
         var api = SailsNgTable.parse(params, $scope.query);
 
