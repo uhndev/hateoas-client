@@ -2,20 +2,19 @@ angular.module('hateoas.allowNav', [])
   .directive('allowNav', function() {
 
     function postLink(scope, element, attribute) {
-      scope.canCreate = /POST/.test(scope.allow());
-      scope.canUpdate = /PUT/.test(scope.allow());
-      scope.canDelete = /DELETE/.test(scope.allow());
+      scope.actions = scope.callbacks();
+      scope.canCreate = /POST/.test(scope.permissions());
+      scope.canUpdate = /PUT/.test(scope.permissions());
+      scope.canDelete = /DELETE/.test(scope.permissions());
     }
 
     return {
       restrict: 'E',
       replace: true,
       scope: {
-        allow: '&',
+        permissions: '&',
         selected: '&',
-        create: '&',
-        update: '&',
-        delete: '&'
+        callbacks: '&'
       },
       templateUrl: 'directives/allowNav/allowNav.tpl.html',
       link: postLink

@@ -1,26 +1,11 @@
 angular.module('hateoas.queryBuilder', [])
-  .filter('isArray', function () {
-    return angular.isArray;
-  })
-  .filter('isObject', function () {
-    return angular.isObject;
-  })
-  .filter('isString', function () {
-    return angular.isString;
-  })
   .directive('queryBuilder', function() {
 
   function queryController($scope) {
     $scope.query = $scope.query || {};
 
-    $scope.criteria = {
-      'string': ['not', 'is', 'contains', 'like', 
-        'startsWith', 'endsWith'],
-      'integer': ['not', 'equals', 
-        'greaterThan', 'greaterThanOrEqual', 
-        'lessThan', 'lessThanOrEqual']
-    };
-  
+    $scope.operators = [];
+
     $scope.groupOperators = ['and', 'or'];
 
     $scope.reset = function() {
@@ -86,6 +71,29 @@ angular.module('hateoas.queryBuilder', [])
     };
   }
 
+  /**
+   * Returns a list of operators given a field type.
+   */
+  function getOperatorsByType(type) {
+    var operators = {
+      'string': ['not', 'is', 'contains', 'like', 
+        'startsWith', 'endsWith'],
+      'number': ['not', 'equals', 
+        'greaterThan', 'greaterThanOrEqual', 
+        'lessThan', 'lessThanOrEqual']
+    };
+  
+    if (!!!type) {
+      return [];
+    } else {
+      if (/integer|float|date/i.test(type)) {
+        return operators['number'];
+      }
+    }
+
+    return operators['string'];
+  }
+
   function postLink(scope, element, attribute, controller) {
     if (scope.template()) {
       scope.advanceSearch = 0;
@@ -93,6 +101,9 @@ angular.module('hateoas.queryBuilder', [])
     }
 
     scope.$watch('advanceSearch', scope.reset);
+    scope.$watch('field.type', function(type) {
+      scope.operators = getOperatorsByType(type);
+    });
   }
 
   return {
