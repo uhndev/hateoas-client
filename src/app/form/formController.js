@@ -1,34 +1,67 @@
 angular.module( 'dados.form.controller', [
+  'ui.router',
   'ngTable',
   'dados.form.service',
   'dados.common.services.sails',
   'dados.common.directives.form-popup'
 ])
 
-.controller('FormCtrl', ['$scope', '$timeout', '$resource', 'Form', 'ngTableParams', 'sailsNgTable',
-  function ($scope, $timeout, $resource, Resource, TableParams, SailsNgTable) {
-    $scope.filters = {};
-    $scope.clearFilters = function() {
-      $scope.filters = {};
-      $scope.tableParams.filter($scope.filters);
+.controller('FormCtrl', 
+  ['$scope', '$timeout', '$resource', '$state', 
+   'FORM_API', 'ngTableParams', 'sailsNgTable',
+
+  function($scope, $timeout, $resource, $state, FORM_API, TableParams, SailsNgTable) {
+    var Resource = $resource(FORM_API);
+
+    /**
+     * Actions to be mapped to the form-popup directive
+     */
+    $scope.popup = {
+      ok: function() {
+        console.log('OK CALLBACK');
+      },
+      cancel: function() {
+        console.log('CANCEL CALLBACK');
+      }
     };
 
-    $scope.ok = function () {
-      alert('OKAY CALLBACK');
+    /**
+     * Actions to be mapped to the allow-nav directive
+     */
+    $scope.actions = {
+      createForm: function() {
+        $state.go('formbuilder');
+      },
+      updateForm: function() {
+        $state.go('formbuilder.edit', { formURL: $scope.selected.href });
+      },
+      deleteForm: function() {
+        if (confirm('Are you sure you want to delete: ' + 
+                     $scope.selected.form_title + '?')) {
+          $resource($scope.selected.href).remove()
+          .$promise.then(function() {
+            $scope.tableParams.reload();
+          });
+        }
+      }
     };
 
-    $scope.cancel = function () {
-      alert('CANCEL CALLBACK');
+    $scope.select = function(item) {
+      $scope.selected = ($scope.selected === item ? null : item);
     };
 
     $scope.query = { 'where' : {} };
-    $scope.$watchCollection('query.where', function(value) {
-      $scope.tableParams.reload();
-    });
-
-    $scope.showAdvance = 0;
-    $scope.$watch('showAdvance', function(value) {
-      $scope.query.where = {};
+    $scope.$watchCollection('query.where', function(newQuery, oldQuery) {
+      if (newQuery && !_.isEqual(newQuery, oldQuery)) {
+        // Page changes will trigger a reload. To reduce the calls to
+        // the server, force a reload only when the user is already on
+        // page 1.
+        if ($scope.tableParams.page() !== 1) {
+          $scope.tableParams.page(1);
+        } else {
+          $scope.tableParams.reload();
+        }
+      }
     });
 
     var TABLE_SETTINGS = {
@@ -41,7 +74,9 @@ angular.module( 'dados.form.controller', [
       getData: function($defer, params) {
         var api = SailsNgTable.parse(params, $scope.query);
 
-        Resource.get(api, function(data) {
+        Resource.get(api, function(data, headers) {
+          $scope.selected = null;
+          $scope.allow = headers('allow');
           $scope.template = data.template;
           $scope.resource = angular.copy(data);
           $timeout(function() {
