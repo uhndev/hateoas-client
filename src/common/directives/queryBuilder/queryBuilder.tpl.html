@@ -38,7 +38,7 @@
         <select ng-disabled="!!!field.type" 
           class="form-control"
           ng-model="comparator" 
-          ng-options="criterion for criterion in criteria[field.type]">
+          ng-options="criterion for criterion in operators">
         </select>
       </div>
       <div class="form-group">
