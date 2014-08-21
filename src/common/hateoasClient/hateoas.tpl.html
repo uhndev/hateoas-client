@@ -1,6 +1,6 @@
 <div>
   <h1>
-    People
+    {{ pageTitle }}
     <small>
       Total: {{ resource.total }}
     </small>
@@ -13,7 +13,8 @@
   <div class="align-right">
     <allow-nav
       ng-if="allow"
-      data-allow="allow" 
+      data-permissions="allow" 
+      data-callbacks="actions"
       data-selected="selected">
     </allow-nav> 
   </div>

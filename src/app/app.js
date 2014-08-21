@@ -11,6 +11,7 @@ angular.module( 'dados', [
     'dados.person',
 	'dados.error',
     'dados.filters.formatter',
+    'dados.filters.type',
 	'ui.router',
     'hateoas.queryBuilder',
     'hateoas.allowNav'
@@ -27,7 +28,7 @@ angular.module( 'dados', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
 	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
 		if ( angular.isDefined( toState.data.pageTitle ) ) {
-			$scope.pageTitle = toState.data.pageTitle + ' | dados' ;
+			$scope.pageTitle = toState.data.pageTitle;
 		}
 	});
 });

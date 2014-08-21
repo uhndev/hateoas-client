@@ -1,11 +1,12 @@
-angular.module('dados.person.controller', 
+angular.module('hateoas.controller', 
     ['ngTable', 'dados.common.services.sails'])
-  .controller('PersonController', 
-    ['$scope', '$timeout', '$resource', 'ngTableParams',
-     'sailsNgTable',
+  .controller('HateoasController', 
+    ['$scope', '$timeout', 'ngTableParams', 'sailsNgTable', 
+     'Resource', 'Actions',
 
-  function($scope, $timeout, $resource, TableParams, SailsNgTable) {
-    var Resource = $resource('http://localhost:1337/api/person');
+  function($scope, $timeout, TableParams, SailsNgTable, 
+    Resource, Actions) {
+    $scope.actions = Actions; 
 
     $scope.select = function(item) {
       $scope.selected = ($scope.selected === item ? null : item);
@@ -40,10 +41,8 @@ angular.module('dados.person.controller',
           $scope.allow = headers('allow');
           $scope.template = data.template;
           $scope.resource = angular.copy(data);
-          $timeout(function() {
-            params.total(data.total);
-            $defer.resolve(data.items);
-          });
+          params.total(data.total);
+          $defer.resolve(data.items);
         });
       }
     });
