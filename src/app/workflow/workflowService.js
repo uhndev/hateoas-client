@@ -21,7 +21,9 @@ function WorkflowStateService (url, $resource) {
 
   Workflow.archive = function(data) {
     if (_.has(data, 'id')) {
-      return Workflow.remove(data);
+      var state = new Workflow(data);
+      state.$delete();
+      return state;
     }
     return null;
   };
