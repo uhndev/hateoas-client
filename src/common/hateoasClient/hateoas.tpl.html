@@ -5,11 +5,21 @@
       Total: {{ resource.total }}
     </small>
   </h1>
-  <query-builder 
-    template="resource.template" 
-    ng-model="query.where"
-    ng-if="resource.template">
-  </query-builder>
+  <div class="clearfix">
+    <div class="col-md-6">
+      <query-builder 
+        template="resource.template" 
+        ng-model="query.where"
+        ng-if="resource.template">
+      </query-builder>
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-default align-right"
+        ng-repeat="link in resource.links">
+        {{ qeury.prompt }}
+      </button>
+    </div>
+  </div>
   <div class="align-right">
     <allow-nav
       ng-if="allow"
@@ -23,10 +33,10 @@
       <tr>
         <th ng-repeat="column in template.data"
           class="text-center sortable" ng-class="{
-            'sort-asc': tableParams.isSortBy(column.rel, 'asc'),
-            'sort-desc': tableParams.isSortBy(column.rel, 'desc')
+            'sort-asc': tableParams.isSortBy(column.name, 'asc'),
+            'sort-desc': tableParams.isSortBy(column.name, 'desc')
           }" 
-          ng-click="tableParams.sorting(column.rel, tableParams.isSortBy(column.rel, 'asc') ? 'desc' : 'asc')">
+          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
         <th>Actions</th>
@@ -37,8 +47,8 @@
         ng-click="select(item)"
         ng-class="{'active': item === selected}">
         <td ng-repeat="column in template.data"
-          sortable="column.rel">
-          {{ item[column.rel] | formatter:column }}
+          sortable="column.name">
+          {{ item[column.name] | formatter:column }}
         </td>
         <td>
           <div ng-if="!item.form_name">
