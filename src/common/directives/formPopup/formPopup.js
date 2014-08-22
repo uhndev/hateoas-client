@@ -23,19 +23,30 @@ angular.module('dados.common.directives.form-popup', [
 ])
 
 .directive('formPopup', function () {
-    return {
-        restrict: 'AE',
-        scope: {
-            url: '=',
-            onSubmit: '&',
-            onCancel: '&'
-        },
-        template: '<button class="btn btn-default" ng-click="open()">{{text}}</button>',
-        controller: 'FormPopupController',
-        link: {
-            pre: function (scope, element, attrs) {
-    	        scope.text = attrs.text || 'Open';
-            }
-        }
-    };
+	return {
+		restrict: 'AE',
+		replace: true,
+		transclude: true,
+		scope: {
+			template: '=',
+			onSubmit: '&',
+			onCancel: '&'
+		},
+		template: '<button class="btn btn-default" ng-click="open()">{{text}}</button>',
+		controller: 'FormPopupController',
+		link: {
+			pre: function (scope, element, attrs) {
+				scope.text = attrs.text || 'Open';
+			},
+			post: function (scope, element, attrs) {
+				var isClickable = angular.isDefined(attrs.isClickable) && scope.$eval(attrs.isClickable) === true ? true : false;
+
+				if (isClickable) {
+					attrs.$set('ngClick', 'open()');
+					element.removeAttr('ng-transclude');
+					$compile(element)(scope);
+				}
+			}
+		}
+	};
 });

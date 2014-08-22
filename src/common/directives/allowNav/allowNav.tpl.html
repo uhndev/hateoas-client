@@ -1,14 +1,16 @@
 <div class="btn-group">
   <button type="button" class="btn btn-default" 
-    ng-click="actions.create(); $event.stopPropagation();"
-    ng-if="canCreate">
+    ng-click="$event.stopPropagation();"
+    ng-if="canCreate"
+    ng-transclude form-popup template="template" on-submit="actions.create()" on-cancel="actions.cancel()">
     <i class="fa fa-file-o"></i>
     Add
   </button>
   <button type="button" class="btn btn-default"
-    ng-click="actions.update(selected()); $event.stopPropagation();"
+    ng-click="$event.stopPropagation();"
     ng-disabled="!!!selected()"
-    ng-if="canUpdate">
+    ng-if="canUpdate"
+    ng-transclude form-popup template="template" on-submit="actions.update(selected())" on-cancel="actions.cancel()">
     <i class="fa fa-edit"></i>
     Edit
   </button>

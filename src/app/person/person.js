@@ -19,7 +19,7 @@ function workflowRoute ($stateProvider) {
         Resource: function($resource) {
           return $resource('http://localhost:1337/api/person');
         },
-        Actions: function() {
+        Actions: function($resource) {
           return {
             // Actions to be mapped to the form-popup directive
             ok: function() {
@@ -31,11 +31,20 @@ function workflowRoute ($stateProvider) {
             // Actions to be mapped to the allow-nav directive
             'create': function() {
               console.log("Creating");
-
+              return {
+                item: null,
+                Resource: $resource('http://localhost:1337/api/person')
+              };
             },
             'update': function(item) {
-              console.log("Updating " + item);
+              console.log("Updating ");
               console.log(item);
+              return {
+                item: item,
+                Resource: $resource(item.href, {}, {
+                  'update' : { method: 'PUT' }
+                })
+              };              
             },
             'delete': function(item) {
               console.log("Removing " + item);

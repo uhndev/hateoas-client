@@ -12,6 +12,7 @@ angular.module('hateoas.allowNav', [])
       restrict: 'E',
       replace: true,
       scope: {
+        template: '=',
         permissions: '&',
         selected: '&',
         callbacks: '&'

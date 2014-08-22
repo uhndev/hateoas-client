@@ -23,6 +23,7 @@
   <div class="align-right">
     <allow-nav
       ng-if="allow"
+      data-template="template"
       data-permissions="allow" 
       data-callbacks="actions"
       data-selected="selected">
@@ -39,7 +40,7 @@
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
-        <th>Actions</th>
+        <th ng-if="!template.href">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -50,13 +51,8 @@
           sortable="column.name">
           {{ item[column.name] | formatter:column }}
         </td>
-        <td>
-          <div ng-if="!item.form_name">
-            <form-popup url="template.href" text="Complete" on-submit="actions.ok()" on-cancel="actions.cancel()"></form-popup>
-          </div>
-          <div ng-if="item.form_name">
-            <form-popup url="item.href" text="Complete" on-submit="actions.ok()" on-cancel="actions.cancel()"></form-popup>
-          </div>
+        <td ng-if="!template.href">
+          <form-popup template="item" text="Complete" on-submit="actions.ok()" on-cancel="actions.cancel()"></form-popup>
         </td>
       </tr>
     </tbody>
