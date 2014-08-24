@@ -1,7 +1,8 @@
-angular.module('dados.study',
+angular.module('dados.study', 
             ['ui.router',
              'hateoas.controller'
             ])
+       .constant('STUDY_API', 'http://localhost:1337/api/study')
        .config(['$stateProvider',
 function workflowRoute ($stateProvider) {
   'use strict';
@@ -16,25 +17,37 @@ function workflowRoute ($stateProvider) {
       },
       data:{ pageTitle: 'Studies' },
       resolve: {
-        Resource: function($resource) {
-          return $resource('http://localhost:1337/api/study');
+        Resource: function($resource, STUDY_API) {
+          return $resource(STUDY_API);
         },
-        Actions: function() {
+        Actions: function($rootScope, $resource, STUDY_API) {
           return {
+            // Actions to be mapped to the allow-nav directive
             'create': function() {
-              console.log("Creating");
+              return {
+                item: null,
+                Resource: $resource(STUDY_API)
+              };
             },
             'update': function(item) {
-              console.log("Updating " + item);
-              console.log(item);
+              return {
+                item: item,
+                Resource: $resource(item.href, {}, {
+                  'update' : { method: 'PUT' }
+                })
+              };              
             },
             'delete': function(item) {
-              console.log("Removing " + item);
-              console.log(item);
+              if (confirm('Are you sure you want to delete study: ' + 
+                           item.name + '?')) {
+                $resource(item.href).remove()
+                .$promise.then(function() {
+                  $rootScope.$broadcast('hateoas.client.refresh');
+                });
+              }
             }
           };
         }
       }
     });
-}
-       ]);
+}]);

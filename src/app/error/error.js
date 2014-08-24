@@ -3,10 +3,6 @@ angular.module('dados.error', [
 	'dados.common.services.error'
 ])
 
-.config( function errorConfig ( $sailsProvider ) {
-	$sailsProvider.url = 'http://localhost:1337';
-})
-
 .controller( 'ErrorCtrl', function ErrorCtrl ( $scope, $modal, $timeout, Authentication, $sails ) {
 
 	var socketErrorModal = null;

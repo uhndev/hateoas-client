@@ -1,5 +1,5 @@
 angular.module('hateoas.controller', 
-    ['ngTable', 'dados.common.services.sails', 'dados.common.directives.form-popup'])
+    ['ngTable', 'dados.common.services.sails', 'dados.common.directives.formPopup'])
   .controller('HateoasController', 
     ['$scope', 'ngTableParams', 'sailsNgTable', 
      'Resource', 'Actions',

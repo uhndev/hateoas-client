@@ -1,5 +1,5 @@
 <div class="container" ng-controller="HeaderCtrl">
-  <div class="navbar navbar-default" ng-if="headerVisible">
+  <nav class="navbar navbar-default" role="navigation" ng-if="headerVisible">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
         ng-click="menuCollapsed = ! menuCollapsed">
@@ -27,11 +27,25 @@
           </a>
         </li>
         <li ui-sref-active="active">
+          <a href ui-sref="study">
+            <i class="fa fa-group"></i>
+            Studies
+          </a>
+        </li>
+        <li ui-sref-active="active">
           <a href ui-sref="forms">
             <i class="fa fa-file-o"></i>
             Forms
           </a>
+        </li>          
+        <li ui-sref-active="active">
+          <a href ui-sref="person">
+            <i class="fa fa-group"></i>
+            Person Manager
+          </a>
         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
         <li ui-sref-active="active">
           <a href ui-sref="formbuilder">
             <i class="fa fa-pencil-square-o"></i>
@@ -43,20 +57,8 @@
             <i class="fa fa-code"></i>
             Workflow Editor
           </a>
-        </li>           
-        <li ui-sref-active="active">
-          <a href ui-sref="person">
-            <i class="fa fa-group"></i>
-            Person Manager
-          </a>
-        </li>           
-        <li ui-sref-active="active">
-          <a href ui-sref="study">
-            <i class="fa fa-group"></i>
-            Studies
-          </a>
-        </li>           
+        </li>
       </ul>
     </div>
-  </div>
+  </nav>
 </div>
