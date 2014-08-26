@@ -43,7 +43,6 @@ angular.module('hateoas.queryBuilder', [])
               return query;
             })
           };
-          console.log($scope.query);
         }
       }
     };
@@ -69,6 +68,7 @@ angular.module('hateoas.queryBuilder', [])
         $scope.query[field] = buffer;
       }
     };
+
   }
 
   /**
@@ -104,6 +104,14 @@ angular.module('hateoas.queryBuilder', [])
     scope.$watch('field.type', function(type) {
       scope.operators = getOperatorsByType(type);
     });
+
+    scope.$watchCollection('template().data', 
+      function(newTemplate, oldTemplate) {
+        if (!_.isEqual(newTemplate, oldTemplate)) {
+          scope.fields = scope.template().data;
+          scope.reset();
+        }
+      });
   }
 
   return {

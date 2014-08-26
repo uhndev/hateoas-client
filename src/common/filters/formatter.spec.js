@@ -5,8 +5,8 @@ describe('dados.filters.formatter', function() {
 
     it('should pad mrn\'s with zeros', 
       inject(function(formatterFilter) {
-        expect(formatterFilter(123, { 'rel': 'mrn' })).toBe('0000123');
-        expect(formatterFilter(1234567, {'rel':'mrn'})).toBe(1234567);
+        expect(formatterFilter(123, { 'name': 'mrn' })).toBe('0000123');
+        expect(formatterFilter(1234567, {'name':'mrn'})).toBe(1234567);
       }));
 
     it('should return the date from ISO strings', 

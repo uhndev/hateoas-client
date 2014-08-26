@@ -1,4 +1,18 @@
 <div>
+    <div class="btn-group">
+      <button class="btn btn-default align-right"
+        ng-click="follow(link)"
+        ng-repeat="link in selected.links">
+        {{ link.prompt }}
+      </button>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-default align-right"
+        ng-click="follow(link)"
+        ng-repeat="link in resource.links">
+        {{ link.prompt }}
+      </button>
+    </div>
   <h1>
     {{ pageTitle }}
     <small>
@@ -6,19 +20,11 @@
     </small>
   </h1>
   <div class="clearfix">
-    <div class="col-md-6">
-      <query-builder 
-        template="resource.template" 
-        ng-model="query.where"
-        ng-if="resource.template">
-      </query-builder>
-    </div>
-    <div class="col-md-6">
-      <button class="btn btn-default align-right"
-        ng-repeat="link in resource.links">
-        {{ qeury.prompt }}
-      </button>
-    </div>
+    <query-builder 
+      template="resource.template" 
+      ng-model="query.where"
+      ng-if="resource.template">
+    </query-builder>
   </div>
   <div class="align-right">
     <allow-nav
@@ -27,12 +33,13 @@
       data-permissions="allow" 
       data-callbacks="actions"
       data-selected="selected">
-    </allow-nav> 
+    </allow-nav>
   </div>
   <table ng-table="tableParams" class="table">
     <thead>
       <tr>
         <th ng-repeat="column in template.data"
+          ng-if="!column.data"
           class="text-center sortable" ng-class="{
             'sort-asc': tableParams.isSortBy(column.name, 'asc'),
             'sort-desc': tableParams.isSortBy(column.name, 'desc')
@@ -48,6 +55,7 @@
         ng-click="select(item)"
         ng-class="{'active': item === selected}">
         <td ng-repeat="column in template.data"
+          ng-if="!column.data"
           sortable="column.name">
           {{ item[column.name] | formatter:column }}
         </td>
