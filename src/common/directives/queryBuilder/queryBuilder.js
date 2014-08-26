@@ -23,27 +23,27 @@ angular.module('hateoas.queryBuilder', [])
           $scope.query = {
             'or' : _.map($scope.fields, function(field) {
               var query = {};
-              query[field.rel] = { 'like': value + '%' };
+              query[field.name] = { 'like': value + '%' };
   
               if (/integer/i.test(field.type)) {
-                query[field.rel] = parseInt(value, 10);
+                query[field.name] = parseInt(value, 10);
               }
   
               if (/float/i.test(field.type)) {
-                query[field.rel] = parseFloat(value);
+                query[field.name] = parseFloat(value);
               }
   
               if (/date|dateTime/i.test(field.type)) {
                 try {
-                  query[field.rel] = new Date(value).toISOString();
+                  query[field.name] = new Date(value).toISOString();
                 } catch(e) {
 
                 }
               }
-  
               return query;
             })
           };
+          console.log($scope.query);
         }
       }
     };
