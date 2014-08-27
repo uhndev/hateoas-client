@@ -1,14 +1,15 @@
-angular.module( 'dados.forms',
+angular.module( 'dados.form',
             ['ui.router',
              'hateoas.controller'
             ])
        .constant('FORM_API', 'http://localhost:1337/api/form')
+       .constant('ANSWERSET_API', 'http://localhost:1337/api/answerset')
        .config(['$stateProvider',
 function workflowRoute( $stateProvider ) {
   'use strict';
   $stateProvider
-    .state( 'forms', {
-      url: '/forms',
+    .state( 'form', {
+      url: '/form',
       views: {
         'main': {
           templateUrl: 'hateoasClient/hateoas.tpl.html',
@@ -20,11 +21,14 @@ function workflowRoute( $stateProvider ) {
         Resource: function($resource, FORM_API) {
           return $resource(FORM_API);
         },
-        Actions: function($rootScope, $resource, $state) {
+        Actions: function($rootScope, $resource, $state, ANSWERSET_API) {
           return {
             // Actions to be mapped to the form-popup directive
             ok: function() {
-              console.log('OK CALLBACK');
+              return {
+                item: null,
+                Resource: $resource(ANSWERSET_API)
+              };
             },
             cancel: function() {
               console.log('CANCEL CALLBACK');

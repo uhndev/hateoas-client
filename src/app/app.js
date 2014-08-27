@@ -3,12 +3,12 @@ angular.module( 'dados', [
 	'templates-common',
 	'dados.auth',
 	'dados.header',
-	'dados.home',
-	'dados.about',
-	'dados.forms',
-	'dados.formbuilder',
+	'dados.form',
+    'dados.answerset',
+  	'dados.formbuilder',
 	'dados.workflow',
     'dados.person',
+    'dados.user',
     'dados.study',
 	'dados.error',
     'dados.filters.formatter',
@@ -20,7 +20,7 @@ angular.module( 'dados', [
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
-	$urlRouterProvider.otherwise( '/home' );
+	$urlRouterProvider.otherwise( '/study' );
 })
 
 .run( function run () {
