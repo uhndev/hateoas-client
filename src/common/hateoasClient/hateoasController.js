@@ -1,27 +1,49 @@
 angular.module('hateoas.controller', 
-    ['ngTable', 'dados.common.services.sails', 
+    ['ngTable', 'dados.common.services.sails',
      'dados.common.directives.formPopup'])
-  .constant('API_URL', 'http://localhost:1337/api/study')
   .controller('HateoasController', 
-    ['$scope', '$resource', '$injector', '$location', 
-      'API_URL', 'ngTableParams', 'sailsNgTable', 
-  function($scope, $resource, $injector, $location, 
-    api, TableParams, SailsNgTable) {
-    $scope.url = api;
-    $scope.query = { 'where' : {} };
-    var Resource = $resource($scope.url);
-    var Service = null;
+    ['$scope', '$rootScope', '$state', '$resource', '$injector',
+     'ngTableParams', 'sailsNgTable', 'Resource', 'Actions',
 
-    function reloadTable() {
-      // Page changes will trigger a reload. To reduce the calls to
-      // the server, force a reload only when the user is already on
-      // page 1.
-      if ($scope.tableParams.page() !== 1) {
-        $scope.tableParams.page(1);
-      } else {
-        $scope.tableParams.reload();
+  function($scope, $rootScope, $state, $resource, $injector,
+            TableParams, SailsNgTable, Resource, Actions) {
+
+    /**
+     * [actions - mapped callbacks that can be individually overridden]
+     */
+    $scope.actions = {
+      // Actions that can be mapped to the form-popup directive
+      ok: Actions.ok || function() {
+        console.log('OK CALLBACK');
+      },
+      cancel: Actions.cancel || function() {
+        console.log('CANCEL CALLBACK');
+      },
+      // Actions that can be mapped to the allow-nav directive
+      // returns payload to modalInstanceController
+      'create': Actions.create || function() {
+        return {
+          item: null,
+          Resource: Resource
+        };
+      },
+      'update': Actions.update || function(item) {
+        return {
+          item: item,
+          Resource: $resource(item.href, {}, {
+            'update' : { method: 'PUT' }
+          })
+        };              
+      },
+      'delete': Actions.delete || function(item) {
+        if (confirm('Are you sure you want to delete this item?')) {
+          $resource(item.href).remove()
+          .$promise.then(function() {
+            $rootScope.$broadcast('hateoas.client.refresh');
+          });
+        }
       }
-    }
+    };
 
     $scope.follow = function(link) {
       if (link) {
@@ -31,32 +53,7 @@ angular.module('hateoas.controller',
             null);
           $scope.pageTitle = link.prompt;  
           $scope.url = link.href;
-        }
-      }
-    };
-
-    $scope.actions = {
-      'create' : function(item) {
-        if (Service !== null) {
-          Service.create(Resource, item);
-        } else {
-          Resource.save(item);
-        }
-      },
-  
-      'update' : function(item) {
-        if (Service !== null) {
-          Service.update(Resource, item);
-        } else {
-          Resource.update(item);
-        }
-      },
-  
-      'delete' : function(item) {
-        if (Service !== null) {
-          Service.remove(Resource, item);
-        } else {
-          Resource.remove(item);
+          // $location.path(link.href.replace(/\/api/,''))
         }
       }
     };
@@ -65,15 +62,22 @@ angular.module('hateoas.controller',
       $scope.selected = ($scope.selected === item ? null : item);
     };
 
-    $scope.$watch('url', function(href) {
-      Resource = $resource(href);
-      reloadTable();
-    });
-
+    $scope.query = { 'where' : {} };
     $scope.$watchCollection('query.where', function(newQuery, oldQuery) {
       if (newQuery && !_.isEqual(newQuery, oldQuery)) {
-        reloadTable();
+        // Page changes will trigger a reload. To reduce the calls to
+        // the server, force a reload only when the user is already on
+        // page 1.
+        if ($scope.tableParams.page() !== 1) {
+          $scope.tableParams.page(1);
+        } else {
+          $scope.tableParams.reload();
+        }
       }
+    });
+
+    $scope.$on('hateoas.client.refresh', function(e) {
+      $scope.tableParams.reload();
     });
 
     var TABLE_SETTINGS = {
@@ -86,16 +90,15 @@ angular.module('hateoas.controller',
       counts: [],
       getData: function($defer, params) {
         var api = SailsNgTable.parse(params, $scope.query);
-        if (Resource) {
-          Resource.get(api, function(data, headers) {
-            $scope.selected = null;
-            $scope.allow = headers('allow');
-            $scope.template = data.template;
-            $scope.resource = angular.copy(data);
-            params.total(data.total);
-            $defer.resolve(data.items);
-          });
-        }
+
+        Resource.get(api, function(data, headers) {
+          $scope.selected = null;
+          $scope.allow = headers('allow');
+          $scope.template = data.template;
+          $scope.resource = angular.copy(data);
+          params.total(data.total);
+          $defer.resolve(data.items);
+        });
       }
     });
   }]);

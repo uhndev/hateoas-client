@@ -7,12 +7,8 @@ angular.module( 'dados.formbuilder', [
   $stateProvider
   .state( 'formbuilder', {
     url: '/formbuilder',
-    views: {
-      'main': {
-        controller: 'FormBuilderController',
-        templateUrl: 'formbuilder/formbuilder.tpl.html'     
-      }
-    },
+    controller: 'FormBuilderController',
+    templateUrl: 'formbuilder/formbuilder.tpl.html',
     data:{ pageTitle: 'Form Builder' },
     resolve: {
       Resource: function($resource) {
@@ -22,12 +18,8 @@ angular.module( 'dados.formbuilder', [
   })
   .state( 'formbuilder.edit', {
     url: '/edit?formURL',
-    views: {
-      'main': {
-        controller: 'FormBuilderController',
-        templateUrl: 'formbuilder/formbuilder.tpl.html'     
-      }
-    },
+    controller: 'FormBuilderController',
+    templateUrl: 'formbuilder/formbuilder.tpl.html',
     data:{ pageTitle: 'Form Builder' }
   });
 });

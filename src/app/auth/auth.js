@@ -12,29 +12,20 @@ angular.module( 'dados.auth', [
     $stateProvider
     .state( 'login', {
         url: '/login',
-        views: {
-            "main": {
-                controller: 'AuthController',
-                templateUrl: 'auth/login.tpl.html'
-            }
-        },
+        controller: 'AuthController',
+        templateUrl: 'auth/login.tpl.html',
         data: { pageTitle: 'Login' }
     })
     .state( 'register', {
         url: '/register',
-        views: {
-            "main": {
-                controller: 'AuthController',
-                templateUrl: 'auth/register.tpl.html'
-            }
-        },
+        controller: 'AuthController',
+        templateUrl: 'auth/register.tpl.html',
         data: { pageTitle: 'Register' }
     });
 })
 
 .controller('AuthController', ['$scope', '$window', '$location', 'AuthService', 'Authentication',
     function ($scope, $window, $location, AuthService, Authentication) {
-
         // check if already logged in
         if (Authentication.currentUser) {
             $location.url('/');

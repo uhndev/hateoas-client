@@ -10,12 +10,8 @@ function workflowRoute( $stateProvider ) {
   $stateProvider
     .state( 'form', {
       url: '/form',
-      views: {
-        'main': {
-          templateUrl: 'hateoasClient/hateoas.tpl.html',
-          controller: 'HateoasController'
-        }
-      },
+      templateUrl: 'hateoasClient/hateoas.tpl.html',
+      controller: 'HateoasController',
       data:{ pageTitle: 'Form' },
       resolve: {
         Resource: function($resource, FORM_API) {
@@ -29,9 +25,6 @@ function workflowRoute( $stateProvider ) {
                 item: null,
                 Resource: $resource(ANSWERSET_API)
               };
-            },
-            cancel: function() {
-              console.log('CANCEL CALLBACK');
             },
             // Actions to be mapped to the allow-nav directive
             create: function() {
