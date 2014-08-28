@@ -5,6 +5,7 @@ angular.module( 'dados', [
 	'dados.auth',
 	'dados.header',
   'dados.workflow',
+  'dados.form',
   'dados.formbuilder',
 	'dados.error',
     'dados.filters.formatter',

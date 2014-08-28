@@ -4,12 +4,8 @@ angular.module('dados.workflow',
     $stateProvider.state({
       name: 'workflow',
       url: '/workflow',
-      views: {
-        'main': {
-          templateUrl: 'workflow/workflow.tpl.html',
-          controller: 'WorkflowController'
-        }
-      },
+      templateUrl: 'workflow/workflow.tpl.html',
+      controller: 'WorkflowController',
       data: {
         pageTitle: 'Workflow Settings'
       }

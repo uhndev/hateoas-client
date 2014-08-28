@@ -3,7 +3,6 @@ angular.module('config', ['hateoas', 'ui.router'])
     '/person',
     '/study',
     '/user',
-    '/form',
     '/answerset',
     [ '/study/:name/subject', 'Subjects' ]
   ])

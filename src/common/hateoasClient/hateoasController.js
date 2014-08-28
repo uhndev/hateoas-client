@@ -1,7 +1,6 @@
 angular.module('hateoas.controller', 
     ['ngTable', 'dados.common.services.sails',
      'dados.common.directives.formPopup'])
-<<<<<<< HEAD
   .constant('API', { 
     protocol: 'http',
     host : 'localhost',
@@ -13,24 +12,28 @@ angular.module('hateoas.controller',
     }
   })
   .controller('HateoasController', 
-    ['$scope', '$resource', '$injector', '$state', '$location',
-      'API', 'ngTableParams', 'sailsNgTable', 
-  function($scope, $resource, $injector, $state, $location,
-    api, TableParams, SailsNgTable) {
+    ['$scope', '$rootScope', '$resource', '$injector', '$state', '$location',
+      'API', 'ngTableParams', 'sailsNgTable', 'Actions', 
+      
+  function($scope, $rootScope, $resource, $injector, $state, $location,
+    api, TableParams, SailsNgTable, Actions) {
     console.log("Starting controller!");
     console.log($location.path());
     $scope.url = api.url() + $location.path();
     $scope.query = { 'where' : {} };
     var Resource = $resource($scope.url);
     var Service = null;
-=======
-  .controller('HateoasController', 
-    ['$scope', '$rootScope', '$state', '$resource', '$injector',
-     'ngTableParams', 'sailsNgTable', 'Resource', 'Actions',
 
-  function($scope, $rootScope, $state, $resource, $injector,
-            TableParams, SailsNgTable, Resource, Actions) {
->>>>>>> e7e117aff644e31b99af942f5f54fe0156174ff8
+    function reloadTable() {
+      // Page changes will trigger a reload. To reduce the calls to
+      // the server, force a reload only when the user is already on
+      // page 1.
+      if ($scope.tableParams.page() !== 1) {
+        $scope.tableParams.page(1);
+      } else {
+        $scope.tableParams.reload();
+      }
+    }
 
     /**
      * [actions - mapped callbacks that can be individually overridden]
@@ -72,42 +75,7 @@ angular.module('hateoas.controller',
     $scope.follow = function(link) {
       if (link) {
         if (link.rel) {
-<<<<<<< HEAD
           $location.path(link.href.replace(/^.*\/api/i, ''));
-        }
-      }
-    };
-
-    $scope.actions = {
-      'create' : function(item) {
-        if (Service !== null) {
-          Service.create(Resource, item);
-        } else {
-          Resource.save(item);
-        }
-      },
-  
-      'update' : function(item) {
-        if (Service !== null) {
-          Service.update(Resource, item);
-        } else {
-          Resource.update(item);
-        }
-      },
-  
-      'delete' : function(item) {
-        if (Service !== null) {
-          Service.remove(Resource, item);
-        } else {
-          Resource.remove(item);
-=======
-          Service = ($injector.has(link.rel + 'Service') ?
-            $injector.get(link.rel + 'Service') :
-            null);
-          $scope.pageTitle = link.prompt;  
-          $scope.url = link.href;
-          // $location.path(link.href.replace(/\/api/,''))
->>>>>>> e7e117aff644e31b99af942f5f54fe0156174ff8
         }
       }
     };
@@ -116,15 +84,11 @@ angular.module('hateoas.controller',
       $scope.selected = ($scope.selected === item ? null : item);
     };
 
-<<<<<<< HEAD
     $scope.$watch('url', function(href) {
-//      Resource = $resource(href);
-//      reloadTable();
+      Resource = $resource(href);
+      reloadTable();
     });
 
-=======
-    $scope.query = { 'where' : {} };
->>>>>>> e7e117aff644e31b99af942f5f54fe0156174ff8
     $scope.$watchCollection('query.where', function(newQuery, oldQuery) {
       if (newQuery && !_.isEqual(newQuery, oldQuery)) {
         // Page changes will trigger a reload. To reduce the calls to

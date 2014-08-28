@@ -4,14 +4,15 @@ angular.module('hateoas', ['hateoas.controller'])
       return {
         name: stateName || route.replace(/\//g, ''),
         url: route,
-        views: {
-          'main': {
-            templateUrl: 'hateoasClient/hateoas.tpl.html',
-            controller: 'HateoasController'
-          }
-        },
+        templateUrl: 'hateoasClient/hateoas.tpl.html',
+        controller: 'HateoasController',
         data: {
-          pageTitle: pageTitle || route.replace(/\//g, ' ')
+          pageTitle: pageTitle || _.capitalize(route.replace(/\//g, ' '))
+        },
+        resolve: {
+          Actions: function() {
+            return {};
+          }
         }
       };
     }

@@ -13,7 +13,7 @@ angular.module('dados.common.directives.formPopup.controller', [
     $scope.open = function() {
       // if not given a form URL, pass through and continue without popup
       // (only applicable for the allowNav on forms page)
-      if (!$scope.template.href) {
+      if ($scope.template.rel == "form") {
         return $scope.onSubmit();
       }
 
