@@ -1,13 +1,24 @@
 angular.module('hateoas.controller', 
     ['ngTable', 'dados.common.services.sails', 
      'dados.common.directives.formPopup'])
-  .constant('API_URL', 'http://localhost:1337/api/study')
+  .constant('API', { 
+    protocol: 'http',
+    host : 'localhost',
+    port: '1337',
+    prefix: '/api',
+    url: function getUrl() {
+      return this.protocol + "://" + 
+        this.host + ":" + this.port + this.prefix;
+    }
+  })
   .controller('HateoasController', 
-    ['$scope', '$resource', '$injector', '$location', 
-      'API_URL', 'ngTableParams', 'sailsNgTable', 
-  function($scope, $resource, $injector, $location, 
+    ['$scope', '$resource', '$injector', '$state', '$location',
+      'API', 'ngTableParams', 'sailsNgTable', 
+  function($scope, $resource, $injector, $state, $location,
     api, TableParams, SailsNgTable) {
-    $scope.url = api;
+    console.log("Starting controller!");
+    console.log($location.path());
+    $scope.url = api.url() + $location.path();
     $scope.query = { 'where' : {} };
     var Resource = $resource($scope.url);
     var Service = null;
@@ -26,11 +37,7 @@ angular.module('hateoas.controller',
     $scope.follow = function(link) {
       if (link) {
         if (link.rel) {
-          Service = ($injector.has(link.rel + 'Service') ?
-            $injector.get(link.rel + 'Service') :
-            null);
-          $scope.pageTitle = link.prompt;  
-          $scope.url = link.href;
+          $location.path(link.href.replace(/^.*\/api/i, ''));
         }
       }
     };
@@ -66,8 +73,8 @@ angular.module('hateoas.controller',
     };
 
     $scope.$watch('url', function(href) {
-      Resource = $resource(href);
-      reloadTable();
+//      Resource = $resource(href);
+//      reloadTable();
     });
 
     $scope.$watchCollection('query.where', function(newQuery, oldQuery) {

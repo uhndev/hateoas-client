@@ -1,25 +1,22 @@
 angular.module( 'dados', [
+  'config',
 	'templates-app',
 	'templates-common',
 	'dados.auth',
 	'dados.header',
-	'dados.form',
-    'dados.answerset',
-  	'dados.formbuilder',
-	'dados.workflow',
-    'dados.person',
-    'dados.user',
-    'dados.study',
+  'dados.workflow',
+  'dados.formbuilder',
 	'dados.error',
     'dados.filters.formatter',
     'dados.filters.type',
 	'ui.router',
+    'hateoas',
     'hateoas.queryBuilder',
     'hateoas.allowNav'
 	// 'dados.common.services.csrf'
 ])
 
-.config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
+.config( function myAppConfig ( $urlRouterProvider ) {
 	$urlRouterProvider.otherwise( '/study' );
 })
 

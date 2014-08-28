@@ -1,21 +1,17 @@
-angular.module('dados.workflow',
-            ['ui.ace',
-             'ui.router',
-             'dados.workflow.controller',
-             'JSONedit'])
-       .config(['$stateProvider',
-function workflowRoute ($stateProvider) {
-  'use strict';
-  $stateProvider
-    .state('workflow', {
+angular.module('dados.workflow', 
+  ['ui.ace', 'dados.workflow.controller', 'JSONedit'])
+  .config(function WorkflowRouting($stateProvider) {
+    $stateProvider.state({
+      name: 'workflow',
       url: '/workflow',
-      views : {
+      views: {
         'main': {
           templateUrl: 'workflow/workflow.tpl.html',
           controller: 'WorkflowController'
         }
       },
-      data:{ pageTitle: 'Application Workflows' }
+      data: {
+        pageTitle: 'Workflow Settings'
+      }
     });
-}
-       ]);
+  });
