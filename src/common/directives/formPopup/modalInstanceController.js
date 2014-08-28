@@ -10,7 +10,7 @@ angular.module('dados.common.directives.modelInstance.controller', [])
   function ($rootScope, $scope, $resource, $modalInstance, template, onSubmit, onCancel) {
     $scope.form = {};
     // retrieve (Create, Update) callback payloads - see person.js and form.js
-    var payload, item, toAnswerSet;
+    var payload, item;
     
     payload = onSubmit();
     item = payload.item;
@@ -37,7 +37,6 @@ angular.module('dados.common.directives.modelInstance.controller', [])
      */
     $scope.ok = function () {
       $modalInstance.result.then(function (data) {
-        console.log(data);
         // if filling out a user form with destination AnswerSet,
         // there exists no template, so we use the field name from
         // the form; otherwise, we read from the template as the key
