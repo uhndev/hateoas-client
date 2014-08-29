@@ -3,26 +3,25 @@
  */
 
 angular.module( 'dados.auth', [
-    'ui.router',
     'ui.bootstrap',
     'dados.auth.service'
 ])
 
-.config(function config( $stateProvider ) {
-    $stateProvider
-    .state( 'login', {
-        url: '/login',
-        controller: 'AuthController',
-        templateUrl: 'auth/login.tpl.html',
-        data: { pageTitle: 'Login' }
-    })
-    .state( 'register', {
-        url: '/register',
-        controller: 'AuthController',
-        templateUrl: 'auth/register.tpl.html',
-        data: { pageTitle: 'Register' }
-    });
-})
+//.config(function config( $stateProvider ) {
+//    $stateProvider
+//    .state( 'login', {
+//        url: '/login',
+//        controller: 'AuthController',
+//        templateUrl: 'auth/login.tpl.html',
+//        data: { pageTitle: 'Login' }
+//    })
+//    .state( 'register', {
+//        url: '/register',
+//        controller: 'AuthController',
+//        templateUrl: 'auth/register.tpl.html',
+//        data: { pageTitle: 'Register' }
+//    });
+//})
 
 .controller('AuthController', ['$scope', '$window', '$location', 'AuthService', 'Authentication',
     function ($scope, $window, $location, AuthService, Authentication) {

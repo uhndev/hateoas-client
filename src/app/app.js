@@ -1,34 +1,31 @@
 angular.module( 'dados', [
-  'config',
 	'templates-app',
 	'templates-common',
 	'dados.auth',
 	'dados.header',
   'dados.workflow',
-  'dados.form',
   'dados.formbuilder',
 	'dados.error',
     'dados.filters.formatter',
     'dados.filters.type',
-	'ui.router',
-    'hateoas',
+   'hateoas',
     'hateoas.queryBuilder',
     'hateoas.allowNav'
 	// 'dados.common.services.csrf'
 ])
-
-.config( function myAppConfig ( $urlRouterProvider ) {
-	$urlRouterProvider.otherwise( '/study' );
-})
-
-.run( function run () {
-})
-
+// Configure all Providers
+//.config( function myAppConfig () { })
+// Initialize application
+//.run( function run () { })
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
-	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-		if ( angular.isDefined( toState.data.pageTitle ) ) {
-			$scope.pageTitle = toState.data.pageTitle;
-		}
-	});
-});
 
+  if (_.isEmpty($location.path())) {
+    $location.path('/study');
+  }
+
+  $scope.$on('$locationChangeSuccess', function(e, current, prev) {
+    $scope.pageTitle = _.titleCase($location.path()
+                                     .replace(/\//g, ' ')
+                                     .trim());
+  });
+});

@@ -46,6 +46,7 @@ angular.module('dados.common.directives.modelInstance.controller', [
         // if given an item, we update; save otherwise
         var promise = (item) ? resource.$update() : resource.$save();
         promise.then(function (data) {
+          // Replace this with a change to the data itself.
           $rootScope.$broadcast('hateoas.client.refresh');
         }).catch(function (err) {
           console.log(err);

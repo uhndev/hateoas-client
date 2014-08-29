@@ -4,13 +4,12 @@ angular.module( 'dados.formbuilder.controller', [
 ])
 
 .controller('FormBuilderController',
-  ['$scope', '$state', '$timeout', '$resource', 'Resource', 
-  function ($scope, $state, $timeout, $resource, Resource) {
+  ['$scope', '$location', '$timeout', '$resource', 
+  function ($scope, $location, $timeout, $resource) {
+    var api = 'http://localhost:1337/api/form';
+    var Resource = $resource(api);
     $scope.alerts = [];
     $scope.form = {};
-
-    // read formURL from query param
-    $scope.formURL = $state.params.formURL || '';
 
     var addAlert = function(msg) {
       $scope.alerts.push(msg);
@@ -23,12 +22,10 @@ angular.module( 'dados.formbuilder.controller', [
       addAlert({msg: err.data, type: 'danger'});
     };
 
+    var query = $location.search();
     // if formURL to load contains a form ID, load it
-    if ($scope.formURL !== '') {
-      Resource = $resource($scope.formURL, {}, {
-        'update' : { method: 'PUT' }
-      });
-      Resource.get($scope.formURL).$promise.then(function (form) {
+    if (_.has(query, 'id')) {
+      Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
         angular.copy(form.items, $scope.form);
         addAlert({msg: 'Loaded form '+$scope.form.form_name+' successfully!', type: 'success'});
       }, function (err) {

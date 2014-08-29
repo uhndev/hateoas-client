@@ -14,48 +14,11 @@
     </div>
     <div class="collapse navbar-collapse" collapse="menuCollapsed">
       <ul class="nav navbar-nav">
-        <li ui-sref-active="active">
-          <a href ui-sref="study">
-            <i class="fa fa-group"></i>
-            Studies
-          </a>
-        </li>
-        <li ui-sref-active="active">
-          <a href ui-sref="form">
-            <i class="fa fa-file-o"></i>
-            Forms
-          </a>
-        </li>
-        <li ui-sref-active="active">
-          <a href ui-sref="answerset">
-            <i class="fa fa-archive"></i>
-            Answers
-          </a>
-        </li>       
-        <li ui-sref-active="active">
-          <a href ui-sref="person">
-            <i class="fa fa-male"></i>
-            Person Manager
-          </a>
-        </li>
-        <li ui-sref-active="active">
-          <a href ui-sref="user">
-            <i class="fa fa-user"></i>
-            User Manager
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li ui-sref-active="active">
-          <a href ui-sref="formbuilder">
-            <i class="fa fa-pencil-square-o"></i>
-            Form Builder
-          </a>
-        </li>
-        <li ui-sref-active="active">
-          <a href ui-sref="workflow">
-            <i class="fa fa-code"></i>
-            Workflow Editor
+        <li ng-repeat="link in navigation"
+          ng-class="{ 'active': link.href === currentHref }">
+          <a href="#{{ link.href }}">
+            <i class="fa {{ link.icon }}"></i>
+            {{ link.prompt }}
           </a>
         </li>
       </ul>

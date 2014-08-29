@@ -59,7 +59,7 @@ angular.module('dados.common.directives.templateService', [])
       return {
         form_type: "system",
         form_name: template.rel + "_form",
-        form_title: _.capitalize(template.rel) + " Form",
+        form_title: _.titleCase(template.rel) + " Form",
         form_submitText: "Submit",
         form_cancelText: "Cancel",
         form_questions: questions

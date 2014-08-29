@@ -65,7 +65,7 @@ module.exports = {
       'vendor/sails.io.js/dist/sails.io.js',
       // angular dependencies
       'vendor/lodash/dist/lodash.min.js',
-      'vendor/angular-hateoas/hateoas.js',
+      'vendor/lodash-contrib/dist/lodash-contrib.min.js',
       'vendor/jquery/jquery.min.js',
       'vendor/jquery/jquery.min.map',
       'vendor/jquery-ui/ui/minified/jquery-ui.min.js',
@@ -82,7 +82,6 @@ module.exports = {
       'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
       'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.min.js',
-      'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/ui-utils.min.js',
       'vendor/angular-ui-sortable/sortable.min.js',
       'vendor/ng-table/ng-table.min.js',

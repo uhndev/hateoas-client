@@ -1,19 +1,13 @@
-angular.module('hateoas', ['hateoas.controller'])
-  .constant('HateoasUtils', {
-    generate: function(route, stateName, pageTitle) {
-      return {
-        name: stateName || route.replace(/\//g, ''),
-        url: route,
-        templateUrl: 'hateoasClient/hateoas.tpl.html',
-        controller: 'HateoasController',
-        data: {
-          pageTitle: pageTitle || _.capitalize(route.replace(/\//g, ' '))
-        },
-        resolve: {
-          Actions: function() {
-            return {};
-          }
-        }
-      };
+angular.module('hateoas', [
+  'hateoas.view',
+  'hateoas.controller'])
+  .constant('API', { 
+    protocol: 'http',
+    host : 'localhost',
+    port: '1337',
+    prefix: '/api',
+    url: function getUrl() {
+      return this.protocol + "://" + 
+        this.host + ":" + this.port + this.prefix;
     }
   });
