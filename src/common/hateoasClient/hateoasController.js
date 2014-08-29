@@ -13,17 +13,6 @@ angular.module('hateoas.controller',
     $scope.query = { 'where' : {} };
     var Resource = $resource($scope.url);
 
-    function reloadTable() {
-      // Page changes will trigger a reload. To reduce the calls to
-      // the server, force a reload only when the user is already on
-      // page 1.
-      if ($scope.tableParams.page() !== 1) {
-        $scope.tableParams.page(1);
-      } else {
-        $scope.tableParams.reload();
-      }
-    }
-
     /**
      * [actions - mapped callbacks that can be individually overridden]
      */
