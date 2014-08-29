@@ -104,7 +104,7 @@ angular.module('dados.common.directives.templateService', [])
     // if filling out a user form with destination AnswerSet,
     // there exists no template, so we use the field name from
     // the form; otherwise, we read from the template as the key
-    var field_keys = (!template.data) ? 
+    var field_keys = (!template.data || template.rel == 'answerset') ? 
                         _.pluck(data.form_questions, 'field_name') :
                         _.pluck(template.data, 'name');
     // answers from the filled out form
@@ -114,7 +114,7 @@ angular.module('dados.common.directives.templateService', [])
 
     // if filling out user form, need to record form, subject, and person
     // otherwise, just the answers are passed to the appropriate model
-    return (!template.data) ? {
+    return (!template.data || template.rel == 'answerset') ? {
       form: data.id,
       subject: '2',
       person: '3',
