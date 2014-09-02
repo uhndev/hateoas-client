@@ -1,0 +1,9 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-default"
+    ng-repeat="button in controls"
+    ng-click="launch(button, item)"
+    ng-disabled="button.requiresItem && !!!item">
+    <i class="fa {{ button.icon }}"></i>
+    {{ button.prompt }}
+  </button>
+</div>
