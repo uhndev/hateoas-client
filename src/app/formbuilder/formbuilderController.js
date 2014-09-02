@@ -7,7 +7,7 @@ angular.module( 'dados.formbuilder.controller', [
   ['$scope', '$location', '$timeout', '$resource', 
   function ($scope, $location, $timeout, $resource) {
     var api = 'http://localhost:1337/api/form';
-    var Resource = $resource(api);
+    var Resource = $resource(api, {}, {'update': { method: 'PUT' }});
     $scope.alerts = [];
     $scope.form = {};
 

@@ -1,5 +1,6 @@
 angular.module('hateoas', [
   'hateoas.view',
+  'hateoas.controls',
   'hateoas.controller'])
   .constant('API', { 
     protocol: 'http',

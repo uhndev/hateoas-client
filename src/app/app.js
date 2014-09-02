@@ -4,13 +4,13 @@ angular.module( 'dados', [
 	'dados.auth',
 	'dados.header',
   'dados.workflow',
+  'dados.form',
   'dados.formbuilder',
 	'dados.error',
     'dados.filters.formatter',
     'dados.filters.type',
    'hateoas',
     'hateoas.queryBuilder',
-    'hateoas.allowNav'
 	// 'dados.common.services.csrf'
 ])
 // Configure all Providers

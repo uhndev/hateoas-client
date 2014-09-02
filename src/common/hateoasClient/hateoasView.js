@@ -2,10 +2,10 @@ angular.module('hateoas.view', [])
   .directive('hateoasClient', 
   function($location, $compile, $templateCache) {
     var defaultTemplate = 
-      $templateCache.get('hateoasClient/hateoas.tpl.html');
+      $templateCache.get('hateoasClient/hateoasView.tpl.html');
 
     function loadTemplate(scope, element, route) {
-      var templateUrl = route.substring(1) + route + '.tpl.html';
+      var templateUrl = route.substring(1) + route + 'View.tpl.html';
       var fragment = $templateCache.get(templateUrl) || 
         defaultTemplate;
       element.html(fragment);

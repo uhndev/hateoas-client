@@ -1,8 +1,7 @@
 angular.module('hateoas.controller', 
     ['ngTable', 
      'hateoas',
-     'dados.common.services.sails',
-     'dados.common.directives.formPopup'])
+     'dados.common.services.sails'])
   .controller('HateoasController', 
     ['$scope', '$rootScope', '$resource', '$injector', '$location',
       'API', 'ngTableParams', 'sailsNgTable',  
@@ -12,43 +11,6 @@ angular.module('hateoas.controller',
     $scope.url = API.url() + $location.path();
     $scope.query = { 'where' : {} };
     var Resource = $resource($scope.url);
-
-    /**
-     * [actions - mapped callbacks that can be individually overridden]
-     */
-    $scope.actions = {
-      // Actions that can be mapped to the form-popup directive
-      ok: function() {
-        console.log('OK CALLBACK');
-      },
-      cancel: function() {
-        console.log('CANCEL CALLBACK');
-      },
-      // Actions that can be mapped to the allow-nav directive
-      // returns payload to modalInstanceController
-      'create': function() {
-        return {
-          item: null,
-          Resource: Resource
-        };
-      },
-      'update': function(item) {
-        return {
-          item: item,
-          Resource: $resource(item.href, {}, {
-            'update' : { method: 'PUT' }
-          })
-        };              
-      },
-      'delete': function(item) {
-        if (confirm('Are you sure you want to delete this item?')) {
-          $resource(item.href).remove()
-          .$promise.then(function() {
-            $rootScope.$broadcast('hateoas.client.refresh');
-          });
-        }
-      }
-    };
 
     $scope.follow = function(link) {
       if (link) {
