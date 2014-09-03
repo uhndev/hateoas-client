@@ -1,4 +1,5 @@
 <div ng-controller="HateoasController">
+  <div id="Links">
     <div class="btn-group">
       <button class="btn btn-default align-right"
         ng-click="follow(link)"
@@ -13,20 +14,21 @@
         {{ link.prompt }}
       </button>
     </div>
-  <h1>
+  </div>
+  <h1 id="Title">
     {{ pageTitle }}
     <small>
       Total: {{ resource.total }}
     </small>
   </h1>
-  <div class="clearfix">
+  <div id="Query" class="clearfix">
     <query-builder 
       template="resource.template" 
       ng-model="query.where"
       ng-if="resource.template">
     </query-builder>
   </div>
-  <div class="align-right">
+  <div id="Controls" class="align-right">
     <hateoas-controls
       ng-if='allow'
       data-template='template'
@@ -35,7 +37,7 @@
       data-item='selected'
     ></hateoas-controls>
   </div>
-  <table ng-table="tableParams" class="table">
+  <table id="Collection" ng-table="tableParams" class="table">
     <thead>
       <tr>
         <th ng-repeat="column in template.data"

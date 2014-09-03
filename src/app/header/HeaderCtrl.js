@@ -16,7 +16,6 @@ angular.module('dados.header', ['dados.common.services.authentication'])
     function ($scope, $location, Authentication) {
         $scope.currentUser = Authentication.currentUser;
         $scope.headerVisible = true;
-        $scope.currentHref = $location.path();
 
         $scope.navigation = [
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
@@ -34,8 +33,14 @@ angular.module('dados.header', ['dados.common.services.authentication'])
             $location.url('/login');
         }
 
-        $scope.$on('$locationChangeSuccess', function(e, current, prev) {
-          $scope.currentHref = $location.path();
-        });
+        function updateActive() {
+          var href = $location.path();
+          _.each($scope.navigation, function(link) {
+            link.isActive = (href.indexOf(link.href) === 0);
+          });
+        }
+
+        $scope.$on('$locationChangeSuccess', updateActive);
+        updateActive();
     }
 ]);

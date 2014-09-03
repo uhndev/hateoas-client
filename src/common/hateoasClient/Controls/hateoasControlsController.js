@@ -3,7 +3,8 @@ angular.module('hateoas.controls.controller',
    'hateoas.controls.service',
    'hateoas.utils',
    'ngform-builder'])
-  .controller('HateoasControlsController',
+  .controller('HateoasControlsController', 
+    ['$scope', '$modal', 'HateoasUtils',
     /**
      * Controller for the directive
      */
@@ -57,28 +58,12 @@ angular.module('hateoas.controls.controller',
        * Private: defaultLauncher
        * The default button handler
        */
-      function defaultLauncher(button) {
+      $scope.launch = function defaultLauncher(button) {
         if (button.method === 'delete') {
           archive($scope.item);
         } else {
           open(button.method);
         }
-      }
+      };
 
-      /**
-       * Modules can override the "Launch" function by creating a constant
-       * with a function using the name: 
-       *   "modelName" + "ControlsControllerLaunch"
-       * This function will then be called whenever any of the controls
-       * are clicked
-       */
-      var launcher = HateoasUtils.getService('ControlsControllerLaunch');
-
-      /**
-       * Public: launch
-       * Used to trigger the appropriate actions when a button is clicked.
-       */
-      $scope.launch = (launcher === null ? defaultLauncher : launcher);
-
-    });
-
+    }]);

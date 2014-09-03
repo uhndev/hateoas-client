@@ -1,13 +1,14 @@
 angular.module('hateoas.controller', 
     ['ngTable', 
      'hateoas',
+     'hateoas.utils',
      'dados.common.services.sails'])
   .controller('HateoasController', 
-    ['$scope', '$rootScope', '$resource', '$injector', '$location',
-      'API', 'ngTableParams', 'sailsNgTable',  
+    ['$scope', '$resource', '$location',
+      'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils',
       
-  function($scope, $rootScope, $resource, $injector, $location,
-    API, TableParams, SailsNgTable) {
+  function($scope, $resource, $location,
+    API, TableParams, SailsNgTable, Utils) {
     $scope.url = API.url() + $location.path();
     $scope.query = { 'where' : {} };
     var Resource = $resource($scope.url);

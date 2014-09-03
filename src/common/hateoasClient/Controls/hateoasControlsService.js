@@ -1,5 +1,6 @@
 angular.module('hateoas.controls.service', ['ngResource'])
-  .service('HateoasControlsService', function($q, $resource) {
+  .service('HateoasControlsService', [ '$q', '$resource',
+  function($q, $resource) {
       /**
        * Public: commit
        * Commits a HATEOAS item to the API.
@@ -21,4 +22,4 @@ angular.module('hateoas.controls.service', ['ngResource'])
       this.archive = function archive(item) {
         console.log("Not implemented!");
       };
-  });
+  }]);

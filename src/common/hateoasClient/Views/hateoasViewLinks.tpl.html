@@ -1,0 +1,16 @@
+<div>
+  <div class="btn-group">
+    <button class="btn btn-default align-right"
+      ng-click="follow(link)"
+      ng-repeat="link in selected.links">
+      {{ link.prompt }}
+    </button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-default align-right"
+      ng-click="follow(link)"
+      ng-repeat="link in resource.links">
+      {{ link.prompt }}
+    </button>
+  </div>
+</div>

@@ -123,6 +123,6 @@ angular.module('hateoas.queryBuilder', [])
     },
     link: postLink,
     templateUrl: 'queryBuilder/queryBuilder.tpl.html',
-    controller: queryController
+    controller: ['$scope', queryController]
   };
 });

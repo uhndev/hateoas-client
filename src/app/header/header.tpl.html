@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" collapse="menuCollapsed">
       <ul class="nav navbar-nav">
         <li ng-repeat="link in navigation"
-          ng-class="{ 'active': link.href === currentHref }">
+          ng-class="{ 'active': link.isActive }">
           <a href="#{{ link.href }}">
             <i class="fa {{ link.icon }}"></i>
             {{ link.prompt }}

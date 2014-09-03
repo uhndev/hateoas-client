@@ -21,6 +21,7 @@
   </head>
   <body>
 
+    <div ng-include="'status/status.tpl.html'"></div>
     <div ng-include="'header/header.tpl.html'"></div>
 
     <div class="container" hateoas-client></div>
@@ -30,8 +31,8 @@
         <div class="footer-inner">
           <p>
             &copy; 2014 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
-            <br />       
           </p>
+          <button ng-click="test()">Message</button>
         </div>
       </div>
     </footer>

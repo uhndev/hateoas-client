@@ -1,6 +1,7 @@
 angular.module('hateoas.modal.controller', 
   ['ui.bootstrap.modal', 'dados.common.services.template'])
-  .controller('HateoasModalController',
+  .controller('HateoasModalController', 
+    ['$scope', '$modalInstance', '$q', 'TemplateService',
     function HateoasModalController($scope, $modalInstance, $q, 
       TemplateService) {
       // Loads values into the form.
@@ -31,4 +32,4 @@ angular.module('hateoas.modal.controller',
       };
 
       loadTemplate($scope.template).then(loadValues);
-    });
+    }]);

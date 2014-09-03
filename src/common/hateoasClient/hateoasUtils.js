@@ -1,14 +1,29 @@
-angular.module('hateoas.utils', [])
-  .service('HateoasUtils', function($location, $injector) {
+angular.module('hateoas.utils', ['hateoas'])
+  .constant('HATEOAS_PREFIX', 'Hateoas')
+  .service('HateoasUtils', 
+    [ '$location', '$injector', 'HATEOAS_PREFIX',
+  function($location, $injector, HATEOAS_PREFIX) {
 
-    this.getService = function(suffix) {
+    function getFactories(suffix) {
       var model = _.capitalize($location.path().substring(1));
-      var service = model + suffix;
-      var defaultService = 'Hateoas' + suffix;
-      return ($injector.has(service) ? 
-        $injector.get(service) :
-          ($injector.has(defaultService) ?
-          $injector.get(defaultService) :
-          null));
+      return {
+        model: model + suffix,
+        default: HATEOAS_PREFIX + suffix
+      };
+    }
+
+    /**
+     * Public: getService
+     * Returns the Service Factory for a HATEOAS route.
+     */
+    this.getService = function (suffix) {
+      var factories = getFactories(suffix);
+      
+      return ($injector.has(factories.model) ?
+        $injector.get(factories.model) :
+          ($injector.has(factories.default) ?
+            $injector.get(factories.default) :
+            null ));
     };
-  });
+
+  }]);

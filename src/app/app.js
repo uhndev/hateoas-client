@@ -1,10 +1,10 @@
 angular.module( 'dados', [
 	'templates-app',
 	'templates-common',
+  'status',
 	'dados.auth',
 	'dados.header',
   'dados.workflow',
-  'dados.form',
   'dados.formbuilder',
 	'dados.error',
     'dados.filters.formatter',
@@ -26,6 +26,15 @@ angular.module( 'dados', [
   $scope.$on('$locationChangeSuccess', function(e, current, prev) {
     $scope.pageTitle = _.titleCase($location.path()
                                      .replace(/\//g, ' ')
+                                     .toLowerCase()
                                      .trim());
   });
+
+  $scope.test = function() {
+    $scope.$broadcast('status.update', {
+      note: 'Hello, World!',
+      type: 'info'
+    });
+  };
+
 });

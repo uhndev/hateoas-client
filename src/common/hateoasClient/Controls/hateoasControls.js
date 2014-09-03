@@ -1,6 +1,7 @@
 angular.module('hateoas.controls', 
   ['hateoas.controls.controller', 'hateoas.utils'])
-  .directive('hateoasControls', function(HateoasUtils) {
+  .directive('hateoasControls', [ 'HateoasUtils', 
+  function(HateoasUtils) {
     // Default constants values for the buttons
     var BTN_TEMPLATES = {
       'post' : {
@@ -54,4 +55,4 @@ angular.module('hateoas.controls',
       link: postLink,
       controller: 'HateoasControlsController'
     };
-  });
+  }]);
