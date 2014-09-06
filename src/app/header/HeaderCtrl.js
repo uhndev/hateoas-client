@@ -36,7 +36,8 @@ angular.module('dados.header', ['dados.common.services.authentication'])
         function updateActive() {
           var href = $location.path();
           _.each($scope.navigation, function(link) {
-            link.isActive = (href.indexOf(link.href) === 0);
+            link.isActive = 
+              (href.toLowerCase() === link.href.toLowerCase());
           });
         }
 

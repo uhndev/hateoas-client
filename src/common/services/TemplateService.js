@@ -3,6 +3,28 @@
  */
 angular.module('dados.common.services.template', [])
 .service('TemplateService', function() {
+  var TYPE_MAP = {
+    "string"    : "textfield",
+    "text"      : "textfield",
+    "integer"   : "number",
+    "float"     : "number",
+    "date"      : "date",
+    "datetime"  : "date",
+    "boolean"   : "checkbox",
+    "array"     : "textfield",
+    "json"      : "textfield"  
+  };
+
+  var BASE_FIELD = {
+    field_validation: {
+      rule: "none",
+      expression: ""
+    },
+    field_helpertext: 'required',
+    field_options: [],
+    field_hasOptions: false,
+    field_required: true
+  }; 
 
   /**
    * [formToObject - converts a form to an object]
@@ -18,61 +40,63 @@ angular.module('dados.common.services.template', [])
   };
 
   /**
+   * [toField - converts a data item from the application/collection+json
+   *  specification to a ng-form-builder field]
+   *  @param  {[item]} item [data item object]
+   *  @param  {[relation]} template's link relation
+   *  @return {[json]} ng-form-builder field object
+   */
+  function toField(item, relation) {
+    return {
+      field_name: item.name,
+      field_title: item.prompt,
+      field_placeholder: _.titleCase(relation + ' ' + item.prompt),
+      field_type: TYPE_MAP[item.type]
+    };
+  }
+
+  /**
+   * [flattenLists - flattens a array of objects containing nested lists]
+   *  @param  {[data]} data array from the template field
+   *  @return {[array]} data array of objects
+   */
+  function flattenDeep(list, listField) {
+    return _.reduce(list, function(result, item) {
+      if (_.has(item, listField) && _.isArray(item[listField])) {
+        result.concat( flattenDeep(item[listField]) );
+      } else {
+        result.push(item);
+      }
+      return result;
+    }, []);
+  }
+
+  /**
    * [parseToForm - converts a template object to a form]
    * @param  {[item]} item     [selected row item]
    * @param  {[json]} template [hateoas template object]
    * @return {[json]}          [resultant form object]
    */
   this.parseToForm = function(item, template) {
+    var relation = template.rel;
     // since AnswerSets don't have an href in their hateoas template
     // we need to load the form directly with the selected answerset's form
-    if (template.rel == 'answerset' && item) {
+    if (relation === 'answerset' && item) {
       return item.form;
     } else {
-      // mappings from sails model attribute types to input types
-      var typeMap = {
-        "string"    : "textfield",
-        "text"      : "textfield",
-        "integer"   : "number",
-        "float"     : "number",
-        "date"      : "date",
-        "datetime"  : "date",
-        "boolean"   : "checkbox",
-        "array"     : "textfield",
-        "json"      : "textfield"  
-      };
-      // recursive helper that 'flattens' arbitrarily nested templates
-      var fn = function(elem) {
-        if (_.has(elem, 'data')) {
-          return _.map(elem.data, fn);
-        } else {
-          return elem;
-        }
-      };
-      // flatten out template fields and reconstitute as form object
-      var fields = _.flatten(_.map(template.data, fn));
-      var questions = _.map(fields, function(elem, idx) {
-        return {
-          field_id: idx + 1,
-          field_name: elem.name,
-          field_title: elem.prompt,
-          field_type: typeMap[elem.type],
-          field_placeholder: template.rel + ' ' + elem.prompt,
-          field_validation: {
-            rule: "none",
-            expression: ""
-          },
-          field_helpertext: 'required',
-          field_options: [],
-          field_hasOptions: false,
-          field_required: true
-        }; 
+      var dataItems = flattenDeep(template.data, 'data');
+
+      var questions = _.map(dataItems, function(dataItem, index) {
+        return _.chain(BASE_FIELD)
+                .merge({ field_id: index + 1 })
+                .merge(toField(dataItem, relation))
+                .value();
       });
       
       return {
         form_type: "system",
-        form_name: template.rel + "_form",
-        form_title: _.titleCase(template.rel) + " Form",
+        form_name: relation + "_form",
+        form_title: _.titleCase(relation) + " Form",
         form_submitText: "Submit",
         form_cancelText: "Cancel",
         form_questions: questions

@@ -11,10 +11,13 @@ angular.module( 'dados', [
     'dados.filters.type',
    'hateoas',
     'hateoas.queryBuilder',
+  'config.interceptors'
 	// 'dados.common.services.csrf'
 ])
 // Configure all Providers
-//.config( function myAppConfig () { })
+.config( function myAppConfig ($httpProvider) { 
+  $httpProvider.interceptors.push('httpRequestInterceptor');
+})
 // Initialize application
 //.run( function run () { })
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
