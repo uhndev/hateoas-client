@@ -1,5 +1,5 @@
 <div class="container" ng-controller="HeaderCtrl">
-  <nav class="navbar navbar-default" role="navigation" ng-if="headerVisible">
+  <nav class="navbar navbar-default" role="navigation" ng-if="AuthService.authorized">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
         ng-click="menuCollapsed = ! menuCollapsed">

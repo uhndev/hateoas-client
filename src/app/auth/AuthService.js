@@ -7,6 +7,8 @@ angular.module('dados.auth.service', ['ngResource'])
     
     var LoginAuth    = $resource(loginURL);
     var RegisterAuth = $resource(registerURL);
+	
+	this.authorized = false;
 
     this.login = function(data, onSuccess, onError) {
       var state = new LoginAuth(data);

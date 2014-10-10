@@ -11,12 +11,16 @@ angular.module( 'dados', [
     'dados.filters.type',
    'hateoas',
     'hateoas.queryBuilder',
-  'config.interceptors'
+  'config.interceptors',
+  'ui.router',
 	// 'dados.common.services.csrf'
 ])
 // Configure all Providers
-.config( function myAppConfig ($httpProvider) { 
+.config( function myAppConfig ($httpProvider, $stateProvider) { 
   $httpProvider.interceptors.push('httpRequestInterceptor');
+  $stateProvider.state('hateoas', {
+    template: '<div class="container" hateoas-client></div>'
+  });
 })
 // Initialize application
 //.run( function run () { })
@@ -39,5 +43,6 @@ angular.module( 'dados', [
       type: 'info'
     });
   };
+  
 
 });

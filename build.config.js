@@ -84,6 +84,7 @@ module.exports = {
       'vendor/angular-ui-ace/ui-ace.min.js',
       'vendor/angular-ui-utils/ui-utils.min.js',
       'vendor/angular-ui-sortable/sortable.min.js',
+      'vendor/angular-ui-router/release/angular-ui-router.min.js',
       'vendor/ng-table/ng-table.min.js',
       'vendor/ng-table/ng-table.map',
       // plugins

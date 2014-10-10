@@ -3,19 +3,21 @@
  * uses the Menus service to track and add menu items based on role
  */
 
-angular.module('dados.header', ['dados.common.services.authentication'])
+angular.module('dados.header', [
+    'dados.common.services.authentication',
+    'dados.auth.service'
+])
 
 .controller('HeaderCtrl', 
-    ['$scope', '$location', 'Authentication', 
+    ['$scope', '$location', 'AuthService', 
     /**
      * [HeaderCtrl - controller for managing header items]
      * @param {[type]} $scope
      * @param {[type]} Menus - service for managing menuItems
      * @param {[type]} Authentication - factory for checking authentication
      */
-    function ($scope, $location, Authentication) {
-        $scope.currentUser = Authentication.currentUser;
-        $scope.headerVisible = true;
+    function ($scope, $location, AuthService) {
+        $scope.AuthService = AuthService;
 
         $scope.navigation = [
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
@@ -28,7 +30,7 @@ angular.module('dados.header', ['dados.common.services.authentication'])
 
         ];
 
-        if (!$scope.currentUser) {
+        if (!AuthService.authorized) {
             $scope.headerVisible = false;
             $location.url('/login');
         }

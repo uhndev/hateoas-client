@@ -10,22 +10,21 @@
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
     <script type="text/javascript">
       var currentUser = {
-        id: 'abc123',
-        username: 'admin',
+        id: '123zxy',
+        username: 'default',
         email: 'admin@uhn.ca',
         first_name: 'John',
-        last_name: 'Admin',
+        last_name: 'Doe',
         role: 'admin'
       };
     </script> 
   </head>
   <body>
 
-    <div ng-include="'status/status.tpl.html'"></div>
+    <!--<div ng-include="'status/status.tpl.html'"></div>-->
     <div ng-include="'header/header.tpl.html'"></div>
 
-    <div class="container" hateoas-client></div>
-    
+	<div class="container" ui-view></div>
     <footer class="footer">
       <div class="container" ng-controller="ErrorCtrl">
         <div class="footer-inner">
