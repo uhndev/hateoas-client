@@ -6,7 +6,7 @@ angular.module( 'dados.formbuilder.controller', [
 .controller('FormBuilderController',
   ['$scope', '$location', '$timeout', '$resource', 
   function ($scope, $location, $timeout, $resource) {
-    var api = 'http://localhost:1337/api/form';
+    var api = 'http://localhost:1337/api/form/:id';
     var Resource = $resource(api, {}, {'update': { method: 'PUT' }});
     $scope.alerts = [];
     $scope.form = {};
@@ -41,7 +41,7 @@ angular.module( 'dados.formbuilder.controller', [
       var resource = new Resource($scope.form);
       // if current form object has an href attribute, we update
       if (_.has($scope.form, 'href')) {
-        resource.$update().then(function (data) {
+        resource.$update( {id:$scope.form.id} ).then(function (data) {
           addAlert({msg: 'Updated form '+$scope.form.form_name+' successfully!', type: 'success'});
         }).catch(pushError);        
       } 

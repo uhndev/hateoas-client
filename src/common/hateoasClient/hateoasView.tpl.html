@@ -64,7 +64,7 @@
         <td ng-if="template.rel == 'form'">
           <button type="button" class="btn btn-default"
             ng-if="item.form_type !== 'system'"
-            ng-transclude form-popup template="item" on-submit="actions.ok()" on-cancel="actions.cancel()">
+            form-popup template="item" on-submit="actions.ok()" on-cancel="actions.cancel()">
             <i class="fa fa-pencil"></i>
             Complete
           </button>
