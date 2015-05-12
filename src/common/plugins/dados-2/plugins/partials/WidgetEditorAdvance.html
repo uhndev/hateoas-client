@@ -1,0 +1,41 @@
+<form class="form-horizontal" role="form">
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
+	    <label for="pattern">
+	        Validation
+	    </label>
+	    <input type="text" id="pattern" class="form-control" 
+	    	ng-model="widget.properties.pattern" />
+	    <ui-help popover="Set the validation pattern for this input. Use
+	     Regular Expressions to defined the validation rules."></ui-help>
+	</div>
+	<!-- div class="form-group">
+		<label for="css">
+			CSS
+		</label>
+	    <textarea id="css" ng-model="widget.css" 
+	    	class="form-control"  rows="3" cols="60">
+	    </textarea>
+	    <ui-help popover="Set the css for this widget.">
+	    </ui-help>
+	</div>
+	<div class="form-group">
+		<label for="click">
+			Click Event
+		</label>
+	    <textarea id="click" ng-model="widget.properties.onclick" 
+	    	class="form-control" rows="3" cols="60">
+	    </textarea>
+	    <ui-help popover="Set the javascript to run when the input is clicked.">
+	    </ui-help>
+	</div>
+	<div class="form-group">
+		<label for="change">
+			Change Event
+		</label>
+	    <textarea id="change" ng-model="widget.properties.onchange" 
+	    	class="form-control" rows="3" cols="60">
+	    </textarea>
+	    <ui-help popover="Set the javascript to run when the contents of this input
+	    has changed."></ui-help>
+	</div -->
+</form>

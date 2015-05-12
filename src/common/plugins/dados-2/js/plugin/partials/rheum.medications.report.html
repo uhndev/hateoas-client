@@ -1,0 +1,41 @@
+<div class="panel panel-default" ng-controller="MedicationSummaryController">
+	<div class="panel-heading" ng-click="isHeaderCollapsed = !isHeaderCollapsed">
+		<strong>Summary</strong>
+		<span class="glyphicon pull-right" 
+			ng-class="isHeaderCollapsed ? 'glyphicon-chevron-right' : 'glyphicon-chevron-down'">
+		</span>
+	</div>
+	<div class="panel-body" collapse="isHeaderCollapsed" ng-init="selected = 'All'">
+	  <ul class="nav nav-tabs" role="tablist">
+  		<li 
+  		  ng-repeat="(category, records) in summary"
+  		  ng-if="!!category"
+  		  ng-class="{ active: category === selected }"
+  		><a ng-click="select(category)">
+  		    {{ category }}
+  		    <span class="badge">
+  		      {{ records.length }}
+  		    </span>
+  		</a></li>
+	  </ul>
+	  <table class="table">
+		<thead>
+			<tr>
+				<th ng-repeat="header in headers">
+					{{ header.label }}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in summary[selected]"
+				ng-class="{ 'bg-success': !row['STOP_DATE'], 
+				'bg-warning' : !!row['STOP_DATE'], 
+				'bg-danger': !row['MEDICATION_CATEGORY']}">
+				<td ng-repeat="header in headers">
+					{{ row[header.name] | formatIfDate:header.name }}
+				</td>
+			</tr>
+		</tbody>
+      </table>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<div class="form-group" ng-hide="isHidden()">
+	<span
+		class="inline-slider"
+		ui-slider 
+		ng-model="widgetModel.value"
+		id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}"
+		name="{{ widget.name }}"
+		title="{{widget.properties.title}}"
+		step="{{widget.properties.step}}"
+		min="{{widget.properties.min}}"
+		max="{{widget.properties.max}}"
+		ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
+		>
+	</span>
+	<span class="slider-value pull-right">
+		{{ widgetModel.value }}{{ widget.properties.units }}
+	</span>
+</div>

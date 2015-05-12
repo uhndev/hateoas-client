@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>
+			Plugin Creator
+		</title>
+		
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/jquery-ui.js"></script>
+		
+		<script src="../js/angular/angular.js"></script>
+		<script src="../js/angular/angular-loader.js"></script>
+		<script src="../js/angular/angular-resource.js"></script>
+		<script src="../js/angular/angular-route.js"></script>
+		<script src="../js/angular/ui-bootstrap-tpls.min.js"></script>
+		<script src="../js/angular/lodash.compat.min.js"></script>
+		<script src="../js/angular/slider.js"></script>
+		<script src="../js/plugin/modules/ui.dados.plugin.js"></script>
+		<script src="../js/plugin/modules/ui.dados.editors.list.js"></script>
+		<script src="../js/plugin/modules/ui.dados.editors.plugin.js"></script>
+		<script src="../js/plugin/modules/ui.dados.editors.expression.js" charset="UTF-8"></script>
+		<script src="../js/plugin/modules/ui.dados.legacyList.js"></script>
+		<script src="../js/plugin/modules/data.dados.form.js"></script>
+		<script src="../js/plugin/helpers/functions.js"></script>
+		<script src="../js/plugin/directives/subform.js"></script>
+		<script src="../js/plugin/directives/calculation.js"></script>
+		
+		<script src="../js/plugin/services/ListServices.js"></script>
+		
+		<script src="../js/plugin/models/widgets.js"></script>
+		
+		<script src="../js/plugin/controllers/MetaDataController.js"></script>
+		<script src="js/controllers.js"></script>
+		<script src="js/application.js"></script>
+		
+		<link rel="stylesheet" href="../jquery-ui.css"/>
+		<link rel="stylesheet" href="../js/plugin/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../js/plugin/css/common.css" />
+		<link rel="stylesheet" href="css/plugins.css" />
+		<link rel="stylesheet" href="css/grid.css" />
+	</head>
+	<body ng-app="PluginCreator" ng-controller="PluginController">
+		<accordion close-others="false" class="plugin-editor">
+			<accordion-group is-open="isSettingsOpen">
+				<accordion-heading>
+					<span class="glyphicon " 
+						ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+					</span>
+					Settings
+       			</accordion-heading>
+				<ng-include src="'partials/PluginConfig.html'"></ng-include>
+			</accordion-group>
+			<accordion-group is-open="isEditorOpen">
+				<accordion-heading>
+					<span class="glyphicon " 
+						ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+					</span>
+					Configuration
+      			</accordion-heading>
+				<ng-include src="'partials/PluginLayout.html'"></ng-include>
+			</accordion-group>
+		</accordion>
+		<div class="controls">
+			<button class="btn btn-default pull-right" ng-model="isSaving"
+				ng-click="save()" ng-disabled="isSaving">
+				<span class="glyphicon glyphicon-floppy-disk"
+					tooltip="Save plugin"></span>
+				Save
+			</button>
+		</div>
+	</body>
+</html>

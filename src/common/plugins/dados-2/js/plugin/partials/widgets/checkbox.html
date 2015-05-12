@@ -1,0 +1,19 @@
+<ol class="row" ng-class="{'list-inline': widget.properties.cols > 1 }" ng-hide="isHidden()">
+	<li ng-repeat="option in widget.properties.options" 
+		ng-class="(widget.properties.cols > 0 ? 'col-md-' + 12/widget.properties.cols : '')">
+		<label for="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}:{{ $index }}"
+		       class="checkbox">
+			<input 
+				id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}:{{ $index }}"
+				type="checkbox"
+				ng-name="widget.name + '_' + $index"
+				title="{{ option.name }}"
+				ng-true-value="{{ option.value }}"
+				ng-false-value=""
+				ng-model="widgetModel.value[$index]"
+				ng-checked="widgetModel.value[$index] == option.value"
+			 />
+			{{ option.name }}
+		</label>
+	</li>
+</ol>

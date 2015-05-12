@@ -1,0 +1,43 @@
+<div class="panel panel-default" ng-if="answers">
+	<div class="panel-heading" ng-click="isHeaderCollapsed = !isHeaderCollapsed">
+		<strong>Help</strong>
+		<span class="glyphicon pull-right" 
+			ng-class="isHeaderCollapsed ? 'glyphicon-chevron-right' : 'glyphicon-chevron-down'">
+		</span>
+	</div>
+	<div class="panel-body" collapse="isHeaderCollapsed">
+		<p>
+	Tapping on the circles will indicate the pain level at a point. Each tap
+	will increase the value of the pain score. Tapping a point that is set to
+	the highest pain score will reset the hot spot.
+		</p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>
+						Colour
+					</th>
+					<th>
+						Pain
+					</th>
+					<th>
+						Count
+					</th>
+				</tr>	
+			</thead>
+			<tbody ng-controller="HomunculusCounterController">
+				<tr ng-repeat="item in form.questions[1].properties.options">
+					<td style="background-color:{{ item.colour }}">
+						{{ item.colour }}
+					</td>
+					<td>
+						{{ item.name }}
+					</td>
+					<td>
+						{{ count[item.value] }}
+					</td>
+				</tr>
+			</tbody>
+		</table>		
+	</div>
+</div>

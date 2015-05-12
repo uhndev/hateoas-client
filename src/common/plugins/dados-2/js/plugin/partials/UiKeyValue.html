@@ -1,0 +1,96 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(key, value) in metaData" ng-form="editKey">
+            <td>
+            	<span ng-if="!isSelected(key)">{{ key }}</span>
+            	<input type="text"
+            	    class="form-control"
+            	    placeholder="{{ key }}"
+            	    ng-if="isSelected(key)"
+	                name="key"
+	                ng-model="selected.key"
+	                ng-required="true"
+	                ng-pattern="/^[A-Za-z].*$/"
+	                is-unique="isEdittableKey"/>
+            </td>
+            <td>
+            	<span ng-if="!isSelected(key)">{{ value }}</span>
+	            <input type="text"
+	            	placeholder="{{ value }}"
+	            	class="form-control"
+	            	ng-if="isSelected(key)"
+	                name="value"
+	                ng-model="selected.value"
+	                ng-required="true"/>
+            </td>
+            <td>
+            	<div class="btn-group">
+	                <button class="btn btn-sm"
+	                	    ng-click="edit(key)"
+	                        ng-if="!selected">
+	                    Edit
+	                </button>
+	                <button class="btn btn-sm"
+	                		ng-click="selected = update(selected);"
+	                        ng-disabled="editKey.$invalid"
+	                        ng-if="isSelected(key)">
+	                    Update
+	                </button>
+	                <button class="btn btn-sm"
+							ng-click="delete(selected.oldKey)"
+	                        ng-if="isSelected(key)">
+	                    Delete
+	                </button>
+	                <button class="btn btn-sm"
+	                		ng-click="cancel()" 
+	                        ng-if="isSelected(key)">
+	                    Cancel
+	                </button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot ng-show="!selected">
+        <tr ng-form="newKey">
+            <td>
+                <input type="text"
+                class="form-control"
+                placeholder="Enter a new meta data key"
+                name="key"
+                ng-model="newPair.key"
+                ng-required="true"
+                ng-pattern="/^[A-Za-z].*$/"
+                is-unique="isUniqueKey"/>
+            </td>
+            <td>
+                <input type="text"
+                placeholder="Enter a new meta data value"
+                class="form-control"
+                name="value"
+                ng-model="newPair.value" 
+                ng-required="true"/>
+            </td>
+            <td>
+            	<div class="btn-group">
+	                <button class="btn btn-sm"
+	                		ng-click="newPair = add(newPair)"
+	                        ng-disabled="newKey.$invalid">
+	                    Add
+	                </button> 
+	                <button class="btn btn-sm"
+	                		ng-click="newPair = reset(newPair)"
+	                        ng-disabled="newKey.$pristine">
+	                    Reset
+	                </button>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

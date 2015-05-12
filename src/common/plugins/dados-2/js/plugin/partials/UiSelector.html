@@ -1,0 +1,11 @@
+<div class="form-group">
+	<label class="control-label">
+		{{ label }}
+	</label>
+	<div>
+		<select class="form-control"
+			    ng-model="selected"
+		        ng-options="item as item.name for item in list()">
+		</select>
+	</div>
+</div>

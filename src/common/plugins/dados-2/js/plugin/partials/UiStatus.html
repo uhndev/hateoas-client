@@ -1,0 +1,11 @@
+<div class="ui-status">
+	<div ng-repeat="notification in notifications" 
+		class="alert alert-{{ notification.status }}">
+		<span class="glyphicon glyphicon-info-sign"></span>
+		<button type="button" class="btn btn-primary close pull-right" 
+			ng-click="remove($index)">
+			<span class="glyphicon glyphicon-remove"></span>
+		</button>
+		{{ notification.message }}
+	</div>
+</div>
