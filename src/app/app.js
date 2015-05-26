@@ -7,6 +7,7 @@ angular.module( 'dados', [
 	'dados.status',
   'dados.header',
   'dados.workflow',
+  'dados.plugincreator',
   'dados.formbuilder',
 	'dados.error',
   'dados.filters.formatter',

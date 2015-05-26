@@ -1,0 +1,30 @@
+<div ng-controller="PluginController">
+	<accordion close-others="false" class="plugin-editor">
+		<accordion-group is-open="isSettingsOpen">
+			<accordion-heading>
+				<span class="glyphicon " 
+					ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+				</span>
+				Settings
+			</accordion-heading>
+			<ng-include src="'partials/PluginConfig.html'"></ng-include>
+		</accordion-group>
+		<accordion-group is-open="isEditorOpen">
+			<accordion-heading>
+				<span class="glyphicon " 
+					ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+				</span>
+				Configuration
+			</accordion-heading>
+			<ng-include src="'partials/PluginLayout.html'"></ng-include>
+		</accordion-group>
+	</accordion>
+	<div class="controls">
+		<button class="btn btn-default pull-right" ng-model="isSaving"
+			ng-click="save()" ng-disabled="isSaving">
+			<span class="glyphicon glyphicon-floppy-disk"
+				tooltip="Save plugin"></span>
+			Save
+		</button>
+	</div>
+</div>
