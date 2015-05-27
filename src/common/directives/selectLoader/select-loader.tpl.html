@@ -1,0 +1,33 @@
+<div ng-switch="select.isAtomic">
+	<div ng-switch-when="true">
+		<isteven-multi-select
+			selection-mode="single"
+			is-disabled="select.isDisabled"
+			input-model="select.input"
+			output-model="select.output"
+			button-label="{{select.labels}}"
+			item-label="{{select.labels}}"
+			output-properties="{{select.outputProperties}}"
+			tick-property="ticked"
+			max-labels="10"
+			on-item-click="select.setValues()"
+			on-reset="select.fetchData(true)">
+		</isteven-multi-select>
+	</div>
+	<div ng-switch-default>
+		<isteven-multi-select
+			is-disabled="select.isDisabled"
+			input-model="select.input"
+			output-model="select.output"
+			button-label="{{select.labels}}"
+			item-label="{{select.labels}}"
+			output-properties="{{select.outputProperties}}"
+			tick-property="ticked"
+			max-labels="10"
+			on-item-click="select.setValues()"
+			on-select-all="select.setValues()"
+			on-reset="select.fetchData(true)"
+			on-select-none="select.values = []">
+		</isteven-multi-select>
+	</div>
+</div>

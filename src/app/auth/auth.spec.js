@@ -17,9 +17,9 @@ describe('AuthService', function() {
  
   describe('Auth', function() {
     describe('instantiate', function() {
-      it('should have isAuthorized function', function() {
-        expect(AuthService.isAuthorized).toBeDefined();
-        expect(angular.isFunction(AuthService.isAuthorized)).toBeTruthy();
+      it('should have isAuthenticated function', function() {
+        expect(AuthService.isAuthenticated).toBeDefined();
+        expect(angular.isFunction(AuthService.isAuthenticated)).toBeTruthy();
       });
 
       it('should have login function', function() {
@@ -31,22 +31,17 @@ describe('AuthService', function() {
         expect(AuthService.logout).toBeDefined();
         expect(angular.isFunction(AuthService.logout)).toBeTruthy();
       });
-
-      it('should have register function', function() {
-        expect(AuthService.register).toBeDefined();
-        expect(angular.isFunction(AuthService.register)).toBeTruthy();
-      });
     });
 
-    describe('isAuthorized', function() {
+    describe('isAuthenticated', function() {
       it('should return false when user not logged in', function() {
-        expect(AuthService.isAuthorized()).toBeFalsy();
+        expect(AuthService.isAuthenticated()).toBeFalsy();
       });
 
       it('should return true when user is logged in', function() {
         ipCookie('user', {user: 'some value'});
         // $cookieStore.put('user', {user: 'some value'});
-        expect(AuthService.isAuthorized()).toBeTruthy();
+        expect(AuthService.isAuthenticated()).toBeTruthy();
         ipCookie.remove('user');
         // $cookieStore.remove('user');
       });

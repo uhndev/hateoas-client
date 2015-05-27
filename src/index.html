@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="dados" ng-controller="AppCtrl">
+<html ng-app="dados" ng-controller="DadosController as dados">
   <head>
     <title ng-bind="pageTitle"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,19 +9,15 @@
     <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
   </head>
-  <body>
-    <div class="navbar-container" ng-include="'header/header.tpl.html'"></div>
-    <alert ng-repeat="message in messages" 
-      type="{{message.type}}" 
-      close="closeAlert($index)">
-      {{message.msg}}
-    </alert> 
+  <body dados-status dados-error>
+    <dados-header submenu="dados.submenu"></dados-header>
+
   	<div ui-view></div>
     <footer class="footer">
-      <div class="container" ng-controller="ErrorCtrl">
+      <div class="container">
         <div class="footer-inner">
           <p>
-            &copy; 2014 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
+            &copy; 2015 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
           </p>
         </div>
       </div>

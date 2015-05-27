@@ -1,4 +1,6 @@
-angular.module('config.interceptors', [])
+(function() {
+  'use strict';
+  angular.module('config.interceptors', [])
   .factory('httpRequestInterceptor', function($q, $location) {
     return {
       'responseError': function(rejection) {
@@ -19,3 +21,4 @@ angular.module('config.interceptors', [])
       }
     };
   });
+})();

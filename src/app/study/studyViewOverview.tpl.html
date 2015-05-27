@@ -1,0 +1,115 @@
+<div ng-controller="StudyOverviewController as study">
+	<div class="row">
+		<div class="pull-left">
+			<h1 id="Title">
+				Study {{::study.resource.items.name}} Overview
+			</h1>
+		</div>
+		<div class="pull-right">
+			<br/>
+			<div id="Controls" class="align-right">
+				<hateoas-controls
+					ng-if='study.allow'
+					data-template='study.template'
+					data-href='{{study.resource.href}}'
+					data-slug='{{study.resource.slug}}'
+					data-permissions="study.allow"
+					data-item='study.resource.items'>
+				</hateoas-controls>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Enrollment</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<h3 class="panel-title text-center">Total Subjects</h3>
+								</div>
+								<div class="panel-body">
+									<h1 class="text-center">
+										<b>77</b>
+									</h1>
+								</div>
+							</div>
+						</div>
+						<!-- Collection Centres Panel -->
+						<div class="col-md-9">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th ng-repeat="col in study.collectionCentres.columns">
+											{{col.title}}
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="row in study.collectionCentres.tableData">
+										<td>
+											<input type="text" class="form-control" ng-model="row.name"/>
+										</td>
+										<td>
+											<select-loader
+												url="user"
+												isAtomic="false"
+												isDisabled="true"
+												values="row.contact"
+												labels="prefix firstname lastname"
+												outputProperties="id">
+											</select-loader>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td></td>
+										<td>
+											<button class="btn btn-primary btn-xs" ng-click="study.addCentre()" ng-if="!study.addingNew">
+												Add New
+											</button>
+											<button class="btn btn-warning btn-xs" ng-click="study.cancelAdd()" ng-if="study.addingNew">
+												Cancel
+											</button>
+										</td>
+									</tr>
+								</tfoot>
+							</table>							
+							<button class="btn btn-primary btn-sm"
+								ng-click="study.saveChanges()">
+								Save Changes
+							</button>
+							<button class="btn btn-warning btn-sm"
+								ng-click="study.revertChanges()">
+								Revert Changes
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Study Information</h3>
+				</div>
+				<div class="panel-body">
+					<simple-table columns="study.studyInfo.columns" table-data="study.studyInfo.tableData"></simple-table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="well">
+				<form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
+			</div>
+		</div>		
+	</div>
+</div>

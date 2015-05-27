@@ -1,0 +1,196 @@
+<div class="container-narrow">
+	<h2>Form Builder</h2>
+	<br>
+
+	<div class="well" >
+		<div class="form-fields" ng-hide="fb.previewMode">
+			<div class="form-properties">
+				<h3>Form Properties</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Form Type: </label>
+						<div class="col-sm-10">
+							<input type="text" name="form-type" class="form-control" ng-model="fb.form.form_type">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Form Name: </label>
+						<div class="col-sm-10">
+							<input type="text" name="form-name" class="form-control" ng-model="fb.form.form_name">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Form Title: </label>
+						<div class="col-sm-10">
+							<input type="text" name="form-title" class="form-control" ng-model="fb.form.form_title">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Text on Submit: </label>
+						<div class="col-sm-10">
+							<input type="text" name="form-submit-btn" class="form-control" ng-model="fb.form.form_submitText">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Text on Cancel: </label>
+						<div class="col-sm-10">
+							<input type="text" name="form-cancel-btn" class="form-control" ng-model="fb.form.form_cancelText">
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<hr>
+
+			<h3>Questions</h3>
+			<div class="add-field form-inline">
+				<select ng-model="fb.addField.new" class="form-control" ng-options="type as type.value for type in fb.addField.types">
+				</select>
+				<button type="submit" class="btn" ng-click="fb.addNewField()">
+					<span class="glyphicon glyphicon-plus"></span> Add Question
+				</button>
+			</div>
+			<hr>
+			<p ng-show="fb.form.form_questions.length == 0">No questions added yet.</p>
+
+			<accordion ui-sortable ng-model="fb.form.form_questions" close-others="fb.accordion.oneAtATime">
+				<div ui-sortable="fb.sortableOptions" ng-model="fb.form.form_questions">
+					<accordion-group ng-repeat="field in fb.form.form_questions" is-open="status.open">
+						<accordion-heading>
+							<a class="accordion-toggle">
+								{{field.field_id}}) &nbsp;{{field.field_title}}
+							</a>
+							<span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></span>
+						</accordion-heading>
+						
+						<div class="accordion-edit">
+							<button class="btn btn-danger pull-right" type="button" ng-click="fb.deleteField(field.field_id)">
+								<span class="glyphicon glyphicon-trash"></span> Delete
+							</button>
+
+							<div class="row">
+								<div class="col-md-4"><b>Question Type: </b></div>
+								<div class="col-md-4">{{field.field_type}}</div>
+							</div>
+							<hr/>
+							<div class="row">
+								<div class="col-md-4"><b>Question Label: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_title" class="form-control" value="{{field.field_title}}">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4"><b>Question Name: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_name" class="form-control" value="{{field.field_name}}">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4"><b>Question Placeholder: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_placeholder" class="form-control" value="field.field_placeholder">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4"><b>Question Helper Text: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_helpertext" class="form-control" value="field.field_helpertext">
+								</div>
+							</div>
+							<div class="row" ng-if="!field.field_hasOptions">
+								<div class="col-md-4"><b>Default Value: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_value" class="form-control" value="{{field.field_value}}">
+								</div>
+							</div>							
+							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
+								<div class="col-md-4"><b>REST URL of Item(s) to Load: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_userURL" class="form-control"
+										placeholder="http://localhost:1337/api/user"/>
+								</div>
+							</div>
+							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
+								<div class="col-md-4"><b>Labels to show on selection: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_labels" class="form-control"
+										placeholder="prefix firstname lastname"/>
+								</div>
+							</div>
+							<div class="row" ng-if="field.field_hasOptions">
+								<div class="col-md-4"><b>Question Options: </b></div>
+								<div class="col-md-8">
+									<div ng-repeat="option in field.field_options">
+										<form class="form-inline" role="form">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Enter name" 
+												ng-model="option.option_title" value="{{option.option_title}}">
+											</div>
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Enter value" 
+												ng-model="option.option_value" value="{{option.option_value}}">
+											</div>
+											<button type="button" class="btn btn-danger right" ng-click="fb.deleteOption(field, option)">
+													-
+											</button>
+										</form>
+									</div>
+									<button class="btn btn-primary btn-sm" type="button" ng-click="fb.addOption(field)">Add Option</button>
+								</div>
+							</div>
+							<validation-directive field="field"></validation-directive>
+							<div class="row">
+								<div class="col-md-4"><b>Required: </b></div>
+								<div class="col-md-4">
+								<label class="radio-inline">
+									<input type="radio" ng-value="true" ng-selected ng-model="field.field_required"> Yes
+								</label>
+								<label class="radio-inline">
+									<input type="radio" ng-value="false" ng-model="field.field_required"> No
+								</label>
+								</div>
+							</div>
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<h3 class="panel-title">Preview</h3>
+								</div>
+								<div class="panel-body">
+									<field-directive field="field"></field-directive>
+								</div>
+							</div>
+						</div>
+					</accordion-group>
+				</div>
+			</accordion>
+
+			<p class="text-center">
+				<button class="btn btn-primary right" type="button" ng-click="fb.previewOn()">
+					<span class="glyphicon glyphicon-eye-open"></span> Preview Form
+				</button>
+				<button class="btn btn-danger right" type="button" ng-click="fb.reset()"> 
+					<span class="glyphicon glyphicon-refresh"></span> Reset
+				</button>
+			</p>
+
+			<br><hr>
+			<a ng-show="!fb.showJson" ng-click="fb.showJson = true">Show form json object</a>
+			<a ng-show="fb.showJson" ng-click="fb.showJson = false">Hide form json object</a><br><br>
+			<div ng-show="fb.showJson">
+				<h4>Form object content:</h4>
+				<pre>{{ fb.form | json }}</pre>
+			</div>
+		</div>
+
+		<div class="form-fields-preview" ng-show="fb.previewMode">
+			<form-directive 
+				form="fb.previewForm" 
+				on-submit="submit()" 
+				on-cancel="cancel()">
+			</form-directive>
+			<hr/>
+			<p class="text-center">
+				<button class="btn btn-primary btn-large right" type="button" ng-click="fb.previewOff()">Back to Create Mode</button>
+			</p>
+		</div>
+	</div>
+</div>

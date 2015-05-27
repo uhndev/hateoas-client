@@ -6,13 +6,13 @@
       New
     </a>
     <a type="button" class="btn btn-default"
-      href="#/formbuilder?id={{selected.id}}"
-      ng-disabled="!!!selected">
+      href="#/formbuilder?id={{hateoas.selected.id}}"
+      ng-disabled="!!!hateoas.selected">
       <i class="fa fa-edit"></i>
       Edit
     </a>
     <button type="button" class="btn btn-default"
-      ng-disabled="!!!selected">
+      ng-disabled="!!!hateoas.selected">
       <i class="fa fa-trash-o"></i>
       Archive
     </button>

@@ -19,7 +19,8 @@ module.exports = function ( karma ) {
     frameworks: [ 'jasmine' ],
     plugins: [ 'karma-jasmine', 
                'karma-chrome-launcher', 
-               'karma-firefox-launcher' ],
+               'karma-firefox-launcher',
+               'karma-phantomjs-launcher' ],
     preprocessors: {
     },
 
@@ -55,7 +56,8 @@ module.exports = function ( karma ) {
      * the aesthetic advantage of not launching a browser every time you save.
      */
     browsers: [
-      'Chrome'
+      // 'Chrome'
+      'PhantomJS'
     ]
   });
 };

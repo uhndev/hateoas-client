@@ -1,0 +1,107 @@
+<div class="navbar-container">
+  <div class="headerWrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="logo_dados">
+                <img id="dados-brand" alt="Brand" ng-src="assets/img/dados.png" width="150" height="52">
+              </div>
+              <div id="subBrand" class="pull-left">
+                <div id="subBrand_site">TECHNA INSTITUTE</div>
+                <div id="subBrand_dep">EXTREME EDITION</div>
+              </div>            
+            </div>            
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <small id="tagline">
+                An Open Platform for Prospective Data Collection in Clinical and Translational Research
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="pull-right">
+          <div id="profile_panel" ng-if="header.isVisible">
+            <div id="profile_pannel_inner">
+              <div id="logout">              
+                <a href="/logout" ng-click="header.logout()">
+                  <img id="logout_img">
+                </a>
+              </div>
+              <div class="profile_title">
+                {{::header.currentUser}}
+              </div>
+              <div class="profile_content">                      
+<!--                 <div>
+                  <b>LAST LOGIN</b> - 09:35 19-05-2015&nbsp;
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menuWrapper" collapse="!header.isVisible">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"
+            ng-click="header.menuCollapsed = ! header.menuCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="link in ::header.navigation"
+              ng-class="{ 
+                'active': link.isActive,
+              }">
+              <a href="#{{ ::link.href }}">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="submenuWrapper" collapse="!header.isVisible || !header.submenu.links">
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="header.submenuCollapsed = true"
+            ng-click="header.submenuCollapsed = ! header.submenuCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" ng-click="header.follow(header.submenu.links[0])">
+            <span class="submenu-link-colour">Selected Study: </span>
+            <span style="color: white">{{header.submenu.links[0].prompt}}</span>
+          <a/>
+        </div>
+        <div class="collapse navbar-collapse" collapse="header.submenuCollapsed">  
+          <ul class="nav navbar-nav">
+            <li ng-repeat="link in header.submenu.links.slice(1)"
+              ng-class="{ 'active': link.isActive }">
+              <a ng-click="header.follow(link)">
+                {{ link.prompt }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

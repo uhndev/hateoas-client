@@ -1,0 +1,52 @@
+<div ng-controller="UserOverviewController as user">
+	<div class="row">
+		<div class="col-md-4">
+			<h1 id="Title">
+				{{user.title}}
+			</h1>
+		</div>
+		<div class="pull-right">
+			<br/>
+			<div id="Controls" class="align-right">
+				<hateoas-controls
+					ng-if='user.allow'
+					data-template='user.template'
+					data-href='{{user.resource.href}}'
+					data-slug='{{user.resource.slug}}'
+					data-permissions="user.allow"
+					data-item='user.resource.items'>
+				</hateoas-controls>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	
+	<div class="row">
+		<!-- List User Info -->
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">User Information</h3>
+				</div>
+				<div class="panel-body">
+					<simple-table columns="user.userInfo.columns" table-data="user.userInfo.tableData"></simple-table>
+				</div>
+			</div>
+		</div>
+		<!-- List User Studies --> 
+		<div class="col-md-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Studies</h3>
+				</div>
+				<div class="panel-body">
+					<list-editor
+						list="user.centreAccess.tableData"
+						columns="user.centreAccess.columns"
+						force-reload="user.savedData.forceReload">
+					</list-editor>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

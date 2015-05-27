@@ -1,0 +1,190 @@
+<div class="table-responsive">
+	<table ng-table="tableParams" class="table table-hover">
+		<thead>
+			<tr>
+				<!-- Header Columns for Data -->
+				<th ng-repeat="column in ledit.columns" class="sortable text-left" 
+					ng-class="{selectEdit: column.$edit && ledit.canEditItem,
+						'sort-asc': ledit.isSortBy(column.field, 'asc'),
+						'sort-desc': ledit.isSortBy(column.field, 'desc')}"
+					ng-click="ledit.sortTable(column)">
+					<button ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem || ledit.canDelCol" 
+						type="button" class="pull-left close" 
+						ng-if="ledit.canEdit" 
+						ng-click="ledit.removeColumn($index)">
+						<span aria-hidden="true">&times;</span>&nbsp;
+					</button>
+					<span class="pull-left" ng-if="!column.$edit">{{column.title}}</span>
+					<div ng-if="column.$edit">
+						<input type="text" class="form-control" 
+							ng-model="column.title" 
+							ng-disabled="ledit.canEditHeader"/>
+					</div>
+					<div ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem" class="pull-right">
+						<button type="button" class="pull-left btn btn-default btn-xs" 
+							ng-if="ledit.canEdit" 
+							ng-click="ledit.selectColumnEdit(column)" >
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+					</div>
+				</th>
+				<!-- Edit Column Header -->
+				<th ng-if="!ledit.editCol && ledit.canEdit" 
+						ng-show="{{ledit.canAddNewcol}}" width="45">
+					<button class="btn btn-default btn-sm" 
+						ng-if="!ledit.editCol"
+						ng-disabled="ledit.editRow || ledit.canEditItem" 
+						ng-click="ledit.editNewColumn()">
+					  <span class="glyphicon glyphicon-plus"></span>
+				  </button>
+				</th>
+				<!-- Action Column Header -->
+				<th ng-if="ledit.editCol && ledit.canEdit" class="selectEdit">
+					<input type="text" 
+						placeholder="New Column Title" class="form-control" 
+						ng-model="columnBuffer.title" />
+				</th>
+				<th ng-if="ledit.canEdit">Actions</th>
+			</tr>
+			<tr ng-if="ledit.showEditCol">
+				<th ng-repeat="column in ledit.columns">
+					<div ng-if="ledit.showEditCol && !column.$edit && ledit.canEdit" 
+						 ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem" class="btn-group">
+						<button class="btn btn-default btn-xs" 
+							ng-if="ledit.canEdit" 
+							ng-click="ledit.selectColumnEdit(column)">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+						<button class="btn btn-danger btn-xs" 
+							ng-if="ledit.canEdit" 
+							ng-click="ledit.removeColumn($index)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</th>				
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in $data" ng-class="{selectEdit: item.$edit && ledit.canEditItem}">
+				<!-- Render each cell per row of data -->
+				<td ng-repeat="column in ledit.columns" 
+					ng-class="{selectEdit: column.$edit && ledit.canEditItem}">
+					<span ng-if="!item.$edit && !column.$edit">{{item[column.field]}}</span>
+					<div ng-if="item.$edit">
+						<input class="form-control" type="{{column.type}}" 
+						placeholder="{{item[column.field]}}" ng-model="item[column.field]" />
+					</div>
+					<div ng-if="column.$edit" data-ng-switch on="column.type">
+						<div data-ng-switch-when="text">
+							<input type="text" class="form-control" ng-model="item[column.field]" />
+						</div>
+						<div data-ng-switch-when="number">
+							<input type="number" class="form-control" ng-model="item[column.field]" />
+						</div>
+					</div>
+				</td>
+				<!-- Render nothing on non-column edit mode -->
+				<td ng-if="!ledit.editCol && ledit.canEdit" ng-show="{{ledit.canAddNewcol}}" width="45"></td>
+				<!-- Render optional inputs when creating new columns -->
+				<td ng-if="ledit.editCol && ledit.canEdit" ng-show="{{ledit.canAddNewcol}}" class="selectEdit">
+					<div data-ng-switch on="ledit.columnBuffer.type">
+						<div data-ng-switch-when="text">
+							<input type="text" class="form-control" ng-model="ledit.columnBuffer.data[$index]" />
+						</div>
+						<div data-ng-switch-when="number">
+							<input type="number" class="form-control" ng-model="ledit.columnBuffer.data[$index]" />
+						</div>
+					</div>
+				</td>
+				<!-- Render action cells for editing rows -->
+				<td width="90" ng-if="ledit.canEdit">
+					<div class="btn-group" ng-if="!item.$edit">
+						<button id="selectRowEditID_{{$index}}" class="btn btn-default btn-sm" 
+							ng-disabled="ledit.editCol || ledit.editRow || ledit.canEditItem" 
+							ng-click="ledit.selectRowEdit(item)">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+						<button id="removeRowID_{{$index}}" class="btn btn-danger btn-sm" 
+							ng-disabled="ledit.editCol || ledit.editRow || ledit.canEditItem" 
+							ng-click="ledit.removeRow(item)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</div>
+					<div class="btn-group" ng-if="item.$edit">
+						<button id="toggleEditID_{{$index}}" class="btn btn-primary btn-sm"
+							ng-click="ledit.toggleEdit(item)">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button id="cancelRowEditID_{{$index}}" class="btn btn-warning btn-sm" 
+							ng-click="ledit.cancelRowEdit(item)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot ng-if="ledit.canEdit">
+			<tr>
+				<!-- Placeholder inputs for creating new rows -->
+				<td data-title="column.title" ng-repeat="column in ledit.columns" 
+					ng-class="{selectEdit: column.$edit && ledit.canEditItem}">
+					<input ng-if="ledit.editRow" class="form-control" 
+						ng-disabled="ledit.editCol || ledit.canEditItem" 
+						placeholder="New {{column.field}}" type="{{column.type}}" 
+						ng-model="ledit.rowBuffer[column.field]"/>
+					<div ng-if="column.$edit">
+						<button class="btn btn-primary btn-sm" ng-click="ledit.toggleEdit(column)">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button class="btn btn-warning btn-sm" ng-click="ledit.cancelColumnEdit(column)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</td>
+				<!-- Render input type option and field name input when creating columns -->
+				<td ng-show="{{ledit.canAddNewcol}}" ng-class="{'selectEdit': ledit.editCol}">
+					<div ng-if="ledit.editCol">
+						<input class="form-control" 
+							placeholder="New field key" type="text" 
+							ng-model="ledit.columnBuffer.field"/>
+						<select class="form-control" 
+							ng-model="ledit.columnBuffer.type" 
+							ng-change="ledit.columnBuffer.data = {}">
+							<option value="text">Textfield</option>
+							<option value="number">Number</option>
+						</select>
+						<br/>
+						<button class="btn btn-primary btn-sm" 
+							ng-disabled="!ledit.canAddCol" 
+							ng-click="ledit.addColumn()">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button class="btn btn-warning btn-sm" 
+							ng-click="ledit.reset(true)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</td>
+				<!-- Action handlers for creating and cancelling row creation -->
+				<td ng-show="{{ledit.canAddNewrow}}" width="90">
+					<div class="btn-group">
+						<button ng-if="!ledit.editRow" class="btn btn-primary btn-sm" 
+							ng-disabled="ledit.editCol || ledit.canEditItem" 
+							ng-click="ledit.editNewRow()">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button ng-if="ledit.editRow" class="btn btn-primary btn-sm" 
+							ng-disabled="ledit.editCol || !ledit.canAddRow" 
+							ng-click="ledit.addRow()">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button ng-if="ledit.editRow" class="btn btn-warning btn-sm" 
+							ng-disabled="ledit.editCol" ng-click="ledit.reset(true)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
