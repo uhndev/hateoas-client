@@ -10,7 +10,26 @@
   httpRequestInterceptor.$inject = ['$q', '$location', '$injector'];
 
   function httpRequestInterceptor($q, $location, $injector) {
+    var CookieStore = $injector.get('$cookieStore');
+
     return {
+
+      /**
+       * Inteceptor for all $http requests to add authentication header
+       * @param  {*} config
+       * @return {*}
+       */
+      request: function(config) {
+        var token;
+        if (_.has(CookieStore.get('user'), 'token')) {
+          token = CookieStore.get('user').token;
+        }
+        if (token) {
+          config.headers.Authorization = 'Bearer ' + token;
+        }
+        return config;
+      },
+
       /**
        * Interceptor method which is triggered whenever response occurs on $http queries.
        * @param  {*} response 
