@@ -1,0 +1,58 @@
+<tabset>
+	<tab heading="Settings">
+		<form>
+			<div class="form-group">
+				<label for="form-loader">Load Plugin:</label>
+				<select ng-model="idPlugin"
+				  class="form-control"
+				  ng-change="loadForm(idPlugin)"
+				  ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
+				  <option value="">-- New --</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="form-name">Plugin Name:</label>
+				<ui-help popover="Provide a name for your plugin. Names must 
+						be in upper case and cannot contain any spaces." 
+					popover-placement="right"></ui-help>
+				<input type="text" class="form-control"
+				 ng-model="form.name"
+				 ng-trim="true" title="Provide a name for your plugin" 
+				 placeholder="Provide a name for your plugin" />
+			</div>
+			<h3>Meta Data</h3>
+			<ng-include src="'../js/plugin/partials/MetaDataEditor.html'">
+			</ng-include>
+		</form>
+	</tab>
+	<tab heading="Import from DADOS">
+		<ui-legacy-list data-list="studies" label="Import from Study:" 
+					data-selected-event="studySelected">
+		</ui-legacy-list>
+		<ui-legacy-list data-list="encounters" label="Encounter" 
+						ng-if="encounters.length > 0"
+					    data-selected-event="encounterSelected">
+		</ui-legacy-list>
+		<button class="btn btn-default pull-right" ng-click="import()" 
+				ng-show="encounter !== null">
+       		Import {{ encounter.name }}
+     	</button>
+	</tab>
+	<tab heading="Import from JSON">
+		<label for="jsonImport">
+			Paste your form below:
+		</label>
+		<textarea id="jsonImport"
+		          class="form-control" 
+				  ng-model="jsonForm" rows="10">
+		</textarea>
+		<button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
+			Import
+		</button>	
+	</tab>
+	<tab heading="JSON">
+		<pre>
+			{{ form | json }}
+		</pre>
+	</tab>
+</tabset>

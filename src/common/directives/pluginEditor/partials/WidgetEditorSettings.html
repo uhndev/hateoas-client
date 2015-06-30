@@ -1,0 +1,202 @@
+<form class="form-horizontal" role="form">
+
+    <div class="panel panel-danger" ng-if="widget.template === 'output'">
+       	<div class="panel-heading">
+       		Warning! <small>0.1 + 0.2 !== 0.3</small>
+       	</div>
+       	<div class="panel-body">
+       	<p>
+       	Note that JavaScript uses IEEE-754 floating point arithmetic.
+       	This is known to cause errors when performing calculations with decimal
+       	numbers. Please see <a href="http://support.microsoft.com/kb/42980">
+       	this article</a> for an in-depth explanation of all possible errors. 
+       	</p>
+		</div>
+    </div>
+
+	<div class="form-group" ng-show="widget.hasOwnProperty('label')">
+	    <label for="label">
+	        Question
+	    </label>
+	    <input class="form-control" id="label"
+	     type="text" maxlength="256" 
+	     ng-required="true" ng-trim="true" ng-model="widget.label" />
+	    <ui-help popover="Specify the question for this input."></ui-help>
+	</div>
+	<div class="form-group">
+	    <label for="name">
+	        Field Name
+	    </label>
+	    <input class="form-control" id="name"
+	     placeholder="Field Name"
+	     type="text" maxlength="256" ng-capitalize
+	     ng-required="true" ng-trim="true" ng-model="widget.name" />
+	    <ui-help popover="Specify the field name for this input. Field 
+	     names cannot contain spaces and must be in uppercase."></ui-help>
+	</div>
+	<div class="form-group">
+	    <label for="title">
+	        Tool Tip
+	    </label>
+	    <input class="form-control" id="title"
+	     placeholder="Tool tips"
+	     type="text" maxlength="256"
+	     ng-required="true" ng-trim="true" ng-model="widget.properties.title" />
+	    <ui-help popover="Specify the tool tip for this input. Tool tips will
+	     appear when the user hovers over an input. As well, empty inputs will
+	     automatically show the tool tip within the input."></ui-help>
+	</div>
+	<div class="form-group">
+		<label for="defaultValue">
+			Default Value
+		</label>
+		<input class="form-control" id="title"
+		 placeholder="Default value" type="text"
+		 ng-trim="true" ng-model="widget.properties.defaultValue.value" />
+		<ui-help popover="Specify the default value for this question"></ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('idForm')">
+		<label for="form">
+			SubForm ID
+		</label>
+		<input class="form-control" id="subform"
+	     placeholder="Form ID"
+	     type="number" 
+	     ng-model-options="{debounce: 1000}"
+	     ng-required="true" ng-trim="true" ng-model="widget.properties.idForm" />
+		<ui-help popover="Select a plugin to embed within this plugin.">
+		</ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('size')">
+	    <label for="size">
+	        Widget Size
+	    </label>
+	    <input class="form-control" id="size" placeholder="Field size"
+	     type="number" min="1" ng-model="widget.properties.size" />
+	    <ui-help popover="Specify the width of the input. Size is a measure of the
+	     number of characters the input can fit."></ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('maxlength')">
+	    <label for="maxlength">
+	        Maximum input length
+	    </label>
+	    <input class="form-control" id="maxlength" placeholder="Maximum characters"
+	     type="number" min="0"
+	     ng-required="false" ng-model="widget.properties.maxlength" />
+	    <ui-help popover="Specify the maximum number of characters that this
+	     input can take."></ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('rows')">
+	    <label for="rows">
+	        Rows
+	    </label>
+	    <input class="form-control" id="rows" placeholder="Number of rows"
+	     type="number" ng-required="false" ng-model="widget.properties.rows" />
+	    <ui-help popover="Specify the number of rows for this input.">
+	    </ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('cols')">
+	    <label for="cols">
+	        Columns
+	    </label>
+	    <div ng-if="widget.properties.type === 'checkbox' || widget.properties.type === 'radio'">
+		    <span
+				class="inline-slider"
+				ui-slider 
+				ng-model="widget.properties.cols"
+				id="cols"
+				title="Number of columns"
+				step="1"
+				min="1"
+				max="4"
+			></span><span class="slider-value">
+				{{ widget.properties.cols }}
+			</span>
+		</div>
+	    
+	    <input class="form-control" 
+	     ng-if="widget.properties.type !== 'checkbox' && widget.properties.type !== 'radio'"
+		 id="cols" placeholder="Number of columns"
+	     type="number" ng-required="false" ng-model="widget.properties.cols" />
+	    <ui-help popover="Specify the number of columns for this input.">
+	    </ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('step')">
+		<label for="step">
+			Step Size
+		</label>
+		<input class="form-control" id="step" type="number" ng-required="false"
+			ng-model="widget.properties.step" />
+		<ui-help popover="Specify the increment/decrement value for this widget.">
+		</ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('min')" 
+		 ng-switch="widget.properties.type">
+	    <label for="min">
+	        Minimum Input Value
+	    </label>
+    	<input ng-switch-when="range" class="form-control" id="min"
+		     type="number"
+		     ng-required="false" ng-model="widget.properties.min" />
+		<input ng-switch-when="date" class="form-control" id="min"
+		     type="text" datepicker-popup
+		     ng-required="false" ng-model="widget.properties.min" />
+    	<input ng-switch-default class="form-control" id="min"
+		     ng-attr-type="{{widget.properties.type}}"
+		     ng-required="false" ng-model="widget.properties.min" />
+	    <ui-help popover="Specify the minimum value that the user can enter.">
+	    </ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('max')"
+		ng-switch="widget.properties.type">
+	    <label for="max">
+	        Max Input Value
+	    </label>
+	    <input ng-switch-when="range" class="form-control" id="max"
+	     type="number"
+	     ng-required="false" ng-model="widget.properties.max" />
+	     <input ng-switch-when="date" class="form-control" id="max" 
+		     type="text" datepicker-popup
+		     ng-required="false" ng-model="widget.properties.max" />
+	    <input ng-switch-default class="form-control" id="max"
+	     ng-attr-type="{{widget.properties.type}}"
+	     ng-required="false" ng-model="widget.properties.max" />
+	    <ui-help popover="Specify the maximum value that the user can enter.">
+	    </ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('units')">
+		<label for="units">
+			Slider Units
+		</label>
+		<input class="form-control" id="units" type="text" ng-required="false"
+			ng-model="widget.properties.units" />
+		<ui-help popover="Specify any units of measurement for this widget.">
+		</ui-help>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('data')">
+		<div class="file-drop" ng-image-drop ng-model="widget.properties.data"
+			style="width:20em;">
+			<p ng-show="!!!widget.properties.data">
+				Drop file here.
+			</p>
+			<p ng-show="!!widget.properties.data">
+				Drop file here to replace.
+			</p>
+			<img ng-show="!!widget.properties.data" 
+				 ng-src="{{ widget.properties.data }}" 
+				 style="max-width:20em;max-height:20em;"/>
+		</div>
+	</div>
+	<div class="form-group" ng-show="widget.properties.hasOwnProperty('expression')">
+		<label for="expression">
+			Expression
+		</label>
+	    <button class="btn" 
+	    		ng-class="!!widget.properties.expression ? 'btn-success' : 'btn-default'"
+	            ng-click="createExpression('expression', fieldNames)">
+	            Define
+        </button>
+		<ui-help popover="Define an expression to evaluate">
+		</ui-help>
+	</div>
+</form>

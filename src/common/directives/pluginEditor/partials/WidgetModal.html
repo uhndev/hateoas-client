@@ -1,0 +1,17 @@
+<div class="modal-header">
+	<h1 ng-if="!!!widget.label">Configure Widget</h1>
+	<h1 ng-if="!!widget.label">Configure {{ widget.label }}</h1>
+</div>
+<div class="modal-body">
+	<ng-include src="'partials/WidgetConfig.html'"></ng-include>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">
+		<span class="glyphicon glyphicon-save"></span>
+		Apply Changes
+	</button>
+	<button class="btn btn-warning" ng-click="cancel()">
+		<span class="glyphicon glyphicon-trash"></span>
+		Cancel
+	</button>
+</div>

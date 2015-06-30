@@ -1,4 +1,5 @@
 <div ng-controller="PluginController">
+	<h1>Form Builder</h1>
 	<accordion close-others="false" class="plugin-editor">
 		<accordion-group is-open="isSettingsOpen">
 			<accordion-heading>
@@ -7,7 +8,52 @@
 				</span>
 				Settings
 			</accordion-heading>
-			<ng-include src="'partials/PluginConfig.html'"></ng-include>
+			<!-- PluginConfig -->
+			<tabset>
+				<tab heading="Settings">
+					<form>
+						<div class="form-group">
+							<label for="form-loader">Load Plugin:</label>
+							<select ng-model="idPlugin"
+							  class="form-control"
+							  ng-change="loadForm(idPlugin)"
+							  ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
+							  <option value="">-- New --</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="form-name">Plugin Name:</label>
+							<ui-help popover="Provide a name for your plugin. Names must 
+									be in upper case and cannot contain any spaces." 
+								popover-placement="right"></ui-help>
+							<input type="text" class="form-control"
+							 ng-model="form.name"
+							 ng-trim="true" title="Provide a name for your plugin" 
+							 placeholder="Provide a name for your plugin" />
+						</div>
+						<h3>Meta Data</h3>
+						<form-meta-editor></form-meta-editor>
+					</form>
+				</tab>
+				<tab heading="Import from JSON">
+					<label for="jsonImport">
+						Paste your form below:
+					</label>
+					<textarea id="jsonImport"
+							  class="form-control" 
+							  ng-model="jsonForm" rows="10">
+					</textarea>
+					<button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
+						Import
+					</button>	
+				</tab>
+				<tab heading="JSON">
+					<pre>
+						{{ form | json }}
+					</pre>
+				</tab>
+			</tabset>
+			<!-- PluginConfig -->
 		</accordion-group>
 		<accordion-group is-open="isEditorOpen">
 			<accordion-heading>
@@ -16,7 +62,55 @@
 				</span>
 				Configuration
 			</accordion-heading>
-			<ng-include src="'partials/PluginLayout.html'"></ng-include>
+			<!-- PluginLayout -->
+			<fieldset class="no-select relative" ng-controller="LayoutController">
+				<legend>Workspace</legend>
+				<ng-form name="plugin">
+					<ol class="form-horizontal" ui-sortable 
+						ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
+						<ui-grid ng-repeat="cell in grid" cell="cell" 
+							cell-count="grid.length" cell-index="$index">
+						</ui-grid>
+					</ol>
+				</ng-form>
+				
+				<form class="grid-settings" ng-show="showSettings">
+					<p>
+						<label>Default cell size:</label>
+						<span ui-slider step="5" max="100" min="20" 
+							class="inline-slider"
+							ng-model="width"></span>
+						<span class="percentage">{{ width }}%</span>
+						<ui-help popover-placement="left"
+							  popover="Set the default width of a widget as a 
+							  % of the screen size."></ui-help>
+					</p>
+					<p>
+						<label>Shrink/Expand amount:</label>
+						<span ui-slider step="5" max="50" min="5" 
+							class="inline-slider"
+							ng-model="step"></span>
+						<span class="percentage">{{ step }}%</span>
+						<ui-help popover-placement="left"
+							  popover="Set the default amount to decrease/increase 
+								the width of a widget as a % of the screen."></ui-help>
+					</p>
+				</form>
+				
+				<div class="open-controls btn-group">
+					<button class="btn btn-default" ng-model="showList" btn-checkbox>
+						<span class="glyphicon" ng-class="{ 'glyphicon-align-justify' : showList, 
+							'glyphicon-th-large' : !showList }"
+							tooltip="Switch between grid view and list view."></span>
+					</button>
+					<button class="btn btn-primary" ng-model="showSettings"
+						btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+						<span class="glyphicon glyphicon-wrench"
+							tooltip="Modify grid settings."></span>
+					</button>
+				</div>
+			</fieldset>
+			<!-- PluginLayout -->
 		</accordion-group>
 	</accordion>
 	<div class="controls">

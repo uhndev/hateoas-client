@@ -1,0 +1,23 @@
+<div class="modal-header">
+	<h3>{{ title }}</h3>
+</div>
+<div class="modal-body">
+	<ui-expression-editor inputs="fieldNames" ng-model="expression">
+	</ui-expression-editor>
+	
+	{{ expression | json }}
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="debug(expression)">
+		<span class="glyphicon glyphicon-save"></span>
+		Debug
+	</button>
+	<button class="btn btn-primary" ng-click="save(expression)">
+		<span class="glyphicon glyphicon-save"></span>
+		Use Expression
+	</button>
+	<button class="btn btn-warning" ng-click="cancel()">
+		<span class="glyphicon glyphicon-trash"></span>
+		Cancel
+	</button>
+</div>

@@ -23,6 +23,7 @@
 
     'dados.common.directives.dadosError',
     'dados.common.directives.hateoas',
+    'dados.common.directives.pluginEditor',
     'dados.common.directives.queryBuilder',
     'dados.common.services.csrf'
   ])
