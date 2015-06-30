@@ -26,7 +26,7 @@
       if (user) {
         var now = new Date();
         $cookieStore.put('user', user, {
-          expires: new Date(now.getTime() + 3600000)
+          expires: new Date(now.getTime() + (60000 * user.expires))
         });
         AuthService.setAuthenticated();
         $location.url('/study');

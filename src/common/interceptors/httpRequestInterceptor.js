@@ -54,14 +54,23 @@
       responseError: function responseErrorCallback(response) {
         var message = '', title = 'Error';
 
-        if (response.status === 400 || response.status === 404) {
-          $location.path('/400');
-        } else if (response.status === 403) {
-          $location.path('/login');
-        } else if (response.status === 500) {
-          $location.path('/500');
+        // change $location for specific response codes
+        switch (response.status) {
+          case 400: 
+            if (response.data.name === 'UnauthorizedError' ||
+                response.data.message === 'jwt expired') {
+              $location.path('/login');
+              $injector.get('AuthService').setUnauthenticated();
+            } else {
+              $location.path('/400'); 
+            }
+            break;
+          case 403: $location.path('/400'); break;
+          case 500: $location.path('/500'); break;
+          default: break;
         }
 
+        // otherwise, try to parse error message from response object
         if (response.data && response.data.error) {
           message = response.data.error;
         } else if (response.data && response.data.message && response.data.title) {
