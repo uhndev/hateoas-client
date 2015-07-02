@@ -66,6 +66,7 @@
             }
             break;
           case 403: $location.path('/400'); break;
+          case 404: $location.path('/400'); break;
           case 500: $location.path('/500'); break;
           default: break;
         }
