@@ -48,12 +48,8 @@
 			}
 
 			if (AuthService.currentUser) {
-				var user = AuthService.currentUser;
-				var identity = user.username;
-				if (user.prefix && user.lastname) {
-					identity = [user.prefix, user.lastname].join(' ');
-				}
-				vm.currentUser = identity;
+				var user = AuthService.currentUser.user;
+				vm.currentUser = [user.prefix, user.lastname].join(' ');
 			}
 		}		
 

@@ -62,7 +62,7 @@
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
-      if (Auth.currentLevel > 1 && (page == '/formbuilder' || page == '/access')) {
+      if (Auth.currentUser.group.level > 1 && (page == '/formbuilder' || page == '/access')) {
         $location.path('/400');
       }
     });

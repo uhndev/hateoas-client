@@ -22,7 +22,7 @@
       request: function(config) {
         var token;
         if (_.has(CookieStore.get('user'), 'token')) {
-          token = CookieStore.get('user').token;
+          token = CookieStore.get('user').token.payload;
         }
         if (token) {
           config.headers.Authorization = 'Bearer ' + token;

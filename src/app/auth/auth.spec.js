@@ -37,7 +37,7 @@ describe('AuthService', function() {
       });
 
       it('should return true when user is logged in', function() {        
-        $cookieStore.put('user', {user: 'some value', group: 'admin'});
+        $cookieStore.put('user', {user: 'some value', group: { name: 'admin' } });
         expect(AuthService.isAuthenticated()).toBeTruthy();
         $cookieStore.remove('user');
       });
