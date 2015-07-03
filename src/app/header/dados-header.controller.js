@@ -1,5 +1,5 @@
 (function() {
-	'use strict';	
+	'use strict';
 	angular
 		.module('dados.header.controller', ['ui.bootstrap'])
 		.controller('HeaderController', HeaderController);
@@ -9,7 +9,7 @@
 	];
 
 	function HeaderController($scope, $location, $state, $rootScope, AuthService, API) {
-		
+
 		var vm = this;
 
 		// bindable variables
@@ -24,10 +24,10 @@
 		init();
 
 		///////////////////////////////////////////////////////////////////////////
-		
+
 		function init() {
 			if (AuthService.isAuthenticated()) {
-				updateHeader();				
+				updateHeader();
 			}
 			updateActive();
 		}
@@ -44,14 +44,14 @@
 			if (AuthService.currentUser.group) {
 				if (AuthService.tabview !== vm.navigation) {
 					vm.navigation = AuthService.tabview;
-				}        
+				}
 			}
 
 			if (AuthService.currentUser) {
 				var user = AuthService.currentUser.user;
 				vm.currentUser = [user.prefix, user.lastname].join(' ');
 			}
-		}		
+		}
 
 		function updateActive() {
 			var href = $location.path();
@@ -65,12 +65,12 @@
 					});
 				} else {
 					link.isActive = (comparator.toLowerCase() === link.href.toLowerCase());
-				}				
+				}
 			});
 
 			_.each(vm.submenu.links, function(link) {
 				var clientUrl = _.convertRestUrl(link.href, API.prefix);
-				link.isActive = 
+				link.isActive =
 					($location.path().toLowerCase() === clientUrl.toLowerCase());
 			});
 		}
