@@ -6,8 +6,8 @@
     </small>
   </h1>
   <div id="Query" class="clearfix">
-    <query-builder 
-      template="hateoas.resource.template" 
+    <query-builder
+      template="hateoas.resource.template"
       ng-model="hateoas.query.where"
       ng-if="hateoas.resource.template">
     </query-builder>
@@ -31,7 +31,7 @@
           class="text-center sortable" ng-class="{
             'sort-asc': tableParams.isSortBy(column.name, 'asc'),
             'sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }" 
+          }"
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
