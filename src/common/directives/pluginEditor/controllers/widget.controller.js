@@ -3,13 +3,14 @@
 
   angular
     .module('dados.common.directives.pluginEditor.widgetController', [
+      'dados.common.directives.pluginEditor.widgetService'
     ])
     .controller('WidgetController', WidgetController);
 
-  WidgetController.$inject = ['$scope', '$modal'];
+  WidgetController.$inject = ['$scope', '$modal', 'WidgetService'];
 
-  function WidgetController($scope, $modal) {
-    $scope.categories = WIDGET_CATEGORIES;
+  function WidgetController($scope, $modal, WidgetService) {
+    $scope.categories = WidgetService.categories;
     $scope.widget = {};
     
     var widgetExtend = function(source) {
@@ -48,14 +49,14 @@
     $scope.$watch('widget.template', function(newType, oldType) {
       if (newType) {
         if (newType != oldType) {
-          $scope.widget = angular.copy(WIDGET_TEMPLATES[newType]);
+          $scope.widget = angular.copy(WidgetService.templates[newType]);
           bindList();
         }
       }
     });
     
     $scope.$on('setWidget', function(e, widget) {
-      $scope.widget = widgetExtend(WIDGET_TEMPLATES[widget.template], widget);
+      $scope.widget = widgetExtend(WidgetService.templates[widget.template], widget);
     });
     
     $scope.$on('listControllerLoaded', function(e) {
@@ -68,7 +69,7 @@
     
     $scope.createExpression = function(property, fields) {
       var modal = $modal.open({
-        templateUrl: 'partials/WidgetEditorCreateExpression.html',
+        templateUrl: 'directives/pluginEditor/partials/WidgetEditorCreateExpression.tpl.html',
         controller: ExpressionModalController,
         resolve: {
           title: function() {

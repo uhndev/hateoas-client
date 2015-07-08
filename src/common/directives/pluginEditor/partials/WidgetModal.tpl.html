@@ -1,0 +1,63 @@
+<div class="modal-header">
+	<h1 ng-if="!!!widget.label">Configure Widget</h1>
+	<h1 ng-if="!!widget.label">Configure {{ widget.label }}</h1>
+</div>
+<div class="modal-body">
+	<section ng-controller="WidgetController" class="widget-configurator no-select">
+		<tabset>
+			<tab heading="Select your widget">
+				<accordion close-others="true">
+					<accordion-group ng-repeat="category in unsorted(categories)"
+						is-open="isopen">
+						<accordion-heading>
+							{{ category }}
+							<i class="pull-right glyphicon" 
+								ng-class="{'glyphicon-chevron-down': isopen, 
+										'glyphicon-chevron-right': !isopen}"></i>
+						</accordion-heading>
+						<div ng-repeat="template in categories[category]">
+							<input type="radio" ng-model="widget.template"
+								id="{{category}}{{template}}{{ $index }}"
+								name="WIDGET_TEMPLATE"
+								ng-value="template" />
+							<label for="{{category}}{{template}}{{ $index }}" 
+								class="capitalize">
+								{{ template }}
+							</label>
+						</div>
+					</accordion-group>
+				</accordion>
+			</tab>
+			<tab heading="Configure your widget" disabled="!widget.template">
+			</tab>
+			<tab heading="Set your list values" ng-show="widget.properties.hasOwnProperty('options')">
+				<ui-list-editor list="widget.properties.options" 
+					can-edit-properties="true"></ui-list-editor>
+			</tab>
+			<tab heading="Configure your widget flags" disabled="!widget.template">
+			</tab>
+			<tab heading="Advanced Widget Settings" disabled="!widget.template">
+			</tab>
+			<tab heading="Preview">
+				<form class="form-horizontal preview">
+					<ui-widget widget="widget" 
+					  widget-model="widget.properties.defaultValue">
+					</ui-widget>
+				</form>
+			</tab>
+			<tab heading="Debug">
+				<pre>{{ widget | json }}</pre>
+			</tab>
+		</tabset>
+	</section>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">
+		<span class="glyphicon glyphicon-save"></span>
+		Apply Changes
+	</button>
+	<button class="btn btn-warning" ng-click="cancel()">
+		<span class="glyphicon glyphicon-trash"></span>
+		Cancel
+	</button>
+</div>

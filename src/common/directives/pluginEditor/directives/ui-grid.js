@@ -10,9 +10,9 @@
     ])
     .directive('uiGrid', uiGrid);
 
-  uiGrid.$inject = ['$http', '$compile', '$templateCache'];
+  uiGrid.$inject = [];
 
-  function uiGrid($http, $compile, $templateCache) {
+  function uiGrid() {
     
     return {
       templateUrl: 'directives/pluginEditor/partials/UiGrid.tpl.html',

@@ -66,7 +66,7 @@
 			<fieldset class="no-select relative" ng-controller="LayoutController">
 				<legend>Workspace</legend>
 				<ng-form name="plugin">
-					<ol class="form-horizontal" ui-sortable 
+					<ol class="form-horizontal"  
 						ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
 						<ui-grid ng-repeat="cell in grid" cell="cell" 
 							cell-count="grid.length" cell-index="$index">

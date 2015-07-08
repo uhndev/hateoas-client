@@ -16,7 +16,7 @@
         controller: 'PluginController'
       };
     });
-
+    
     function postLink(scope, element, attribute, controller) {
     }
 })();

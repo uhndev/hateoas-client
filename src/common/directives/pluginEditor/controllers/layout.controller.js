@@ -3,7 +3,8 @@
 
   angular
     .module('dados.common.directives.pluginEditor.layoutController', [
-      'dados.common.directives.pluginEditor.widgetModalController'
+      'dados.common.directives.pluginEditor.widgetModalController',
+      'dados.common.directives.pluginEditor.widgetController',
     ])
     .controller('LayoutController', LayoutController);
 
@@ -111,10 +112,10 @@
      * 
      * @param e is the event data
      * @param index is the index of the cell to create the widget
-     */
+     */     
     $scope.$on('configure', function(e, index) {
       var modal = $modal.open({
-        templateUrl: 'partials/WidgetModal.html',
+        templateUrl: 'directives/pluginEditor/partials/WidgetModal.tpl.html',
         controller: 'WidgetModalController',
         resolve : {
           widget : function() {
