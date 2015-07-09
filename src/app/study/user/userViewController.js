@@ -83,7 +83,6 @@
 
 						_.each(data.items, function (item) {
 							savedAccess[item.enrollmentId] = {};
-              savedAccess[item.enrollmentId].enrollmentId = item.enrollmentId;
 							savedAccess[item.enrollmentId].centreAccess = item.centreAccess;
 							savedAccess[item.enrollmentId].collectionCentre = item.collectionCentre;
 						});
@@ -156,12 +155,11 @@
           });
 					return enrollment.$update({ id: item.enrollmentId });
 				}
-
 				return;
 			}))
 			.then(function() {
 				toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-        init();
+        $scope.tableParams.reload();
 			});
 		}
 
