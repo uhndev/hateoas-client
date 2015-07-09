@@ -29,14 +29,29 @@
 				</accordion>
 			</tab>
 			<tab heading="Configure your widget" disabled="!widget.template">
+				<ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
+				</ng-include>
 			</tab>
 			<tab heading="Set your list values" ng-show="widget.properties.hasOwnProperty('options')">
 				<ui-list-editor list="widget.properties.options" 
 					can-edit-properties="true"></ui-list-editor>
 			</tab>
 			<tab heading="Configure your widget flags" disabled="!widget.template">
+				<ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
+				</ng-include>
 			</tab>
 			<tab heading="Advanced Widget Settings" disabled="!widget.template">
+				<form class="form-horizontal" role="form">
+					<div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
+						<label for="pattern">
+							Validation
+						</label>
+						<input type="text" id="pattern" class="form-control" 
+							ng-model="widget.properties.pattern" />
+						<ui-help popover="Set the validation pattern for this input. Use
+						 Regular Expressions to defined the validation rules."></ui-help>
+					</div>
+				</form>	
 			</tab>
 			<tab heading="Preview">
 				<form class="form-horizontal preview">

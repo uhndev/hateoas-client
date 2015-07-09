@@ -13,6 +13,13 @@
     $scope.categories = WidgetService.categories;
     $scope.widget = {};
     
+    $scope.unsorted = function(obj){
+      if (!obj) {
+        return [];
+      }
+      return Object.keys(obj);
+    };
+    
     var widgetExtend = function(source) {
       var widgets = Array.prototype.slice.call(arguments);
       

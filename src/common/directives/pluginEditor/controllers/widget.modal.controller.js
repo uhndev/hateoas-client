@@ -6,7 +6,7 @@
     ])
     .controller('WidgetModalController', WidgetModalController);
 
-  WidgetModalController.$inject = ['$scope'];
+  WidgetModalController.$inject = ['$scope', '$modalInstance', 'widget', 'fieldNames'];
 
   function WidgetModalController($scope, $modalInstance, widget, fieldNames) {
     $scope.fieldNames = angular.copy(fieldNames);

@@ -5,7 +5,8 @@
       'dados.common.directives.pluginEditor.pluginController',
       'dados.common.directives.pluginEditor.layoutController',
       'dados.common.directives.pluginEditor.widgetModalController',
-      'dados.common.directives.pluginEditor.directives.uiGrid'
+      'dados.common.directives.pluginEditor.directives.uiGrid',
+      'dados.common.directives.pluginEditor.directives.uiSortable',
     ])
     .directive('pluginEditor', function() {
       return {
