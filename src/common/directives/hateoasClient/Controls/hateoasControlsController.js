@@ -7,14 +7,14 @@
   .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
-    '$scope', '$modal', '$location', 
+    '$scope', '$modal', '$location',
     'API', 'SLUG_ROUTES', 'HateoasUtils', 'toastr'
   ];
- 
+
   /**
    * Controller for the directive
    */
-  function HateoasControlsController($scope, $modal, $location, 
+  function HateoasControlsController($scope, $modal, $location,
                                       API, SLUG_ROUTES, HateoasUtils, toastr) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
@@ -27,7 +27,10 @@
      * @returns $promise
      */
     function archive(item) {
-      Service.archive(item);
+      Service.archive(item).then(function (data) {
+        toastr.success('Item successfully archived!', 'Success');
+        $scope.$emit('hateoas.client.refresh');
+      });
     }
 
     /**
@@ -39,7 +42,7 @@
      */
     function open(method) {
       var modalScope = $scope.$new(true);
-      modalScope.item = (method === 'post' ? 
+      modalScope.item = (method === 'post' ?
           {} : angular.copy($scope.item));
       modalScope.template = $scope.template;
 

@@ -32,7 +32,7 @@
 
       /**
        * Interceptor method which is triggered whenever response occurs on $http queries.
-       * @param  {*} response 
+       * @param  {*} response
        * @return {*|Promise}
        */
       response: function responseCallback(response) {
@@ -56,13 +56,11 @@
 
         // change $location for specific response codes
         switch (response.status) {
-          case 400: 
+          case 400:
             if (response.data.name === 'UnauthorizedError' ||
                 response.data.message === 'jwt expired') {
               $location.path('/login');
               $injector.get('AuthService').setUnauthenticated();
-            } else {
-              $location.path('/400'); 
             }
             break;
           case 403: $location.path('/400'); break;

@@ -20,22 +20,22 @@
       <select-loader
         id="centreInput"
         url="{{addUser.centreHref}}"
-        is-atomic="false"
+        is-atomic="true"
         is-disabled="false"
-        values="addUser.newUser.collectioncentre"
+        values="addUser.newUser.collectionCentre"
         labels="name"
         output-properties="id">
       </select-loader>
     </div>
     <div class="form-group">
       <label for="roleInput">Role&nbsp;</label>
-      <select id="roleInput" class="form-control" ng-model="addUser.newUser.role" required="required">
+      <select id="roleInput" class="form-control" ng-model="addUser.newUser.centreAccess" required="required">
         <option value="coordinator">Coordinator</option>
         <option value="interviewer">Interviewer</option>
       </select>
     </div>
     <button type="submit" id="addUserBtn" class="btn btn-primary" ng-click="addUser.addUser()"
-      ng-disabled="!addUser.newUser.user || !addUser.newUser.collectioncentre || !addUser.newUser.role">
+      ng-disabled="!addUser.newUser.user || !addUser.newUser.collectionCentre || !addUser.newUser.centreAccess">
       Add User
     </button>
   </form>

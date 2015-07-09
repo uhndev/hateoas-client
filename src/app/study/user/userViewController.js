@@ -8,15 +8,15 @@
 			'dados.common.directives.selectLoader'
 		])
 		.controller('StudyUserController', StudyUserController);
-	
+
 	StudyUserController.$inject = [
-		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams', 
-		'sailsNgTable', 'CollectionCentreService', 'UserAccess', 'toastr', 'API'
+		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams',
+		'sailsNgTable', 'CollectionCentreService', 'UserAccess', 'UserEnrollment', 'toastr', 'API'
 	];
-	
-	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams, 
-																SailsNgTable, CollectionCentre, UserAccess, toastr, API) {
-		
+
+	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams,
+																SailsNgTable, CollectionCentre, UserAccess, UserEnrollment, toastr, API) {
+
 		var vm = this;
 		var savedAccess = {};
 
@@ -26,7 +26,7 @@
 		vm.query = { 'where' : {} };
 		vm.toggleEdit = true;
 		vm.selected = null;
-		vm.filters = {};    
+		vm.filters = {};
 		vm.template = {};
 		vm.resource = {};
 		vm.url = API.url() + $location.path();
@@ -36,6 +36,7 @@
 		vm.openUser = openUser;
 		vm.openAddUser = openAddUser;
 		vm.saveChanges = saveChanges;
+    vm.archiveUser = archiveUser;
 
 		init();
 
@@ -51,7 +52,7 @@
 				filter: vm.filters
 			};
 
-			$scope.tableParams = new TableParams(TABLE_SETTINGS, { 
+			$scope.tableParams = new TableParams(TABLE_SETTINGS, {
 				counts: [],
 				getData: function($defer, params) {
 					var api = SailsNgTable.parse(params, vm.query);
@@ -61,31 +62,30 @@
 						vm.allow = headers('allow');
 						vm.centreHref = "study/" + currStudy + "/collectioncentre";
 
-						if (_.contains(vm.allow, 'read,')) {
-							vm.allow = vm.allow.substring(5);
-						}
 						// add role and collection centre fields
 						data.template.data = data.template.data.concat([
 							{
-								"name": "accessCollectionCentre",
-								"type": "multiselect",
+								"name": "collectionCentre",
+								"type": "singleselect",
 								"prompt": "Collection Centre",
 								"value": vm.centreHref
-							},            	
+							},
 							{
-								"name": "accessRole",
+								"name": "centreAccess",
 								"type": "dropdown",
 								"prompt": "Role",
 								"value": "role"
 							}
 						]);
+
 						vm.template = data.template;
 						vm.resource = angular.copy(data);
-						
+
 						_.each(data.items, function (item) {
-							savedAccess[item.id] = {};
-							savedAccess[item.id].centreAccess = item.centreAccess;
-							savedAccess[item.id].collectionCentre = item.accessCollectionCentre;
+							savedAccess[item.enrollmentId] = {};
+              savedAccess[item.enrollmentId].enrollmentId = item.enrollmentId;
+							savedAccess[item.enrollmentId].centreAccess = item.centreAccess;
+							savedAccess[item.enrollmentId].collectionCentre = item.collectionCentre;
 						});
 
 						params.total(data.total);
@@ -98,25 +98,25 @@
 							_.map(data.links, function(link) {
 								if (link.rel === 'overview' && link.prompt === '*') {
 									 link.prompt = currStudy;
-								}  
+								}
 								if (_.contains(link.href, '*')) {
-									link.href = link.href.replace(/\*/g, currStudy);  
-								}  
+									link.href = link.href.replace(/\*/g, currStudy);
+								}
 								return link;
 							});
 							var submenu = {
 								links: AuthService.getRoleLinks(data.links)
 							};
 							angular.copy(submenu, $scope.dados.submenu);
-						}            
+						}
 					});
 				}
-			});      
+			});
 		}
 
 		function select(item) {
 			vm.selected = (vm.selected === item ? null : item);
-		}	
+		}
 
 		function openUser() {
       if (vm.selected.rel) {
@@ -144,59 +144,36 @@
 	    });
 		}
 
-		function saveChanges() {		
+		function saveChanges() {
 			$q.all(_.map(vm.resource.items, function (item) {
-				var isAdding = false;
-				var swapWith = [];
-				var diff = _.difference(savedAccess[item.id].collectionCentre, item.accessCollectionCentre);
-
-				if (savedAccess[item.id].collectionCentre.length === item.accessCollectionCentre.length) {
-					angular.copy(item.accessCollectionCentre, swapWith);
+				// only make PUT request if necessary if selection changed
+				if (!_.isEqual(savedAccess[item.enrollmentId].centreAccess, item.centreAccess) ||
+            !_.isEqual(savedAccess[item.enrollmentId].collectionCentre, item.collectionCentre)) {
+					var enrollment = new UserEnrollment({
+            user: item.id,
+            collectionCentre: item.collectionCentre,
+            centreAccess: item.centreAccess
+          });
+					return enrollment.$update({ id: item.enrollmentId });
 				}
 
-				if (diff.length === 0) {
-					diff = _.difference(item.accessCollectionCentre, savedAccess[item.id].collectionCentre);
-					isAdding = true;
-				} else {
-				  isAdding = false;
-				}
-
-				var access = {};
-				// set access level for each selected collection centre
-				_.each(item.accessCollectionCentre, function (centre) {
-					access[centre] = item.accessRole;
-				});
-				// merge existing centreAccess with new attributes
-				var accessCopy = angular.copy(item.centreAccess);
-				_.extend(accessCopy, access);
-				angular.copy(accessCopy, access);
-
-				if (!isAdding) {
-					_.each(diff, function (centreId) {
-						delete access[centreId];
-					});
-				}
-
-				// only make PUT request if necessary
-				if (!_.isEqual(access, item.centreAccess)) {
-					var req =  {centreAccess: access};
-					// if collection centre hasnt changed, and centreAccess has, role must have been updated
-					if (!_.isEqual(savedAccess[item.id].collectionCentre, item.accessCollectionCentre)) {
-						req.swapWith = swapWith;
-						req.isAdding = isAdding;
-						req.collectionCentres = diff;
-					}
-					
-					var user = new UserAccess(req);
-					return user.$update({ id: item.id });
-				}
-				
 				return;
 			}))
 			.then(function() {
 				toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
+        init();
 			});
-		}    
+		}
+
+    function archiveUser() {
+      var enrollment = new UserEnrollment({
+        expiredAt: new Date()
+      });
+      return enrollment.$update({ id: vm.selected.enrollmentId }).then(function () {
+        toastr.success('Archived user enrollment!', 'Enrollment');
+        $scope.tableParams.reload();
+      });
+    }
 
 		// watchers
 		$scope.$watchCollection('studyUser.query.where', function(newQuery, oldQuery) {
@@ -210,10 +187,10 @@
 					$scope.tableParams.reload();
 				}
 			}
-		});    
+		});
 
 		$scope.$on('hateoas.client.refresh', function() {
 			init();
-		});    
+		});
 	}
 })();

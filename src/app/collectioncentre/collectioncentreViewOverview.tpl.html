@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<hr/>
-	
+
 	<div class="row">
 		<!-- List User Info -->
 		<div class="col-md-4">
@@ -29,9 +29,9 @@
 					<h3 class="panel-title">Collection Centre Information</h3>
 				</div>
 				<div class="panel-body">
-					<simple-table 
-						columns="cc.centreInfo.columns" 
-						rows="cc.centreInfo.rows" 
+					<simple-table
+						columns="cc.centreInfo.columns"
+						rows="cc.centreInfo.rows"
 						table-data="cc.centreInfo.tableData">
 					</simple-table>
 				</div>
@@ -57,7 +57,7 @@
 								<td>{{::row.username}}</td>
 								<td>{{::row.email}}</td>
 								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
-								<td>{{::row.centreAccess[cc.resource.items.id]}}</td>
+								<td>{{::row.centreAccess}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 
-		<!-- List Subjects --> 
+		<!-- List Subjects -->
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">
@@ -85,16 +85,7 @@
 								<td>{{::row.username}}</td>
 								<td>{{::row.email}}</td>
 								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
-								<td>
-									<select-loader
-										url="role"
-										is-atomic="true"
-										is-disabled="true"
-										values="row.centreAccess[cc.resource.items.id]"
-										labels="name"
-										output-properties="id">
-									</select-loader>									
-								</td>
+								<td>{{::row.studyMapping}}</td>
 							</tr>
 						</tbody>
 					</table>

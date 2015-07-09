@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<hr/>
-	
+
 	<div class="row">
 		<!-- List User Info -->
 		<div class="col-md-4">
@@ -29,15 +29,15 @@
 					<h3 class="panel-title">User Information</h3>
 				</div>
 				<div class="panel-body">
-					<simple-table 
+					<simple-table
 						rows="user.userInfo.rows"
-						columns="user.userInfo.columns" 
+						columns="user.userInfo.columns"
 						table-data="user.userInfo.tableData">
 					</simple-table>
 				</div>
 			</div>
 		</div>
-		<!-- List User Studies --> 
+		<!-- List User Studies -->
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">
@@ -64,8 +64,17 @@
 										output-properties="id">
 									</select-loader>
 								</td>
-								<td>{{row.name}}</td>
-								<td>{{user.centreAccess[row.id]}}</td>
+								<td>
+                  <select-loader
+                    url="collectioncentre"
+                    is-atomic="true"
+                    is-disabled="true"
+                    values="row.collectionCentre"
+                    labels="name"
+                    output-properties="id">
+                  </select-loader>
+                </td>
+								<td>{{row.centreAccess}}</td>
 							</tr>
 						</tbody>
 					</table>
