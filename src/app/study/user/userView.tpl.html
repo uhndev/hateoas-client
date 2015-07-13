@@ -16,22 +16,26 @@
   <div id="Controls" class="pull-right">
     <div class="btn-group">
       <button type="button" class="btn btn-default"
+        ng-if="studyUser.allow.read"
         ng-click="studyUser.openUser()"
         ng-disabled="!!!studyUser.selected">
         <i class="fa fa-folder-o"></i>
         View User
       </button>
       <button type="button" class="btn btn-default"
+        ng-if="studyUser.allow.create"
         ng-click="studyUser.openAddUser()">
         <i class="fa fa-file-o"></i>
         Add User
       </button>
       <button type="button" class="btn btn-default"
+        ng-if="studyUser.allow.update"
         ng-click="studyUser.saveChanges()">
         <i class="fa fa-floppy-o"></i>
         Save Changes
       </button>
       <button type="button" class="btn btn-default"
+        ng-if="studyUser.allow.delete"
         ng-click="studyUser.archiveUser()"
         ng-disabled="!!!studyUser.selected">
         <i class="fa fa-trash-o"></i>

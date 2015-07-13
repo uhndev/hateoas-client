@@ -21,7 +21,7 @@
 		var savedAccess = {};
 
 		// bindable variables
-		vm.allow = '';
+		vm.allow = {};
 		vm.centreHref = '';
 		vm.query = { 'where' : {} };
 		vm.toggleEdit = true;
@@ -59,7 +59,11 @@
 
 					Resource.get(api, function(data, headers) {
 						vm.selected = null;
-						vm.allow = headers('allow');
+						var permissions = headers('allow').split(',');
+            _.each(permissions, function (permission) {
+              vm.allow[permission] = true;
+            });
+
 						vm.centreHref = "study/" + currStudy + "/collectioncentre";
 
 						// add role and collection centre fields
@@ -157,9 +161,11 @@
 				}
 				return;
 			}))
-			.then(function() {
-				toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-        $scope.tableParams.reload();
+			.then(function(data) {
+        if (!_.all(data, _.isUndefined)) {
+          toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
+          $scope.tableParams.reload();
+        }
 			});
 		}
 

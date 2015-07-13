@@ -32,7 +32,7 @@
 
   dadosConfig.$inject = ['$stateProvider', 'toastrConfig'];
 
-  function dadosConfig($stateProvider, toastrConfig) { 
+  function dadosConfig($stateProvider, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
@@ -46,7 +46,7 @@
       timeOut: 3000
     });
   }
- 
+
   DadosController.$inject = ['$scope', '$state', '$location', 'AuthService'];
 
   function DadosController($scope, $state, $location, Auth) {
@@ -57,12 +57,14 @@
     if (_.isEmpty($location.path())) {
       $location.path('/study');
     }
-    
+
     $state.go('hateoas');
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
-      if (Auth.currentUser.group.level > 1 && (page == '/formbuilder' || page == '/access')) {
+      if (_.has(Auth.currentUser, 'group') &&
+          Auth.currentUser.group.level > 1 &&
+          (page == '/formbuilder' || page == '/access')) {
         $location.path('/400');
       }
     });
@@ -78,8 +80,8 @@
       $scope.pageTitle = _.titleCase($location.path()
                                        .replace(/\//g, ' ')
                                        .toLowerCase()
-                                       .trim());     
-    }); 
+                                       .trim());
+    });
   }
 
 })();
