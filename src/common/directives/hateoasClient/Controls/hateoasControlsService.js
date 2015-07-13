@@ -30,7 +30,7 @@
      * @returns $promise
      */
     this.archive = function archive(item) {
-      return $resource(item.href).delete({id: item.id}).$promise;
+      return $resource(item.href).delete().$promise;
     };
   }
 })();

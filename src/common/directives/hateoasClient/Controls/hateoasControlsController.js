@@ -27,10 +27,13 @@
      * @returns $promise
      */
     function archive(item) {
-      Service.archive(item).then(function (data) {
-        toastr.success('Item successfully archived!', 'Success');
-        $scope.$emit('hateoas.client.refresh');
-      });
+      var conf = confirm("Are you sure you want to archive this item?");
+      if (conf) {
+        Service.archive(item).then(function (data) {
+          toastr.success('Item successfully archived!', 'Success');
+          $scope.$emit('hateoas.client.refresh');
+        });
+      }
     }
 
     /**

@@ -170,13 +170,14 @@
 		}
 
     function archiveUser() {
-      var enrollment = new UserEnrollment({
-        expiredAt: new Date()
-      });
-      return enrollment.$update({ id: vm.selected.enrollmentId }).then(function () {
-        toastr.success('Archived user enrollment!', 'Enrollment');
-        $scope.tableParams.reload();
-      });
+      var conf = confirm("Are you sure you want to archive this enrollment?");
+      if (conf) {
+        var enrollment = new UserEnrollment({ id: vm.selected.enrollmentId });
+        return enrollment.$delete({ id: vm.selected.enrollmentId }).then(function () {
+          toastr.success('Archived user enrollment!', 'Enrollment');
+          $scope.tableParams.reload();
+        });
+      }
     }
 
 		// watchers
