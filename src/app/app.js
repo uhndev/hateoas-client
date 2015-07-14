@@ -72,7 +72,6 @@
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
       var prevBaseUrl = _.parseUrl($location, prev)[0];
       var currBaseUrl = _.first(_.pathnameToArray($location.path()));
-      console.log(currBaseUrl);
       if (prevBaseUrl !== currBaseUrl || currBaseUrl === 'study') {
         vm.submenu = {};
       }
