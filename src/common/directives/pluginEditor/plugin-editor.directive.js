@@ -8,6 +8,7 @@
       'dados.common.directives.pluginEditor.directives.formMetaEditor',
       'dados.common.directives.pluginEditor.directives.uiWidget',
       'dados.common.directives.pluginEditor.directives.uiListEditor',
+      'dados.common.directives.pluginEditor.directives.uiExpressionEditor',
       'dados.common.directives.pluginEditor.directives.uiGrid',
       'dados.common.directives.pluginEditor.directives.uiSortable',
       //'dados.common.directives.pluginEditor.directives.uiHelp',

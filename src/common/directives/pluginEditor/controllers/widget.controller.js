@@ -3,6 +3,7 @@
 
   angular
     .module('dados.common.directives.pluginEditor.widgetController', [
+      'dados.common.directives.pluginEditor.expressionModalController',
       'dados.common.directives.pluginEditor.widgetService'
     ])
     .controller('WidgetController', WidgetController);
@@ -77,7 +78,7 @@
     $scope.createExpression = function(property, fields) {
       var modal = $modal.open({
         templateUrl: 'directives/pluginEditor/partials/WidgetEditorCreateExpression.tpl.html',
-        controller: ExpressionModalController,
+        controller: 'ExpressionModalController',
         resolve: {
           title: function() {
             return [property, 'when...'].join(' ');

@@ -7,19 +7,15 @@
   FormService.$inject = ['$resource'];
 
   function FormService($resource) {
-  /*
-    return $resource('http://localhost:1337/api/userform/:id',
-        {id : '@id'},
-        {
-          query : {method: 'GET', isArray: false },
-          update : {method : 'PUT'}
-        }
-    );
-  */
     return $resource(
       'http://localhost:1337/api/userform/:id', 
       {id : '@id'},
-      {'query' : {method: 'GET', isArray: true, transformResponse: transformHateoas }}
+      {
+        'get' : {method: 'GET', isArray: false, transformResponse: transformHateoas },
+        'query' : {method: 'GET', isArray: true, transformResponse: transformHateoas },
+        'update' : {method: 'PUT', isArray: false, transformResponse: transformHateoas },
+        'save' : {method: 'POST', isArray: false, transformResponse: transformHateoas }
+      }
     );
   }
   
