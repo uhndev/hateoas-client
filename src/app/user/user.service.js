@@ -1,16 +1,40 @@
 (function() {
 	'use strict';
 
-	angular.module('dados.user.service', ['ngResource'])
-	.service('UserService', UserService);
+	angular
+		.module('dados.user.service', ['ngResource', 'dados.user.constants'])
+		.service('UserService', UserService)
+		.service('UserAccess', UserAccess)
+		.service('UserRoles', UserRoles)
+    .service('UserEnrollment', UserEnrollment);
 
-	UserService.$inject = ['$resource', 'API'];
+	UserService.$inject = ['$resource', 'USER_API'];
+	UserAccess.$inject = ['$resource', 'USER_API'];
+	UserRoles.$inject = ['$resource', 'USER_API'];
+  UserEnrollment.$inject = ['$resource', 'USER_ENROLLMENT_API'];
 
-	function UserService($resource, API) {
-		return $resource(API.url() + '/user/:id', {}, {
-			'update': {
-				method: 'PUT'
-			}
+	function UserService($resource, USER_API) {
+		return $resource(USER_API.url, {}, {
+			'update': { method: 'PUT' }
 		});
 	}
+
+	function UserAccess($resource, USER_API) {
+		return $resource(USER_API.url + '/access', {}, {
+			'update': { method: 'PUT' }
+		});
+	}
+
+	function UserRoles($resource, USER_API) {
+		return $resource(USER_API.url + '/roles', {}, {
+			'update': { method: 'PUT' }
+		});
+	}
+
+  function UserEnrollment($resource, USER_ENROLLMENT_API) {
+    return $resource(USER_ENROLLMENT_API.url, {}, {
+      'update': { method: 'PUT' }
+    });
+  }
+
 })();

@@ -1,13 +1,15 @@
 (function() {
-	'use strict';	
+	'use strict';
 	angular
-		.module('dados.header.controller', [])
+		.module('dados.header.controller', ['ui.bootstrap'])
 		.controller('HeaderController', HeaderController);
 
-	HeaderController.$inject = ['$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW'];
+	HeaderController.$inject = [
+		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API'
+	];
 
-	function HeaderController($location, $state, $rootScope, AuthService, API, TABVIEW) {
-		
+	function HeaderController($scope, $location, $state, $rootScope, AuthService, API) {
+
 		var vm = this;
 
 		// bindable variables
@@ -22,10 +24,10 @@
 		init();
 
 		///////////////////////////////////////////////////////////////////////////
-		
+
 		function init() {
 			if (AuthService.isAuthenticated()) {
-				updateHeader();				
+				updateHeader();
 			}
 			updateActive();
 		}
@@ -39,37 +41,36 @@
     }
 
 		function updateHeader() {
-			if (AuthService.currentRole) {
-				var view = AuthService.currentRole.toString().toUpperCase();
-				if (TABVIEW[view] !== vm.navigation) {
-					vm.navigation = TABVIEW[view];
-				}        
+			if (AuthService.currentUser.group) {
+				if (AuthService.tabview !== vm.navigation) {
+					vm.navigation = AuthService.tabview;
+				}
 			}
 
 			if (AuthService.currentUser) {
-				var user = AuthService.currentUser;
-				var identity = user.username;
-				if (user.prefix && user.lastname) {
-					identity = [user.prefix, user.lastname].join(' ');
-				}
-				vm.currentUser = identity;
+				var user = AuthService.currentUser.user;
+				vm.currentUser = [user.prefix, user.lastname].join(' ');
 			}
-		}		
+		}
 
 		function updateActive() {
-			updateHeader();
 			var href = $location.path();
 
 			_.each(vm.navigation, function(link) {
 				var pathArr = _.pathnameToArray(href);
 				var comparator = (pathArr.length >= 2) ? '/' + _.first(pathArr) : href;
-				link.isActive = 
-					(comparator.toLowerCase() === link.href.toLowerCase());
+				if (link.dropdown) {
+					_.each(link.dropdown, function(droplink) {
+						droplink.isActive = (comparator.toLowerCase() === droplink.href.toLowerCase());
+					});
+				} else {
+					link.isActive = (comparator.toLowerCase() === link.href.toLowerCase());
+				}
 			});
 
 			_.each(vm.submenu.links, function(link) {
 				var clientUrl = _.convertRestUrl(link.href, API.prefix);
-				link.isActive = 
+				link.isActive =
 					($location.path().toLowerCase() === clientUrl.toLowerCase());
 			});
 		}

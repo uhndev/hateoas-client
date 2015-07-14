@@ -70,6 +70,7 @@ module.exports = {
       'vendor/sails.io.js/dist/sails.io.js',      
 
       'vendor/angular/angular.js',
+      'vendor/angular-ui-grid/ui-grid.js',
       'vendor/angular-animate/angular-animate.js',
       'vendor/angular-loader/angular-loader.js',
       'vendor/angular-resource/angular-resource.js',
@@ -96,7 +97,11 @@ module.exports = {
     ],
     assets: [
       'vendor/bootstrap/dist/fonts/*',
-      'vendor/font-awesome/fonts/*'      
+      'vendor/font-awesome/fonts/*',
+      'vendor/angular-ui-grid/ui-grid.eot',
+      'vendor/angular-ui-grid/ui-grid.svg',
+      'vendor/angular-ui-grid/ui-grid.ttf',
+      'vendor/angular-ui-grid/ui-grid.woff'
     ]
   },
 };

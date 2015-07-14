@@ -16,19 +16,12 @@
   <tbody>
     <tr ng-repeat="item in $data"
       ng-click="hateoas.select(item)"
+      class="selectable"
       ng-class="{'active': item === hateoas.selected}">
       <td ng-repeat="column in hateoas.template.data"
         ng-if="!column.data"
         sortable="column.name">
         {{ item[column.name] | formatter:column }}
-      </td>
-      <td ng-if="hateoas.template.rel == 'form'">
-        <button type="button" class="btn btn-default"
-          ng-if="item.form_type !== 'system'"
-          form-popup template="item" on-submit="actions.ok()" on-cancel="actions.cancel()">
-          <i class="fa fa-pencil"></i>
-          Complete
-        </button>
       </td>
     </tr>
   </tbody>

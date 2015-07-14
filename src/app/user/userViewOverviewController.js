@@ -7,12 +7,12 @@
       'dados.common.directives.listEditor'
     ])
     .controller('UserOverviewController', UserOverviewController);
-  
+
   UserOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'UserService', 'toastr', 'API'
+    '$scope', '$resource', '$location', 'toastr', 'API'
   ];
-  
-  function UserOverviewController($scope, $resource, $location, User, toastr, API) {
+
+  function UserOverviewController($scope, $resource, $location, toastr, API) {
     var vm = this;
 
     // bindable variables
@@ -22,12 +22,9 @@
     vm.resource = {};
     vm.userInfo = {};
     vm.centreAccess = {};
-    vm.savedData = {};
     vm.url = API.url() + $location.path();
 
     // bindable methods
-    vm.saveChanges = saveChanges;
-    vm.revertChanges = revertChanges;
 
     init();
 
@@ -40,70 +37,41 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);
-        var robj = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname');
-        
+
+        var robj = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob');
+
         vm.title = _.camelCase(data.items.username);
         if (data.items.prefix && data.items.firstname && data.items.lastname) {
           vm.title = [data.items.prefix, data.items.firstname, data.items.lastname].join(' ');
         }
-        
+
         vm.userInfo = {
           columns: [ 'Name', 'Value' ],
-          tableData: parseData(robj)
+          rows: {
+            'username': { title: 'Username', type: 'text' },
+            'email': { title: 'Email', type: 'text' },
+            'prefix': { title: 'Prefix', type: 'text' },
+            'firstname': { title: 'Firstname', type: 'text' },
+            'lastname': { title: 'Lastname', type: 'text' },
+            'gender': { title: 'Gender', type: 'text' },
+            'dob': { title: 'Date of Birth', type: 'date' }
+          },
+          tableData: _.objToPair(robj)
         };
 
-        vm.centreAccess = {
-          tableData: data.items.centreAccess || [],
+        vm.userStudies = {
+          tableData: data.items.enrollments || [],
           columns: [
-            { title: 'Study', field: 'study', type: 'text' },
-            { title: 'Role', field: 'role', type: 'text' },
-            { title: 'Collection Centre', field: 'collectionCentre', type: 'text' }
+            { title: 'Study', field: 'study', type: 'single' },
+            { title: 'Collection Centre', field: 'collectionCentre', type: 'single' },
+            { title: 'Role', field: 'role', type: 'single' }
           ]
         };
-        
-        vm.savedData = {
-          forceReload: false,
-          data: angular.copy(vm.centreAccess)
-        };
-
-        // initialize submenu
-        if (_.has(data.items, 'links')) {
-          var submenu = {
-            href: data.items.slug,
-            name: data.items.name,
-            links: data.items.links
-          };
-          angular.copy(submenu, $scope.dados.submenu);
-        }
       });
     }
 
-    function parseData(robj) {
-      return _.map(_.keys(robj), function (k) {
-        return { 
-          name: 'User ' + _.camelCase(k),
-          value: robj[k]
-        };
-      });
-    }
-
-    function generateReport() {
-      alert('Generating report');
-    }
-
-    function saveChanges() {
-      angular.copy(vm.centreAccess, vm.savedData.data);
-      var user = new User({ 'centreAccess': vm.centreAccess.tableData });
-      user.$update({ id: vm.resource.items.id }).then(function (data) {
-        toastr.success('Updated user studies successfully!', 'Study');
-      }).catch(function (err) {
-        toastr.error(err, 'Study');
-      });
-    }
-
-    function revertChanges() {
-      angular.copy(vm.savedData.data, vm.centreAccess);
-      vm.savedData.forceReload = !vm.savedData.forceReload;
-    }
+    $scope.$on('hateoas.client.refresh', function() {
+      init();
+    });
   }
 })();

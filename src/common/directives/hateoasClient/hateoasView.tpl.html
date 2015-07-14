@@ -6,8 +6,8 @@
     </small>
   </h1>
   <div id="Query" class="clearfix">
-    <query-builder 
-      template="hateoas.resource.template" 
+    <query-builder
+      template="hateoas.resource.template"
       ng-model="hateoas.query.where"
       ng-if="hateoas.resource.template">
     </query-builder>
@@ -22,6 +22,7 @@
       data-item='hateoas.selected'
     ></hateoas-controls>
   </div>
+
   <table id="Collection" ng-table="tableParams" class="table">
     <thead>
       <tr>
@@ -30,29 +31,21 @@
           class="text-center sortable" ng-class="{
             'sort-asc': tableParams.isSortBy(column.name, 'asc'),
             'sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }" 
+          }"
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
           {{ column.prompt }}
         </th>
-        <th ng-if="hateoas.template.rel == 'form'">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="item in $data"
         ng-click="hateoas.select(item)"
+        class="selectable"
         ng-class="{'active': item === hateoas.selected}">
         <td ng-repeat="column in hateoas.template.data"
           ng-if="!column.data"
           sortable="column.name">
           {{ item[column.name] | formatter:column }}
-        </td>
-        <td ng-if="hateoas.template.rel == 'form'">
-          <button type="button" class="btn btn-default"
-            ng-if="item.form_type !== 'system'"
-            form-popup template="item" on-submit="actions.ok()" on-cancel="actions.cancel()">
-            <i class="fa fa-pencil"></i>
-            Complete
-          </button>
         </td>
       </tr>
     </tbody>

@@ -1,15 +1,16 @@
 (function() {
   'use strict';
-  angular.module('dados.common.services.csrf', [])
-    .constant('CSRF_API', 'http://localhost:1337/csrfToken')
+  angular
+    .module('dados.common.interceptors.csrf', [])
     .factory('csrfRequestInterceptor', CsrfRequestInterceptor)
     .config(function ($httpProvider) {
       $httpProvider.interceptors.push('csrfRequestInterceptor');
     });
 
-    CsrfRequestInterceptor.$inject = ['$q', '$injector', 'CSRF_API'];    
+    CsrfRequestInterceptor.$inject = ['$q', '$injector', 'API'];    
 
-    function CsrfRequestInterceptor($q , $injector, CSRF_URL) {
+    function CsrfRequestInterceptor($q , $injector, API) {
+      var CSRF_URL = API.base() + '/csrfToken';
       var _token = false;
       return {
         request: function InterceptRequest(config){

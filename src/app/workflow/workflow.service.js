@@ -2,14 +2,13 @@
   'use strict';
 
   angular
-    .module('dados.workflow.service', ['ngResource', 'toastr'])
-    .constant('WORKFLOWSTATE_API', 'http://localhost:1337/api/workflowState')
+    .module('dados.workflow.service', ['ngResource', 'toastr', 'dados.workflow.constants'])
     .factory('Workflow', WorkflowStateService);
 
   WorkflowStateService.$inject = ['WORKFLOWSTATE_API', '$resource', 'toastr'];
 
-  function WorkflowStateService(url, $resource, toastr) {
-    var Workflow = $resource(url + '/:id', {id : '@id'}, {
+  function WorkflowStateService(WORKFLOWSTATE_API, $resource, toastr) {
+    var Workflow = $resource(WORKFLOWSTATE_API.url + '/:id', {id : '@id'}, {
       'query': { method: 'GET', isArray: false },
       'update' : { method: 'PUT' }
     });
@@ -19,14 +18,10 @@
       if (_.has(state, 'id')) {
         state.$update().then(function(data) {
           toastr.success('Successfully updated workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
       } else {
         state.$save().then(function(data) {
           toastr.success('Successfully created workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
       }
       return state;
@@ -37,8 +32,6 @@
         var state = new Workflow(data);
         state.$delete().then(function(data) {
           toastr.success('Successfully archived workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
         return state;
       }

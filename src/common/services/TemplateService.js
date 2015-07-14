@@ -116,6 +116,16 @@
      * @return {[null]}          [no return; objects are modified in place]
      */
     this.loadAnswerSet = function(item, template, form) {
+      if (template.study) {
+        _.map(form.items.form_questions, function(question) {
+          if ((question.field_hasItem || question.field_hasItems) && 
+               question.field_name !== 'study' && question.field_prependURL) {
+            question.field_userURL = 'study/' + template.study + '/' + question.field_userURL;
+          }
+          return question;
+        });
+      }
+
       if (!_.isEmpty(item)) {
         var answers = (template.rel === 'answerset' ? item.answers : item);
         var questions = _.map(form.items.form_questions,

@@ -1,6 +1,6 @@
 <div ng-controller="StudyOverviewController as study">
 	<div class="row">
-		<div class="pull-left">
+		<div class="col-md-8">
 			<h1 id="Title">
 				Study {{::study.resource.items.name}} Overview
 			</h1>
@@ -28,20 +28,8 @@
 				</div>
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-md-3">
-							<div class="panel panel-success">
-								<div class="panel-heading">
-									<h3 class="panel-title text-center">Total Subjects</h3>
-								</div>
-								<div class="panel-body">
-									<h1 class="text-center">
-										<b>77</b>
-									</h1>
-								</div>
-							</div>
-						</div>
 						<!-- Collection Centres Panel -->
-						<div class="col-md-9">
+						<div class="col-md-8">
 							<table class="table table-hover">
 								<thead>
 									<tr>
@@ -52,43 +40,47 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="row in study.collectionCentres.tableData">
-										<td>
-											<input type="text" class="form-control" ng-model="row.name"/>
-										</td>
+										<td>{{row.name}}</td>
 										<td>
 											<select-loader
 												url="user"
-												isAtomic="false"
-												isDisabled="true"
+												is-atomic="true"
+												is-disabled="true"
 												values="row.contact"
 												labels="prefix firstname lastname"
-												outputProperties="id">
+												output-properties="id">
 											</select-loader>
 										</td>
+										<td>{{row.coordinators_count}}</td>
+										<td>{{row.subjects_count}}</td>
 									</tr>
 								</tbody>
-								<tfoot>
-									<tr>
-										<td></td>
-										<td>
-											<button class="btn btn-primary btn-xs" ng-click="study.addCentre()" ng-if="!study.addingNew">
-												Add New
-											</button>
-											<button class="btn btn-warning btn-xs" ng-click="study.cancelAdd()" ng-if="study.addingNew">
-												Cancel
-											</button>
-										</td>
-									</tr>
-								</tfoot>
-							</table>							
-							<button class="btn btn-primary btn-sm"
-								ng-click="study.saveChanges()">
-								Save Changes
-							</button>
-							<button class="btn btn-warning btn-sm"
-								ng-click="study.revertChanges()">
-								Revert Changes
-							</button>
+							</table>
+						</div>
+						<!-- Total Counts -->
+						<div class="col-md-2">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<h3 class="panel-title text-center">Coordinators</h3>
+								</div>
+								<div class="panel-body">
+									<h3 class="text-center">
+										<b>{{study.collectionCentres.coordinators_total}}</b>
+									</h3>
+								</div>
+							</div>
+						</div>						
+						<div class="col-md-2">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<h3 class="panel-title text-center">Subjects</h3>
+								</div>
+								<div class="panel-body">
+									<h3 class="text-center">
+										<b>{{study.collectionCentres.subjects_total}}</b>
+									</h3>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -102,7 +94,11 @@
 					<h3 class="panel-title">Study Information</h3>
 				</div>
 				<div class="panel-body">
-					<simple-table columns="study.studyInfo.columns" table-data="study.studyInfo.tableData"></simple-table>
+					<simple-table 
+						rows="study.studyInfo.rows"
+						columns="study.studyInfo.columns" 
+						table-data="study.studyInfo.tableData">
+					</simple-table>
 				</div>
 			</div>
 		</div>

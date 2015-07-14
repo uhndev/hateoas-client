@@ -13,9 +13,8 @@
     var vm = this;
 
     // bindable variables
-    vm.previewMode = false;
-    vm.previewForm = {};
     vm.form = {};
+    vm.previewMode = false;
     vm.addField = {};
     vm.accordion = {
       oneAtATime: true
@@ -26,8 +25,6 @@
     vm.deleteField = deleteField;
     vm.addOption = addOption;
     vm.deleteOption = deleteOption;
-    vm.previewOn = previewOn;
-    vm.previewOff = previewOff;
     vm.reset = reset;
 
     init();
@@ -147,27 +144,12 @@
       }
     }
 
-    // preview form
-    function previewOn() {
-      if (vm.form.form_questions === null || vm.form.form_questions.length === 0) {
-        alert('No fields added yet, please add fields to the form before preview.');
-      }
-      else {
-        vm.previewMode = !vm.previewMode;
-        angular.copy(vm.form, vm.previewForm);
-      }
-    }
-
-    // hide preview form, go back to create mode
-    function previewOff() {
-      vm.previewMode = !vm.previewMode;
-    }
-
     // deletes all the fields
     function reset(){
       vm.form.form_questions.splice(0, vm.form.form_questions.length);
       vm.addField.lastAddedID = 0;
     }
+ 
   }
 
 })();

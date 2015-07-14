@@ -5,8 +5,9 @@
     .service('HateoasControlsService', HateoasControlsService);
 
   HateoasControlsService.$inject = ['$q', '$resource'];
-  
+
   function HateoasControlsService($q, $resource) {
+
     /**
      * Public: commit
      * Commits a HATEOAS item to the API.
@@ -14,7 +15,7 @@
      * @returns $promise
      */
     this.commit = function commit(href, item) {
-      var resource = $resource(href, null, { 
+      var resource = $resource(href, null, {
         'update': { method: 'PUT' },
         'save': { method: 'POST' }
       });
@@ -29,7 +30,7 @@
      * @returns $promise
      */
     this.archive = function archive(item) {
-      console.log("Not implemented!");
+      return $resource(item.href).delete().$promise;
     };
   }
 })();

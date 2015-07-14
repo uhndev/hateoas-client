@@ -1,0 +1,96 @@
+<div ng-controller="CollectionCentreOverviewController as cc">
+	<div class="row">
+		<div class="col-md-8">
+			<h1 id="Title">
+				{{cc.title}}
+			</h1>
+		</div>
+		<div class="pull-right">
+			<br/>
+			<div id="Controls" class="align-right">
+				<hateoas-controls
+					ng-if='cc.allow'
+					data-template='cc.template'
+					data-href='{{cc.resource.href}}'
+					data-slug='{{cc.resource.slug}}'
+					data-permissions="cc.allow"
+					data-item='cc.resource.items'>
+				</hateoas-controls>
+			</div>
+		</div>
+	</div>
+	<hr/>
+
+	<div class="row">
+		<!-- List User Info -->
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Collection Centre Information</h3>
+				</div>
+				<div class="panel-body">
+					<simple-table
+						columns="cc.centreInfo.columns"
+						rows="cc.centreInfo.rows"
+						table-data="cc.centreInfo.tableData">
+					</simple-table>
+				</div>
+			</div>
+		</div>
+		<!-- List Users -->
+		<div class="col-md-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Coordinators</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th ng-repeat="col in ::cc.centreUsers.columns">
+									{{::col}}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in ::cc.centreUsers.tableData">
+								<td>{{::row.username}}</td>
+								<td>{{::row.email}}</td>
+								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
+								<td>{{::row.centreAccess}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- List Subjects -->
+		<div class="col-md-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Subjects</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th ng-repeat="col in ::cc.centreSubjects.columns">
+									{{::col}}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in ::cc.centreSubjects.tableData">
+								<td>{{::row.username}}</td>
+								<td>{{::row.email}}</td>
+								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
+								<td>{{::row.studyMapping}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

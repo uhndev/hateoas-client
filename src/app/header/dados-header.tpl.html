@@ -2,33 +2,32 @@
   <div class="headerWrapper">
     <div class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 col-sm-7 col-xs-4">
           <div class="row">
             <div class="col-md-12">
               <div id="logo_dados">
-                <img id="dados-brand" alt="Brand" ng-src="assets/img/dados.png" width="150" height="52">
+                <img id="dados-brand" alt="Brand" ng-src="assets/img/dados.png">
               </div>
-              <div id="subBrand" class="pull-left">
+              <div id="subBrand" class="pull-left hidden-xs">
                 <div id="subBrand_site">TECHNA INSTITUTE</div>
                 <div id="subBrand_dep">EXTREME EDITION</div>
-              </div>            
+              </div>
             </div>            
           </div>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 hidden-xs">
               <small id="tagline">
                 An Open Platform for Prospective Data Collection in Clinical and Translational Research
               </small>
             </div>
           </div>
         </div>
-
         <div class="pull-right">
           <div id="profile_panel" ng-if="header.isVisible">
             <div id="profile_pannel_inner">
               <div id="logout">              
                 <a href="/logout" ng-click="header.logout()">
-                  <img id="logout_img">
+                  <img id="logout_img" src="assets/img/ico_logout.png">
                 </a>
               </div>
               <div class="profile_title">
@@ -60,14 +59,33 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in ::header.navigation"
+            <li ng-repeat="link in ::header.navigation" dropdown
               ng-class="{ 
                 'active': link.isActive,
+                'dropdown': link.dropdown
               }">
-              <a href="#{{ ::link.href }}">
+              <!-- Single Link -->
+              <a href="#{{ ::link.href }}" ng-if="!link.dropdown">
                 <i class="fa {{ ::link.icon }}"></i>
                 {{ ::link.prompt }}
               </a>
+              <!-- Dropdown Link -->
+              <a href class="dropdown-toggle" ng-if="link.dropdown"
+                dropdown-toggle role="button" aria-expanded="false">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
+                <li ng-repeat="droplink in link.dropdown"
+                  ng-class="{ 
+                  'active': droplink.isActive
+                }">
+                  <a href="#{{ ::droplink.href }}">
+                    <i class="fa {{ ::droplink.icon }}"></i>
+                    {{ ::droplink.prompt }}
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

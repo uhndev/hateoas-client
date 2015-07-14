@@ -77,7 +77,6 @@
         var defaultViewLocation = 'directives/hateoasClient/Views/hateoasView';
         var pathArr = _.pathnameToArray(path);
         var model = _.first(pathArr);
-
         var fragment;
         if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
           var view = _.last(pathArr);

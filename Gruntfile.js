@@ -19,6 +19,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-coffeelint');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-ng-constant');
   grunt.loadNpmTasks('grunt-html2js');
   process.chdir(cwd);
 
@@ -92,7 +93,8 @@ module.exports = function ( grunt ) {
      */
     clean: [ 
       '<%= build_dir %>', 
-      '<%= compile_dir %>'
+      '<%= compile_dir %>',
+      'src/common/config/app.config.js'
     ],
 
     /**
@@ -223,6 +225,37 @@ module.exports = function ( grunt ) {
             expand: true
           }
         ]
+      }
+    },
+
+    ngconstant: {
+      // Options for all targets
+      options : {
+        space : ' ',
+        wrap : '(function(){\n\'use strict\';\n{%= __ngModule %}})();',
+        name : 'dados.common.config',
+        dest : 'src/common/config/app.config.js'
+      },      
+      // Environment targets
+      development: {
+        constants: {
+          BASE: { 
+            protocol: 'http',
+            host : 'localhost',
+            port: '1337',
+            prefix: '/api'
+          }
+        }
+      },
+      production: {
+        constants: {
+          BASE: { 
+            protocol: 'http',
+            host : 'localhost',
+            port: '1337',
+            prefix: '/api'
+          }
+        }
       }
     },
 
@@ -552,14 +585,24 @@ module.exports = function ( grunt ) {
    * The default task is to build and compile.
    */
   grunt.registerTask( 'default', [ 'build', 'compile' ] );
+  grunt.registerTask( 'prod', [ 'build_prod', 'compile' ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
+    'clean', 'ngconstant:development', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'karmaconfig',
+    'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 
+    'karmaconfig',
+    'karma:continuous' 
+  ]);
+
+  grunt.registerTask( 'build_prod', [
+    'clean', 'ngconstant:production', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
+    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 
+    'karmaconfig',
     'karma:continuous' 
   ]);
 

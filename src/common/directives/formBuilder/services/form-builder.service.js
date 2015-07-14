@@ -76,6 +76,11 @@
           value: 'Single Select',
           value_type: '',
           hasItem: true
+        },
+        {
+          name: 'json',
+          value: 'JSON',
+          value_type: {}
         }
       ]
     };

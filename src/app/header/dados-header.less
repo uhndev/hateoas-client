@@ -1,0 +1,141 @@
+/**
+ * Navigation
+ */
+#logo_dados {
+  float:left;
+  padding-right: 15px;
+  margin-bottom: 5px;
+}
+#subBrand {
+  float: right;
+  width: 200px;
+  position: relative;
+  top: 18px;
+  padding-left: 15px;
+  background: url(img/dottedLine_vert.gif) top left repeat-y;
+  margin: 0;
+  overflow: hidden;
+  height: 34px;  
+}
+#subBrand_site {
+  font-size: 12px;
+  color: #ccc;
+  margin: 0;
+  text-transform: uppercase;
+}
+#subBrand_dep {
+  font-size: 16px;
+  color: #E79851;
+  vertical-align: text-bottom;
+  margin: 0;
+  text-transform: uppercase;
+}
+#tagline {
+  clear: both;
+  font-size: 11px;
+  color: #ccc;
+}
+#profile_panel {
+  margin-top: -20px;
+  background: #00538B url(img/profile_panel_bg.png) no-repeat left bottom;
+  height: auto;
+  width: 289px;
+  padding: 0 0 1px 0;
+  overflow: hidden;
+}
+#profile_pannel_inner {
+  padding: 10px 14px 10px 16px;
+  margin: 0 8px 8px 8px;
+  height: auto;
+  border-bottom: #E79851 solid 6px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
+#logout {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: block;
+  top: 5px;
+  right: 0;
+  float: right;
+  border: none;
+}
+#logout_img {
+  width: 24px;
+  height: 24px;
+  border: 0;
+}
+.profile_title {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-weight: lighter;
+  font-size: 16px;
+  color: #fff;
+  text-transform: none;
+  padding: 4px 0 0 0;
+}
+.profile_content {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 10px;
+  color: #fff;
+  margin: 3px 2px 3px 0;
+  text-align: left;
+  padding: 18px 0 0 0;
+}
+@media (max-width: @screen-xs-max) {
+  .navbar-nav > li > a {
+    padding-left: 30px;
+  }
+  #profile_panel {
+    width: 150px;
+  }
+  #logo_dados img {
+    width: 100px;
+    height: auto;
+  }
+}
+.navbar-container {
+  background-color: @headerColour;
+}
+.navbar-collapse {
+  padding-left: 0px;
+}
+.headerWrapper {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  .navbar-default {
+    background-color: @headerColour;
+    border-color: @headerColour;
+  }
+}
+.menuWrapper {
+  .navbar {
+    margin-bottom: 0px;
+  }
+  .navbar-default {
+    background-color: @menuColour;
+    border-color: @menuColour;
+  }
+}
+.submenuWrapper {
+  margin-bottom: 10px;
+  .navbar {
+    margin-bottom: 0px;
+  } 
+  .navbar-inverse {
+    background-color: @submenuColour;
+    border-color: @submenuColour;
+    z-index: 0;
+    position: relative;
+  }
+  -moz-box-shadow: 0px 4px 7px -2px #666;
+  -webkit-box-shadow: 0px 4px 7px -2px #666;
+  box-shadow: 0px 4px 7px -2px #666;
+}
+.submenu-link-colour {
+  color: @submenuLinkColour;
+}
+.dropdown-menu > li > a {
+  padding: 7px 20px;
+}

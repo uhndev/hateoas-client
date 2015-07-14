@@ -5,22 +5,16 @@
 		</label>&nbsp;
 		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
 		<div class="row-fluid">
-			<isteven-multi-select  
-				id="{{field.field_id}}" 
-				is-disabled="!field.field_userURL"
-				selection-mode="single"
+			<select-loader
+				id="{{field.field_id}}"
+				url="{{field.field_userURL}}"
+				is-atomic="field.field_hasItem"
+				is-disabled="false"
 				ng-required="field.field_required"
-				input-model="multiInput"    
-				output-model="multiOutput"
-				button-label="{{field.field_labels}}"
-				item-label="{{field.field_labels}}"
-				output-properties="id"
-				tick-property="ticked"
-				max-labels="10"
-				on-item-click="setValues()"
-				on-reset="fetchData(true)"
-			>
-			</isteven-multi-select>
+				values="field.field_value"
+				labels="{{field.field_labels}}"
+				output-properties="id">
+			</select-loader>
 		</div>
 		<div ng-show="!sub_form.$pristine">
 			<span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>

@@ -1,20 +1,18 @@
 /**
- * Module for handling authentication of users
+ * Controller for handling authentication of users
  */
-
 (function() {
   'use strict';
 
   angular
     .module('dados.auth.controller', [
-      'ngCookies',
-      'ipCookie'
+      'ngCookies'
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'toastr'];
+  AuthController.$inject = ['$location', '$state', '$cookieStore', 'AuthService', 'toastr'];
 
-  function AuthController($location, $state, $cookieStore, ipCookie, AuthService, toastr) {
+  function AuthController($location, $state, $cookieStore, AuthService, toastr) {
     var vm = this;
     vm.error = '';
     
@@ -23,36 +21,43 @@
       $location.url('/');
     }
 
+    /**
+     * [success]
+     * Success callback following attempted login by user; on success, user info and token 
+     * are stored in cookie with expiration set in ms.
+     * @param  {Object} user response from server containing user, group, and token
+     * @return {Null}
+     */
     var success = function(user) {
       if (user) {
         var now = new Date();
-        ipCookie('user', user, {
-          expires: new Date(now.getTime() + 900000)
+        $cookieStore.put('user', user, {
+          expires: new Date(now.getTime() + (60000 * user.token.expires))
         });
         AuthService.setAuthenticated();
-
-        // wait until stable angular 1.3 for cookie expiration support
-        // $cookieStore.put('user', user, {
-        //   expires: new Date(now.getTime() + 900000)
-        // });
         $location.url('/study');
         $state.go('hateoas');
       }
     };
 
+    /**
+     * [error]
+     * Error callback on unsuccessful login
+     * @param  {Object} err 
+     */
     var error = function(err) {
       vm.error = err;
     };
 
+    /**
+     * [login]
+     * Bound method to login button on form
+     * @return {[type]} [description]
+     */
     vm.login = function() {
       AuthService.login(vm.credentials, success, error);
     };
 
-    vm.register = function(isValid) {
-      if (isValid) {
-        AuthService.register(vm.credentials, success, error);
-      }
-    };
   } 
   
 })();

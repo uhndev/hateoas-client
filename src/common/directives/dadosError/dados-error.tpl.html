@@ -13,7 +13,7 @@
 			<div ng-if="err.error.currentUser">
 				<dt>Username</dt><dd>{{ err.error.currentUser.username }}</dd>
 				<dt>Email</dt><dd>{{ err.error.currentUser.email }}</dd>
-				<dt>Role</dt><dd>{{ err.error.currentUser.role }}</dd>
+				<dt>Role</dt><dd>{{ err.error.currentUser.group }}</dd>
 			</div>
 			<div ng-if="err.error.memoryDump">
 				<dt>Memory Usage</dt><dd>{{ err.error.memoryDump.usage || 'unable to determine'}}</dd>

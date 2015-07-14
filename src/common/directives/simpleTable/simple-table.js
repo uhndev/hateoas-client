@@ -1,42 +1,36 @@
 (function() {
   'use strict';
   angular
-    .module('dados.common.directives.simpleTable', [])
+    .module('dados.common.directives.simpleTable', [
+      'dados.common.directives.selectLoader'
+    ])
     .directive('simpleTable', function() {
       return {
         restrict: 'E',
         replace: true,
         scope: {
           columns: '=',
+          rows: '=',
           tableData: '='
         },
-        template: '<table class="table table-hover">'+
-          '<thead>'+
-            '<tr>'+
-              '<th ng-repeat="col in table.columns">{{col}}</th>'+
-            '</tr>'+
-          '</thead>'+
-          '<tbody>'+
-            '<tr ng-repeat="item in table.tableData">'+
-              '<td>{{item.name}}</td>'+
-              '<td>{{item.value}}</td>'+
-            '</tr>'+
-          '</tbody>'+
-        '</table>',
+        templateUrl: 'directives/simpleTable/simpleTable.tpl.html',
         controller: TableController,
         controllerAs: 'table',
         bindToController: true
       };
     });
 
-  TableController.$inject = [];
+  TableController.$inject = ['$scope'];
 
-  function TableController() {
+  function TableController($scope) {
     var vm = this;
 
     // bindable variables
     vm.columns = vm.columns || [];
-    vm.tableData = vm.tableData || [];
+    // each row has field: { title, type }
+    vm.rows = vm.rows || [];
+    // each tableData has name value pair
+    vm.tableData = vm.tableData || [];   
   }
 
 })();

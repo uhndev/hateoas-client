@@ -8,11 +8,12 @@
   .controller('HateoasController', HateoasController);
 
   HateoasController.$inject = [
-    '$scope', '$resource', '$location', 
+    '$scope', '$resource', '$location', 'AuthService',
     'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
   ];
       
-  function HateoasController($scope, $resource, $location, API, TableParams, SailsNgTable, Utils) {
+  function HateoasController($scope, $resource, $location, AuthService, 
+                              API, TableParams, SailsNgTable, Utils) {
 
     var vm = this;
 
@@ -34,6 +35,8 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      var currStudy = _.getStudyFromUrl($location.path());
+
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
         page: 1,
@@ -53,6 +56,31 @@
             vm.resource = angular.copy(data);
             params.total(data.total);
             $defer.resolve(data.items);
+
+            // if on study subpage, include study name in template 
+            // to be able to prepend to appropriate rest calls
+            if (currStudy) {
+              vm.template.study = currStudy;
+            }
+
+            // initialize submenu
+            if (currStudy && _.has(data, 'links') && data.links.length > 0) {
+              // from workflowstate and current url study
+              // replace wildcards in href with study name
+              _.map(data.links, function(link) {
+                if (link.rel === 'overview' && link.prompt === '*') {
+                   link.prompt = currStudy;
+                }  
+                if (_.contains(link.href, '*')) {
+                  link.href = link.href.replace(/\*/g, currStudy);  
+                }  
+                return link;
+              });
+              var submenu = {
+                links: AuthService.getRoleLinks(data.links)
+              };
+              angular.copy(submenu, $scope.dados.submenu);
+            }
           });
         }
       });
@@ -73,7 +101,7 @@
         var submenu = {
           href: vm.selected.slug,
           name: vm.selected.name,
-          links: vm.selected.links
+          links: AuthService.getRoleLinks(vm.selected.links)
         };
         angular.copy(submenu, $scope.dados.submenu);
       } 

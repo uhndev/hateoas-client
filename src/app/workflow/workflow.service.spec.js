@@ -11,7 +11,6 @@ describe('Workflow', function() {
 
     it('exists', function () {
       expect(API_CONSTANT).toBeTruthy();
-      expect(_.isString(API_CONSTANT)).toBeTruthy();
     });
 
     it('is a constant', inject(function($injector) {
@@ -30,7 +29,7 @@ describe('Workflow', function() {
         function(backend, Workflow, api) {
           $httpBackend = backend;
           mockWorkflowResource = Workflow;
-          url = api;
+          url = api.url;
         }]);
     });
 
