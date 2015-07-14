@@ -1,0 +1,66 @@
+<section ng-controller="MetaDataController">
+	<table class="table table-condensed table-striped">
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="(key, value) in metaData">
+				<td>
+					<span ng-hide="editKey==key">{{ key }}</span>
+					<input type="text" class="form-control" ng-model="entry.key" ng-if="editKey == key"/>
+				</td>
+				<td>
+					<span ng-hide="editKey==key">{{ value }}</span>
+					<input type="text" class="form-control" ng-model="entry.value" ng-if="editKey == key"/>
+				</td>
+				<td>
+					<div class="btn-group" ng-show="!editKey">
+						<button class="btn btn-default btn-sm" ng-click="edit(key)">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+						<button class="btn btn-danger btn-sm" ng-click="remove(key)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</div>
+					<div class="btn-group" ng-show="editKey == key">
+						<button class="btn btn-primary btn-sm" ng-click="update(key, value)">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button class="btn btn-warning btn-sm" ng-click="cancel()">
+							 <span class="glyphicon glyphicon-refresh"></span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot ng-if="!editKey">
+			<tr>
+				<td>
+					<input type="text" class="form-control"
+						placeholder="Attribute Name"
+						ng-model="entry.key" />
+				</td>
+				<td>
+					<input type="text" class="form-control" 
+						placeholder="Attribute Value or Reference ID"
+						ng-model="entry.value" />
+				</td>
+				<td>
+					<div class="btn-group">
+						<button class="btn btn-primary btn-sm" ng-click="add()" 
+							ng-disabled="entry.key == '' || entry.value == ''">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button class="btn btn-warning btn-sm" ng-click="clear()">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</section>

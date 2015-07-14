@@ -5,8 +5,12 @@
       'dados.common.directives.pluginEditor.pluginController',
       'dados.common.directives.pluginEditor.layoutController',
       'dados.common.directives.pluginEditor.widgetModalController',
+      'dados.common.directives.pluginEditor.directives.formMetaEditor',
+      'dados.common.directives.pluginEditor.directives.uiWidget',
+      'dados.common.directives.pluginEditor.directives.uiListEditor',
       'dados.common.directives.pluginEditor.directives.uiGrid',
       'dados.common.directives.pluginEditor.directives.uiSortable',
+      //'dados.common.directives.pluginEditor.directives.uiHelp',
     ])
     .directive('pluginEditor', function() {
       return {

@@ -1,0 +1,19 @@
+<select 
+    class="form-control"
+	ng-model="widgetModel.value"
+	id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}"
+	name="{{ widget.name }}"
+	size="{{widget.properties.size }}"
+	title="{{widget.properties.title }}"
+	style="background-color: {{ widgetModel.value }}"	
+>
+	<option value="" ng-hide="!!widgetModel.value">
+		{{ widget.properties.title }}
+	</option>
+	<option ng-repeat="item in widget.properties.options" 
+		value="{{ item.value }}"
+		ng-selected="item.value == widgetModel.value"
+		style="background-color: {{ item.value }}">
+		{{ item.name }}
+	</option>
+</select>

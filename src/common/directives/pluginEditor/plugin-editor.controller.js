@@ -1,17 +1,19 @@
 (function() {
   'use strict';
-  angular.module('dados.common.directives.pluginEditor.pluginController', [])
+  angular.module('dados.common.directives.pluginEditor.pluginController', [
+    'dados.common.directives.pluginEditor.formService'
+  ])
   .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location'];
+  PluginController.$inject = ['$scope', '$location', 'FormService'];
 
-  function PluginController($scope, $location) {
+  function PluginController($scope, $location, FormService) {
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
     $scope.form = { name: '', questions: [], metaData: {}};
-    //$scope.forms = FormResource.query();
-    $scope.idPlugin = parseInt($location.search()['idPlugin'], 10);
+    $scope.forms = FormService.query();
+    $scope.idPlugin = $location.search()['idPlugin'];
     
     $scope.$on('metaDataControllerLoaded', function(e) {
       $scope.$broadcast('setMetaData', $scope.form.metaData);
@@ -67,9 +69,9 @@
     $scope.save = function() {
       $scope.isSaving = true;
       if ($scope.form.id) {
-        //FormResource.update($scope.form, onFormSaved);
+        FormService.update($scope.form, onFormSaved);
       } else {
-        //FormResource.save($scope.form, onFormSaved);
+        FormService.save($scope.form, onFormSaved);
       }
     };
     
@@ -93,8 +95,8 @@
       setForm(form);
     };
     
-    if ($scope.idPlugin && !isNaN(parseInt($scope.idPlugin, 10))) {
-      //FormResource.get({id: $scope.idPlugin, deep: true}, setForm);
+    if ($scope.idPlugin) {
+      FormService.get({id: $scope.idPlugin}, setForm);
     }
     
     $scope.loadForm = function(id) {
