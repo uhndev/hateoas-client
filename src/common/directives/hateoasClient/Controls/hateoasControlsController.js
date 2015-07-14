@@ -31,6 +31,7 @@
       if (conf) {
         Service.archive(item).then(function (data) {
           toastr.success('Item successfully archived!', 'Success');
+          $scope.$emit('submenu.clear');
           $scope.$emit('hateoas.client.refresh');
         });
       }
@@ -59,7 +60,7 @@
       instance.result.then(function(item) {
         var newItem = _.merge(modalScope.item, item);
         var api = newItem.href || $scope.href;
-        //TODO: Handle errors!
+
         Service.commit(api, newItem).then(function(data) {
           toastr.success('Item successfully updated!', 'Success');
           $scope.$emit('hateoas.client.refresh');

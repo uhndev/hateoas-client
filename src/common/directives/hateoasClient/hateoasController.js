@@ -11,8 +11,8 @@
     '$scope', '$resource', '$location', 'AuthService',
     'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
   ];
-      
-  function HateoasController($scope, $resource, $location, AuthService, 
+
+  function HateoasController($scope, $resource, $location, AuthService,
                               API, TableParams, SailsNgTable, Utils) {
 
     var vm = this;
@@ -44,7 +44,7 @@
         filter: vm.filters
       };
 
-      $scope.tableParams = new TableParams(TABLE_SETTINGS, { 
+      $scope.tableParams = new TableParams(TABLE_SETTINGS, {
         counts: [],
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, vm.query);
@@ -57,7 +57,7 @@
             params.total(data.total);
             $defer.resolve(data.items);
 
-            // if on study subpage, include study name in template 
+            // if on study subpage, include study name in template
             // to be able to prepend to appropriate rest calls
             if (currStudy) {
               vm.template.study = currStudy;
@@ -70,10 +70,10 @@
               _.map(data.links, function(link) {
                 if (link.rel === 'overview' && link.prompt === '*') {
                    link.prompt = currStudy;
-                }  
+                }
                 if (_.contains(link.href, '*')) {
-                  link.href = link.href.replace(/\*/g, currStudy);  
-                }  
+                  link.href = link.href.replace(/\*/g, currStudy);
+                }
                 return link;
               });
               var submenu = {
@@ -85,7 +85,7 @@
         }
       });
     }
-    
+
 
     function follow(link) {
       if (link) {
@@ -104,7 +104,7 @@
           links: AuthService.getRoleLinks(vm.selected.links)
         };
         angular.copy(submenu, $scope.dados.submenu);
-      } 
+      }
     }
 
     // watchers
