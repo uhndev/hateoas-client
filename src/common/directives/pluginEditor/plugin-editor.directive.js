@@ -11,7 +11,8 @@
       'dados.common.directives.pluginEditor.directives.uiExpressionEditor',
       'dados.common.directives.pluginEditor.directives.uiGrid',
       'dados.common.directives.pluginEditor.directives.uiSortable',
-      //'dados.common.directives.pluginEditor.directives.uiHelp',
+      'dados.common.directives.pluginEditor.directives.uiHelp',
+      'dados.common.directives.pluginEditor.directives.ngName',
     ])
     .directive('pluginEditor', function() {
       return {

@@ -8,8 +8,7 @@
 				type="checkbox"
 				ng-name="widget.name + '_' + $index"
 				title="{{ option.name }}"
-				ng-true-value="{{ option.value }}"
-				ng-false-value=""
+				ng-true-value="'{{ option.value }}'"
 				ng-model="widgetModel.value[$index]"
 				ng-checked="widgetModel.value[$index] == option.value"
 			 />
