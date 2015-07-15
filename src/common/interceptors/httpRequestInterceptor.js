@@ -56,9 +56,12 @@
 
         // change $location for specific response codes
         switch (response.status) {
-          case 401:
-            $location.path('/login');
-            $injector.get('AuthService').setUnauthenticated();
+          case 400:
+            if (response.data.status == 401 || response.status == 401) {
+              title = response.data.message;
+              $location.path('/login');
+              $injector.get('AuthService').setUnauthenticated();
+            }
             break;
           case 403: $location.path('/400'); break;
           case 404: $location.path('/400'); break;
