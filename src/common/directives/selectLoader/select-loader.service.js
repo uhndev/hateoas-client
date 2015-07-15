@@ -11,22 +11,22 @@
 		var cache = {};
 
 		this.loadSelect = function(url, refresh) {
-      cache[url] = $http.get(url).then(function(response) {
-        return response.data.items;
-      });
-      return cache[url];
+      // cache[url] = $http.get(url).then(function(response) {
+      //   return response.data.items;
+      // });
+      // return cache[url];
 
-			// var deferred;
-			// if (!cache[url] || refresh) {
-			// 	cache[url] = $http.get(url).then(function(response) {
-			// 		return response.data.items;
-			// 	});
-			// 	return cache[url];
-			// } else {
-			// 	deferred = $q.defer();
-			// 	deferred.resolve(cache[url]);
-			// 	return deferred.promise;
-			// }
+			var deferred;
+			if (!cache[url] || refresh) {
+				cache[url] = $http.get(url).then(function(response) {
+					return response.data.items;
+				});
+				return cache[url];
+			} else {
+				deferred = $q.defer();
+				deferred.resolve(cache[url]);
+				return deferred.promise;
+			}
 		};
 	}
 })();

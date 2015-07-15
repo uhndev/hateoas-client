@@ -56,7 +56,7 @@
 
         // change $location for specific response codes
         switch (response.status) {
-          case 400:
+          case 401:
             if (response.data.name === 'UnauthorizedError' ||
                 response.data.message === 'jwt expired') {
               $location.path('/login');
