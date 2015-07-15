@@ -57,11 +57,8 @@
         // change $location for specific response codes
         switch (response.status) {
           case 401:
-            if (response.data.name === 'UnauthorizedError' ||
-                response.data.message === 'jwt expired') {
-              $location.path('/login');
-              $injector.get('AuthService').setUnauthenticated();
-            }
+            $location.path('/login');
+            $injector.get('AuthService').setUnauthenticated();
             break;
           case 403: $location.path('/400'); break;
           case 404: $location.path('/400'); break;
