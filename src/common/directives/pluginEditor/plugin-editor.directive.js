@@ -18,12 +18,9 @@
       return {
         restrict: 'E',
         replace: true,
-        link: postLink,
         templateUrl: 'directives/pluginEditor/plugin-editor.tpl.html',
         controller: 'PluginController'
       };
     });
-    
-    function postLink(scope, element, attribute, controller) {
-    }
+
 })();

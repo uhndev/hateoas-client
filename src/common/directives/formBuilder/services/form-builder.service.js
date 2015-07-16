@@ -2,9 +2,9 @@
   'use strict';
   angular
     .module('dados.common.directives.formBuilder.service', [])
-    .service('FormService', FormService);
+    .service('SystemFormService', SystemFormService);
 
-  function FormService() {
+  function SystemFormService() {
     return {
       fields:[
         {
@@ -85,6 +85,6 @@
       ]
     };
   }
-  
+
 })();
 

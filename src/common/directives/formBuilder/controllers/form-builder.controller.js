@@ -7,9 +7,9 @@
     .module('dados.common.directives.formBuilder.controller', [])
     .controller('CreateController', CreateController);
 
-  CreateController.$inject = ['$http', 'FormService'];
+  CreateController.$inject = ['$http', 'SystemFormService'];
 
-  function CreateController($http, FormService) {
+  function CreateController($http, SystemFormService) {
     var vm = this;
 
     // bindable variables
@@ -48,10 +48,10 @@
       });
 
       // field initialization
-      var defaultField = FormService.fields[0];
+      var defaultField = SystemFormService.fields[0];
       vm.addField = {
         new: defaultField,
-        types: FormService.fields,        
+        types: SystemFormService.fields,
         value_type: defaultField.value_type,
         hasOptions: defaultField.hasOptions,
         hasItems: defaultField.hasItems,
@@ -149,7 +149,7 @@
       vm.form.form_questions.splice(0, vm.form.form_questions.length);
       vm.addField.lastAddedID = 0;
     }
- 
+
   }
 
 })();

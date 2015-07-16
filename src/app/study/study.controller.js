@@ -8,11 +8,11 @@
     ])
     .constant('FORM_NAME', 'survey_tracking')
     .controller('StudyOverviewController', StudyOverviewController);
-  
+
   StudyOverviewController.$inject = [
     '$scope', '$resource', '$location', 'API', 'FORM_NAME', 'AuthService'
   ];
-  
+
   function StudyOverviewController($scope, $resource, $location, API, FORM_NAME, AuthService) {
     var vm = this;
 
@@ -23,7 +23,7 @@
     vm.studyInfo = {};
     vm.collectionCentres = {};
     vm.savedData = {};
-    vm.url = API.url() + $location.path();    
+    vm.url = API.url() + $location.path();
 
     // bindable methods
     vm.generateReport = generateReport;
@@ -34,14 +34,14 @@
 
     function init() {
       var Resource = $resource(vm.url);
-      var SurveyForm = $resource(API.url() + '/form?form_name=' + FORM_NAME);
+      var SurveyForm = $resource(API.url() + '/systemform?form_name=' + FORM_NAME);
 
       Resource.get(function(data, headers) {
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);
         var robj = _.pick(data.items, 'name', 'reb', 'administrator', 'pi');
-        
+
         vm.studyInfo = {
           columns: [ 'Name', 'Value' ],
           rows: {
@@ -87,7 +87,7 @@
         if (_.all(obj[k], function(o) { return _.has(o, 'id'); })) {
           val = _.pluck(obj[k], 'id');
         }
-        return { 
+        return {
           name: k,
           value: val
         };

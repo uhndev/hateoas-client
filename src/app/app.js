@@ -30,9 +30,9 @@
   .config(dadosConfig)
   .controller('DadosController', DadosController);
 
-  dadosConfig.$inject = ['$stateProvider', 'toastrConfig'];
+  dadosConfig.$inject = ['$stateProvider', '$tooltipProvider', 'toastrConfig'];
 
-  function dadosConfig($stateProvider, toastrConfig) {
+  function dadosConfig($stateProvider, $tooltipProvider, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
@@ -44,6 +44,10 @@
       progressBar: true,
       tapToDismiss: true,
       timeOut: 3000
+    });
+
+    $tooltipProvider.options({
+      appendToBody: true
     });
   }
 
@@ -64,7 +68,7 @@
       var page = $location.path();
       if (_.has(Auth.currentUser, 'group') &&
           Auth.currentUser.group.level > 1 &&
-          (page == '/formbuilder' || page == '/access')) {
+          (page == '/formbuilder' || page == '/plugineditor' || page == '/access')) {
         $location.path('/400');
       }
     });

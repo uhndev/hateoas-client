@@ -3,11 +3,11 @@
 		No field name set. Field name is required.
 	</div>
 	<div class="alert alert-info" ng-if="!cell.template">
-		Place your mouse over here to configure this widget. 
+		Place your mouse over here to configure this widget.
 		Drag the widget to re-order it. {{ showList }}
 	</div>
-	<ui-widget ng-if="cell.template" widget="cell" 
-		widget-model="cell.properties.defaultValue" 
+	<ui-widget ng-if="cell.template" widget="cell"
+		widget-model="cell.properties.defaultValue"
 		class="panel-body"></ui-widget>
 	<div class="panel-footer">
 		<div class="btn-group btn-group-sm">
@@ -15,11 +15,11 @@
 			 tooltip="Add cell to the left">
 				<span class="glyphicon glyphicon-log-in flip"></span>
 			</button>
-			<button class="btn btn-default" ng-click="shrink()" 
+			<button class="btn btn-default" ng-click="shrink()"
 				ng-hide="!shrinkable()" tooltip="Shrink cell">
 				<span class="glyphicon glyphicon-resize-small"></span>
 			</button>
-			<button class="btn btn-default" ng-click="expand()" 
+			<button class="btn btn-default" ng-click="expand()"
 				ng-hide="!expandable()"
 				tooltip="Expand cell">
 				<span class="glyphicon glyphicon-resize-full"></span>

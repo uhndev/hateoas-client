@@ -1,14 +1,15 @@
 (function() {
   'use strict';
   angular
-    .module('dados.common.directives.pluginEditor.formService', ['ngResource'])
+    .module('dados.common.directives.pluginEditor.formService', [
+      'ngResource', 'dados.form.constants'])
     .factory('FormService', FormService);
-    
-  FormService.$inject = ['$resource'];
 
-  function FormService($resource) {
+  FormService.$inject = ['$resource', 'FORM_API'];
+
+  function FormService($resource, FORM_API) {
     return $resource(
-      'http://localhost:1337/api/userform/:id', 
+      FORM_API.url,
       {id : '@id'},
       {
         'get' : {method: 'GET', isArray: false, transformResponse: transformHateoas },
@@ -18,7 +19,7 @@
       }
     );
   }
-  
+
   function transformHateoas(data, headersGetter) {
     var jsonData = angular.fromJson(data);
     if (jsonData.hasOwnProperty('items')) {
@@ -26,5 +27,5 @@
     }
     return jsonData;
   }
-  
+
 })();
