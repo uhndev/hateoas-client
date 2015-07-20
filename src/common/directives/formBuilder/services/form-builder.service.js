@@ -2,9 +2,9 @@
   'use strict';
   angular
     .module('dados.common.directives.formBuilder.service', [])
-    .service('SystemFormService', SystemFormService);
+    .service('SystemFormFieldService', SystemFormFieldService);
 
-  function SystemFormService() {
+  function SystemFormFieldService() {
     return {
       fields:[
         {

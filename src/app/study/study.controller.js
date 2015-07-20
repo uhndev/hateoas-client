@@ -81,19 +81,6 @@
       });
     }
 
-    function parseData(obj) {
-      return _.map(_.keys(obj), function (k) {
-        var val = obj[k];
-        if (_.all(obj[k], function(o) { return _.has(o, 'id'); })) {
-          val = _.pluck(obj[k], 'id');
-        }
-        return {
-          name: k,
-          value: val
-        };
-      });
-    }
-
     function generateReport() {
       alert('Generating report');
     }

@@ -6,11 +6,11 @@
       'dados.common.directives.simpleTable'
     ])
     .controller('CollectionCentreOverviewController', CollectionCentreOverviewController);
-  
+
   CollectionCentreOverviewController.$inject = [
     '$scope', '$resource', '$location', 'API'
   ];
-  
+
   function CollectionCentreOverviewController($scope, $resource, $location, API) {
     var vm = this;
 
@@ -37,8 +37,8 @@
         vm.resource = angular.copy(data);
         var robj = _.pick(data.items, 'name', 'study', 'contact');
         vm.title = data.items.name;
-        
-        vm.centreInfo = {          
+
+        vm.centreInfo = {
           tableData: _.objToPair(robj),
           columns: ['Field', 'Value'],
           rows: {
@@ -55,13 +55,13 @@
 
         vm.centreSubjects = {
           tableData: data.items.subjects || [],
-          columns: []
+          columns: ['Subject ID', 'Study Mapping', 'Date of Event']
         };
       });
     }
 
     $scope.$on('hateoas.client.refresh', function() {
       init();
-    });    
+    });
   }
 })();

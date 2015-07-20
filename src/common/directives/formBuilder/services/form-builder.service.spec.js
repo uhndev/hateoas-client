@@ -1,22 +1,22 @@
-describe('Service: SystemFormService Tests', function () {
+describe('Service: SystemFormFieldService Tests', function () {
 
 	// load the service module
 	beforeEach(module('dados.common.directives.formBuilder'));
 
 	// instantiate service
-	var SystemFormService;
-	beforeEach(inject(function (_SystemFormService_) {
-		SystemFormService = _SystemFormService_;
+	var SystemFormFieldService;
+	beforeEach(inject(function (_SystemFormFieldService_) {
+		SystemFormFieldService = _SystemFormFieldService_;
 	}));
 
 	it('should be defined', function () {
-		expect(!!SystemFormService).toBe(true);
+		expect(!!SystemFormFieldService).toBe(true);
 		return true;
 	});
 
 	it('should return a non-empty fields array', function() {
-		expect(SystemFormService.fields).not.toEqual(null);
-		expect(SystemFormService.fields.length).not.toBe(0);
+		expect(SystemFormFieldService.fields).not.toEqual(null);
+		expect(SystemFormFieldService.fields.length).not.toBe(0);
 	});
 
 });

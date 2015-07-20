@@ -1,15 +1,17 @@
 (function() {
   'use strict';
   angular
-    .module('dados.common.directives.pluginEditor.formService', [
-      'ngResource', 'dados.form.constants'])
-    .factory('FormService', FormService);
+    .module('dados.form.service', [
+      'ngResource',
+      'dados.form.constants'
+    ])
+    .service('SystemFormService', SystemFormService);
 
-  FormService.$inject = ['$resource', 'FORM_API'];
+  SystemFormService.$inject = ['$resource', 'SYSTEMFORM_API'];
 
-  function FormService($resource, FORM_API) {
+  function SystemFormService($resource, SYSTEMFORM_API) {
     return $resource(
-      FORM_API.url,
+      SYSTEMFORM_API.url,
       {id : '@id'},
       {
         'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
