@@ -62,9 +62,9 @@
         vm.userStudies = {
           tableData: data.items.enrollments || [],
           columns: [
-            { title: 'Study', field: 'study', type: 'single' },
-            { title: 'Collection Centre', field: 'collectionCentre', type: 'single' },
-            { title: 'Role', field: 'role', type: 'single' }
+            { title: 'Study', field: 'study', type: 'text' },
+            { title: 'Collection Centre', field: 'collectionCentre', type: 'text' },
+            { title: 'Role', field: 'role', type: 'text' }
           ]
         };
       });

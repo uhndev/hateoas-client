@@ -57,7 +57,7 @@
             });
           } else {
             var values = vm.values;
-            if (_.all(vm.values, function(v) { return _.has(v, 'id'); })) {
+            if (_.all(vm.values, _.has('id'))) {
               values = _.pluck(vm.values, 'id');
             }
             _.map(vm.input, function(item) {
