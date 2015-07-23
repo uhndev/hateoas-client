@@ -5,7 +5,7 @@
 		.module('dados.common.directives.selectLoader.controller', [
       'isteven-multi-select',
 			'dados.constants',
-      'dados.common.directives.selectLoader.service'			
+      'dados.common.directives.selectLoader.service'
 		])
 		.controller('SelectController', SelectController);
 
@@ -15,7 +15,7 @@
 		var vm = this;
 
 		// bindable variables
-    vm.loadError = false; 
+    vm.loadError = false;
 		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
     vm.output = vm.output || [];
@@ -26,14 +26,14 @@
     // bindable methods
     vm.setValues = setValues;
     vm.fetchData = fetchData;
-    
+
     fetchData(false);
 
     ///////////////////////////////////////////////////////////////////////////
 
     function setValues() {
       if (vm.isAtomic) {
-      	vm.values = _.first(_.pluck(vm.output, 'id'));        
+      	vm.values = _.first(_.pluck(vm.output, 'id'));
       } else {
         vm.values = _.pluck(vm.output, 'id');
       }
@@ -48,7 +48,7 @@
         angular.copy(data, vm.input);
         _.map(vm.input, function(inp) { delete inp.ticked; return inp; });
         // set selected values if loading form
-        if (!_.isEmpty(vm.values)) {
+        if (!_.isNull(vm.values)) {
           if (vm.isAtomic) {
             _.each(vm.input, function(item) {
               if (vm.values === item.id) {
