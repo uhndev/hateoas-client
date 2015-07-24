@@ -41,16 +41,7 @@
 								<tbody>
 									<tr ng-repeat="row in study.collectionCentres.tableData">
 										<td>{{row.name}}</td>
-										<td>
-											<select-loader
-												url="user"
-												is-atomic="true"
-												is-disabled="true"
-												values="row.contact"
-												labels="prefix firstname lastname"
-												output-properties="id">
-											</select-loader>
-										</td>
+										<td>{{row.contact}}</td>
 										<td>{{row.coordinators_count}}</td>
 										<td>{{row.subjects_count}}</td>
 									</tr>
@@ -69,7 +60,7 @@
 									</h3>
 								</div>
 							</div>
-						</div>						
+						</div>
 						<div class="col-md-2">
 							<div class="panel panel-success">
 								<div class="panel-heading">
@@ -94,9 +85,9 @@
 					<h3 class="panel-title">Study Information</h3>
 				</div>
 				<div class="panel-body">
-					<simple-table 
+					<simple-table
 						rows="study.studyInfo.rows"
-						columns="study.studyInfo.columns" 
+						columns="study.studyInfo.columns"
 						table-data="study.studyInfo.tableData">
 					</simple-table>
 				</div>
@@ -106,6 +97,6 @@
 			<div class="well">
 				<form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>
