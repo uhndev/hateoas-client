@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -13,7 +13,7 @@
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
-    $scope.form = { name: '', questions: [], metaData: {}};
+    $scope.form = {name: '', questions: [], metaData: {}};
     $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
     $scope.sortableOptions = {
@@ -27,15 +27,15 @@
       });
     }
 
-    $scope.$on('metaDataControllerLoaded', function(e) {
+    $scope.$on('metaDataControllerLoaded', function (e) {
       $scope.$broadcast('setMetaData', $scope.form.metaData);
     });
 
-    $scope.$on('layoutControllerLoaded', function(e) {
+    $scope.$on('layoutControllerLoaded', function (e) {
       $scope.$broadcast('setGrid', $scope.form.questions);
     });
 
-    $scope.$on('saveGrid', function(e, widgets) {
+    $scope.$on('saveGrid', function (e, widgets) {
       $scope.form.questions = angular.copy(widgets);
     });
 
@@ -55,25 +55,30 @@
     //   }
     // });
 
-    var onFormSaved = function(result) {
+    var onFormSaved = function (result) {
       $scope.form = angular.copy(result);
       $scope.isSaving = false;
-      toastr.success('Saved form '+$scope.form.name+' successfully!', 'Form');
+      toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
       // @TODO investigate what this was about - Kevin
       $location.search('idPlugin', $scope.form.id);
       $scope.forms = FormService.query();
       // window.location.reload();
     };
 
-    var setForm = function(form) {
+    var onFormError = function (err) {
+      $scope.isSaving = false;
+      console.log(err);
+    };
+
+    var setForm = function (form) {
       $scope.form = form;
 
-      angular.forEach($scope.form.questions, function(question) {
+      angular.forEach($scope.form.questions, function (question) {
         if (angular.isUndefined(question.properties.defaultValue)) {
           if (question.properties.type.match(/checkbox/i)) {
-            question.properties.defaultValue = { value : [] };
+            question.properties.defaultValue = {value: []};
           } else {
-            question.properties.defaultValue = { value : undefined };
+            question.properties.defaultValue = {value: undefined};
           }
         }
       });
@@ -81,29 +86,36 @@
       $scope.$broadcast('setGrid', $scope.form.questions);
       $scope.$broadcast('setMetaData', $scope.form.metaData);
       $scope.isSaving = false;
-      toastr.info('Loaded form '+$scope.form.name+' successfully!', 'Form');
+      toastr.info('Loaded form ' + $scope.form.name + ' successfully!', 'Form');
     };
 
-    $scope.save = function() {
-      $scope.isSaving = true;
-      if ($scope.form.id) {
-        FormService.update($scope.form, onFormSaved);
+    $scope.save = function () {
+      if (_.isEmpty($scope.form.name)) {
+        toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
+      }
+      if (_.all($scope.form.questions, 'name')) {
+        $scope.isSaving = true;
+        if ($scope.form.id) {
+          FormService.update($scope.form, onFormSaved, onFormError);
+        } else {
+          FormService.save($scope.form, onFormSaved, onFormError);
+        }
       } else {
-        FormService.save($scope.form, onFormSaved);
+        toastr.warning('No questions added yet!', 'Plugin Editor');
       }
     };
 
-    $scope.import = function() {
+    $scope.import = function () {
       var idEncounter = $scope.encounter.id;
       if (angular.isDefined(idEncounter) &&
-          angular.isNumber(idEncounter)) {
+        angular.isNumber(idEncounter)) {
         $scope.isSaving = true;
-        LegacyResource.get({ id: idEncounter })
+        LegacyResource.get({id: idEncounter})
           .$promise.then(setForm);
       }
     };
 
-    $scope.importJson = function(jsonForm) {
+    $scope.importJson = function (jsonForm) {
       var form = JSON.parse(jsonForm);
 
       // Strip IDs. It is vital that all id's are stripped to prevent
@@ -113,7 +125,7 @@
       setForm(form);
     };
 
-    $scope.loadForm = function(id) {
+    $scope.loadForm = function (id) {
       $scope.idPlugin = id;
       if (!id) { // load new form palette
         $scope.form = {};
