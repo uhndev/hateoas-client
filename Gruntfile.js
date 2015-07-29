@@ -251,7 +251,7 @@ module.exports = function ( grunt ) {
         constants: {
           BASE: {
             protocol: 'http',
-            host : 'localhost',
+            host : 'ws69.uhnresearch.ca',
             port: '1337',
             prefix: '/api'
           }
