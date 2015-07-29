@@ -2,22 +2,15 @@
   'use strict';
   angular
     .module('dados.common.directives.pluginEditor.formService', [
-      'ngResource', 'dados.form.constants'])
+      'dados.form.constants',
+      'dados.common.services.resource'
+    ])
     .factory('FormService', FormService);
 
-  FormService.$inject = ['$resource', 'FORM_API'];
+  FormService.$inject = ['ResourceFactory', 'FORM_API'];
 
-  function FormService($resource, FORM_API) {
-    return $resource(
-      FORM_API.url,
-      {id : '@id'},
-      {
-        'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
-        'query' : {method: 'GET', isArray: true, transformResponse: _.transformHateoas },
-        'update' : {method: 'PUT', isArray: false, transformResponse: _.transformHateoas },
-        'save' : {method: 'POST', isArray: false, transformResponse: _.transformHateoas }
-      }
-    );
+  function FormService(ResourceFactory, FORM_API) {
+    return ResourceFactory.create(FORM_API.url);
   }
 
 })();

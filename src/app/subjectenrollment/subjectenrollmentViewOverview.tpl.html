@@ -1,0 +1,23 @@
+<div ng-controller="SubjectOverviewController as subject">
+	<div class="row">
+		<div class="col-md-8">
+			<h1 id="Title">
+				Subject {{::subject.resource.items.name}} Overview
+			</h1>
+		</div>
+		<div class="pull-right">
+			<br/>
+			<div id="Controls" class="align-right">
+				<hateoas-controls
+					ng-if='study.allow'
+					data-template='subject.template'
+					data-href='{{subject.resource.href}}'
+					data-slug='{{subject.resource.slug}}'
+					data-permissions="subject.allow"
+					data-item='subject.resource.items'>
+				</hateoas-controls>
+			</div>
+		</div>
+	</div>
+	<hr/>
+</div>

@@ -2,16 +2,15 @@
 	'use strict';
 
 	angular
-		.module('dados.study.service', ['ngResource', 'dados.study.constants'])
+		.module('dados.study.service', [
+      'dados.study.constants',
+      'dados.common.services.resource'
+    ])
 		.service('StudyService', StudyService);
 
-	StudyService.$inject = ['$resource', 'STUDY_API'];
+	StudyService.$inject = ['ResourceFactory', 'STUDY_API'];
 
-	function StudyService($resource, STUDY_API) {
-		return $resource(STUDY_API.url, {}, {
-			'update': {
-				method: 'PUT'
-			}
-		});
+	function StudyService(ResourceFactory, STUDY_API) {
+		return ResourceFactory.create(STUDY_API.url);
 	}
 })();

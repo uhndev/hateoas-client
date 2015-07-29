@@ -53,7 +53,6 @@
       var instance = $modal.open({
         templateUrl: 'directives/hateoasClient/Modal/hateoasModal.tpl.html',
         controller: 'HateoasModalController',
-        size: 'lg',
         scope: modalScope
       });
 

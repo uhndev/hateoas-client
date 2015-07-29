@@ -14,6 +14,7 @@
     'dados.access',
   	'dados.auth',
     'dados.study',
+    'dados.subject',
     'dados.user',
     'dados.header',
     'dados.workflow',
@@ -75,8 +76,9 @@
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
       var prevBaseUrl = _.parseUrl($location, prev)[0];
-      var currBaseUrl = _.first(_.pathnameToArray($location.path()));
-      if (prevBaseUrl !== currBaseUrl || currBaseUrl === 'study') {
+      var basePath = _.pathnameToArray($location.path());
+      var currBaseUrl = _.first(basePath);
+      if (prevBaseUrl !== currBaseUrl || currBaseUrl === 'study' && basePath.length === 1) {
         vm.submenu = {};
       }
 

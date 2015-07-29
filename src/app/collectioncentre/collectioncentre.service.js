@@ -2,16 +2,15 @@
 	'use strict';
 
 	angular
-		.module('dados.collectioncentre.service', ['ngResource', 'dados.collectioncentre.constants'])
+		.module('dados.collectioncentre.service', [
+      'dados.collectioncentre.constants',
+      'dados.common.services.resource'
+    ])
 		.service('CollectionCentreService', CollectionCentreService);
 
-	CollectionCentreService.$inject = ['$resource', 'COLLECTIONCENTRE_API'];
+	CollectionCentreService.$inject = ['ResourceFactory', 'COLLECTIONCENTRE_API'];
 
-	function CollectionCentreService($resource, COLLECTIONCENTRE_API) {
-		return $resource(COLLECTIONCENTRE_API.url, {}, {
-			'update': {
-				method: 'PUT'
-			}
-		});
+	function CollectionCentreService(ResourceFactory, COLLECTIONCENTRE_API) {
+		return ResourceFactory.create(COLLECTIONCENTRE_API.url);
 	}
 })();
