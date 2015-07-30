@@ -66,20 +66,12 @@
 				<div ng-controller="WidgetController" class="content_left">
 					<tabset>
 						<tab heading="Add new widget" active="editTabActive[0]">
-							<accordion close-others="true">
-								<accordion-group ng-repeat="category in unsorted(categories)"
-									is-open="isopen">
-									<accordion-heading>
-										{{ category }}
-										<i class="pull-right glyphicon" 
-											ng-class="{'glyphicon-chevron-down': isopen, 
-													'glyphicon-chevron-right': !isopen}"></i>
-									</accordion-heading>
-									<div class="tab_content_inside" ng-repeat="template in categories[category]">
+								<div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
+									<h2>{{ category }}</h2>
+									<div ng-repeat="template in categories[category]">
 										<a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
 									</div>
-								</accordion-group>
-							</accordion>
+								</div>
 						</tab>
 						<tab heading="Select your widget" active="editTabActive[1]">
 							<accordion close-others="true">
@@ -115,8 +107,6 @@
 						<tab heading="Configure your widget flags" active="editTabActive[4]" disabled="!widget.template">
 							<ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
 							</ng-include>
-						</tab>
-						<tab heading="Advanced Widget Settings" active="editTabActive[5]" disabled="!widget.template">
 							<form class="form-horizontal" role="form">
 								<div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
 									<label for="pattern">
@@ -128,9 +118,6 @@
 									 Regular Expressions to defined the validation rules."></ui-help>
 								</div>
 							</form>	
-						</tab>
-						<tab heading="Debug" active="editTabActive[6]">
-							<pre>{{ widget | json }}</pre>
 						</tab>
 					</tabset>			
 				</div>

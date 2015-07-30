@@ -24,6 +24,15 @@
     var getTemplate = function() {
       return  { css : { width : $scope.width + '%' } };
     };
+		
+    var selectWidget = function(idx) {
+      $scope.selectedIndex = idx;
+      if($scope.questions[idx].template) {
+        $scope.editTabActive[2] = true;
+      } else {
+        $scope.editTabActive[1] = true;
+      }
+    };
     
     /**
      * listener: expand
@@ -116,15 +125,14 @@
      * @param index is the index of the cell to create the widget
      */     
     $scope.$on('configure', function(e, index) {
-      $scope.selectedIndex = index;
+      selectWidget(index);
     });
 	
     $scope.addNewWidget = function(template) {
       var prevLen = $scope.questions.length;
       var newLen = $scope.questions.push(_.extend(WidgetService.templates[template], getTemplate()));
       if(newLen > prevLen) {
-        $scope.selectedIndex = prevLen;
-        $scope.editTabActive[2] = true;
+        selectWidget(prevLen);
       }
     };
 	
