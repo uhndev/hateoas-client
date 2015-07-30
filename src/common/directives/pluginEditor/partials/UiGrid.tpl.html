@@ -1,4 +1,4 @@
-<li class="cell panel panel-default" ng-style="cell.css" ng-class="{ 'trash' : cell.isDeleted }">
+<li class="cell panel panel-default" ng-style="cell.css" ng-class="{ 'trash' : cell.isDeleted }" ng-click="configure()">
 	<div class="alert alert-danger" ng-if="!!cell.template && !cell.name.length">
 		No field name set. Field name is required.
 	</div>

@@ -12,8 +12,8 @@
 
   function WidgetController($scope, $modal, WidgetService) {
     $scope.categories = WidgetService.categories;
-    $scope.widget = {};
-    
+    $scope.widget = $scope.questions[$scope.selectedIndex];
+	
     $scope.unsorted = function(obj){
       if (!obj) {
         return [];
@@ -57,14 +57,16 @@
     $scope.$watch('widget.template', function(newType, oldType) {
       if (newType) {
         if (newType != oldType) {
-          $scope.widget = angular.copy(WidgetService.templates[newType]);
+          $scope.questions[$scope.selectedIndex] = widgetExtend(WidgetService.templates[newType], $scope.widget);
+          $scope.widget = $scope.questions[$scope.selectedIndex];
           bindList();
         }
       }
     });
     
     $scope.$on('setWidget', function(e, widget) {
-      $scope.widget = widgetExtend(WidgetService.templates[widget.template], widget);
+      //$scope.widget = widgetExtend(WidgetService.templates[widget.template], widget);
+      $scope.widget = $scope.questions[$scope.selectedIndex];
     });
     
     $scope.$on('listControllerLoaded', function(e) {
@@ -107,6 +109,10 @@
       });
     };
     
+	$scope.$watch('selectedIndex', function() {
+		$scope.widget = $scope.questions[$scope.selectedIndex];
+	});
+	
     $scope.$emit('widgetControllerLoaded');
   }
 

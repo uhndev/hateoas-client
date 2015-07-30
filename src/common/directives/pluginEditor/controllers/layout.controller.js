@@ -3,15 +3,17 @@
 
   angular
     .module('dados.common.directives.pluginEditor.layoutController', [
-      'dados.common.directives.pluginEditor.widgetModalController',
       'dados.common.directives.pluginEditor.widgetController',
+      'dados.common.directives.pluginEditor.widgetService'
     ])
     .controller('LayoutController', LayoutController);
 
-  LayoutController.$inject = ['$scope', '$modal'];
+  LayoutController.$inject = ['$scope', '$modal', 'WidgetService'];
 
-  function LayoutController($scope, $modal) {
-    $scope.grid = [];  // Plugin layout is defined by a flat grid.
+  function LayoutController($scope, $modal, WidgetService) {
+	$scope.questions = [];
+	$scope.selectedIndex = -1;
+	
     var MIN_WIDTH = 20; // Minimum width of a cell
     // Cell defaults. Each cell is by default 100% wide.
     $scope.width = 100;
@@ -61,8 +63,7 @@
      * @param pivotIndex is the index of the cell to be removed
      */
     $scope.$on("remove", function(e, pivotIndex) {
-      var cell = $scope.grid[pivotIndex];
-      
+      var cell = $scope.questions[pivotIndex];
       
       if (cell.isDeleted === false &&
           confirm("All contents of this will be removed and you will not " +
@@ -70,7 +71,7 @@
         if (!!(cell.id)) {
           cell.isDeleted = true;
         } else {
-          $scope.grid.splice(pivotIndex, 1);
+          $scope.questions.splice(pivotIndex, 1);
         }
       } else {
         if (cell.isDeleted) {
@@ -88,7 +89,7 @@
      * @param pivotIndex is the index of the cell to be added.
      */
     $scope.$on("add", function(e, pivotIndex) {
-      $scope.grid.splice(pivotIndex, 0, getTemplate());
+      $scope.questions.splice(pivotIndex, 0, getTemplate());
     });
     
     /**
@@ -101,7 +102,7 @@
      * @param newIndex is the new location of the cell
      */
     $scope.$on("move", function(e, from, to) {
-      $scope.grid.splice(to, 0, $scope.grid.splice(from, 1)[0]);
+      $scope.questions.splice(to, 0, $scope.questions.splice(from, 1)[0]);
     });
     
     /**
@@ -114,35 +115,28 @@
      * @param index is the index of the cell to create the widget
      */     
     $scope.$on('configure', function(e, index) {
-      var modal = $modal.open({
-        templateUrl: 'directives/pluginEditor/partials/WidgetModal.tpl.html',
-        controller: 'WidgetModalController',
-        resolve : {
-          widget : function() {
-            return $scope.grid[index];
-          },
-          fieldNames: function() {
-            var names = [];
-            angular.forEach($scope.grid, function(widget) {
-              if (angular.isDefined(widget.name)) {
-                names.push( widget.name );
-              }
-            });
-            return names;
-          }
-        }
-      });
-      
-      modal.result.then(function(widget) {
-        angular.copy($scope.grid[index].css, widget.css);
-        $scope.grid[index] = angular.copy(widget);
-      });
+      $scope.selectedIndex = index;
+    });
+	
+    $scope.addNewWidget = function(template) {
+      var prevLen = $scope.questions.length;
+      var newLen = $scope.questions.push(_.extend(WidgetService.templates[template], getTemplate()));
+      if(newLen > prevLen) {
+        $scope.selectedIndex = prevLen;
+      }
+    };
+	
+    $scope.$on('updateWidget', function(e, widget) {
+      if (widget.css) {
+        $scope.questions[$scope.selectedIndex] = angular.copy(widget);
+      }
     });
     
     $scope.$on('setGrid', function(e, grid) {
-      $scope.grid = grid;
-      if ($scope.grid.length === 0) {
-        $scope.grid.push( getTemplate() );
+      $scope.questions = grid;
+      if ($scope.questions.length === 0) {
+        $scope.questions.push( getTemplate() );
+        $scope.selectedIndex = 0;
       }
     });
     
