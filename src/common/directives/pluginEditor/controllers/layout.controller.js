@@ -11,8 +11,9 @@
   LayoutController.$inject = ['$scope', '$modal', 'WidgetService'];
 
   function LayoutController($scope, $modal, WidgetService) {
-	$scope.questions = [];
-	$scope.selectedIndex = -1;
+    $scope.questions = [];
+    $scope.selectedIndex = -1;
+    $scope.editTabActive = [true,false,false,false,false,false,false];
 	
     var MIN_WIDTH = 20; // Minimum width of a cell
     // Cell defaults. Each cell is by default 100% wide.
@@ -123,6 +124,7 @@
       var newLen = $scope.questions.push(_.extend(WidgetService.templates[template], getTemplate()));
       if(newLen > prevLen) {
         $scope.selectedIndex = prevLen;
+        $scope.editTabActive[2] = true;
       }
     };
 	

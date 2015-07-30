@@ -65,7 +65,7 @@
 			<div ng-controller="LayoutController">
 				<div ng-controller="WidgetController" class="content_left">
 					<tabset>
-						<tab heading="Add new widget">
+						<tab heading="Add new widget" active="editTabActive[0]">
 							<accordion close-others="true">
 								<accordion-group ng-repeat="category in unsorted(categories)"
 									is-open="isopen">
@@ -81,7 +81,7 @@
 								</accordion-group>
 							</accordion>
 						</tab>
-						<tab heading="Select your widget">
+						<tab heading="Select your widget" active="editTabActive[1]">
 							<accordion close-others="true">
 								<accordion-group ng-repeat="category in unsorted(categories)"
 									is-open="isopen">
@@ -104,19 +104,19 @@
 								</accordion-group>
 							</accordion>
 						</tab>
-						<tab heading="Configure your widget" disabled="!widget.template">
+						<tab heading="Configure your widget" active="editTabActive[2]" disabled="!widget.template">
 							<ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
 							</ng-include>
 						</tab>
-						<tab heading="Set your list values" ng-show="widget.properties.hasOwnProperty('options')">
+						<tab heading="Set your list values" active="editTabActive[3]" ng-show="widget.properties.hasOwnProperty('options')">
 							<ui-list-editor list="widget.properties.options" 
 								can-edit-properties="true"></ui-list-editor>
 						</tab>
-						<tab heading="Configure your widget flags" disabled="!widget.template">
+						<tab heading="Configure your widget flags" active="editTabActive[4]" disabled="!widget.template">
 							<ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
 							</ng-include>
 						</tab>
-						<tab heading="Advanced Widget Settings" disabled="!widget.template">
+						<tab heading="Advanced Widget Settings" active="editTabActive[5]" disabled="!widget.template">
 							<form class="form-horizontal" role="form">
 								<div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
 									<label for="pattern">
@@ -129,7 +129,7 @@
 								</div>
 							</form>	
 						</tab>
-						<tab heading="Debug">
+						<tab heading="Debug" active="editTabActive[6]">
 							<pre>{{ widget | json }}</pre>
 						</tab>
 					</tabset>			
