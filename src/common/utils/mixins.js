@@ -8,9 +8,11 @@
 		'getStudyFromUrl': getStudyFromUrl,
 		'inArray': inArray,
 		'isUrl': isUrl,
+    'isJson': isJson,
 		'sum': sum,
 		'capitalizeFirst': capitalizeFirst,
-		'objToPair': objToPair
+		'objToPair': objToPair,
+    'transformHateoas': transformHateoas
 	});
 
 	function parseUrl(location, url) {
@@ -42,7 +44,16 @@
 	function isUrl(s) {
   	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
   	return regexp.test(s);
-	}	
+	}
+
+  function isJson(data) {
+    try {
+      JSON.parse(data);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
 
 	function sum(arr) {
 		return _.reduce(arr, function(sum, num) { return sum + num; }, 0);
@@ -54,11 +65,23 @@
 
 	function objToPair(obj) {
     return _.map(_.keys(obj), function (k) {
-      return { 
+      return {
         name: k,
         value: obj[k]
       };
     });
 	}
+
+  function transformHateoas(data) {
+    if (isJson(data)) {
+      var jsonData = angular.fromJson(data);
+      if (jsonData.hasOwnProperty('items')) {
+        return jsonData.items;
+      }
+      return jsonData;
+    } else {
+      return data;
+    }
+  }
 
 })();

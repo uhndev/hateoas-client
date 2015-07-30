@@ -70,13 +70,13 @@
 						data.template.data = data.template.data.concat([
 							{
 								"name": "collectionCentre",
-								"type": "singleselect",
+								"type": "integer",
 								"prompt": "Collection Centre",
 								"value": vm.centreHref
 							},
 							{
 								"name": "centreAccess",
-								"type": "dropdown",
+								"type": "string",
 								"prompt": "Role",
 								"value": "role"
 							}

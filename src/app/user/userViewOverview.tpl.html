@@ -54,26 +54,8 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="row in user.userStudies.tableData">
-								<td>
-									<select-loader
-										url="study"
-										is-atomic="true"
-										is-disabled="true"
-										values="row.study"
-										labels="name"
-										output-properties="id">
-									</select-loader>
-								</td>
-								<td>
-                  <select-loader
-                    url="collectioncentre"
-                    is-atomic="true"
-                    is-disabled="true"
-                    values="row.collectionCentre"
-                    labels="name"
-                    output-properties="id">
-                  </select-loader>
-                </td>
+								<td>{{row.study}}</td>
+								<td>{{row.collectionCentre}}</td>
 								<td>{{row.centreAccess}}</td>
 							</tr>
 						</tbody>

@@ -52,14 +52,20 @@
           },
           tableData: _.objToPair(robj)
         };
+        var subTotal = _.reduce(_.pluck(data.items.centreSummary, 'subjects_count'), function(result, count) {
+          return result + _.parseInt(count);
+        }, 0);
+        var coordTotal = _.reduce(_.pluck(data.items.centreSummary, 'coordinators_count'), function(result, count) {
+          return result + _.parseInt(count);
+        }, 0);
 
         vm.collectionCentres = {
-          subjects_total: _.sum(_.pluck(data.items.centreSummary, 'subjects_count')),
-          coordinators_total: _.sum(_.pluck(data.items.centreSummary, 'coordinators_count')),
+          subjects_total: subTotal,
+          coordinators_total: coordTotal,
           tableData: data.items.centreSummary || [],
           columns: [
             { title: 'Collection Centres', field: 'name', type: 'text' },
-            { title: 'Contact', field: 'contact', type: 'multi' },
+            { title: 'Contact', field: 'contact', type: 'text' },
             { title: 'Coordinators/Interviewers', field: 'coordinators_count', type: 'number'},
             { title: 'Subjects Enrolled', field: 'subjects_count', type: 'number'}
           ]
@@ -78,19 +84,6 @@
 
       SurveyForm.get(function (data) {
         vm.clinicalForm = angular.copy(_.first(data.items));
-      });
-    }
-
-    function parseData(obj) {
-      return _.map(_.keys(obj), function (k) {
-        var val = obj[k];
-        if (_.all(obj[k], function(o) { return _.has(o, 'id'); })) {
-          val = _.pluck(obj[k], 'id');
-        }
-        return {
-          name: k,
-          value: val
-        };
       });
     }
 

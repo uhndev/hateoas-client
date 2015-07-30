@@ -23,27 +23,32 @@
       } else {
         if (_.isArray($scope.fields)) {
           $scope.query = {
-            'or' : _.map($scope.fields, function(field) {
+            'or' : _.reduce($scope.fields, function(result, field) {
               var query = {};
-              query[field.name] = { 'like': value + '%' };
-  
-              if (/integer/i.test(field.type)) {
-                query[field.name] = parseInt(value, 10);
-              }
-  
-              if (/float/i.test(field.type)) {
-                query[field.name] = parseFloat(value);
-              }
-  
               if (/date|dateTime/i.test(field.type)) {
                 try {
-                  query[field.name] = new Date(value).toISOString();
+                  var dateObj = new Date(value).toISOString();
+                  query[field.name] = { '>=': date, '<': date };
+                  result.concat(query);
                 } catch(e) {
-
+                  // if value not date, do not concat
+                } finally {
+                  return result;
                 }
+              } else {
+                query[field.name] = { 'like': value + '%' };
+
+                if (/integer/i.test(field.type)) {
+                  query[field.name] = parseInt(value, 10);
+                }
+
+                if (/float/i.test(field.type)) {
+                  query[field.name] = parseFloat(value);
+                }
+
+                return result.concat(query);
               }
-              return query;
-            })
+            }, [])
           };
         }
       }
