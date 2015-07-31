@@ -35,13 +35,16 @@
                 } finally {
                   return result;
                 }
-              } else {
+              }
+              else if (/json/i.test(field.type)) {
+                // do nothing
+                return result;
+              }
+              else {
                 query[field.name] = { 'like': value + '%' };
-
                 if (/integer/i.test(field.type)) {
                   query[field.name] = parseInt(value, 10);
                 }
-
                 if (/float/i.test(field.type)) {
                   query[field.name] = parseFloat(value);
                 }

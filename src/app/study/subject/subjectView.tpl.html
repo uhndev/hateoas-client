@@ -1,0 +1,78 @@
+<div ng-controller="StudySubjectController as studySubject">
+  <h1 id="Title">
+    {{ pageTitle }}
+    <small>
+      Total: {{studySubject.resource.count}}
+    </small>
+  </h1>
+  <div id="Query" class="clearfix">
+    <query-builder
+      template="studySubject.resource.template"
+      ng-model="studySubject.query.where"
+      ng-if="studySubject.resource.template">
+    </query-builder>
+  </div>
+
+  <div id="Controls" class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.read"
+              ng-click="studySubject.openSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-folder-o"></i>
+        View Subject
+      </button>
+      <hateoas-controls
+        ng-if="studySubject.allow.create"
+        data-template='studySubject.resource.template'
+        data-href='{{studySubject.resource.href}}'
+        data-slug='{{studySubject.resource.slug}}'
+        data-permissions='studySubject.allows'
+        data-item='studySubject.selected'
+      ></hateoas-controls>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.update"
+              ng-click="studySubject.editSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-edit"></i>
+        Edit Subject
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.delete"
+              ng-click="studySubject.archiveSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-trash-o"></i>
+        Archive
+      </button>
+    </div>
+  </div>
+
+  <table id="Collection" ng-table="tableParams" class="table table-hover">
+    <thead>
+      <tr>
+        <th ng-repeat="column in studySubject.template.data"
+            ng-if="!column.data"
+            class="text-center sortable" ng-class="{
+              'sort-asc': tableParams.isSortBy(column.name, 'asc'),
+              'sort-desc': tableParams.isSortBy(column.name, 'desc')
+            }"
+            ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
+          {{ column.prompt }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in studySubject.resource.items"
+          ng-click="studySubject.select(item)"
+          class="selectable"
+          ng-class="{'active': item === studySubject.selected}">
+        <td ng-repeat="column in studySubject.template.data"
+            ng-if="!column.data"
+            sortable="column.name">
+          {{ item[column.name] | formatter:column }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

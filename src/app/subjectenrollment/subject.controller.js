@@ -3,16 +3,17 @@
   angular
     .module('dados.subject.controller', [
       'dados.subject.service',
+      'dados.common.services.resource',
       'dados.common.directives.selectLoader',
       'dados.common.directives.simpleTable'
     ])
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API', 'SubjectService', 'SubjectEnrollmentService'
+    '$scope', '$location', 'API', 'ResourceFactory'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, API, Subject, SubjectEnrollment) {
+  function SubjectOverviewController($scope, $location, API, ResourceFactory) {
     var vm = this;
 
     // bindable variables
@@ -22,14 +23,14 @@
     vm.url = API.url() + $location.path();
 
     // bindable methods
+
     init();
 
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var Resource = $resource(vm.url);
-
-      Resource.get(function(data, headers) {
+      var SubjectEnrollment = ResourceFactory.create(vm.url);
+      SubjectEnrollment.get(function(data, headers) {
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);

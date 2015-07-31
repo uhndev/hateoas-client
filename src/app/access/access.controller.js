@@ -3,11 +3,11 @@
   angular
     .module('dados.access', [
       'toastr',
-      'dados.access.service', 
+      'dados.access.service',
       'dados.user.service'
     ])
     .controller('AccessController', AccessController);
-  
+
   AccessController.$inject = ['toastr', 'GroupService', 'ModelService', 'UserService', 'UserRoles'];
 
   function AccessController(toastr, Group, Model, User, UserRoles) {
@@ -29,7 +29,7 @@
     // current user or group access view
     vm.currentView = 'user';
     vm.viewName = '';
-    
+
     // bindable methods
     vm.select = select;
     vm.toggleAccessType = toggleAccessType;
@@ -40,48 +40,49 @@
     vm.saveChanges = saveChanges;
 
     init();
-    
+
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Private Methods
      */
-    
+
     /**
      * [init]
      * Private initialization call when controller is loaded.
      */
     function init() {
       // load groups
-      Group.get(function (data) {
-        vm.groups = data.items;
-        // load models
-        Model.get(function (data) {
-          vm.models = _.pluck(data.items, 'name');
-          vm.models.push('UserOwner');
-          _.each(vm.actions, function (action) {
-            _.each(vm.models, function (model) {
-              vm.masterRoles.push(action + model);
-            });          
+      vm.groups = Group.query();
+      // load models
+      Model.query(function (data) {
+        vm.models = _.pluck(data, 'name');
+        vm.models.push('UserOwner');
+        _.each(vm.actions, function (action) {
+          _.each(vm.models, function (model) {
+            vm.masterRoles.push(action + model);
           });
+        });
 
-          loadResource(vm.currentView);
-        });        
-      });      
+        loadResource(vm.currentView);
+      });
     }
 
     /**
      * [loadResource]
      * Depending on user/group view, load different resource to manage
-     * @param  {String} view 
+     * @param  {String} view
      */
     function loadResource(view) {
-      var Resource = (view === 'user') ? User : Group;
-      Resource.get(function(data, headers) {
-        vm.allow = headers('allow');
-        vm.template = data.template;
-        vm.resource = angular.copy(data);
-      });
+      if (view === 'user') {
+        User.get(function(data, headers) {
+          vm.resource = angular.copy(data);
+        });
+      } else {
+        Group.query(function(data, headers) {
+          vm.resource.items = angular.copy(data);
+        });
+      }
     }
 
     function loadView(item) {
@@ -94,8 +95,8 @@
       if (!_.isUndefined(_.find(item.roles, { name: 'admin' }))) {
         vm.access = vm.masterRoles;
       } else {
-        vm.access = _.pluck(item.roles, 'name');  
-      }      
+        vm.access = _.pluck(item.roles, 'name');
+      }
     }
 
     function clearSelections() {
@@ -106,12 +107,12 @@
     /*****************************
      *  Public Bindable Methods  *
      *****************************/
-    
+
     /**
      * [select]
      * Selects a user or group for access management
-     * @param  {Object} item 
-     * @return {null}      
+     * @param  {Object} item
+     * @return {null}
      */
     function select(item) {
       vm.selected = (vm.selected === item ? null : item);
@@ -119,7 +120,7 @@
         loadView(vm.selected);
       } else {
         clearSelections();
-      }      
+      }
     }
 
     /**
@@ -148,8 +149,8 @@
     /**
      * [addToAccess]
      * Selecting checkbox cell in access matrix should add role to user/group's permissions
-     * @param {String} action 
-     * @param {Sting} model  
+     * @param {String} action
+     * @param {Sting} model
      */
     function addToAccess(action, model) {
       var findRole = action.toString() + model.toString();
@@ -164,8 +165,8 @@
      * [removeAccess]
      * Selecting badge on left panel should remove specific permission
      * from list of proposed access changes
-     * @param  {String} permission 
-     * @return {null}            
+     * @param  {String} permission
+     * @return {null}
      */
     function removeAccess(permission) {
       vm.access = _.without(vm.access, permission);
@@ -173,7 +174,7 @@
 
     /**
      * [updateRole]
-     * Changing dropdown value should update user's permissions to 
+     * Changing dropdown value should update user's permissions to
      * one of the group default roles
      */
     function updateRole() {
