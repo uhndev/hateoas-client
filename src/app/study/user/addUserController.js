@@ -8,10 +8,10 @@
 		.controller('AddUserController', AddUserController);
 
 	AddUserController.$inject = [
-		'$scope', '$modalInstance', '$resource', 'API', 'UserAccess', 'toastr', 'centreHref'
+		'$modalInstance', 'UserAccess', 'toastr', 'centreHref'
 	];
 
-	function AddUserController($scope, $modalInstance, $resource, API, UserAccess, toastr, centreHref) {
+	function AddUserController($modalInstance, UserAccess, toastr, centreHref) {
 		var vm = this;
 		// bindable variables
 		vm.newUser = {};

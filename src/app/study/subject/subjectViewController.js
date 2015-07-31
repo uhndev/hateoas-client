@@ -2,35 +2,40 @@
   'use strict';
   angular
     .module('dados.study.subject', [
+      'dados.study.subject.addSubject.controller',
+      'dados.study.subject.editSubject.controller',
       'dados.common.directives.hateoas.controls',
       'dados.subject.service'
     ])
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
-    '$scope', '$resource', '$location', 'AuthService', 'ngTableParams', 'sailsNgTable',
+    '$scope', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams', 'sailsNgTable',
     'toastr', 'API', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
-  function StudySubjectController($scope, $resource, $location, AuthService, TableParams, SailsNgTable,
-                                  toastr, API, SubjectEnrollment, Subject) {
+  function StudySubjectController($scope, $resource, $location, $modal, AuthService, TableParams,
+                                  SailsNgTable, toastr, API, SubjectEnrollment, Subject) {
 
     var vm = this;
 
     // bindable variables
+    vm.centreHref = '';
     vm.allows = 'create';
     vm.allow = {};
     vm.query = { 'where' : {} };
+    vm.studyAttributes = {};
     vm.selected = null;
     vm.template = {};
     vm.resource = {};
+    vm.subjectForm = {};
     vm.url = API.url() + $location.path();
 
     // bindable methods;
     vm.select = select;
     vm.openSubject = openSubject;
-    vm.newSubject = newSubject;
-    vm.editSubject = editSubject;
+    vm.openAddSubject = openAddSubject;
+    vm.openEditSubject = openEditSubject;
     vm.archiveSubject = archiveSubject;
 
     init();
@@ -39,6 +44,12 @@
 
     function init() {
       var currStudy = _.getStudyFromUrl($location.path());
+      vm.centreHref = "study/" + currStudy + "/collectioncentre";
+      var Study = $resource(API.url() + "/study/" + currStudy);
+      Study.get(function (data, headers) {
+        vm.studyAttributes = angular.copy(data.items.attributes);
+      });
+
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
         page: 1,
@@ -97,10 +108,51 @@
       }
     }
 
-    function newSubject() {
+    function openAddSubject() {
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'study/subject/addSubjectModal.tpl.html',
+        controller: 'AddSubjectController',
+        controllerAs: 'addSubject',
+        bindToController: true,
+        resolve: {
+          studyAttributes: function() {
+            return vm.studyAttributes;
+          },
+          centreHref: function () {
+            return vm.centreHref;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $scope.tableParams.reload();
+      });
     }
 
-    function editSubject() {
+    function openEditSubject() {
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'study/subject/editSubjectModal.tpl.html',
+        controller: 'EditSubjectController',
+        controllerAs: 'editSubject',
+        bindToController: true,
+        resolve: {
+          subject: function() {
+            return vm.selected;
+          },
+          studyAttributes: function() {
+            return vm.studyAttributes;
+          },
+          centreHref: function () {
+            return vm.centreHref;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $scope.tableParams.reload();
+      });
     }
 
     function archiveSubject() {

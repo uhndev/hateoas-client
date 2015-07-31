@@ -22,17 +22,15 @@
         <i class="fa fa-folder-o"></i>
         View Subject
       </button>
-      <hateoas-controls
-        ng-if="studySubject.allow.create"
-        data-template='studySubject.resource.template'
-        data-href='{{studySubject.resource.href}}'
-        data-slug='{{studySubject.resource.slug}}'
-        data-permissions='studySubject.allows'
-        data-item='studySubject.selected'
-      ></hateoas-controls>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.create"
+              ng-click="studySubject.openAddSubject()">
+        <i class="fa fa-file-o"></i>
+        Add Subject
+      </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.update"
-              ng-click="studySubject.editSubject()"
+              ng-click="studySubject.openEditSubject()"
               ng-disabled="!!!studySubject.selected">
         <i class="fa fa-edit"></i>
         Edit Subject

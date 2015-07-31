@@ -1,0 +1,151 @@
+<div class="modal-header">
+  <h3 class="modal-title">Add Subject to Study</h3>
+</div>
+<div class="modal-body">
+  <ng-form name="subjectForm" class="form-horizontal" novalidate>
+    <div class="form-group">
+      <label for="username" class="col-sm-3 control-label">Username&nbsp;</label>
+      <div class="col-sm-9">
+        <input type="text" name="username" class="form-control"
+               data-ng-model="addSubject.newSubject.username"
+               ng-minlength="5"
+               placeholder="johndoe" required>
+        <p ng-show="subjectForm.username.$invalid && !subjectForm.username.$pristine" 
+           class="pull-right required-error">Username must be at least 5 characters</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email" class="col-sm-3 control-label">Email&nbsp;</label>
+      <div class="col-sm-9">
+        <input type="email" name="email" class="form-control"
+               data-ng-model="addSubject.newSubject.email"
+               placeholder="johndoe@email.com" required>
+        <p ng-show="subjectForm.email.$invalid && !subjectForm.email.$pristine"
+           class="pull-right required-error">Email is required.</p>  
+      </div>                  
+    </div>
+    <div class="form-group">
+      <label for="password" class="col-sm-3 control-label">Password&nbsp;</label>
+      <div class="col-sm-9">
+        <input type="password" name="password" class="form-control"
+               ng-model="addSubject.newSubject.password" ng-minlength="8"
+               ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/"
+               required>
+        <p ng-show="subjectForm.password.$invalid && !subjectForm.password.$pristine" 
+           class="pull-right required-error">
+          Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character
+        </p>
+      </div>       
+    </div>
+    <div class="form-group">
+      <label for="prefix" class="col-sm-3 control-label">Prefix&nbsp;</label>
+      <div class="col-sm-9">
+        <select name="prefix" class="form-control" ng-model="addSubject.newSubject.prefix" required>
+          <option value="" disabled>Select a prefix</option>
+          <option value="Mr." label="Mr.">Mr.</option>
+          <option value="Mrs." label="Mrs.">Mrs.</option>
+          <option value="Ms." label="Ms.">Ms.</option>
+          <option value="Dr." label="Dr.">Dr.</option>
+        </select>
+        <p ng-show="subjectForm.prefix.$invalid && !subjectForm.prefix.$pristine" 
+           class="pull-right required-error">Prefix is required.</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="firstname" class="col-sm-3 control-label">Firstname&nbsp;</label>
+      <div class="col-sm-9">
+        <input type="text" name="firstname" class="form-control"
+               data-ng-model="addSubject.newSubject.firstname"
+               placeholder="John" required>
+        <p ng-show="subjectForm.firstname.$invalid && !subjectForm.firstname.$pristine" 
+           class="pull-right required-error">Firstname is required.</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="lastname" class="col-sm-3 control-label">Lastname&nbsp;</label>
+      <div class="col-sm-9">
+      <input type="text" name="lastname" class="form-control"
+             data-ng-model="addSubject.newSubject.lastname"
+             placeholder="Doe" required>
+      <p ng-show="subjectForm.lastname.$invalid && !subjectForm.lastname.$pristine" 
+         class="pull-right required-error">Lastname is required.</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="gender" class="col-sm-3 control-label">Gender&nbsp;</label>
+      <div class="col-sm-9">
+      <select name="gender" class="form-control" ng-model="addSubject.newSubject.gender" required>
+        <option value="" disabled>Select a gender</option>
+        <option value="Male" label="Male">Male</option>
+        <option value="Female" label="Female">Female</option>
+      </select>
+      <p ng-show="subjectForm.gender.$invalid && !subjectForm.gender.$pristine" 
+         class="pull-right required-error">Gender is required.</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dob" class="col-sm-3 control-label">Date of Birth&nbsp;</label>
+      <div class="col-sm-9">
+      <p class="input-group">
+        <input name="dob" type="text" class="form-control" datepicker-popup ng-model="addSubject.newSubject.dob" 
+               is-open="addSubject.openedDOB" required disabled/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="addSubject.openDOB($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+        <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine" 
+           class="pull-right required-error">Date of birth is required.</p>
+      </p>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class="form-group" ng-repeat="(key, values) in addSubject.studyAttributes">
+      <label for="{{key}}" class="col-sm-3 control-label">{{key | uppercase}} &nbsp;</label>
+      <div class="col-sm-9">
+      <select ng-model="addSubject.newSubject.studyMapping[key]" class="form-control">
+        <option value="" disabled>Select {{key}} options</option>
+        <option value="{{option}}" ng-repeat="option in values">{{option}}</option>
+      </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="doe" class="col-sm-3 control-label">Date of Event&nbsp;</label>
+      <div class="col-sm-9">
+      <p class="input-group">
+        <input name="doe" type="text" class="form-control" datepicker-popup ng-model="addSubject.newSubject.doe" 
+               is-open="addSubject.openedDOE" required disabled/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="addSubject.openDOE($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+        <p ng-show="subjectForm.doe.$invalid && !subjectForm.doe.$pristine" 
+           class="pull-right required-error">Date of event is required.</p>
+      </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="centreInput" class="col-sm-3 control-label">Collection Centre&nbsp;</label>
+      <div class="col-sm-9">
+      <select-loader
+        name="centreInput"
+        url="{{addSubject.centreHref}}"
+        is-atomic="true"
+        is-disabled="false"
+        values="addSubject.newSubject.collectionCentre"
+        labels="name"
+        output-properties="id"
+        required>
+      </select-loader>
+      </div>
+    </div>
+  </ng-form>
+</div>
+<div class="modal-footer">
+  <button type="submit" id="addSubjectBtn" class="btn btn-primary" 
+          ng-disabled="subjectForm.$invalid" ng-click="addSubject.addSubject()">
+    Add Subject
+  </button>
+  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="addSubject.cancel()">
+    Cancel
+  </button>
+</div>
