@@ -63,15 +63,15 @@
 			</accordion-heading>
 			<!-- PluginLayout -->
 			<div ng-controller="LayoutController">
-				<div ng-controller="WidgetController" class="content_left">
+				<div scroll-past ng-controller="WidgetController" class="content_left">
 					<tabset>
 						<tab heading="Add new widget" active="editTabActive[0]">
-								<div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
-									<h2>{{ category }}</h2>
-									<div ng-repeat="template in categories[category]">
-										<a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
-									</div>
+							<div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
+								<h2>{{ category }}</h2>
+								<div ng-repeat="template in categories[category]">
+									<a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
 								</div>
+							</div>
 						</tab>
 						<tab heading="Select your widget" active="editTabActive[1]">
 							<accordion close-others="true">
@@ -119,9 +119,9 @@
 								</div>
 							</form>	
 						</tab>
-					</tabset>			
+					</tabset>
 				</div>
-				<div class="content_right no-select relative">
+				<div class="content_right scroll-past-anchor no-select relative">
 					<legend>Workspace</legend>
 					<ng-form name="plugin">
 						<ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
