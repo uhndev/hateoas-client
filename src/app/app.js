@@ -21,7 +21,6 @@
     'dados.formbuilder',
     'dados.collectioncentre',
 
-    'dados.filters.padzero',
     'dados.filters.formatter',
     'dados.filters.type',
 
