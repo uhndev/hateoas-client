@@ -10,12 +10,10 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$location', '$filter', '$modal', 'ngTableParams',
-    'API', 'ResourceFactory', 'SubjectEnrollmentService', 'AuthService'
+    '$scope', '$location', '$modal', 'ngTableParams', 'API', 'ResourceFactory'
   ];
 
-  function SubjectOverviewController($scope, $location, $filter, $modal, TableParams,
-                                     API, ResourceFactory, SubjectEnrollment, AuthService) {
+  function SubjectOverviewController($scope, $location, $modal, TableParams, API, ResourceFactory) {
     var vm = this;
 
     // bindable variables

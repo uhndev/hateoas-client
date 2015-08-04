@@ -44,6 +44,10 @@
     function init() {
       var currStudy = _.getStudyFromUrl($location.path());
       vm.centreHref = "study/" + currStudy + "/collectioncentre";
+      var Study = $resource(API.url() + '/study/' + currStudy);
+      Study.get(function (data, headers) {
+        vm.study = data.items;
+      });
 
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
@@ -96,7 +100,7 @@
         bindToController: true,
         resolve: {
           studyAttributes: function() {
-            return vm.selected.studyAttributes;
+            return vm.study.attributes;
           },
           centreHref: function () {
             return vm.centreHref;
@@ -121,7 +125,7 @@
             return vm.selected;
           },
           studyAttributes: function() {
-            return vm.studyAttributes;
+            return vm.study.attributes;
           },
           centreHref: function () {
             return vm.centreHref;
