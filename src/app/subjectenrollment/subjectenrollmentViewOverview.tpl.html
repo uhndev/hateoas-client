@@ -1,24 +1,97 @@
-<div ng-controller="SubjectOverviewController as subject">
-	<div class="row">
-		<div class="col-md-8">
-			<h1 id="Title">
-				Subject {{::subject.resource.items.name}} Overview
-			</h1>
-		</div>
-		<div class="pull-right">
-			<br/>
-			<div id="Controls" class="align-right">
-				<hateoas-controls
-					ng-if='study.allow'
-					data-template='subject.template'
-					data-href='{{subject.resource.href}}'
-					data-slug='{{subject.resource.slug}}'
-					data-permissions="subject.allow"
-					data-item='subject.resource.items'>
-				</hateoas-controls>
-			</div>
-		</div>
-	</div>
-	<hr/>
-  <pre>{{subject.resource | json}}</pre>
+<div ng-controller="SubjectOverviewController as subject" class="container">
+  <div class="row">
+    <div class="col-md-10">
+      <h1 id="Title">
+        Subject {{subject.resource.subjectNumber | padzero:5}}
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right">
+      <button type="button" class="btn btn-info">
+        <i class="fa fa-file-text"></i>
+        Real-Time Report
+      </button>
+      <button type="button" class="btn btn-info">
+        Call Log <span class="badge">4</span>
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="subject.allow.update"
+              ng-click="subject.openEditSubject()">
+        <i class="fa fa-edit"></i>
+        Edit Subject
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <!-- List Subject Info -->
+    <div class="col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Subject Information</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <tr>
+              <td><strong>Subject ID</strong></td>
+              <td>{{subject.resource.subjectNumber | padzero:5}}</td>
+            </tr>
+            <tr>
+              <td><strong>Study</strong></td>
+              <td>{{subject.resource.studyName}}</td>
+            </tr>
+            <tr>
+              <td><strong>Collection Centre</strong></td>
+              <td>{{subject.resource.collectionCentreName}}</td>
+            </tr>
+            <tr ng-repeat="(key, value) in subject.resource.studyMapping">
+              <td><strong>{{key | uppercase}}</strong></td>
+              <td>{{value}}</td>
+            </tr>
+            <tr>
+              <td><strong>Date of Event</strong></td>
+              <td>{{subject.resource.doe | date:'EEEE, MMMM d, y'}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- List Subject Forms -->
+    <div class="col-md-8">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Subject Forms</h3>
+        </div>
+        <div class="panel-body">
+          <table ng-table="tableParams" class="table table-hover ng-table-responsive">
+            <tbody ng-repeat="form in $groups">
+              <tr class="ng-table-group">
+                <td colspan="{{$columns.length}}">
+                  <a href="" ng-click="form.$hideRows = !form.$hideRows">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': form.$hideRows, 'glyphicon-chevron-down': !form.$hideRows }"></span>
+                    <strong>{{ form.value }}</strong>
+                  </a>
+                </td>
+              </tr>
+              <tr ng-hide="form.$hideRows" ng-repeat="item in form.data">
+                <td sortable="'name'" data-title="'Name'">
+                  {{item.name}}
+                </td>
+                <td sortable="'age'" data-title="'Date'">
+                  {{item.date | date:'yyyy-MM-dd'}}
+                </td>
+                <td sortable="'status'" data-title="'Status'">
+                  {{item.status}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

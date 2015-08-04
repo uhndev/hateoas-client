@@ -21,6 +21,7 @@
     'dados.formbuilder',
     'dados.collectioncentre',
 
+    'dados.filters.padzero',
     'dados.filters.formatter',
     'dados.filters.type',
 
@@ -78,7 +79,8 @@
       var prevBaseUrl = _.parseUrl($location, prev)[0];
       var basePath = _.pathnameToArray($location.path());
       var currBaseUrl = _.first(basePath);
-      if (prevBaseUrl !== currBaseUrl || currBaseUrl === 'study' && basePath.length === 1) {
+      if (prevBaseUrl !== currBaseUrl ||
+          currBaseUrl === 'study' && basePath.length === 1) {
         vm.submenu = {};
       }
 

@@ -21,7 +21,6 @@
 
     // bindable variables
     vm.centreHref = '';
-    vm.allows = 'create';
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.studyAttributes = {};
@@ -45,10 +44,6 @@
     function init() {
       var currStudy = _.getStudyFromUrl($location.path());
       vm.centreHref = "study/" + currStudy + "/collectioncentre";
-      var Study = $resource(API.url() + "/study/" + currStudy);
-      Study.get(function (data, headers) {
-        vm.studyAttributes = angular.copy(data.items.attributes);
-      });
 
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
@@ -101,7 +96,7 @@
         bindToController: true,
         resolve: {
           studyAttributes: function() {
-            return vm.studyAttributes;
+            return vm.selected.studyAttributes;
           },
           centreHref: function () {
             return vm.centreHref;
