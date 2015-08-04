@@ -94,24 +94,8 @@
 						params.total(data.total);
 						$defer.resolve(data.items);
 
-						// initialize submenu
-						if (currStudy && _.has(data, 'links') && data.links.length > 0) {
-							// from workflowstate and current url study
-							// replace wildcards in href with study name
-							_.map(data.links, function(link) {
-								if (link.rel === 'overview' && link.prompt === '*') {
-									 link.prompt = currStudy;
-								}
-								if (_.contains(link.href, '*')) {
-									link.href = link.href.replace(/\*/g, currStudy);
-								}
-								return link;
-							});
-							var submenu = {
-								links: AuthService.getRoleLinks(data.links)
-							};
-							angular.copy(submenu, $scope.dados.submenu);
-						}
+            // initialize submenu
+            AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
 					});
 				}
 			});
@@ -134,7 +118,6 @@
 	      controller: 'AddUserController',
 	      controllerAs: 'addUser',
 	      bindToController: true,
-	      size: 'lg',
 	      resolve: {
 	        centreHref: function () {
 	          return vm.centreHref;

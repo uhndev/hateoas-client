@@ -3,7 +3,7 @@
  */
 (function() {
   'use strict';
-  
+
   angular
     .module('dados.auth.service', [
       'ngCookies',
@@ -15,17 +15,17 @@
 
   AuthService.$inject = [
     'AUTH_API', '$rootScope', '$location', '$resource', '$cookieStore', 'TABVIEW', 'SUBVIEW'
-  ]; 
+  ];
 
   function AuthService(Auth, $rootScope, $location, $resource, $cookieStore, TABVIEW, SUBVIEW) {
-    
+
     var LoginAuth = $resource(Auth.LOGIN_API);
     var self = this;
 
     /**
      * [isAuthenticated]
      * Checks cookie and fires events depending on whether user is authenticated
-     * @return {Boolean} 
+     * @return {Boolean}
      */
     this.isAuthenticated = function() {
       var auth = Boolean($cookieStore.get('user'));
@@ -75,9 +75,38 @@
     };
 
     /**
+     * [setSubmenu]
+     * From any submenu page, we need to parse and render a hateoas resource's
+     * links array to populate our submenu in our top level scope
+     * @param {String} currStudy     string representation of our current study state
+     * @param {Object} resource      a hateoas response object containing a links array
+     * @param {Object} submenuScope  a reference to the scope where the submenu is defined
+     */
+    this.setSubmenu = function(currStudy, resource, submenuScope) {
+      // initialize submenu
+      if (currStudy && _.has(resource, 'links') && resource.links.length > 0) {
+        // from workflowstate and current url study
+        // replace wildcards in href with study name
+        _.map(resource.links, function(link) {
+          if (link.rel === 'overview' && link.prompt === '*') {
+            link.prompt = currStudy;
+          }
+          if (_.contains(link.href, '*')) {
+            link.href = link.href.replace(/\*/g, currStudy);
+          }
+          return link;
+        });
+        var submenu = {
+          links: self.getRoleLinks(resource.links)
+        };
+        angular.copy(submenu, submenuScope);
+      }
+    };
+
+    /**
      * [login]
-     * Service function called from auth controller to handle actual 
-     * POST to /auth/local.  
+     * Service function called from auth controller to handle actual
+     * POST to /auth/local.
      * @param  {Object} data      passed credentials for login
      * @param  {Function} onSuccess success callback
      * @param  {Function} onError   error callback
@@ -92,10 +121,10 @@
      * [logout]
      * Service function for invalidating token and removes cookie
      */
-    this.logout = function(data, onSuccess, onError) {      
+    this.logout = function(data, onSuccess, onError) {
       this.setUnauthenticated();
       $cookieStore.remove('user');
       return $resource(Auth.LOGOUT_API).query();
     };
-  }  
+  }
 })();
