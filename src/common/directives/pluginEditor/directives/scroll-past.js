@@ -1,3 +1,20 @@
+/**
+ * ScrollPast directive
+ *
+ * This directive emulates fixed CSS position behaviour without taking element element out of flow
+ * e.g. as you scroll through the form questions the edit palette stays visible.
+ * Doesn't require CSS3 transformations. Function triggers as user scrolls past the element.
+ *
+ * Implemented using Angular's element and its built-in jqLite library.
+ * 
+ * Usage:
+ * <div scroll-past>Fixed content</div>
+ * <div class="scroll-past-anchor">Data container that doesn't fit on the screen</div>
+ *
+ * @module      directives/pluginEditor/scrollPast
+ * @description Directive to emulate fixed element position
+ * @help        See https://docs.angularjs.org/api/ng/function/angular.element
+ */
  
  (function() {
   'use strict';

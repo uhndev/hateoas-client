@@ -65,7 +65,7 @@
 			<div ng-controller="LayoutController">
 				<div scroll-past ng-controller="WidgetController" class="content_left">
 					<tabset>
-						<tab heading="Add new widget" active="editTabActive[0]">
+						<tab heading="Add new widget" active="editTabActive['add']">
 							<div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
 								<h2>{{ category }}</h2>
 								<div ng-repeat="template in categories[category]">
@@ -73,7 +73,7 @@
 								</div>
 							</div>
 						</tab>
-						<tab heading="Select your widget" active="editTabActive[1]">
+						<tab heading="Select your widget" active="editTabActive['select']">
 							<accordion close-others="true">
 								<accordion-group ng-repeat="category in unsorted(categories)"
 									is-open="isopen">
@@ -92,19 +92,19 @@
 											class="capitalize">
 											{{ template }}
 										</label>
-									</div>
+									</div
 								</accordion-group>
 							</accordion>
 						</tab>
-						<tab heading="Configure your widget" active="editTabActive[2]" disabled="!widget.template">
+						<tab heading="Configure your widget" active="editTabActive['config']" disabled="!widget.template">
 							<ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
 							</ng-include>
 						</tab>
-						<tab heading="Set your list values" active="editTabActive[3]" ng-show="widget.properties.hasOwnProperty('options')">
+						<tab heading="Set your list values" active="editTabActive['list_config']" ng-show="widget.properties.hasOwnProperty('options')">
 							<ui-list-editor list="widget.properties.options" 
 								can-edit-properties="true"></ui-list-editor>
 						</tab>
-						<tab heading="Configure your widget flags" active="editTabActive[4]" disabled="!widget.template">
+						<tab heading="Configure your widget flags" active="editTabActive['flags']" disabled="!widget.template">
 							<ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
 							</ng-include>
 							<form class="form-horizontal" role="form">

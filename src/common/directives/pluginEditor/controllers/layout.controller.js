@@ -13,7 +13,13 @@
   function LayoutController($scope, $modal, WidgetService) {
     $scope.questions = [];
     $scope.selectedIndex = -1;
-    $scope.editTabActive = [true,false,false,false,false,false,false];
+    $scope.editTabActive = {
+      'add' : true,
+      'select' : false,
+      'config' : false,
+      'list_config' : false,
+      'flags' : false,
+    };
 	
     var MIN_WIDTH = 20; // Minimum width of a cell
     // Cell defaults. Each cell is by default 100% wide.
