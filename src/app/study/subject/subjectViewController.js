@@ -2,6 +2,7 @@
   'use strict';
   angular
     .module('dados.study.subject', [
+      'dados.subject.constants',
       'dados.study.subject.addSubject.controller',
       'dados.study.subject.editSubject.controller',
       'dados.common.directives.hateoas.controls',

@@ -125,11 +125,12 @@
       <div class="col-sm-9">
       <p class="input-group">
         <input name="doe" type="text" class="form-control" datepicker-popup ng-model="addSubject.newSubject.doe"
-               is-open="addSubject.openedDOE" disabled/>
+               is-open="addSubject.openedDOE"
+               ng-required="addSubject.newSubject.studyMapping" disabled/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="addSubject.openDOE($event)"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
-        <p ng-show="enrollmentForm.doe.$invalid && !enrollmentForm.doe.$pristine"
+        <p ng-show="enrollmentForm.doe.$invalid"
            class="pull-right required-error">Date of event is required.</p>
       </p>
       </div>

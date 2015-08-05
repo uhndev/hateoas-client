@@ -2,32 +2,23 @@
   'use strict';
 
   angular
-    .module('dados.study.subject.editSubject.controller', [
-      'ui.bootstrap'
-    ])
+    .module('dados.study.subject.editSubject.controller', [])
     .controller('EditSubjectController', EditSubjectController);
 
   EditSubjectController.$inject = [
-    '$modalInstance', 'subject', 'study', 'centreHref', 'toastr', 'SubjectEnrollmentService', 'UserService'
+    '$modalInstance', 'subject', 'study', 'centreHref', 'toastr',
+    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
   ];
 
-  function EditSubjectController($modalInstance, subject, study, centreHref, toastr, SubjectEnrollment, User) {
+  function EditSubjectController($modalInstance, subject, study, centreHref, toastr,
+                                 ENROLLMENT_STATUSES, SubjectEnrollment, User) {
     var vm = this;
     // bindable variables
     vm.openedDOE = false;
     vm.newSubject = subject || {};
     vm.study = study;
     vm.centreHref = centreHref;
-    vm.statuses = [
-      'REGISTERED',
-      'ONGOING',
-      'LOST TO FOLLOWUP',
-      'WITHDRAWN',
-      'INELIGIBLE',
-      'DECEASED',
-      'TERMINATED',
-      'COMPLETED'
-    ];
+    vm.statuses = ENROLLMENT_STATUSES;
 
     // bindable methods
     vm.openDOE = openDOE;
