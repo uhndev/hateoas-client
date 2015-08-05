@@ -8,16 +8,27 @@
     .controller('EditSubjectController', EditSubjectController);
 
   EditSubjectController.$inject = [
-    '$modalInstance', 'subject', 'studyAttributes', 'centreHref', 'toastr', 'SubjectEnrollmentService', 'UserService'
+    '$modalInstance', 'subject', 'study', 'centreHref', 'toastr', 'SubjectEnrollmentService', 'UserService'
   ];
 
-  function EditSubjectController($modalInstance, subject, studyAttributes, centreHref, toastr, SubjectEnrollment, User) {
+  function EditSubjectController($modalInstance, subject, study, centreHref, toastr, SubjectEnrollment, User) {
     var vm = this;
     // bindable variables
     vm.openedDOE = false;
     vm.newSubject = subject || {};
-    vm.studyAttributes = studyAttributes;    
+    vm.study = study;
     vm.centreHref = centreHref;
+    vm.statuses = [
+      'REGISTERED',
+      'ONGOING',
+      'LOST TO FOLLOWUP',
+      'WITHDRAWN',
+      'INELIGIBLE',
+      'DECEASED',
+      'TERMINATED',
+      'COMPLETED'
+    ];
+
     // bindable methods
     vm.openDOE = openDOE;
     vm.editSubject = editSubject;
@@ -37,7 +48,7 @@
       $event.preventDefault();
       $event.stopPropagation();
       vm.openedDOE = true;
-    }     
+    }
 
     function editSubject() {
       var user = new User(vm.userData);

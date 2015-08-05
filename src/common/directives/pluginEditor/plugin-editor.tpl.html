@@ -79,8 +79,8 @@
 									is-open="isopen">
 									<accordion-heading>
 										{{ category }}
-										<i class="pull-right glyphicon" 
-											ng-class="{'glyphicon-chevron-down': isopen, 
+										<i class="pull-right glyphicon"
+											ng-class="{'glyphicon-chevron-down': isopen,
 													'glyphicon-chevron-right': !isopen}"></i>
 									</accordion-heading>
 									<div ng-repeat="template in categories[category]">
@@ -88,7 +88,7 @@
 											id="{{category}}{{template}}{{ $index }}"
 											name="WIDGET_TEMPLATE"
 											ng-value="template" />
-										<label for="{{category}}{{template}}{{ $index }}" 
+										<label for="{{category}}{{template}}{{ $index }}"
 											class="capitalize">
 											{{ template }}
 										</label>
@@ -101,7 +101,7 @@
 							</ng-include>
 						</tab>
 						<tab heading="Set your list values" active="editTabActive['list_config']" ng-show="widget.properties.hasOwnProperty('options')">
-							<ui-list-editor list="widget.properties.options" 
+							<ui-list-editor list="widget.properties.options"
 								can-edit-properties="true"></ui-list-editor>
 						</tab>
 						<tab heading="Configure your widget flags" active="editTabActive['flags']" disabled="!widget.template">
@@ -112,12 +112,12 @@
 									<label for="pattern">
 										Validation
 									</label>
-									<input type="text" id="pattern" class="form-control" 
+									<input type="text" id="pattern" class="form-control"
 										ng-model="widget.properties.pattern" />
 									<ui-help popover="Set the validation pattern for this input. Use
 									 Regular Expressions to defined the validation rules."></ui-help>
 								</div>
-							</form>	
+							</form>
 						</tab>
 					</tabset>
 				</div>
@@ -126,7 +126,7 @@
 					<ng-form name="plugin">
 						<ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
 							ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
-							<ui-grid ng-repeat="cell in questions" cell="cell"
+							<ui-grid ng-repeat="cell in questions track by $index" cell="cell"
 								cell-count="grid.length" cell-index="$index">
 							</ui-grid>
 						</ol>

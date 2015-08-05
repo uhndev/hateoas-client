@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-10">
       <h1 id="Title">
-        Subject {{subject.resource.subjectNumber | formatter:{"name": "mrn"} }}
+        Subject {{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}
       </h1>
     </div>
   </div>
@@ -37,7 +37,7 @@
           <table class="table table-hover">
             <tr>
               <td><strong>Subject ID</strong></td>
-              <td>{{subject.resource.subjectNumber | formatter:{"name": "mrn"} }}</td>
+              <td>{{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}</td>
             </tr>
             <tr>
               <td><strong>Study</strong></td>

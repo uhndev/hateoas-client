@@ -5,8 +5,8 @@ angular.module('dados.filters.formatter', [])
       padding = padding || '0';
       input = input + '';
 
-      return (input.length >= width ? 
-                input : 
+      return (input.length >= width ?
+                input :
                 new Array(width - input.length + 1)
                   .join(padding) + input);
     }
@@ -16,12 +16,12 @@ angular.module('dados.filters.formatter', [])
         if (/date/i.test(template.type)) {
           return input.substring(0, input.indexOf('T'));
         }
-  
+
         if (/array/i.test(template.type)) {
           return input.length;
         }
-  
-        if (/mrn/i.test(template.name) && 
+
+        if (/mrn/i.test(template.type) &&
              String(input).length < 7) {
           return pad(input, 7);
         }

@@ -8,17 +8,28 @@
     .controller('AddSubjectController', AddSubjectController);
 
   AddSubjectController.$inject = [
-    '$modalInstance', 'studyAttributes', 'centreHref', 'toastr', 'SubjectEnrollmentService'
+    '$modalInstance', 'study', 'centreHref', 'toastr', 'SubjectEnrollmentService'
   ];
 
-  function AddSubjectController($modalInstance, studyAttributes, centreHref, toastr, SubjectEnrollment) {
+  function AddSubjectController($modalInstance, study, centreHref, toastr, SubjectEnrollment) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
     vm.openedDOE = false;
-    vm.newSubject = {};
-    vm.studyAttributes = studyAttributes;    
+    vm.newSubject = { study: study.id };
+    vm.study = study;
     vm.centreHref = centreHref;
+    vm.statuses = [
+      'REGISTERED',
+      'ONGOING',
+      'LOST TO FOLLOWUP',
+      'WITHDRAWN',
+      'INELIGIBLE',
+      'DECEASED',
+      'TERMINATED',
+      'COMPLETED'
+    ];
+
     // bindable methods
     vm.openDOB = openDOB;
     vm.openDOE = openDOE;
@@ -31,13 +42,13 @@
       $event.preventDefault();
       $event.stopPropagation();
       vm.openedDOB = true;
-    } 
+    }
 
     function openDOE($event) {
       $event.preventDefault();
       $event.stopPropagation();
       vm.openedDOE = true;
-    }     
+    }
 
     function addSubject() {
       var enrollment = new SubjectEnrollment(vm.newSubject);

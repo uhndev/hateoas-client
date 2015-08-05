@@ -23,7 +23,6 @@
     vm.centreHref = '';
     vm.allow = {};
     vm.query = { 'where' : {} };
-    vm.studyAttributes = {};
     vm.selected = null;
     vm.template = {};
     vm.resource = {};
@@ -99,8 +98,8 @@
         controllerAs: 'addSubject',
         bindToController: true,
         resolve: {
-          studyAttributes: function() {
-            return vm.study.attributes;
+          study: function() {
+            return angular.copy(vm.study);
           },
           centreHref: function () {
             return vm.centreHref;
@@ -122,10 +121,10 @@
         bindToController: true,
         resolve: {
           subject: function() {
-            return vm.selected;
+            return angular.copy(vm.selected);
           },
-          studyAttributes: function() {
-            return vm.study.attributes;
+          study: function() {
+            return angular.copy(vm.study);
           },
           centreHref: function () {
             return vm.centreHref;
