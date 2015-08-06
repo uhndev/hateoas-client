@@ -8,15 +8,13 @@
 		.service('UserRoles', UserRoles)
     .service('UserEnrollment', UserEnrollment);
 
-	UserService.$inject = ['$resource', 'USER_API'];
+	UserService.$inject = ['ResourceFactory', 'USER_API'];
 	UserAccess.$inject = ['$resource', 'USER_API'];
 	UserRoles.$inject = ['$resource', 'USER_API'];
   UserEnrollment.$inject = ['$resource', 'USER_ENROLLMENT_API'];
 
-	function UserService($resource, USER_API) {
-		return $resource(USER_API.url, {}, {
-			'update': { method: 'PUT' }
-		});
+	function UserService(ResourceFactory, USER_API) {
+    return ResourceFactory.create(USER_API.url);
 	}
 
 	function UserAccess($resource, USER_API) {

@@ -10,6 +10,20 @@
     'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
   ];
 
+  /**
+   * EditSubjectController
+
+   * @description Controller for the edit subject in study modal window.
+   * @param $modalInstance
+   * @param subject             resolved subject response to edit passed in from subjectViewController.js
+   * @param study               resolved study response passed in from subjectViewController.js
+   * @param centreHref          resolved url /study/<STUDY>/collectioncentre used for selectLoader dropdown
+   * @param toastr
+   * @param ENROLLMENT_STATUSES constants used in status dropdowns, defined in subject.constant.js
+   * @param SubjectEnrollment
+   * @param User
+   * @constructor
+   */
   function EditSubjectController($modalInstance, subject, study, centreHref, toastr,
                                  ENROLLMENT_STATUSES, SubjectEnrollment, User) {
     var vm = this;

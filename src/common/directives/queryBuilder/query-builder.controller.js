@@ -42,7 +42,7 @@
               }
               else {
                 query[field.name] = { 'like': value + '%' };
-                if (/integer/i.test(field.type)) {
+                if (/integer/i.test(field.type) || /mrn/i.test(field.type)) {
                   query[field.name] = parseInt(value, 10);
                 }
                 if (/float/i.test(field.type)) {

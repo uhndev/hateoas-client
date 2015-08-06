@@ -74,15 +74,10 @@
      * @param  {String} view
      */
     function loadResource(view) {
-      if (view === 'user') {
-        User.get(function(data, headers) {
-          vm.resource = angular.copy(data);
-        });
-      } else {
-        Group.query(function(data, headers) {
-          vm.resource.items = angular.copy(data);
-        });
-      }
+      var Resource = (view === 'user') ? User : Group;
+      Resource.query(function(data, headers) {
+        vm.resource.items = angular.copy(data);
+      });
     }
 
     function loadView(item) {

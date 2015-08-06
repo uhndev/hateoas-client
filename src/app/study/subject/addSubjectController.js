@@ -9,6 +9,18 @@
     '$modalInstance', 'study', 'centreHref', 'toastr', 'ENROLLMENT_STATUSES', 'SubjectEnrollmentService'
   ];
 
+  /**
+   * AddSubjectController
+
+   * @description Controller for the add subject to study modal window.
+   * @param $modalInstance
+   * @param study               resolved study response passed in from subjectViewController.js
+   * @param centreHref          resolved url /study/<STUDY>/collectioncentre used for selectLoader dropdown
+   * @param toastr
+   * @param ENROLLMENT_STATUSES constants used in status dropdowns, defined in subject.constant.js
+   * @param SubjectEnrollment
+   * @constructor
+   */
   function AddSubjectController($modalInstance, study, centreHref, toastr, ENROLLMENT_STATUSES, SubjectEnrollment) {
     var vm = this;
     // bindable variables
