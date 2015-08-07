@@ -45,7 +45,7 @@
 
     function init() {
       User.get({ id: subject.userId }, function (data, headers) {
-        vm.userData = angular.copy(data.items);
+        vm.userData = angular.copy(data);
       });
     }
 
