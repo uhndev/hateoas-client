@@ -1,6 +1,6 @@
 module.exports = function ( karma ) {
   karma.set({
-    /** 
+    /**
      * From where to look for files, starting with the location of this file.
      */
     basePath: '../',
@@ -13,21 +13,33 @@ module.exports = function ( karma ) {
       <% }); %>
       'src/**/*.js'
     ],
+
     exclude: [
       'src/assets/**/*.js'
     ],
     frameworks: [ 'jasmine' ],
-    plugins: [ 'karma-jasmine', 
-               'karma-chrome-launcher', 
-               'karma-firefox-launcher',
-               'karma-phantomjs-launcher' ],
+
+    plugins: [
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-phantomjs-launcher',
+      'karma-junit-reporter'
+    ],
+
     preprocessors: {
     },
 
     /**
      * How to report, by default.
      */
-    reporters: 'dots',
+    reporters: ['dots', 'junit'],
+
+    junitReporter: {
+      outputDir: 'karma/results',
+      outputFile: 'karma-test-results.xml',
+      suite: 'angular-tests'
+    },
 
     /**
      * On which port should the browser connect, on which port is the test runner
@@ -37,7 +49,7 @@ module.exports = function ( karma ) {
     runnerPort: 9100,
     urlRoot: '/',
 
-    /** 
+    /**
      * Disable file watching by default.
      */
     autoWatch: false,
