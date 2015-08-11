@@ -175,7 +175,7 @@
           subject: function() {
             return vm.resource;
           },
-          studyAttributes: function() {
+          study: function() {
             return vm.resource.studyAttributes;
           },
           centreHref: function () {
