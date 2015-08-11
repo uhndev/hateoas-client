@@ -34,9 +34,9 @@
     var selectWidget = function(idx) {
       $scope.selectedIndex = idx;
       if($scope.questions[idx].template) {
-        $scope.editTabActive[2] = true;
+        $scope.editTabActive['config'] = true;
       } else {
-        $scope.editTabActive[1] = true;
+        $scope.editTabActive['select'] = true;
       }
     };
     
@@ -119,6 +119,8 @@
      */
     $scope.$on("move", function(e, from, to) {
       $scope.questions.splice(to, 0, $scope.questions.splice(from, 1)[0]);
+      $scope.$apply();
+      selectWidget(to);
     });
     
     /**
@@ -155,6 +157,10 @@
         $scope.selectedIndex = 0;
       }
     });
+
+    $scope.$watch('questions', function(newVal, oldVal) {
+      console.log('trigger');
+    }, true);
     
     $scope.$emit('layoutControllerLoaded');
   }
