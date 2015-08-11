@@ -28,7 +28,10 @@
     $scope.showSettings = false;
     
     var getTemplate = function() {
-      return  { css : { width : $scope.width + '%' } };
+      return  { 
+          css : { width : $scope.width + '%' },
+          isDeleted : false
+        };
     };
 		
     var selectWidget = function(idx) {
@@ -71,6 +74,19 @@
     });
     
     /**
+     * listener: clone
+     * 
+     * Clones a cell and inserts it to the grid.
+     * 
+     * @param e is the event data
+     * @param cellIndex is the index of the cell to be cloned
+     */
+    $scope.$on("clone", function(e, cellIndex) {
+      var newCell = angular.copy($scope.questions[cellIndex]);
+      $scope.questions.splice(cellIndex, 0, newCell);
+    });
+    
+    /**
      * listener: remove
      * 
      * Removes a cell from the grid.
@@ -97,7 +113,7 @@
     });
     
     /**
-     * listener: remove
+     * listener: add
      * 
      * Adds a cell to the grid.
      * 
@@ -143,7 +159,7 @@
         selectWidget(prevLen);
       }
     };
-	
+	 
     $scope.$on('updateWidget', function(e, widget) {
       if (widget.css) {
         $scope.questions[$scope.selectedIndex] = angular.copy(widget);
@@ -157,10 +173,6 @@
         $scope.selectedIndex = 0;
       }
     });
-
-    $scope.$watch('questions', function(newVal, oldVal) {
-      console.log('trigger');
-    }, true);
     
     $scope.$emit('layoutControllerLoaded');
   }

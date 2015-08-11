@@ -24,11 +24,15 @@
 				tooltip="Expand cell">
 				<span class="glyphicon glyphicon-resize-full"></span>
 			</button>
-			<button class="btn btn-primary" ng-click="configure()"
+			<button class="btn btn-primary" ng-click="clone($index)"
+				tooltip="Clone widget">
+				<span class="glyphicon glyphicon-plus"></span>
+			</button>
+			<button class="btn btn-warning" ng-click="configure()"
 				tooltip="Configure widget">
 				<span class="glyphicon glyphicon-cog"></span>
 			</button>
-			<button class="btn btn-warning"
+			<button class="btn btn-danger"
 				ng-hide="cellCount <= 1" ng-click="remove($index)"
 				tooltip="Delete widget">
 				<span class="glyphicon glyphicon-trash"></span>
