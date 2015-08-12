@@ -13,6 +13,10 @@
       $scope.$emit('configure', $scope.cellIndex);
     };
     
+    $scope.clone = function() {
+      $scope.$emit('clone', $scope.cellIndex);
+    };
+    
     $scope.remove = function() {
       $scope.$emit('remove', $scope.cellIndex);
     };

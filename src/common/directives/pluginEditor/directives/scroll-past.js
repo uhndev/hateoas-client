@@ -1,7 +1,7 @@
 /**
  * ScrollPast directive
  *
- * This directive emulates fixed CSS position behaviour without taking element element out of flow
+ * This directive emulates fixed CSS position behaviour without taking element out of flow
  * e.g. as you scroll through the form questions the edit palette stays visible.
  * Doesn't require CSS3 transformations. Function triggers as user scrolls past the element.
  *

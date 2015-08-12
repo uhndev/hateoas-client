@@ -28,15 +28,18 @@
     $scope.showSettings = false;
     
     var getTemplate = function() {
-      return  { css : { width : $scope.width + '%' } };
+      return  { 
+          css : { width : $scope.width + '%' },
+          isDeleted : false
+        };
     };
 		
     var selectWidget = function(idx) {
       $scope.selectedIndex = idx;
       if($scope.questions[idx].template) {
-        $scope.editTabActive[2] = true;
+        $scope.editTabActive['config'] = true;
       } else {
-        $scope.editTabActive[1] = true;
+        $scope.editTabActive['select'] = true;
       }
     };
     
@@ -71,6 +74,19 @@
     });
     
     /**
+     * listener: clone
+     * 
+     * Clones a cell and inserts it to the grid.
+     * 
+     * @param e is the event data
+     * @param cellIndex is the index of the cell to be cloned
+     */
+    $scope.$on("clone", function(e, cellIndex) {
+      var newCell = angular.copy($scope.questions[cellIndex]);
+      $scope.questions.splice(cellIndex, 0, newCell);
+    });
+    
+    /**
      * listener: remove
      * 
      * Removes a cell from the grid.
@@ -97,7 +113,7 @@
     });
     
     /**
-     * listener: remove
+     * listener: add
      * 
      * Adds a cell to the grid.
      * 
@@ -119,6 +135,8 @@
      */
     $scope.$on("move", function(e, from, to) {
       $scope.questions.splice(to, 0, $scope.questions.splice(from, 1)[0]);
+      $scope.$apply();
+      selectWidget(to);
     });
     
     /**
@@ -141,7 +159,7 @@
         selectWidget(prevLen);
       }
     };
-	
+	 
     $scope.$on('updateWidget', function(e, widget) {
       if (widget.css) {
         $scope.questions[$scope.selectedIndex] = angular.copy(widget);
