@@ -45,7 +45,6 @@
       };
 
       $scope.tableParams = new TableParams(TABLE_SETTINGS, {
-        counts: [],
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, vm.query);
 
