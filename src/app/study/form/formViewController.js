@@ -18,6 +18,7 @@
     var vm = this;
 
     // bindable variables
+    vm.currStudy = '';
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;
@@ -27,7 +28,6 @@
 
     // bindable methods;
     vm.select = select;
-    vm.openForm = openForm;
     vm.archiveForm = archiveForm;
 
     init();
@@ -35,7 +35,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var currStudy = _.getStudyFromUrl($location.path());
+      vm.currStudy = _.getStudyFromUrl($location.path());
 
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
@@ -62,7 +62,7 @@
             $defer.resolve(data.items);
 
             // initialize submenu
-            AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+            AuthService.setSubmenu(vm.currStudy, data, $scope.dados.submenu);
           });
         }
       });
@@ -72,31 +72,12 @@
       vm.selected = (vm.selected === item ? null : item);
     }
 
-    function openForm() {
-      var modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'study/form/formPreviewModal.tpl.html',
-        controller: 'FormPreviewController',
-        controllerAs: 'formPreview',
-        bindToController: true,
-        resolve: {
-          study: function() {
-            return currStudy;
-          }
-        }
-      });
-
-      modalInstance.result.then(function () {
-        $scope.tableParams.reload();
-      });
-    }
-
     function archiveForm() {
       var conf = confirm("Are you sure you want to archive this form?");
       if (conf) {
         var form = new Form({ id: vm.selected.id });
         return form.$delete({ id: vm.selected.id }).then(function () {
-          toastr.success('Archived form from '+ currStudy + '!', 'Form');
+          toastr.success('Archived form from '+ vm.currStudy + '!', 'Form');
           $scope.tableParams.reload();
         });
       }

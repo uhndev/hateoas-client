@@ -1,183 +1,200 @@
 <div>
-	<accordion close-others="false" class="plugin-editor">
-		<accordion-group is-open="isSettingsOpen">
-			<accordion-heading>
+  <accordion close-others="false" class="plugin-editor">
+    <accordion-group is-open="isSettingsOpen">
+      <accordion-heading>
 				<span class="glyphicon "
-					ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+              ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
 				</span>
-				Settings
-			</accordion-heading>
-			<!-- PluginConfig -->
-			<tabset>
-				<tab heading="Settings">
-					<form>
-						<div class="form-group">
-							<label for="form-loader">Load Plugin:</label>
-							<select ng-model="idPlugin"
-							  class="form-control"
-							  ng-change="loadForm(idPlugin)"
-							  ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
-							  <option value="">-- New --</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="form-name">Plugin Name:</label>
-							<ui-help popover="Provide a name for your plugin. Names must
+        Settings
+      </accordion-heading>
+      <!-- PluginConfig -->
+      <tabset>
+        <tab heading="Settings">
+          <form>
+            <div class="form-group">
+              <label for="form-loader">Load Plugin:</label>
+              <select ng-model="idPlugin"
+                      class="form-control"
+                      ng-change="loadForm(idPlugin)"
+                      ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
+                <option value="">-- New --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="form-name">Plugin Name:</label>
+              <ui-help popover="Provide a name for your plugin. Names must
 									be in upper case and cannot contain any spaces."
-								popover-placement="right"></ui-help>
-							<input type="text" class="form-control"
-							 ng-model="form.name"
-							 ng-trim="true" title="Provide a name for your plugin"
-							 placeholder="Provide a name for your plugin" />
-						</div>
-						<h3>Meta Data</h3>
-						<form-meta-editor></form-meta-editor>
-					</form>
-				</tab>
-				<tab heading="Import from JSON">
-					<label for="jsonImport">
-						Paste your form below:
-					</label>
+                       popover-placement="right"></ui-help>
+              <input type="text" class="form-control"
+                     ng-model="form.name"
+                     ng-trim="true" title="Provide a name for your plugin"
+                     placeholder="Provide a name for your plugin"/>
+            </div>
+            <h3>Meta Data</h3>
+            <form-meta-editor></form-meta-editor>
+          </form>
+        </tab>
+        <tab heading="Import from JSON">
+          <label for="jsonImport">
+            Paste your form below:
+          </label>
 					<textarea id="jsonImport"
-							  class="form-control"
-							  ng-model="jsonForm" rows="10">
+                    class="form-control"
+                    ng-model="jsonForm" rows="10">
 					</textarea>
-					<button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
-						Import
-					</button>
-				</tab>
-				<tab heading="JSON">
+          <button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
+            Import
+          </button>
+        </tab>
+        <tab heading="JSON">
 					<pre>
 						{{ form | json }}
 					</pre>
-				</tab>
-			</tabset>
-			<!-- PluginConfig -->
-		</accordion-group>
-		<accordion-group is-open="isEditorOpen">
-			<accordion-heading>
+        </tab>
+      </tabset>
+      <!-- PluginConfig -->
+    </accordion-group>
+    <accordion-group is-open="isEditorOpen">
+      <accordion-heading>
 				<span class="glyphicon "
-					ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+              ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
 				</span>
-				Configuration
-			</accordion-heading>
-			<!-- PluginLayout -->
-			<div ng-controller="LayoutController">
-				<div scroll-past ng-controller="WidgetController" class="content_left">
-					<tabset>
-						<tab heading="Add new widget" active="editTabActive['add']">
-							<div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
-								<h2>{{ category }}</h2>
-								<div ng-repeat="template in categories[category]">
-									<a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
-								</div>
-							</div>
-						</tab>
-						<tab heading="Select your widget" active="editTabActive['select']">
-							<accordion close-others="true">
-								<accordion-group ng-repeat="category in unsorted(categories)"
-									is-open="isopen">
-									<accordion-heading>
-										{{ category }}
-										<i class="pull-right glyphicon"
-											ng-class="{'glyphicon-chevron-down': isopen,
+        Configuration
+      </accordion-heading>
+      <!-- PluginLayout -->
+      <div ng-controller="LayoutController" class="row">
+        <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
+          <tabset>
+            <tab tooltip="Add new widget" active="editTabActive['add']">
+              <tab-heading>
+                <i class="fa fa-plus-square"></i> Widget
+              </tab-heading>
+              <div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
+                <h2>{{ category }}</h2>
+
+                <div ng-repeat="template in categories[category]">
+                  <a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
+                </div>
+              </div>
+            </tab>
+            <tab tooltip="Select widget type" active="editTabActive['select']">
+              <tab-heading>
+                <i class="fa fa-list"></i> Types
+              </tab-heading>
+              <accordion close-others="true">
+                <accordion-group ng-repeat="category in unsorted(categories)"
+                                 is-open="isopen">
+                  <accordion-heading>
+                    {{ category }}
+                    <i class="pull-right glyphicon"
+                       ng-class="{'glyphicon-chevron-down': isopen,
 													'glyphicon-chevron-right': !isopen}"></i>
-									</accordion-heading>
-									<div ng-repeat="template in categories[category]">
-										<input type="radio" ng-model="widget.template"
-											id="{{category}}{{template}}{{ $index }}"
-											name="WIDGET_TEMPLATE"
-											ng-value="template" />
-										<label for="{{category}}{{template}}{{ $index }}"
-											class="capitalize">
-											{{ template }}
-										</label>
-									</div
-								</accordion-group>
-							</accordion>
-						</tab>
-						<tab heading="Configure your widget" active="editTabActive['config']" disabled="!widget.template">
-							<ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
-							</ng-include>
-						</tab>
-						<tab heading="Set your list values" active="editTabActive['list_config']" ng-show="widget.properties.hasOwnProperty('options')">
-							<ui-list-editor list="widget.properties.options"
-								can-edit-properties="true"></ui-list-editor>
-						</tab>
-						<tab heading="Configure your widget flags" active="editTabActive['flags']" disabled="!widget.template">
-							<ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
-							</ng-include>
-							<form class="form-horizontal" role="form">
-								<div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
-									<label for="pattern">
-										Validation
-									</label>
-									<input type="text" id="pattern" class="form-control"
-										ng-model="widget.properties.pattern" />
-									<ui-help popover="Set the validation pattern for this input. Use
+                  </accordion-heading>
+                  <div ng-repeat="template in categories[category]">
+                    <input type="radio" ng-model="widget.template"
+                           id="{{category}}{{template}}{{ $index }}"
+                           name="WIDGET_TEMPLATE"
+                           ng-value="template"/>
+                    <label for="{{category}}{{template}}{{ $index }}"
+                           class="capitalize">
+                      {{ template }}
+                    </label>
+                  </div
+                </accordion-group>
+              </accordion>
+            </tab>
+            <tab tooltip="Configure widget" active="editTabActive['config']" disable="!widget.template">
+              <tab-heading>
+                <i class="fa fa-wrench"></i> Config
+              </tab-heading>
+              <ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
+              </ng-include>
+            </tab>
+            <tab tooltip="Set widget list options" active="editTabActive['list_config']"
+                 ng-show="widget.properties.hasOwnProperty('options')">
+              <tab-heading>
+                <i class="fa fa-list-ol"></i> Options
+              </tab-heading>
+              <ui-list-editor list="widget.properties.options"
+                              can-edit-properties="true"></ui-list-editor>
+            </tab>
+            <tab tooltip="Configure widget flags" active="editTabActive['flags']" disable="!widget.template">
+              <tab-heading>
+                <i class="fa fa-flag"></i> Flags
+              </tab-heading>
+              <ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
+              </ng-include>
+              <form class="form-horizontal" role="form">
+                <div class="form-group" ng-show="widget.properties.hasOwnProperty('pattern')">
+                  <label for="pattern">
+                    Validation
+                    <ui-help popover="Set the validation pattern for this input. Use
 									 Regular Expressions to defined the validation rules."></ui-help>
-								</div>
-							</form>
-						</tab>
-					</tabset>
-				</div>
-				<div class="content_right scroll-past-anchor no-select relative">
-					<legend>Workspace</legend>
-					<ng-form name="plugin">
-						<ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
-							ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
-							<ui-grid ng-repeat="cell in questions track by $index" cell="cell"
-								cell-count="grid.length" cell-index="$index">
-							</ui-grid>
-						</ol>
-					</ng-form>
+                  </label>
+                  <input type="text" id="pattern" class="form-control"
+                         ng-model="widget.properties.pattern"/>
+                </div>
+              </form>
+            </tab>
+          </tabset>
+        </div>
+        <div class="content_right col-md-8 scroll-past-anchor no-select relative">
+          <legend>Workspace</legend>
+          <ng-form name="plugin">
+            <ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
+                ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
+              <ui-grid ng-repeat="cell in questions track by $index" cell="cell"
+                       cell-count="grid.length" cell-index="$index" selected-index="selectedIndex">
+              </ui-grid>
+            </ol>
+          </ng-form>
 
-					<form class="grid-settings" ng-show="showSettings">
-						<p>
-							<label>Default cell size:</label>
+          <form class="grid-settings" ng-show="showSettings">
+            <p>
+              <label>Default cell size:</label>
 							<span ui-slider step="5" max="100" min="20"
-								class="inline-slider"
-								ng-model="width"></span>
-							<span class="percentage">{{ width }}%</span>
-							<ui-help popover-placement="left"
-								  popover="Set the default width of a widget as a
+                    class="inline-slider"
+                    ng-model="width"></span>
+              <span class="percentage">{{ width }}%</span>
+              <ui-help popover-placement="left"
+                       popover="Set the default width of a widget as a
 								  % of the screen size."></ui-help>
-						</p>
-						<p>
-							<label>Shrink/Expand amount:</label>
+            </p>
+            <p>
+              <label>Shrink/Expand amount:</label>
 							<span ui-slider step="5" max="50" min="5"
-								class="inline-slider"
-								ng-model="step"></span>
-							<span class="percentage">{{ step }}%</span>
-							<ui-help popover-placement="left"
-								  popover="Set the default amount to decrease/increase
+                    class="inline-slider"
+                    ng-model="step"></span>
+              <span class="percentage">{{ step }}%</span>
+              <ui-help popover-placement="left"
+                       popover="Set the default amount to decrease/increase
 									the width of a widget as a % of the screen."></ui-help>
-						</p>
-					</form>
+            </p>
+          </form>
 
-					<div class="open-controls btn-group">
-						<button class="btn btn-default" ng-model="showList" btn-checkbox>
+          <div class="open-controls btn-group">
+            <button class="btn btn-default" ng-model="showList" btn-checkbox>
 							<span class="glyphicon" ng-class="{ 'glyphicon-align-justify' : showList,
 								'glyphicon-th-large' : !showList }"
-								tooltip="Switch between grid view and list view."></span>
-						</button>
-						<button class="btn btn-primary" ng-model="showSettings"
-							btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                    tooltip="Switch between grid view and list view."></span>
+            </button>
+            <button class="btn btn-primary" ng-model="showSettings"
+                    btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
 							<span class="glyphicon glyphicon-wrench"
-								tooltip="Modify grid settings."></span>
-						</button>
-					</div>
-				</div>
-			</div>
-			<!-- PluginLayout -->
-		</accordion-group>
-	</accordion>
-	<div class="controls">
-		<button class="btn btn-default pull-right" ng-model="isSaving"
-			ng-click="save()" ng-disabled="isSaving">
+                    tooltip="Modify grid settings."></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- PluginLayout -->
+    </accordion-group>
+  </accordion>
+  <div class="controls">
+    <button class="btn btn-default pull-right" ng-model="isSaving"
+            ng-click="save()" ng-disabled="isSaving">
 			<span class="glyphicon glyphicon-floppy-disk"
-				tooltip="Save plugin"></span>
-			Save
-		</button>
-	</div>
+            tooltip="Save plugin"></span>
+      Save
+    </button>
+  </div>
 </div>

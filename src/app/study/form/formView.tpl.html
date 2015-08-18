@@ -15,26 +15,19 @@
 
   <div id="Controls" class="pull-right">
     <div class="btn-group">
-      <button type="button" class="btn btn-default"
-              ng-if="studyForm.allow.read"
-              ng-click="studyForm.openForm()"
-              ng-disabled="!!!studyForm.selected">
-        <i class="fa fa-folder-o"></i>
-        View Form
-      </button>
-      <button type="button" class="btn btn-default"
+      <a type="button" class="btn btn-default"
               ng-if="studyForm.allow.create"
-              href="#/plugineditor">
+              ng-href="#/plugineditor?studyName={{studyForm.currStudy}}">
         <i class="fa fa-file-o"></i>
-        Create Form in Study
-      </button>
-      <button type="button" class="btn btn-default"
+        Create Form
+      </a>
+      <a type="button" class="btn btn-default"
               ng-if="studyForm.allow.update"
-              href="#/plugineditor?idPlugin={{studyForm.selected.id}}"
+              ng-href="#/plugineditor?studyName={{studyForm.currStudy}}&idPlugin={{studyForm.selected.id}}"
               ng-disabled="!!!studyForm.selected">
         <i class="fa fa-edit"></i>
         Edit Form
-      </button>
+      </a>
       <button type="button" class="btn btn-default"
               ng-if="studyForm.allow.delete"
               ng-click="studyForm.archiveForm()"

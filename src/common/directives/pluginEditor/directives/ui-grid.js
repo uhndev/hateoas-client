@@ -1,5 +1,5 @@
-/** 
- * 
+/**
+ *
  */
 (function() {
   'use strict';
@@ -13,17 +13,18 @@
   uiGrid.$inject = [];
 
   function uiGrid() {
-    
+
     return {
       templateUrl: 'directives/pluginEditor/partials/UiGrid.tpl.html',
       controller: 'UiGridController',
       restrict: 'E',
       replace: true,
       scope: {
+        selectedIndex: '=',
         cellIndex: '=',
         cellCount: '=',
         cell: '='
-      },
+      }
     };
   }
 

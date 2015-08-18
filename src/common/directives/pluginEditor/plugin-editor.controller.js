@@ -16,7 +16,7 @@
     $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
     $scope.studyName = $location.search()['studyName'];
-    $scope.form = {name: '', questions: [], metaData: {}, studyName: $scope.studyName};
+    $scope.form = { name: '', questions: [], metaData: {}, studyName: $scope.studyName };
     $scope.sortableOptions = {
       cursor: 'move',
       revert: true
@@ -24,7 +24,7 @@
 
     if ($scope.idPlugin && !_.has($scope.form, 'id')) {
       FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
-        setForm(form);
+        setForm(_.pick(form, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
       });
     }
 
@@ -57,7 +57,7 @@
     // });
 
     var onFormSaved = function (result) {
-      $scope.form = angular.copy(result);
+      $scope.form = angular.copy(_.pick(result, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
       $scope.isSaving = false;
       toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
       // @TODO investigate what this was about - Kevin
@@ -73,6 +73,9 @@
 
     var setForm = function (form) {
       $scope.form = form;
+      if (!_.has(form, 'studyName')) {
+        $scope.form.studyName = $scope.studyName;
+      }
 
       angular.forEach($scope.form.questions, function (question) {
         if (angular.isUndefined(question.properties.defaultValue)) {

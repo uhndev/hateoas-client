@@ -12,6 +12,9 @@ body > .controls {
   left:2em;
   right:2em;
 }
+.widget-selected {
+  background-color: #dff0d8;
+}
 .form-horizontal .cell .form-group {
   margin:0;
 }
@@ -199,6 +202,8 @@ input:checked + label {
   background-color:rgba(255,255,255,0.5);
 }
 .open-controls {
+  margin-top: 7px;
+  margin-right: 15px;
   position:absolute;
   top:-0.5em;
   right:0;
@@ -233,14 +238,10 @@ input:checked + label {
 	top: 0px;
 }
 .content_left {
-	float: left;
-	position: relative;
-	width: 320px;
 	padding-top: 10px;
 }
 .content_right {
-	padding-top: 10px;
-	margin-left: 320px;
+	padding-top: 20px;
 	border-left: 1px solid #ddd;
 	padding-left: 20px;
 	min-height: 100%;
@@ -263,10 +264,10 @@ input:checked + label {
 	}
 }
 .fb_add_button {
-	display: inline-block; 
-	margin: 0; 
+	display: inline-block;
+	margin: 0;
 	padding: 0.563rem 0.844rem;
-	background: #53B2DB; 
+	background: #53B2DB;
 	color: #fff;
 	text-align: center;
 	text-decoration: none;
