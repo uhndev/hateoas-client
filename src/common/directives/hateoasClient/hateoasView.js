@@ -27,27 +27,27 @@
         if (pathArr.length === 3) {
           var view = _.last(pathArr);
           templates = _.map(VIEW_MODULES, function(module) {
-            return [model, '/', view, '/', view, 'View', module, '.tpl.html'].join('');  
+            return [model, '/', view, '/', view, 'View', module, '.tpl.html'].join('');
           });
-          templates.push( 
+          templates.push(
             [model, '/', view, '/', view, 'View.tpl.html'].join('')
           );
         }
         else if (pathArr.length === 2) {
           templates = _.map(ITEM_MODULES, function(module) {
-            return [model, '/', model, 'View', module, '.tpl.html'].join('');  
+            return [model, '/', model, 'View', module, '.tpl.html'].join('');
           });
-          templates.push( 
+          templates.push(
             [model, '/', model, 'View.tpl.html'].join('')
           );
         } else {
           templates = _.map(VIEW_MODULES, function(module) {
-            return [path.substring(1), path, 
-              'View', module, '.tpl.html'].join('');  
+            return [path.substring(1), path,
+              'View', module, '.tpl.html'].join('');
           });
-          templates.push( 
+          templates.push(
             [path.substring(1), path, 'View.tpl.html'].join('')
-          );        
+          );
         }
 
         return templates;
@@ -61,7 +61,7 @@
        */
       function override(templates) {
         return _.some(templates, function(href) {
-          return !!$templateCache.get(href); 
+          return !!$templateCache.get(href);
         });
       }
 
@@ -80,48 +80,48 @@
         var fragment;
         if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
           var view = _.last(pathArr);
-          fragment = '<div>';
+          fragment = '<div ng-controller="HateoasController as hateoas">';
           _.each(VIEW_MODULES, function(module) {
-            var templateUrl = [model, '/', view, '/', view, 
+            var templateUrl = [model, '/', view, '/', view,
               'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation, 
+            var defaultUrl = [defaultViewLocation,
               module, '.tpl.html'].join('');
 
-            fragment += $templateCache.get(templateUrl) || 
+            fragment += $templateCache.get(templateUrl) ||
               $templateCache.get(defaultUrl);
           });
         }
         else if (pathArr.length === 2) { // routes like /study/LEAP or /user/:id
           fragment = '<div>';
           _.each(ITEM_MODULES, function(module) {
-            var templateUrl = [model, '/', model, 
+            var templateUrl = [model, '/', model,
               'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation, 
+            var defaultUrl = [defaultViewLocation,
               module, '.tpl.html'].join('');
 
-            fragment += $templateCache.get(templateUrl) || 
+            fragment += $templateCache.get(templateUrl) ||
               $templateCache.get(defaultUrl);
           });
         } else {
           fragment = '<div ng-controller="HateoasController as hateoas">';
           _.each(VIEW_MODULES, function(module) {
-            var templateUrl = [path.substring(1), path, 
+            var templateUrl = [path.substring(1), path,
               'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation, 
+            var defaultUrl = [defaultViewLocation,
               module, '.tpl.html'].join('');
 
-            fragment += $templateCache.get(templateUrl) || 
+            fragment += $templateCache.get(templateUrl) ||
               $templateCache.get(defaultUrl);
           });
         }
-                 
+
         fragment += '</div>';
         return fragment;
       }
 
       /**
        * Private: loadTemplate
-       * Loads the template for the current route path and binds it to the 
+       * Loads the template for the current route path and binds it to the
        * scope.
        * @param scope
        * @param element
@@ -140,8 +140,8 @@
             // only cache for non-item views
             if (path.split('/').length !== 3) {
               $templateCache.put(pageView, fragment);
-              _.each(templates, $templateCache.remove);  
-            }            
+              _.each(templates, $templateCache.remove);
+            }
           }
           element.html(fragment);
         } else {
@@ -155,10 +155,10 @@
       /**
        * Private: postLink
        * Initialization for this directive. Sets up all events and creates
-       * the first view. 
+       * the first view.
        */
       function postLink(scope, element) {
-        scope.$on('$locationChangeStart', 
+        scope.$on('$locationChangeStart',
           function(e, currentHref, prevHref) {
             if (currentHref && currentHref !== prevHref) {
               loadTemplate(scope, element, $location.path());

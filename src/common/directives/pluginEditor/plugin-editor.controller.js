@@ -13,9 +13,10 @@
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
-    $scope.form = {name: '', questions: [], metaData: {}};
     $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
+    $scope.studyName = $location.search()['studyName'];
+    $scope.form = {name: '', questions: [], metaData: {}, studyName: $scope.studyName};
     $scope.sortableOptions = {
       cursor: 'move',
       revert: true
