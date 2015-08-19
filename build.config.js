@@ -22,7 +22,7 @@ module.exports = {
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
-    
+
     coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
     coffeeunit: [ 'src/**/*.spec.coffee' ],
 
@@ -61,16 +61,15 @@ module.exports = {
    * recommended that you use wildcards.
    */
   vendor_files: {
-    js: [      
+    js: [
       // angular dependencies
       'vendor/jquery/jquery.js',
-      'vendor/jquery-ui/ui/jquery-ui.js',      
+      'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/dist/lodash.js',
-      'vendor/lodash-contrib/dist/lodash-contrib.js', 
-      'vendor/sails.io.js/dist/sails.io.js',      
+      'vendor/lodash-contrib/dist/lodash-contrib.js',
+      'vendor/sails.io.js/dist/sails.io.js',
 
       'vendor/angular/angular.js',
-      'vendor/angular-ui-grid/ui-grid.js',
       'vendor/angular-animate/angular-animate.js',
       'vendor/angular-loader/angular-loader.js',
       'vendor/angular-resource/angular-resource.js',
@@ -84,12 +83,12 @@ module.exports = {
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/ng-table/ng-table.js',
       'vendor/angular-ui-utils/ui-utils.js',
-      'vendor/angular-ui-sortable/sortable.js',  
+      'vendor/angular-ui-sortable/sortable.js',
       'vendor/ace-builds/src/ace.js',
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
-               
+
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'
     ],

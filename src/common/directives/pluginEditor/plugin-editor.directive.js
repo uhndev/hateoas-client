@@ -13,7 +13,7 @@
       'dados.common.directives.pluginEditor.directives.uiSortable',
       'dados.common.directives.pluginEditor.directives.uiHelp',
       'dados.common.directives.pluginEditor.directives.scrollPast',
-      'dados.common.directives.pluginEditor.directives.ngName',
+      'dados.common.directives.pluginEditor.directives.ngName'
     ])
     .directive('pluginEditor', function() {
       return {

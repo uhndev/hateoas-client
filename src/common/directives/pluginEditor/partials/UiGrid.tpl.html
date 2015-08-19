@@ -1,46 +1,55 @@
-<li class="cell panel panel-default" ng-style="cell.css" ng-class="{ 'trash' : cell.isDeleted }" ng-click="configure()">
-	<div class="alert alert-danger" ng-if="!!cell.template && !cell.name.length">
-		No field name set. Field name is required.
-	</div>
-	<div class="alert alert-info" ng-if="!cell.template">
-		Click over here to configure this widget.
-		Drag the widget to re-order it. {{ showList }}
-	</div>
-	<ui-widget ng-if="cell.template" widget="cell"
-		widget-model="cell.properties.defaultValue"
-		class="panel-body"></ui-widget>
-	<div class="panel-footer">
-		<div class="btn-group btn-group-sm">
-			<button class="btn btn-default" ng-click="addLeft()"
-			 tooltip="Add cell to the left">
-				<span class="glyphicon glyphicon-log-in flip"></span>
-			</button>
-			<button class="btn btn-default" ng-click="shrink()"
-				ng-hide="!shrinkable()" tooltip="Shrink cell">
-				<span class="glyphicon glyphicon-resize-small"></span>
-			</button>
-			<button class="btn btn-default" ng-click="expand()"
-				ng-hide="!expandable()"
-				tooltip="Expand cell">
-				<span class="glyphicon glyphicon-resize-full"></span>
-			</button>
-			<button class="btn btn-primary" ng-click="clone($index)"
-				tooltip="Clone widget">
-				<span class="glyphicon glyphicon-plus"></span>
-			</button>
-			<button class="btn btn-warning" ng-click="configure()"
-				tooltip="Configure widget">
-				<span class="glyphicon glyphicon-cog"></span>
-			</button>
-			<button class="btn btn-danger"
-				ng-hide="cellCount <= 1" ng-click="remove($index)"
-				tooltip="Delete widget">
-				<span class="glyphicon glyphicon-trash"></span>
-			</button>
-			<button class="btn btn-default" ng-click="addRight()"
-				tooltip="Add cell to the right">
-				<span class="glyphicon glyphicon-log-in"></span>
-			</button>
-		</div>
-	</div>
+<li class="cell panel panel-default selectable" ng-style="cell.css"
+    ng-class="{ 'trash' : cell.isDeleted, 'widget-selected': cellIndex === selectedIndex }"
+    ng-click="configure()">
+  <div class="alert alert-info" ng-if="!cell.template">
+    Click over here to configure this widget.
+    Drag the widget to re-order it. {{ showList }}
+  </div>
+  <ui-widget ng-if="cell.template" widget="cell"
+             widget-model="cell.properties.defaultValue"
+             class="panel-body"></ui-widget>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-md-7">
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-default" ng-click="addLeft()"
+                  tooltip="Add cell to the left">
+            <span class="glyphicon glyphicon-log-in flip"></span>
+          </button>
+          <button class="btn btn-default" ng-click="shrink()"
+                  ng-disabled="!shrinkable()" tooltip="Shrink cell">
+            <span class="glyphicon glyphicon-resize-small"></span>
+          </button>
+          <button class="btn btn-default" ng-click="expand()"
+                  ng-disabled="!expandable()"
+                  tooltip="Expand cell">
+            <span class="glyphicon glyphicon-resize-full"></span>
+          </button>
+          <button class="btn btn-primary" ng-click="clone($index)"
+                  tooltip="Clone widget">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+          <button class="btn btn-warning" ng-click="configure()"
+                  tooltip="Configure widget">
+            <span class="glyphicon glyphicon-cog"></span>
+          </button>
+          <button class="btn btn-danger"
+                  ng-hide="cellCount <= 1" ng-click="remove($index)"
+                  tooltip="Delete widget">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+          <button class="btn btn-default" ng-click="addRight()"
+                  tooltip="Add cell to the right">
+            <span class="glyphicon glyphicon-log-in"></span>
+          </button>
+        </div>
+      </div>
+      <div class="pull-right" ng-if="!!cell.template && !cell.name.length">
+        <p class="text-warning">
+          <i class="fa fa-exclamation-triangle"></i>
+          No field name set. Field name is required.
+        </p>
+      </div>
+    </div>
+  </div>
 </li>

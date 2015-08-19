@@ -32,7 +32,7 @@
           {
             'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
             'query' : {method: 'GET', isArray: true, transformResponse: _.transformHateoas },
-            'update' : {method: 'PUT', isArray: false, transformResponse: _.transformHateoas },
+            'update' : {method: 'PUT', isArray: false },
             'save' : {method: 'POST', isArray: false, transformResponse: _.transformHateoas }
           }
         );

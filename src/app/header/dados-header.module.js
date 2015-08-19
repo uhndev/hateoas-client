@@ -1,6 +1,6 @@
 (function() {
-	'use strict';	
-	
+	'use strict';
+
 	angular.module('dados.header', [
 		'dados.auth.service',
 		'dados.header.constants',

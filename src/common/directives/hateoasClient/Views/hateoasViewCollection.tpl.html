@@ -6,11 +6,10 @@
         class="text-center sortable" ng-class="{
           'sort-asc': tableParams.isSortBy(column.name, 'asc'),
           'sort-desc': tableParams.isSortBy(column.name, 'desc')
-        }" 
+        }"
         ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
         {{ column.prompt }}
       </th>
-      <th ng-if="hateoas.template.rel == 'form'">Actions</th>
     </tr>
   </thead>
   <tbody>
