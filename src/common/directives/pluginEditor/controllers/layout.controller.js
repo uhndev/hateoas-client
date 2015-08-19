@@ -19,7 +19,7 @@
       'select' : false,
       'config' : false,
       'list_config' : false,
-      'flags' : false,
+      'flags' : false
     };
 
     var MIN_WIDTH = 20; // Minimum width of a cell
@@ -111,6 +111,7 @@
         } else {
           $scope.questions.splice(pivotIndex, 1);
         }
+        $scope.selectedIndex = -1;
       } else {
         if (cell.isDeleted) {
           cell.isDeleted = false;

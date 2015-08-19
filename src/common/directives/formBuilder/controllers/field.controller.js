@@ -44,7 +44,7 @@
           case 'max_length':   res = value.length <= expr; break;
           case 'between':      res = value.length >= expr.min && value.length <= expr.max; break;
           default: break;
-        }                
+        }
       }
       $scope.showValidateError = !res;
       return res;
@@ -70,11 +70,11 @@
       $scope.showValidateError = !res;
       return res;
     }
-    
+
     function openDate($event) {
       $event.preventDefault();
       $event.stopPropagation();
-    }    
+    }
   }
 
 })();

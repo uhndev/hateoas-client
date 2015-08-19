@@ -28,13 +28,16 @@
                                  ENROLLMENT_STATUSES, SubjectEnrollment, User) {
     var vm = this;
     // bindable variables
+    vm.openedDOB = false;
     vm.openedDOE = false;
+    vm.userData = {};
     vm.newSubject = subject || {};
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
 
     // bindable methods
+    vm.openDOB = openDOB;
     vm.openDOE = openDOE;
     vm.editSubject = editSubject;
     vm.cancel = cancel;
@@ -45,8 +48,16 @@
 
     function init() {
       User.get({ id: subject.userId }, function (data, headers) {
-        vm.userData = angular.copy(data);
+        if (data) {
+          vm.userData = angular.copy(data);
+        }
       });
+    }
+
+    function openDOB($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      vm.openedDOB = true;
     }
 
     function openDOE($event) {

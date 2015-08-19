@@ -1,5 +1,6 @@
 /**
- *
+ * @name ui-help
+ * @description Directive element facilitating tooltips from a question mark
  */
 (function() {
   'use strict';

@@ -23,7 +23,7 @@
       </a>
       <a type="button" class="btn btn-default"
               ng-if="studyForm.allow.update"
-              ng-href="#/plugineditor?studyName={{studyForm.currStudy}}&idPlugin={{studyForm.selected.id}}"
+              ng-href="#/plugineditor?&idPlugin={{studyForm.selected.id}}"
               ng-disabled="!!!studyForm.selected">
         <i class="fa fa-edit"></i>
         Edit Form
@@ -43,12 +43,12 @@
     <tr>
       <th ng-repeat="column in studyForm.template.data"
           ng-if="!column.data"
-          class="text-center sortable" ng-class="{
-              'sort-asc': tableParams.isSortBy(column.name, 'asc'),
-              'sort-desc': tableParams.isSortBy(column.name, 'desc')
-            }"
+          class="text-center sortable"
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-        {{ column.prompt }}
+        {{ column.prompt }} <i class="pull-left" ng-class="{
+            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
+            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
+          }"></i>
       </th>
     </tr>
     </thead>

@@ -10,6 +10,7 @@
   PluginController.$inject = ['$scope', '$location', 'FormService', 'toastr'];
 
   function PluginController($scope, $location, FormService, toastr) {
+    // bindable variables
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
@@ -22,11 +23,29 @@
       revert: true
     };
 
-    if ($scope.idPlugin && !_.has($scope.form, 'id')) {
-      FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
-        setForm(_.pick(form, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
-      });
+    // bindable methods
+    $scope.save = save;
+    $scope.importLegacy = importLegacy;
+    $scope.importJson = importJson;
+    $scope.loadForm = loadForm;
+
+    init();
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      // form id set in url, load form by id
+      if ($scope.idPlugin && !_.has($scope.form, 'id')) {
+        FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
+          // we only want non-hateoas attributes to load into our pluginEditor
+          setForm(_.pick(form, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
+        });
+      }
     }
+
+    /**
+     * Event Listeners
+     */
 
     $scope.$on('metaDataControllerLoaded', function (e) {
       $scope.$broadcast('setMetaData', $scope.form.metaData);
@@ -40,38 +59,24 @@
       $scope.form.questions = angular.copy(widgets);
     });
 
-    /*
-     * Dirty fix. This quick fix was put in place because the "Save" button
-     * would fail after the first save. Didn't have time to debug, so forced
-     * a refresh on the page.
-     *
-     * For a more permanent fix, please use angular routing to control the follow
-     * of the application.
-     *
-     * @TODO investigate what this was about - Kevin
+    /**
+     * Private Methods
      */
-    // $scope.$on('$locationChangeSuccess', function(e, newHref, oldHref) {
-    //   if (newHref !== oldHref) {
-    //     window.location.reload();
-    //   }
-    // });
 
-    var onFormSaved = function (result) {
+    function onFormSaved(result) {
       $scope.form = angular.copy(_.pick(result, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
       $scope.isSaving = false;
       toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
-      // @TODO investigate what this was about - Kevin
       $location.search('idPlugin', $scope.form.id);
       $scope.forms = FormService.query();
-      // window.location.reload();
-    };
+    }
 
-    var onFormError = function (err) {
+    function onFormError(err) {
       $scope.isSaving = false;
       console.log(err);
-    };
+    }
 
-    var setForm = function (form) {
+    function setForm(form) {
       $scope.form = form;
       if (!_.has(form, 'studyName')) {
         $scope.form.studyName = $scope.studyName;
@@ -91,25 +96,30 @@
       $scope.$broadcast('setMetaData', $scope.form.metaData);
       $scope.isSaving = false;
       toastr.info('Loaded form ' + $scope.form.name + ' successfully!', 'Form');
-    };
+    }
 
-    $scope.save = function () {
+    /**
+     * Public Methods
+     */
+
+    function save() {
       if (_.isEmpty($scope.form.name)) {
         toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
-      }
-      if (_.all($scope.form.questions, 'name')) {
-        $scope.isSaving = true;
-        if ($scope.form.id) {
-          FormService.update($scope.form, onFormSaved, onFormError);
-        } else {
-          FormService.save($scope.form, onFormSaved, onFormError);
-        }
       } else {
-        toastr.warning('No questions added yet!', 'Plugin Editor');
+        if (_.all($scope.form.questions, 'name')) {
+          $scope.isSaving = true;
+          if ($scope.form.id) {
+            FormService.update($scope.form, onFormSaved, onFormError);
+          } else {
+            FormService.save($scope.form, onFormSaved, onFormError);
+          }
+        } else {
+          toastr.warning('No questions added yet!', 'Plugin Editor');
+        }
       }
-    };
+    }
 
-    $scope.import = function () {
+    function importLegacy() {
       var idEncounter = $scope.encounter.id;
       if (angular.isDefined(idEncounter) &&
         angular.isNumber(idEncounter)) {
@@ -117,9 +127,9 @@
         LegacyResource.get({id: idEncounter})
           .$promise.then(setForm);
       }
-    };
+    }
 
-    $scope.importJson = function (jsonForm) {
+    function importJson(jsonForm) {
       var form = JSON.parse(jsonForm);
 
       // Strip IDs. It is vital that all id's are stripped to prevent
@@ -127,15 +137,15 @@
       form = omit(form, 'id', form, true);
 
       setForm(form);
-    };
+    }
 
-    $scope.loadForm = function (id) {
+    function loadForm(id) {
       $scope.idPlugin = id;
       if (!id) { // load new form palette
         $scope.form = {};
       }
       $location.search('idPlugin', id);
-    };
+    }
 
   }
 })();
