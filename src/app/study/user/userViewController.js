@@ -11,11 +11,11 @@
 
 	StudyUserController.$inject = [
 		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams',
-		'sailsNgTable', 'CollectionCentreService', 'UserAccess', 'UserEnrollment', 'toastr', 'API'
+		'sailsNgTable', 'UserEnrollment', 'toastr', 'API'
 	];
 
 	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams,
-																SailsNgTable, CollectionCentre, UserAccess, UserEnrollment, toastr, API) {
+																SailsNgTable, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
@@ -65,11 +65,14 @@
 
 						vm.centreHref = "study/" + currStudy + "/collectioncentre";
 
-						// add role and collection centre fields
+						// depending on permissions, render select-loader or plaintext
+            var columnName = (vm.allow.update || vm.allow.create) ? "collectionCentre" : "collectionCentreName";
+            var columnType = (vm.allow.update || vm.allow.create) ? "integer" : "string";
+            // add role and collection centre fields
 						data.template.data = data.template.data.concat([
 							{
-								"name": "collectionCentre",
-								"type": "integer",
+								"name": columnName,
+								"type": columnType,
 								"prompt": "Collection Centre",
 								"value": vm.centreHref
 							},
