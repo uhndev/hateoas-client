@@ -41,7 +41,7 @@
                 return result;
               }
               else {
-                query[field.name] = { 'like': value + '%' };
+                query[field.name] = { 'contains': value };
                 if (/integer/i.test(field.type) || /mrn/i.test(field.type)) {
                   query[field.name] = parseInt(value, 10);
                 }
