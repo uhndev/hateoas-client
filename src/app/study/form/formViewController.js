@@ -14,11 +14,8 @@
   function StudyFormController($scope, $location, AuthService, toastr, API, Form) {
     var vm = this;
 
-    // private variables
-    var currStudy = _.getStudyFromUrl($location.path());
-
     // bindable variables
-    vm.currStudy = '';
+    vm.currStudy = _.getStudyFromUrl($location.path());
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;
@@ -35,7 +32,7 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+        AuthService.setSubmenu(vm.currStudy, data, $scope.dados.submenu);
       }
       return data;
     }
