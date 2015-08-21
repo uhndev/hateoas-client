@@ -8,10 +8,10 @@
 		.controller('AddUserController', AddUserController);
 
 	AddUserController.$inject = [
-		'$modalInstance', 'UserAccess', 'toastr', 'centreHref'
+		'$modalInstance', 'UserEnrollment', 'toastr', 'centreHref'
 	];
 
-	function AddUserController($modalInstance, UserAccess, toastr, centreHref) {
+	function AddUserController($modalInstance, UserEnrollment, toastr, centreHref) {
 		var vm = this;
 		// bindable variables
 		vm.newUser = {};
@@ -23,12 +23,12 @@
 		///////////////////////////////////////////////////////////////////////////
 
 		function addUser() {
-      var user = new UserAccess({
+      var user = new UserEnrollment({
         'collectionCentre': vm.newUser.collectionCentre,
         'centreAccess': vm.newUser.centreAccess,
         'user': vm.newUser.user
       });
-      user.$update({ id: vm.newUser.user })
+      user.$save()
       .then(function() {
         toastr.success('Added user to collection centre!', 'Collection Centre');
       }).finally(function () {
