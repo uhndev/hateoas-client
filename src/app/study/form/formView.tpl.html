@@ -38,32 +38,15 @@
     </div>
   </div>
 
-  <table id="Collection" ng-table="tableParams" class="table table-hover">
-    <thead>
-    <tr>
-      <th ng-repeat="column in studyForm.template.data"
-          ng-if="!column.data"
-          class="text-center sortable"
-          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-        {{ column.prompt }} <i class="pull-left" ng-class="{
-            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
-            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }"></i>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="item in studyForm.resource.items"
-        ng-click="studyForm.select(item)"
-        class="selectable"
-        ng-class="{'active': item === studyForm.selected}">
-      <td ng-repeat="column in studyForm.template.data"
-          ng-if="!column.data"
-          sortable="column.name">
-        {{ item[column.name] | formatter:column }}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <hateoas-table
+    url="{{studyForm.url}}"
+    query="studyForm.query"
+    selected="studyForm.selected"
+    filter="studyForm.filter"
+    allow="studyForm.allow"
+    template="studyForm.template"
+    resource="studyForm.resource"
+    on-resource-loaded="studyForm.onResourceLoaded">
+  </hateoas-table>
 
 </div>

@@ -45,32 +45,15 @@
     </div>
   </div>
 
-  <table id="Collection" ng-table="tableParams" class="table table-hover">
-    <thead>
-      <tr>
-        <th ng-repeat="column in studySubject.template.data"
-            ng-if="!column.data"
-            class="text-center sortable"
-            ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-          {{ column.prompt }} <i class="pull-left" ng-class="{
-            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
-            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }"></i>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="item in studySubject.resource.items"
-          ng-click="studySubject.select(item)"
-          class="selectable"
-          ng-class="{'active': item === studySubject.selected}">
-        <td ng-repeat="column in studySubject.template.data"
-            ng-if="!column.data"
-            sortable="column.name">
-          {{ item[column.name] | formatter:column }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <hateoas-table
+    url="{{studySubject.url}}"
+    query="studySubject.query"
+    selected="studySubject.selected"
+    filter="studySubject.filter"
+    allow="studySubject.allow"
+    template="studySubject.template"
+    resource="studySubject.resource"
+    on-resource-loaded="studySubject.onResourceLoaded">
+  </hateoas-table>
 
 </div>

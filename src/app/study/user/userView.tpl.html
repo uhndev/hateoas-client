@@ -44,55 +44,15 @@
     </div>
   </div>
 
-  <table id="Collection" ng-table="tableParams" class="table table-hover">
-    <thead>
-    <tr>
-      <th ng-repeat="column in studyUser.template.data"
-          ng-if="!column.data"
-          class="text-center sortable"
-          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-        {{ column.prompt }} <i class="pull-left" ng-class="{
-            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
-            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }"></i>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="item in studyUser.resource.items"
-        ng-click="studyUser.select(item)"
-        class="selectable"
-        ng-class="{'active': item === studyUser.selected}">
-      <td ng-repeat="column in studyUser.template.data"
-          ng-if="!column.data"
-          sortable="column.name">
-        <div ng-switch="column.name">
-          <div ng-switch-when="collectionCentre">
-            <select-loader
-              ng-if="studyUser.allow.update"
-              url="{{column.value}}"
-              is-atomic="true"
-              is-disabled="false"
-              values="item[column.name]"
-              labels="name"
-              output-properties="id">
-            </select-loader>
-            <p ng-if="!!!studyUser.allow.update">{{::item[column.name]}}</p>
-          </div>
-          <div ng-switch-when="centreAccess">
-            <select ng-if="studyUser.allow.update" ng-model="item[column.name]" class="form-control">
-              <option value="coordinator">Coordinator</option>
-              <option value="interviewer">Interviewer</option>
-            </select>
-            <p ng-if="!!!studyUser.allow.update">{{::item[column.name]}}</p>
-          </div>
-          <div ng-switch-default>
-            {{ item[column.name] | formatter:column }}
-          </div>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <hateoas-table
+    url="{{studyUser.url}}"
+    query="studyUser.query"
+    selected="studyUser.selected"
+    filter="studyUser.filter"
+    allow="studyUser.allow"
+    template="studyUser.template"
+    resource="studyUser.resource"
+    on-resource-loaded="studyUser.onResourceLoaded">
+  </hateoas-table>
 
 </div>

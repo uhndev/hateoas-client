@@ -41,14 +41,16 @@
         vm.template = data.template;
         vm.resource = angular.copy(data);
         var robj = _.pick(data.items, 'name', 'reb', 'administrator', 'pi');
+        robj.administrator = _.userObjToName(robj.administrator);
+        robj.pi = _.userObjToName(robj.pi);
 
         vm.studyInfo = {
           columns: [ 'Name', 'Value' ],
           rows: {
             'name': { title: 'Name', type: 'text' },
             'reb': { title: 'REB', type: 'text' },
-            'administrator': { title: 'Administrator', type: 'user' },
-            'pi': { title: 'PI', type: 'user' }
+            'administrator': { title: 'Administrator', type: 'text' },
+            'pi': { title: 'PI', type: 'text' }
           },
           tableData: _.objToPair(robj)
         };
