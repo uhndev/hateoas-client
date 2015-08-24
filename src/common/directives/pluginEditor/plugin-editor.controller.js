@@ -7,17 +7,17 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', 'FormService', 'toastr'];
+  PluginController.$inject = ['$scope', '$location', 'FormService', 'StudyFormService', 'toastr'];
 
-  function PluginController($scope, $location, FormService, toastr) {
+  function PluginController($scope, $location, FormService, StudyFormService, toastr) {
     // bindable variables
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
     $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
-    $scope.studyName = $location.search()['studyName'];
-    $scope.form = { name: '', questions: [], metaData: {}, studyName: $scope.studyName };
+    $scope.study = $location.search()['study'];
+    $scope.form = { name: '', questions: [], metaData: {} };
     $scope.sortableOptions = {
       cursor: 'move',
       revert: true
@@ -38,7 +38,7 @@
       if ($scope.idPlugin && !_.has($scope.form, 'id')) {
         FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
           // we only want non-hateoas attributes to load into our pluginEditor
-          setForm(_.pick(form, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
+          setForm(_.pick(form, 'id', 'name', 'questions', 'metaData', 'isDirty'));
         });
       }
     }
@@ -64,7 +64,7 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = angular.copy(_.pick(result, 'id', 'name', 'study', 'questions', 'metaData', 'isDirty'));
+      $scope.form = angular.copy(_.pick(result, 'id', 'name', 'questions', 'metaData', 'isDirty'));
       $scope.isSaving = false;
       toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
       $location.search('idPlugin', $scope.form.id);
@@ -77,10 +77,8 @@
     }
 
     function setForm(form) {
+      console.log(form);
       $scope.form = form;
-      if (!_.has(form, 'studyName')) {
-        $scope.form.studyName = $scope.studyName;
-      }
 
       angular.forEach($scope.form.questions, function (question) {
         if (angular.isUndefined(question.properties.defaultValue)) {
@@ -111,7 +109,16 @@
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
-            FormService.save($scope.form, onFormSaved, onFormError);
+            if (!$scope.study) {
+              FormService.save($scope.form, onFormSaved, onFormError);
+            } else {
+              var studyForm = new StudyFormService($scope.form);
+              studyForm.formID = $scope.form.id;
+              studyForm.studyID = $scope.study;
+              studyForm.$save()
+                .then(onFormSaved)
+                .catch(onFormError);
+            }
           }
         } else {
           toastr.warning('No questions added yet!', 'Plugin Editor');

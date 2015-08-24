@@ -38,13 +38,20 @@
         var robj = _.pick(data.items, 'name', 'study', 'contact');
         vm.title = data.items.name;
 
+        if (_.isObject(robj.contact)) {
+          robj.contact = _.userObjToName(robj.contact);
+        }
+        if (_.isObject(robj.study)) {
+          robj.study = robj.study.name;
+        }
+
         vm.centreInfo = {
           tableData: _.objToPair(robj),
           columns: ['Field', 'Value'],
           rows: {
             'name': { title: 'Name', type: 'text' },
-            'study': { title: 'Study', type: 'study' },
-            'contact': { title: 'Contact', type: 'user' }
+            'study': { title: 'Study', type: 'text' },
+            'contact': { title: 'Contact', type: 'text' }
           }
         };
 
@@ -53,9 +60,21 @@
           columns: ['Username', 'Email', 'Person', 'Role']
         };
 
+        var subjectColumns = ['Subject ID'];
+        // add columns for keys in studyMapping
+        _.forIn(_.first(data.items.subjects).studyMapping, function (value, key) {
+          subjectColumns.push(_.capitalize(key));
+        });
+        subjectColumns.push('Date of Event');
+
+        var modSubjects = _.map(data.items.subjects, function (subject) {
+          subject.subjectNumber = _.pad(subject.subjectNumber, 7);
+          return subject;
+        });
+
         vm.centreSubjects = {
-          tableData: data.items.subjects || [],
-          columns: ['Subject ID', 'Study Mapping', 'Date of Event']
+          tableData: modSubjects || [],
+          columns: subjectColumns
         };
       });
     }

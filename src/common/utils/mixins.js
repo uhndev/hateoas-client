@@ -12,7 +12,9 @@
 		'sum': sum,
 		'capitalizeFirst': capitalizeFirst,
 		'objToPair': objToPair,
-    'transformHateoas': transformHateoas
+    'transformHateoas': transformHateoas,
+    'pad': pad,
+    'userObjToName': userObjToName
 	});
 
 	function parseUrl(location, url) {
@@ -82,6 +84,20 @@
     } else {
       return data;
     }
+  }
+
+  function pad(input, width, padding) {
+    padding = padding || '0';
+    input = input + '';
+
+    return (input.length >= width ?
+      input :
+    new Array(width - input.length + 1)
+      .join(padding) + input);
+  }
+
+  function userObjToName(userObj) {
+    return [userObj.prefix, userObj.firstname, userObj.lastname].join(' ');
   }
 
 })();

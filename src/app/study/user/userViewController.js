@@ -4,25 +4,25 @@
 		.module('dados.study.user', [
 			'dados.user.service',
 			'dados.study.user.addUser.controller',
-			'dados.collectioncentre.service',
-			'dados.common.directives.selectLoader'
+			'dados.collectioncentre.service'
 		])
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
-		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams',
-		'sailsNgTable', 'CollectionCentreService', 'UserAccess', 'UserEnrollment', 'toastr', 'API'
+		'$scope', '$q', '$location', '$modal', 'AuthService', 'UserEnrollment', 'toastr', 'API'
 	];
 
-	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams,
-																SailsNgTable, CollectionCentre, UserAccess, UserEnrollment, toastr, API) {
+	function StudyUserController($scope, $q, $location, $modal, AuthService, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
 
+    // private variables
+    var currStudy = _.getStudyFromUrl($location.path());
+    var centreHref = "study/" + currStudy + "/collectioncentre";
+
 		// bindable variables
 		vm.allow = {};
-		vm.centreHref = '';
 		vm.query = { 'where' : {} };
 		vm.toggleEdit = true;
 		vm.selected = null;
@@ -32,77 +32,47 @@
 		vm.url = API.url() + $location.path();
 
 		// bindable methods
-		vm.select = select;
 		vm.openUser = openUser;
 		vm.openAddUser = openAddUser;
 		vm.saveChanges = saveChanges;
     vm.archiveUser = archiveUser;
-
-		init();
+    vm.onResourceLoaded = onResourceLoaded;
 
 		///////////////////////////////////////////////////////////////////////////
 
-		function init() {
-			var currStudy = _.getStudyFromUrl($location.path());
+    function onResourceLoaded(data) {
+      if (data) {
+        // depending on permissions, render select-loader or plaintext
+        var columnName = (vm.allow.update || vm.allow.create) ? "collectionCentre" : "collectionCentreName";
+        var columnType = (vm.allow.update || vm.allow.create) ? "integer" : "string";
+        // add role and collection centre fields
+        data.template.data = data.template.data.concat([
+          {
+            "name": columnName,
+            "type": columnType,
+            "prompt": "Collection Centre",
+            "value": centreHref
+          },
+          {
+            "name": "centreAccess",
+            "type": "string",
+            "prompt": "Role",
+            "value": "role"
+          }
+        ]);
 
-			var Resource = $resource(vm.url);
-			var TABLE_SETTINGS = {
-				page: 1,
-				count: 10,
-				filter: vm.filters
-			};
+        _.each(data.items, function (item) {
+          savedAccess[item.enrollmentId] = {};
+          savedAccess[item.enrollmentId].centreAccess = item.centreAccess;
+          savedAccess[item.enrollmentId].collectionCentre = item.collectionCentre;
+        });
 
-			$scope.tableParams = new TableParams(TABLE_SETTINGS, {
-				getData: function($defer, params) {
-					var api = SailsNgTable.parse(params, vm.query);
+        // initialize submenu
+        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+      }
 
-					Resource.get(api, function(data, headers) {
-						vm.selected = null;
-						var permissions = headers('allow').split(',');
-            _.each(permissions, function (permission) {
-              vm.allow[permission] = true;
-            });
-
-						vm.centreHref = "study/" + currStudy + "/collectioncentre";
-
-						// add role and collection centre fields
-						data.template.data = data.template.data.concat([
-							{
-								"name": "collectionCentre",
-								"type": "integer",
-								"prompt": "Collection Centre",
-								"value": vm.centreHref
-							},
-							{
-								"name": "centreAccess",
-								"type": "string",
-								"prompt": "Role",
-								"value": "role"
-							}
-						]);
-
-						vm.template = data.template;
-						vm.resource = angular.copy(data);
-
-						_.each(data.items, function (item) {
-							savedAccess[item.enrollmentId] = {};
-							savedAccess[item.enrollmentId].centreAccess = item.centreAccess;
-							savedAccess[item.enrollmentId].collectionCentre = item.collectionCentre;
-						});
-
-						params.total(data.total);
-						$defer.resolve(data.items);
-
-            // initialize submenu
-            AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
-					});
-				}
-			});
-		}
-
-		function select(item) {
-			vm.selected = (vm.selected === item ? null : item);
-		}
+      return data;
+    }
 
 		function openUser() {
       if (vm.selected.rel) {
@@ -119,13 +89,13 @@
 	      bindToController: true,
 	      resolve: {
 	        centreHref: function () {
-	          return vm.centreHref;
+	          return centreHref;
 	        }
 	      }
 	    });
 
 	    modalInstance.result.then(function () {
-	      $scope.tableParams.reload();
+        $scope.$broadcast('hateoas.client.refresh');
 	    });
 		}
 
@@ -146,7 +116,7 @@
 			.then(function(data) {
         if (!_.all(data, _.isUndefined)) {
           toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-          $scope.tableParams.reload();
+          $scope.$broadcast('hateoas.client.refresh');
         }
 			});
 		}
@@ -157,27 +127,9 @@
         var enrollment = new UserEnrollment({ id: vm.selected.enrollmentId });
         return enrollment.$delete({ id: vm.selected.enrollmentId }).then(function () {
           toastr.success('Archived user enrollment!', 'Enrollment');
-          $scope.tableParams.reload();
+          $scope.$broadcast('hateoas.client.refresh');
         });
       }
     }
-
-		// watchers
-		$scope.$watchCollection('studyUser.query.where', function(newQuery, oldQuery) {
-			if (newQuery && !_.isEqual(newQuery, oldQuery)) {
-				// Page changes will trigger a reload. To reduce the calls to
-				// the server, force a reload only when the user is already on
-				// page 1.
-				if ($scope.tableParams.page() !== 1) {
-					$scope.tableParams.page(1);
-				} else {
-					$scope.tableParams.reload();
-				}
-			}
-		});
-
-		$scope.$on('hateoas.client.refresh', function() {
-			init();
-		});
 	}
 })();

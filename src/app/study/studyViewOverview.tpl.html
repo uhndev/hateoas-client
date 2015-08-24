@@ -5,19 +5,6 @@
 				Study {{::study.resource.items.name}} Overview
 			</h1>
 		</div>
-		<div class="pull-right">
-			<br/>
-			<div id="Controls" class="align-right">
-				<hateoas-controls
-					ng-if='study.allow'
-					data-template='study.template'
-					data-href='{{study.resource.href}}'
-					data-slug='{{study.resource.slug}}'
-					data-permissions="study.allow"
-					data-item='study.resource.items'>
-				</hateoas-controls>
-			</div>
-		</div>
 	</div>
 	<hr/>
 	<div class="row">

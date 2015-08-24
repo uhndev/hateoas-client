@@ -11,14 +11,18 @@
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams', 'sailsNgTable',
-    'toastr', 'API', 'SubjectEnrollmentService', 'SubjectService'
+    '$scope', '$resource', '$location', '$modal', 'AuthService', 'toastr',
+    'API', 'StudyService', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
-  function StudySubjectController($scope, $resource, $location, $modal, AuthService, TableParams,
-                                  SailsNgTable, toastr, API, SubjectEnrollment, Subject) {
+  function StudySubjectController($scope, $resource, $location, $modal, AuthService, toastr,
+                                  API, Study, SubjectEnrollment, Subject) {
 
     var vm = this;
+
+    // private variables
+    var currStudy = _.getStudyFromUrl($location.path());
+    var centreHref = "study/" + currStudy + "/collectioncentre";
 
     // bindable variables
     vm.centreHref = '';
@@ -31,7 +35,7 @@
     vm.url = API.url() + $location.path();
 
     // bindable methods;
-    vm.select = select;
+    vm.onResourceLoaded = onResourceLoaded;
     vm.openSubject = openSubject;
     vm.openAddSubject = openAddSubject;
     vm.openEditSubject = openEditSubject;
@@ -41,47 +45,50 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Private Methods
+     */
     function init() {
-      var currStudy = _.getStudyFromUrl($location.path());
-      vm.centreHref = "study/" + currStudy + "/collectioncentre";
-      var Study = $resource(API.url() + '/study/' + currStudy);
-      Study.get(function (data, headers) {
-        vm.study = data.items;
-      });
-
-      var Resource = $resource(vm.url);
-      var TABLE_SETTINGS = {
-        page: 1,
-        count: 10,
-        filter: vm.filters
-      };
-
-      $scope.tableParams = new TableParams(TABLE_SETTINGS, {
-        getData: function($defer, params) {
-          var api = SailsNgTable.parse(params, vm.query);
-
-          Resource.get(api, function(data, headers) {
-            vm.selected = null;
-            var permissions = headers('allow').split(',');
-            _.each(permissions, function (permission) {
-              vm.allow[permission] = true;
-            });
-
-            vm.template = data.template;
-            vm.resource = angular.copy(data);
-
-            params.total(data.total);
-            $defer.resolve(data.items);
-
-            // initialize submenu
-            AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
-          });
-        }
+      Study.query({ name: currStudy }).$promise.then(function (data) {
+        vm.study = _.first(data);
       });
     }
 
-    function select(item) {
-      vm.selected = (vm.selected === item ? null : item);
+    function loadModal(type) {
+      var modalSettings = {
+        animation: true,
+        templateUrl: 'study/subject/' + type + 'SubjectModal.tpl.html',
+        controller: _.capitalize(type) + 'SubjectController',
+        controllerAs: type + 'Subject',
+        bindToController: true,
+        resolve: {
+          study: function () {
+            return angular.copy(vm.study);
+          },
+          centreHref: function () {
+            return centreHref;
+          }
+        }
+      };
+
+      if (type === 'edit') {
+        modalSettings.resolve.subject = function() {
+          return angular.copy(vm.selected);
+        };
+      }
+
+      return modalSettings;
+    }
+
+    /**
+     * Public Methods
+     */
+    function onResourceLoaded(data) {
+      if (data) {
+        // initialize submenu
+        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+      }
+      return data;
     }
 
     function openSubject() {
@@ -91,49 +98,14 @@
     }
 
     function openAddSubject() {
-      var modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'study/subject/addSubjectModal.tpl.html',
-        controller: 'AddSubjectController',
-        controllerAs: 'addSubject',
-        bindToController: true,
-        resolve: {
-          study: function() {
-            return angular.copy(vm.study);
-          },
-          centreHref: function () {
-            return vm.centreHref;
-          }
-        }
-      });
-
-      modalInstance.result.then(function () {
-        $scope.tableParams.reload();
+      $modal.open(loadModal('add')).result.then(function () {
+        $scope.$broadcast('hateoas.client.refresh');
       });
     }
 
     function openEditSubject() {
-      var modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'study/subject/editSubjectModal.tpl.html',
-        controller: 'EditSubjectController',
-        controllerAs: 'editSubject',
-        bindToController: true,
-        resolve: {
-          subject: function() {
-            return angular.copy(vm.selected);
-          },
-          study: function() {
-            return angular.copy(vm.study);
-          },
-          centreHref: function () {
-            return vm.centreHref;
-          }
-        }
-      });
-
-      modalInstance.result.then(function () {
-        $scope.tableParams.reload();
+      $modal.open(loadModal('edit')).result.then(function () {
+        $scope.$broadcast('hateoas.client.refresh');
       });
     }
 
@@ -143,27 +115,9 @@
         var enrollment = new SubjectEnrollment({ id: vm.selected.id });
         return enrollment.$delete({ id: vm.selected.id }).then(function () {
           toastr.success('Archived subject enrollment!', 'Enrollment');
-          $scope.tableParams.reload();
+          $scope.$broadcast('hateoas.client.refresh');
         });
       }
     }
-
-    // watchers
-    $scope.$watchCollection('studySubject.query.where', function(newQuery, oldQuery) {
-      if (newQuery && !_.isEqual(newQuery, oldQuery)) {
-        // Page changes will trigger a reload. To reduce the calls to
-        // the server, force a reload only when the user is already on
-        // page 1.
-        if ($scope.tableParams.page() !== 1) {
-          $scope.tableParams.page(1);
-        } else {
-          $scope.tableParams.reload();
-        }
-      }
-    });
-
-    $scope.$on('hateoas.client.refresh', function() {
-      init();
-    });
   }
 })();

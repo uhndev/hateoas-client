@@ -13,57 +13,59 @@
     </query-builder>
   </div>
 
-  <div id="Controls" class="pull-right">
-    <div class="btn-group">
-      <a type="button" class="btn btn-default"
-              ng-if="studyForm.allow.create"
-              ng-href="#/plugineditor?studyName={{studyForm.currStudy}}">
-        <i class="fa fa-file-o"></i>
-        Create Form
-      </a>
-      <a type="button" class="btn btn-default"
-              ng-if="studyForm.allow.update"
-              ng-href="#/plugineditor?&idPlugin={{studyForm.selected.id}}"
-              ng-disabled="!!!studyForm.selected">
-        <i class="fa fa-edit"></i>
-        Edit Form
-      </a>
-      <button type="button" class="btn btn-default"
-              ng-if="studyForm.allow.delete"
-              ng-click="studyForm.archiveForm()"
-              ng-disabled="!!!studyForm.selected">
-        <i class="fa fa-trash-o"></i>
-        Archive
-      </button>
+  <div id="Controls" class="row">
+
+    <div class="col-md-6">
+      <form class="form-inline">
+        <div class="form-group">
+          <select ng-model="studyForm.formToAdd"
+                  class="form-control"
+                  ng-options="selected.id as selected.name for selected in studyForm.forms | orderBy:'name'">
+            <option value="" disabled>Select a form to add</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </form>
     </div>
+
+    <div class="pull-right">
+      <div class="btn-group">
+        <a type="button" class="btn btn-default"
+           ng-if="studyForm.allow.create"
+           ng-href="#/plugineditor?study={{studyForm.study}}">
+          <i class="fa fa-file-o"></i>
+          Create Form
+        </a>
+        <a type="button" class="btn btn-default"
+           ng-if="studyForm.allow.update"
+           ng-href="#/plugineditor?&idPlugin={{studyForm.selected.id}}"
+           ng-disabled="!!!studyForm.selected">
+          <i class="fa fa-edit"></i>
+          Edit Form
+        </a>
+        <button type="button" class="btn btn-default"
+                ng-if="studyForm.allow.delete"
+                ng-click="studyForm.archiveForm()"
+                ng-disabled="!!!studyForm.selected">
+          <i class="fa fa-trash-o"></i>
+          Archive
+        </button>
+      </div>
+    </div>
+
   </div>
 
-  <table id="Collection" ng-table="tableParams" class="table table-hover">
-    <thead>
-    <tr>
-      <th ng-repeat="column in studyForm.template.data"
-          ng-if="!column.data"
-          class="text-center sortable"
-          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-        {{ column.prompt }} <i class="pull-left" ng-class="{
-            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
-            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }"></i>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="item in studyForm.resource.items"
-        ng-click="studyForm.select(item)"
-        class="selectable"
-        ng-class="{'active': item === studyForm.selected}">
-      <td ng-repeat="column in studyForm.template.data"
-          ng-if="!column.data"
-          sortable="column.name">
-        {{ item[column.name] | formatter:column }}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <hateoas-table
+    url="{{studyForm.url}}"
+    query="studyForm.query"
+    selected="studyForm.selected"
+    filter="studyForm.filter"
+    allow="studyForm.allow"
+    template="studyForm.template"
+    resource="studyForm.resource"
+    on-resource-loaded="studyForm.onResourceLoaded">
+  </hateoas-table>
 
 </div>
