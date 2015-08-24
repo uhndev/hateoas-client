@@ -2,19 +2,23 @@
   'use strict';
   angular
     .module('dados.study.form', [
+      'dados.study.service',
       'dados.common.directives.hateoas.controls',
       'dados.common.directives.pluginEditor.formService'
     ])
     .controller('StudyFormController', StudyFormController);
 
   StudyFormController.$inject = [
-    '$scope', '$location', 'AuthService', 'toastr', 'API', 'FormService'
+    '$scope', '$resource', '$location', 'AuthService', 'toastr', 'API', 'StudyService', 'FormService', 'StudyFormService'
   ];
 
-  function StudyFormController($scope, $location, AuthService, toastr, API, Form) {
+  function StudyFormController($scope, $resource, $location, AuthService, toastr, API, Study, Form, StudyForm) {
     var vm = this;
 
     // bindable variables
+    vm.study = '';
+    vm.forms = Form.query();
+    vm.formToAdd = '';
     vm.currStudy = _.getStudyFromUrl($location.path());
     vm.allow = {};
     vm.query = { 'where' : {} };
@@ -26,8 +30,17 @@
     // bindable methods;
     vm.archiveForm = archiveForm;
     vm.onResourceLoaded = onResourceLoaded;
+    vm.addFormToStudy = addFormToStudy;
+
+    init();
 
     ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      Study.query({ name: vm.currStudy }).$promise.then(function (data) {
+        vm.study = _.first(data).id;
+      });
+    }
 
     function onResourceLoaded(data) {
       if (data) {
@@ -40,12 +53,23 @@
     function archiveForm() {
       var conf = confirm("Are you sure you want to archive this form?");
       if (conf) {
-        var form = new Form({ id: vm.selected.id });
-        return form.$delete({ id: vm.selected.id }).then(function () {
+        var studyForm = new StudyForm({ formID: vm.selected.id, studyID: vm.study });
+        return studyForm.$delete().then(function () {
           toastr.success('Archived form from '+ vm.currStudy + '!', 'Form');
           $scope.$broadcast('hateoas.client.refresh');
         });
       }
+    }
+
+    function addFormToStudy() {
+      console.log(vm.formToAdd);
+      var studyForm = new StudyForm();
+      studyForm.formID = vm.formToAdd;
+      studyForm.studyID = vm.study;
+      studyForm.$save().then(function () {
+        toastr.success('Added form to ' + vm.currStudy + '!', 'Form');
+        $scope.$broadcast('hateoas.client.refresh');
+      });
     }
   }
 })();

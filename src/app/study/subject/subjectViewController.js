@@ -12,11 +12,11 @@
 
   StudySubjectController.$inject = [
     '$scope', '$resource', '$location', '$modal', 'AuthService', 'toastr',
-    'API', 'SubjectEnrollmentService', 'SubjectService'
+    'API', 'StudyService', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
   function StudySubjectController($scope, $resource, $location, $modal, AuthService, toastr,
-                                  API, SubjectEnrollment, Subject) {
+                                  API, Study, SubjectEnrollment, Subject) {
 
     var vm = this;
 
@@ -49,9 +49,8 @@
      * Private Methods
      */
     function init() {
-      var Study = $resource(API.url() + '/study/' + currStudy);
-      Study.get(function (data, headers) {
-        vm.study = data.items;
+      Study.query({ name: currStudy }).$promise.then(function (data) {
+        vm.study = _.first(data);
       });
     }
 

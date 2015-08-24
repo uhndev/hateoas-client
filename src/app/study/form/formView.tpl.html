@@ -13,29 +13,48 @@
     </query-builder>
   </div>
 
-  <div id="Controls" class="pull-right">
-    <div class="btn-group">
-      <a type="button" class="btn btn-default"
-              ng-if="studyForm.allow.create"
-              ng-href="#/plugineditor?studyName={{studyForm.currStudy}}">
-        <i class="fa fa-file-o"></i>
-        Create Form
-      </a>
-      <a type="button" class="btn btn-default"
-              ng-if="studyForm.allow.update"
-              ng-href="#/plugineditor?&idPlugin={{studyForm.selected.id}}"
-              ng-disabled="!!!studyForm.selected">
-        <i class="fa fa-edit"></i>
-        Edit Form
-      </a>
-      <button type="button" class="btn btn-default"
-              ng-if="studyForm.allow.delete"
-              ng-click="studyForm.archiveForm()"
-              ng-disabled="!!!studyForm.selected">
-        <i class="fa fa-trash-o"></i>
-        Archive
-      </button>
+  <div id="Controls" class="row">
+
+    <div class="col-md-6">
+      <form class="form-inline">
+        <div class="form-group">
+          <select ng-model="studyForm.formToAdd"
+                  class="form-control"
+                  ng-options="selected.id as selected.name for selected in studyForm.forms | orderBy:'name'">
+            <option value="" disabled>Select a form to add</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </form>
     </div>
+
+    <div class="pull-right">
+      <div class="btn-group">
+        <a type="button" class="btn btn-default"
+           ng-if="studyForm.allow.create"
+           ng-href="#/plugineditor?study={{studyForm.study}}">
+          <i class="fa fa-file-o"></i>
+          Create Form
+        </a>
+        <a type="button" class="btn btn-default"
+           ng-if="studyForm.allow.update"
+           ng-href="#/plugineditor?&idPlugin={{studyForm.selected.id}}"
+           ng-disabled="!!!studyForm.selected">
+          <i class="fa fa-edit"></i>
+          Edit Form
+        </a>
+        <button type="button" class="btn btn-default"
+                ng-if="studyForm.allow.delete"
+                ng-click="studyForm.archiveForm()"
+                ng-disabled="!!!studyForm.selected">
+          <i class="fa fa-trash-o"></i>
+          Archive
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <hateoas-table

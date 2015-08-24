@@ -13,4 +13,5 @@
 	function StudyService(ResourceFactory, STUDY_API) {
 		return ResourceFactory.create(STUDY_API.url);
 	}
+
 })();
