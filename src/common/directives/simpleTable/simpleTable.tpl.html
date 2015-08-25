@@ -1,65 +1,21 @@
 <table class="table table-hover">
   <thead>
-    <tr>
-      <th ng-repeat="col in table.columns">{{col}}</th>
-    </tr>
+  <tr>
+    <th ng-repeat="col in table.columns">{{col}}</th>
+  </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="item in table.tableData">
-      <td>{{table.rows[item.name].title}}</td>
-      <td ng-switch="table.rows[item.name].type">
-        <div ng-switch-when="users">
-          <select-loader
-            url="user"
-            is-atomic="false"
-            is-disabled="true"
-            values="item.value"
-            labels="prefix firstname lastname"
-            output-properties="id">
-          </select-loader>
-        </div>      
-        <div ng-switch-when="user">
-          <select-loader
-            url="user"
-            is-atomic="true"
-            is-disabled="true"
-            values="item.value"
-            labels="prefix firstname lastname"
-            output-properties="id">
-          </select-loader>
-        </div>
-        <div ng-switch-when="studies">
-          <select-loader
-            url="study"
-            is-atomic="false"
-            is-disabled="true"
-            values="item.value"
-            labels="name"
-            output-properties="id">
-          </select-loader>
-        </div>
-        <div ng-switch-when="study">
-          <select-loader
-            url="study"
-            is-atomic="true"
-            is-disabled="true"
-            values="item.value"
-            labels="name"
-            output-properties="id">
-          </select-loader>          
-        </div>
-        <div ng-switch-when="role">
-          <select-loader
-            url="role"
-            is-atomic="true"
-            is-disabled="true"
-            values="item.value"
-            labels="name"
-            output-properties="id">
-          </select-loader>          
-        </div>
-        <div ng-switch-default>{{item.value}}</div>
-      </td>
-    </tr>
+  <tr ng-repeat="item in table.tableData">
+    <td>{{table.rows[item.name].title}}</td>
+    <td ng-switch="table.rows[item.name].type">
+      <div ng-switch-when="user">
+        <a ng-href="#/user/{{item.value.id}}">{{item.value.prefix}} {{item.value.firstname}} {{item.value.lastname}}</a>
+      </div>
+      <div ng-switch-when="study">
+        <a ng-href="#/study/{{item.value.name}}">{{item.value.name}}</a>
+      </div>
+      <div ng-switch-default>{{item.value}}</div>
+    </td>
+  </tr>
   </tbody>
 </table>

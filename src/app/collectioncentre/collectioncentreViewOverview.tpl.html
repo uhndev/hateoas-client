@@ -42,7 +42,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in ::cc.centreUsers.tableData">
+							<tr ng-repeat="row in ::cc.centreUsers.tableData"
+                  hateoas-link link-type="user" link-id="{{::row.id}}">
 								<td>{{::row.username}}</td>
 								<td>{{::row.email}}</td>
 								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
@@ -68,7 +69,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in ::cc.centreSubjects.tableData">
+							<tr ng-repeat="row in ::cc.centreSubjects.tableData"
+                  hateoas-link link-type="subjectenrollment" link-id="{{::row.id}}">
 								<td>{{::row.subjectNumber}}</td>
 								<td ng-repeat="(key, value) in ::row.studyMapping">
                   {{::value}}

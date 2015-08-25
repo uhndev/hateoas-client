@@ -41,11 +41,15 @@
             </tr>
             <tr>
               <td><strong>Study</strong></td>
-              <td>{{subject.resource.studyName}}</td>
+              <td>
+                <a ng-href="#/study/{{::subject.resource.studyName}}">{{::subject.resource.studyName}}</a>
+              </td>
             </tr>
             <tr>
               <td><strong>Collection Centre</strong></td>
-              <td>{{subject.resource.collectionCentreName}}</td>
+              <td>
+                <a ng-href="#/study/{{::subject.resource.collectionCentre}}">{{::subject.resource.collectionCentreName}}</a>
+              </td>
             </tr>
             <tr ng-repeat="(key, value) in subject.resource.studyMapping">
               <td><strong>{{key | uppercase}}</strong></td>

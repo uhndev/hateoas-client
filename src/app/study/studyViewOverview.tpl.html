@@ -27,8 +27,12 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="row in study.collectionCentres.tableData">
-										<td>{{row.name}}</td>
-										<td>{{row.contact}}</td>
+										<td>
+                      <a ng-href="#/collectioncentre/{{row.id}}">{{row.name}}</a>
+                    </td>
+										<td>
+                      <a ng-href="#/user/{{row.contact}}">{{row.contactName}}</a>
+                    </td>
 										<td>{{row.coordinators_count}}</td>
 										<td>{{row.subjects_count}}</td>
 									</tr>

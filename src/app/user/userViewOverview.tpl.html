@@ -1,67 +1,72 @@
 <div ng-controller="UserOverviewController as user">
-	<div class="row">
-		<div class="col-md-8">
-			<h1 id="Title">
-				{{user.title}}
-			</h1>
-		</div>
-		<div class="pull-right">
-			<br/>
-			<div id="Controls" class="align-right">
-				<hateoas-controls
-					ng-if='user.allow'
-					data-template='user.template'
-					data-href='{{user.resource.href}}'
-					data-slug='{{user.resource.slug}}'
-					data-permissions="user.allow"
-					data-item='user.resource.items'>
-				</hateoas-controls>
-			</div>
-		</div>
-	</div>
-	<hr/>
+  <div class="row">
+    <div class="col-md-8">
+      <h1 id="Title">
+        {{user.title}}
+      </h1>
+    </div>
+    <div class="pull-right">
+      <br/>
 
-	<div class="row">
-		<!-- List User Info -->
-		<div class="col-md-4">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">User Information</h3>
-				</div>
-				<div class="panel-body">
-					<simple-table
-						rows="user.userInfo.rows"
-						columns="user.userInfo.columns"
-						table-data="user.userInfo.tableData">
-					</simple-table>
-				</div>
-			</div>
-		</div>
-		<!-- List User Studies -->
-		<div class="col-md-8">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Studies</h3>
-				</div>
-				<div class="panel-body">
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th ng-repeat="col in user.userStudies.columns">
-									{{col.title}}
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="row in user.userStudies.tableData">
-								<td>{{row.study}}</td>
-								<td>{{row.collectionCentre}}</td>
-								<td>{{row.centreAccess}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+      <div id="Controls" class="align-right">
+        <hateoas-controls
+          ng-if='user.allow'
+          data-template='user.template'
+          data-href='{{user.resource.href}}'
+          data-slug='{{user.resource.slug}}'
+          data-permissions="user.allow"
+          data-item='user.resource.items'>
+        </hateoas-controls>
+      </div>
+    </div>
+  </div>
+  <hr/>
+
+  <div class="row">
+    <!-- List User Info -->
+    <div class="col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">User Information</h3>
+        </div>
+        <div class="panel-body">
+          <simple-table
+            rows="user.userInfo.rows"
+            columns="user.userInfo.columns"
+            table-data="user.userInfo.tableData">
+          </simple-table>
+        </div>
+      </div>
+    </div>
+    <!-- List User Studies -->
+    <div class="col-md-8">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Studies</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th ng-repeat="col in user.userStudies.columns">
+                {{col.title}}
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in user.userStudies.tableData">
+              <td>
+                <a ng-href="#/study/{{::row.study}}">{{::row.study}}</a>
+              </td>
+              <td>
+                <a ng-href="#/collectioncentre/{{::row.collectionCentre}}">{{::row.collectionCentreName}}</a>
+              </td>
+              <td>{{row.centreAccess}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

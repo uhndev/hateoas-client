@@ -38,21 +38,14 @@
         var robj = _.pick(data.items, 'name', 'study', 'contact');
         vm.title = data.items.name;
 
-        if (_.isObject(robj.contact)) {
-          robj.contact = _.userObjToName(robj.contact);
-        }
-        if (_.isObject(robj.study)) {
-          robj.study = robj.study.name;
-        }
-
         vm.centreInfo = {
-          tableData: _.objToPair(robj),
           columns: ['Field', 'Value'],
           rows: {
             'name': { title: 'Name', type: 'text' },
-            'study': { title: 'Study', type: 'text' },
-            'contact': { title: 'Contact', type: 'text' }
-          }
+            'study': { title: 'Study', type: 'study' },
+            'contact': { title: 'Contact', type: 'user' }
+          },
+          tableData: _.objToPair(robj)
         };
 
         vm.centreUsers = {

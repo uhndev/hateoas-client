@@ -9,10 +9,10 @@
     .controller('StudyFormController', StudyFormController);
 
   StudyFormController.$inject = [
-    '$scope', '$resource', '$location', 'AuthService', 'toastr', 'API', 'StudyService', 'FormService', 'StudyFormService'
+    '$scope', '$location', 'AuthService', 'toastr', 'API', 'StudyService', 'FormService', 'StudyFormService'
   ];
 
-  function StudyFormController($scope, $resource, $location, AuthService, toastr, API, Study, Form, StudyForm) {
+  function StudyFormController($scope, $location, AuthService, toastr, API, Study, Form, StudyForm) {
     var vm = this;
 
     // bindable variables

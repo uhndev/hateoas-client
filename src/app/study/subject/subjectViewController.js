@@ -11,11 +11,11 @@
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'AuthService', 'toastr',
+    '$scope', '$location', '$modal', 'AuthService', 'toastr',
     'API', 'StudyService', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
-  function StudySubjectController($scope, $resource, $location, $modal, AuthService, toastr,
+  function StudySubjectController($scope, $location, $modal, AuthService, toastr,
                                   API, Study, SubjectEnrollment, Subject) {
 
     var vm = this;

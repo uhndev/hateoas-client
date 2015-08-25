@@ -10,20 +10,24 @@
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookieStore', 'AuthService', 'toastr'];
+  AuthController.$inject = ['$location', '$state', '$cookieStore', 'AuthService'];
 
-  function AuthController($location, $state, $cookieStore, AuthService, toastr) {
+  function AuthController($location, $state, $cookieStore, AuthService) {
     var vm = this;
     vm.error = '';
-    
+
     // check if already logged in
     if (AuthService.isAuthenticated()) {
-      $location.url('/');
+      $location.url('/study');
+      $state.go('hateoas');
+    } else {
+      $location.url('/login');
+      $state.go('login');
     }
 
     /**
      * [success]
-     * Success callback following attempted login by user; on success, user info and token 
+     * Success callback following attempted login by user; on success, user info and token
      * are stored in cookie with expiration set in ms.
      * @param  {Object} user response from server containing user, group, and token
      * @return {Null}
@@ -43,7 +47,7 @@
     /**
      * [error]
      * Error callback on unsuccessful login
-     * @param  {Object} err 
+     * @param  {Object} err
      */
     var error = function(err) {
       vm.error = err;
@@ -58,7 +62,7 @@
       AuthService.login(vm.credentials, success, error);
     };
 
-  } 
-  
+  }
+
 })();
 
