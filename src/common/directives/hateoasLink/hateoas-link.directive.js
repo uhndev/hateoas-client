@@ -14,14 +14,13 @@
     .module('dados.common.directives.hateoasLink', [])
     .directive('hateoasLink', hateoasLink);
 
-  function hateoasLink($compile, $location, API) {
+  function hateoasLink($location, API) {
     return {
       restrict: 'A',
       scope: {
         url: '@',
         linkType: '@',
-        linkId: '@',
-        text: '@'
+        linkId: '@'
       },
       link: function(scope, elem) {
         // compute link to navigate to
