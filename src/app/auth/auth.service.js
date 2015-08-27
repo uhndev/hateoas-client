@@ -88,7 +88,7 @@
         // from workflowstate and current url study
         // replace wildcards in href with study name
         _.map(resource.links, function(link) {
-          if (link.rel === 'overview' && link.prompt === '*') {
+          if (link.rel === 'name' && link.prompt === '*') {
             link.prompt = currStudy;
           }
           if (_.contains(link.href, '*')) {

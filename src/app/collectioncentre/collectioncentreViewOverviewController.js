@@ -8,10 +8,10 @@
     .controller('CollectionCentreOverviewController', CollectionCentreOverviewController);
 
   CollectionCentreOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API'
+    '$scope', '$resource', '$location', 'API', 'AuthService'
   ];
 
-  function CollectionCentreOverviewController($scope, $resource, $location, API) {
+  function CollectionCentreOverviewController($scope, $resource, $location, API, AuthService) {
     var vm = this;
 
     // bindable variables
@@ -37,6 +37,9 @@
         vm.resource = angular.copy(data);
         var robj = _.pick(data.items, 'name', 'study', 'contact');
         vm.title = data.items.name;
+
+        // initialize submenu
+        AuthService.setSubmenu(vm.resource.items.study.name, data, $scope.dados.submenu);
 
         vm.centreInfo = {
           columns: ['Field', 'Value'],

@@ -5,10 +5,10 @@
 		.controller('HeaderController', HeaderController);
 
 	HeaderController.$inject = [
-		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API'
+		'$location', '$rootScope', 'StudyService', 'AuthService', 'API'
 	];
 
-	function HeaderController($scope, $location, $state, $rootScope, AuthService, API) {
+	function HeaderController($location, $rootScope, Study, AuthService, API) {
 
 		var vm = this;
 
@@ -16,6 +16,7 @@
 		vm.isVisible = AuthService.isAuthenticated();
 		vm.currentUser = '';
 		vm.navigation = [];
+    vm.studies = Study.query();
 
 		// bindable methods
 		vm.logout = logout;
@@ -32,13 +33,9 @@
 			updateActive();
 		}
 
-		function follow(link) {
-      if (link) {
-        if (link.rel) {
-          $location.path(_.convertRestUrl(link.href, API.prefix));
-        }
-      }
-    }
+    /**
+     * Private Methods
+     */
 
 		function updateHeader() {
 			if (AuthService.currentUser.group) {
@@ -74,6 +71,18 @@
 					($location.path().toLowerCase() === clientUrl.toLowerCase());
 			});
 		}
+
+    /**
+     * Public Methods
+     */
+
+    function follow(link) {
+      if (link) {
+        if (link.rel) {
+          $location.path(_.convertRestUrl(link.href, API.prefix));
+        }
+      }
+    }
 
 		function logout() {
 			vm.isVisible = false;

@@ -1,24 +1,15 @@
-<div class="container" ng-controller="FormBuilderController as formbuilder">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="pull-left">
-				<h1 id="Title">
-				  Form Builder
-				</h1>
-			</div>
-			<div class="pull-right">
-				<br/>
-			  <button type="button" 
-			    class="btn btn-success pull-right" 
-			    ng-disabled="formbuilder.form.form_questions === 0" 
-			    ng-click="formbuilder.saveForm()">
-			    Save Form
-			  </button>
-			</div>
-		</div>
-	</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="pull-left">
+        <h1 id="Title">
+          Form Builder
+        </h1>
+      </div>
+    </div>
+  </div>
 
   <hr/>
 
-  <form-builder form="formbuilder.form"></form-builder>
+  <plugin-editor></plugin-editor>
 </div>

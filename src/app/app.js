@@ -19,6 +19,7 @@
     'dados.header',
     'dados.workflow',
     'dados.formbuilder',
+    'dados.systemformbuilder',
     'dados.collectioncentre',
 
     'dados.filters.formatter',
@@ -69,20 +70,12 @@
       var page = $location.path();
       if (_.has(Auth.currentUser, 'group') &&
           Auth.currentUser.group.level > 1 &&
-          (page == '/formbuilder' || page == '/plugineditor' || page == '/access')) {
+          (page == '/systemformbuilder' || page == '/formbuilder' || page == '/access')) {
         $location.path('/400');
       }
     });
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
-      var prevBaseUrl = _.parseUrl($location, prev)[0];
-      var basePath = _.pathnameToArray($location.path());
-      var currBaseUrl = _.first(basePath);
-      if (prevBaseUrl !== currBaseUrl ||
-          currBaseUrl === 'study' && basePath.length === 1) {
-        vm.submenu = {};
-      }
-
       $scope.pageTitle = _.titleCase($location.path()
                                        .replace(/\//g, ' ')
                                        .toLowerCase()

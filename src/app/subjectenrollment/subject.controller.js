@@ -10,10 +10,10 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$location', '$modal', 'ngTableParams', 'API', 'ResourceFactory'
+    '$scope', '$resource', '$location', '$modal', 'ngTableParams', 'API', 'AuthService'
   ];
 
-  function SubjectOverviewController($scope, $location, $modal, TableParams, API, ResourceFactory) {
+  function SubjectOverviewController($scope, $resource, $location, $modal, TableParams, API, AuthService) {
     var vm = this;
 
     // bindable variables
@@ -153,14 +153,16 @@
     });
 
     function init() {
-      var SubjectEnrollment = ResourceFactory.create(vm.url);
+      var SubjectEnrollment = $resource(vm.url);
       SubjectEnrollment.get(function(data, headers) {
         vm.template = data.template;
-        vm.resource = angular.copy(data);
+        vm.resource = angular.copy(data.items);
         var permissions = headers('allow').split(',');
         _.each(permissions, function (permission) {
           vm.allow[permission] = true;
         });
+        // initialize submenu
+        AuthService.setSubmenu(vm.resource.studyName, data, $scope.dados.submenu);
       });
     }
 

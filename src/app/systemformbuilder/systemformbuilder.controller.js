@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('dados.formbuilder.controller', ['dados.form.service'])
+    .module('dados.systemformbuilder.controller', ['dados.form.service'])
     .controller('FormBuilderController', FormBuilderController);
 
   FormBuilderController.$inject = ['$location', '$timeout', '$resource', 'toastr', 'SystemFormService'];
