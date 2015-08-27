@@ -107,6 +107,8 @@
   .navbar-default {
     background-color: @headerColour;
     border-color: @headerColour;
+    z-index: 20;
+    position: relative;
   }
 }
 .menuWrapper {
@@ -116,8 +118,6 @@
   .navbar-default {
     background-color: @menuColour;
     border-color: @menuColour;
-    z-index: 99999;
-    position: relative;
   }
 }
 .submenuWrapper {
@@ -128,6 +128,8 @@
   .navbar-inverse {
     background-color: @submenuColour;
     border-color: @submenuColour;
+    z-index: 10;
+    position: relative;
   }
   -moz-box-shadow: 0px 4px 7px -2px #666;
   -webkit-box-shadow: 0px 4px 7px -2px #666;

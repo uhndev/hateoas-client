@@ -2,6 +2,7 @@
 	angular.module('dados.common.directives', [
     'dados.common.directives.dadosError',
     'dados.common.directives.formBuilder',
+    'dados.common.directives.generatePassword',
     'dados.common.directives.hateoas',
     'dados.common.directives.hateoasTable',
     'dados.common.directives.hateoasLink',

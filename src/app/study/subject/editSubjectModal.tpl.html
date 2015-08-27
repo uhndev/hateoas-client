@@ -32,10 +32,10 @@
       <label for="password" class="col-sm-3 control-label">Password&nbsp;</label>
 
       <div class="col-sm-9">
-        <input type="password" name="password" class="form-control"
+        <input type="text" name="password" class="form-control"
                ng-model="editSubject.userData.password" ng-minlength="8"
-               ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/">
-
+               ng-pattern="/(?=.*[a-z])(?=.*[^a-zA-Z])/"
+               generate-password for-input="editSubject.userData.password" disabled/>
         <p ng-show="subjectForm.password.$invalid && !subjectForm.password.$pristine"
            class="pull-right required-error">
           Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1
