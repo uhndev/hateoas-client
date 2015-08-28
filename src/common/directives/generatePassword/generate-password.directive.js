@@ -1,3 +1,11 @@
+/**
+ * @name generate-password
+ * @description Simple directive that wraps an input tag with button to generate
+ *              a randomized password to be bound to the input field's ng-model.
+ * @example <input ng-model="passwordValue"
+ *                 generate-password for-input="passwordValue" />
+ */
+
 (function() {
   'use strict';
 
