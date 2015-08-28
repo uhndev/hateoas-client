@@ -1,10 +1,11 @@
 (function() {
   'use strict';
   angular
-    .module('dados.common.interceptors.httprequest', [])
+    .module('dados.common.interceptors.httprequest', ['sails.io'])
     .factory('httpRequestInterceptor', httpRequestInterceptor)
-    .config(function ($httpProvider) {
+    .config(function ($httpProvider, $sailsSocketProvider) {
       $httpProvider.interceptors.push('httpRequestInterceptor');
+      $sailsSocketProvider.interceptors.push('httpRequestInterceptor');
     });
 
   httpRequestInterceptor.$inject = ['$q', '$location', '$injector'];
