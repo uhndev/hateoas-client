@@ -46,7 +46,6 @@
         }
 
         vm.userInfo = {
-          columns: [ 'Name', 'Value' ],
           rows: {
             'username': { title: 'Username', type: 'text' },
             'email': { title: 'Email', type: 'text' },

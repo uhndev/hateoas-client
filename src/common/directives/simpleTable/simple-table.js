@@ -9,7 +9,6 @@
         restrict: 'E',
         replace: true,
         scope: {
-          columns: '=',
           rows: '=',
           tableData: '='
         },
@@ -26,11 +25,10 @@
     var vm = this;
 
     // bindable variables
-    vm.columns = vm.columns || [];
     // each row has field: { title, type }
     vm.rows = vm.rows || [];
     // each tableData has name value pair
-    vm.tableData = vm.tableData || [];   
+    vm.tableData = vm.tableData || [];
   }
 
 })();

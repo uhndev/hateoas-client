@@ -1,12 +1,6 @@
 <table class="table table-hover">
-  <thead>
-  <tr>
-    <th ng-repeat="col in table.columns">{{col}}</th>
-  </tr>
-  </thead>
-  <tbody>
   <tr ng-repeat="item in table.tableData">
-    <td>{{table.rows[item.name].title}}</td>
+    <td><b>{{table.rows[item.name].title}}</b></td>
     <td ng-switch="table.rows[item.name].type">
       <div ng-switch-when="user">
         <a ng-href="#/user/{{item.value.id}}">{{item.value.prefix}} {{item.value.firstname}} {{item.value.lastname}}</a>
@@ -14,8 +8,10 @@
       <div ng-switch-when="study">
         <a ng-href="#/study/{{item.value.name}}">{{item.value.name}}</a>
       </div>
+      <div ng-switch-when="date">
+        {{item.value | date:'EEEE, MMMM d, y'}}
+      </div>
       <div ng-switch-default>{{item.value}}</div>
     </td>
   </tr>
-  </tbody>
 </table>

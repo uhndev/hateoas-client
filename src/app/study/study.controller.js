@@ -43,7 +43,6 @@
         var robj = _.pick(data.items, 'name', 'reb', 'administrator', 'pi');
 
         vm.studyInfo = {
-          columns: [ 'Name', 'Value' ],
           rows: {
             'name': { title: 'Name', type: 'text' },
             'reb': { title: 'REB', type: 'text' },
