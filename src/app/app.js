@@ -15,6 +15,7 @@
   	'dados.auth',
     'dados.study',
     'dados.subject',
+    'dados.survey',
     'dados.user',
     'dados.header',
     'dados.workflow',

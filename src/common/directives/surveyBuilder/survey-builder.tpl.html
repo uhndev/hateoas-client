@@ -1,0 +1,68 @@
+<div>
+  <tabset justified="true">
+    <!-- Stage 1: Define 1 survey item with n sessions in survey -->
+    <!-- (study, survey, completedBy) -->
+    <!-- (surveyVersion, name, timepoint, availableFrom, availableTo, type) -->
+    <tab heading="Define Survey" active="surveyBuilder.STAGES['DEFINE_SURVEY']">
+      <ng-form name="surveyForm" class="form-horizontal" novalidate>
+        <div class="form-group">
+          <label for="name" class="col-sm-3 control-label">Survey Name&nbsp;</label>
+          <div class="col-sm-9">
+            <input type="text" name="name" class="form-control"
+                   data-ng-model="surveyBuilder.survey.name" required>
+            <p ng-show="surveyForm.name.$invalid && !surveyForm.name.$pristine"
+               class="pull-right required-error">Survey must have a name.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="completedBy" class="col-sm-3 control-label">Completed By&nbsp;</label>
+          <div class="col-sm-9">
+            <select name="completedBy" class="form-control" ng-model="surveyBuilder.survey.completedBy" required>
+              <option value="" disabled>Select the type of user</option>
+              <option value="subject" label="Subject">Subject</option>
+              <option value="coordinator" label="Coordinator">Coordinator</option>
+            </select>
+            <p ng-show="surveyForm.completedBy.$invalid && !surveyForm.completedBy.$pristine"
+               class="pull-right required-error">You must select a type of user to complete the survey.</p>
+          </div>
+        </div>
+      </ng-form>
+
+      <hr/>
+      <session-builder session="surveyBuilder.newSession"
+                       generate-sessions="surveyBuilder.generateSessions"></session-builder>
+      <hr/>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th ng-repeat="column in surveyBuilder.sessionColumns" tooltip="{{column.tooltip}}">
+              {{column.prompt}}
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="session in surveyBuilder.survey.sessions">
+            <td ng-repeat="column in surveyBuilder.sessionColumns">
+              {{session[column.name]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </tab>
+
+    <!-- Stage 2: Define m formVersions for each n session in survey -->
+    <!-- (list of formVersions applied to sessions) -->
+    <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
+      <ng-form name="selectForm" class="form-horizontal" novalidate>
+
+      </ng-form>
+    </tab>
+
+    <!-- Stage 4: Review survey definitions before creation -->
+    <tab heading="Review Survey" active="surveyBuilder.STAGES['REVIEW_SURVEY']">
+      <pre>{{surveyBuilder.survey | json}}</pre>
+    </tab>
+  </tabset>
+</div>

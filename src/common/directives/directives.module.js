@@ -6,10 +6,10 @@
     'dados.common.directives.hateoas',
     'dados.common.directives.hateoasTable',
     'dados.common.directives.hateoasLink',
-    'dados.common.directives.listEditor',
     'dados.common.directives.pluginEditor',
     'dados.common.directives.queryBuilder',
     'dados.common.directives.selectLoader',
-    'dados.common.directives.simpleTable'
+    'dados.common.directives.simpleTable',
+    'dados.common.directives.surveyBuilder'
 	]);
 })();

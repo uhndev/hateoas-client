@@ -1,0 +1,59 @@
+<div ng-controller="StudySurveyController as studySurvey">
+  <h1 id="Title">
+    {{ pageTitle }}
+    <small>
+      Total: {{studySurvey.resource.total}}
+    </small>
+  </h1>
+  <div id="Query" class="clearfix">
+    <query-builder
+      template="studySurvey.resource.template"
+      ng-model="studySurvey.query.where"
+      ng-if="studySurvey.resource.template">
+    </query-builder>
+  </div>
+
+  <div id="Controls" class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default"
+              ng-if="studySurvey.allow.read"
+              ng-click="studySurvey.openSubject()"
+              ng-disabled="!!!studySurvey.selected">
+        <i class="fa fa-folder-o"></i>
+        View Survey
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySurvey.allow.create"
+              ng-click="studySurvey.openAddSurvey()">
+        <i class="fa fa-file-o"></i>
+        Add Survey
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySurvey.allow.update"
+              ng-click="studySurvey.openEditSurvey()"
+              ng-disabled="!!!studySurvey.selected">
+        <i class="fa fa-edit"></i>
+        Edit Survey
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySurvey.allow.delete"
+              ng-click="studySurvey.archiveSurvey()"
+              ng-disabled="!!!studySurvey.selected">
+        <i class="fa fa-trash-o"></i>
+        Archive
+      </button>
+    </div>
+  </div>
+
+  <hateoas-table
+    url="{{studySurvey.url}}"
+    query="studySurvey.query"
+    selected="studySurvey.selected"
+    filter="studySurvey.filter"
+    allow="studySurvey.allow"
+    template="studySurvey.template"
+    resource="studySurvey.resource"
+    on-resource-loaded="studySurvey.onResourceLoaded">
+  </hateoas-table>
+
+</div>

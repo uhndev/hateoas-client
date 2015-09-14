@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h3 class="modal-title">Add Survey</h3>
+</div>
+<div class="modal-body">
+  <survey-builder study="addSurvey.study" survey="addSurvey.newSurvey" is-valid="addSurvey.isValid"></survey-builder>
+</div>
+<div class="modal-footer">
+  <button type="submit" id="submitSurvey" class="btn btn-primary"
+          ng-disabled="!addSurvey.isValid" ng-click="addSurvey.save()">
+    Save
+  </button>
+  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="addSurvey.cancel()">
+    Cancel
+  </button>
+</div>
