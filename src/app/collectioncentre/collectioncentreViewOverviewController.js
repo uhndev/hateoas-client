@@ -42,7 +42,6 @@
         AuthService.setSubmenu(vm.resource.items.study.name, data, $scope.dados.submenu);
 
         vm.centreInfo = {
-          columns: ['Field', 'Value'],
           rows: {
             'name': { title: 'Name', type: 'text' },
             'study': { title: 'Study', type: 'study' },

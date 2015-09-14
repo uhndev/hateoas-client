@@ -17,7 +17,7 @@
 
     // bindable variables
     vm.study = '';
-    vm.forms = Form.query();
+    vm.forms = [];
     vm.formToAdd = '';
     vm.currStudy = _.getStudyFromUrl($location.path());
     vm.allow = {};
@@ -46,6 +46,8 @@
       if (data) {
         // initialize submenu
         AuthService.setSubmenu(vm.currStudy, data, $scope.dados.submenu);
+        // populate add form dropdown with forms not already added
+        vm.forms = Form.query({ 'where': { 'id': { '!': _.pluck(data.items, 'id') }}});
       }
       return data;
     }

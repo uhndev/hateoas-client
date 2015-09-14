@@ -24,7 +24,7 @@
             <option value="" disabled>Select a form to add</option>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()">
+        <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()" ng-disabled="!!!studyForm.formToAdd">
           <span class="glyphicon glyphicon-plus"></span>
         </button>
       </form>
