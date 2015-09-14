@@ -1,6 +1,10 @@
-/**
- * jQuery UI Slider plugin wrapper
+ /**
+ * @name jQuery UI Slider widget wrapper
+ * @description Directive that wraps the slider widget as an angular directive,
+ *              so we can bound element's value to ngModel.
+ * @example <span ui-slider step="5" max="100" min="20" class="inline-slider" ng-model="width"></span>
  */
+ 
 (function() {
   'use strict';
 
