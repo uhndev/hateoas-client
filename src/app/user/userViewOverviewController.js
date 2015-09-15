@@ -3,8 +3,7 @@
   angular
     .module('dados.user', [
       'dados.user.service',
-      'dados.common.directives.simpleTable',
-      'dados.common.directives.listEditor'
+      'dados.common.directives.simpleTable'
     ])
     .controller('UserOverviewController', UserOverviewController);
 

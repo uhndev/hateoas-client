@@ -14,7 +14,6 @@
 
     // bindable variables
     vm.newSurvey = { study: study.id };
-    vm.isValid = false;
 
     // bindable methods
     vm.save = save;

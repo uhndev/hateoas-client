@@ -1,6 +1,6 @@
 <div class="row">
 
-  <div class="col-md-2">
+  <div class="col-md-3">
     <div class="form-group">
       <label>Type
         <ui-help popover="The type of session, can be repeatable (scheduled) or adhoc (non-scheduled)"></ui-help>
@@ -49,7 +49,7 @@
 
   <div class="col-md-2">
     <div class="form-group">
-      <label for="availableFrom">Available From
+      <label for="availableFrom">From
         <ui-help popover="The number of days before session date this survey should become available"></ui-help>
       </label>
       <input id="availableFrom" type="number" name="availableFrom" class="form-control"
@@ -60,7 +60,7 @@
 
   <div class="col-md-2">
     <div class="form-group">
-      <label for="availableTo">Available To
+      <label for="availableTo">To
         <ui-help popover="The number of days after session date this survey should no longer be available"></ui-help>
       </label>
       <input id="availableTo" type="number" name="availableTo" class="form-control"
@@ -69,15 +69,13 @@
     </div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-1">
     <div class="form-group">
-      <label for="availableTo">Generate
-        <ui-help popover="Click to generate calculated sessions"></ui-help>
-      </label>
+      <label for="availableTo">&nbsp;</label>
       <br/>
       <button type="button" class="btn btn-primary"
               ng-click="sessionBuilder.generateSessions()">
-        <span class="glyphicon glyphicon-plus"></span> Session(s)
+        <span class="glyphicon glyphicon-plus"></span>
       </button>
     </div>
   </div>

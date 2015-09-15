@@ -10,14 +10,14 @@
     })
     .controller('SurveyBuilderController', SurveyBuilderController);
 
-  SurveyBuilderController.$inject = ['STAGES', 'ngTableParams'];
+  SurveyBuilderController.$inject = ['$scope', 'STAGES', 'ngTableParams'];
 
   /**
    * @name SurveyBuilderController
    * @param STAGES
    * @constructor
    */
-  function SurveyBuilderController(STAGES, TableParams) {
+  function SurveyBuilderController($scope, STAGES, TableParams) {
     var vm = this;
 
     // bindable variables
@@ -25,13 +25,6 @@
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
     vm.STAGES = STAGES;                        // constants defining states/stages of survey creation
-    vm.sessionColumns = [
-      { prompt: 'Type', name: 'type', type: 'text'},
-      { prompt: 'Name', name: 'name', type: 'text'},
-      { prompt: 'Timepoint', name: 'timepoint', type: 'number'},
-      { prompt: 'Available From', name: 'availableFrom', type: 'number'},
-      { prompt: 'Available To', name: 'availableTo', type: 'number' }
-    ];
 
     // bindable methods
     vm.generateSessions = generateSessions;
@@ -44,6 +37,13 @@
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
       }
+      vm.tableParams = new TableParams({
+        page: 1,
+        count: 10
+      }, {
+        groupBy: "type",
+        data: vm.survey.sessions
+      });
     }
 
     function generateSessions() {
@@ -68,8 +68,13 @@
           vm.survey.sessions.push(vm.newSession);
         }
         vm.newSession = {};
+        vm.tableParams.reload();
       }
     }
-  }
 
+    $scope.$watch('surveyBuilder.survey', function(newVal, oldVal) {
+      vm.isValid = (_.has(vm.surveyForm, '$valid') && _.has(vm.survey, 'sessions')) ?
+                   (vm.surveyForm.$valid && vm.survey.sessions.length > 0) : false;
+    }, true);
+  }
 })();
