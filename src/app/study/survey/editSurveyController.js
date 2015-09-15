@@ -6,14 +6,15 @@
     .controller('EditSurveyController', EditSurveyController);
 
   EditSurveyController.$inject = [
-    '$modalInstance', 'toastr', 'study', 'survey', 'SurveyService'
+    '$modalInstance', 'toastr', 'study', 'forms', 'survey', 'SurveyService'
   ];
 
-  function EditSurveyController($modalInstance, toastr, study, survey, Survey) {
+  function EditSurveyController($modalInstance, toastr, study, forms, survey, Survey) {
     var vm = this;
 
     // bindable variables
     vm.study = study || {};
+    vm.forms = forms || [];
     vm.editSurvey = survey || {};
     vm.isValid = false;
 

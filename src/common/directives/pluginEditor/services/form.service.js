@@ -24,7 +24,7 @@
         studyID: '@studyID'
       },
       {
-        'save' : { 
+        'save' : {
           method: 'POST',
           isArray: false,
           transformResponse: _.transformHateoas

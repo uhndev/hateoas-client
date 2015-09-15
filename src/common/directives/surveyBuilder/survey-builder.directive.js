@@ -12,6 +12,7 @@
       restrict: 'E',
       scope: {
         study: '=',
+        forms: '=',
         survey: '=',
         isValid: '='
       },

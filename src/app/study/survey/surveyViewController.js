@@ -10,10 +10,10 @@
     .controller('StudySurveyController', StudySurveyController);
 
   StudySurveyController.$inject = [
-    '$scope', '$location', '$modal', 'AuthService', 'toastr', 'StudyService', 'API'
+    '$scope', '$location', '$resource', '$modal', 'AuthService', 'toastr', 'StudyService', 'API'
   ];
 
-  function StudySurveyController($scope, $location, $modal, AuthService, toastr, Study, API) {
+  function StudySurveyController($scope, $location, $resource, $modal, AuthService, toastr, Study, API) {
 
     var vm = this;
 
@@ -60,7 +60,15 @@
         backdrop: 'static',
         resolve: {
           study: function () {
+            // resolve study object
             return angular.copy(vm.study);
+          },
+          forms: function() {
+            // resolve study forms
+            var StudyForms = $resource(API.url() + '/study/' + currStudy + '/form');
+            return StudyForms.get().$promise.then(function (data) {
+              return data.items;
+            });
           }
         }
       };

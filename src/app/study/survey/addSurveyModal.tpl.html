@@ -3,7 +3,10 @@
 </div>
 <div class="modal-body">
   <pre>{{addSurvey.isValid | json}}</pre>
-  <survey-builder study="addSurvey.study" survey="addSurvey.newSurvey" is-valid="addSurvey.isValid"></survey-builder>
+  <survey-builder study="addSurvey.study"
+                  forms="addSurvey.forms"
+                  survey="addSurvey.newSurvey"
+                  is-valid="addSurvey.isValid"></survey-builder>
 </div>
 <div class="modal-footer">
   <button type="submit" id="submitSurvey" class="btn btn-primary"

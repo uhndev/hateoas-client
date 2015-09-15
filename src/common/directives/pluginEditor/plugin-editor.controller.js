@@ -109,16 +109,11 @@
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
-            if (!$scope.study) {
-              FormService.save($scope.form, onFormSaved, onFormError);
-            } else {
-              var studyForm = new StudyFormService($scope.form);
-              studyForm.formID = $scope.form.id;
-              studyForm.studyID = $scope.study;
-              studyForm.$save()
-                .then(onFormSaved)
-                .catch(onFormError);
-            }
+            var studyForm = new StudyFormService($scope.form);
+            studyForm.studyID = $scope.study;
+            studyForm.$save()
+              .then(onFormSaved)
+              .catch(onFormError);
           }
         } else {
           toastr.warning('No questions added yet!', 'Plugin Editor');

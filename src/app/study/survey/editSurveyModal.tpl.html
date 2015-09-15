@@ -2,7 +2,10 @@
   <h3 class="modal-title">Edit Survey</h3>
 </div>
 <div class="modal-body">
-  <survey-builder survey="editSurvey.editSurvey" is-valid="editSurvey.isValid"></survey-builder>
+  <survey-builder study="editSurvey.study"
+                  forms="editSurvey.forms"
+                  survey="editSurvey.editSurvey"
+                  is-valid="editSurvey.isValid"></survey-builder>
 </div>
 <div class="modal-footer">
   <button type="submit" id="submitSurvey" class="btn btn-primary"

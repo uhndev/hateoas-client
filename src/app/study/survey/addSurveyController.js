@@ -6,13 +6,15 @@
     .controller('AddSurveyController', AddSurveyController);
 
   AddSurveyController.$inject = [
-    '$modalInstance', 'toastr', 'study', 'SurveyService'
+    '$modalInstance', 'toastr', 'study', 'forms', 'SurveyService'
   ];
 
-  function AddSurveyController($modalInstance, toastr, study, Survey) {
+  function AddSurveyController($modalInstance, toastr, study, forms, Survey) {
     var vm = this;
 
     // bindable variables
+    vm.study = study;
+    vm.forms = forms;
     vm.newSurvey = { study: study.id };
 
     // bindable methods

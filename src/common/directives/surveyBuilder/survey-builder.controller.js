@@ -4,9 +4,9 @@
   angular
     .module('dados.common.directives.surveyBuilder.controller', [])
     .constant('STAGES', { // stages of survey creation
-      'DEFINE_SURVEY': 0,
-      'SELECT_FORMS': 1,
-      'REVIEW_SURVEY': 2
+      'DEFINE_SURVEY': true,
+      'SELECT_FORMS': false,
+      'REVIEW_SURVEY': false
     })
     .controller('SurveyBuilderController', SurveyBuilderController);
 
@@ -24,16 +24,32 @@
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
-    vm.STAGES = STAGES;                        // constants defining states/stages of survey creation
+    vm.forms = vm.forms || [];                 // array storing form definitions
+    vm.formVersions = [];                      // array storing latest form versions
+    vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
+    vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
+    vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
 
     // bindable methods
+    vm.addRemoveForm = addRemoveForm;
+    vm.isFormActive = isFormActive;
     vm.generateSessions = generateSessions;
 
     init();
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Private Methods
+     */
     function init() {
+      // sort and retrieve latest revisions of forms
+      if (!_.has(vm.forms, 'versions')) {
+        // store array of latest forms
+        vm.formVersions = _.map(vm.forms, function (form) {
+          return _.last(_.sortBy(form.versions, 'revision'));
+        });
+      }
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
       }
@@ -46,8 +62,24 @@
       });
     }
 
+    /**
+     * Public Methods
+     */
+    function addRemoveForm(formVersion, session) {
+      if (_.inArray(session.formVersions, formVersion.id)) {
+        session.formVersions = _.without(session.formVersions, formVersion.id);
+      } else {
+        session.formVersions.push(formVersion.id);
+      }
+    }
+
+    function isFormActive(form, session) {
+      return _.inArray(session.formVersions, form.id);
+    }
+
     function generateSessions() {
       if (!_.isEmpty(vm.newSession)) {
+        vm.newSession.formVersions = _.pluck(vm.formVersions, 'id');
         // if scheduled, session won't have name but will have repeat attributes
         if (vm.newSession.type === 'scheduled') {
           // repeat as many times as needed to generate timepoints
@@ -59,7 +91,8 @@
               name: future.toString() + ' Day',
               timepoint: future,
               availableFrom: vm.newSession.availableFrom,
-              availableTo: vm.newSession.availableTo
+              availableTo: vm.newSession.availableTo,
+              formVersions: _.pluck(vm.formVersions, 'id')
             });
           }
         }
@@ -68,6 +101,7 @@
           vm.survey.sessions.push(vm.newSession);
         }
         vm.newSession = {};
+        vm.tableParams.sorting('timepoint', 'asc');
         vm.tableParams.reload();
       }
     }

@@ -7,23 +7,28 @@
       <ng-form name="surveyBuilder.surveyForm" class="form-horizontal" novalidate>
         <div class="form-group">
           <label for="name" class="col-sm-3 control-label">Survey Name&nbsp;</label>
+
           <div class="col-sm-9">
             <input type="text" name="name" class="form-control"
                    data-ng-model="surveyBuilder.survey.name" required>
+
             <p ng-show="surveyBuilder.surveyForm.name.$invalid && !surveyBuilder.surveyForm.name.$pristine"
                class="pull-right required-error">Survey must have a name.</p>
           </div>
         </div>
         <div class="form-group">
           <label for="completedBy" class="col-sm-3 control-label">Completed By&nbsp;</label>
+
           <div class="col-sm-9">
             <select name="completedBy" class="form-control" ng-model="surveyBuilder.survey.completedBy" required>
               <option value="" disabled>Select the type of user</option>
               <option value="subject" label="Subject">Subject</option>
               <option value="coordinator" label="Coordinator">Coordinator</option>
             </select>
-            <p ng-show="surveyBuilder.surveyForm.completedBy.$invalid && !surveyBuilder.surveyForm.completedBy.$pristine"
-               class="pull-right required-error">You must select a type of user to complete the survey.</p>
+
+            <p
+              ng-show="surveyBuilder.surveyForm.completedBy.$invalid && !surveyBuilder.surveyForm.completedBy.$pristine"
+              class="pull-right required-error">You must select a type of user to complete the survey.</p>
           </div>
         </div>
       </ng-form>
@@ -38,7 +43,8 @@
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
           <td colspan="5">
             <a href="" ng-click="group.$hideRows = !group.$hideRows">
-              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <span class="glyphicon"
+                    ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
               <strong>{{ group.value }}</strong>
             </a>
           </td>
@@ -67,14 +73,44 @@
     <!-- Stage 2: Define m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
-      <ng-form name="surveyBuilder.selectForm" class="form-horizontal" novalidate>
-
-      </ng-form>
+      <div class="row">
+        <div class="col-md-8">
+          <h4>Configure Forms for Sessions</h4>
+        </div>
+        <div class="pull-right">
+        </div>
+      </div>
+      <div class="row" ng-if="surveyBuilder.survey.sessions.length > 0">
+        <div clas="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item"
+                ng-repeat="session in surveyBuilder.survey.sessions">
+              {{session.name}} {{session.formVersions | json}}
+              <br/>
+              <button class="btn btn-xs permission-btn" type="button"
+                      ng-repeat="form in surveyBuilder.formVersions"
+                      ng-click="surveyBuilder.addRemoveForm(form, session)"
+                      ng-class="{
+                        'btn-primary active': surveyBuilder.isFormActive(form, session),
+                        'btn-default': !surveyBuilder.isFormActive(form, session)
+                      }">
+                <div ng-switch="surveyBuilder.isFormActive(form, session)">
+                  <div ng-switch-when="false">
+                    <s>{{form.name}}</s>
+                  </div>
+                  <div ng-switch-default>
+                    {{form.name}} <span class="glyphicon glyphicon-remove"></span>
+                  </div>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </tab>
 
     <!-- Stage 4: Review survey definitions before creation -->
     <tab heading="Review Survey" active="surveyBuilder.STAGES['REVIEW_SURVEY']">
-      <pre>Survey Form: {{surveyBuilder.isValid | json}}</pre>
       <pre>{{surveyBuilder.survey | json}}</pre>
     </tab>
   </tabset>
