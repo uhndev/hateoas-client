@@ -38,80 +38,50 @@
                        generate-sessions="surveyBuilder.generateSessions"></session-builder>
       <hr/>
 
-      <table ng-table="surveyBuilder.tableParams" class="table table-condensed table-hover">
-        <tbody>
-        <tr class="ng-table-group" ng-repeat-start="group in $groups">
-          <td colspan="5">
-            <a href="" ng-click="group.$hideRows = !group.$hideRows">
-              <span class="glyphicon"
-                    ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-              <strong>{{ group.value }}</strong>
-            </a>
-          </td>
-        </tr>
-        <tr ng-hide="group.$hideRows" ng-repeat="item in group.data" ng-repeat-end>
-          <td sortable="'type'" data-title="'Type'">
-            {{item.type}}
-          </td>
-          <td sortable="'name'" data-title="'Name'">
-            {{item.name}}
-          </td>
-          <td sortable="'timepoint'" data-title="'Timepoint'">
-            {{item.timepoint}}
-          </td>
-          <td sortable="'availableFrom'" data-title="'Available From'">
-            {{item.availableFrom}}
-          </td>
-          <td sortable="'availableTo'" data-title="'Available To'">
-            {{item.availableTo}}
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <list-editor list="surveyBuilder.survey.sessions"
+                   columns="surveyBuilder.sessionColumns"
+                   affix-missing="false"
+                   can-edit="true"
+                   can-add-newcol="false"
+                   can-add-newrow="false"
+                   can-edit-header="false"
+                   can-del-row="false"
+                   can-del-col="false"
+                   force-reload="surveyBuilder.toggleReload">
+      </list-editor>
     </tab>
 
-    <!-- Stage 2: Define m formVersions for each n session in survey -->
+    <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
-      <div class="row">
-        <div class="col-md-8">
-          <h4>Configure Forms for Sessions</h4>
-        </div>
-        <div class="pull-right">
-        </div>
-      </div>
-      <div class="row" ng-if="surveyBuilder.survey.sessions.length > 0">
-        <div clas="col-md-12">
-          <ul class="list-group">
-            <li class="list-group-item"
-                ng-repeat="session in surveyBuilder.survey.sessions">
-              {{session.name}} {{session.formVersions | json}}
-              <br/>
-              <button class="btn btn-xs permission-btn" type="button"
-                      ng-repeat="form in surveyBuilder.formVersions"
-                      ng-click="surveyBuilder.addRemoveForm(form, session)"
-                      ng-class="{
-                        'btn-primary active': surveyBuilder.isFormActive(form, session),
-                        'btn-default': !surveyBuilder.isFormActive(form, session)
-                      }">
-                <div ng-switch="surveyBuilder.isFormActive(form, session)">
-                  <div ng-switch-when="false">
-                    <s>{{form.name}}</s>
-                  </div>
-                  <div ng-switch-default>
-                    {{form.name}} <span class="glyphicon glyphicon-remove"></span>
-                  </div>
-                </div>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </tab>
+      <timeline>
+        <timeline-event ng-repeat="session in surveyBuilder.survey.sessions">
+          <timeline-badge class="info">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </timeline-badge>
+          <timeline-panel class="info">
+            <timeline-heading>
+              <h4>{{session.name}}</h4>
+            </timeline-heading>
+            <span ng-repeat="form in surveyBuilder.formVersions"
+                  ng-switch="surveyBuilder.isFormActive(form, session)">
+              <span ng-switch-when="true">
+                <button class="btn btn-primary btn-xs permission-btn" type="button"
+                        ng-click="surveyBuilder.addRemoveForm(form, session)">
+                  {{form.name}} <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </span>
+              <span ng-switch-default>
+                <button class="btn btn-default btn-xs permission-btn" type="button"
+                        ng-click="surveyBuilder.addRemoveForm(form, session)">
+                  <s>{{form.name}}</s>
+                </button>
+              </span>
+            </span>
 
-    <!-- Stage 4: Review survey definitions before creation -->
-    <tab heading="Review Survey" active="surveyBuilder.STAGES['REVIEW_SURVEY']">
-      <pre>{{surveyBuilder.survey | json}}</pre>
+          </timeline-panel>
+        </timeline-event>
+      </timeline>
     </tab>
   </tabset>
 </div>

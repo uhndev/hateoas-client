@@ -81,6 +81,7 @@ module.exports = {
       'vendor/angular-multi-select/isteven-multi-select.js',
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
+      'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-utils/ui-utils.js',
       'vendor/angular-ui-sortable/sortable.js',

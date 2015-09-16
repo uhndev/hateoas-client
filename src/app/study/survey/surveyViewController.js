@@ -10,10 +10,10 @@
     .controller('StudySurveyController', StudySurveyController);
 
   StudySurveyController.$inject = [
-    '$scope', '$location', '$resource', '$modal', 'AuthService', 'toastr', 'StudyService', 'API'
+    '$scope', '$location', '$resource', '$modal', 'AuthService', 'toastr', 'StudyService', 'SurveyService', 'API'
   ];
 
-  function StudySurveyController($scope, $location, $resource, $modal, AuthService, toastr, Study, API) {
+  function StudySurveyController($scope, $location, $resource, $modal, AuthService, toastr, Study, Survey, API) {
 
     var vm = this;
 

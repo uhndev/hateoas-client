@@ -2,11 +2,13 @@
   'use strict';
 
   angular
-    .module('dados.common.directives.surveyBuilder.controller', [])
+    .module('dados.common.directives.surveyBuilder.controller', [
+      'dados.common.directives.listEditor',
+      'angular-timeline'
+    ])
     .constant('STAGES', { // stages of survey creation
       'DEFINE_SURVEY': true,
-      'SELECT_FORMS': false,
-      'REVIEW_SURVEY': false
+      'SELECT_FORMS': false
     })
     .controller('SurveyBuilderController', SurveyBuilderController);
 
@@ -29,6 +31,17 @@
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
     vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
     vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
+    vm.sessionColumns = [
+      { title: 'Type', field: 'type', type: 'dropdown', options: [
+        { prompt: 'Scheduled', value: 'scheduled' },
+        { prompt: 'Non-scheduled', value: 'non-scheduled' }
+      ]},
+      { title: 'Name', field: 'name', type: 'text'},
+      { title: 'Timepoint', field: 'timepoint', type: 'number'},
+      { title: 'Available From', field: 'availableFrom', type: 'number'},
+      { title: 'Available To', field: 'availableTo', type: 'number'}
+    ];
+    vm.toggleReload = false;
 
     // bindable methods
     vm.addRemoveForm = addRemoveForm;
@@ -101,8 +114,9 @@
           vm.survey.sessions.push(vm.newSession);
         }
         vm.newSession = {};
-        vm.tableParams.sorting('timepoint', 'asc');
+        angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
         vm.tableParams.reload();
+        vm.toggleReload = !vm.toggleReload;
       }
     }
 
