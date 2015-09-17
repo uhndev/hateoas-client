@@ -21,7 +21,7 @@
       </label>
       <input id="name" type="text" name="name" class="form-control"
              data-ng-model="sessionBuilder.session.name"
-             ng-disabled="!sessionBuilder.session.type" required />
+             ng-disabled="!sessionBuilder.session.type" required/>
     </div>
   </div>
 
@@ -32,18 +32,19 @@
       </label>
       <input id="repeat" type="number" name="repeat" class="form-control"
              min="0" data-ng-model="sessionBuilder.session.repeat"
-             ng-disabled="!sessionBuilder.session.type" required />
+             ng-disabled="!sessionBuilder.session.type" required/>
     </div>
   </div>
 
   <div class="col-md-2">
     <div class="form-group">
       <label for="timepoint">Timepoint
-        <ui-help popover="The number of days after subject date of enrollment for when this session should take place."></ui-help>
+        <ui-help
+          popover="The number of days after subject date of enrollment for when this session should take place."></ui-help>
       </label>
       <input id="timepoint" type="number" name="timepoint" class="form-control"
              min="0" data-ng-model="sessionBuilder.session.timepoint"
-             ng-disabled="!sessionBuilder.session.type" required />
+             ng-disabled="!sessionBuilder.session.type" required/>
     </div>
   </div>
 
@@ -54,7 +55,7 @@
       </label>
       <input id="availableFrom" type="number" name="availableFrom" class="form-control"
              min="0" data-ng-model="sessionBuilder.session.availableFrom"
-             ng-disabled="!sessionBuilder.session.type" required />
+             ng-disabled="!sessionBuilder.session.type" required/>
     </div>
   </div>
 
@@ -65,7 +66,7 @@
       </label>
       <input id="availableTo" type="number" name="availableTo" class="form-control"
              min="0" data-ng-model="sessionBuilder.session.availableTo"
-             ng-disabled="!sessionBuilder.session.type" required />
+             ng-disabled="!sessionBuilder.session.type" required/>
     </div>
   </div>
 
@@ -74,6 +75,7 @@
       <label for="availableTo">&nbsp;</label>
       <br/>
       <button type="button" class="btn btn-primary"
+              ng-disabled="sessionBuilder.isSessionInvalid()"
               ng-click="sessionBuilder.generateSessions()">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
