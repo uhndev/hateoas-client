@@ -75,7 +75,16 @@
 
       if (type === 'edit') {
         modalSettings.resolve.survey = function() {
-          return angular.copy(vm.selected);
+          var survey = angular.copy(vm.selected);
+          survey.sessions = [];
+          _.each(vm.selected.sessionForms, function(session) {
+            if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
+              session.formVersions = [session.formVersions];
+            }
+            survey.sessions.push(session);
+          });
+          delete survey.sessionForms;
+          return survey;
         };
       }
 

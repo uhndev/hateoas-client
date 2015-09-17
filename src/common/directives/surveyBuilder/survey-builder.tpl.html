@@ -54,6 +54,7 @@
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
+      <pre>{{surveyBuilder.survey | json}}</pre>
       <timeline>
         <timeline-event ng-repeat="session in surveyBuilder.survey.sessions">
           <timeline-badge class="info">

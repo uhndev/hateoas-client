@@ -79,6 +79,8 @@
      * Public Methods
      */
     function addRemoveForm(formVersion, session) {
+      console.log(session);
+      console.log(formVersion);
       if (_.inArray(session.formVersions, formVersion.id)) {
         session.formVersions = _.without(session.formVersions, formVersion.id);
       } else {
