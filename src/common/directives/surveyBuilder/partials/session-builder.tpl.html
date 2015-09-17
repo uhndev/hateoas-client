@@ -75,7 +75,7 @@
       <label for="availableTo">&nbsp;</label>
       <br/>
       <button type="button" class="btn btn-primary"
-              ng-disabled="sessionBuilder.isSessionInvalid()"
+              ng-disabled="!sessionBuilder.isSessionValid()"
               ng-click="sessionBuilder.generateSessions()">
         <span class="glyphicon glyphicon-plus"></span>
       </button>

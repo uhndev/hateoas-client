@@ -28,6 +28,7 @@
     vm.study = vm.study || {};                 // object storing study definition
     vm.forms = vm.forms || [];                 // array storing form definitions
     vm.formVersions = [];                      // array storing latest form versions
+    vm.latestSurveyVersion = 1;                // id of latest survey version
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
     vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
     vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
@@ -56,12 +57,18 @@
      * Private Methods
      */
     function init() {
+      angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
       // sort and retrieve latest revisions of forms
       if (!_.has(vm.forms, 'versions')) {
         // store array of latest forms
         vm.formVersions = _.map(vm.forms, function (form) {
           return _.last(_.sortBy(form.versions, 'revision'));
         });
+      }
+      // sort and retrieve latest revisions of surveys
+      if (_.has(vm.survey, 'versions') && vm.survey.versions.length > 1) {
+        // store latest survey version
+        vm.latestSurveyVersion = _.last(_.sortBy(vm.survey.versions, 'revision'));
       }
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
@@ -79,8 +86,6 @@
      * Public Methods
      */
     function addRemoveForm(formVersion, session) {
-      console.log(session);
-      console.log(formVersion);
       if (_.inArray(session.formVersions, formVersion.id)) {
         session.formVersions = _.without(session.formVersions, formVersion.id);
       } else {
@@ -101,7 +106,7 @@
           for (var i=1; i <= vm.newSession.repeat; i++) {
             var future = vm.newSession.timepoint * i;
             vm.survey.sessions.push({
-              surveyVersion: 1,
+              surveyVersion: vm.latestSurveyVersion,
               type: vm.newSession.type,
               name: future.toString() + ' Day',
               timepoint: future,
@@ -113,6 +118,7 @@
         }
         // otherwise, its non-scheduled won't have repeat but will have name attribute
         else {
+          vm.newSession.surveyVersion = vm.latestSurveyVersion;
           vm.survey.sessions.push(vm.newSession);
         }
         vm.newSession = {};

@@ -15,15 +15,15 @@
     vm.generateSessions = vm.generateSessions || function(data) { return data; };
 
     // bindable methods
-    vm.isSessionInvalid = isSessionInvalid;
+    vm.isSessionValid = isSessionValid;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    function isSessionInvalid() {
-      var valid = !vm.session.timepoint || !vm.session.availableFrom || !vm.session.availableTo;
+    function isSessionValid() {
+      var valid = vm.session.timepoint >= 0 && vm.session.availableFrom >= 0 && vm.session.availableTo >= 0;
       switch(vm.session.type) {
-        case 'scheduled': return valid || !vm.session.repeat;
-        case 'non-scheduled': return valid || !vm.session.name;
+        case 'scheduled': return valid && vm.session.repeat >= 0;
+        case 'non-scheduled': return valid && vm.session.name;
         default: return false;
       }
     }
