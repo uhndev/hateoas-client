@@ -85,6 +85,13 @@
     /**
      * Public Methods
      */
+
+    /**
+     * addRemoveForm
+     * @description Adds or removes formVersion from session on the 'Select Forms' interface
+     * @param formVersion formVersion object
+     * @param session session object with list of formVersions
+     */
     function addRemoveForm(formVersion, session) {
       if (_.inArray(session.formVersions, formVersion.id)) {
         session.formVersions = _.without(session.formVersions, formVersion.id);
@@ -93,10 +100,22 @@
       }
     }
 
+    /**
+     * isFormActive
+     * @param form
+     * @param session
+     * @returns {Boolean} true if formVersion is in session, false otherwise
+     */
     function isFormActive(form, session) {
       return _.inArray(session.formVersions, form.id);
     }
 
+    /**
+     * generateSessions
+     * @description Depending on session type, generate n sessions if type was
+     *              scheduled, or 1 session if type was non-scheduled.  Sessions
+     *              will be generated with the latest SurveyVersion.
+     */
     function generateSessions() {
       if (!_.isEmpty(vm.newSession)) {
         vm.newSession.formVersions = _.pluck(vm.formVersions, 'id');
