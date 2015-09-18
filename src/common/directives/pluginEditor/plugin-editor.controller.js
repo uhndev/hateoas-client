@@ -77,7 +77,6 @@
     }
 
     function setForm(form) {
-      console.log(form);
       $scope.form = form;
 
       angular.forEach($scope.form.questions, function (question) {
@@ -109,11 +108,15 @@
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
-            var studyForm = new StudyFormService($scope.form);
-            studyForm.studyID = $scope.study;
-            studyForm.$save()
-              .then(onFormSaved)
-              .catch(onFormError);
+            if (!$scope.study) {
+              FormService.save($scope.form, onFormSaved, onFormError);
+            } else {
+              var studyForm = new StudyFormService($scope.form);
+              studyForm.studyID = $scope.study;
+              studyForm.$save()
+                .then(onFormSaved)
+                .catch(onFormError);
+            }
           }
         } else {
           toastr.warning('No questions added yet!', 'Plugin Editor');
