@@ -16,6 +16,7 @@
     vm.study = study;
     vm.forms = forms;
     vm.newSurvey = { study: study.id };
+    vm.saving = false;
 
     // bindable methods
     vm.save = save;
@@ -24,6 +25,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function save() {
+      vm.saving = true;
       var survey = new Survey(vm.newSurvey);
       survey.$save()
         .then(function() {

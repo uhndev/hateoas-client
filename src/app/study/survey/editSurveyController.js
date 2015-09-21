@@ -17,6 +17,7 @@
     vm.forms = forms || [];
     vm.editSurvey = survey || {};
     vm.isValid = false;
+    vm.saving = false;
 
     // bindable methods
     vm.save = save;
@@ -25,6 +26,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function save() {
+      vm.saving = true;
       var enrollment = new Survey(vm.editSurvey);
       enrollment
         .$update({ id: survey.id })

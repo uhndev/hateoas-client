@@ -68,13 +68,13 @@
               <span ng-switch-when="true">
                 <button class="btn btn-primary btn-xs permission-btn" type="button"
                         ng-click="surveyBuilder.addRemoveForm(form, session)">
-                  {{form.name}} <span class="glyphicon glyphicon-remove"></span>
+                  {{form.name}} <i class="fa fa-times"></i>
                 </button>
               </span>
               <span ng-switch-default>
                 <button class="btn btn-default btn-xs permission-btn" type="button"
                         ng-click="surveyBuilder.addRemoveForm(form, session)">
-                  <s>{{form.name}}</s> <span class="glyphicon glyphicon-plus"></span>
+                  <s>{{form.name}}</s> <i class="fa fa-plus"></i>
                 </button>
               </span>
             </span>

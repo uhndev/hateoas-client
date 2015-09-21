@@ -15,13 +15,13 @@
     var vm = this;
 
     // bindable variables
-    vm.tableParams = {};
     vm.allow = {};
     vm.template = {};
     vm.resource = {};
     vm.url = API.url() + $location.path();
 
     // bindable methods
+    vm.openEditSurvey = openEditSurvey;
 
     init();
 
@@ -37,15 +37,50 @@
           vm.allow[permission] = true;
         });
         // initialize submenu
-        AuthService.setSubmenu(vm.resource.studySessions.study.name, data, $scope.dados.submenu);
+        AuthService.setSubmenu(vm.resource.sessionStudy.name, data, $scope.dados.submenu);
 
         vm.tableParams = new TableParams({
           page: 1,
           count: 10
         }, {
           groupBy: "type",
-          data: _.sortBy(vm.resource.studySessions.sessions, 'timepoint')
+          data: _.sortBy(vm.resource.sessionForms, 'timepoint')
         });
+      });
+    }
+
+    function openEditSurvey() {
+      var modalInstance = $modal.open({
+        animation: true,
+        size: 'lg',
+        templateUrl: 'study/survey/editSurveyModal.tpl.html',
+        controller: 'EditSurveyController',
+        controllerAs: 'editSurvey',
+        bindToController: true,
+        resolve: {
+          study: function() {
+            return angular.copy(vm.resource.sessionStudy);
+          },
+          forms: function() {
+            return angular.copy(vm.resource.sessionStudy.forms);
+          },
+          survey: function() {
+            var survey = angular.copy(vm.resource);
+            survey.sessions = [];
+            _.each(survey.sessionForms, function(session) {
+              if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
+                session.formVersions = [session.formVersions];
+              }
+              session.formVersions = _.pluck(session.formVersions, 'id');
+              survey.sessions.push(session);
+            });
+            delete survey.sessionForms;
+            return survey;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        init();
       });
     }
   }

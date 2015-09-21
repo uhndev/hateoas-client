@@ -13,6 +13,12 @@
       <button type="button" class="btn btn-info">
         Call Log <span class="badge">4</span>
       </button>
+      <button type="button" class="btn btn-default"
+              ng-if="survey.allow.update"
+              ng-click="survey.openEditSurvey()">
+        <i class="fa fa-edit"></i>
+        Edit Survey
+      </button>
     </div>
   </div>
 
@@ -34,7 +40,7 @@
             <tr>
               <td><strong>Study</strong></td>
               <td>
-                <a ng-href="#/study/{{survey.resource.studySessions.study.name}}">{{survey.resource.studySessions.study.name}}</a>
+                <a ng-href="#/study/{{survey.resource.sessionStudy.name}}">{{survey.resource.sessionStudy.name}}</a>
               </td>
             </tr>
             <tr>
