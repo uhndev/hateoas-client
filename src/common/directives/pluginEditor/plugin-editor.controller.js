@@ -7,10 +7,11 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', 'FormService', 'StudyFormService', 'toastr'];
+  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'toastr'];
 
-  function PluginController($scope, $location, FormService, StudyFormService, toastr) {
+  function PluginController($scope, $location, $timeout, FormService, StudyFormService, toastr) {
     // bindable variables
+    $scope.firstLoad = true;
     $scope.isSaving = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
@@ -94,6 +95,7 @@
       $scope.$broadcast('setGrid', $scope.form.questions);
       $scope.$broadcast('setMetaData', $scope.form.metaData);
       $scope.isSaving = false;
+      $scope.firstLoad = true;
       toastr.info('Loaded form ' + $scope.form.name + ' successfully!', 'Form');
     }
 
@@ -101,9 +103,15 @@
      * Public Methods
      */
 
-    function save() {
+    function save(isManual) {
+      if (typeof(isManual)==='undefined') {
+        isManual = true;
+      }
+    
       if (_.isEmpty($scope.form.name)) {
-        toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
+        if (isManual) {
+          toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
+        }
       } else {
         if (_.all($scope.form.questions, 'name')) {
           $scope.isSaving = true;
@@ -121,7 +129,7 @@
                 .catch(onFormError);
             }
           }
-        } else {
+        } else if (isManual) {
           toastr.warning('No questions added yet!', 'Plugin Editor');
         }
       }
@@ -154,6 +162,21 @@
       }
       $location.search('idPlugin', id);
     }
-
+    
+    /* Debounce the $watch call with the hardcoded timeout 
+     * so we are not trying to save the form on each change.
+     * Save() will check if form is valid.
+     */
+    var onFormUpdate = debounceWatch($timeout, function (newVal, oldVal) {
+      if ($scope.firstLoad) {
+        // Suspend the first watch triggered until the end of digest cycle
+        $timeout(function() {
+          $scope.firstLoad = false;
+        });
+      } else {
+        save(false);
+      }
+    }, 5000);
+    $scope.$watch('form', onFormUpdate, true);
   }
 })();
