@@ -19,6 +19,7 @@
     $scope.study = $location.search()['study'];
     $scope.form = { name: '', questions: [], metaData: {} };
     $scope.sortableOptions = {
+      helper: "clone", // fixes the issue when click event intercepts the drop movement
       cursor: 'move',
       revert: true
     };
