@@ -63,6 +63,7 @@
     }
 
     function cancel() {
+      vm.newSubject = {};
       $modalInstance.dismiss('cancel');
     }
   }

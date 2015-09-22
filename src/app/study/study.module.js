@@ -5,6 +5,7 @@
 	  'dados.study.user',
     'dados.study.subject',
     'dados.study.form',
+    'dados.study.survey',
 	  'dados.study.service'
 	]);
 })();

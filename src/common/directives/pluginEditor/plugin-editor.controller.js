@@ -78,7 +78,6 @@
     }
 
     function setForm(form) {
-      console.log(form);
       $scope.form = form;
 
       angular.forEach($scope.form.questions, function (question) {
@@ -114,7 +113,6 @@
               FormService.save($scope.form, onFormSaved, onFormError);
             } else {
               var studyForm = new StudyFormService($scope.form);
-              studyForm.formID = $scope.form.id;
               studyForm.studyID = $scope.study;
               studyForm.$save()
                 .then(onFormSaved)
