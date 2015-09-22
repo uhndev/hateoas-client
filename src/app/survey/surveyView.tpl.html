@@ -1,0 +1,102 @@
+<div ng-controller="SurveyOverviewController as survey" class="container">
+  <div class="row">
+    <div class="col-md-10">
+      <h1 id="Title">{{survey.resource.name}}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right">
+      <button type="button" class="btn btn-info">
+        <i class="fa fa-file-text"></i>
+        Real-Time Report
+      </button>
+      <button type="button" class="btn btn-info">
+        Call Log <span class="badge">4</span>
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="survey.allow.update"
+              ng-click="survey.openEditSurvey()">
+        <i class="fa fa-edit"></i>
+        Edit Survey
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <!-- List Subject Info -->
+    <div class="col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Survey Information</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <tr>
+              <td><strong>Survey Name</strong></td>
+              <td>{{survey.resource.name}}</td>
+            </tr>
+            <tr>
+              <td><strong>Study</strong></td>
+              <td>
+                <a ng-href="#/study/{{survey.resource.sessionStudy.name}}">{{survey.resource.sessionStudy.name}}</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Completed By</strong></td>
+              <td>{{survey.resource.completedBy}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- List Subject Forms -->
+    <div class="col-md-8">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Survey Session Forms</h3>
+        </div>
+        <div class="panel-body">
+          <table ng-table="survey.tableParams" class="table table-hover ng-table-responsive">
+            <tbody ng-repeat="type in $groups">
+            <tr class="ng-table-group">
+              <td colspan="{{$columns.length}}">
+                <a href="" ng-click="type.$hideRows = !type.$hideRows">
+                  <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': type.$hideRows, 'glyphicon-chevron-down': !type.$hideRows }"></span>
+                  <strong>{{ type.value }}</strong>
+                </a>
+              </td>
+            </tr>
+            <tr ng-hide="type.$hideRows" ng-repeat="session in type.data">
+              <td sortable="'type'" data-title="'Type'">
+                {{session.type}}
+              </td>
+              <td sortable="'name'" data-title="'Name'">
+                {{session.name}}
+              </td>
+              <td sortable="'timepoint'" data-title="'Timepoint'">
+                {{session.timepoint}}
+              </td>
+              <td sortable="'availableFrom'" data-title="'Available From'">
+                {{session.availableFrom}}
+              </td>
+              <td sortable="'availableTo'" data-title="'Available To'">
+                {{session.availableTo}}
+              </td>
+              <td sortable="'formVersions'" data-title="'Forms'">
+                <span ng-repeat="form in session.formVersions">
+                  <button class="btn btn-primary btn-xs permission-btn" type="button">
+                    {{form.name}}
+                  </button>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

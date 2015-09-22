@@ -47,7 +47,11 @@
         // initialize submenu
         AuthService.setSubmenu(vm.currStudy, data, $scope.dados.submenu);
         // populate add form dropdown with forms not already added
-        vm.forms = Form.query({ 'where': { 'id': { '!': _.pluck(data.items, 'id') }}});
+        var filterQuery = {};
+        if (!_.isEmpty(data.items)) {
+          filterQuery.where = { 'id': { '!': _.pluck(data.items, 'id') } };
+        }
+        vm.forms = Form.query(filterQuery);
       }
       return data;
     }
@@ -64,12 +68,12 @@
     }
 
     function addFormToStudy() {
-      console.log(vm.formToAdd);
       var studyForm = new StudyForm();
       studyForm.formID = vm.formToAdd;
       studyForm.studyID = vm.study;
       studyForm.$save().then(function () {
         toastr.success('Added form to ' + vm.currStudy + '!', 'Form');
+        vm.formToAdd = null;
         $scope.$broadcast('hateoas.client.refresh');
       });
     }

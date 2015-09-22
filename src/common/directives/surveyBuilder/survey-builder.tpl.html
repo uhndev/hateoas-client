@@ -1,0 +1,86 @@
+<div>
+  <tabset justified="true">
+    <!-- Stage 1: Define 1 survey item with n sessions in survey -->
+    <!-- (study, survey, completedBy) -->
+    <!-- (surveyVersion, name, timepoint, availableFrom, availableTo, type) -->
+    <tab heading="Define Survey" active="surveyBuilder.STAGES['DEFINE_SURVEY']">
+      <ng-form name="surveyBuilder.surveyForm" class="form-horizontal" novalidate>
+        <div class="form-group">
+          <label for="name" class="col-sm-3 control-label">Survey Name&nbsp;</label>
+
+          <div class="col-sm-9">
+            <input type="text" name="name" class="form-control"
+                   data-ng-model="surveyBuilder.survey.name" required>
+
+            <p ng-show="surveyBuilder.surveyForm.name.$invalid && !surveyBuilder.surveyForm.name.$pristine"
+               class="pull-right required-error">Survey must have a name.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="completedBy" class="col-sm-3 control-label">Completed By&nbsp;</label>
+
+          <div class="col-sm-9">
+            <select name="completedBy" class="form-control" ng-model="surveyBuilder.survey.completedBy" required>
+              <option value="" disabled>Select the type of user</option>
+              <option value="subject" label="Subject">Subject</option>
+              <option value="coordinator" label="Coordinator">Coordinator</option>
+            </select>
+
+            <p
+              ng-show="surveyBuilder.surveyForm.completedBy.$invalid && !surveyBuilder.surveyForm.completedBy.$pristine"
+              class="pull-right required-error">You must select a type of user to complete the survey.</p>
+          </div>
+        </div>
+      </ng-form>
+
+      <hr/>
+      <session-builder session="surveyBuilder.newSession"
+                       generate-sessions="surveyBuilder.generateSessions"></session-builder>
+      <hr/>
+
+      <list-editor list="surveyBuilder.survey.sessions"
+                   columns="surveyBuilder.sessionColumns"
+                   affix-missing="false"
+                   can-edit="true"
+                   can-add-newcol="false"
+                   can-add-newrow="false"
+                   can-edit-header="false"
+                   can-del-row="false"
+                   can-del-col="false"
+                   force-reload="surveyBuilder.toggleReload">
+      </list-editor>
+    </tab>
+
+    <!-- Stage 2: Configure m formVersions for each n session in survey -->
+    <!-- (list of formVersions applied to sessions) -->
+    <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
+      <timeline>
+        <timeline-event ng-repeat="session in surveyBuilder.survey.sessions">
+          <timeline-badge class="info">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </timeline-badge>
+          <timeline-panel class="info">
+            <timeline-heading>
+              <h4>{{session.name}}</h4>
+            </timeline-heading>
+            <span ng-repeat="form in surveyBuilder.formVersions"
+                  ng-switch="surveyBuilder.isFormActive(form, session)">
+              <span ng-switch-when="true">
+                <button class="btn btn-primary btn-xs permission-btn" type="button"
+                        ng-click="surveyBuilder.addRemoveForm(form, session)">
+                  {{form.name}} <i class="fa fa-times"></i>
+                </button>
+              </span>
+              <span ng-switch-default>
+                <button class="btn btn-default btn-xs permission-btn" type="button"
+                        ng-click="surveyBuilder.addRemoveForm(form, session)">
+                  <s>{{form.name}}</s> <i class="fa fa-plus"></i>
+                </button>
+              </span>
+            </span>
+          </timeline-panel>
+        </timeline-event>
+      </timeline>
+    </tab>
+  </tabset>
+</div>

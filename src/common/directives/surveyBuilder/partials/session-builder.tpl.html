@@ -1,0 +1,84 @@
+<div class="row">
+
+  <div class="col-md-3">
+    <div class="form-group">
+      <label>Type
+        <ui-help popover="The type of session, can be repeatable (scheduled) or adhoc (non-scheduled)"></ui-help>
+      </label>
+      <select id="sessionType" name="type" class="form-control"
+              ng-model="sessionBuilder.session.type" required>
+        <option value="" disabled>Select a type</option>
+        <option value="scheduled" label="Scheduled">Scheduled</option>
+        <option value="non-scheduled" label="Non-scheduled">Non-scheduled</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-2" ng-if="sessionBuilder.session.type !== 'scheduled'">
+    <div class="form-group">
+      <label for="name">Name
+        <ui-help popover="The name given to this session. e.g. 90 Day Intake"></ui-help>
+      </label>
+      <input id="name" type="text" name="name" class="form-control"
+             ng-model="sessionBuilder.session.name"
+             ng-disabled="!sessionBuilder.session.type" required/>
+    </div>
+  </div>
+
+  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
+    <div class="form-group">
+      <label for="repeat">Repeat
+        <ui-help popover="The number of of times this session should occur."></ui-help>
+      </label>
+      <input id="repeat" type="number" name="repeat" class="form-control"
+             min="0" ng-model="sessionBuilder.session.repeat"
+             ng-disabled="!sessionBuilder.session.type" required/>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div class="form-group">
+      <label for="timepoint">Timepoint
+        <ui-help
+          popover="The number of days after subject date of enrollment for when this session should take place."></ui-help>
+      </label>
+      <input id="timepoint" type="number" name="timepoint" class="form-control"
+             min="0" ng-model="sessionBuilder.session.timepoint"
+             ng-disabled="!sessionBuilder.session.type" required/>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div class="form-group">
+      <label for="availableFrom">Available From
+        <ui-help popover="The number of days before session date this survey should become available"></ui-help>
+      </label>
+      <input id="availableFrom" type="number" name="availableFrom" class="form-control"
+             min="0" ng-model="sessionBuilder.session.availableFrom"
+             ng-disabled="!sessionBuilder.session.type" required/>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div class="form-group">
+      <label for="availableTo">Available To
+        <ui-help popover="The number of days after session date this survey should no longer be available"></ui-help>
+      </label>
+      <input id="availableTo" type="number" name="availableTo" class="form-control"
+             min="0" ng-model="sessionBuilder.session.availableTo"
+             ng-disabled="!sessionBuilder.session.type" required/>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <label for="availableTo">&nbsp;</label>
+      <br/>
+      <button type="button" class="btn btn-primary"
+              ng-disabled="!sessionBuilder.isSessionValid()"
+              ng-click="sessionBuilder.generateSessions()">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </div>
+  </div>
+</div>
