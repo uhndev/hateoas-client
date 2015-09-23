@@ -114,6 +114,7 @@
       } else {
         if (_.all($scope.form.questions, 'name')) {
           $scope.isSaving = true;
+          $scope.form.commit = isManual;
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
