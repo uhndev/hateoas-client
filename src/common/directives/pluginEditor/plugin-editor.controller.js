@@ -66,11 +66,13 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = angular.copy(_.pick(result, 'id', 'name', 'questions', 'metaData', 'isDirty'));
-      $scope.isSaving = false;
-      toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
-      $location.search('idPlugin', $scope.form.id);
-      $scope.forms = FormService.query();
+      if(angular.isDefined(result.items.id)) {
+        $scope.form = angular.copy(result.items);
+        $scope.isSaving = false;
+        toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
+        $location.search('idPlugin', $scope.form.id);
+        $scope.forms = FormService.query();
+      }
     }
 
     function onFormError(err) {
@@ -172,10 +174,17 @@
         $timeout(function() {
           $scope.firstLoad = false;
         });
-      } else {
+      } else if (!equalsDeep(newVal, oldVal)) {
         save(false);
       }
     }, 5000);
-    $scope.$watch('form', onFormUpdate, true);
+    
+    /* Have to watch for specific form changes
+     * otherwise flag or timestamp updates may trigger save again.
+     */
+    $scope.$watch('form.name', onFormUpdate);
+    $scope.$watch('form.metaData', onFormUpdate, true);
+    $scope.$watch('form.questions', onFormUpdate, true);
+    
   }
 })();
