@@ -180,28 +180,6 @@ function debounceWatch($timeout, callback, delay) {
 	};
 }
 
-function equalsDeep(first, second, check) {
-  var result = true;
-  if (angular.isObject(first) && angular.isObject(second)) {
-    if (_.size(first) == _.size(second)) {
-      _.forIn(first, function(value, key) {
-        if (angular.isDefined(second[key])) {
-          result = equalsDeep(value, second[key], check);
-          if (!result) {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return false;
-    }
-  } else if (first !== second) {
-    return false;
-  }
-  return result;
-}
 
 /******************************************************************************
  * function: omit

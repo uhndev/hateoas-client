@@ -66,13 +66,11 @@
      */
 
     function onFormSaved(result) {
-      if(angular.isDefined(result.items.id)) {
-        $scope.form = angular.copy(result.items);
-        $scope.isSaving = false;
-        toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
-        $location.search('idPlugin', $scope.form.id);
-        $scope.forms = FormService.query();
-      }
+      $scope.form = angular.copy(_.transformHateoas(result));
+      $scope.isSaving = false;
+      toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
+      $location.search('idPlugin', $scope.form.id);
+      $scope.forms = FormService.query();
     }
 
     function onFormError(err) {
@@ -174,7 +172,7 @@
         $timeout(function() {
           $scope.firstLoad = false;
         });
-      } else if (!equalsDeep(newVal, oldVal)) {
+      } else if (!_.equalsDeep(newVal, oldVal)) {
         save(false);
       }
     }, 5000);

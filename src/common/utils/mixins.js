@@ -14,7 +14,8 @@
 		'objToPair': objToPair,
     'transformHateoas': transformHateoas,
     'pad': pad,
-    'userObjToName': userObjToName
+    'userObjToName': userObjToName,
+    'equalsDeep': equalsDeep
 	});
 
 	function parseUrl(location, url) {
@@ -100,4 +101,27 @@
     return [userObj.prefix, userObj.firstname, userObj.lastname].join(' ');
   }
 
+  function equalsDeep(first, second) {
+    var result = true;
+    if (angular.isObject(first) && angular.isObject(second)) {
+      if (_.size(first) == _.size(second)) {
+        _.forIn(first, function(value, key) {
+          if (angular.isDefined(second[key])) {
+            result = equalsDeep(value, second[key]);
+            if (!result) {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        });
+      } else {
+        return false;
+      }
+    } else if (first !== second) {
+      return false;
+    }
+    return result;
+  }
+  
 })();
