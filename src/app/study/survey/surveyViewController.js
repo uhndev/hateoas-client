@@ -73,6 +73,14 @@
         }
       };
 
+      /**
+       * When editing an existing survey, sessions are not populated yet, so we must
+       * fetch the individual survey and move the survey.sessionForms array to
+       * survey.sessions to match our model definition.
+       *
+       * side note: survey.sessionForms was populated in the backend via the
+       * studysession database view, hence the need to store it in a separate array from sessions.
+       */
       if (type === 'edit') {
         modalSettings.resolve.survey = function() {
           return Survey.get({ id: vm.selected.id }).$promise.then(function (survey) {
