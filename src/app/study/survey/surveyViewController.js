@@ -76,9 +76,8 @@
       if (type === 'edit') {
         modalSettings.resolve.survey = function() {
           return Survey.get({ id: vm.selected.id }).$promise.then(function (survey) {
-            console.log(survey);
             survey.sessions = [];
-            _.each(vm.selected.sessionForms, function(session) {
+            _.each(survey.sessionForms, function(session) {
               if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
                 session.formVersions = [session.formVersions];
               }
