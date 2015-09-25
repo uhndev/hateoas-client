@@ -67,23 +67,23 @@
     </tr>
     </thead>
     <tbody ng-form="ledit.colForm">
-    <tr ng-repeat="(rowIdx, item) in $data" ng-class="{selectEdit: item.$edit && ledit.canEditItem}" ng-form="ledit.rowForm_{{rowIdx}}">
+    <tr ng-repeat="item in $data track by $index" ng-class="{selectEdit: item.$edit && ledit.canEditItem}" ng-form="ledit.rowForm_{{$index}}">
       <!-- Render each cell per row of data -->
-      <td ng-repeat="(colIdx, column) in ledit.columns"
+      <td ng-repeat="column in ledit.columns track by $index"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}">
         <span ng-if="!item.$edit && !column.$edit">{{item[column.field]}}</span>
 
         <div ng-if="item.$edit" data-ng-switch="column.type">
           <div data-ng-switch-when="text">
-            <input type="text" name="rowForm_{{rowIdx}}_{{colIdx}}" class="form-control"
+            <input type="text" name="rowForm_{{$parent.$index}}_{{$index}}" class="form-control"
                    ng-model="item[column.field]" placeholder="{{item[column.field]}}" required/>
           </div>
           <div data-ng-switch-when="number">
-            <input type="number" name="rowForm_{{ledit.rowIdx}}_{{colIdx}}" min="0" class="form-control"
+            <input type="number" name="rowForm_{{$parent.$index}}_{{$index}}" min="0" class="form-control"
                    ng-model="item[column.field]" required/>
           </div>
           <div data-ng-switch-when="dropdown">
-            <select name="rowForm_{{rowIdx}}_{{colIdx}}"
+            <select name="rowForm_{{$parent.$index}}_{{$index}}"
                     class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
               <option ng-repeat="option in column.options" value="{{option.value}}"
@@ -94,15 +94,15 @@
         </div>
         <div ng-if="column.$edit" data-ng-switch="column.type">
           <div data-ng-switch-when="text">
-            <input type="text" class="form-control" name="colForm_{{rowIdx}}_{{colIdx}}"
+            <input type="text" class="form-control" name="colForm_{{$parent.$index}}_{{$index}}"
                    ng-model="item[column.field]" placeholder="{{item[column.field]}}" required/>
           </div>
           <div data-ng-switch-when="number">
-            <input type="number" min="0" class="form-control" name="colForm_{{rowIdx}}_{{colIdx}}"
+            <input type="number" min="0" class="form-control" name="colForm_{{$parent.$index}}_{{$index}}"
                    ng-model="item[column.field]" required/>
           </div>
           <div data-ng-switch-when="dropdown">
-            <select name="colForm_{{rowIdx}}_{{colIdx}}"
+            <select name="colForm_{{$parent.$index}}_{{$index}}"
                     class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
               <option ng-repeat="option in column.options" value="{{option.value}}"

@@ -138,6 +138,9 @@
         // otherwise, its non-scheduled won't have repeat but will have name attribute
         else {
           vm.newSession.surveyVersion = vm.latestSurveyVersion;
+          vm.newSession.timepoint = 0;
+          vm.newSession.availableFrom = 0;
+          vm.newSession.availableTo = 0;
           vm.survey.sessions.push(vm.newSession);
         }
         vm.newSession = {};

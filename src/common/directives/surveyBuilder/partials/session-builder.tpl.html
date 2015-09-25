@@ -14,7 +14,11 @@
     </div>
   </div>
 
-  <div class="col-md-2" ng-if="sessionBuilder.session.type !== 'scheduled'">
+  <div ng-if="sessionBuilder.session.type !== 'scheduled'"
+       ng-class="{
+        'col-md-8': sessionBuilder.session.type !== 'scheduled',
+        'col-md-2': sessionBuilder.session.type == 'scheduled'
+      }">
     <div class="form-group">
       <label for="name">Name
         <ui-help popover="The name given to this session. e.g. 90 Day Intake"></ui-help>
@@ -36,7 +40,7 @@
     </div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
     <div class="form-group">
       <label for="timepoint">Timepoint
         <ui-help
@@ -48,7 +52,7 @@
     </div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
     <div class="form-group">
       <label for="availableFrom">Available From
         <ui-help popover="The number of days before session date this survey should become available"></ui-help>
@@ -59,7 +63,7 @@
     </div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
     <div class="form-group">
       <label for="availableTo">Available To
         <ui-help popover="The number of days after session date this survey should no longer be available"></ui-help>
