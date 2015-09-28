@@ -30,128 +30,6 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-    var sampleData = [
-      {
-        "name": "Form 10",
-        "date": new Date(),
-        "status": "Completed",
-        "encounter": "Consent"
-      },
-      {
-        "name": "Form 9",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 1"
-      },
-      {
-        "name": "Form 6",
-        "date": new Date(),
-        "status": "Completed",
-        "encounter": "Visit 1"
-      },
-      {
-        "name": "Form 6",
-        "date": new Date(),
-        "status": "Incomplete",
-        "encounter": "Visit 1"
-      },
-      {
-        "name": "Form 4",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 2"
-      },
-      {
-        "name": "Form 5",
-        "date": new Date(),
-        "status": "Incomplete",
-        "encounter": "Visit 2"
-      },
-      {
-        "name": "Form 0",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 3"
-      },
-      {
-        "name": "Form 5",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 3"
-      },
-      {
-        "name": "Form 9",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 3"
-      },
-      {
-        "name": "Form 5",
-        "date": new Date(),
-        "status": "Incomplete",
-        "encounter": "Visit 3"
-      },
-      {
-        "name": "Form 10",
-        "date": new Date(),
-        "status": "Completed",
-        "encounter": "Visit 3"
-      },
-      {
-        "name": "Form 8",
-        "date": new Date(),
-        "status": "Completed",
-        "encounter": "Visit 4"
-      },
-      {
-        "name": "Form 8",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 4"
-      },
-      {
-        "name": "Form 2",
-        "date": new Date(),
-        "status": "Incomplete",
-        "encounter": "Visit 4"
-      },
-      {
-        "name": "Form 8",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 5"
-      },
-      {
-        "name": "Form 8",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 6"
-      },
-      {
-        "name": "Form 9",
-        "date": new Date(),
-        "status": "Incomplete",
-        "encounter": "Visit 7"
-      },
-      {
-        "name": "Form 7",
-        "date": new Date(),
-        "status": "Late",
-        "encounter": "Visit 7"
-      }
-    ];
-
-    $scope.tableParams = new TableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-    }, {
-      groupBy: 'encounter',
-      total: sampleData.length,
-      getData: function($defer, params) {
-        $defer.resolve(sampleData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-    });
-
     function init() {
       var SubjectEnrollment = $resource(vm.url);
       SubjectEnrollment.get(function(data, headers) {
@@ -161,6 +39,16 @@
         _.each(permissions, function (permission) {
           vm.allow[permission] = true;
         });
+
+        vm.tableParams = new TableParams({
+          page: 1,            // show first page
+          count: 10           // count per page
+        }, {
+          groupBy: 'name',
+          total: data.items.formSchedules.length,
+          data: data.items.formSchedules
+        });
+
         // initialize submenu
         AuthService.setSubmenu(vm.resource.studyName, data, $scope.dados.submenu);
       });
