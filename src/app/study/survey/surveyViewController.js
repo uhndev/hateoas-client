@@ -89,6 +89,7 @@
               if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
                 session.formVersions = [session.formVersions];
               }
+              session.formVersions = _.pluck(session.formVersions, 'id');
               survey.sessions.push(session);
             });
             delete survey.sessionForms;
