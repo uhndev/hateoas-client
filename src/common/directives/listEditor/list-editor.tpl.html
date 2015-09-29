@@ -157,6 +157,10 @@
                   ng-click="ledit.cancelRowEdit(item)">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
+          <span class="pull-right required-error"
+                ng-show="ledit.rowForm_{{$index}}.$invalid">
+            * Invalid value(s)
+          </span>
         </div>
       </td>
     </tr>
@@ -179,6 +183,10 @@
           <button class="btn btn-warning btn-sm" ng-click="ledit.cancelColumnEdit(column)">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
+          <span class="pull-right required-error"
+                ng-show="ledit.colForm.$invalid">
+            * Invalid value(s)
+          </span>
         </div>
       </td>
       <!-- Render input type option and field name input when creating columns -->
