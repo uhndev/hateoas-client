@@ -27,7 +27,7 @@
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
     vm.forms = vm.forms || [];                 // array storing form definitions
-    vm.formVersions = [];                      // array storing latest form versions
+    vm.formVersions = {};                      // dictionary storing latest form versions by id
     vm.latestSurveyVersion = 1;                // id of latest survey version
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
     vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
@@ -60,10 +60,10 @@
       angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
       // sort and retrieve latest revisions of forms
       if (!_.has(vm.forms, 'versions')) {
-        // store array of latest forms
-        vm.formVersions = _.map(vm.forms, function (form) {
+        // store dictionary of latest forms
+        vm.formVersions = _.indexBy(_.map(vm.forms, function (form) {
           return _.last(_.sortBy(form.versions, 'revision'));
-        });
+        }), 'id');
       }
       // sort and retrieve latest revisions of surveys
       if (_.has(vm.survey, 'versions') && vm.survey.versions.length > 1) {
@@ -93,10 +93,11 @@
      * @param session session object with list of formVersions
      */
     function addRemoveForm(formVersion, session) {
-      if (_.inArray(session.formVersions, formVersion.id)) {
-        session.formVersions = _.without(session.formVersions, formVersion.id);
+      var formId = parseInt((_.has(formVersion, 'id') ? formVersion.id : formVersion));
+      if (_.inArray(session.formVersions, formId)) {
+        session.formVersions = _.without(session.formVersions, formId);
       } else {
-        session.formVersions.push(formVersion.id);
+        session.formVersions.push(formId);
       }
     }
 
@@ -107,7 +108,8 @@
      * @returns {Boolean} true if formVersion is in session, false otherwise
      */
     function isFormActive(form, session) {
-      return _.inArray(session.formVersions, form.id);
+      var formId = parseInt((_.has(form, 'id') ? form.id : form));
+      return _.inArray(session.formVersions, formId);
     }
 
     /**
@@ -118,7 +120,10 @@
      */
     function generateSessions() {
       if (!_.isEmpty(vm.newSession)) {
-        vm.newSession.formVersions = _.pluck(vm.formVersions, 'id');
+        var formIds = _.map(_.keys(vm.formVersions), function (formId) { return parseInt(formId); });
+        vm.newSession.formOrder = angular.copy(formIds);
+        vm.newSession.formVersions = angular.copy(formIds);
+
         // if scheduled, session won't have name but will have repeat attributes
         if (vm.newSession.type === 'scheduled') {
           // repeat as many times as needed to generate timepoints
@@ -131,7 +136,8 @@
               timepoint: future,
               availableFrom: vm.newSession.availableFrom,
               availableTo: vm.newSession.availableTo,
-              formVersions: _.pluck(vm.formVersions, 'id')
+              formOrder: angular.copy(formIds),
+              formVersions: angular.copy(formIds)
             });
           }
         }
