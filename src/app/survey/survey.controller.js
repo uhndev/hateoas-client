@@ -39,12 +39,27 @@
         // initialize submenu
         AuthService.setSubmenu(vm.resource.sessionStudy.name, data, $scope.dados.submenu);
 
+        var scheduledForms = [];
+        var sessions = angular.copy(_.sortBy(vm.resource.sessionForms, 'timepoint'));
+        // create 1D list of scheduled forms
+        _.each(sessions, function (session) {
+          _.each(session.formOrder, function (formOrderId) {
+            // if ordered form is active for this session
+            if (_.contains(_.pluck(session.formVersions, 'id'), formOrderId)) {
+              var sessionForm = _.clone(session);
+              sessionForm.formItem = vm.resource.sessionStudy.possibleForms[formOrderId];
+              scheduledForms.push(sessionForm);
+            }
+          });
+        });
+        console.log(scheduledForms);
+
         vm.tableParams = new TableParams({
           page: 1,
           count: 10
         }, {
-          groupBy: "type",
-          data: _.sortBy(vm.resource.sessionForms, 'timepoint')
+          groupBy: "name",
+          data: scheduledForms
         });
       });
     }
@@ -62,7 +77,11 @@
             return angular.copy(vm.resource.sessionStudy);
           },
           forms: function() {
-            return angular.copy(vm.resource.sessionStudy.forms);
+            // resolve study forms
+            var StudyForms = $resource(API.url() + '/study/' + vm.resource.sessionStudy.name + '/form');
+            return StudyForms.get().$promise.then(function (data) {
+              return data.items;
+            });
           },
           survey: function() {
             var survey = angular.copy(vm.resource);
