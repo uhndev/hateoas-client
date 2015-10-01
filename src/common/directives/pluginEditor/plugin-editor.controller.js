@@ -7,12 +7,13 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'toastr'];
+  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'];
 
-  function PluginController($scope, $location, $timeout, FormService, StudyFormService, toastr) {
+  function PluginController($scope, $location, $timeout, FormService, StudyFormService, FormVersionService, toastr) {
     // bindable variables
     $scope.firstLoad = true;
     $scope.isSaving = false;
+    $scope.isCommitting = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
     $scope.forms = FormService.query();
@@ -40,9 +41,18 @@
       if ($scope.idPlugin && !_.has($scope.form, 'id')) {
         FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
           // we only want non-hateoas attributes to load into our pluginEditor
-          setForm(_.pick(form, 'id', 'name', 'questions', 'metaData', 'isDirty'));
+          setForm(pickFormAttributes(form));
         });
       }
+    }
+    
+    function pickFormAttributes(hateoas) {
+      if (hateoas.hasOwnProperty('items')) {
+        return _.pick(hateoas.items, 'id', 'name', 'questions', 'metaData', 'isDirty');
+      } else {
+        return _.pick(hateoas, 'id', 'name', 'questions', 'metaData', 'isDirty');
+      }
+      
     }
 
     /**
@@ -66,8 +76,11 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = angular.copy(_.transformHateoas(result));
+      $scope.form = pickFormAttributes(result);
       $scope.isSaving = false;
+      if ($scope.isCommitting) {
+        FormVersionService.save($scope.form);
+      }
       toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
       $location.search('idPlugin', $scope.form.id);
       $scope.forms = FormService.query();
@@ -114,7 +127,7 @@
       } else {
         if (_.all($scope.form.questions, 'name')) {
           $scope.isSaving = true;
-          $scope.form.commit = isManual;
+          $scope.isCommitting = isManual;
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {

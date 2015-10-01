@@ -7,10 +7,12 @@
       'dados.common.services.resource'
     ])
     .factory('FormService', FormService)
-    .factory('StudyFormService', StudyFormService);
+    .factory('StudyFormService', StudyFormService)
+    .factory('FormVersionService', FormVersionService);
 
   FormService.$inject = ['ResourceFactory', 'FORM_API'];
   StudyFormService.$inject = ['$resource', 'API'];
+  FormVersionService.$inject = ['$resource', 'API'];
 
   function FormService(ResourceFactory, FORM_API) {
     return ResourceFactory.create(FORM_API.url);
@@ -38,4 +40,8 @@
     );
   }
 
+  function FormVersionService($resource, API) {
+    return $resource(API.url() + '/formversion');
+  }  
+  
 })();
