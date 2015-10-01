@@ -60,21 +60,21 @@
         </div>
         <div class="panel-body">
           <table ng-table="survey.tableParams" class="table table-hover ng-table-responsive">
-            <tbody ng-repeat="type in $groups">
+            <tbody ng-repeat="name in $groups">
             <tr class="ng-table-group">
               <td colspan="{{$columns.length}}">
-                <a href="" ng-click="type.$hideRows = !type.$hideRows">
-                  <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': type.$hideRows, 'glyphicon-chevron-down': !type.$hideRows }"></span>
-                  <strong>{{ type.value }}</strong>
+                <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                  <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+                  <strong>{{ name.value }}</strong>
                 </a>
               </td>
             </tr>
-            <tr ng-hide="type.$hideRows" ng-repeat="session in type.data">
+            <tr ng-hide="name.$hideRows" ng-repeat="session in name.data">
               <td sortable="'type'" data-title="'Type'">
                 {{session.type}}
               </td>
               <td sortable="'name'" data-title="'Name'">
-                {{session.name}}
+                {{session.formItem.name}}
               </td>
               <td sortable="'timepoint'" data-title="'Timepoint'">
                 {{session.timepoint}}
@@ -84,13 +84,6 @@
               </td>
               <td sortable="'availableTo'" data-title="'Available To'">
                 {{session.availableTo}}
-              </td>
-              <td sortable="'formVersions'" data-title="'Forms'">
-                <span ng-repeat="form in session.formVersions">
-                  <button class="btn btn-primary btn-xs permission-btn" type="button">
-                    {{form.name}}
-                  </button>
-                </span>
               </td>
             </tr>
             </tbody>

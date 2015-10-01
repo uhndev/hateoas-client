@@ -19,6 +19,7 @@
             'fa fa-sort-desc': ledit.isSortBy(column.field, 'desc')
           }"></i>
         </span>
+
         <div ng-if="column.$edit">
           <input type="text" class="form-control"
                  ng-model="column.title"
@@ -43,7 +44,7 @@
       <th ng-if="ledit.editCol && ledit.canEdit" class="selectEdit">
         <input type="text"
                placeholder="New Column Title" class="form-control"
-               ng-model="ledit.columnBuffer.title" />
+               ng-model="ledit.columnBuffer.title"/>
       </th>
       <th ng-if="ledit.canEdit">Actions</th>
     </tr>
@@ -65,35 +66,48 @@
       </th>
     </tr>
     </thead>
-    <tbody>
-    <tr ng-repeat="item in $data" ng-class="{selectEdit: item.$edit && ledit.canEditItem}">
+    <tbody ng-form="ledit.colForm">
+    <tr ng-repeat="item in $data track by $index" ng-class="{selectEdit: item.$edit && ledit.canEditItem}" ng-form="ledit.rowForm_{{$index}}">
       <!-- Render each cell per row of data -->
-      <td ng-repeat="column in ledit.columns"
+      <td ng-repeat="column in ledit.columns track by $index"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}">
         <span ng-if="!item.$edit && !column.$edit">{{item[column.field]}}</span>
+
         <div ng-if="item.$edit" data-ng-switch="column.type">
+          <div data-ng-switch-when="text">
+            <input type="text" name="rowForm_{{$parent.$index}}_{{$index}}" class="form-control"
+                   ng-model="item[column.field]" placeholder="{{item[column.field]}}" required/>
+          </div>
+          <div data-ng-switch-when="number">
+            <input type="number" name="rowForm_{{$parent.$index}}_{{$index}}" min="0" class="form-control"
+                   ng-model="item[column.field]" required/>
+          </div>
           <div data-ng-switch-when="dropdown">
-            <select class="form-control" ng-model="item[column.field]" required>
+            <select name="rowForm_{{$parent.$index}}_{{$index}}"
+                    class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
               <option ng-repeat="option in column.options" value="{{option.value}}"
-                      ng-selected="item[column.field] === option.value">{{option.prompt}}</option>
+                      ng-selected="item[column.field] === option.value">{{option.prompt}}
+              </option>
             </select>
           </div>
-          <input data-ng-switch-default class="form-control" type="{{column.type}}"
-                 placeholder="{{item[column.field]}}" ng-model="item[column.field]" />
         </div>
         <div ng-if="column.$edit" data-ng-switch="column.type">
           <div data-ng-switch-when="text">
-            <input type="text" class="form-control" ng-model="item[column.field]" />
+            <input type="text" class="form-control" name="colForm_{{$parent.$index}}_{{$index}}"
+                   ng-model="item[column.field]" placeholder="{{item[column.field]}}" required/>
           </div>
           <div data-ng-switch-when="number">
-            <input type="number" class="form-control" ng-model="item[column.field]" />
+            <input type="number" min="0" class="form-control" name="colForm_{{$parent.$index}}_{{$index}}"
+                   ng-model="item[column.field]" required/>
           </div>
           <div data-ng-switch-when="dropdown">
-            <select class="form-control" ng-model="item[column.field]" required>
+            <select name="colForm_{{$parent.$index}}_{{$index}}"
+                    class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
               <option ng-repeat="option in column.options" value="{{option.value}}"
-                      ng-selected="item[column.field] === option.value">{{option.prompt}}</option>
+                      ng-selected="item[column.field] === option.value">{{option.prompt}}
+              </option>
             </select>
           </div>
         </div>
@@ -104,16 +118,17 @@
       <td ng-if="ledit.editCol && ledit.canEdit" ng-show="{{ledit.canAddNewcol}}" class="selectEdit">
         <div data-ng-switch="ledit.columnBuffer.type">
           <div data-ng-switch-when="text">
-            <input type="text" class="form-control" ng-model="ledit.columnBuffer.data[$index]" />
+            <input type="text" class="form-control" ng-model="ledit.columnBuffer.data[$index]"/>
           </div>
           <div data-ng-switch-when="number">
-            <input type="number" class="form-control" ng-model="ledit.columnBuffer.data[$index]" />
+            <input type="number" min="0" class="form-control" ng-model="ledit.columnBuffer.data[$index]"/>
           </div>
           <div data-ng-switch-when="dropdown">
             <select class="form-control" ng-model="ledit.columnBuffer.data[$index]" required>
               <option value="" disabled>Select an option</option>
               <option ng-repeat="option in column.options" value="{{option.value}}"
-                      ng-selected="item[column.field] === option.value">{{option.prompt}}</option>
+                      ng-selected="item[column.field] === option.value">{{option.prompt}}
+              </option>
             </select>
           </div>
         </div>
@@ -134,6 +149,7 @@
         </div>
         <div class="btn-group" ng-if="item.$edit">
           <button id="toggleEditID_{{$index}}" class="btn btn-primary btn-sm"
+                  ng-disabled="ledit.rowForm_{{$index}}.$invalid"
                   ng-click="ledit.toggleEdit(item)">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
@@ -141,6 +157,10 @@
                   ng-click="ledit.cancelRowEdit(item)">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
+          <span class="pull-right required-error"
+                ng-show="ledit.rowForm_{{$index}}.$invalid">
+            * Invalid value(s)
+          </span>
         </div>
       </td>
     </tr>
@@ -154,13 +174,19 @@
                ng-disabled="ledit.editCol || ledit.canEditItem"
                placeholder="New {{column.field}}" type="{{column.type}}"
                ng-model="ledit.rowBuffer[column.field]"/>
+
         <div ng-if="column.$edit">
-          <button class="btn btn-primary btn-sm" ng-click="ledit.toggleEdit(column)">
+          <button class="btn btn-primary btn-sm" ng-click="ledit.toggleEdit(column)"
+                  ng-disabled="ledit.colForm.$invalid">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
           <button class="btn btn-warning btn-sm" ng-click="ledit.cancelColumnEdit(column)">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
+          <span class="pull-right required-error"
+                ng-show="ledit.colForm.$invalid">
+            * Invalid value(s)
+          </span>
         </div>
       </td>
       <!-- Render input type option and field name input when creating columns -->

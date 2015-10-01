@@ -73,18 +73,28 @@
         }
       };
 
+      /**
+       * When editing an existing survey, sessions are not populated yet, so we must
+       * fetch the individual survey and move the survey.sessionForms array to
+       * survey.sessions to match our model definition.
+       *
+       * side note: survey.sessionForms was populated in the backend via the
+       * studysession database view, hence the need to store it in a separate array from sessions.
+       */
       if (type === 'edit') {
         modalSettings.resolve.survey = function() {
-          var survey = angular.copy(vm.selected);
-          survey.sessions = [];
-          _.each(vm.selected.sessionForms, function(session) {
-            if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
-              session.formVersions = [session.formVersions];
-            }
-            survey.sessions.push(session);
+          return Survey.get({ id: vm.selected.id }).$promise.then(function (survey) {
+            survey.sessions = [];
+            _.each(survey.sessionForms, function(session) {
+              if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
+                session.formVersions = [session.formVersions];
+              }
+              session.formVersions = _.pluck(session.formVersions, 'id');
+              survey.sessions.push(session);
+            });
+            delete survey.sessionForms;
+            return survey;
           });
-          delete survey.sessionForms;
-          return survey;
         };
       }
 

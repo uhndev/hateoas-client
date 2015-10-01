@@ -47,7 +47,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      User.get({ id: subject.userId }, function (data, headers) {
+      User.get({ id: subject.user }, function (data, headers) {
         if (data) {
           vm.userData = angular.copy(data);
         }
@@ -71,7 +71,7 @@
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment
         .$update({ id: subject.id })
-        .then(user.$update({ id: subject.userId }))
+        .then(user.$update({ id: subject.user }))
         .then(function() {
           toastr.success('Updated subject enrollment!', 'Subject Enrollment');
         })

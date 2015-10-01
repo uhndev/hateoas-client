@@ -63,21 +63,25 @@
             <timeline-heading>
               <h4>{{session.name}}</h4>
             </timeline-heading>
-            <span ng-repeat="form in surveyBuilder.formVersions"
-                  ng-switch="surveyBuilder.isFormActive(form, session)">
-              <span ng-switch-when="true">
-                <button class="btn btn-primary btn-xs permission-btn" type="button"
-                        ng-click="surveyBuilder.addRemoveForm(form, session)">
-                  {{form.name}} <i class="fa fa-times"></i>
-                </button>
-              </span>
-              <span ng-switch-default>
-                <button class="btn btn-default btn-xs permission-btn" type="button"
-                        ng-click="surveyBuilder.addRemoveForm(form, session)">
-                  <s>{{form.name}}</s> <i class="fa fa-plus"></i>
-                </button>
-              </span>
-            </span>
+            <ul class="list-unstyled" ui-sortable="{ 'cursor': 'move' }" ng-model="session.formOrder">
+              <li ng-repeat="id in session.formOrder"
+                  class="selectable"
+                  ng-style="{ 'margin-bottom': '-5px' }"
+                  ng-switch="surveyBuilder.isFormActive(id, session)">
+                <h4>
+                  <span ng-switch-when="true" class="label label-primary"
+                        ng-click="surveyBuilder.addRemoveForm(id, session)">
+                    {{$index + 1}}) {{surveyBuilder.formVersions[id].name}}
+                    <i class="fa fa-times"></i>
+                  </span>
+                  <span ng-switch-default class="label label-default"
+                        ng-click="surveyBuilder.addRemoveForm(id, session)">
+                    <s>{{$index + 1}}) {{surveyBuilder.formVersions[id].name}}</s>
+                    <i class="fa fa-plus"></i>
+                  </span>
+                </h4>
+              </li>
+            </ul>
           </timeline-panel>
         </timeline-event>
       </timeline>
