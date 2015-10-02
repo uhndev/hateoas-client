@@ -57,7 +57,6 @@
               ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}
           </td>
           <td ng-if="access.currentView === 'user'">
-            </isteven-multi-select>
             <select class="form-control"
                     ng-disabled="access.selected.id !== row.id"
                     ng-model="row.group"
