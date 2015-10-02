@@ -1,3 +1,10 @@
+/**
+ * Form Editor Controller
+ *
+ * @module      directives/pluginEditor
+ * @description Main controller for pluginEditor directive that handles form import and saving logic.
+ */
+
 (function () {
   'use strict';
 
@@ -46,6 +53,10 @@
       }
     }
     
+    /**
+     * Function that picks only non-hateoas attributes from server response
+     */
+    
     function pickFormAttributes(hateoas) {
       if (hateoas.hasOwnProperty('items')) {
         return _.pick(hateoas.items, 'id', 'name', 'questions', 'metaData', 'isDirty');
@@ -76,7 +87,7 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = pickFormAttributes(result);
+      $scope.form = angular.copy(pickFormAttributes(result));
       $scope.isSaving = false;
       if ($scope.isCommitting) {
         FormVersionService.save($scope.form);

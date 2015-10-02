@@ -1,3 +1,10 @@
+/**
+ * Lodash utility mixins
+ *
+ * @module      utils/mixins
+ * @description A set of utility functions extending the Lodash library to be used on the client side.
+ */
+
 (function() {
 	'use strict';
 
@@ -100,7 +107,16 @@
   function userObjToName(userObj) {
     return [userObj.prefix, userObj.firstname, userObj.lastname].join(' ');
   }
-
+ 
+  /**
+   * equalsDeep
+   * @description  A deep object comparison function to detect deep object changes
+   *              (e.g. question properties on a form).
+   *              Performs recursive search and test until first inconsistency.
+   * @param {} first
+   * @param {} second
+   * @return {boolean} True if values are equal, False otherwise
+   */  
   function equalsDeep(first, second) {
     var result = true;
     if (angular.isObject(first) && angular.isObject(second)) {
