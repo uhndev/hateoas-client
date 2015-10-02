@@ -25,7 +25,7 @@
 
     // private variables
     var loadLimit = 5;                         // max number of sessions to show in window
-    var loadDistance = 1;                      // number of sessions to remove/append on scroll
+    var loadDistance = 3;                      // number of sessions to remove/append on scroll
 
     // bindable variables
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
