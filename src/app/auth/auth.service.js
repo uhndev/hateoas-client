@@ -14,10 +14,10 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', '$rootScope', '$location', '$resource', '$cookieStore', 'TABVIEW', 'SUBVIEW'
+    'AUTH_API', '$rootScope', '$location', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW'
   ];
 
-  function AuthService(Auth, $rootScope, $location, $resource, $cookieStore, TABVIEW, SUBVIEW) {
+  function AuthService(Auth, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW) {
 
     var LoginAuth = $resource(Auth.LOGIN_API);
     var self = this;
@@ -28,7 +28,7 @@
      * @return {Boolean}
      */
     this.isAuthenticated = function() {
-      var auth = Boolean($cookieStore.get('user'));
+      var auth = Boolean($cookies.get('user'));
       if (!auth) {
         this.setUnauthenticated();
       } else {
@@ -42,7 +42,7 @@
      * Fires events to app (dados-header) to remove main/sub menus from view
      */
     this.setUnauthenticated = function() {
-      $cookieStore.remove('user');
+      $cookies.remove('user');
       delete this.currentUser;
       $rootScope.$broadcast("events.unauthorized");
       $location.url('/login');
@@ -54,10 +54,10 @@
      * from response, or from angular constant settings
      */
     this.setAuthenticated = function() {
-      this.currentUser = $cookieStore.get('user');
+      this.currentUser = $cookies.getObject('user');
       var view = this.currentUser.group.name.toString().toUpperCase();
-      this.tabview = $cookieStore.get('user').group.tabview || TABVIEW[view];
-      this.subview = $cookieStore.get('user').group.subview || SUBVIEW[view];
+      this.tabview = $cookies.getObject('user').group.tabview || TABVIEW[view];
+      this.subview = $cookies.getObject('user').group.subview || SUBVIEW[view];
       $rootScope.$broadcast("events.authorized");
     };
 
@@ -123,7 +123,7 @@
      */
     this.logout = function(data, onSuccess, onError) {
       this.setUnauthenticated();
-      $cookieStore.remove('user');
+      $cookies.remove('user');
       return $resource(Auth.LOGOUT_API).query();
     };
   }

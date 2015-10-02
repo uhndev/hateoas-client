@@ -10,9 +10,9 @@
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookieStore', 'AuthService'];
+  AuthController.$inject = ['$location', '$state', '$cookies', 'AuthService'];
 
-  function AuthController($location, $state, $cookieStore, AuthService) {
+  function AuthController($location, $state, $cookies, AuthService) {
     var vm = this;
     vm.error = '';
 
@@ -35,7 +35,7 @@
     var success = function(user) {
       if (user) {
         var now = new Date();
-        $cookieStore.put('user', user, {
+        $cookies.putObject('user', user, {
           expires: new Date(now.getTime() + (60000 * user.token.expires))
         });
         AuthService.setAuthenticated();

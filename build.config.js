@@ -84,7 +84,7 @@ module.exports = {
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/ng-table/dist/ng-table.js',
-      'vendor/angular-ui-utils/ui-utils.js',
+      'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
       'vendor/ace-builds/src/ace.js',
       'vendor/ace-builds/src/mode-javascript.js',
