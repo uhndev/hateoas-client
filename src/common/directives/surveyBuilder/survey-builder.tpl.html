@@ -54,37 +54,40 @@
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
-      <timeline>
-        <timeline-event ng-repeat="session in surveyBuilder.survey.sessions">
-          <timeline-badge class="info">
-            <i class="glyphicon glyphicon-calendar"></i>
-          </timeline-badge>
-          <timeline-panel class="info">
-            <timeline-heading>
-              <h4>{{session.name}}</h4>
-            </timeline-heading>
-            <ul class="list-unstyled" ui-sortable="{ 'cursor': 'move' }" ng-model="session.formOrder">
-              <li ng-repeat="id in session.formOrder"
-                  class="selectable"
-                  ng-style="{ 'margin-bottom': '-5px' }"
-                  ng-switch="surveyBuilder.isFormActive(id, session)">
-                <h4>
-                  <span ng-switch-when="true" class="label label-primary"
-                        ng-click="surveyBuilder.addRemoveForm(id, session)">
-                    {{$index + 1}}) {{surveyBuilder.formVersions[id].name}}
-                    <i class="fa fa-times"></i>
-                  </span>
-                  <span ng-switch-default class="label label-default"
-                        ng-click="surveyBuilder.addRemoveForm(id, session)">
-                    <s>{{$index + 1}}) {{surveyBuilder.formVersions[id].name}}</s>
-                    <i class="fa fa-plus"></i>
-                  </span>
-                </h4>
-              </li>
-            </ul>
-          </timeline-panel>
-        </timeline-event>
-      </timeline>
+      <pre>{{surveyBuilder.showLimit | json}}</pre>
+      <div class="timeline-container" scrolly onscrolldown="surveyBuilder.loadNext()" onscrollup="surveyBuilder.loadPrev()">
+        <timeline>
+          <timeline-event ng-repeat="session in surveyBuilder.survey.sessions | limitTo:surveyBuilder.showLimit">
+            <timeline-badge class="info">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </timeline-badge>
+            <timeline-panel class="info">
+              <timeline-heading>
+                <h4>{{session.name}}</h4>
+              </timeline-heading>
+              <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }" ng-model="session.formOrder">
+                <li ng-repeat="id in session.formOrder"
+                    class="selectable"
+                    ng-style="{ 'margin-bottom': '-5px' }"
+                    ng-switch="surveyBuilder.isFormActive(id, session)">
+                  <h4>
+                    <span ng-switch-when="true" class="label label-primary"
+                          ng-click="surveyBuilder.addRemoveForm(id, session)">
+                      {{$index + 1}}) {{surveyBuilder.formVersions[id].name}}
+                      <i class="fa fa-times"></i>
+                    </span>
+                    <span ng-switch-default class="label label-default"
+                          ng-click="surveyBuilder.addRemoveForm(id, session)">
+                      <s>{{$index + 1}}) {{surveyBuilder.formVersions[id].name}}</s>
+                      <i class="fa fa-plus"></i>
+                    </span>
+                  </h4>
+                </li>
+              </ul>
+            </timeline-panel>
+          </timeline-event>
+        </timeline>
+      </div>
     </tab>
   </tabset>
 </div>

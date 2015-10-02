@@ -4,6 +4,7 @@
   angular
     .module('dados.common.directives.surveyBuilder.controller', [
       'dados.common.directives.listEditor',
+      'angular-scroll-animate',
       'angular-timeline'
     ])
     .constant('STAGES', { // stages of survey creation
@@ -32,6 +33,9 @@
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
     vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
     vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
+    vm.showLimit = 5;
+    vm.hideLimit = 0;
+
     vm.sessionColumns = [
       { title: 'Type', field: 'type', type: 'dropdown', options: [
         { prompt: 'Scheduled', value: 'scheduled' },
@@ -48,6 +52,10 @@
     vm.addRemoveForm = addRemoveForm;
     vm.isFormActive = isFormActive;
     vm.generateSessions = generateSessions;
+    vm.loadNext = loadNext;
+    vm.loadPrev = loadPrev;
+    vm.animateElementIn = animateElementIn;
+    vm.animateElementOut = animateElementOut;
 
     init();
 
@@ -154,6 +162,27 @@
         vm.tableParams.reload();
         vm.toggleReload = !vm.toggleReload;
       }
+    }
+
+    function loadNext() {
+      vm.showLimit += 2;
+    }
+
+    function loadPrev() {
+      console.log('load prev');
+      if ((vm.showLimit - 3) >= 5) {
+        vm.showLimit -= 3;
+      }
+    }
+
+    function animateElementIn($elem) {
+      $elem.removeClass('hidden');
+      $elem.addClass('bounce-in');
+    }
+
+    function animateElementOut($elem) {
+      $elem.addClass('hidden');
+      $elem.removeClass('bounce-in');
     }
 
     $scope.$watch('surveyBuilder.survey', function(newVal, oldVal) {
