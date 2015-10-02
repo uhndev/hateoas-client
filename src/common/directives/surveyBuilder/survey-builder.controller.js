@@ -164,11 +164,19 @@
       }
     }
 
+    /**
+     * loadNext
+     * @description Moves window of sessions view forward by loadDistance
+     */
     function loadNext() {
       vm.showLimit += loadDistance;
       vm.hideLimit += loadDistance;
     }
 
+    /**
+     * loadPrev
+     * @description Moves window of sessions view backward by loadDistance
+     */
     function loadPrev() {
       if ((vm.showLimit - loadDistance) >= loadLimit) {
         vm.showLimit -= loadDistance;
