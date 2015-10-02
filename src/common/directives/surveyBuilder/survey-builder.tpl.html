@@ -54,10 +54,20 @@
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms" active="surveyBuilder.STAGES['SELECT_FORMS']">
-      <pre>{{surveyBuilder.showLimit | json}}</pre>
-      <div class="timeline-container" scrolly onscrolldown="surveyBuilder.loadNext()" onscrollup="surveyBuilder.loadPrev()">
+      <div class="input-group">
+        <input id="hideLimit" class="form-control" ng-model="surveyBuilder.timelineQuery"
+               placeholder="Filter sessions"/>
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+      </div>
+      <br/>
+
+      <div class="timeline-container" scroll-watch onscrolldown="surveyBuilder.loadNext()"
+           onscrollup="surveyBuilder.loadPrev()" onscrolltop="surveyBuilder.hideLimit = 0">
         <timeline>
-          <timeline-event ng-repeat="session in surveyBuilder.survey.sessions | limitTo:surveyBuilder.showLimit">
+          <timeline-event
+            ng-repeat="session in surveyBuilder.survey.sessions | filter:surveyBuilder.timelineQuery | limitTo:surveyBuilder.showLimit:surveyBuilder.hideLimit">
             <timeline-badge class="info">
               <i class="glyphicon glyphicon-calendar"></i>
             </timeline-badge>
@@ -65,7 +75,8 @@
               <timeline-heading>
                 <h4>{{session.name}}</h4>
               </timeline-heading>
-              <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }" ng-model="session.formOrder">
+              <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+                  ng-model="session.formOrder">
                 <li ng-repeat="id in session.formOrder"
                     class="selectable"
                     ng-style="{ 'margin-bottom': '-5px' }"

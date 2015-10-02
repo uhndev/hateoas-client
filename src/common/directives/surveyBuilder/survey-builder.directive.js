@@ -17,38 +17,7 @@
 
   angular
     .module('dados.common.directives.surveyBuilder.directive', [])
-    .directive('surveyBuilder', surveyBuilder)
-    .directive('scrolly', function ($parse) {
-      return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-          var raw = element[0];
-          console.log('loading directive');
-          var scrollingDown = true;
-          var lastScrollTop = 0;
-
-          element.bind('scroll', function () {
-            console.log('in scroll');
-            console.log(raw.scrollTop + raw.offsetHeight);
-            console.log(raw.scrollHeight);
-
-            var scrollTop = raw.scrollTop + raw.offsetHeight;
-            scrollingDown = (scrollTop > lastScrollTop);
-            lastScrollTop = scrollTop;
-
-            if (scrollingDown) {
-              if (scrollTop >= raw.scrollHeight) {
-                scope.$apply(attrs.onscrolldown);
-              }
-            } else {
-              if (scrollTop <= Math.floor(raw.scrollHeight / 1.5)) {
-                scope.$apply(attrs.onscrollup);
-              }
-            }
-          });
-        }
-      };
-    });
+    .directive('surveyBuilder', surveyBuilder);
 
   surveyBuilder.$inject = [];
 

@@ -23,6 +23,10 @@
   function SurveyBuilderController($scope, STAGES, TableParams) {
     var vm = this;
 
+    // private variables
+    var loadLimit = 5;                         // max number of sessions to show in window
+    var loadDistance = 1;                      // number of sessions to remove/append on scroll
+
     // bindable variables
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
@@ -31,10 +35,8 @@
     vm.formVersions = {};                      // dictionary storing latest form versions by id
     vm.latestSurveyVersion = 1;                // id of latest survey version
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
-    vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
-    vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
-    vm.showLimit = 5;
-    vm.hideLimit = 0;
+    vm.showLimit = loadLimit;                  // number of sessions in timeline to limit from the end
+    vm.hideLimit = 0;                          // number of sessions in timeline to limit from the beginning
 
     vm.sessionColumns = [
       { title: 'Type', field: 'type', type: 'dropdown', options: [
@@ -54,8 +56,6 @@
     vm.generateSessions = generateSessions;
     vm.loadNext = loadNext;
     vm.loadPrev = loadPrev;
-    vm.animateElementIn = animateElementIn;
-    vm.animateElementOut = animateElementOut;
 
     init();
 
@@ -165,24 +165,23 @@
     }
 
     function loadNext() {
-      vm.showLimit += 2;
+      vm.showLimit += loadDistance;
+      vm.hideLimit += loadDistance;
     }
 
     function loadPrev() {
-      console.log('load prev');
-      if ((vm.showLimit - 3) >= 5) {
-        vm.showLimit -= 3;
+      if ((vm.showLimit - loadDistance) >= loadLimit) {
+        vm.showLimit -= loadDistance;
       }
-    }
-
-    function animateElementIn($elem) {
-      $elem.removeClass('hidden');
-      $elem.addClass('bounce-in');
-    }
-
-    function animateElementOut($elem) {
-      $elem.addClass('hidden');
-      $elem.removeClass('bounce-in');
+      if ((vm.hideLimit - loadDistance) >= 0) {
+        if ((vm.hideLimit - loadDistance) <= loadDistance) {
+          vm.hideLimit = 0;
+        } else {
+          vm.hideLimit -= loadDistance;
+        }
+      } else {
+        vm.hideLimit = 0;
+      }
     }
 
     $scope.$watch('surveyBuilder.survey', function(newVal, oldVal) {
