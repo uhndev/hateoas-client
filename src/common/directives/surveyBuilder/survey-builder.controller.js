@@ -4,7 +4,6 @@
   angular
     .module('dados.common.directives.surveyBuilder.controller', [
       'dados.common.directives.listEditor',
-      'angular-scroll-animate',
       'angular-timeline'
     ])
     .constant('STAGES', { // stages of survey creation
@@ -23,10 +22,6 @@
   function SurveyBuilderController($scope, STAGES, TableParams) {
     var vm = this;
 
-    // private variables
-    var loadLimit = 5;                         // max number of sessions to show in window
-    var loadDistance = 3;                      // number of sessions to remove/append on scroll
-
     // bindable variables
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
@@ -35,8 +30,8 @@
     vm.formVersions = {};                      // dictionary storing latest form versions by id
     vm.latestSurveyVersion = 1;                // id of latest survey version
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
-    vm.showLimit = loadLimit;                  // number of sessions in timeline to limit from the end
-    vm.hideLimit = 0;                          // number of sessions in timeline to limit from the beginning
+    vm.loadLimit = 10;                         // max number of sessions to show in window
+    vm.beginLimit = 0;                         // number of sessions in timeline to limit from the beginning
 
     vm.sessionColumns = [
       { title: 'Type', field: 'type', type: 'dropdown', options: [
@@ -54,8 +49,6 @@
     vm.addRemoveForm = addRemoveForm;
     vm.isFormActive = isFormActive;
     vm.generateSessions = generateSessions;
-    vm.loadNext = loadNext;
-    vm.loadPrev = loadPrev;
 
     init();
 
@@ -164,35 +157,7 @@
       }
     }
 
-    /**
-     * loadNext
-     * @description Moves window of sessions view forward by loadDistance
-     */
-    function loadNext() {
-      vm.showLimit += loadDistance;
-      vm.hideLimit += loadDistance;
-    }
-
-    /**
-     * loadPrev
-     * @description Moves window of sessions view backward by loadDistance
-     */
-    function loadPrev() {
-      if ((vm.showLimit - loadDistance) >= loadLimit) {
-        vm.showLimit -= loadDistance;
-      }
-      if ((vm.hideLimit - loadDistance) >= 0) {
-        if ((vm.hideLimit - loadDistance) <= loadDistance) {
-          vm.hideLimit = 0;
-        } else {
-          vm.hideLimit -= loadDistance;
-        }
-      } else {
-        vm.hideLimit = 0;
-      }
-    }
-
-    $scope.$watch('surveyBuilder.survey', function(newVal, oldVal) {
+    $scope.$watch('sb.survey', function(newVal, oldVal) {
       vm.isValid = (_.has(vm.surveyForm, '$valid') && _.has(vm.survey, 'sessions')) ?
                    (vm.surveyForm.$valid && vm.survey.sessions.length > 0) : false;
     }, true);

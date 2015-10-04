@@ -8,8 +8,7 @@
  * <div class="timeline-container"
  *      scroll-watch
  *      onscrolldown="surveyBuilder.loadNext()"
- *      onscrollup="surveyBuilder.loadPrev()"
- *      onscrolltop="surveyBuilder.hideLimit = 0">
+ *      onscrollup="surveyBuilder.loadPrev()">
  */
 
 (function() {
@@ -26,7 +25,6 @@
         var raw = element[0];
         var scrollingDown = true;
         var lastScrollTop = 0;
-        var upScrollThreshold = 1.5; // threshold where onscrollup should fire
 
         element.bind('scroll', function () {
           var scrollTop = raw.scrollTop + raw.offsetHeight;
@@ -39,10 +37,6 @@
             }
           } else {
             if (scrollTop <= raw.offsetHeight) { // reached top, fire onscrolltop
-              scope.$apply(attrs.onscrolltop);
-            }
-
-            if (scrollTop <= Math.floor(raw.scrollHeight / upScrollThreshold)) { // reached relative middle
               scope.$apply(attrs.onscrollup);
             }
           }

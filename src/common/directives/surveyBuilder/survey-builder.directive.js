@@ -33,7 +33,7 @@
       replace: true,
       templateUrl: 'directives/surveyBuilder/survey-builder.tpl.html',
       controller: 'SurveyBuilderController',
-      controllerAs: 'surveyBuilder',
+      controllerAs: 'sb',
       bindToController: true
     };
   }
