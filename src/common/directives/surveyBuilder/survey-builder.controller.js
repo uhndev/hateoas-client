@@ -22,6 +22,11 @@
   function SurveyBuilderController($scope, STAGES, TableParams) {
     var vm = this;
 
+    // private variables
+    var stepSize = 2;                          // amount of sessions to add when scrolling down
+    var defaultLoad = 10;                      // default number of sessions to limit to
+    var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
+
     // bindable variables
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
@@ -49,6 +54,7 @@
     vm.addRemoveForm = addRemoveForm;
     vm.isFormActive = isFormActive;
     vm.generateSessions = generateSessions;
+    vm.loadMore = loadMore;
 
     init();
 
@@ -66,14 +72,20 @@
           return _.last(_.sortBy(form.versions, 'revision'));
         }), 'id');
       }
+
       // sort and retrieve latest revisions of surveys
       if (_.has(vm.survey, 'versions') && vm.survey.versions.length > 1) {
         // store latest survey version
         vm.latestSurveyVersion = _.last(_.sortBy(vm.survey.versions, 'revision'));
       }
+
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
+        vm.loadLimit = 0;
+      } else {
+        vm.loadLimit = (vm.survey.sessions.length > infiniteThreshold) ? defaultLoad : vm.survey.sessions.length;
       }
+
       vm.tableParams = new TableParams({
         page: 1,
         count: 10
@@ -152,8 +164,24 @@
         }
         vm.newSession = {};
         angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
+        vm.loadLimit = (vm.survey.sessions.length > infiniteThreshold) ? defaultLoad : vm.survey.sessions.length;
         vm.tableParams.reload();
         vm.toggleReload = !vm.toggleReload;
+      }
+    }
+
+    /**
+     * loadMore
+     * @description Callback for when scrollbar reaches bottom of window; will load more elements
+     *              depending on total number of available sessions.
+     */
+    function loadMore() {
+      if (vm.survey.sessions.length > infiniteThreshold) {
+        if ((vm.loadLimit + stepSize) > vm.survey.sessions.length) {
+          vm.loadLimit = vm.survey.sessions.length;
+        } else {
+          vm.loadLimit += stepSize;
+        }
       }
     }
 

@@ -53,15 +53,16 @@
 
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
-    <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit].name}}" active="sb.STAGES['SELECT_FORMS']">
+    <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit - 1].name}}"
+         active="sb.STAGES['SELECT_FORMS']">
       <form class="form-inline">
         <div class="form-group">
           <label>Start From: </label>
-          <input type="number" class="form-control" ng-model="sb.beginLimit"/>
+          <input type="number" class="form-control" min="0" max="{{sb.survey.sessions.length}}" ng-model="sb.beginLimit"/>
         </div>
         <div class="form-group">
           <label>Limit: </label>
-          <input type="number" class="form-control" ng-model="sb.loadLimit"/>
+          <input type="number" class="form-control" min="0" max="{{sb.survey.sessions.length}}" ng-model="sb.loadLimit"/>
         </div>
         <div class="form-group pull-right">
           <div class="input-group" ng-style="{ 'width': 300 }">
@@ -77,7 +78,7 @@
 
       <br/>
 
-      <div class="timeline-container" scroll-watch onscrolldown="sb.loadLimit = sb.loadLimit + 2">
+      <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
         <timeline>
           <timeline-event
             ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery | limitTo:sb.loadLimit:sb.beginLimit">

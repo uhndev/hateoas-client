@@ -52,7 +52,6 @@
             }
           });
         });
-        console.log(scheduledForms);
 
         vm.tableParams = new TableParams({
           page: 1,
