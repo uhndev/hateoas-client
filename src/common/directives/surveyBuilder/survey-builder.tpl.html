@@ -55,47 +55,36 @@
     <!-- (list of formVersions applied to sessions) -->
     <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit - 1].name}}"
          active="sb.STAGES['SELECT_FORMS']">
-      <form class="form-inline">
-        <div class="form-group">
-          <label>Start From: </label>
-          <input type="number" class="form-control" min="0" max="{{sb.survey.sessions.length}}" ng-model="sb.beginLimit"/>
+      <div class="row">
+        <div class="input-group">
+          <input class="form-control" ng-model="sb.timelineQuery"
+                 ng-model-options="{ 'debounce': 500 }"
+                 placeholder="Filter sessions"/>
+              <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search"></i>
+              </span>
         </div>
-        <div class="form-group">
-          <label>Limit: </label>
-          <input type="number" class="form-control" min="0" max="{{sb.survey.sessions.length}}" ng-model="sb.loadLimit"/>
-        </div>
-        <div class="form-group pull-right">
-          <div class="input-group" ng-style="{ 'width': 300 }">
-            <span class="input-group-addon">
-              <i class="glyphicon glyphicon-search"></i>
-            </span>
-            <input class="form-control" ng-model="sb.timelineQuery"
-                   ng-model-options="{ 'debounce': 500 }"
-                   placeholder="Filter sessions"/>
-          </div>
-        </div>
-      </form>
-
+      </div>
       <br/>
-
-      <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
-        <timeline>
-          <timeline-event
-            ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery | limitTo:sb.loadLimit:sb.beginLimit">
-            <timeline-badge class="info">
-              <i class="glyphicon glyphicon-calendar"></i>
-            </timeline-badge>
-            <timeline-panel class="info">
-              <timeline-heading>
-                <h4>{{session.name}}</h4>
-              </timeline-heading>
-              <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
-                  ng-model="session.formOrder">
-                <li ng-repeat="id in session.formOrder"
-                    class="selectable"
-                    ng-style="{ 'margin-bottom': '-5px' }"
-                    ng-switch="sb.isFormActive(id, session)">
-                  <h4>
+      <div class="row">
+        <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
+          <timeline>
+            <timeline-event
+              ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery | limitTo:sb.loadLimit:sb.beginLimit">
+              <timeline-badge class="info">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </timeline-badge>
+              <timeline-panel class="info">
+                <timeline-heading>
+                  <h4>{{session.name}}</h4>
+                </timeline-heading>
+                <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+                    ng-model="session.formOrder">
+                  <li ng-repeat="id in session.formOrder"
+                      class="selectable"
+                      ng-style="{ 'margin-bottom': '-5px' }"
+                      ng-switch="sb.isFormActive(id, session)">
+                    <h4>
                     <span ng-switch-when="true" class="label label-primary"
                           ng-click="sb.addRemoveForm(id, session)">
                       {{$index + 1}}) {{sb.formVersions[id].name}}
@@ -106,12 +95,13 @@
                       <s>{{$index + 1}}) {{sb.formVersions[id].name}}</s>
                       <i class="fa fa-plus"></i>
                     </span>
-                  </h4>
-                </li>
-              </ul>
-            </timeline-panel>
-          </timeline-event>
-        </timeline>
+                    </h4>
+                  </li>
+                </ul>
+              </timeline-panel>
+            </timeline-event>
+          </timeline>
+        </div>
       </div>
     </tab>
   </tabset>
