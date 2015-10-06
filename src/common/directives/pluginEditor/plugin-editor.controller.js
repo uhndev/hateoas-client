@@ -87,13 +87,13 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = angular.copy(pickFormAttributes(result));
+      var savedForm = pickFormAttributes(result);
       $scope.isSaving = false;
       if ($scope.isCommitting) {
         FormVersionService.save($scope.form);
       }
-      toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
-      $location.search('idPlugin', $scope.form.id);
+      toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
+      $location.search('idPlugin', savedForm.id);
       $scope.forms = FormService.query();
     }
 
