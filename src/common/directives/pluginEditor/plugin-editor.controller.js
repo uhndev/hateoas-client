@@ -1,3 +1,10 @@
+/**
+ * Form Editor Controller
+ *
+ * @module      directives/pluginEditor
+ * @description Main controller for pluginEditor directive that handles form import and saving logic.
+ */
+
 (function () {
   'use strict';
 
@@ -7,11 +14,13 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', 'FormService', 'StudyFormService', 'toastr'];
+  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'];
 
-  function PluginController($scope, $location, FormService, StudyFormService, toastr) {
+  function PluginController($scope, $location, $timeout, FormService, StudyFormService, FormVersionService, toastr) {
     // bindable variables
+    $scope.firstLoad = true;
     $scope.isSaving = false;
+    $scope.isCommitting = false;
     $scope.isSettingsOpen = true;
     $scope.isEditorOpen = true;
     $scope.forms = FormService.query();
@@ -39,9 +48,22 @@
       if ($scope.idPlugin && !_.has($scope.form, 'id')) {
         FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
           // we only want non-hateoas attributes to load into our pluginEditor
-          setForm(_.pick(form, 'id', 'name', 'questions', 'metaData', 'isDirty'));
+          setForm(pickFormAttributes(form));
         });
       }
+    }
+    
+    /**
+     * Function that picks only non-hateoas attributes from server response
+     */
+    
+    function pickFormAttributes(hateoas) {
+      if (hateoas.hasOwnProperty('items')) {
+        return _.pick(hateoas.items, 'id', 'name', 'questions', 'metaData', 'isDirty');
+      } else {
+        return _.pick(hateoas, 'id', 'name', 'questions', 'metaData', 'isDirty');
+      }
+      
     }
 
     /**
@@ -65,10 +87,13 @@
      */
 
     function onFormSaved(result) {
-      $scope.form = angular.copy(_.pick(result, 'id', 'name', 'questions', 'metaData', 'isDirty'));
+      var savedForm = pickFormAttributes(result);
       $scope.isSaving = false;
-      toastr.success('Saved form ' + $scope.form.name + ' successfully!', 'Form');
-      $location.search('idPlugin', $scope.form.id);
+      if ($scope.isCommitting) {
+        FormVersionService.save($scope.form);
+      }
+      toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
+      $location.search('idPlugin', savedForm.id);
       $scope.forms = FormService.query();
     }
 
@@ -93,6 +118,7 @@
       $scope.$broadcast('setGrid', $scope.form.questions);
       $scope.$broadcast('setMetaData', $scope.form.metaData);
       $scope.isSaving = false;
+      $scope.firstLoad = true;
       toastr.info('Loaded form ' + $scope.form.name + ' successfully!', 'Form');
     }
 
@@ -100,12 +126,19 @@
      * Public Methods
      */
 
-    function save() {
+    function save(isManual) {
+      if (typeof(isManual)==='undefined') {
+        isManual = true;
+      }
+    
       if (_.isEmpty($scope.form.name)) {
-        toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
+        if (isManual) {
+          toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
+        }
       } else {
         if (_.all($scope.form.questions, 'name')) {
           $scope.isSaving = true;
+          $scope.isCommitting = isManual;
           if ($scope.form.id) {
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
@@ -119,7 +152,7 @@
                 .catch(onFormError);
             }
           }
-        } else {
+        } else if (isManual) {
           toastr.warning('No questions added yet!', 'Plugin Editor');
         }
       }
@@ -152,6 +185,28 @@
       }
       $location.search('idPlugin', id);
     }
-
+    
+    /* Debounce the $watch call with the hardcoded timeout 
+     * so we are not trying to save the form on each change.
+     * Save() will check if form is valid.
+     */
+    var onFormUpdate = debounceWatch($timeout, function (newVal, oldVal) {
+      if ($scope.firstLoad) {
+        // Suspend the first watch triggered until the end of digest cycle
+        $timeout(function() {
+          $scope.firstLoad = false;
+        });
+      } else if (!_.equalsDeep(newVal, oldVal)) {
+        save(false);
+      }
+    }, 5000);
+    
+    /* Have to watch for specific form changes
+     * otherwise flag or timestamp updates may trigger save again.
+     */
+    $scope.$watch('form.name', onFormUpdate);
+    $scope.$watch('form.metaData', onFormUpdate, true);
+    $scope.$watch('form.questions', onFormUpdate, true);
+    
   }
 })();
