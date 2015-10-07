@@ -57,34 +57,63 @@
          active="sb.STAGES['SELECT_FORMS']">
       <div class="row">
         <div class="input-group">
-          <input class="form-control" ng-model="sb.timelineQuery"
+          <span class="input-group-addon selectable" ng-click="sb.isDefaultsCollapsed = !sb.isDefaultsCollapsed">
+            Default Forms
+            <i class="glyphicon" ng-class="{
+              'glyphicon-chevron-right': sb.isDefaultsCollapsed,
+              'glyphicon-chevron-down': !sb.isDefaultsCollapsed
+            }"></i>
+          </span>
+          <input class="form-control" ng-model="sb.timelineQuery.name"
                  ng-model-options="{ 'debounce': 500 }"
                  placeholder="Filter sessions"/>
-              <span class="input-group-addon">
-                <i class="glyphicon glyphicon-search"></i>
-              </span>
+          <span class="input-group-addon">
+            <i class="glyphicon glyphicon-search"></i>
+          </span>
         </div>
       </div>
       <br/>
       <div class="row">
-        <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
-          <timeline>
-            <timeline-event
-              ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery | limitTo:sb.loadLimit:sb.beginLimit">
-              <timeline-badge class="info">
-                <i class="glyphicon glyphicon-calendar"></i>
-              </timeline-badge>
-              <timeline-panel class="info">
-                <timeline-heading>
-                  <h4>{{session.name}}</h4>
-                </timeline-heading>
-                <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
-                    ng-model="session.formOrder">
-                  <li ng-repeat="id in session.formOrder"
-                      class="selectable"
-                      ng-style="{ 'margin-bottom': '-5px' }"
-                      ng-switch="sb.isFormActive(id, session)">
-                    <h4>
+        <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
+          Cascade Changes <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
+          <ui-help popover="If checked, changes in this panel will cascade to each session in the survey"></ui-help>
+
+          <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+              ng-model="sb.forms">
+            <li ng-repeat="form in sb.forms"
+                class="selectable"
+                ng-switch="form.active">
+              <h4><span ng-switch-when="true" class="label label-primary"
+                    ng-click="form.active = false">
+                {{$index + 1}}) {{form.name}}
+                <i class="fa fa-times"></i>
+              </span>
+              <span ng-switch-default class="label label-default"
+                    ng-click="form.active = true">
+                <s>{{$index + 1}}) {{form.name}}</s>
+                <i class="fa fa-plus"></i>
+              </span></h4>
+            </li>
+          </ul>
+        </div>
+        <div ng-class="{ 'col-md-9': !sb.isDefaultsCollapsed }">
+          <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
+            <timeline>
+              <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit">
+                <timeline-badge class="info">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </timeline-badge>
+                <timeline-panel class="info" ng-class="{ 'timeline-inverted': !sb.isDefaultsCollapsed }">
+                  <timeline-heading>
+                    <h4>{{session.name}}</h4>
+                  </timeline-heading>
+                  <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+                      ng-model="session.formOrder">
+                    <li ng-repeat="id in session.formOrder"
+                        class="selectable"
+                        ng-style="{ 'margin-bottom': '-5px' }"
+                        ng-switch="sb.isFormActive(id, session)">
+                      <h4>
                     <span ng-switch-when="true" class="label label-primary"
                           ng-click="sb.addRemoveForm(id, session)">
                       {{$index + 1}}) {{sb.formVersions[id].name}}
@@ -95,12 +124,13 @@
                       <s>{{$index + 1}}) {{sb.formVersions[id].name}}</s>
                       <i class="fa fa-plus"></i>
                     </span>
-                    </h4>
-                  </li>
-                </ul>
-              </timeline-panel>
-            </timeline-event>
-          </timeline>
+                      </h4>
+                    </li>
+                  </ul>
+                </timeline-panel>
+              </timeline-event>
+            </timeline>
+          </div>
         </div>
       </div>
     </tab>

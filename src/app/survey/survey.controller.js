@@ -71,6 +71,7 @@
         controller: 'EditSurveyController',
         controllerAs: 'editSurvey',
         bindToController: true,
+        windowClass: 'modal-window',
         resolve: {
           study: function() {
             return angular.copy(vm.resource.sessionStudy);

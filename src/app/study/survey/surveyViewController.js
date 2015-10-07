@@ -58,6 +58,7 @@
         size: 'lg',
         bindToController: true,
         backdrop: 'static',
+        windowClass: 'modal-window',
         resolve: {
           study: function () {
             // resolve study object

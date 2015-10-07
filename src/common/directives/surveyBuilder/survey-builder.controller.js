@@ -28,6 +28,8 @@
     var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
 
     // bindable variables
+    vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
+    vm.cascadeDefaults = true;                 // denotes whether or not to cascade changes in form order to each session
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
@@ -53,6 +55,7 @@
     // bindable methods
     vm.addRemoveForm = addRemoveForm;
     vm.isFormActive = isFormActive;
+    vm.onToggleCascadeDefaults = onToggleCascadeDefaults;
     vm.generateSessions = generateSessions;
     vm.loadMore = loadMore;
 
@@ -65,12 +68,19 @@
      */
     function init() {
       angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
+
       // sort and retrieve latest revisions of forms
       if (!_.has(vm.forms, 'versions')) {
+        // stored list of latest form versions
+        vm.forms = _.map(vm.forms, function (form) {
+          var latestForm = _.last(_.sortBy(form.versions, 'revision'));
+          latestForm = _.pick(latestForm, 'id', 'name', 'revision', 'form');
+          latestForm.active = true;
+          return latestForm;
+        });
+
         // store dictionary of latest forms
-        vm.formVersions = _.indexBy(_.map(vm.forms, function (form) {
-          return _.last(_.sortBy(form.versions, 'revision'));
-        }), 'id');
+        vm.formVersions = _.indexBy(angular.copy(vm.forms), 'id');
       }
 
       // sort and retrieve latest revisions of surveys
@@ -79,6 +89,24 @@
         vm.latestSurveyVersion = _.last(_.sortBy(vm.survey.versions, 'revision'));
       }
 
+      // check if editing existing survey, if so, disable auto-cascade
+      if (_.has(vm.survey, 'id')) {
+        vm.cascadeDefaults = false;
+        vm.isDefaultsCollapsed = true;
+
+        // check if any new forms have been added and add them if so
+        var formIds = _.pluck(vm.forms, 'id');
+        _.map(vm.survey.sessions, function (session) {
+          var diff = _.difference(formIds, session.formOrder);
+          if (diff.length > 0) {
+            _.each(diff, function (formId) {
+              session.formOrder.push(formId);
+            });
+          }
+        });
+      }
+
+      // depending on length of survey, disable/enable infinite-scroll
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
         vm.loadLimit = 0;
@@ -125,6 +153,18 @@
       return _.inArray(session.formVersions, formId);
     }
 
+    function onToggleCascadeDefaults() {
+      if (vm.cascadeDefaults) {
+        var formOrder = _.map(_.pluck(vm.forms, 'id'), function (formId) { return parseInt(formId); });
+        var formIds = _.map(_.pluck(_.filter(vm.forms, { active: true }), 'id'), function (formId) { return parseInt(formId); });
+
+        _.map(vm.survey.sessions, function (session) {
+          session.formOrder = angular.copy(formOrder);
+          session.formVersions = angular.copy(formIds);
+        });
+      }
+    }
+
     /**
      * generateSessions
      * @description Depending on session type, generate n sessions if type was
@@ -133,9 +173,9 @@
      */
     function generateSessions() {
       if (!_.isEmpty(vm.newSession)) {
-        var formIds = _.map(_.keys(vm.formVersions), function (formId) { return parseInt(formId); });
+        var formIds = _.map(_.pluck(vm.forms, 'id'), function (formId) { return parseInt(formId); });
         vm.newSession.formOrder = angular.copy(formIds);
-        vm.newSession.formVersions = angular.copy(formIds);
+        vm.newSession.formVersions = angular.copy(_.filter(formIds, { active: false }));
 
         // if scheduled, session won't have name but will have repeat attributes
         if (vm.newSession.type === 'scheduled') {
@@ -188,6 +228,10 @@
     $scope.$watch('sb.survey', function(newVal, oldVal) {
       vm.isValid = (_.has(vm.surveyForm, '$valid') && _.has(vm.survey, 'sessions')) ?
                    (vm.surveyForm.$valid && vm.survey.sessions.length > 0) : false;
+    }, true);
+
+    $scope.$watch('sb.forms', function(newVal, oldVal) {
+      onToggleCascadeDefaults();
     }, true);
   }
 })();
