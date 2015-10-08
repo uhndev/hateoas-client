@@ -76,11 +76,13 @@
       <div class="row">
         <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
           Cascade Changes <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
-          <ui-help popover="If checked, changes in this panel will cascade to each session in the survey"></ui-help>
+          <ui-help popover="If checked, changes in this panel will cascade to each session in the survey with blue calendars.
+                            Clicking the calendar icons will toggle cascading.">
+          </ui-help>
 
           <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
-              ng-model="sb.forms">
-            <li ng-repeat="form in sb.forms"
+              ng-model="sb.survey.defaultFormVersions">
+            <li ng-repeat="form in sb.survey.defaultFormVersions"
                 class="selectable"
                 ng-switch="form.active">
               <h4><span ng-switch-when="true" class="label label-primary"
@@ -100,7 +102,8 @@
           <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
             <timeline>
               <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit">
-                <timeline-badge class="info">
+                <timeline-badge class="selectable" ng-class="{ 'info': !session.$noCascade, 'default': session.$noCascade }"
+                                ng-click="session.$noCascade = !session.$noCascade;">
                   <i class="glyphicon glyphicon-calendar"></i>
                 </timeline-badge>
                 <timeline-panel class="info" ng-class="{ 'timeline-inverted': !sb.isDefaultsCollapsed }">

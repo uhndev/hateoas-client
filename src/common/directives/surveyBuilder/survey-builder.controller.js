@@ -26,6 +26,7 @@
     var stepSize = 2;                          // amount of sessions to add when scrolling down
     var defaultLoad = 10;                      // default number of sessions to limit to
     var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
+    var savedSessions = [];                   // buffer of sessions that are saved when user clicks cascade
 
     // bindable variables
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
@@ -95,6 +96,19 @@
         vm.isDefaultsCollapsed = true;
 
         // check if any new forms have been added and add them if so
+        var formDiffs = _.filter(vm.forms, function (form) {
+          return !_.contains(_.pluck(vm.survey.defaultFormVersions, 'id'), form.id);
+        });
+
+        // add any new forms to survey.defaultFormVersions
+        if (formDiffs.length > 0) {
+          _.each(formDiffs, function (formToAdd) {
+            formToAdd.active = false;
+            vm.survey.defaultFormVersions.push(formToAdd);
+          });
+        }
+
+        // add any new forms to each session.formOrder
         var formIds = _.pluck(vm.forms, 'id');
         _.map(vm.survey.sessions, function (session) {
           var diff = _.difference(formIds, session.formOrder);
@@ -103,6 +117,12 @@
               session.formOrder.push(formId);
             });
           }
+        });
+      } else {
+        // if creating new survey, set defaultFormVersions from vm.forms
+        vm.survey.defaultFormVersions = [];
+        _.each(vm.forms, function (form) {
+          vm.survey.defaultFormVersions.push(form);
         });
       }
 
@@ -155,12 +175,14 @@
 
     function onToggleCascadeDefaults() {
       if (vm.cascadeDefaults) {
-        var formOrder = _.map(_.pluck(vm.forms, 'id'), function (formId) { return parseInt(formId); });
-        var formIds = _.map(_.pluck(_.filter(vm.forms, { active: true }), 'id'), function (formId) { return parseInt(formId); });
+        var formOrder = _.map(_.pluck(vm.survey.defaultFormVersions, 'id'), function (formId) { return parseInt(formId); });
+        var formIds = _.map(_.pluck(_.filter(vm.survey.defaultFormVersions, { active: true }), 'id'), function (formId) { return parseInt(formId); });
 
         _.map(vm.survey.sessions, function (session) {
-          session.formOrder = angular.copy(formOrder);
-          session.formVersions = angular.copy(formIds);
+          if (!session.$noCascade) {
+            session.formOrder = angular.copy(formOrder);
+            session.formVersions = angular.copy(formIds);
+          }
         });
       }
     }
@@ -230,7 +252,7 @@
                    (vm.surveyForm.$valid && vm.survey.sessions.length > 0) : false;
     }, true);
 
-    $scope.$watch('sb.forms', function(newVal, oldVal) {
+    $scope.$watch('sb.survey.defaultFormVersions', function(newVal, oldVal) {
       onToggleCascadeDefaults();
     }, true);
   }

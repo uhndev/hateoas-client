@@ -1,10 +1,21 @@
-.timeline-container {
-  overflow-y: auto;
-  max-height: 550px;
+@media only screen and (min-height: 701px) {
+  .timeline-container {
+    overflow-y: auto;
+    max-height: 550px;
+  }
+  .modal-window .modal-dialog {
+    width: 60%;
+  }
 }
 
-.modal-window .modal-dialog {
-  width: 60%;
+@media only screen and (max-height: 700px) {
+  .timeline-container {
+    overflow-y: auto;
+    max-height: 250px;
+  }
+  .modal-window .modal-dialog {
+    width: 75%;
+  }
 }
 
 @-moz-keyframes dots-loader {
