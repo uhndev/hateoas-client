@@ -138,8 +138,9 @@
       } else {
         if (_.all($scope.form.questions, 'name')) {
           $scope.isSaving = true;
-          $scope.isCommitting = isManual;
+          $scope.isCommitting = false;
           if ($scope.form.id) {
+            $scope.isCommitting = isManual;
             FormService.update($scope.form, onFormSaved, onFormError);
           } else {
             if (!$scope.study) {
@@ -204,9 +205,7 @@
     /* Have to watch for specific form changes
      * otherwise flag or timestamp updates may trigger save again.
      */
-    $scope.$watch('form.name', onFormUpdate);
-    $scope.$watch('form.metaData', onFormUpdate, true);
-    $scope.$watch('form.questions', onFormUpdate, true);
+    $scope.$watch('form', onFormUpdate, true);
     
   }
 })();
