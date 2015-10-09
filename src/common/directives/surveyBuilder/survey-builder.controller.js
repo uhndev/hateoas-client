@@ -26,7 +26,6 @@
     var stepSize = 2;                          // amount of sessions to add when scrolling down
     var defaultLoad = 10;                      // default number of sessions to limit to
     var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
-    var savedSessions = [];                   // buffer of sessions that are saved when user clicks cascade
 
     // bindable variables
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
