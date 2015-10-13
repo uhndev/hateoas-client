@@ -43,6 +43,8 @@
         _.each(permissions, function (permission) {
           vm.allow[permission] = true;
         });
+
+        // populate filter dropdown for survey table
         vm.surveys = _.union(_.pluck(data.items.formSchedules, 'surveyName'));
 
         vm.tableParams = new TableParams({
@@ -60,6 +62,10 @@
       });
     }
 
+    /**
+     * openEditSubject
+     * @description Function for opening the subject edit modal window.
+     */
     function openEditSubject() {
       var modalInstance = $modal.open({
         animation: true,
@@ -81,11 +87,21 @@
       });
     }
 
+    /**
+     * openDate
+     * @description Dummy function to prevent defaults when opening the ui-datepicker
+     * @param $event
+     */
     function openDate($event) {
       $event.preventDefault();
       $event.stopPropagation();
     }
 
+    /**
+     * saveSchedule
+     * @description Saves any updates of session availability, triggered with ng-change on any date changes
+     * @param schedule
+     */
     function saveSchedule(schedule) {
       SubjectSchedule.update(_.pick(schedule, 'id', 'availableFrom', 'availableTo'), function () {
         toastr.success('Updated scheduled session ' + schedule.name + ' for form ' + schedule.scheduledForm.name, 'Form');
