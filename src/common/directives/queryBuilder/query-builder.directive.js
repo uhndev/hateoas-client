@@ -23,13 +23,13 @@
      */
     function getOperatorsByType(type) {
       var operators = {
-        'string': ['not', 'is', 'contains', 'like', 
+        'string': ['not', 'is', 'contains', 'like',
           'startsWith', 'endsWith'],
-        'number': ['not', 'equals', 
-          'greaterThan', 'greaterThanOrEqual', 
+        'number': ['not', 'equals',
+          'greaterThan', 'greaterThanOrEqual',
           'lessThan', 'lessThanOrEqual']
       };
-    
+
       if (!!!type) {
         return [];
       } else {
@@ -52,9 +52,9 @@
         scope.operators = getOperatorsByType(type);
       });
 
-      scope.$watchCollection('template().data', 
+      scope.$watchCollection('template().data',
         function(newTemplate, oldTemplate) {
-          if (!_.isEqual(newTemplate, oldTemplate)) {
+          if (!_.isEqual(angular.toJson(newTemplate), angular.toJson(oldTemplate))) {
             scope.fields = scope.template().data;
             scope.reset();
           }
