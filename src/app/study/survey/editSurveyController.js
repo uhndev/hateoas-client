@@ -61,7 +61,7 @@
           return null;
         })
         .then(function () {
-          var message = 'Updated survey!';
+          var message = 'Updated survey ' + vm.editSurvey.name;
           message += (sessionsToAdd.length > 0) ? ' and added ' + sessionsToAdd.length + ' sessions to survey' : '';
           toastr.success(message, 'Survey');
         })
