@@ -10,10 +10,10 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'ngTableParams', 'API', 'AuthService'
+    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams', 'API', 'AuthService', 'SubjectScheduleService'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, $modal, TableParams, API, AuthService) {
+  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams, API, AuthService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables
@@ -21,10 +21,14 @@
     vm.allow = {};
     vm.template = {};
     vm.resource = {};
+    vm.surveyFilter = {};
+    vm.surveys = [];
     vm.url = API.url() + $location.path();
 
     // bindable methods
     vm.openEditSubject = openEditSubject;
+    vm.openDate = openDate;
+    vm.saveSchedule = saveSchedule;
 
     init();
 
@@ -39,10 +43,12 @@
         _.each(permissions, function (permission) {
           vm.allow[permission] = true;
         });
+        vm.surveys = _.union(_.pluck(data.items.formSchedules, 'surveyName'));
 
         vm.tableParams = new TableParams({
           page: 1,            // show first page
-          count: 10           // count per page
+          count: 10,          // count per page
+          filter: vm.surveyFilter
         }, {
           groupBy: 'name',
           total: data.items.formSchedules.length,
@@ -72,6 +78,18 @@
             return "study/" + vm.resource.studyName + "/collectioncentre";
           }
         }
+      });
+    }
+
+    function openDate($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+
+    function saveSchedule(schedule) {
+      SubjectSchedule.update(_.pick(schedule, 'id', 'availableFrom', 'availableTo'), function () {
+        toastr.success('Updated scheduled session ' + schedule.name + ' for form ' + schedule.scheduledForm.name, 'Form');
+        init();
       });
     }
   }
