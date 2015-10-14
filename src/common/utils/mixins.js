@@ -22,7 +22,8 @@
     'transformHateoas': transformHateoas,
     'pad': pad,
     'userObjToName': userObjToName,
-    'equalsDeep': equalsDeep
+    'equalsDeep': equalsDeep,
+    'findArrayDiff': findArrayDiff
 	});
 
 	function parseUrl(location, url) {
@@ -107,7 +108,7 @@
   function userObjToName(userObj) {
     return [userObj.prefix, userObj.firstname, userObj.lastname].join(' ');
   }
- 
+
   /**
    * equalsDeep
    * @description  A deep object comparison function to detect deep object changes
@@ -116,7 +117,7 @@
    * @param {} first
    * @param {} second
    * @return {boolean} True if values are equal, False otherwise
-   */  
+   */
   function equalsDeep(first, second) {
     var result = true;
     if (angular.isObject(first) && angular.isObject(second)) {
@@ -139,5 +140,32 @@
     }
     return result;
   }
-  
+
+  /**
+   * findArrayDiff
+   * @description Takes two arrays and returns an object with add/remove keys to dictate what's changed
+   * @param current    Current array to check
+   * @param prev       Previous version of array
+   * @returns {Object}
+   */
+  function findArrayDiff(current, prev) {
+    var diff = _.xor(current, prev);
+    var result = {
+      'toAdd': [],
+      'toRemove': []
+    };
+    if (diff.length === 0) {
+      return result;
+    } else {
+      _.each(diff, function (element) {
+        if (_.contains(current, element)) {
+          result.toAdd.push(element);
+        } else {
+          result.toRemove.push(element);
+        }
+      });
+      return result;
+    }
+  }
+
 })();
