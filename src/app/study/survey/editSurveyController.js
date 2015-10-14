@@ -38,7 +38,10 @@
       // if we've added sessions, separate calls and partition sessions to be added/updated
       _.each(vm.editSurvey.sessions, function (session) {
         if (_.has(session, 'id')) {
-          if (!angular.equals(angular.copy(session), _.find(vm.savedSessions, { id: session.id }))) {
+          if (!angular.equals(
+              angular.toJson(session),
+              angular.toJson(_.find(vm.savedSessions, { id: session.id }))
+            )) {
             sessionsToUpdate.push(session);
           }
         } else {
@@ -82,8 +85,8 @@
         .then(function () {
           var message = 'Updated survey ' + vm.editSurvey.name;
           message += (sessionsToAdd.length > 0) ? ', added ' + sessionsToAdd.length + ' session(s) to survey' : '';
-          message += (sessionsToUpdate.length > 0) ? ', updated ' + sessionsToAdd.length + ' session(s) from survey' : '';
-          message += (sessionsToRemove.length > 0) ? ', removed ' + sessionsToAdd.length + ' session(s) from survey' : '';
+          message += (sessionsToUpdate.length > 0) ? ', updated ' + sessionsToUpdate.length + ' session(s) from survey' : '';
+          message += (sessionsToRemove.length > 0) ? ', removed ' + sessionsToRemove.length + ' session(s) from survey' : '';
           toastr.success(message, 'Survey');
         })
         .finally(function () {

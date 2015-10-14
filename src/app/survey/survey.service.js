@@ -30,8 +30,7 @@
         {
           'update' : {
             method: 'PUT',
-            isArray: false,
-            transformResponse: _.transformHateoas
+            isArray: false
           }
         }
       );

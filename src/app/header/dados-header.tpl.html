@@ -64,7 +64,7 @@
                 'dropdown': link.dropdown
               }">
               <!-- Single Link -->
-              <a href="#{{ ::link.href }}" ng-if="!link.dropdown">
+              <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown">
                 <i class="fa {{ ::link.icon }}"></i>
                 {{ ::link.prompt }}
               </a>
@@ -79,7 +79,7 @@
                     ng-class="{
                   'active': droplink.isActive
                 }">
-                  <a href="#{{ ::droplink.href }}">
+                  <a hateoas-link state-href="{{ ::droplink.href }}">
                     <i class="fa {{ ::droplink.icon }}"></i>
                     {{ ::droplink.prompt }}
                   </a>
