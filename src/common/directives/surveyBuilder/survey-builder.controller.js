@@ -28,6 +28,7 @@
     var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
 
     // bindable variables
+    vm.isFormsToggled = false;                 // boolean denoting whether all forms per session are visible
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
     vm.cascadeDefaults = true;                 // denotes whether or not to cascade changes in form order to each session
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
@@ -58,6 +59,7 @@
     vm.onToggleCascadeDefaults = onToggleCascadeDefaults;
     vm.generateSessions = generateSessions;
     vm.loadMore = loadMore;
+    vm.toggleForms = toggleForms;
 
     init();
 
@@ -244,6 +246,13 @@
           vm.loadLimit += stepSize;
         }
       }
+    }
+
+    function toggleForms() {
+      vm.isFormsToggled = !vm.isFormsToggled;
+      _.map(vm.survey.sessions, function (session) {
+        session.$isCollapsed = vm.isFormsToggled;
+      });
     }
 
     $scope.$watch('sb.survey', function(newVal, oldVal) {

@@ -67,15 +67,19 @@
           <input class="form-control" ng-model="sb.timelineQuery.name"
                  ng-model-options="{ 'debounce': 500 }"
                  placeholder="Filter sessions"/>
-          <span class="input-group-addon">
-            <i class="glyphicon glyphicon-search"></i>
+          <span class="input-group-addon selectable" ng-click="sb.toggleForms()">
+            Form Visibility
+            <i class="fa" ng-class="{
+                'fa-eye': !sb.isFormsToggled,
+                'fa-eye-slash': sb.isFormsToggled
+              }"></i>
           </span>
         </div>
       </div>
       <br/>
       <div class="row">
         <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
-          Cascade Changes <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
+          Apply To All Sessions <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
           <ui-help popover="If checked, changes in this panel will cascade to each session in the survey with blue calendars.
                             Clicking the calendar icons will toggle cascading.">
           </ui-help>
@@ -108,15 +112,24 @@
                 </timeline-badge>
                 <timeline-panel class="info" ng-class="{ 'timeline-inverted': !sb.isDefaultsCollapsed }">
                   <timeline-heading>
-                    <h4>{{session.name}}</h4>
+                    <h4>
+                      {{session.name}}&nbsp;
+                      <span class="selectable" ng-click="session.$isCollapsed = !session.$isCollapsed">
+                        <i class="glyphicon" ng-class="{
+                          'glyphicon-chevron-right': session.$isCollapsed,
+                          'glyphicon-chevron-down': !session.$isCollapsed
+                        }"></i>
+                      </span>
+                    </h4>
                   </timeline-heading>
-                  <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
-                      ng-model="session.formOrder">
-                    <li ng-repeat="id in session.formOrder"
-                        class="selectable"
-                        ng-style="{ 'margin-bottom': '-5px' }"
-                        ng-switch="sb.isFormActive(id, session)">
-                      <h4>
+                  <div collapse="session.$isCollapsed">
+                    <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+                        ng-model="session.formOrder">
+                      <li ng-repeat="id in session.formOrder"
+                          class="selectable"
+                          ng-style="{ 'margin-bottom': '-5px' }"
+                          ng-switch="sb.isFormActive(id, session)">
+                        <h4>
                     <span ng-switch-when="true" class="label label-primary"
                           ng-click="sb.addRemoveForm(id, session)">
                       {{$index + 1}}) {{sb.formVersions[id].name}}
@@ -127,9 +140,10 @@
                       <s>{{$index + 1}}) {{sb.formVersions[id].name}}</s>
                       <i class="fa fa-plus"></i>
                     </span>
-                      </h4>
-                    </li>
-                  </ul>
+                        </h4>
+                      </li>
+                    </ul>
+                  </div>
                 </timeline-panel>
               </timeline-event>
             </timeline>

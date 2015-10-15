@@ -23,6 +23,7 @@
     vm.resource = {};
     vm.surveyFilter = {};
     vm.surveys = [];
+    vm.tempParams = { page: null, count: null };
     vm.url = API.url() + $location.path();
 
     // bindable methods
@@ -48,8 +49,8 @@
         vm.surveys = _.union(_.pluck(data.items.formSchedules, 'surveyName'));
 
         vm.tableParams = new TableParams({
-          page: 1,            // show first page
-          count: 10,          // count per page
+          page: vm.tempParams.page   || 1,           // show first page
+          count: vm.tempParams.count || 10,          // count per page
           filter: vm.surveyFilter
         }, {
           groupBy: 'name',
@@ -95,6 +96,9 @@
     function openDate($event) {
       $event.preventDefault();
       $event.stopPropagation();
+      // store reference to ng-table count and page variables
+      vm.tempParams.count = vm.tableParams.count();
+      vm.tempParams.page = vm.tableParams.page();
     }
 
     /**

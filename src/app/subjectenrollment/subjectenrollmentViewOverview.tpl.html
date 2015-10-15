@@ -96,33 +96,43 @@
                   {{schedule.scheduledForm.name}}
                 </td>
                 <td data-title="'Available From'">
-                  <span ng-if="schedule.$editFrom"
-                        ng-change="subject.saveSchedule(schedule)"
-                        ng-model="schedule.availableFrom"
-                        datepicker-popup ng-model="dt" is-open="schedule.$editFrom">
-                    {{schedule.availableFrom | date:'EEE, MMM d, y'}}
-                  </span>
-                  <span ng-if="!schedule.$editFrom">
-                    <i class="fa fa-calendar selectable pull-left"
-                       ng-click="subject.openDate($event); schedule.$editFrom = true"></i>
-                    &nbsp;{{schedule.availableFrom | date:'EEE, MMM d, y'}}
-                  </span>
+                  <div ng-switch="schedule.type">
+                    <div ng-switch-when="non-scheduled">Always</div>
+                    <div ng-switch-default>
+                      <span ng-if="schedule.$editFrom"
+                            ng-change="subject.saveSchedule(schedule)"
+                            ng-model="schedule.availableFrom"
+                            datepicker-popup ng-model="dt" is-open="schedule.$editFrom" max-date="schedule.availableTo">
+                        {{schedule.availableFrom | date:'EEE, MMM d, y'}}
+                      </span>
+                      <span ng-if="!schedule.$editFrom">
+                        <i class="fa fa-calendar selectable pull-left"
+                           ng-click="subject.openDate($event); schedule.$editFrom = true"></i>
+                        &nbsp;{{schedule.availableFrom | date:'EEE, MMM d, y'}}
+                      </span>
+                    </div>
+                  </div>
                 </td>
                 <td data-title="'Available To'" ng-click="schedule.$editTo = !schedule.$editTo">
-                  <span ng-if="schedule.$editTo"
-                        ng-change="subject.saveSchedule(schedule)"
-                        ng-model="schedule.availableTo"
-                        datepicker-popup ng-model="dt" is-open="schedule.$editTo">
-                    {{schedule.availableTo | date:'EEE, MMM d, y'}}
-                  </span>
-                  <span ng-if="!schedule.$editTo">
-                    <i class="fa fa-calendar selectable pull-left"
-                       ng-click="subject.openDate($event); schedule.$editTo = true"></i>
-                    &nbsp;{{schedule.availableTo | date:'EEE, MMM d, y'}}
-                  </span>
+                  <div ng-switch="schedule.type">
+                    <div ng-switch-when="non-scheduled">Always</div>
+                    <div ng-switch-default>
+                      <span ng-if="schedule.$editTo"
+                            ng-change="subject.saveSchedule(schedule)"
+                            ng-model="schedule.availableTo"
+                            datepicker-popup ng-model="dt" is-open="schedule.$editTo" min-date="schedule.availableFrom">
+                        {{schedule.availableTo | date:'EEE, MMM d, y'}}
+                      </span>
+                      <span ng-if="!schedule.$editTo">
+                        <i class="fa fa-calendar selectable pull-left"
+                           ng-click="subject.openDate($event); schedule.$editTo = true"></i>
+                        &nbsp;{{schedule.availableTo | date:'EEE, MMM d, y'}}
+                      </span>
+                    </div>
+                  </div>
                 </td>
                 <td data-title="'Status'">
-                  {{schedule.scheduledForm.status}}
+                  {{(schedule.type === 'scheduled') ? schedule.scheduledForm.status : 'N/A'}}
                 </td>
               </tr>
             </tbody>
