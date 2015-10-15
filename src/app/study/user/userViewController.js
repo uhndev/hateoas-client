@@ -109,7 +109,7 @@
             collectionCentre: item.collectionCentre,
             centreAccess: item.centreAccess
           });
-					return enrollment.$update({ id: item.enrollmentId });
+					return enrollment.$update({ id: item.userenrollment });
 				}
 				return;
 			}))
