@@ -124,8 +124,8 @@
     function archiveUser() {
       var conf = confirm("Are you sure you want to archive this enrollment?");
       if (conf) {
-        var enrollment = new UserEnrollment({ id: vm.selected.enrollmentId });
-        return enrollment.$delete({ id: vm.selected.enrollmentId }).then(function () {
+        var enrollment = new UserEnrollment({ id: vm.selected.userenrollment });
+        return enrollment.$delete({ id: vm.selected.userenrollment }).then(function () {
           toastr.success('Archived user enrollment!', 'Enrollment');
           $scope.$broadcast('hateoas.client.refresh');
         });
