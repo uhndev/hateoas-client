@@ -23,8 +23,8 @@ module.exports = {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
 
-    coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
-    coffeeunit: [ 'src/**/*.spec.coffee' ],
+    ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
+    tsunit: [ 'src/**/*.spec.ts' ],
 
     atpl: [ 'src/app/**/*.tpl.html' ],
     ctpl: [ 'src/common/**/*.tpl.html' ],
@@ -104,5 +104,5 @@ module.exports = {
       'vendor/angular-ui-grid/ui-grid.ttf',
       'vendor/angular-ui-grid/ui-grid.woff'
     ]
-  },
+  }
 };
