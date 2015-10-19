@@ -24,6 +24,20 @@
     $scope.validateNumber = validateNumber;
     $scope.openDate = openDate;
 
+    if ($scope.field.field_type == 'singleselect') {
+      $scope.field.field_value = {};
+      $scope.$watch('field.field_questions', function (oldVal, newVal) {
+        if (oldVal !== newVal) {
+          _.each($scope.field.field_questions, function (question) {
+            if (question.field_value) {
+
+              $scope.field.field_value[question.field_name] = question.field_value;
+            }
+          });
+        }
+      }, true);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     function clearExpr(field) {

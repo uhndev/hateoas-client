@@ -16,7 +16,7 @@
       "datetime"  : "date",
       "boolean"   : "checkbox",
       "array"     : "textfield",
-      "json"      : "textfield"  
+      "json"      : "textfield"
     };
 
     var BASE_FIELD = {
@@ -28,7 +28,7 @@
       field_options: [],
       field_hasOptions: false,
       field_required: true
-    }; 
+    };
 
     /**
      * [formToObject - converts a form to an object]
@@ -36,7 +36,7 @@
      * @return {[json]}      [resultant data as an object]
      */
     this.formToObject = function(form) {
-      return _.reduce(form.form_questions, 
+      return _.reduce(form.form_questions,
         function(item, question) {
           item[question.field_name] = question.field_value;
           return item;
@@ -64,15 +64,20 @@
      *  @param  {[data]} data array from the template field
      *  @return {[array]} data array of objects
      */
-    function flattenDeep(list, listField) {
-      return _.reduce(list, function(result, item) {
-        if (_.has(item, listField) && _.isArray(item[listField])) {
-          result.concat( flattenDeep(item[listField]) );
-        } else {
-          result.push(item);
+    function flattenDeep(list, listField, relation, result) {
+      if (!_.has(list, listField) && !_.isArray(list)) {
+        if (!result[relation]) {
+          result[relation] = [];
         }
-        return result;
-      }, []);
+        return result[relation].push(list);
+      }
+      else if (!_.isArray(list) && _.has(list, listField)) {
+        return flattenDeep(list[listField], listField, list.type, result);
+      } else {
+        return _.map(list, function (item) {
+          return flattenDeep(item, listField, relation, result);
+        });
+      }
     }
 
     /**
@@ -83,29 +88,48 @@
      */
     this.parseToForm = function(item, template) {
       var relation = template.rel;
-      // since AnswerSets don't have an href in their hateoas template
-      // we need to load the form directly with the selected answerset's form
-      if (relation === 'answerset' && item) {
-        return item.form;
-      } else {
-        var dataItems = flattenDeep(template.data, 'data');
+      var dataItems = {};
+      dataItems[relation] = [];
+      flattenDeep(template.data, 'data', relation, dataItems);
+      console.log(dataItems);
 
-        var questions = _.map(dataItems, function(dataItem, index) {
-          return _.chain(BASE_FIELD)
-                  .merge({ field_id: index + 1 })
-                  .merge(toField(dataItem, relation))
-                  .value();
+      // build initial form with base relation fields
+      var questions = _.map(dataItems[relation], function(dataItem, index) {
+        return _.chain(BASE_FIELD)
+                .merge({ field_id: index + 1 })
+                .merge(toField(dataItem, relation))
+                .value();
+      });
+      delete dataItems[relation];
+
+      var idx = questions.length;
+      _.forIn(dataItems, function (value, key) {
+        questions.push({
+          field_id: ++idx,
+          field_helpertext: 'required',
+          field_options: [],
+          field_hasOptions: false,
+          field_required: true,
+          field_type: 'singleselect',
+          field_name: key,
+          field_title: _.titleCase(key),
+          field_questions: _.map(value, function (dataItem, index) {
+            return _.chain(BASE_FIELD)
+              .merge({ field_id: index + 1 })
+              .merge(toField(dataItem, key))
+              .value();
+          })
         });
-        
-        return {
-          form_type: "system",
-          form_name: relation + "_form",
-          form_title: _.titleCase(relation) + " Form",
-          form_submitText: "Submit",
-          form_cancelText: "Cancel",
-          form_questions: questions
-        };
-      }
+      });
+
+      return {
+        form_type: "system",
+        form_name: relation + "_form",
+        form_title: _.titleCase(relation) + " Form",
+        form_submitText: "Submit",
+        form_cancelText: "Cancel",
+        form_questions: questions
+      };
     };
 
     /**
@@ -118,7 +142,7 @@
     this.loadAnswerSet = function(item, template, form) {
       if (template.study) {
         _.map(form.items.form_questions, function(question) {
-          if ((question.field_hasItem || question.field_hasItems) && 
+          if ((question.field_hasItem || question.field_hasItems) &&
                question.field_name !== 'study' && question.field_prependURL) {
             question.field_userURL = 'study/' + template.study + '/' + question.field_userURL;
           }
@@ -127,11 +151,10 @@
       }
 
       if (!_.isEmpty(item)) {
-        var answers = (template.rel === 'answerset' ? item.answers : item);
         var questions = _.map(form.items.form_questions,
           function(question) {
             if (_.has(item, question.field_name)) {
-              question.field_value = answers[question.field_name];
+              question.field_value = item[question.field_name];
             }
 
             return question;
@@ -139,34 +162,6 @@
 
         form.items.form_questions = questions;
       }
-    };
-
-    /**
-     * [createAnswerSet - reads from a form/template to convert to AnswerSet]
-     * @param  {[json]} data     [form object result after hitting submit]
-     * @param  {[json]} template [hateoas template]
-     * @return {[json]}          [AnswerSet]
-     */
-    this.createAnswerSet = function(data, template) {
-      // if filling out a user form with destination AnswerSet,
-      // there exists no template, so we use the field name from
-      // the form; otherwise, we read from the template as the key
-      var field_keys = (!template.data || template.rel == 'answerset') ? 
-                          _.pluck(data.form_questions, 'field_name') :
-                          _.pluck(template.data, 'name');
-      // answers from the filled out form
-      var field_values = _.pluck(data.form_questions, 'field_value');
-      // zip pairwise key/value pairs
-      var answers = _.zipObject(field_keys, field_values);
-
-      // if filling out user form, need to record form, subject, and person
-      // otherwise, just the answers are passed to the appropriate model
-      return (!template.data || template.rel == 'answerset') ? {
-        form: data.id,
-        subject: '2',
-        person: '3',
-        answers: answers
-      } : answers;
     };
   }
 })();

@@ -24,8 +24,7 @@ describe('TemplateService', function() {
   });
 
   it('has 4 methods', function() {
-    expect(_.keys(SERVICE)).toEqual(['formToObject', 'parseToForm', 
-      'loadAnswerSet', 'createAnswerSet' ]);
+    expect(_.keys(SERVICE)).toEqual(['formToObject', 'parseToForm', 'loadAnswerSet' ]);
   });
 
   it('converts a form to a data object with formToObject', function() {
@@ -33,7 +32,7 @@ describe('TemplateService', function() {
       username: '0',
       email: '1',
       password: '2',
-      role: '3' 
+      role: '3'
     };
 
     // Generate test data
@@ -58,7 +57,7 @@ describe('TemplateService', function() {
       username: '0',
       email: '1',
       password: '2',
-      role: '3' 
+      role: '3'
     };
 
     var tempForm = {

@@ -3,20 +3,28 @@
 		<label for="field.field_id">
 			{{field.field_id}}) {{field.field_title}}
 		</label>&nbsp;
-		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
-		<div class="row-fluid">
-			<select-loader
-				id="{{field.field_id}}"
-				url="{{field.field_userURL}}"
-				is-atomic="field.field_hasItem"
-				is-disabled="false"
-				ng-required="field.field_required"
-				values="field.field_value"
-				labels="{{field.field_labels}}"
-				output-properties="id">
-			</select-loader>
-		</div>
-		<div ng-show="!sub_form.$pristine">
+		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && sub_form.$valid"></span>
+    <span class="pull-right">
+      <input type="checkbox" ng-model="selectToggle" ng-change="field.field_value = {}"/> Create New
+    </span>
+    <pre>{{field.field_value | json}}</pre>
+    <div class="row-fluid" ng-switch="selectToggle">
+      <fieldset class="well" ng-switch-when="true">
+        <field-directive ng-repeat="subfield in field.field_questions" field="subfield"></field-directive>
+      </fieldset>
+      <select-loader
+        ng-switch-default
+        id="{{field.field_id}}"
+        url="{{field.field_userURL || field.field_name}}"
+        is-atomic="true"
+        is-disabled="false"
+        ng-required="field.field_required"
+        values="field.field_value"
+        labels="{{field.field_labels || 'name prefix firstname lastname'}}"
+        output-properties="id">
+      </select-loader>
+    </div>
+		<div ng-show="!sub_form.$pristine && sub_form.$invalid">
 			<span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
 		</div>
 	</div>
