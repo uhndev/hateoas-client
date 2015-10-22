@@ -59,12 +59,11 @@
       instance.result.then(function(item) {
         var newItem = _.merge(modalScope.item, item);
         var api = newItem.href || $scope.href;
-        console.log(newItem);
-        //Service.commit(api, newItem).then(function(data) {
-        //  toastr.success('Item successfully updated!', 'Success');
-        //  $scope.$emit('hateoas.client.refresh');
-        //  modalScope.$destroy();
-        //});
+        Service.commit(api, newItem).then(function(data) {
+          toastr.success('Item successfully updated!', 'Success');
+          $scope.$emit('hateoas.client.refresh');
+          modalScope.$destroy();
+        });
       });
     }
 

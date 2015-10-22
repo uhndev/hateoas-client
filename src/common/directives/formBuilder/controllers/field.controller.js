@@ -12,6 +12,9 @@
 
   function FieldController($scope, $http, $timeout, SelectService) {
 
+    // private variables
+    var savedSingleSelect = null;
+
     // bindable variables
     $scope.opened = false;
     $scope.multiInput = [];
@@ -19,23 +22,30 @@
     $scope.loadError = false;
 
     // bindable methods
+    $scope.toggleSelectCreate = toggleSelectCreate;
     $scope.clearExpr = clearExpr;
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
     $scope.openDate = openDate;
 
     if ($scope.field.field_type == 'singleselect') {
-      $scope.field.field_value = {};
+      savedSingleSelect = angular.copy($scope.field.field_value);
       $scope.$watch('field.field_questions', function (oldVal, newVal) {
         if (oldVal !== newVal) {
           _.each($scope.field.field_questions, function (question) {
             if (question.field_value) {
-
               $scope.field.field_value[question.field_name] = question.field_value;
             }
           });
         }
       }, true);
+    }
+
+    function toggleSelectCreate() {
+      if ($scope.selectToggle) {
+        savedSingleSelect = angular.copy($scope.field.field_value);
+      }
+      $scope.field.field_value = ($scope.selectToggle) ?  {} : savedSingleSelect;
     }
 
     ///////////////////////////////////////////////////////////////////////////

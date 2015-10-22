@@ -16,7 +16,7 @@
       "datetime"  : "date",
       "boolean"   : "checkbox",
       "array"     : "textfield",
-      "json"      : "textfield"
+      "json"      : "json"
     };
 
     var BASE_FIELD = {
@@ -51,31 +51,73 @@
      *  @return {[json]} ng-form-builder field object
      */
     function toField(item, relation) {
-      return {
+      var fields = {
         field_name: item.name,
         field_title: item.prompt,
         field_placeholder: _.titleCase(relation + ' ' + item.prompt),
         field_type: TYPE_MAP[item.type]
       };
+      if (_.isArray(item.value)) { // for enum fields
+        fields.field_type = 'dropdown';
+        fields.hasOptions = true;
+        fields.field_options = _.map(item.value, function (option, index) {
+          return {
+            "option_id" : index,
+            "option_title" : option,
+            "option_value" : option
+          };
+        });
+      }
+      return fields;
     }
 
     /**
-     * [flattenLists - flattens a array of objects containing nested lists]
+     * [transformDeep - takes template data array and converts to form]
      *  @param  {[data]} data array from the template field
      *  @return {[array]} data array of objects
      */
-    function flattenDeep(list, listField, relation, result) {
-      if (!_.has(list, listField) && !_.isArray(list)) {
-        if (!result[relation]) {
-          result[relation] = [];
-        }
-        return result[relation].push(list);
+    function transformDeep(list, listField, relation) {
+      if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
+        return _.merge(list, _.chain(BASE_FIELD).merge(toField(list, relation)).value());
+      } else if (!_.isArray(list) && _.has(list, listField)) { // single model field
+        return _.merge(list, {
+          field_helpertext: 'required',
+          field_options: [],
+          field_hasOptions: false,
+          field_required: true,
+          field_type: 'singleselect',
+          field_name: list.name,
+          field_title: _.titleCase(list.name),
+          field_userURL: list.type,
+          field_questions: _.map(list[listField], function (dataItem, index) {
+            dataItem.field_id = index + 1;
+            return transformDeep(dataItem, listField, dataItem.type);
+          })
+        });
+      } else {
+        return _.map(list, function (item) { // list of fields
+          return transformDeep(item, listField, relation);
+        });
+      }
+    }
+
+    /**
+     * [callbackDeep - performs a given callback at leaf nodes of given recursive lists]
+     *  @param  {[data]} data array from the template field
+     *  @return {[array]} data array of objects
+     *
+     */
+    function callbackDeep(list, listField, callback) {
+      if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
+        list = callback(list);
+        return list;
       }
       else if (!_.isArray(list) && _.has(list, listField)) {
-        return flattenDeep(list[listField], listField, list.type, result);
+        list = callback(list);
+        return callbackDeep(list[listField], listField, callback);
       } else {
-        return _.map(list, function (item) {
-          return flattenDeep(item, listField, relation, result);
+        return _.map(list, function (item) { // list of fields
+          return callbackDeep(item, listField, callback);
         });
       }
     }
@@ -87,45 +129,26 @@
      * @return {[json]}          [resultant form object]
      */
     this.parseToForm = function(item, template) {
-      var relation = template.rel;
-      var dataItems = {};
-      dataItems[relation] = [];
-      flattenDeep(template.data, 'data', relation, dataItems);
-      console.log(dataItems);
-
-      // build initial form with base relation fields
-      var questions = _.map(dataItems[relation], function(dataItem, index) {
-        return _.chain(BASE_FIELD)
-                .merge({ field_id: index + 1 })
-                .merge(toField(dataItem, relation))
-                .value();
+      // add form-builder fields to template object
+      var questions = _.map(transformDeep(template.data, 'data', template.rel), function (question, index) {
+        question.field_id = index + 1;
+        return question;
       });
-      delete dataItems[relation];
 
-      var idx = questions.length;
-      _.forIn(dataItems, function (value, key) {
-        questions.push({
-          field_id: ++idx,
-          field_helpertext: 'required',
-          field_options: [],
-          field_hasOptions: false,
-          field_required: true,
-          field_type: 'singleselect',
-          field_name: key,
-          field_title: _.titleCase(key),
-          field_questions: _.map(value, function (dataItem, index) {
-            return _.chain(BASE_FIELD)
-              .merge({ field_id: index + 1 })
-              .merge(toField(dataItem, key))
-              .value();
-          })
-        });
+      // removes template fields from form objects
+      callbackDeep(questions, 'field_questions', function(item) {
+        delete item.name;
+        delete item.type;
+        delete item.prompt;
+        delete item.value;
+        delete item.data;
+        return item;
       });
 
       return {
         form_type: "system",
-        form_name: relation + "_form",
-        form_title: _.titleCase(relation) + " Form",
+        form_name: template.rel + "_form",
+        form_title: _.titleCase(template.rel) + " Form",
         form_submitText: "Submit",
         form_cancelText: "Cancel",
         form_questions: questions

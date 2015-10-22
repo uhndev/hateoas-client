@@ -4,11 +4,10 @@
 			{{field.field_id}}) {{field.field_title}}
 		</label>&nbsp;
 		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && sub_form.$valid"></span>
-    <span class="pull-right">
-      <input type="checkbox" ng-model="selectToggle" ng-change="field.field_value = {}"/> Create New
+    <span class="pull-right" ng-show="field.field_questions.length > 0">
+      <input type="checkbox" ng-model="selectToggle" ng-change="toggleSelectCreate()"/> Create New
     </span>
-    <pre>{{field.field_value | json}}</pre>
-    <div class="row-fluid" ng-switch="selectToggle">
+    <div class="row-fluid" ng-switch="selectToggle" ng-style="{ 'margin-left': '20px' }">
       <fieldset class="well" ng-switch-when="true">
         <field-directive ng-repeat="subfield in field.field_questions" field="subfield"></field-directive>
       </fieldset>
