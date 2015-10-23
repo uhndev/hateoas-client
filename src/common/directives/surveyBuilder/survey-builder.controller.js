@@ -29,6 +29,7 @@
 
     // bindable variables
     vm.isFormsToggled = false;                 // boolean denoting whether all forms per session are visible
+    vm.isSessionsToggled = false;              // boolean denoting whether all session can be affected by applying all
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
     vm.cascadeDefaults = true;                 // denotes whether or not to cascade changes in form order to each session
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
@@ -42,12 +43,13 @@
     vm.beginLimit = 0;                         // number of sessions in timeline to limit from the beginning
 
     vm.sessionColumns = [
+      { title: 'Name', field: 'name', type: 'text'},
       { title: 'Type', field: 'type', type: 'dropdown', options: [
         { prompt: 'Scheduled', value: 'scheduled' },
+        { prompt: 'Recurring', value: 'recurring' },
         { prompt: 'Non-scheduled', value: 'non-scheduled' }
       ]},
-      { title: 'Name', field: 'name', type: 'text'},
-      { title: 'Timepoint', field: 'timepoint', type: 'number'},
+      { title: 'Interval', field: 'timepoint', type: 'number'},
       { title: 'Available From', field: 'availableFrom', type: 'number'},
       { title: 'Available To', field: 'availableTo', type: 'number'}
     ];
@@ -60,6 +62,7 @@
     vm.generateSessions = generateSessions;
     vm.loadMore = loadMore;
     vm.toggleForms = toggleForms;
+    vm.toggleSessions = toggleSessions;
 
     init();
 
@@ -200,31 +203,45 @@
         vm.newSession.formOrder = angular.copy(formIds);
         vm.newSession.formVersions = angular.copy(_.filter(formIds, { active: false }));
 
-        // if scheduled, session won't have name but will have repeat attributes
-        if (vm.newSession.type === 'scheduled') {
-          // repeat as many times as needed to generate timepoints
-          for (var i=1; i <= vm.newSession.repeat; i++) {
-            var future = vm.newSession.timepoint * i;
+        switch(vm.newSession.type) {
+          case 'scheduled':
             vm.survey.sessions.push({
               surveyVersion: vm.latestSurveyVersion,
               type: vm.newSession.type,
-              name: future.toString() + ' Day',
-              timepoint: future,
+              name: vm.newSession.name,
+              timepoint: vm.newSession.timepoint,
               availableFrom: vm.newSession.availableFrom,
               availableTo: vm.newSession.availableTo,
               formOrder: angular.copy(formIds),
               formVersions: angular.copy(formIds)
             });
-          }
+            break;
+          case 'recurring': // if scheduled, session won't have name but will have repeat attributes
+            // repeat as many times as needed to generate timepoints
+            for (var i=1; i <= vm.newSession.repeat; i++) {
+              var future = vm.newSession.timepoint * i;
+              vm.survey.sessions.push({
+                surveyVersion: vm.latestSurveyVersion,
+                type: vm.newSession.type,
+                name: future.toString() + ' Day',
+                timepoint: future,
+                availableFrom: vm.newSession.availableFrom,
+                availableTo: vm.newSession.availableTo,
+                formOrder: angular.copy(formIds),
+                formVersions: angular.copy(formIds)
+              });
+            }
+            break;
+          case 'non-scheduled': // otherwise, its non-scheduled won't have repeat but will have name attribute
+            vm.newSession.surveyVersion = vm.latestSurveyVersion;
+            vm.newSession.timepoint = 0;
+            vm.newSession.availableFrom = 0;
+            vm.newSession.availableTo = 0;
+            vm.survey.sessions.push(vm.newSession);
+            break;
+          default: break;
         }
-        // otherwise, its non-scheduled won't have repeat but will have name attribute
-        else {
-          vm.newSession.surveyVersion = vm.latestSurveyVersion;
-          vm.newSession.timepoint = 0;
-          vm.newSession.availableFrom = 0;
-          vm.newSession.availableTo = 0;
-          vm.survey.sessions.push(vm.newSession);
-        }
+
         vm.newSession = {};
         angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
         vm.loadLimit = (vm.survey.sessions.length > infiniteThreshold) ? defaultLoad : vm.survey.sessions.length;
@@ -252,6 +269,13 @@
       vm.isFormsToggled = !vm.isFormsToggled;
       _.map(vm.survey.sessions, function (session) {
         session.$isCollapsed = vm.isFormsToggled;
+      });
+    }
+
+    function toggleSessions() {
+      vm.isSessionsToggled = !vm.isSessionsToggled;
+      _.map(vm.survey.sessions, function (session) {
+        session.$noCascade = vm.isSessionsToggled;
       });
     }
 

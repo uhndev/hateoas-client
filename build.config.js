@@ -67,11 +67,13 @@ module.exports = {
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/dist/lodash.js',
       'vendor/lodash-contrib/dist/lodash-contrib.js',
+      'vendor/moment/moment.js',
       'vendor/sails.io.js/dist/sails.io.js',
 
       'vendor/angular/angular.js',
       'vendor/angular-animate/angular-animate.js',
       'vendor/angular-loader/angular-loader.js',
+      'vendor/angular-moment/angular-moment.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',
       'vendor/angular-cookies/angular-cookies.js',

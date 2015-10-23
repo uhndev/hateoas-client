@@ -26,8 +26,7 @@
               <option value="coordinator" label="Coordinator">Coordinator</option>
             </select>
 
-            <p
-              ng-show="sb.surveyForm.completedBy.$invalid && !sb.surveyForm.completedBy.$pristine"
+            <p ng-show="sb.surveyForm.completedBy.$invalid && !sb.surveyForm.completedBy.$pristine"
               class="pull-right required-error">You must select a type of user to complete the survey.</p>
           </div>
         </div>
@@ -56,25 +55,36 @@
     <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit - 1].name}}"
          active="sb.STAGES['SELECT_FORMS']">
       <div class="row">
-        <div class="input-group">
-          <span class="input-group-addon selectable" ng-click="sb.isDefaultsCollapsed = !sb.isDefaultsCollapsed">
-            Default Forms
-            <i class="glyphicon" ng-class="{
-              'glyphicon-chevron-right': sb.isDefaultsCollapsed,
-              'glyphicon-chevron-down': !sb.isDefaultsCollapsed
-            }"></i>
-          </span>
-          <input class="form-control" ng-model="sb.timelineQuery.name"
-                 ng-model-options="{ 'debounce': 500 }"
-                 placeholder="Filter sessions"/>
-          <span class="input-group-addon selectable" ng-click="sb.toggleForms()">
-            Form Visibility
-            <i class="fa" ng-class="{
-                'fa-eye': !sb.isFormsToggled,
-                'fa-eye-slash': sb.isFormsToggled
-              }"></i>
-          </span>
-        </div>
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon selectable" ng-click="sb.isDefaultsCollapsed = !sb.isDefaultsCollapsed">
+                Default Forms
+                <i class="glyphicon" ng-class="{
+                  'glyphicon-chevron-right': sb.isDefaultsCollapsed,
+                  'glyphicon-chevron-down': !sb.isDefaultsCollapsed
+                }"></i>
+              </span>
+              <input class="form-control" ng-model="sb.timelineQuery.name"
+                     ng-model-options="{ 'debounce': 500 }"
+                     placeholder="Filter sessions"/>
+            </div>
+          </div>
+          <div class="form-group pull-right">
+            <div class="checkbox" ng-click="sb.toggleForms()">
+              <label>
+                <input type="checkbox" ng-model="sb.isFormsToggled" />
+                Hide Forms
+              </label>
+            </div>
+            <div class="checkbox" ng-click="sb.toggleSessions()">
+              <label>
+                <input type="checkbox" ng-model="sb.isSessionsToggled" />
+                Disable Sessions
+              </label>
+            </div>
+          </div>
+        </form>
       </div>
       <br/>
       <div class="row">
@@ -103,7 +113,7 @@
           </ul>
         </div>
         <div ng-class="{ 'col-md-9': !sb.isDefaultsCollapsed }">
-          <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
+          <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()" onscrollup="sb.loadLimit = 10">
             <timeline>
               <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit">
                 <timeline-badge class="selectable" ng-class="{ 'info': !session.$noCascade, 'default': session.$noCascade }"
@@ -121,6 +131,11 @@
                         }"></i>
                       </span>
                     </h4>
+                    <p class="text-muted" ng-if="session.type !== 'non-scheduled'">
+                      <i class="glyphicon glyphicon-time"></i>Occurring in {{session.timepoint | amDurationFormat: 'days'}}
+                      <br/>
+                      Available {{session.availableFrom}} day(s) before and {{session.availableTo}} day(s) after
+                    </p>
                   </timeline-heading>
                   <div collapse="session.$isCollapsed">
                     <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
