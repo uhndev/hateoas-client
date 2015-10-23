@@ -49,7 +49,7 @@
         { prompt: 'Recurring', value: 'recurring' },
         { prompt: 'Non-scheduled', value: 'non-scheduled' }
       ]},
-      { title: 'Interval', field: 'timepoint', type: 'number'},
+      { title: 'Timepoint', field: 'timepoint', type: 'number'},
       { title: 'Available From', field: 'availableFrom', type: 'number'},
       { title: 'Available To', field: 'availableTo', type: 'number'}
     ];
@@ -204,7 +204,7 @@
         vm.newSession.formVersions = angular.copy(_.filter(formIds, { active: false }));
 
         switch(vm.newSession.type) {
-          case 'scheduled':
+          case 'scheduled': // if scheduled, session will have name, but repeat will be set to 1
             vm.survey.sessions.push({
               surveyVersion: vm.latestSurveyVersion,
               type: vm.newSession.type,
@@ -216,7 +216,7 @@
               formVersions: angular.copy(formIds)
             });
             break;
-          case 'recurring': // if scheduled, session won't have name but will have repeat attributes
+          case 'recurring': // if recurring, session won't have name but will have repeat attributes
             // repeat as many times as needed to generate timepoints
             for (var i=1; i <= vm.newSession.repeat; i++) {
               var future = vm.newSession.timepoint * i;
@@ -265,6 +265,10 @@
       }
     }
 
+    /**
+     * toggleForms
+     * @description Click handler for toggling form visibility
+     */
     function toggleForms() {
       vm.isFormsToggled = !vm.isFormsToggled;
       _.map(vm.survey.sessions, function (session) {
@@ -272,6 +276,10 @@
       });
     }
 
+    /**
+     * toggleSessions
+     * @description Click handler for toggling whether sessions can be affected by cascading changes
+     */
     function toggleSessions() {
       vm.isSessionsToggled = !vm.isSessionsToggled;
       _.map(vm.survey.sessions, function (session) {
