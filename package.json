@@ -13,6 +13,7 @@
     "url": "git@github.com:ngbp/ngbp.git"
   },
   "dependencies": {
+    "bower": "^1.6.5",
     "lodash-contrib": "^241.4.10"
   },
   "devDependencies": {
