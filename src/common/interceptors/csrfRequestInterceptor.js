@@ -29,7 +29,7 @@
           $http.get(CSRF_URL).success(function (response , status , headers){
             if(response._csrf){
               _token = response._csrf;
-              config.data._csrf = _token;
+              // config.data._csrf = _token;
               config.headers['X-CSRF-Token'] = response._csrf;
             }
             deferred.resolve(config);

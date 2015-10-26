@@ -36,7 +36,6 @@
   dadosConfig.$inject = ['$stateProvider', '$tooltipProvider', 'toastrConfig'];
 
   function dadosConfig($stateProvider, $tooltipProvider, toastrConfig) {
-
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
