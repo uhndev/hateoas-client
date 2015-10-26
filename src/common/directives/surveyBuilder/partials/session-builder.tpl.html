@@ -1,76 +1,85 @@
 <div class="row">
-
   <div class="col-md-3">
     <div class="form-group">
       <label>Type
-        <ui-help popover="The type of session, can be repeatable (scheduled) or adhoc (non-scheduled)"></ui-help>
+        <ui-help popover="The type of session, can be scheduled, recurring (scheduled) or adhoc (non-scheduled)"></ui-help>
       </label>
       <select id="sessionType" name="type" class="form-control"
               ng-model="sessionBuilder.session.type" required>
         <option value="" disabled>Select a type</option>
         <option value="scheduled" label="Scheduled">Scheduled</option>
+        <option value="recurring" label="Recurring">Recurring</option>
         <option value="non-scheduled" label="Non-scheduled">Non-scheduled</option>
       </select>
     </div>
   </div>
 
-  <div ng-if="sessionBuilder.session.type !== 'scheduled'"
+  <div ng-if="sessionBuilder.session.type !== 'recurring'"
+       ng-hide="!sessionBuilder.session.type"
        ng-class="{
-        'col-md-8': sessionBuilder.session.type !== 'scheduled',
-        'col-md-2': sessionBuilder.session.type == 'scheduled'
-      }">
+      'col-md-8': sessionBuilder.session.type == 'non-scheduled',
+      'col-md-2': sessionBuilder.session.type !== 'non-scheduled'
+    }">
     <div class="form-group">
       <label for="name">Name
         <ui-help popover="The name given to this session. e.g. 90 Day Intake"></ui-help>
       </label>
       <input id="name" type="text" name="name" class="form-control"
-             ng-model="sessionBuilder.session.name"
-             ng-disabled="!sessionBuilder.session.type" required/>
+             ng-model="sessionBuilder.session.name" required/>
     </div>
   </div>
 
-  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type == 'recurring'">
     <div class="form-group">
       <label for="repeat">Repeat
+        <span ng-if="sessionBuilder.session.repeat">: {{sessionBuilder.session.repeat}} times</span>
         <ui-help popover="The number of of times this session should occur."></ui-help>
       </label>
       <input id="repeat" type="number" name="repeat" class="form-control"
-             min="0" ng-model="sessionBuilder.session.repeat"
-             ng-disabled="!sessionBuilder.session.type" required/>
+             min="0" ng-model="sessionBuilder.session.repeat" required/>
     </div>
   </div>
 
-  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
-    <div class="form-group">
-      <label for="timepoint">Timepoint
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type === 'recurring'">
+      <label for="timepoint">Interval
+        <span ng-if="sessionBuilder.session.timepoint">: Every {{sessionBuilder.session.timepoint | amDurationFormat: 'days'}}</span>
         <ui-help
-          popover="The number of days after subject date of enrollment for when this session should take place."></ui-help>
+          popover="The interval in days between repetitions, starting from the subject's date of enrollment."></ui-help>
       </label>
       <input id="timepoint" type="number" name="timepoint" class="form-control"
              min="0" ng-model="sessionBuilder.session.timepoint"
              ng-disabled="!sessionBuilder.session.type" required/>
-    </div>
   </div>
 
-  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type === 'scheduled'">
+    <label for="timepoint">Deadline
+      <span ng-if="sessionBuilder.session.timepoint">: In {{sessionBuilder.session.timepoint | amDurationFormat: 'days'}}</span>
+      <ui-help
+        popover="The interval in days starting from the subject's date of enrollment."></ui-help>
+    </label>
+    <input id="timepoint" type="number" name="timepoint" class="form-control"
+           min="0" ng-model="sessionBuilder.session.timepoint" required/>
+  </div>
+
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type !== 'non-scheduled'">
     <div class="form-group">
-      <label for="availableFrom">Available From
+      <label for="availableFrom">Available
+        <span ng-if="sessionBuilder.session.availableFrom"> {{sessionBuilder.session.availableFrom}} day(s) before</span>
         <ui-help popover="The number of days before session date this survey should become available"></ui-help>
       </label>
       <input id="availableFrom" type="number" name="availableFrom" class="form-control"
-             min="0" ng-model="sessionBuilder.session.availableFrom"
-             ng-disabled="!sessionBuilder.session.type" required/>
+             min="0" ng-model="sessionBuilder.session.availableFrom" required/>
     </div>
   </div>
 
-  <div class="col-md-2" ng-if="sessionBuilder.session.type == 'scheduled'">
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type !== 'non-scheduled'">
     <div class="form-group">
-      <label for="availableTo">Available To
+      <label for="availableTo">Available
+        <span ng-if="sessionBuilder.session.availableTo"> {{sessionBuilder.session.availableTo}} day(s) after</span>
         <ui-help popover="The number of days after session date this survey should no longer be available"></ui-help>
       </label>
       <input id="availableTo" type="number" name="availableTo" class="form-control"
-             min="0" ng-model="sessionBuilder.session.availableTo"
-             ng-disabled="!sessionBuilder.session.type" required/>
+             min="0" ng-model="sessionBuilder.session.availableTo" required/>
     </div>
   </div>
 

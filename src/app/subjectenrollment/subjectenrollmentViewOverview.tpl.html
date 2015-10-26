@@ -132,7 +132,7 @@
                   </div>
                 </td>
                 <td data-title="'Status'">
-                  {{(schedule.type === 'scheduled') ? schedule.scheduledForm.status : 'N/A'}}
+                  {{(schedule.type !== 'non-scheduled') ? schedule.scheduledForm.status : 'N/A'}}
                 </td>
               </tr>
             </tbody>
