@@ -25,7 +25,8 @@
     "lodash-contrib": "~241.4.15",
     "ng-table": "~0.8.3",
     "sails.io.js": "~0.11.5",
-    "angular-scroll-animate": "~0.9.4"
+    "angular-scroll-animate": "~0.9.4",
+    "angular-moment": "~0.10.3"
   },
   "resolutions": {
     "lodash": "~2.4.1",

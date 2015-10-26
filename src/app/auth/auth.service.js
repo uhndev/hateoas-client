@@ -124,7 +124,9 @@
     this.logout = function(data, onSuccess, onError) {
       this.setUnauthenticated();
       $cookies.remove('user');
-      return $resource(Auth.LOGOUT_API).query();
+      return $resource(Auth.LOGOUT_API, {}, {
+        'query' : {method: 'GET', isArray: false }
+      }).query();
     };
   }
 })();
