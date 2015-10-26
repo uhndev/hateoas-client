@@ -45,6 +45,7 @@ karma/results/**
 .vagrant/**
 .floo
 .flooignore
+src/common/config/*
 
 ################################################
 # Dependencies

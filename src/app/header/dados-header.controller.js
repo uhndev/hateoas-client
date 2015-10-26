@@ -88,6 +88,7 @@
     function logout() {
       vm.isVisible = false;
       vm.navigation = [];
+      vm.submenu = [];
       AuthService.logout();
     }
 
