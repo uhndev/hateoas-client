@@ -1,0 +1,155 @@
+<div>
+  <tabset justified="true">
+    <!-- Stage 1: Define 1 survey item with n sessions in survey -->
+    <!-- (study, survey, completedBy) -->
+    <!-- (surveyVersion, name, timepoint, availableFrom, availableTo, type) -->
+    <tab heading="Define Survey" active="sb.STAGES['DEFINE_SURVEY']">
+      <ng-form name="sb.surveyForm" class="form-horizontal" novalidate>
+        <div class="form-group">
+          <label for="name" class="col-sm-3 control-label">Survey Name&nbsp;</label>
+
+          <div class="col-sm-9">
+            <input type="text" name="name" class="form-control"
+                   data-ng-model="sb.survey.name" required>
+
+            <p ng-show="sb.surveyForm.name.$invalid && !sb.surveyForm.name.$pristine"
+               class="pull-right required-error">Survey must have a name.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="completedBy" class="col-sm-3 control-label">Completed By&nbsp;</label>
+
+          <div class="col-sm-9">
+            <select name="completedBy" class="form-control" ng-model="sb.survey.completedBy" required>
+              <option value="" disabled>Select the type of user</option>
+              <option value="subject" label="Subject">Subject</option>
+              <option value="coordinator" label="Coordinator">Coordinator</option>
+            </select>
+
+            <p
+              ng-show="sb.surveyForm.completedBy.$invalid && !sb.surveyForm.completedBy.$pristine"
+              class="pull-right required-error">You must select a type of user to complete the survey.</p>
+          </div>
+        </div>
+      </ng-form>
+
+      <hr/>
+      <session-builder session="sb.newSession"
+                       generate-sessions="sb.generateSessions"></session-builder>
+      <hr/>
+
+      <list-editor list="sb.survey.sessions"
+                   columns="sb.sessionColumns"
+                   affix-missing="false"
+                   can-edit="true"
+                   can-add-newcol="false"
+                   can-add-newrow="false"
+                   can-edit-header="false"
+                   can-del-row="false"
+                   can-del-col="false"
+                   force-reload="sb.toggleReload">
+      </list-editor>
+    </tab>
+
+    <!-- Stage 2: Configure m formVersions for each n session in survey -->
+    <!-- (list of formVersions applied to sessions) -->
+    <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit - 1].name}}"
+         active="sb.STAGES['SELECT_FORMS']">
+      <div class="row">
+        <div class="input-group">
+          <span class="input-group-addon selectable" ng-click="sb.isDefaultsCollapsed = !sb.isDefaultsCollapsed">
+            Default Forms
+            <i class="glyphicon" ng-class="{
+              'glyphicon-chevron-right': sb.isDefaultsCollapsed,
+              'glyphicon-chevron-down': !sb.isDefaultsCollapsed
+            }"></i>
+          </span>
+          <input class="form-control" ng-model="sb.timelineQuery.name"
+                 ng-model-options="{ 'debounce': 500 }"
+                 placeholder="Filter sessions"/>
+          <span class="input-group-addon selectable" ng-click="sb.toggleForms()">
+            Form Visibility
+            <i class="fa" ng-class="{
+                'fa-eye': !sb.isFormsToggled,
+                'fa-eye-slash': sb.isFormsToggled
+              }"></i>
+          </span>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
+          Apply To All Sessions <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
+          <ui-help popover="If checked, changes in this panel will cascade to each session in the survey with blue calendars.
+                            Clicking the calendar icons will toggle cascading.">
+          </ui-help>
+
+          <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+              ng-model="sb.survey.defaultFormVersions">
+            <li ng-repeat="form in sb.survey.defaultFormVersions"
+                class="selectable"
+                ng-switch="form.active">
+              <h4><span ng-switch-when="true" class="label label-primary"
+                    ng-click="form.active = false">
+                {{$index + 1}}) {{form.name}}
+                <i class="fa fa-times"></i>
+              </span>
+              <span ng-switch-default class="label label-default"
+                    ng-click="form.active = true">
+                <s>{{$index + 1}}) {{form.name}}</s>
+                <i class="fa fa-plus"></i>
+              </span></h4>
+            </li>
+          </ul>
+        </div>
+        <div ng-class="{ 'col-md-9': !sb.isDefaultsCollapsed }">
+          <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()">
+            <timeline>
+              <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit">
+                <timeline-badge class="selectable" ng-class="{ 'info': !session.$noCascade, 'default': session.$noCascade }"
+                                ng-click="session.$noCascade = !session.$noCascade;">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </timeline-badge>
+                <timeline-panel class="info" ng-class="{ 'timeline-inverted': !sb.isDefaultsCollapsed }">
+                  <timeline-heading>
+                    <h4>
+                      {{session.name}}&nbsp;
+                      <span class="selectable" ng-click="session.$isCollapsed = !session.$isCollapsed">
+                        <i class="glyphicon" ng-class="{
+                          'glyphicon-chevron-right': session.$isCollapsed,
+                          'glyphicon-chevron-down': !session.$isCollapsed
+                        }"></i>
+                      </span>
+                    </h4>
+                  </timeline-heading>
+                  <div collapse="session.$isCollapsed">
+                    <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
+                        ng-model="session.formOrder">
+                      <li ng-repeat="id in session.formOrder"
+                          class="selectable"
+                          ng-style="{ 'margin-bottom': '-5px' }"
+                          ng-switch="sb.isFormActive(id, session)">
+                        <h4>
+                    <span ng-switch-when="true" class="label label-primary"
+                          ng-click="sb.addRemoveForm(id, session)">
+                      {{$index + 1}}) {{sb.formVersions[id].name}}
+                      <i class="fa fa-times"></i>
+                    </span>
+                    <span ng-switch-default class="label label-default"
+                          ng-click="sb.addRemoveForm(id, session)">
+                      <s>{{$index + 1}}) {{sb.formVersions[id].name}}</s>
+                      <i class="fa fa-plus"></i>
+                    </span>
+                        </h4>
+                      </li>
+                    </ul>
+                  </div>
+                </timeline-panel>
+              </timeline-event>
+            </timeline>
+          </div>
+        </div>
+      </div>
+    </tab>
+  </tabset>
+</div>

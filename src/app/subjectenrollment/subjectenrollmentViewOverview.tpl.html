@@ -1,0 +1,144 @@
+<div ng-controller="SubjectOverviewController as subject" class="container">
+  <div class="row">
+    <div class="col-md-10">
+      <h1 id="Title">
+        Subject {{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right">
+      <button type="button" class="btn btn-info">
+        <i class="fa fa-file-text"></i>
+        Real-Time Report
+      </button>
+      <button type="button" class="btn btn-info">
+        Call Log <span class="badge">4</span>
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="subject.allow.update"
+              ng-click="subject.openEditSubject()">
+        <i class="fa fa-edit"></i>
+        Edit Subject
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <!-- List Subject Info -->
+    <div class="col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Subject Information</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <tr>
+              <td><strong>Subject ID</strong></td>
+              <td>{{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}</td>
+            </tr>
+            <tr>
+              <td><strong>Study</strong></td>
+              <td>
+                <a ng-href="#/study/{{::subject.resource.studyName}}">{{::subject.resource.studyName}}</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Collection Centre</strong></td>
+              <td>
+                <a ng-href="#/collectioncentre/{{::subject.resource.collectionCentre}}">{{::subject.resource.collectionCentreName}}</a>
+              </td>
+            </tr>
+            <tr ng-repeat="(key, value) in subject.resource.studyMapping">
+              <td><strong>{{key | uppercase}}</strong></td>
+              <td>{{value}}</td>
+            </tr>
+            <tr>
+              <td><strong>Date of Event</strong></td>
+              <td>{{subject.resource.doe | date:'EEEE, MMMM d, y'}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- List Subject Forms -->
+    <div class="col-md-8">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Subject Forms</h3>
+        </div>
+        <div class="panel-body">
+          <select class="form-control" ng-model="subject.surveyFilter.surveyName"
+                  ng-options="survey for survey in subject.surveys">
+            <option value="">View all surveys</option>
+          </select>
+          <table ng-table="subject.tableParams" class="table table-hover ng-table-responsive">
+            <tbody ng-repeat="name in $groups">
+              <tr class="ng-table-group">
+                <td colspan="{{$columns.length}}">
+                  <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+                    <strong>{{ name.value }}</strong>
+                  </a>
+                </td>
+              </tr>
+              <tr ng-hide="name.$hideRows" ng-repeat="schedule in name.data">
+                <td data-title="'Type'">
+                  {{schedule.type}}
+                </td>
+                <td data-title="'Survey'">
+                  {{schedule.surveyName}}
+                </td>
+                <td data-title="'Form'">
+                  {{schedule.scheduledForm.name}}
+                </td>
+                <td data-title="'Available From'">
+                  <div ng-switch="schedule.type">
+                    <div ng-switch-when="non-scheduled">Always</div>
+                    <div ng-switch-default>
+                      <span ng-if="schedule.$editFrom"
+                            ng-change="subject.saveSchedule(schedule)"
+                            ng-model="schedule.availableFrom"
+                            datepicker-popup ng-model="dt" is-open="schedule.$editFrom" max-date="schedule.availableTo">
+                        {{schedule.availableFrom | date:'EEE, MMM d, y'}}
+                      </span>
+                      <span ng-if="!schedule.$editFrom">
+                        <i class="fa fa-calendar selectable pull-left"
+                           ng-click="subject.openDate($event); schedule.$editFrom = true"></i>
+                        &nbsp;{{schedule.availableFrom | date:'EEE, MMM d, y'}}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td data-title="'Available To'" ng-click="schedule.$editTo = !schedule.$editTo">
+                  <div ng-switch="schedule.type">
+                    <div ng-switch-when="non-scheduled">Always</div>
+                    <div ng-switch-default>
+                      <span ng-if="schedule.$editTo"
+                            ng-change="subject.saveSchedule(schedule)"
+                            ng-model="schedule.availableTo"
+                            datepicker-popup ng-model="dt" is-open="schedule.$editTo" min-date="schedule.availableFrom">
+                        {{schedule.availableTo | date:'EEE, MMM d, y'}}
+                      </span>
+                      <span ng-if="!schedule.$editTo">
+                        <i class="fa fa-calendar selectable pull-left"
+                           ng-click="subject.openDate($event); schedule.$editTo = true"></i>
+                        &nbsp;{{schedule.availableTo | date:'EEE, MMM d, y'}}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td data-title="'Status'">
+                  {{(schedule.type === 'scheduled') ? schedule.scheduledForm.status : 'N/A'}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

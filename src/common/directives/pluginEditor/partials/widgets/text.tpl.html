@@ -1,0 +1,13 @@
+<input type="text"
+    class="form-control"
+	id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}"
+	name="{{ widget.name }}"
+	title="{{widget.properties.title }}"
+	placeholder="{{ widget.properties.title }}"
+	size="{{widget.properties.size }}"
+	ng-model="widgetModel.value"
+	maxlength="{{widget.properties.maxlength}}"
+	ng-autocomplete="{{widget.properties.autocomplete }}"
+	ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
+	ng-pattern="{{widget.properties.pattern }}"
+/>

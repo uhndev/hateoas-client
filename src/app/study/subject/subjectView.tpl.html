@@ -1,0 +1,60 @@
+<div ng-controller="StudySubjectController as studySubject">
+  <h1 id="Title">
+    {{ pageTitle }}
+    <small>
+      Total: {{studySubject.resource.total}}
+    </small>
+  </h1>
+  <div id="Query" class="clearfix">
+    <query-builder
+      template="studySubject.resource.template"
+      ng-model="studySubject.query.where"
+      ng-if="studySubject.resource.template">
+    </query-builder>
+  </div>
+
+  <div id="Controls" class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.read"
+              ng-click="studySubject.openSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-folder-o"></i>
+        View Subject
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.create"
+              ng-click="studySubject.openAddSubject()">
+        <i class="fa fa-file-o"></i>
+        Add Subject
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.update"
+              ng-click="studySubject.openEditSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-edit"></i>
+        Edit Subject
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="studySubject.allow.delete"
+              ng-click="studySubject.archiveSubject()"
+              ng-disabled="!!!studySubject.selected">
+        <i class="fa fa-trash-o"></i>
+        Archive
+      </button>
+    </div>
+  </div>
+
+  <hateoas-table
+    class="clearfix"
+    url="{{studySubject.url}}"
+    query="studySubject.query"
+    selected="studySubject.selected"
+    filter="studySubject.filter"
+    allow="studySubject.allow"
+    template="studySubject.template"
+    resource="studySubject.resource"
+    on-resource-loaded="studySubject.onResourceLoaded">
+  </hateoas-table>
+
+</div>

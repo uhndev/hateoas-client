@@ -1,0 +1,85 @@
+<div ng-controller="CollectionCentreOverviewController as cc">
+	<div class="row">
+		<div class="col-md-8">
+			<h1 id="Title">
+				{{cc.title}}
+			</h1>
+		</div>
+	</div>
+	<hr/>
+
+	<div class="row">
+		<!-- List User Info -->
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Collection Centre Information</h3>
+				</div>
+				<div class="panel-body">
+					<simple-table
+						rows="cc.centreInfo.rows"
+						table-data="cc.centreInfo.tableData">
+					</simple-table>
+				</div>
+			</div>
+		</div>
+
+    <!-- Right Column -->
+		<div class="col-md-8">
+      <!-- List Users -->
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Coordinators</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th ng-repeat="col in ::cc.centreUsers.columns">
+									{{::col}}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in ::cc.centreUsers.tableData"
+                  hateoas-link state-href="/user/{{::row.id}}">
+								<td>{{::row.username}}</td>
+								<td>{{::row.email}}</td>
+								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
+								<td>{{::row.centreAccess}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		  <!-- List Subjects -->
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Subjects</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th ng-repeat="col in ::cc.centreSubjects.columns">
+									{{::col}}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in ::cc.centreSubjects.tableData"
+                  hateoas-link state-href="/subjectenrollment/{{::row.id}}">
+								<td>{{::row.subjectNumber}}</td>
+								<td ng-repeat="(key, value) in ::row.studyMapping">
+                  {{::value}}
+                </td>
+								<td>{{::row.doe | date:'EEEE, MMMM d, y'}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<input type="text"
+	ng-model="widgetModel.value"
+	id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}"
+	name="{{ widget.name }}"
+	typeahead="option.name as option.name for option in widget.properties.options | filter:{name: $viewValue}"
+	maxlength="{{widget.properties.maxlength}}"
+	title="{{widget.properties.title }}"
+	placeholder="{{widget.properties.title }}"
+	size="{{widget.properties.size }}"
+	autocomplete="{{widget.properties.autocomplete }}"
+	class="form-control"
+	ng-model-options="{ updateOn: 'default blur', debounce: {'default': 350, 'blur': 0} }"
+	ng-pattern="{{widget.properties.pattern }}"
+/>
+<!--  datalist id="uuid:{{plugin.id}}:{{ widget.id }}:list">
+	<option ng-repeat="option in widget.properties.options" 
+		value="{{option.name}}" label="{{option.value}}"></option>
+</datalist -->

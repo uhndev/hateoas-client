@@ -1,0 +1,25 @@
+<div subform ng-show="!!widget.subform">
+	<section ui-dados-info 
+			 ng-if="widget.subform.metaData.headerUrl"
+			 form="widget.subform"
+			 answers="answers">
+	</section>
+	<ng-form name="{{ widget.name }}"
+	   ng-expressions="widget.subform.questions">
+		<ol class="plugin {{ widget.subform.metaData.type }}"
+		 	ng-class="{ 'grid' : (widget.subform.metaData.grid === 'true'), 'no-numbers': (widget.subform.metaData.numbers === 'false') }">
+			<li ng-repeat="question in widget.subform.questions"
+				ng-style="{'width' : (widget.subform.metaData.grid === 'true' ? question.css.width : '100%')}"
+				ng-hide="{{ question.properties.hidden }}">
+				<div question
+					 class="cell form-group"
+					 ng-style="question.css"
+					 ng-class="'ui-' + question.template"
+					 plugin="{{ widget.name }}"
+					 widget="question"
+					 widget-model="answers[question.id]">
+				</div>
+			</li>
+		</ol>
+	</ng-form>
+</div>

@@ -1,0 +1,18 @@
+<ol class="row" ng-class="{'list-inline': widget.properties.cols > 1 }" ng-hide="isHidden()">
+	<li ng-repeat="option in widget.properties.options"
+		ng-class="(widget.properties.cols > 0 ? 'col-md-' + 12/widget.properties.cols : '')">
+		<label for="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}:{{ $index }}"
+			ng-dblclick="widgetModel.value = ''"  class="radio">
+			<input 
+				id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}:{{ $index }}"
+				type="radio"
+				name="{{ widget.name }}"
+				title="{{ option.name }}"
+				ng-attr-value="{{ option.value }}"
+				ng-model="widgetModel.value"
+				/>
+			
+			{{ option.name }}
+		</label>
+	</li>
+</ol>

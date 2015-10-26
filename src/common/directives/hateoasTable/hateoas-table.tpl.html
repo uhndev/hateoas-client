@@ -1,0 +1,50 @@
+<table id="Collection" ng-table="tableParams" class="table">
+  <thead>
+  <tr>
+    <th ng-repeat="column in ht.template.data"
+        ng-if="!column.data"
+        class="text-center sortable"
+        ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
+      {{ column.prompt }} <i class="pull-left" ng-class="{
+            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
+            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
+          }"></i>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="item in ht.resource.items"
+      ng-click="ht.select(item)"
+      class="selectable"
+      ng-class="{'active': item === ht.selected}">
+    <td ng-repeat="column in ht.template.data"
+        ng-if="!column.data"
+        sortable="column.name">
+      <div ng-switch="column.name">
+        <div ng-switch-when="collectionCentre">
+          <select-loader
+            ng-if="ht.allow.update"
+            url="{{column.value}}"
+            is-atomic="true"
+            is-disabled="false"
+            values="item[column.name]"
+            labels="name"
+            output-properties="id">
+          </select-loader>
+          <p ng-if="!!!ht.allow.update">{{::item[column.name]}}</p>
+        </div>
+        <div ng-switch-when="centreAccess">
+          <select ng-if="ht.allow.update" ng-model="item[column.name]" class="form-control">
+            <option value="coordinator">Coordinator</option>
+            <option value="interviewer">Interviewer</option>
+          </select>
+          <p ng-if="!!!ht.allow.update">{{::item[column.name]}}</p>
+        </div>
+        <div ng-switch-default>
+          {{ item[column.name] | formatter:column }}
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

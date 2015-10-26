@@ -1,157 +1,190 @@
 /**
  * Utility helper functions for managing/manipulating hateoas templates
  */
-angular.module('dados.common.services.template', [])
-.service('TemplateService', function() {
-  var TYPE_MAP = {
-    "string"    : "textfield",
-    "text"      : "textfield",
-    "integer"   : "number",
-    "float"     : "number",
-    "date"      : "date",
-    "datetime"  : "date",
-    "boolean"   : "checkbox",
-    "array"     : "textfield",
-    "json"      : "textfield"  
-  };
+(function() {
+  'use strict';
+  angular.module('dados.common.services.template', [])
+  .service('TemplateService', TemplateService);
 
-  var BASE_FIELD = {
-    field_validation: {
-      rule: "none",
-      expression: ""
-    },
-    field_helpertext: 'required',
-    field_options: [],
-    field_hasOptions: false,
-    field_required: true
-  }; 
-
-  /**
-   * [formToObject - converts a form to an object]
-   * @param  {[form]} form [form object]
-   * @return {[json]}      [resultant data as an object]
-   */
-  this.formToObject = function(form) {
-    return _.reduce(form.form_questions, 
-      function(item, question) {
-        item[question.field_name] = question.field_value;
-        return item;
-      }, {});
-  };
-
-  /**
-   * [toField - converts a data item from the application/collection+json
-   *  specification to a ng-form-builder field]
-   *  @param  {[item]} item [data item object]
-   *  @param  {[relation]} template's link relation
-   *  @return {[json]} ng-form-builder field object
-   */
-  function toField(item, relation) {
-    return {
-      field_name: item.name,
-      field_title: item.prompt,
-      field_placeholder: _.titleCase(relation + ' ' + item.prompt),
-      field_type: TYPE_MAP[item.type]
+  function TemplateService() {
+    var TYPE_MAP = {
+      "string"    : "textfield",
+      "text"      : "textfield",
+      "integer"   : "number",
+      "float"     : "number",
+      "date"      : "date",
+      "datetime"  : "date",
+      "boolean"   : "checkbox",
+      "array"     : "textfield",
+      "json"      : "json"
     };
-  }
 
-  /**
-   * [flattenLists - flattens a array of objects containing nested lists]
-   *  @param  {[data]} data array from the template field
-   *  @return {[array]} data array of objects
-   */
-  function flattenDeep(list, listField) {
-    return _.reduce(list, function(result, item) {
-      if (_.has(item, listField) && _.isArray(item[listField])) {
-        result.concat( flattenDeep(item[listField]) );
-      } else {
-        result.push(item);
+    var BASE_FIELD = {
+      field_validation: {
+        rule: "none",
+        expression: ""
+      },
+      field_helpertext: 'required',
+      field_options: [],
+      field_hasOptions: false,
+      field_required: true
+    };
+
+    /**
+     * [formToObject - converts a form to an object]
+     * @param  {[form]} form [form object]
+     * @return {[json]}      [resultant data as an object]
+     */
+    this.formToObject = function(form) {
+      return _.reduce(form.form_questions,
+        function(item, question) {
+          item[question.field_name] = question.field_value;
+          return item;
+        }, {});
+    };
+
+    /**
+     * [toField - converts a data item from the application/collection+json
+     *  specification to a ng-form-builder field]
+     *  @param  {[item]} item [data item object]
+     *  @param  {[relation]} template's link relation
+     *  @return {[json]} ng-form-builder field object
+     */
+    function toField(item, relation) {
+      var fields = {
+        field_name: item.name,
+        field_title: item.prompt,
+        field_placeholder: _.titleCase(relation + ' ' + item.prompt),
+        field_type: TYPE_MAP[item.type]
+      };
+      if (_.isArray(item.value)) { // for enum fields
+        fields.field_type = 'dropdown';
+        fields.hasOptions = true;
+        fields.field_options = _.map(item.value, function (option, index) {
+          return {
+            "option_id" : index,
+            "option_title" : option,
+            "option_value" : option
+          };
+        });
       }
-      return result;
-    }, []);
-  }
+      return fields;
+    }
 
-  /**
-   * [parseToForm - converts a template object to a form]
-   * @param  {[item]} item     [selected row item]
-   * @param  {[json]} template [hateoas template object]
-   * @return {[json]}          [resultant form object]
-   */
-  this.parseToForm = function(item, template) {
-    var relation = template.rel;
-    // since AnswerSets don't have an href in their hateoas template
-    // we need to load the form directly with the selected answerset's form
-    if (relation === 'answerset' && item) {
-      return item.form;
-    } else {
-      var dataItems = flattenDeep(template.data, 'data');
+    /**
+     * [transformDeep - takes template data array and converts to form]
+     *  @param  {[data]} data array from the template field
+     *  @return {[array]} data array of objects
+     */
+    function transformDeep(list, listField, relation) {
+      if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
+        return _.merge(list, _.chain(BASE_FIELD).merge(toField(list, relation)).value());
+      } else if (!_.isArray(list) && _.has(list, listField)) { // single model field
+        return _.merge(list, {
+          field_helpertext: 'required',
+          field_options: [],
+          field_hasOptions: false,
+          field_required: true,
+          field_type: 'singleselect',
+          field_name: list.name,
+          field_title: _.titleCase(list.name),
+          field_userURL: list.type,
+          field_questions: _.map(list[listField], function (dataItem, index) {
+            dataItem.field_id = index + 1;
+            return transformDeep(dataItem, listField, dataItem.type);
+          })
+        });
+      } else {
+        return _.map(list, function (item) { // list of fields
+          return transformDeep(item, listField, relation);
+        });
+      }
+    }
 
-      var questions = _.map(dataItems, function(dataItem, index) {
-        return _.chain(BASE_FIELD)
-                .merge({ field_id: index + 1 })
-                .merge(toField(dataItem, relation))
-                .value();
+    /**
+     * [callbackDeep - performs a given callback at leaf nodes of given recursive lists]
+     *  @param  {[data]} data array from the template field
+     *  @return {[array]} data array of objects
+     *
+     */
+    function callbackDeep(list, listField, callback) {
+      if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
+        list = callback(list);
+        return list;
+      }
+      else if (!_.isArray(list) && _.has(list, listField)) {
+        list = callback(list);
+        return callbackDeep(list[listField], listField, callback);
+      } else {
+        return _.map(list, function (item) { // list of fields
+          return callbackDeep(item, listField, callback);
+        });
+      }
+    }
+
+    /**
+     * [parseToForm - converts a template object to a form]
+     * @param  {[item]} item     [selected row item]
+     * @param  {[json]} template [hateoas template object]
+     * @return {[json]}          [resultant form object]
+     */
+    this.parseToForm = function(item, template) {
+      // add form-builder fields to template object
+      var questions = _.map(transformDeep(template.data, 'data', template.rel), function (question, index) {
+        question.field_id = index + 1;
+        return question;
       });
-      
+
+      // removes template fields from form objects
+      callbackDeep(questions, 'field_questions', function(item) {
+        delete item.name;
+        delete item.type;
+        delete item.prompt;
+        delete item.value;
+        delete item.data;
+        return item;
+      });
+
       return {
         form_type: "system",
-        form_name: relation + "_form",
-        form_title: _.titleCase(relation) + " Form",
+        form_name: template.rel + "_form",
+        form_title: _.titleCase(template.rel) + " Form",
         form_submitText: "Submit",
         form_cancelText: "Cancel",
         form_questions: questions
       };
-    }
-  };
+    };
 
-  /**
-   * [loadAnswerSet - when editing an item, load answers into a form]
-   * @param  {[json]} item     [selected row item to edit]
-   * @param  {[json]} template [hateoas template]
-   * @param  {[json]} form     [form object]
-   * @return {[null]}          [no return; objects are modified in place]
-   */
-  this.loadAnswerSet = function(item, template, form) {
-    if (!_.isEmpty(item)) {
-      var answers = (template.rel === 'answerset' ? item.answers : item);
-      var questions = _.map(form.items.form_questions,
-        function(question) {
-          if (_.has(item, question.field_name)) {
-            question.field_value = answers[question.field_name];
+    /**
+     * [loadAnswerSet - when editing an item, load answers into a form]
+     * @param  {[json]} item     [selected row item to edit]
+     * @param  {[json]} template [hateoas template]
+     * @param  {[json]} form     [form object]
+     * @return {[null]}          [no return; objects are modified in place]
+     */
+    this.loadAnswerSet = function(item, template, form) {
+      if (template.study) {
+        _.map(form.items.form_questions, function(question) {
+          if ((question.field_hasItem || question.field_hasItems) &&
+               question.field_name !== 'study' && question.field_prependURL) {
+            question.field_userURL = 'study/' + template.study + '/' + question.field_userURL;
           }
-
           return question;
         });
+      }
 
-      form.items.form_questions = questions;
-    }
-  };
+      if (!_.isEmpty(item)) {
+        var questions = _.map(form.items.form_questions,
+          function(question) {
+            if (_.has(item, question.field_name)) {
+              question.field_value = item[question.field_name];
+            }
 
-  /**
-   * [createAnswerSet - reads from a form/template to convert to AnswerSet]
-   * @param  {[json]} data     [form object result after hitting submit]
-   * @param  {[json]} template [hateoas template]
-   * @return {[json]}          [AnswerSet]
-   */
-  this.createAnswerSet = function(data, template) {
-    // if filling out a user form with destination AnswerSet,
-    // there exists no template, so we use the field name from
-    // the form; otherwise, we read from the template as the key
-    var field_keys = (!template.data || template.rel == 'answerset') ? 
-                        _.pluck(data.form_questions, 'field_name') :
-                        _.pluck(template.data, 'name');
-    // answers from the filled out form
-    var field_values = _.pluck(data.form_questions, 'field_value');
-    // zip pairwise key/value pairs
-    var answers = _.zipObject(field_keys, field_values);
+            return question;
+          });
 
-    // if filling out user form, need to record form, subject, and person
-    // otherwise, just the answers are passed to the appropriate model
-    return (!template.data || template.rel == 'answerset') ? {
-      form: data.id,
-      subject: '2',
-      person: '3',
-      answers: answers
-    } : answers;
-  };
-});
+        form.items.form_questions = questions;
+      }
+    };
+  }
+})();

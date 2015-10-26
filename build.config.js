@@ -22,9 +22,9 @@ module.exports = {
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
-    
-    coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
-    coffeeunit: [ 'src/**/*.spec.coffee' ],
+
+    ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
+    tsunit: [ 'src/**/*.spec.ts' ],
 
     atpl: [ 'src/app/**/*.tpl.html' ],
     ctpl: [ 'src/common/**/*.tpl.html' ],
@@ -62,42 +62,48 @@ module.exports = {
    */
   vendor_files: {
     js: [
-      'vendor/sails.io.js/dist/sails.io.js',
       // angular dependencies
-      'vendor/lodash/dist/lodash.min.js',
-      'vendor/lodash-contrib/dist/lodash-contrib.min.js',
-      'vendor/jquery/jquery.min.js',
-      'vendor/jquery/jquery.min.map',
-      'vendor/jquery-ui/ui/minified/jquery-ui.min.js',
+      'vendor/jquery/jquery.js',
+      'vendor/jquery-ui/ui/jquery-ui.js',
+      'vendor/lodash/dist/lodash.js',
+      'vendor/lodash-contrib/dist/lodash-contrib.js',
+      'sails-io-settings.js',
+      'vendor/sails.io.js/dist/sails.io.js',
+
       'vendor/angular/angular.js',
-      'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
-      'vendor/angular-loader/angular-loader.min.js',
-      'vendor/angular-loader/angular-loader.min.js.map',
-      'vendor/angular-resource/angular-resource.min.js',
-      'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'vendor/angular-resource/angular-resource.min.js',
-      'vendor/angular-resource/angular-resource.min.js.map',
-      'vendor/angular-sails/dist/angular-sails.min.js',
-      'vendor/ace-builds/src-min-noconflict/ace.js',
-      'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
-      'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
-      'vendor/angular-ui-ace/ui-ace.min.js',
-      'vendor/angular-ui-utils/ui-utils.min.js',
-      'vendor/angular-ui-sortable/sortable.min.js',
-      'vendor/angular-ui-router/release/angular-ui-router.min.js',
-      'vendor/ng-table/ng-table.min.js',
-      'vendor/ng-table/ng-table.map',
+      'vendor/angular-animate/angular-animate.js',
+      'vendor/angular-loader/angular-loader.js',
+      'vendor/angular-resource/angular-resource.js',
+      'vendor/angular-cookie/angular-cookie.js',
+      'vendor/angular-cookies/angular-cookies.js',
+      'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+      'vendor/angular-resource/angular-resource.js',
+      'vendor/angular-ui-router/release/angular-ui-router.js',
+      'vendor/angular-multi-select/isteven-multi-select.js',
+      'vendor/angularSails/dist/ngsails.io.js',
+      'vendor/angular-toastr/dist/angular-toastr.tpls.js',
+      'vendor/angular-timeline/dist/angular-timeline.js',
+      'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
+      'vendor/ng-table/dist/ng-table.js',
+      'vendor/angular-ui-validate/dist/validate.js',
+      'vendor/angular-ui-sortable/sortable.js',
+      'vendor/ace-builds/src/ace.js',
+      'vendor/ace-builds/src/mode-javascript.js',
+      'vendor/ace-builds/src/worker-javascript.js',
+      'vendor/angular-ui-ace/ui-ace.js',
+
       // plugins
-      'vendor/JSONedit/js/JSONEdit.js',
-      'vendor/ngform-builder/dist/ngform-builder.min.js',
-      'vendor/nglist-editor/dist/nglist-editor.min.js'
+      'vendor/JSONedit/js/JSONEdit.js'
     ],
     css: [
-      'vendor/font-awesome/css/font-awesome.min.css'
     ],
     assets: [
       'vendor/bootstrap/dist/fonts/*',
-      'vendor/font-awesome/fonts/*'
+      'vendor/font-awesome/fonts/*',
+      'vendor/angular-ui-grid/ui-grid.eot',
+      'vendor/angular-ui-grid/ui-grid.svg',
+      'vendor/angular-ui-grid/ui-grid.ttf',
+      'vendor/angular-ui-grid/ui-grid.woff'
     ]
-  },
+  }
 };

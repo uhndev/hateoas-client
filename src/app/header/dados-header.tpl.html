@@ -1,0 +1,138 @@
+<div class="navbar-container">
+  <div class="headerWrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-7 col-xs-4">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="logo_dados">
+                <a href="#/study">
+                  <img id="dados-brand" alt="Brand" ng-src="assets/img/dados.png">
+                </a>
+              </div>
+              <div id="subBrand" class="pull-left hidden-xs">
+                <div id="subBrand_site">TECHNA INSTITUTE</div>
+                <div id="subBrand_dep">EXTREME EDITION</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 hidden-xs">
+              <small id="tagline">
+                An Open Platform for Prospective Data Collection in Clinical and Translational Research
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="pull-right">
+          <div id="profile_panel" ng-if="header.isVisible">
+            <div id="profile_pannel_inner">
+              <div id="logout">
+                <a ng-href ng-click="header.logout()">
+                  <img id="logout_img" src="assets/img/ico_logout.png">
+                </a>
+              </div>
+              <div class="profile_title">
+                {{::header.currentUser}}
+              </div>
+              <div class="profile_content">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menuWrapper" collapse="!header.isVisible">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"
+                  ng-click="header.menuCollapsed = ! header.menuCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="link in ::header.navigation" dropdown
+                ng-class="{
+                'active': link.isActive,
+                'dropdown': link.dropdown
+              }">
+              <!-- Single Link -->
+              <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }}
+              </a>
+              <!-- Dropdown Link -->
+              <a href class="dropdown-toggle" ng-if="link.dropdown"
+                 dropdown-toggle role="button" aria-expanded="false">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
+                <li ng-repeat="droplink in link.dropdown"
+                    ng-class="{
+                  'active': droplink.isActive
+                }">
+                  <a hateoas-link state-href="{{ ::droplink.href }}">
+                    <i class="fa {{ ::droplink.icon }}"></i>
+                    {{ ::droplink.prompt }}
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="submenuWrapper" collapse="!header.isVisible || !header.submenu.links">
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="header.submenuCollapsed = true"
+                  ng-click="header.submenuCollapsed = ! header.submenuCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" collapse="header.submenuCollapsed">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href class="navbar-brand">
+                <span class="submenu-link-colour">Selected Study:</span>
+              <a/>
+            </li>
+            <li class="dropdown" dropdown>
+              <a href class="navbar-brand dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
+                <span style="color: white">{{header.submenu.links[0].prompt}} <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="study in header.studies" role="menuitem"
+                    ng-class="{
+                  'active': header.submenu.links[0].prompt === study.name
+                }">
+                  <a href="#/study/{{study.name}}">{{study.name}}</a>
+                </li>
+              </ul>
+            </li>
+            <li ng-repeat="link in header.submenu.links.slice(1)"
+                ng-class="{ 'active': link.isActive }">
+              <a ng-click="header.follow(link)">
+                {{ link.prompt }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

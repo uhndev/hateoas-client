@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h3 class="modal-title">Edit Survey</h3>
+</div>
+<div class="modal-body" ng-class="{ 'text-center': editSurvey.saving }">
+  <div ng-class="{ 'dots-loader': editSurvey.saving }"></div>
+  <survey-builder ng-hide="editSurvey.saving" study="editSurvey.study"
+                  forms="editSurvey.forms"
+                  survey="editSurvey.editSurvey"
+                  is-valid="editSurvey.isValid"></survey-builder>
+</div>
+<div class="modal-footer">
+  <button type="submit" id="submitSurvey" class="btn btn-primary"
+          ng-disabled="!editSurvey.isValid || editSurvey.saving" ng-click="editSurvey.save()">
+    Save
+  </button>
+  <button type="button" id="cancelBtn" class="btn btn-warning"
+          ng-disabled="editSurvey.saving"
+          ng-click="editSurvey.cancel()">
+    Cancel
+  </button>
+</div>

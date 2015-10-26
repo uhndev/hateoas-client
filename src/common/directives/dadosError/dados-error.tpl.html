@@ -1,0 +1,42 @@
+<div>
+	<div class="modal-body">
+		<blockquote>
+			<p>{{ err.error.message }}</p>
+		</blockquote>
+		<dl class="dl-horizontal">
+			<div ng-if="err.error.hostname">
+				<dt>Hostname</dt><dd>{{ err.error.hostname }}</dd>
+			</div>
+			<div ng-if="err.error.browser">
+				<dt>Browser</dt><dd>{{ err.error.browser }}</dd>
+			</div>
+			<div ng-if="err.error.currentUser">
+				<dt>Username</dt><dd>{{ err.error.currentUser.username }}</dd>
+				<dt>Email</dt><dd>{{ err.error.currentUser.email }}</dd>
+				<dt>Role</dt><dd>{{ err.error.currentUser.group }}</dd>
+			</div>
+			<div ng-if="err.error.memoryDump">
+				<dt>Memory Usage</dt><dd>{{ err.error.memoryDump.usage || 'unable to determine'}}</dd>
+			</div>
+			<div ng-if="err.error.geolocation">
+				<dt>Geolocation</dt><dd>{{ err.error.geolocation || 'unable to determine'}}</dd>
+				<dt>Accuracy</dt><dd>{{ err.error.accuracy || 'unable to determine'}}</dd>
+			</div>
+			<div ng-if="err.error.screenshot">
+			<dt>Screenshot</dt>
+			<dd>
+				<button type="button" class="btn btn-info btn-xs" ng-click="err.isDisplayed = !err.isDisplayed">
+					Hide/Show
+				</button>
+				<div ng-init="err.isDisplayed = false" ng-show="err.isDisplayed">
+					<img class="img-responsive" src="{{err.error.screenshot}}">
+				</div>
+			</dd>
+			</div>
+		</dl>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" data-ng-click="err.reconnect()">Attempt Reconnect</button>
+		<button class="btn btn-danger" data-ng-click="err.sendError(error)">Send Error Report</button>
+	</div>
+</div>

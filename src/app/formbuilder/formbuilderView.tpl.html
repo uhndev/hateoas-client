@@ -1,15 +1,15 @@
-<div ng-controller="FormBuilderController">
-  <alert ng-repeat="alert in alerts" 
-    type="{{alert.type}}" 
-    close="closeAlert($index)">
-    {{alert.msg}}
-  </alert>
-  <button type="button" 
-    class="btn btn-success pull-right" 
-    ng-disabled="$scope.form.form_questions === 0" 
-    ng-click="saveForm()">
-    Save Form
-  </button>
-  <form-builder form="form">
-  </form-builder>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="pull-left">
+        <h1 id="Title">
+          Form Builder
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <plugin-editor></plugin-editor>
 </div>
