@@ -67,7 +67,7 @@
               </span>
               <input class="form-control" ng-model="sb.timelineQuery.name"
                      ng-model-options="{ 'debounce': 500 }"
-                     placeholder="Filter sessions"/>
+                     placeholder="Filter encounters"/>
             </div>
           </div>
           <div class="form-group pull-right">
@@ -80,7 +80,7 @@
             <div class="checkbox" ng-click="sb.toggleSessions()">
               <label>
                 <input type="checkbox" ng-model="sb.isSessionsToggled" />
-                Disable Sessions
+                Disable Encounters
               </label>
             </div>
           </div>
@@ -89,8 +89,8 @@
       <br/>
       <div class="row">
         <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
-          Apply To All Sessions <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
-          <ui-help popover="If checked, changes in this panel will cascade to each session in the survey with blue calendars.
+          Apply To All Encounters <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
+          <ui-help popover="If checked, changes in this panel will cascade to each selected encounter session in the survey.
                             Clicking the calendar icons will toggle cascading.">
           </ui-help>
 
