@@ -32,12 +32,13 @@
 
         if (scope.url) {
           url = _.convertRestUrl(scope.url, API.prefix);
+          attrs.$set('href', '#' + url);
         }
 
         // bind click action to navigate
         elem.addClass('selectable');
         scope.handleClick = function() {
-          if (scope.stateHref && $state.current.name !== 'hateoas') {
+          if ($state.current.name !== 'hateoas') {
             $state.go('hateoas');
           }
           $location.path(url);

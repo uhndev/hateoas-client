@@ -120,13 +120,13 @@
                     ng-class="{
                   'active': header.submenu.links[0].prompt === study.name
                 }">
-                  <a href="#/study/{{study.name}}">{{study.name}}</a>
+                  <a hateoas-link state-href="#/study/{{study.name}}">{{study.name}}</a>
                 </li>
               </ul>
             </li>
             <li ng-repeat="link in header.submenu.links.slice(1)"
                 ng-class="{ 'active': link.isActive }">
-              <a ng-click="header.follow(link)">
+              <a hateoas-link url="{{::link.href}}">
                 {{ link.prompt }}
               </a>
             </li>
