@@ -18,6 +18,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-ng-constant');
   grunt.loadNpmTasks('grunt-html2js');
+  grunt.loadNpmTasks('grunt-text-replace');
 
   /**
    * Load in our build configuration file.
@@ -244,26 +245,8 @@ module.exports = function ( grunt ) {
         dest : 'src/common/config/app.config.js'
       },
       // Environment targets
-      development: {
-        constants: {
-          BASE: {
-            protocol: 'http',
-            host : 'localhost',
-            port: '1337',
-            prefix: '/api'
-          }
-        }
-      },
-      production: {
-        constants: {
-          BASE: {
-            protocol: 'http',
-            host : 'ws69.uhnresearch.ca',
-            port: '1337',
-            prefix: '/api'
-          }
-        }
-      }
+      development: '<%= environments.development %>',
+      production: '<%= environments.production %>'
     },
 
     /**
@@ -381,6 +364,29 @@ module.exports = function ( grunt ) {
     },
 
     /**
+     * The `replace` task replaces the appropriate socket.io url in
+     * sails-io-settings.js to match the environment.
+     */
+    replace: {
+      development: {
+        src: ['sails-io-settings.tpl'],
+        dest: ['sails-io-settings.js'],
+        replacements: [{
+          from: "<development_url>",
+          to: "<%= environments.development.url %>"
+        }]
+      },
+      production: {
+        src: ['sails-io-settings.tpl'],
+        dest: ['sails-io-settings.js'],
+        replacements: [{
+          from: "<development_url>",
+          to: "<%= environments.production.url %>"
+        }]
+      }
+    },
+
+    /**
      * The `index` task compiles the `index.html` file as a Grunt template. CSS
      * and JS files co-exist here but they get split apart later.
      */
@@ -485,6 +491,7 @@ module.exports = function ( grunt ) {
        */
       assets: {
         files: [
+          'build.config.js',
           'src/assets/**/*'
         ],
         tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
@@ -556,7 +563,7 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
+    'clean', 'replace:development', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build',
     'karmaconfig',
@@ -564,7 +571,7 @@ module.exports = function ( grunt ) {
   ]);
 
   grunt.registerTask( 'build_prod', [
-    'clean', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
+    'clean', 'replace:production', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);

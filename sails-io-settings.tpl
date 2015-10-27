@@ -13,7 +13,7 @@ var SAILSMODULE = (function (){
         },
         set: function (value){
           sails = value;
-          sails.url = "http://localhost:1337";
+          sails.url = "<development_url>";
           sails.useCORSRouteToGetCookie = false;
         }
       });

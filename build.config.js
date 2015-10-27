@@ -2,6 +2,32 @@
  * This file/module contains all configuration for the build process.
  */
 module.exports = {
+
+  environments: {
+    development: {
+      url: 'http://localhost:1337',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : 'localhost',
+          port: '1337',
+          prefix: '/api'
+        }
+      }
+    },
+    production: {
+      url: 'http://ws69.uhnresearch:1337',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : 'ws69.uhnresearch.ca',
+          port: '1337',
+          prefix: '/api'
+        }
+      }
+    }
+  },
+
   /**
    * The `build_dir` folder is where our projects are compiled during
    * development and the `compile_dir` folder is where our app resides once it's

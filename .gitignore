@@ -46,6 +46,7 @@ karma/results/**
 .floo
 .flooignore
 src/common/config/*
+sails-io-settings.js
 
 ################################################
 # Dependencies
