@@ -52,8 +52,7 @@
 
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
-    <tab heading="Select Forms: Showing {{sb.survey.sessions[sb.beginLimit].name}} to {{sb.survey.sessions[sb.beginLimit + sb.loadLimit - 1].name}}"
-         active="sb.STAGES['SELECT_FORMS']">
+    <tab heading="Select Forms" active="sb.STAGES['SELECT_FORMS']">
       <div class="row">
         <form class="form-inline">
           <div class="form-group">
@@ -71,10 +70,16 @@
             </div>
           </div>
           <div class="form-group pull-right">
+            <div class="checkbox" ng-click="sb.hideInactiveForms = !sb.hideInactiveForms">
+              <label>
+                <input type="checkbox" ng-model="sb.hideInactiveForms" />
+                Hide Inactive Forms
+              </label>
+            </div>
             <div class="checkbox" ng-click="sb.toggleForms()">
               <label>
                 <input type="checkbox" ng-model="sb.isFormsToggled" />
-                Hide Forms
+                Hide All Forms
               </label>
             </div>
             <div class="checkbox" ng-click="sb.toggleSessions()">
@@ -105,6 +110,7 @@
                 <i class="fa fa-times"></i>
               </span>
               <span ng-switch-default class="label label-default"
+                    ng-hide="sb.hideInactiveForms"
                     ng-click="form.active = true">
                 <s>{{$index + 1}}) {{form.name}}</s>
                 <i class="fa fa-plus"></i>
@@ -132,7 +138,8 @@
                       </span>
                     </h4>
                     <p class="text-muted" ng-if="session.type !== 'non-scheduled'">
-                      <i class="glyphicon glyphicon-time"></i>Occurring in {{session.timepoint | amDurationFormat: 'days'}}
+                      <i class="glyphicon glyphicon-time"></i>
+                      Occurring in {{session.timepoint | amDurationFormat: 'days'}} ({{session.timepoint}} days)
                       <br/>
                       Available {{session.availableFrom}} day(s) before and {{session.availableTo}} day(s) after
                     </p>
@@ -151,6 +158,7 @@
                       <i class="fa fa-times"></i>
                     </span>
                     <span ng-switch-default class="label label-default"
+                          ng-hide="sb.hideInactiveForms"
                           ng-click="sb.addRemoveForm(id, session)">
                       <s>{{$index + 1}}) {{sb.formVersions[id].name}}</s>
                       <i class="fa fa-plus"></i>

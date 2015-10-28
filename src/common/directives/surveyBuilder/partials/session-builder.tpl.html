@@ -29,26 +29,39 @@
     </div>
   </div>
 
+  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type === 'recurring'">
+    <label for="timepoint">Interval
+      <span ng-if="sessionBuilder.session.timepoint">
+        <ng-pluralize count="sessionBuilder.session.timepoint"
+                      when="{'0': ': day of',
+                             '1': ': Every day',
+                             'other': ': Every {} days'}">
+        </ng-pluralize>
+      </span>
+      <ui-help
+        popover="The interval in days between repetitions, starting from the subject's date of enrollment."></ui-help>
+    </label>
+    <input id="timepoint" type="number" name="timepoint" class="form-control"
+           min="0" ng-model="sessionBuilder.session.timepoint"
+           ng-disabled="!sessionBuilder.session.type" required/>
+  </div>
+
   <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type == 'recurring'">
     <div class="form-group">
       <label for="repeat">Repeat
-        <span ng-if="sessionBuilder.session.repeat">: {{sessionBuilder.session.repeat}} times</span>
+        <span ng-if="sessionBuilder.session.repeat">:
+          <ng-pluralize count="sessionBuilder.session.repeat"
+                        when="{'0': ' Never',
+                               '1': ' Once',
+                               '2': ' Twice',
+                               'other': ' {} times'}">
+          </ng-pluralize>
+        </span>
         <ui-help popover="The number of of times this encounter should occur."></ui-help>
       </label>
       <input id="repeat" type="number" name="repeat" class="form-control"
              min="0" ng-model="sessionBuilder.session.repeat" required/>
     </div>
-  </div>
-
-  <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type === 'recurring'">
-      <label for="timepoint">Interval
-        <span ng-if="sessionBuilder.session.timepoint">: Every {{sessionBuilder.session.timepoint | amDurationFormat: 'days'}}</span>
-        <ui-help
-          popover="The interval in days between repetitions, starting from the subject's date of enrollment."></ui-help>
-      </label>
-      <input id="timepoint" type="number" name="timepoint" class="form-control"
-             min="0" ng-model="sessionBuilder.session.timepoint"
-             ng-disabled="!sessionBuilder.session.type" required/>
   </div>
 
   <div class="col-md-2" ng-hide="!sessionBuilder.session.type" ng-if="sessionBuilder.session.type === 'scheduled'">
@@ -65,7 +78,13 @@
     <div class="form-group">
       <label for="availableFrom">Available
         <span ng-if="!sessionBuilder.session.availableFrom"> From</span>
-        <span ng-if="sessionBuilder.session.availableFrom"> {{sessionBuilder.session.availableFrom}} day(s) before</span>
+        <span ng-if="sessionBuilder.session.availableFrom">
+          <ng-pluralize count="sessionBuilder.session.availableFrom"
+                        when="{'0': ' day of',
+                               'one': ' 1 day before',
+                               'other': ' {} days before'}">
+          </ng-pluralize>
+        </span>
         <ui-help popover="The number of days before encounter date this survey should become available"></ui-help>
       </label>
       <input id="availableFrom" type="number" name="availableFrom" class="form-control"
@@ -77,7 +96,13 @@
     <div class="form-group">
       <label for="availableTo">Available
         <span ng-if="!sessionBuilder.session.availableTo"> To</span>
-        <span ng-if="sessionBuilder.session.availableTo"> {{sessionBuilder.session.availableTo}} day(s) after</span>
+        <span ng-if="sessionBuilder.session.availableTo">
+          <ng-pluralize count="sessionBuilder.session.availableTo"
+                        when="{'0': ' day of',
+                               'one': ' 1 day after',
+                               'other': ' {} days after'}">
+          </ng-pluralize>
+        </span>
         <ui-help popover="The number of days after encounter date this survey should no longer be available"></ui-help>
       </label>
       <input id="availableTo" type="number" name="availableTo" class="form-control"
