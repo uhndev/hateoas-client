@@ -28,6 +28,7 @@
     var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
 
     // bindable variables
+    vm.hideInactiveForms = false;              // boolean denoting whether all inactive forms should be hidden
     vm.isFormsToggled = false;                 // boolean denoting whether all forms per session are visible
     vm.isSessionsToggled = false;              // boolean denoting whether all session can be affected by applying all
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
