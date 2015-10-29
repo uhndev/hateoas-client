@@ -100,6 +100,17 @@ module.exports = function ( grunt ) {
      * `build_dir`, and then to copy the assets to `compile_dir`.
      */
     copy: {
+      build_app_i18n: {
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            cwd: '.',
+            src: [ '<%= app_files.ai18n %>', '<%= app_files.ci18n %>' ],
+            dest: '<%= build_dir %>/i18n/'
+          }
+        ]
+      },
       build_app_assets: {
         files: [
           {
@@ -137,6 +148,16 @@ module.exports = function ( grunt ) {
             src: [ '<%= vendor_files.js %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
+            expand: true
+          }
+        ]
+      },
+      compile_i18n: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= compile_dir %>/i18n',
+            cwd: '<%= build_dir %>/i18n',
             expand: true
           }
         ]
@@ -564,7 +585,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'replace:development', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'concat:build_css', 'copy:build_app_i18n', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build',
     'karmaconfig',
     'karma:continuous'
@@ -572,7 +593,7 @@ module.exports = function ( grunt ) {
 
   grunt.registerTask( 'build_prod', [
     'clean', 'replace:production', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'concat:build_css', 'copy:build_app_i18n', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
 
@@ -581,7 +602,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
+    'less:compile', 'copy:compile_assets', 'copy:compile_i18n', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
   ]);
 
   /**

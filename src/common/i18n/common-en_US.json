@@ -1,0 +1,9 @@
+{
+  "COMMON": {
+    "LANGUAGES": {
+      "LANGUAGE": "Language",
+      "ENGLISH": "English",
+      "FRENCH": "French"
+    }
+  }
+}

@@ -19,6 +19,11 @@
         <div class="footer-inner">
           <p>
             &copy; 2015 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
+            <select class="pull-right" ng-change="dados.changeLanguage()" ng-model="dados.locale">
+              <option disabled translate>COMMON.LANGUAGES.LANGUAGE</option>
+              <option value="en_US" translate>COMMON.LANGUAGES.ENGLISH</option>
+              <option value="fr" translate>COMMON.LANGUAGES.FRENCH</option>
+            </select>
           </p>
         </div>
       </div>

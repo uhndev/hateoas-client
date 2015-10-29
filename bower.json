@@ -27,7 +27,11 @@
     "sails.io.js": "~0.11.5",
     "angular-scroll-animate": "~0.9.4",
     "angular-moment": "~0.10.3",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "angular-translate": "~2.8.1",
+    "angular-translate-handler-log": "~2.8.1",
+    "angular-sanitize": "~1.4.7",
+    "angular-translate-loader-partial": "~2.8.1"
   },
   "resolutions": {
     "lodash": "~2.4.1",
@@ -39,6 +43,7 @@
     "angular-toastr": "~1.5.0",
     "angular-ui-ace": "~0.2.3",
     "angular-ui-utils": "~3.0.0",
-    "angularSails": "~0.12.1"
+    "angularSails": "~0.12.1",
+    "angular-sanitize": "~1.4.7"
   }
 }

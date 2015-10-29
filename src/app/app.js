@@ -6,6 +6,8 @@
     'toastr',
     'ngAnimate',
     'ngResource',
+    'ngSanitize',
+    'pascalprecht.translate',
 
     'templates-app',
     'templates-common',
@@ -33,12 +35,20 @@
   .config(dadosConfig)
   .controller('DadosController', DadosController);
 
-  dadosConfig.$inject = ['$stateProvider', '$tooltipProvider', 'toastrConfig'];
+  dadosConfig.$inject = ['$stateProvider', '$translateProvider', '$translatePartialLoaderProvider', '$tooltipProvider', 'toastrConfig'];
 
-  function dadosConfig($stateProvider, $tooltipProvider, toastrConfig) {
+  function dadosConfig($stateProvider, $translateProvider, $translatePartialLoaderProvider, $tooltipProvider, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
+
+    $translateProvider.useLoader('$translatePartialLoader', {
+      urlTemplate: 'i18n/{part}-{lang}.json'
+    });
+    $translatePartialLoaderProvider.addPart('common');
+
+    $translateProvider.determinePreferredLanguage();
+    $translateProvider.useSanitizeValueStrategy('sanitize');
 
     angular.extend(toastrConfig, {
       autoDismiss: true,
@@ -54,18 +64,29 @@
     });
   }
 
-  DadosController.$inject = ['$scope', '$state', '$location', 'AuthService'];
+  DadosController.$inject = ['$scope', '$state', '$translate', '$location', 'AuthService'];
 
-  function DadosController($scope, $state, $location, Auth) {
+  function DadosController($scope, $state, $translate, $location, Auth) {
 
     var vm = this;
     vm.submenu = {};
+    vm.locale = '';
+    vm.changeLanguage = changeLanguage;
 
-    if (_.isEmpty($location.path())) {
-      $location.path('/study');
+    init();
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      if (_.isEmpty($location.path())) {
+        $location.path('/study');
+      }
+      $state.go('hateoas');
     }
 
-    $state.go('hateoas');
+    function changeLanguage() {
+      $translate.use(vm.locale);
+    }
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();

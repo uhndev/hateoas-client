@@ -52,6 +52,9 @@ module.exports = {
     ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
     tsunit: [ 'src/**/*.spec.ts' ],
 
+    ai18n: [ 'src/app/**/i18n/*.json' ],
+    ci18n: [ 'src/common/i18n/*.json' ],
+
     atpl: [ 'src/app/**/*.tpl.html' ],
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
@@ -101,6 +104,7 @@ module.exports = {
       'vendor/angular-loader/angular-loader.js',
       'vendor/moment/moment.js',
       'vendor/angular-moment/angular-moment.js',
+      'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',
       'vendor/angular-cookies/angular-cookies.js',
@@ -119,6 +123,11 @@ module.exports = {
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
+
+      // translation libs
+      'vendor/angular-translate/angular-translate.js',
+      'vendor/angular-translate-handler-log/angular-translate-handler-log.js',
+      'vendor/angular-translate-loader-partial/angular-translate-loader-partial.js',
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'
