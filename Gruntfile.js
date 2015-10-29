@@ -19,6 +19,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-ng-constant');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-json-minify');
 
   /**
    * Load in our build configuration file.
@@ -172,6 +173,15 @@ module.exports = function ( grunt ) {
             expand: true
           }
         ]
+      }
+    },
+
+    /**
+     * Minifies json files (i18n) and strips whitespace and comments
+     */
+    'json-minify': {
+      build: {
+        files: '<%= build_dir %>/i18n/*.json'
       }
     },
 
@@ -596,7 +606,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'replace:development', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
-    'concat:build_css', 'copy:build_app_i18n', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'concat:build_css', 'copy:build_app_i18n', 'json-minify:build', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build',
     'karmaconfig',
     'karma:continuous'
@@ -604,7 +614,7 @@ module.exports = function ( grunt ) {
 
   grunt.registerTask( 'build_prod', [
     'clean', 'replace:production', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
-    'concat:build_css', 'copy:build_app_i18n', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'concat:build_css', 'copy:build_app_i18n', 'json-minify:build', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
 

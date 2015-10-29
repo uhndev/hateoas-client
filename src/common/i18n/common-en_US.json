@@ -1,5 +1,10 @@
+/**
+  * common-en_US.json
+  * Translation Keys for hateoasClient, hateoasControls, queryBuilder
+  * and template columns for all auto-built hateoas tables
+  */
 {
-  "COMMON": {
+  "COMMON": { // Definitions for language dropdown in footer
     "LANGUAGES": {
       "LANGUAGE": "Language",
       "ENGLISH": "English",
@@ -7,6 +12,7 @@
     }
   },
 
+  // Definitions for hateoas-client and queryBuilder
   "HATEOAS": {
     "TITLE": {
       "TOTAL": "Total: {{total}}"
@@ -35,12 +41,14 @@
     }
   },
 
+  // Definitions for hateoas-client/hateoas-table study template columns
   "STUDY": {
     "NAME": "Study Name",
     "ATTRIBUTES": "Attributes",
     "REB": "REB #"
   },
 
+  // Definitions for hateoas-client/hateoas-table user template columns
   "USER": {
     "USERNAME": "Username",
     "EMAIL": "Email",
@@ -51,11 +59,13 @@
     "DOB": "Date of Birth"
   },
 
+  // Definitions for hateoas-client/hateoas-table collection centre template columns
   "COLLECTION_CENTRE": {
     "NAME": "Collection Centre Name",
     "CONTACT": "Contact"
   },
 
+  // Definitions for hateoas-client/hateoas-table subject enrollment template columns
   "SUBJECT_ENROLLMENT": {
     "SUBJECT_NUMBER": "Subject ID",
     "COLLECTION_CENTRE": "Collection Centre",
@@ -64,6 +74,7 @@
     "STATUS": "Status"
   },
 
+  // Definitions for hateoas-client/hateoas-table user enrollment template columns
   "USER_ENROLLMENT": {
     "USERNAME": "Username",
     "EMAIL": "Email",
@@ -76,6 +87,7 @@
     "CENTRE_ACCESS": "Role"
   },
 
+  // Definitions for hateoas-client/hateoas-table survey template columns
   "SURVEY": {
     "NAME": "Survey Name",
     "COMPLETED_BY": "Completed By"

@@ -1,3 +1,7 @@
+/**
+  * header-en_US.json
+  * Translation Keys for the header module
+  */
 {
   "HEADER": {
     "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",

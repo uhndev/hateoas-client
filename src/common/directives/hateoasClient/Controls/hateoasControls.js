@@ -37,7 +37,8 @@
       };
 
       /**
-       * Creates a list of buttons to draw based on the permissions
+       * Creates a list of buttons to draw based on the permissions retrieved
+       * from the allows header included in server response.
        */
       function postLink(scope, element, attribute) {
         var permissions = scope.permissions();

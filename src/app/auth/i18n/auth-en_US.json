@@ -1,3 +1,7 @@
+/**
+  * auth-en_US.json
+  * Translation Keys for the auth module
+  */
 {
   "AUTH": {
     "TITLE": "Login",

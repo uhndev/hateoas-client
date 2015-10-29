@@ -19,7 +19,9 @@
     });
 
     /**
-     * Returns a list of operators given a field type.
+     * getOperatorsByType
+     * @description Returns a list of operators given a field type, used in post-link to
+     *              populate scope.operators based on changing field types.
      */
     function getOperatorsByType(type) {
       var operators = {
@@ -52,7 +54,12 @@
       return operators['string'];
     }
 
-    function postLink(scope, element, attribute, controller) {
+  /**
+   * postLink
+   * @description Sets up watchers on changing field types to provide appropriate operators in dropdowns
+   * @param scope
+   */
+    function postLink(scope) {
       if (scope.template()) {
         scope.advanceSearch = 0;
         scope.fields = scope.template().data;
