@@ -48,7 +48,8 @@
     $translatePartialLoaderProvider.addPart('common');
 
     $translateProvider.determinePreferredLanguage();
-    $translateProvider.useSanitizeValueStrategy('sanitize');
+    $translateProvider.useMissingTranslationHandlerLog();
+    $translateProvider.useSanitizeValueStrategy('escaped');
 
     angular.extend(toastrConfig, {
       autoDismiss: true,

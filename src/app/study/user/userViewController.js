@@ -50,13 +50,13 @@
           {
             "name": columnName,
             "type": columnType,
-            "prompt": "Collection Centre",
+            "prompt": "USER_ENROLLMENT.COLLECTION_CENTRE",
             "value": centreHref
           },
           {
             "name": "centreAccess",
             "type": "string",
-            "prompt": "Role",
+            "prompt": "USER_ENROLLMENT.CENTRE_ACCESS",
             "value": "role"
           }
         ]);

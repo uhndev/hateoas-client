@@ -52,7 +52,7 @@ module.exports = {
     ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
     tsunit: [ 'src/**/*.spec.ts' ],
 
-    ai18n: [ 'src/app/**/i18n/*.json' ],
+    ai18n: [ 'src/app/**/i18n/*.json', 'src/app/**/**/i18n/*.json' ],
     ci18n: [ 'src/common/i18n/*.json' ],
 
     atpl: [ 'src/app/**/*.tpl.html' ],

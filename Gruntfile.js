@@ -105,6 +105,7 @@ module.exports = function ( grunt ) {
           {
             expand: true,
             flatten: true,
+            encoding: 'utf-8',
             cwd: '.',
             src: [ '<%= app_files.ai18n %>', '<%= app_files.ci18n %>' ],
             dest: '<%= build_dir %>/i18n/'
@@ -504,6 +505,16 @@ module.exports = function ( grunt ) {
           '<%= app_files.js %>'
         ],
         tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
+      },
+
+      /**
+       * When translation files change, we want to re-copy them to the build folder
+       */
+      i18n: {
+        files: [
+          '<%= app_files.ai18n %>', '<%= app_files.ci18n %>'
+        ],
+        tasks: [ 'copy:build_app_i18n' ]
       },
 
       /**

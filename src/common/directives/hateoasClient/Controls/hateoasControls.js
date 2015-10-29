@@ -5,33 +5,33 @@
       'dados.common.directives.hateoas.controls.controller',
       'dados.common.directives.hateoas.controls.service'
     ])
-    .directive('hateoasControls', [ 'HateoasUtils', 
-      
+    .directive('hateoasControls', [ 'HateoasUtils',
+
     function(HateoasUtils) {
       // Default constants values for the buttons
       var BTN_TEMPLATES = {
         'read': {
           method: 'get',
           requiresItem: true,
-          prompt: 'Open',
+          prompt: 'HATEOAS.CONTROLS.OPEN_BTN',
           icon: 'fa-folder-o'
         },
         'create' : {
           method: 'post',
           requiresItem: false,
-          prompt: 'New',
+          prompt: 'HATEOAS.CONTROLS.NEW_BTN',
           icon: 'fa-file-o'
         },
         'update' : {
           method: 'put',
           requiresItem: true,
-          prompt: 'Edit',
-          icon: 'fa-edit' 
+          prompt: 'HATEOAS.CONTROLS.EDIT_BTN',
+          icon: 'fa-edit'
         },
         'delete': {
           method: 'delete',
           requiresItem: true,
-          prompt: 'Archive',
+          prompt: 'HATEOAS.CONTROLS.ARCHIVE_BTN',
           icon: 'fa-trash-o'
         }
       };
@@ -44,7 +44,7 @@
 
         if (permissions && _.isString(permissions)) {
           var allow = permissions.split(',');
-          scope.controls = _.reduce(allow, 
+          scope.controls = _.reduce(allow,
             function(buttons, methodName) {
               methodName = methodName.trim().toLowerCase();
               if (_.has(BTN_TEMPLATES, methodName)) {

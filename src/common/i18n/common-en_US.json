@@ -5,5 +5,79 @@
       "ENGLISH": "English",
       "FRENCH": "French"
     }
+  },
+
+  "HATEOAS": {
+    "TITLE": {
+      "TOTAL": "Total: {{total}}"
+    },
+    "QUERY": {
+      "ADVANCED": {
+        "SEARCH_BTN": "Advanced Search",
+        "OPERATORS": {
+          "NOT": "Not",
+          "IS": "Is",
+          "CONTAINS": "Contains",
+          "LIKE": "Like",
+          "STARTS_WITH": "Starts With",
+          "ENDS_WITH": "Ends With"
+        }
+      },
+      "PLACEHOLDER": "Search Value",
+      "ADD_BTN": "Add",
+      "RESET_BTN": "Reset"
+    },
+    "CONTROLS": {
+      "OPEN_BTN": "Open",
+      "NEW_BTN": "New",
+      "EDIT_BTN": "Edit",
+      "ARCHIVE_BTN": "Archive"
+    }
+  },
+
+  "STUDY": {
+    "NAME": "Study Name",
+    "ATTRIBUTES": "Attributes",
+    "REB": "REB #"
+  },
+
+  "USER": {
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "PREFIX": "Prefix",
+    "FIRSTNAME": "Firstname",
+    "LASTNAME": "Lastname",
+    "GENDER": "Gender",
+    "DOB": "Date of Birth"
+  },
+
+  "COLLECTION_CENTRE": {
+    "NAME": "Collection Centre Name",
+    "CONTACT": "Contact"
+  },
+
+  "SUBJECT_ENROLLMENT": {
+    "SUBJECT_NUMBER": "Subject ID",
+    "COLLECTION_CENTRE": "Collection Centre",
+    "DOE": "Date of Event",
+    "STUDY_MAPPING": "Study Mapping",
+    "STATUS": "Status"
+  },
+
+  "USER_ENROLLMENT": {
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "PREFIX": "Prefix",
+    "FIRSTNAME": "Firstname",
+    "LASTNAME": "Lastname",
+    "GENDER": "Gender",
+    "DOB": "Date of Birth",
+    "COLLECTION_CENTRE": "Collection Centre",
+    "CENTRE_ACCESS": "Role"
+  },
+
+  "SURVEY": {
+    "NAME": "Survey Name",
+    "COMPLETED_BY": "Completed By"
   }
 }

@@ -3,6 +3,7 @@
   <head>
     <title ng-bind="pageTitle"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="shortcut icon" href="assets/img/favicon.ico"/>
 
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
@@ -16,15 +17,19 @@
   	<div ui-view ng-cloak></div>
     <footer class="footer">
       <div class="container">
-        <div class="footer-inner">
-          <p>
-            &copy; 2015 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
-            <select class="pull-right" ng-change="dados.changeLanguage()" ng-model="dados.locale">
+        <div class="footer-inner row">
+          <div class="col-md-10">
+            <p>
+              &copy; 2015 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
+            </p>
+          </div>
+          <div class="col-md-2">
+            <select class="form-control pull-right" ng-change="dados.changeLanguage()" ng-model="dados.locale">
               <option disabled translate>COMMON.LANGUAGES.LANGUAGE</option>
-              <option value="en_US" translate>COMMON.LANGUAGES.ENGLISH</option>
+              <option value="en_US" translate ng-selected="true">COMMON.LANGUAGES.ENGLISH</option>
               <option value="fr" translate>COMMON.LANGUAGES.FRENCH</option>
             </select>
-          </p>
+          </div>
         </div>
       </div>
     </footer>

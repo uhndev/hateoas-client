@@ -5,5 +5,79 @@
       "ENGLISH": "Anglais",
       "FRENCH": "Francais"
     }
+  },
+
+  "HATEOAS": {
+    "TITLE": {
+      "TOTAL": "Global: {{total}}"
+    },
+    "QUERY": {
+      "ADVANCED": {
+        "SEARCH_BTN": "Recherche Avancée",
+        "OPERATORS": {
+          "NOT": "Pas",
+          "IS": "Est",
+          "CONTAINS": "Contient",
+          "LIKE": "Aimer",
+          "STARTS_WITH": "Commence Avec",
+          "ENDS_WITH": "Se Termine Par"
+        }
+      },
+      "PLACEHOLDER": "Valeur de Recherche",
+      "ADD_BTN": "Ajouter",
+      "RESET_BTN": "Réinitialiser"
+    },
+    "CONTROLS": {
+      "OPEN_BTN": "Ouvert",
+      "NEW_BTN": "Nouveau",
+      "EDIT_BTN": "Modifier",
+      "ARCHIVE_BTN": "Archives"
+    }
+  },
+
+  "STUDY": {
+    "NAME": "Nom de L'étude",
+    "ATTRIBUTES": "Attributs",
+    "REB": "REB #"
+  },
+
+  "USER": {
+    "USERNAME": "Nom d'utilisateur",
+    "EMAIL": "Email",
+    "PREFIX": "Préfixe",
+    "FIRSTNAME": "Prénom",
+    "LASTNAME": "Nom de famille",
+    "GENDER": "Sexe",
+    "DOB": "Date D'anniversaire"
+  },
+
+  "COLLECTION_CENTRE": {
+    "NAME": "Nom Collection Centre",
+    "CONTACT": "Contact"
+  },
+
+  "SUBJECT_ENROLLMENT": {
+    "SUBJECT_NUMBER": "Sujet ID",
+    "COLLECTION_CENTRE": "Centre Collection",
+    "DOE": "Date de L'événement",
+    "STUDY_MAPPING": "Cartographie de L'étude",
+    "STATUS": "Statut"
+  },
+
+  "USER_ENROLLMENT": {
+    "USERNAME": "Nom d'utilisateur",
+    "EMAIL": "Email",
+    "PREFIX": "Préfixe",
+    "FIRSTNAME": "Prénom",
+    "LASTNAME": "Nom de famille",
+    "GENDER": "Sexe",
+    "DOB": "Date D'anniversaire",
+    "COLLECTION_CENTRE": "Centre Collection",
+    "CENTRE_ACCESS": "Rôle"
+  },
+
+  "SURVEY": {
+    "NAME": "Nom de L'enquête",
+    "COMPLETED_BY": "Terminé Par"
   }
 }
