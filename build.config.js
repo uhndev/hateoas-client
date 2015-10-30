@@ -128,6 +128,9 @@ module.exports = {
       'vendor/angular-translate/angular-translate.js',
       'vendor/angular-translate-handler-log/angular-translate-handler-log.js',
       'vendor/angular-translate-loader-partial/angular-translate-loader-partial.js',
+      'vendor/angular-dynamic-locale/dist/tmhDynamicLocale.js',
+      'vendor/angular-i18n/angular-locale_en-us.js',
+      'vendor/angular-i18n/angular-locale_fr.js',
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'
