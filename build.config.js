@@ -16,11 +16,11 @@ module.exports = {
       }
     },
     production: {
-      url: 'http://localhost:1337',
+      url: 'http://ws69.uhnresearch.ca:1337',
       constants: {
         BASE: {
           protocol: 'http',
-          host : 'localhost',
+          host : 'ws69.uhnresearch.ca',
           port: '1337',
           prefix: '/api'
         }
