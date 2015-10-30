@@ -1,0 +1,11 @@
+<form class="form-inline" ng-if="visible">
+  <div class="form-group">
+    <label>
+      {{"COMMON.LANGUAGES.LANGUAGE" | translate}}:&nbsp;
+    </label>
+    <select class="form-control" ng-model="currentLocaleDisplayName"
+            ng-options="locale as locale | translate for locale in localesDisplayNames"
+            ng-change="changeLanguage(currentLocaleDisplayName)">
+    </select>
+  </div>
+</form>

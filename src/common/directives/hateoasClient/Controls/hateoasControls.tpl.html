@@ -4,6 +4,6 @@
     ng-click="launch(button, item)"
     ng-disabled="button.requiresItem && !!!item">
     <i class="fa {{ button.icon }}"></i>
-    {{ button.prompt }}
+    <span translate>{{ button.prompt }}</span>
   </button>
 </div>

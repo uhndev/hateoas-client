@@ -1,0 +1,29 @@
+/**
+  * header-en_US.json
+  * Translation Keys for the header module
+  */
+{
+  "HEADER": {
+    "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
+    "SELECTED_STUDY": "Selected Study:",
+    "MENU": {
+      "STUDIES": "Studies",
+      "MY_STUDIES": "My Studies",
+      "MY_PROFILE": "My Profile",
+      "USER_MANAGER": "User Manager",
+      "TOOLS": "Tools",
+      "FORM_BUILDER": "Form Builder",
+      "WORKFLOW_EDITOR": "Workflow Editor",
+      "GROUPS": "Groups",
+      "ACCESS_MANAGEMENT": "Access Management"
+    },
+    "SUBMENU": {
+      "OVERVIEW": "Overview",
+      "COLLECTION_CENTRES": "Collection Centres",
+      "SUBJECTS": "Subjects",
+      "USERS": "Users",
+      "FORMS": "Forms",
+      "SURVEYS": "Surveys"
+    }
+  }
+}

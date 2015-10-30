@@ -18,9 +18,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 hidden-xs">
-              <small id="tagline">
-                An Open Platform for Prospective Data Collection in Clinical and Translational Research
-              </small>
+              <small id="tagline" translate>HEADER.TAGLINE</small>
             </div>
           </div>
         </div>
@@ -66,13 +64,13 @@
               <!-- Single Link -->
               <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown">
                 <i class="fa {{ ::link.icon }}"></i>
-                {{ ::link.prompt }}
+                {{ link.prompt | translate }}
               </a>
               <!-- Dropdown Link -->
               <a href class="dropdown-toggle" ng-if="link.dropdown"
                  dropdown-toggle role="button" aria-expanded="false">
                 <i class="fa {{ ::link.icon }}"></i>
-                {{ ::link.prompt }} <span class="caret"></span>
+                {{ link.prompt | translate }} <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
                 <li ng-repeat="droplink in link.dropdown"
@@ -81,7 +79,7 @@
                 }">
                   <a hateoas-link state-href="{{ ::droplink.href }}">
                     <i class="fa {{ ::droplink.icon }}"></i>
-                    {{ ::droplink.prompt }}
+                    {{ droplink.prompt | translate }}
                   </a>
                 </li>
               </ul>
@@ -108,7 +106,7 @@
           <ul class="nav navbar-nav">
             <li>
               <a href class="navbar-brand">
-                <span class="submenu-link-colour">Selected Study:</span>
+                <span class="submenu-link-colour" translate>HEADER.SELECTED_STUDY</span>
               <a/>
             </li>
             <li class="dropdown" dropdown>
@@ -127,7 +125,7 @@
             <li ng-repeat="link in header.submenu.links.slice(1)"
                 ng-class="{ 'active': link.isActive }">
               <a hateoas-link url="{{::link.href}}">
-                {{ link.prompt }}
+                {{ link.prompt | translate }}
               </a>
             </li>
           </ul>

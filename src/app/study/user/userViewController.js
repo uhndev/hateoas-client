@@ -40,6 +40,13 @@
 
 		///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * onResourceLoaded
+     * @description See hateoas-table directive for more details but in a nutshell, this function
+     *              exists to intercept and 'massage' the data as needed before being rendered to the table.
+     * @param data hateoas response fetched from resource endpoint
+     * @returns {*}
+     */
     function onResourceLoaded(data) {
       if (data) {
         // depending on permissions, render select-loader or plaintext
@@ -50,13 +57,13 @@
           {
             "name": columnName,
             "type": columnType,
-            "prompt": "Collection Centre",
+            "prompt": "USER_ENROLLMENT.COLLECTION_CENTRE",
             "value": centreHref
           },
           {
             "name": "centreAccess",
             "type": "string",
-            "prompt": "Role",
+            "prompt": "USER_ENROLLMENT.CENTRE_ACCESS",
             "value": "role"
           }
         ]);

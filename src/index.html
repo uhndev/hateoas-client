@@ -3,6 +3,7 @@
   <head>
     <title ng-bind="pageTitle"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="shortcut icon" href="assets/img/favicon.ico"/>
 
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
@@ -16,10 +17,15 @@
   	<div ui-view ng-cloak></div>
     <footer class="footer">
       <div class="container">
-        <div class="footer-inner">
-          <p>
-            &copy; 2015 <a href="https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client">Techna Institute</a>.
-          </p>
+        <div class="footer-inner row">
+          <div class="col-md-9">
+            <p>
+              &copy; 2015 <a href="http://dados.technainstitute.com">Techna Institute</a>.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <div class="pull-right" language-select></div>
+          </div>
         </div>
       </div>
     </footer>

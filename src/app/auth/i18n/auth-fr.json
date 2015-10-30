@@ -1,0 +1,11 @@
+{
+  "AUTH": {
+    "TITLE": "S'identifier",
+    "USERNAME": "Nom d'utilisateur",
+    "EMAIL": "Email",
+    "USERNAME_OR_EMAIL": "Nom d'utilisateur ou email",
+    "PASSWORD": "Mot de passe",
+    "SIGN_IN": "S'inscrire",
+    "SIGN_IN_ERROR": "Identifiant ou mot de passe incorrect"
+  }
+}

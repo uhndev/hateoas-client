@@ -1,11 +1,15 @@
 (function() {
 	'use strict';
 
-	angular.module('dados.header', [
-		'dados.auth.service',
-		'dados.header.constants',
-		'dados.header.directive',
-		'dados.header.controller'
-	]);
+	angular
+    .module('dados.header', [
+      'dados.auth.service',
+      'dados.header.constants',
+      'dados.header.directive',
+      'dados.header.controller'
+    ])
+    .config(function config( $translatePartialLoaderProvider ) {
+      $translatePartialLoaderProvider.addPart('header');
+    });
 
 })();

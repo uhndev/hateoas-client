@@ -2,20 +2,20 @@
   <form ng-hide="advanceSearch">
     <div class="form-group no-margin has-feedback has-feedback-left">
       <i class="no-top form-control-feedback fa fa-search"></i>
-      <label class="control-label ng-hide">
-        Search Value
+      <label class="control-label ng-hide" translate>
+        HATEOAS.QUERY.PLACEHOLDER
       </label>
       <input type="text"
-        class="form-control"
-        placeholder="Search value"
-        ng-model-options="{ debounce: 700 }"
-        ng-model="value"
-        ng-change="search(value)" />
+             class="form-control"
+             placeholder="{{ 'HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+             ng-model-options="{ debounce: 700 }"
+             ng-model="value"
+             ng-change="search(value)"/>
     </div>
   </form>
   <div ng-show="advanceSearch">
     <ul ng-repeat="(property, expression) in query">
-     <li ng-if="expression|isString">
+      <li ng-if="expression|isString">
         {{ property }}
         <i class="condition"> is </i>
         <b> {{ expression | json }} </b>
@@ -29,42 +29,40 @@
     </ul>
     <form class="form-inline" role="form">
       <div class="form-group">
-        <select ng-model="field"
-          class="form-control"
-          ng-options="field as field.prompt for field in fields">
+        <select ng-model="field" class="form-control"
+                ng-options="field as field.prompt | translate for field in fields">
         </select>
       </div>
       <div class="form-group">
-        <select ng-disabled="!!!field.type"
-          class="form-control"
-          ng-model="comparator"
-          ng-options="criterion for criterion in operators">
+        <select ng-disabled="!!!field.type" class="form-control" ng-model="comparator">
+          <option value="{{criterion.val}}" ng-repeat="criterion in operators" translate>{{criterion.translationKey}}
+          </option>
         </select>
       </div>
       <div class="form-group">
         <input ng-disabled="!!!field || !!!comparator"
-          class="form-control"
-          type="text"
-          ng-model="value" />
+               class="form-control"
+               type="text"
+               ng-model="value"/>
       </div>
       <button ng-disabled="!!!field || !!!comparator || !!!value"
-        class="btn btn-default"
-        ng-click="add(field.name, comparator, value)">
-        Add
+              class="btn btn-default"
+              ng-click="add(field.name, comparator, value)" translate>
+        HATEOAS.QUERY.ADD_BTN
       </button>
       <button ng-disabled="!!!query"
-        class="btn btn-warning"
-        ng-click="reset()">
-        Reset
+              class="btn btn-warning"
+              ng-click="reset()" translate>
+        HATEOAS.QUERY.RESET_BTN
       </button>
     </form>
   </div>
   <button type="button"
-    class="btn btn-link btn-sm pull-right no-margin no-padding"
-    ng-model="advanceSearch"
-    btn-checkbox
-    btn-checkbox-true="1"
-    btn-checkbox-false="0">
-    Advanced Search
+          class="btn btn-link btn-sm pull-right no-margin no-padding"
+          ng-model="advanceSearch"
+          btn-checkbox
+          btn-checkbox-true="1"
+          btn-checkbox-false="0">
+    <span translate>HATEOAS.QUERY.ADVANCED.SEARCH_BTN</span>
   </button>
 </div>
