@@ -5,10 +5,10 @@
     .controller('HeaderController', HeaderController);
 
   HeaderController.$inject = [
-    '$scope', '$location', '$rootScope', 'StudyService', 'AuthService', 'API'
+    '$scope', '$location', '$translate', '$rootScope', 'StudyService', 'AuthService', 'API'
   ];
 
-  function HeaderController($scope, $location, $rootScope, Study, AuthService, API) {
+  function HeaderController($scope, $location, $translate, $rootScope, Study, AuthService, API) {
 
     var vm = this;
 
@@ -27,6 +27,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      vm.locale = $translate.use();
       if (AuthService.isAuthenticated()) {
         vm.studies = Study.query();
         updateHeader();
@@ -104,6 +105,10 @@
     });
 
     $rootScope.$on('$locationChangeSuccess', updateActive);
+
+    $rootScope.$on('$translateChangeSuccess', function (event, data) {
+      vm.locale = data.language;
+    });
 
     // header loads before authentication is valid, so wait until navigation populated
     var unreg = $scope.$watch('header.navigation', function(oldVal, newVal) {
