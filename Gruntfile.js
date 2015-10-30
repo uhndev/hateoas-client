@@ -164,6 +164,16 @@ module.exports = function ( grunt ) {
           }
         ]
       },
+      compile_angular_i18n: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= compile_dir %>/vendor/angular-i18n',
+            cwd: '<%= build_dir %>/vendor/angular-i18n',
+            expand: true
+          }
+        ]
+      },
       compile_assets: {
         files: [
           {
@@ -623,7 +633,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less:compile', 'copy:compile_assets', 'copy:compile_i18n', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
+    'less:compile', 'copy:compile_assets', 'copy:compile_i18n', 'copy:compile_angular_i18n', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
   ]);
 
   /**
