@@ -1,0 +1,17 @@
+{
+  "STUDY_OVERVIEW": {
+    "TITLE": "Study Overview: {{name}}",
+    "ENROLLMENT": {
+      "TITLE": "Enrollment",
+      "COLLECTION_CENTRES": "Collection Centres",
+      "CONTACT": "Contact",
+      "COORDINATORS": "Coordinators",
+      "INTERVIEWERS": "Interviewers",
+      "SUBJECTS": "Subjects",
+      "SUBJECTS_ENROLLED": "Subjects Enrolled"
+    },
+    "STUDY_INFORMATION": {
+      "TITLE": "Study Information"
+    }
+  }
+}

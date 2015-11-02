@@ -6,6 +6,9 @@
       'dados.common.directives.hateoas.controls',
       'dados.common.directives.pluginEditor.formService'
     ])
+    .config(function config( $translatePartialLoaderProvider ) {
+      $translatePartialLoaderProvider.addPart('studyform');
+    })
     .controller('StudyFormController', StudyFormController);
 
   StudyFormController.$inject = [
