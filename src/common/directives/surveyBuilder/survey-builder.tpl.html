@@ -70,21 +70,23 @@
             </div>
           </div>
           <div class="form-group pull-right">
-            <div class="checkbox" ng-click="sb.hideInactiveForms = !sb.hideInactiveForms">
+            <div class="checkbox">
               <label>
-                <input type="checkbox" ng-model="sb.hideInactiveForms" />
+                <input type="checkbox" ng-model="sb.hideInactiveForms"/>
                 Hide Inactive Forms
               </label>
             </div>
-            <div class="checkbox" ng-click="sb.toggleForms()">
+            <div class="checkbox">
               <label>
-                <input type="checkbox" ng-model="sb.isFormsToggled" />
+                <input type="checkbox" ng-model="sb.isFormsToggled"
+                       ng-change="sb.toggleForms(sb.isFormsToggled)"/>
                 Hide All Forms
               </label>
             </div>
-            <div class="checkbox" ng-click="sb.toggleSessions()">
+            <div class="checkbox">
               <label>
-                <input type="checkbox" ng-model="sb.isSessionsToggled" />
+                <input type="checkbox" ng-model="sb.isSessionsToggled"
+                       ng-change="sb.toggleSessions(sb.isSessionsToggled)"/>
                 Disable Encounters
               </label>
             </div>

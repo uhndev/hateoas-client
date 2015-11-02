@@ -270,10 +270,10 @@
      * toggleForms
      * @description Click handler for toggling form visibility
      */
-    function toggleForms() {
-      vm.isFormsToggled = !vm.isFormsToggled;
+    function toggleForms(isFormsToggled) {
+      //vm.isFormsToggled = !vm.isFormsToggled;
       _.map(vm.survey.sessions, function (session) {
-        session.$isCollapsed = vm.isFormsToggled;
+        session.$isCollapsed = isFormsToggled;
       });
     }
 
@@ -281,10 +281,10 @@
      * toggleSessions
      * @description Click handler for toggling whether sessions can be affected by cascading changes
      */
-    function toggleSessions() {
-      vm.isSessionsToggled = !vm.isSessionsToggled;
+    function toggleSessions(isSessionsToggled) {
+      //vm.isSessionsToggled = !vm.isSessionsToggled;
       _.map(vm.survey.sessions, function (session) {
-        session.$noCascade = vm.isSessionsToggled;
+        session.$noCascade = isSessionsToggled;
       });
     }
 
