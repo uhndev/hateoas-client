@@ -407,9 +407,25 @@ module.exports = function ( grunt ) {
 
     /**
      * The `replace` task replaces the appropriate socket.io url in
-     * sails-io-settings.js to match the environment.
+     * sails-io-settings.js to match the environment and adds the livereload script
      */
     replace: {
+      add_livereload: {
+        src: ['src/index.html'],
+        overwrite: true,
+        replacements: [{
+          from: "<!-- livereload -->",
+          to: "<script src=\"//localhost:35729/livereload.js\"></script>"
+        }]
+      },
+      remove_livereload: {
+        src: ['src/index.html'],
+        overwrite: true,
+        replacements: [{
+          from: "<script src=\"//localhost:35729/livereload.js\"></script>",
+          to: "<!-- livereload -->"
+        }]
+      },
       development: {
         src: ['sails-io-settings.tpl'],
         dest: ['sails-io-settings.js'],
@@ -615,7 +631,7 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'replace:development', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
+    'clean', 'replace:development', 'replace:add_livereload', 'ngconstant:development', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_i18n', 'json-minify:build', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build',
     'karmaconfig',
@@ -623,7 +639,7 @@ module.exports = function ( grunt ) {
   ]);
 
   grunt.registerTask( 'build_prod', [
-    'clean', 'replace:production', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
+    'clean', 'replace:production', 'replace:remove_livereload', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_i18n', 'json-minify:build', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);

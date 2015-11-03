@@ -38,7 +38,9 @@
   "STUDY": {
     "NAME": "Nom de L'étude",
     "ATTRIBUTES": "Attributs",
-    "REB": "REB #"
+    "REB": "REB #",
+    "ADMINISTRATOR": "Administrateur",
+    "PI": "PI"
   },
 
   "USER": {
@@ -74,6 +76,12 @@
     "DOB": "Date D'anniversaire",
     "COLLECTION_CENTRE": "Centre Collection",
     "CENTRE_ACCESS": "Rôle"
+  },
+
+  "FORM": {
+    "NAME": "Nom de Forme",
+    "METADATA": "Métadonnées",
+    "QUESTIONS": "Questions"
   },
 
   "SURVEY": {

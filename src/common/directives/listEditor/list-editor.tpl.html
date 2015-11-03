@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <!-- Header Columns for Data -->
-      <th ng-repeat="column in ledit.columns" class="sortable text-left"
+      <th ng-repeat="column in ledit.columns track by $index" class="sortable text-left"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}"
           ng-click="ledit.sortTable(column)">
         <button ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem || ledit.canDelCol"
@@ -49,7 +49,7 @@
       <th ng-if="ledit.canEdit">Actions</th>
     </tr>
     <tr ng-if="ledit.showEditCol">
-      <th ng-repeat="column in ledit.columns">
+      <th ng-repeat="column in ledit.columns track by $index">
         <div ng-if="ledit.showEditCol && !column.$edit && ledit.canEdit"
              ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem" class="btn-group">
           <button class="btn btn-default btn-xs"
@@ -86,7 +86,7 @@
             <select name="rowForm_{{$parent.$index}}_{{$index}}"
                     class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
-              <option ng-repeat="option in column.options" value="{{option.value}}"
+              <option ng-repeat="option in column.options track by $index" value="{{option.value}}"
                       ng-selected="item[column.field] === option.value">{{option.prompt}}
               </option>
             </select>
@@ -105,7 +105,7 @@
             <select name="colForm_{{$parent.$index}}_{{$index}}"
                     class="form-control" ng-model="item[column.field]" required>
               <option value="" disabled>Select an option</option>
-              <option ng-repeat="option in column.options" value="{{option.value}}"
+              <option ng-repeat="option in column.options track by $index" value="{{option.value}}"
                       ng-selected="item[column.field] === option.value">{{option.prompt}}
               </option>
             </select>
@@ -126,7 +126,7 @@
           <div data-ng-switch-when="dropdown">
             <select class="form-control" ng-model="ledit.columnBuffer.data[$index]" required>
               <option value="" disabled>Select an option</option>
-              <option ng-repeat="option in column.options" value="{{option.value}}"
+              <option ng-repeat="option in column.options track by $index" value="{{option.value}}"
                       ng-selected="item[column.field] === option.value">{{option.prompt}}
               </option>
             </select>
@@ -168,7 +168,7 @@
     <tfoot ng-if="ledit.canEdit">
     <tr>
       <!-- Placeholder inputs for creating new rows -->
-      <td data-title="column.title" ng-repeat="column in ledit.columns"
+      <td data-title="column.title" ng-repeat="column in ledit.columns track by $index"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}">
         <input ng-if="ledit.editRow" class="form-control"
                ng-disabled="ledit.editCol || ledit.canEditItem"

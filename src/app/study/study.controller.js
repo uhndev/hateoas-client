@@ -44,10 +44,10 @@
 
         vm.studyInfo = {
           rows: {
-            'name': { title: 'Name', type: 'text' },
-            'reb': { title: 'REB', type: 'text' },
-            'administrator': { title: 'Administrator', type: 'user' },
-            'pi': { title: 'PI', type: 'user' }
+            'name': { title: 'STUDY.NAME', type: 'text' },
+            'reb': { title: 'STUDY.REB', type: 'text' },
+            'administrator': { title: 'STUDY.ADMINISTRATOR', type: 'user' },
+            'pi': { title: 'STUDY.PI', type: 'user' }
           },
           tableData: _.objToPair(robj)
         };
@@ -63,10 +63,10 @@
           coordinators_total: coordTotal,
           tableData: data.items.centreSummary || [],
           columns: [
-            { title: 'Collection Centres', field: 'name', type: 'text' },
-            { title: 'Contact', field: 'contact', type: 'text' },
-            { title: 'Coordinators/Interviewers', field: 'coordinators_count', type: 'number'},
-            { title: 'Subjects Enrolled', field: 'subjects_count', type: 'number'}
+            { title: 'STUDY_OVERVIEW.ENROLLMENT.COLLECTION_CENTRES', field: 'name', type: 'text' },
+            { title: 'STUDY_OVERVIEW.ENROLLMENT.CONTACT', field: 'contact', type: 'text' },
+            { title: 'STUDY_OVERVIEW.ENROLLMENT.COORDINATORS', field: 'coordinators_count', type: 'number'},
+            { title: 'STUDY_OVERVIEW.ENROLLMENT.SUBJECTS_ENROLLED', field: 'subjects_count', type: 'number'}
           ]
         };
 

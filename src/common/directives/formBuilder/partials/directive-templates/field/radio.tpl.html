@@ -3,11 +3,11 @@
     <label for="field.field_id">
       {{field.field_id}}) {{field.field_title}}
     </label>&nbsp;
-    <div ng-repeat="option in field.field_options" class="row-fluid">
+    <div ng-repeat="option in field.field_options track by $index" class="row-fluid">
       <label>
-        <input type="radio" 
-        value="{{option.option_value}}" 
-        ng-model="field.field_value"  
+        <input type="radio"
+        value="{{option.option_value}}"
+        ng-model="field.field_value"
         ng-required="field.field_required"/>
         &nbsp;
         <span ng-bind="option.option_title"></span>

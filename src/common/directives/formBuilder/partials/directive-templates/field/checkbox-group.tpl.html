@@ -4,7 +4,7 @@
         {{field.field_id}}) {{field.field_title}}
     </label>
     <div class="row-fluid" class="checkbox-inline">
-    	<label ng-repeat="option in field.field_options">
+    	<label ng-repeat="option in field.field_options track by $index">
     		<input type="checkbox"
     			ng-true-value="true"
     			ng-false-value="false"

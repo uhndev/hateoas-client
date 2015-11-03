@@ -70,10 +70,10 @@
               <tab-heading>
                 <i class="fa fa-plus-square"></i> Widget
               </tab-heading>
-              <div class="tab_content_inside" ng-repeat="category in unsorted(categories)">
+              <div class="tab_content_inside" ng-repeat="category in unsorted(categories) track by $index">
                 <h2>{{ category }}</h2>
 
-                <div ng-repeat="template in categories[category]">
+                <div ng-repeat="template in categories[category] track by $index">
                   <a ng-click="addNewWidget(template)" class="fb_add_button">{{ template }}</a>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                 <i class="fa fa-list"></i> Types
               </tab-heading>
               <accordion close-others="true">
-                <accordion-group ng-repeat="category in unsorted(categories)"
+                <accordion-group ng-repeat="category in unsorted(categories) track by $index"
                                  is-open="isopen">
                   <accordion-heading>
                     {{ category }}
@@ -91,7 +91,7 @@
                        ng-class="{'glyphicon-chevron-down': isopen,
 													'glyphicon-chevron-right': !isopen}"></i>
                   </accordion-heading>
-                  <div ng-repeat="template in categories[category]">
+                  <div ng-repeat="template in categories[category] track by $index">
                     <input type="radio" ng-model="widget.template"
                            id="{{category}}{{template}}{{ $index }}"
                            name="WIDGET_TEMPLATE"

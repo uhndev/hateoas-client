@@ -35,13 +35,13 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th ng-repeat="col in ::cc.centreUsers.columns">
+								<th ng-repeat="col in ::cc.centreUsers.columns track by $index">
 									{{::col}}
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in ::cc.centreUsers.tableData"
+							<tr ng-repeat="row in ::cc.centreUsers.tableData track by $index"
                   hateoas-link state-href="/user/{{::row.id}}">
 								<td>{{::row.username}}</td>
 								<td>{{::row.email}}</td>
@@ -62,16 +62,16 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th ng-repeat="col in ::cc.centreSubjects.columns">
+								<th ng-repeat="col in ::cc.centreSubjects.columns track by $index">
 									{{::col}}
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in ::cc.centreSubjects.tableData"
+							<tr ng-repeat="row in ::cc.centreSubjects.tableData track by $index"
                   hateoas-link state-href="/subjectenrollment/{{::row.id}}">
 								<td>{{::row.subjectNumber}}</td>
-								<td ng-repeat="(key, value) in ::row.studyMapping">
+								<td ng-repeat="(key, value) in ::row.studyMapping track by $index">
                   {{::value}}
                 </td>
 								<td>{{::row.doe | date:'EEEE, MMMM d, y'}}</td>

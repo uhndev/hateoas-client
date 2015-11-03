@@ -1,0 +1,10 @@
+{
+  "STUDY_SURVEY": {
+    "CONTROLS": {
+      "OPEN_BTN": "Voir Enquête",
+      "NEW_BTN": "Ajouter Enquête",
+      "EDIT_BTN": "Modifier Enquête",
+      "ARCHIVE_BTN": "Archiver"
+    }
+  }
+}

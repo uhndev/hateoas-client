@@ -45,7 +45,9 @@
   "STUDY": {
     "NAME": "Study Name",
     "ATTRIBUTES": "Attributes",
-    "REB": "REB #"
+    "REB": "REB #",
+    "ADMINISTRATOR": "Administrator",
+    "PI": "PI"
   },
 
   // Definitions for hateoas-client/hateoas-table user template columns
@@ -85,6 +87,13 @@
     "DOB": "Date of Birth",
     "COLLECTION_CENTRE": "Collection Centre",
     "CENTRE_ACCESS": "Role"
+  },
+
+  // Definitions for hateoas-client/hateoas-table form template columns
+  "FORM": {
+    "NAME": "Form Name",
+    "METADATA": "Meta Data",
+    "QUESTIONS": "Questions"
   },
 
   // Definitions for hateoas-client/hateoas-table survey template columns

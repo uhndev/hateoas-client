@@ -1,0 +1,10 @@
+{
+  "STUDY_USER": {
+    "CONTROLS": {
+      "OPEN_BTN": "View User",
+      "NEW_BTN": "Add User",
+      "EDIT_BTN": "Save Changes",
+      "ARCHIVE_BTN": "Archive"
+    }
+  }
+}

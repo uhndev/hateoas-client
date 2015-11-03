@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="row in access.resource.items | filter:access.searchView"
+        <tr ng-repeat="row in access.resource.items | filter:access.searchView track by $index"
             class="selectable"
             ng-class="{'active': row === access.selected}">
           <td ng-if="access.currentView === 'user'"
@@ -83,7 +83,7 @@
         </div>
         <div class="panel-body">
           <ul class="list-unstyled">
-            <li ng-repeat="permission in access.access">
+            <li ng-repeat="permission in access.access track by $index">
               <button class="btn btn-info btn-xs permission-btn" type="button"
                       ng-click="access.removeAccess(permission)">
                 {{permission}} <span class="glyphicon glyphicon-remove"></span>
@@ -105,12 +105,12 @@
              ng-if="access.selected">
         <thead>
         <tr>
-          <th ng-repeat="action in ::access.actions">{{::action}}</th>
+          <th ng-repeat="action in ::access.actions track by $index">{{::action}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="model in ::access.models">
-          <td ng-repeat="action in ::access.actions">
+        <tr ng-repeat="model in ::access.models track by $index">
+          <td ng-repeat="action in ::access.actions track by $index">
             <div class="checkbox">
               <label>
                 <input type="checkbox"

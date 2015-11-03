@@ -12,10 +12,10 @@
     <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
   </head>
-  <body dados-status dados-error>
+  <body dados-status dados-error ng-cloak translate-cloak>
     <dados-header submenu="dados.submenu"></dados-header>
 
-  	<div ui-view ng-cloak></div>
+  	<div ui-view></div>
     <footer class="footer">
       <div class="container">
         <div class="footer-inner row">

@@ -103,7 +103,7 @@
 
           <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
               ng-model="sb.survey.defaultFormVersions">
-            <li ng-repeat="form in sb.survey.defaultFormVersions"
+            <li ng-repeat="form in sb.survey.defaultFormVersions track by $index"
                 class="selectable"
                 ng-switch="form.active">
               <h4><span ng-switch-when="true" class="label label-primary"
@@ -123,7 +123,7 @@
         <div ng-class="{ 'col-md-9': !sb.isDefaultsCollapsed }">
           <div class="timeline-container" scroll-watch onscrolldown="sb.loadMore()" onscrollup="sb.loadLimit = 10">
             <timeline>
-              <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit">
+              <timeline-event ng-repeat="session in sb.survey.sessions | filter:sb.timelineQuery:strict | limitTo:sb.loadLimit:sb.beginLimit track by $index">
                 <timeline-badge class="selectable" ng-class="{ 'info': !session.$noCascade, 'default': session.$noCascade }"
                                 ng-click="session.$noCascade = !session.$noCascade;">
                   <i class="glyphicon glyphicon-calendar"></i>
@@ -149,7 +149,7 @@
                   <div collapse="session.$isCollapsed">
                     <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
                         ng-model="session.formOrder">
-                      <li ng-repeat="id in session.formOrder"
+                      <li ng-repeat="id in session.formOrder track by $index"
                           class="selectable"
                           ng-style="{ 'margin-bottom': '-5px' }"
                           ng-switch="sb.isFormActive(id, session)">

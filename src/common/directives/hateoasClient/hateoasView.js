@@ -128,6 +128,12 @@
        * @param path
        */
       function loadTemplate(scope, element, path) {
+        // if there was already an inherited scope, $destroy to prevent memory leak
+        if (scope.inheritedScope) {
+          scope.inheritedScope.$destroy();
+        }
+        // create new inherited scope each time
+        scope.inheritedScope = scope.$new(false);
         var templates = getTemplates(path);
         element.empty(); // triggers destroy;
         if (override(templates)) {
@@ -149,7 +155,8 @@
           var defaultView = 'directives/hateoasClient/hateoasView.tpl.html';
           element.html($templateCache.get(defaultView));
         }
-        $compile(element.contents())(scope);
+        // use inherited scope
+        $compile(element.contents())(scope.inheritedScope);
       }
 
       /**

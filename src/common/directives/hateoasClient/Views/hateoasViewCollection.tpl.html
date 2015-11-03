@@ -1,7 +1,7 @@
 <table id="Collection" ng-table="tableParams" class="table">
   <thead>
     <tr>
-      <th ng-repeat="column in hateoas.template.data"
+      <th ng-repeat="column in hateoas.template.data track by $index"
         ng-if="!column.data"
         class="text-center sortable" ng-class="{
           'sort-asc': tableParams.isSortBy(column.name, 'asc'),
@@ -13,11 +13,11 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="item in $data"
+    <tr ng-repeat="item in $data track by $index"
       ng-click="hateoas.select(item)"
       class="selectable"
       ng-class="{'active': item === hateoas.selected}">
-      <td ng-repeat="column in hateoas.template.data"
+      <td ng-repeat="column in hateoas.template.data track by $index"
         ng-if="!column.data"
         sortable="column.name">
         {{ item[column.name] | formatter:column }}
