@@ -27,8 +27,8 @@
 							<hr/>
 							<form class="form-inline">
 								<div class="form-group">
-									<select ng-model="fb.addField.new" 
-										class="form-control" 
+									<select ng-model="fb.addField.new"
+										class="form-control"
 										ng-options="type as type.value for type in fb.addField.types">
 									</select>
 								</div>
@@ -40,15 +40,15 @@
 				  </div>
 				</div>
 				<p class="text-center">
-					<button class="btn btn-primary right" type="button" 
+					<button class="btn btn-primary right" type="button"
 						ng-disabled="fb.form.form_questions.length === 0"
 						ng-click="fb.previewMode = !fb.previewMode">
 						<span class="glyphicon glyphicon-eye-open"></span> Preview Form
-					</button>		
-					<button class="btn btn-danger right" type="button" ng-click="fb.reset()"> 
+					</button>
+					<button class="btn btn-danger right" type="button" ng-click="fb.reset()">
 						<span class="glyphicon glyphicon-refresh"></span> Reset
 					</button>
-				</p>		
+				</p>
 			</div>
 
 			<div class="col-md-9">
@@ -56,14 +56,14 @@
 
 				<accordion ui-sortable ng-model="fb.form.form_questions" close-others="fb.accordion.oneAtATime">
 					<div ui-sortable="fb.sortableOptions" ng-model="fb.form.form_questions">
-						<accordion-group ng-repeat="field in fb.form.form_questions" is-open="status.open">
+						<accordion-group ng-repeat="field in fb.form.form_questions track by $index" is-open="status.open">
 							<accordion-heading>
 								<a class="accordion-toggle">
 									{{field.field_id}}) &nbsp;{{field.field_title}}
 								</a>
 								<span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></span>
 							</accordion-heading>
-							
+
 							<div class="accordion-edit">
 								<button class="btn btn-danger pull-right" type="button" ng-click="fb.deleteField(field.field_id)">
 									<span class="glyphicon glyphicon-trash"></span> Delete
@@ -113,7 +113,7 @@
 									<label class="radio-inline">
 										<input type="radio" ng-value="false" ng-model="field.field_prependURL"> No
 									</label>
-									</div>							
+									</div>
 								</div>
 								<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
 									<div class="col-md-4"><b>REST URL of Item(s) to Load: </b></div>
@@ -132,14 +132,14 @@
 								<div class="row" ng-if="field.field_hasOptions">
 									<div class="col-md-4"><b>Question Options: </b></div>
 									<div class="col-md-8">
-										<div ng-repeat="option in field.field_options">
+										<div ng-repeat="option in field.field_options track by $index">
 											<form class="form-inline" role="form">
 												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Enter name" 
+													<input type="text" class="form-control" placeholder="Enter name"
 													ng-model="option.option_title" value="{{option.option_title}}">
 												</div>
 												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Enter value" 
+													<input type="text" class="form-control" placeholder="Enter value"
 													ng-model="option.option_value" value="{{option.option_value}}">
 												</div>
 												<button type="button" class="btn btn-danger right" ng-click="fb.deleteOption(field, option)">
@@ -187,14 +187,14 @@
 	</div>
 
 	<div class="form-fields-preview" ng-show="fb.previewMode">
-		<form-directive 
-			form="fb.form" 
-			on-submit="submit()" 
+		<form-directive
+			form="fb.form"
+			on-submit="submit()"
 			on-cancel="cancel()">
 		</form-directive>
 		<hr/>
 		<p class="text-center">
-			<button class="btn btn-primary btn-large right" type="button" 
+			<button class="btn btn-primary btn-large right" type="button"
 				ng-click="fb.previewMode = !fb.previewMode">
 				Back to Create Mode
 			</button>

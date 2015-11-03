@@ -7,7 +7,7 @@
 		<tabset>
 			<tab heading="Select your widget">
 				<accordion close-others="true">
-					<accordion-group ng-repeat="category in unsorted(categories)"
+					<accordion-group ng-repeat="category in unsorted(categories) track by $index"
 						is-open="isopen">
 						<accordion-heading>
 							{{ category }}
@@ -15,7 +15,7 @@
 								ng-class="{'glyphicon-chevron-down': isopen,
 										'glyphicon-chevron-right': !isopen}"></i>
 						</accordion-heading>
-						<div ng-repeat="template in categories[category]">
+						<div ng-repeat="template in categories[category] track by $index">
 							<input type="radio" ng-model="widget.template"
 								id="{{category}}{{template}}{{ $index }}"
 								name="WIDGET_TEMPLATE"

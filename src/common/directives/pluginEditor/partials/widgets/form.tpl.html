@@ -1,5 +1,5 @@
 <div subform ng-show="!!widget.subform">
-	<section ui-dados-info 
+	<section ui-dados-info
 			 ng-if="widget.subform.metaData.headerUrl"
 			 form="widget.subform"
 			 answers="answers">
@@ -8,7 +8,7 @@
 	   ng-expressions="widget.subform.questions">
 		<ol class="plugin {{ widget.subform.metaData.type }}"
 		 	ng-class="{ 'grid' : (widget.subform.metaData.grid === 'true'), 'no-numbers': (widget.subform.metaData.numbers === 'false') }">
-			<li ng-repeat="question in widget.subform.questions"
+			<li ng-repeat="question in widget.subform.questions track by $index"
 				ng-style="{'width' : (widget.subform.metaData.grid === 'true' ? question.css.width : '100%')}"
 				ng-hide="{{ question.properties.hidden }}">
 				<div question

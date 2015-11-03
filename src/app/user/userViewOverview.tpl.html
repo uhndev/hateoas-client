@@ -47,13 +47,13 @@
           <table class="table table-hover">
             <thead>
             <tr>
-              <th ng-repeat="col in user.userStudies.columns">
+              <th ng-repeat="col in user.userStudies.columns track by $index">
                 {{col.title}}
               </th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="row in user.userStudies.tableData">
+            <tr ng-repeat="row in user.userStudies.tableData track by $index">
               <td>
                 <a ng-href="#/study/{{::row.study}}">{{::row.study}}</a>
               </td>

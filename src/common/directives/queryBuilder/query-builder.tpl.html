@@ -14,7 +14,7 @@
     </div>
   </form>
   <div ng-show="advanceSearch">
-    <ul ng-repeat="(property, expression) in query">
+    <ul ng-repeat="(property, expression) in query track by $index">
       <li ng-if="expression|isString">
         {{ property }}
         <i class="condition"> is </i>
@@ -35,7 +35,7 @@
       </div>
       <div class="form-group">
         <select ng-disabled="!!!field.type" class="form-control" ng-model="comparator">
-          <option value="{{criterion.val}}" ng-repeat="criterion in operators" translate>{{criterion.translationKey}}
+          <option value="{{criterion.val}}" ng-repeat="criterion in operators track by $index" translate>{{criterion.translationKey}}
           </option>
         </select>
       </div>

@@ -133,16 +133,17 @@
         if (override(templates)) {
           var pageView = templates.pop();
           var fragment = $templateCache.get(pageView);
-          if (!fragment) {
-            // Optimization here, so next time we hit this page
-            // we don't have to rebuild the template.
-            fragment = build(path);
-            // only cache for non-item views
-            if (path.split('/').length !== 3) {
-              $templateCache.put(pageView, fragment);
-              _.each(templates, $templateCache.remove);
-            }
-          }
+          console.log(pageView);
+          //if (!fragment) {
+          //  // Optimization here, so next time we hit this page
+          //  // we don't have to rebuild the template.
+          //  fragment = build(path);
+          //  // only cache for non-item views
+          //  if (path.split('/').length !== 3) {
+          //    $templateCache.put(pageView, fragment);
+          //    _.each(templates, $templateCache.remove);
+          //  }
+          //}
           element.html(fragment);
         } else {
           // use the default

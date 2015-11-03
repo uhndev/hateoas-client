@@ -12,7 +12,7 @@
 		<div class="col-md-4">
 			<select class="form-control" ng-model="field.field_validation.rule" ng-change="clearExpr(field)">
 				<option value="" disabled>Select a rule</option>
-				<option ng-repeat="rule in numberValidationRules" value="{{rule.value}}">{{rule.name}}</option>
+				<option ng-repeat="rule in numberValidationRules track by $index" value="{{rule.value}}">{{rule.name}}</option>
 			</select>
 		</div>
 		<div ng-switch="field.field_validation.rule">

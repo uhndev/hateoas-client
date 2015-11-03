@@ -8,7 +8,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="(key, value) in metaData">
+			<tr ng-repeat="(key, value) in metaData track by $index">
 				<td>
 					<span ng-hide="editKey==key">{{ key }}</span>
 					<input type="text" class="form-control" ng-model="entry.key" ng-if="editKey == key"/>
@@ -45,13 +45,13 @@
 						ng-model="entry.key" />
 				</td>
 				<td>
-					<input type="text" class="form-control" 
+					<input type="text" class="form-control"
 						placeholder="Attribute Value or Reference ID"
 						ng-model="entry.value" />
 				</td>
 				<td>
 					<div class="btn-group">
-						<button class="btn btn-primary btn-sm" ng-click="add()" 
+						<button class="btn btn-primary btn-sm" ng-click="add()"
 							ng-disabled="entry.key == '' || entry.value == ''">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>

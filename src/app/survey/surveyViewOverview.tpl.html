@@ -60,7 +60,7 @@
         </div>
         <div class="panel-body">
           <table ng-table="survey.tableParams" class="table table-hover ng-table-responsive">
-            <tbody ng-repeat="name in $groups">
+            <tbody ng-repeat="name in $groups track by $index">
             <tr class="ng-table-group">
               <td colspan="{{$columns.length}}">
                 <a href="" ng-click="name.$hideRows = !name.$hideRows">
@@ -69,7 +69,7 @@
                 </a>
               </td>
             </tr>
-            <tr ng-hide="name.$hideRows" ng-repeat="session in name.data">
+            <tr ng-hide="name.$hideRows" ng-repeat="session in name.data track by $index">
               <td sortable="'type'" data-title="'Type'">
                 {{session.type}}
               </td>

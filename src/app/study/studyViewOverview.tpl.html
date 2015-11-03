@@ -20,13 +20,13 @@
 							<table class="table table-hover">
 								<thead>
 									<tr>
-										<th ng-repeat="col in study.collectionCentres.columns" translate>
+										<th ng-repeat="col in study.collectionCentres.columns track by $index" translate>
 											{{col.title}}
 										</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="row in study.collectionCentres.tableData">
+									<tr ng-repeat="row in study.collectionCentres.tableData track by $index">
 										<td>
                       <a ng-href="#/collectioncentre/{{row.id}}">{{row.name}}</a>
                     </td>

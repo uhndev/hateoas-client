@@ -51,7 +51,7 @@
                 <a ng-href="#/collectioncentre/{{::subject.resource.collectionCentre}}">{{::subject.resource.collectionCentreName}}</a>
               </td>
             </tr>
-            <tr ng-repeat="(key, value) in subject.resource.studyMapping">
+            <tr ng-repeat="(key, value) in subject.resource.studyMapping track by $index">
               <td><strong>{{key | uppercase}}</strong></td>
               <td>{{value}}</td>
             </tr>
@@ -76,7 +76,7 @@
             <option value="">View all surveys</option>
           </select>
           <table ng-table="subject.tableParams" class="table table-hover ng-table-responsive">
-            <tbody ng-repeat="name in $groups">
+            <tbody ng-repeat="name in $groups track by $index">
               <tr class="ng-table-group">
                 <td colspan="{{$columns.length}}">
                   <a href="" ng-click="name.$hideRows = !name.$hideRows">
@@ -85,7 +85,7 @@
                   </a>
                 </td>
               </tr>
-              <tr ng-hide="name.$hideRows" ng-repeat="schedule in name.data">
+              <tr ng-hide="name.$hideRows" ng-repeat="schedule in name.data track by $index">
                 <td data-title="'Type'">
                   {{schedule.type}}
                 </td>

@@ -1,8 +1,8 @@
-<section>	
+<section>
 	<table class="full-width padded list-editor">
 		<thead>
 			<tr>
-				<th ng-repeat="(key, value) in template">
+				<th ng-repeat="(key, value) in template track by $index">
 					<span ng-if="!item[key].canRename || !canEditProperties">
 						{{ key }}
 					</span>
@@ -33,7 +33,7 @@
 						<span class="input-group-btn">
 					        <button class="btn btn-default btn-sm" type="button"
 					        	ng-click="addProperty(newProperty);newProperty = '';">
-					        	<span class="glyphicon glyphicon-plus"></span>	
+					        	<span class="glyphicon glyphicon-plus"></span>
 					        </button>
 				     	</span>
 			     	</div>
@@ -41,17 +41,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="item in list" ng-init="rowIndex = $index">
-				<td ng-repeat="(key, value) in item">
-					
+			<tr ng-repeat="item in list track by $index" ng-init="rowIndex = $index">
+				<td ng-repeat="(key, value) in item track by $index">
+
 					<span ng-if="editMode != $parent.$index">
 						{{ item[key] }}
 					</span>
 					<span ng-if="editMode == $parent.$index">
 						<ui-widget ng-if="template[key].template"
 							class="no-margin full-width"
-							widget="template[key]" 
-							widget-model="itemBuffer[key]" 
+							widget="template[key]"
+							widget-model="itemBuffer[key]"
 							show-label="false"></ui-widget>
 					</span>
 				</td>
@@ -60,7 +60,7 @@
 						<button class="btn btn-default btn-sm" ng-click="editItem( $index )">
 								<span class="glyphicon glyphicon-pencil"></span>
 						</button>
-						<button class="btn btn-danger btn-sm" 
+						<button class="btn btn-danger btn-sm"
 								ng-click="removeItem( $index )">
 								<span class="glyphicon glyphicon-trash"></span>
 						</button>
@@ -78,15 +78,15 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td ng-repeat="(key, value) in template">
+				<td ng-repeat="(key, value) in template track by $index">
 					<ui-widget ng-if="template[key].template"
 						class="no-margin full-width"
-						widget="template[key]" 
-						widget-model="item[key]" 
+						widget="template[key]"
+						widget-model="item[key]"
 						hide-label="true"></ui-widget>
 				</td>
 				<td class="btn-group">
-					<button class="btn btn-primary btn-sm" ng-click="addItem()" 
+					<button class="btn btn-primary btn-sm" ng-click="addItem()"
 						ng-disabled="canAdd() == false">
 						<span class="glyphicon glyphicon-plus"></span>
 					</button>
