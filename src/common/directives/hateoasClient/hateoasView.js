@@ -128,29 +128,35 @@
        * @param path
        */
       function loadTemplate(scope, element, path) {
+        // if there was already an inherited scope, $destroy to prevent memory leak
+        if (scope.inheritedScope) {
+          scope.inheritedScope.$destroy();
+        }
+        // create new inherited scope each time
+        scope.inheritedScope = scope.$new(false);
         var templates = getTemplates(path);
         element.empty(); // triggers destroy;
         if (override(templates)) {
           var pageView = templates.pop();
           var fragment = $templateCache.get(pageView);
-          console.log(pageView);
-          //if (!fragment) {
-          //  // Optimization here, so next time we hit this page
-          //  // we don't have to rebuild the template.
-          //  fragment = build(path);
-          //  // only cache for non-item views
-          //  if (path.split('/').length !== 3) {
-          //    $templateCache.put(pageView, fragment);
-          //    _.each(templates, $templateCache.remove);
-          //  }
-          //}
+          if (!fragment) {
+            // Optimization here, so next time we hit this page
+            // we don't have to rebuild the template.
+            fragment = build(path);
+            // only cache for non-item views
+            if (path.split('/').length !== 3) {
+              $templateCache.put(pageView, fragment);
+              _.each(templates, $templateCache.remove);
+            }
+          }
           element.html(fragment);
         } else {
           // use the default
           var defaultView = 'directives/hateoasClient/hateoasView.tpl.html';
           element.html($templateCache.get(defaultView));
         }
-        $compile(element.contents())(scope);
+        // use inherited scope
+        $compile(element.contents())(scope.inheritedScope);
       }
 
       /**
