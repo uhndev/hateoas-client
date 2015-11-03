@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="shortcut icon" href="assets/img/favicon.ico"/>
-    <script src="http://localhost:35729/livereload.js"></script>
+    
 
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
     <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
   </head>
-  <body dados-status dados-error>
+  <body dados-status dados-error ng-cloak translate-cloak>
     <dados-header submenu="dados.submenu"></dados-header>
 
-  	<div ui-view ng-cloak></div>
+  	<div ui-view></div>
     <footer class="footer">
       <div class="container">
         <div class="footer-inner row">

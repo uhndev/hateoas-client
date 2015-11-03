@@ -1,0 +1,10 @@
+{
+  "STUDY_SUBJECT": {
+    "CONTROLS": {
+      "OPEN_BTN": "Voir Sujet",
+      "NEW_BTN": "Ajouter Sujet",
+      "EDIT_BTN": "Modifier Sujet",
+      "ARCHIVE_BTN": "Archiver"
+    }
+  }
+}

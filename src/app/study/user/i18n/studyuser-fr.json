@@ -1,0 +1,10 @@
+{
+  "STUDY_USER": {
+    "CONTROLS": {
+      "OPEN_BTN": "Voir Utilisateur",
+      "NEW_BTN": "Ajouter Utilisateur",
+      "EDIT_BTN": "Sauvegarder les Changements",
+      "ARCHIVE_BTN": "Archiver"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 <div ng-controller="StudySurveyController as studySurvey">
   <h1 id="Title">
     {{ pageTitle }}
-    <small>
-      Total: {{studySurvey.resource.total}}
+    <small translate translate-values="{ total: studySurvey.resource.total }">
+      HATEOAS.TITLE.TOTAL
     </small>
   </h1>
   <div id="Query" class="clearfix">
@@ -20,27 +20,27 @@
               ng-click="studySurvey.openSurvey()"
               ng-disabled="!!!studySurvey.selected">
         <i class="fa fa-folder-o"></i>
-        View Survey
+        <span translate>STUDY_SURVEY.CONTROLS.OPEN_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.create"
               ng-click="studySurvey.openAddSurvey()">
         <i class="fa fa-file-o"></i>
-        Add Survey
+        <span translate>STUDY_SURVEY.CONTROLS.NEW_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.update"
               ng-click="studySurvey.openEditSurvey()"
               ng-disabled="!!!studySurvey.selected">
         <i class="fa fa-edit"></i>
-        Edit Survey
+        <span translate>STUDY_SURVEY.CONTROLS.EDIT_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.delete"
               ng-click="studySurvey.archiveSurvey()"
               ng-disabled="!!!studySurvey.selected">
         <i class="fa fa-trash-o"></i>
-        Archive
+        <span translate>STUDY_SURVEY.CONTROLS.ARCHIVE_BTN</span>
       </button>
     </div>
   </div>

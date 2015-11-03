@@ -6,6 +6,9 @@
 			'dados.study.user.addUser.controller',
 			'dados.collectioncentre.service'
 		])
+    .config(function config( $translatePartialLoaderProvider ) {
+      $translatePartialLoaderProvider.addPart('studyuser');
+    })
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
