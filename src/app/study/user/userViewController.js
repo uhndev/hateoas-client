@@ -6,9 +6,6 @@
 			'dados.study.user.addUser.controller',
 			'dados.collectioncentre.service'
 		])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studyuser');
-    })
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
@@ -60,13 +57,13 @@
           {
             "name": columnName,
             "type": columnType,
-            "prompt": "USER_ENROLLMENT.COLLECTION_CENTRE",
+            "prompt": "COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE",
             "value": centreHref
           },
           {
             "name": "centreAccess",
             "type": "string",
-            "prompt": "USER_ENROLLMENT.CENTRE_ACCESS",
+            "prompt": "COMMON.MODELS.USER_ENROLLMENT.CENTRE_ACCESS",
             "value": "role"
           }
         ]);

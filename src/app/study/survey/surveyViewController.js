@@ -7,9 +7,6 @@
       'dados.study.survey.addSurvey.controller',
       'dados.study.survey.editSurvey.controller'
     ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studysurvey');
-    })
     .controller('StudySurveyController', StudySurveyController);
 
   StudySurveyController.$inject = [

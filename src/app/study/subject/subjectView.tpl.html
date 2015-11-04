@@ -2,7 +2,7 @@
   <h1 id="Title">
     {{ pageTitle }}
     <small translate translate-values="{ total: studySubject.resource.total }">
-      HATEOAS.TITLE.TOTAL
+      COMMON.HATEOAS.TITLE.TOTAL
     </small>
   </h1>
   <div id="Query" class="clearfix">
@@ -20,27 +20,27 @@
               ng-click="studySubject.openSubject()"
               ng-disabled="!!!studySubject.selected">
         <i class="fa fa-folder-o"></i>
-        <span translate>STUDY_SUBJECT.CONTROLS.OPEN_BTN</span>
+        <span translate>APP.STUDY.SUBJECT.CONTROLS.OPEN_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.create"
               ng-click="studySubject.openAddSubject()">
         <i class="fa fa-file-o"></i>
-        <span translate>STUDY_SUBJECT.CONTROLS.NEW_BTN</span>
+        <span translate>APP.STUDY.SUBJECT.CONTROLS.NEW_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.update"
               ng-click="studySubject.openEditSubject()"
               ng-disabled="!!!studySubject.selected">
         <i class="fa fa-edit"></i>
-        <span translate>STUDY_SUBJECT.CONTROLS.EDIT_BTN</span>
+        <span translate>APP.STUDY.SUBJECT.CONTROLS.EDIT_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.delete"
               ng-click="studySubject.archiveSubject()"
               ng-disabled="!!!studySubject.selected">
         <i class="fa fa-trash-o"></i>
-        <span translate>STUDY_SUBJECT.CONTROLS.ARCHIVE_BTN</span>
+        <span translate>APP.STUDY.SUBJECT.CONTROLS.ARCHIVE_BTN</span>
       </button>
     </div>
   </div>

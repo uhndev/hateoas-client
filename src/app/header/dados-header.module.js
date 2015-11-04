@@ -7,9 +7,6 @@
       'dados.header.constants',
       'dados.header.directive',
       'dados.header.controller'
-    ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('header');
-    });
+    ]);
 
 })();

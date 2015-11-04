@@ -8,9 +8,6 @@
       'dados.common.directives.hateoas.controls',
       'dados.subject.service'
     ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studysubject');
-    })
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
