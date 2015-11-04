@@ -1,0 +1,1028 @@
+<div ng-controller="AssessmentController as assessment" class="container">
+
+  <div class="row">
+    <div class="col-md-8">
+      <h2 id="Title">
+        Assessments
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form data-ng-submit="assessment.findReferral(assessment.searchString)" autocomplete="off">
+        <fieldset>
+          <div class="form-group">
+            <label for="searchString">Find Referrals</label>
+            <div class="input-group">
+              <input type="text" id="searchString" name="searchString" class="form-control"
+                     data-ng-model="assessment.searchString" placeholder="Search MRN / Claim / Client">
+            <span class="input-group-addon selectable" ng-click="assessment.findReferral(assessment.searchString)">
+              <i class="glyphicon glyphicon-search"></i>
+            </span>
+            </div>
+          </div>
+          <div class="text-center form-group">
+            <!--{{assessment.referrals|json}}-->
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+  <hr/>
+
+  <h4 style="clear:both">Results&nbsp;
+    <span ng-click="assessment.collapsedSearch= !assessment.collapsedSearch;">
+      <i class="glyphicon" ng-class="{
+        'glyphicon-chevron-right': assessment.collapsedSearch,
+        'glyphicon-chevron-down': !assessment.collapsedSearch
+      }"></i>
+    </span>
+  </h4>
+
+  <div id="referralSearchDiv" class="form-group" collapse="assessment.collapsedSearch">
+    <table id="searchResults" class="table">
+      <thead>
+      <tr>
+        <td>MRN #</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Claim Num</td>
+        <td>Policy Num</td>
+      </tr>
+      </thead>
+      <tr ng-repeat="referral in assessment.referrals" ng-click="assessment.selectReferral(referral)"
+          class="{{(assessment.selectedReferral===referral) ? 'selectedRow' : ''}}">
+        <td>{{referral.client_mrn}}</td>
+        <td>{{referral.client_firstName}}</td>
+        <td>{{referral.client_lastName}}</td>
+        <td>{{referral.claim_claimNum}}</td>
+        <td>{{referral.claim_policyNum}}</td>
+      </tr>
+    </table>
+  </div>
+  <div id="selectedReferralDiv" class="form-group" collapse="assessment.collapsedClientDetail">
+    <table id="clientDetail" class="table">
+      <thead>
+      <tr>
+        <td>MRN #</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Claim Num</td>
+        <td>Policy Num</td>
+        <td>City</td>
+        <td>Referral Date</td>
+      </tr>
+      </thead>
+      <tr class="selectedRow">
+        <td>{{assessment.selectedReferral.client_mrn}}</td>
+        <td>{{assessment.selectedReferral.client_firstName}}</td>
+        <td>{{assessment.selectedReferral.client_lastName}}</td>
+        <td>{{assessment.selectedReferral.claim_claimNum}}</td>
+        <td>{{assessment.selectedReferral.claim_policyNum}}</td>
+        <td>{{assessment.selectedReferral.client_city}}</td>
+        <td>{{assessment.selectedReferral.referralDate}}</td>
+      </tr>
+    </table>
+
+    <div id="sitesDiv">
+      <table id="distanceToSites" class="SiteDistanceTable">
+        <tr>
+          <td ng-repeat="site in assessment.sites" ng-click="assessment.selectSite(site)">{{site.name}}</td>
+        </tr>
+        <tr>
+          <td ng-repeat="siteDistance in assessment.distanceMatrix.rows[0].elements">{{siteDistance.distance.text}}</td>
+        </tr>
+      </table>
+    </div>
+  <div id="mapDiv" class="form-div">
+    <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
+                        zoom="assessment.map.zoom">
+      <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click" >
+        </ui-gmap-markers>
+    </ui-gmap-google-map>
+    <div id="directionsDiv" />
+    </div>
+  </div>
+  <div id="triageDiv">
+    <h2>Triage</h2>
+    <table class="ng-table">
+      <tr>
+        <td>Program</td>
+        <td>Doctor</td>
+        <td>Therapist Initials</td>
+        <td>Clinic Date</td>
+      </tr>
+      </thead>
+      <tr>
+        <td>
+          <select class="form-control" id="selectProgram" >
+            <option disabled selected>Select Program</option>
+            <option ng-repeat="program in assessment.programs" value="site">{{program.programName}}</option>
+          </select>
+        </td>
+        <td>{{assessment.selectedReferral.physician_name}}</td>
+        <td></td>
+        <td>{{assessment.selectedReferral.recieveDate}}</td>
+      </tr>
+    </table>
+    <div id="assessmentType">
+      <h2>Assessment Type</h2>
+      <input type="radio" name="WSIBSpeciality" value="WSIBSpeciality">WSIBSpeciality
+      <input type="radio" name="WSIBNonSpecialty" value="WSIBNonSpecialty">WSIBNonSpecialty
+  </div>
+    <div id="workStatus">
+      <h2>Work Status</h2>
+      <input type="radio" name="Full Time Duties" value="Full Time Duties">Full Time\Duties
+      <input type="radio" name="Modified Time Duties" value="Modified Time Duties">Modified Time\Duties
+      <input type="radio" name="Modified Time" value="Full Time">Full Time\Modified Duties
+      <input type="radio" name="" value="WSIBNonSpecialty">Not Working
+  </div>
+    <div>
+      <select class="form-control" id="prognosis" >
+        <option value="" selected="">--- Select One ---</option>
+        <option value="1">Too soon to render a prognosis</option>
+        <option value="1">Fully Recovered Now</option>
+        <option value="2">Partially Recovered Now and No Further Recovery Expected </option>
+        <option value="3">Partially Recovered Now and Full Recovery Anticipated in </option>
+        <option value="4">Partially Recovered Now and Full Recovery Not Anticipated but may continue to improve for </option>
+      </select>
+    </div>
+    <div class="section">
+      <span class="section-title1">Recommend Services</span><br><br>
+      <!-- START Accordion DIV -->
+      <div id="accordion-container">
+        <!--Altum WSIB Specialty Services Title-->
+        <h2 class="accordion-header active-header" id="wsib-spec-header">
+          <span class="custom-checkbox selected"><input type="checkbox" name="wsib-spec-toggle" id="wsib-spec-toggle" value="aaa"></span><label for="wsib-spec-toggle" class="accordion-label"> Altum WSIB Speciality</label>
+        </h2>
+        <!--START Altum WSIB Specialty Services Content-->
+        <div class="accordion-content open-content" id="wsib-spec-div" style="width: 100%; display: block;">
+          <!--<div class="disabled" style="display:block;" id="wsib-spec-disabled-div">Disabled</div>-->
+
+
+          <div class="serviceMask" id="wsib-spec-mask" style="display: none;"></div>
+          <!--Section Title Start -->
+          <div class="section-title">
+
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 338px; height: auto; min-height: 232px;">
+              <span class="section-title1">Diagnostic</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Blood Work" id="ws-BloodWork" class="wsib-spec-class" value="Blood Work" onclick="$('#'+$(this).attr('id')+'-div').toggle();$('#'+$(this).attr('id')+'Site').val('TWH');"></span> Blood Work
+                  </label>
+                  <br>
+                  <div id="ws-BloodWork-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-BloodWorkSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select><br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-Blood WorkApproval" class="wsib-spec-class" value="BloodWorkApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Bone Scan" value="Bone Scan" id="ws-BoneScan" onclick="$('#'+$(this).attr('id')+'-div').toggle();$('#'+$(this).attr('id')+'Site').val('TWH');"></span> Bone Scan
+                  </label>
+                  <br>
+                  <div id="ws-BoneScan-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-BoneScanSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-Bone ScanApproval" class="wsib-spec-class" value="BoneScanApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-CT" value="CT" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> CT
+                  </label>
+                  <br>
+                  <div id="ws-CT-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-CTSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-CTApproval" class="wsib-spec-class" value="CTApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-EMG" value="EMG" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> EMG
+                  </label>
+                  <div id="ws-EMG-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-EMGSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-EMGApproval" class="wsib-spec-class" value="EMGApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-SNRB" value="SNRB" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> SNRB
+                  </label>
+                  <div id="ws-SNRB-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-SNRBSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-SNRBApproval" class="wsib-spec-class" value="SNRBApproval"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!--<div>
+                                            <label class="radio-label-nomargin-right">
+                                                <input type="checkbox" name="ws-OtherDiagnostic" id="ws-OtherDiagnostic" value="OtherDiagnostic" onclick="javascript: $('#div-diagInput').toggle(); $('#ws-diagInput').focus();"/> Other
+                                            </label>
+                                            <br/>
+
+                                        </div>-->
+
+              </div>
+
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <div>
+                  <label class="radio-label-nomargin-right">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-UltraSound" value="UltraSound" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> UltraSound
+                  </label>
+                  <div id="ws-UltraSound-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-UltraSoundSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-UltraSoundApproval" class="wsib-spec-class" value="UltraSoundApproval"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="radio-label-nomargin-right">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-UGI" value="UGI" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> UltraSound Guided Injection
+                  </label>
+                  <div id="ws-UGI-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-UGISite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-UGIApproval" class="wsib-spec-class" value="UGIApproval"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="radio-label-nomargin-right">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-XRAY" value="XRAY" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> XRAY
+                  </label>
+                  <div id="ws-XRAY-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-XRAYSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-XRAYApproval" class="wsib-spec-class" value="XRAYApproval"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-MRI" value="MRI" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> MRI
+                  </label>
+                  <div id="ws-MRI-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-MRISite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-MRIApproval" class="wsib-spec-class" value="MRIApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Arthrogram" value="Arthrogram" onclick="$('#'+$(this).attr('name')+'-div').toggle();$('#'+$(this).attr('name')+'Site').val('TWH');"></span> Arthrogram
+                  </label>
+                  <div id="ws-Arthrogram-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-ArthrogramSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-ArthrogramApproval" class="wsib-spec-class" value="ArthrogramApproval"></span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Radiology Review" id="ws-RadiologyReview" value="Radiology Review" onclick="$('#'+$(this).attr('id')+'-div').toggle();$('#'+$(this).attr('id')+'Site').val('TWH');"></span> Radiology Review
+                  </label>
+                  <div id="ws-RadiologyReview-div" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px;margin-bottom: 10px; display:none;">
+                    <span style="font-size: 14px;">Recommended Site:</span>
+                    <select id="ws-RadiologyReviewSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <br>
+                    <label class="radio-label">
+                      Approval Required: <span class="custom-checkbox checkbox-approval-required"><input type="checkbox" name="ws-Radiology ReviewApproval" class="wsib-spec-class" value="RadiologyReviewApproval"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!--	<div style="clear: both; position: relative; float: left; margin: 15px 0px!important;left: -40px; display: none;" id="div-diagInput">
+                                          <div class="labelTop">
+                                              <div class="css">
+                                                  <label for="ws-diagInput">OTHER</label>
+                                                  <input type="text" id="ws-diagInput"/>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      -->
+
+            </div>
+            <!-- Start Other DIV -->
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px; height: auto; min-height: 232px;">
+              <span class="section-title1">Service</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-AlliedHealth" value="Allied Health" onclick="$('#'+$(this).attr('name')+'Div').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Allied Health
+                  </label><br>
+                  <div id="ws-AlliedHealthDiv" style="display: none;border: 1px solid rgb(204, 204, 204);padding: 10px;border-radius: 5px;margin-bottom: 10px; margin-right:10px;">
+                    <select id="ws-AlliedHealthSite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <div>
+                      Sessions: <input type="number" min="1" max="25" style="width: 50px;" id="ws-AlliedHealthSessions" value="1">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-AlliedHealthPharmacy" value="Allied Health Pharmacy" onclick="$('#'+$(this).attr('name')+'Div').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Allied Health<br>&nbsp;&nbsp;&nbsp;[Pharmacy]
+                  </label>
+                  <div id="ws-AlliedHealthPharmacyDiv" style="display: none;border: 1px solid rgb(204, 204, 204);padding: 10px;border-radius: 5px;margin-bottom: 10px; margin-right:10px;">
+                    <select id="ws-AlliedHealthPharmacySite" style="width: 111px; margin-bottom: 10px; font-size: 14px; color: rgb(147, 147, 147);">
+                      <option value="0">-- Select Site --</option>
+                      <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                    </select>
+                    <div>
+                      Sessions: <input type="number" min="1" max="25" style="width: 50px;" id="ws-AlliedHealthPharmacySessions" value="1">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Brace" value="Brace" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Brace
+                  </label><br>
+                  <select id="ws-BraceSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-FAE" value="FAE" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> FAE
+                  </label><br>
+                  <select id="ws-FAESite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Glove Ax" id="ws-Glove" value="Glove" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> Glove
+                  </label><br>
+                  <select id="ws-GloveSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+              </div>
+              <div style="float: left; position: relative;">
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Gauntlet" value="Gauntlet" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Gauntlet
+                  </label><br>
+                  <select id="ws-GauntletSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Prothesis" value="Prothesis" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Prothesis
+                  </label><br>
+                  <select id="ws-ProthesisSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Splint" value="Splint" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Splint
+                  </label><br>
+                  <select id="ws-SplintSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Radiology review" id="ws-Radiologyreview" value="Radiology review" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> Radiology review
+                  </label><br>
+                  <select id="ws-RadiologyreviewSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>
+                  </select>
+                </div>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="ws-OtherOther" id="ws-OtherOther" value="OtherOther" onclick="$('#divOtherOtherInput').toggle();$('#ws-OtherOtherInput').focus();"></span> Other
+                </label><br>
+
+              </div>
+              <div style="clear: both; position: relative; float: left; display:none;" id="divOtherOtherInput">
+                <div class="labelTop">
+                  <div class="css">
+                    <label for="ws-OtherOtherInput">OTHER</label>
+                    <input type="text" id="ws-OtherOtherInput" class="ui-autocomplete-input" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Other Div -->
+            <div style="clear: both; margin-bottom: 20px;"></div>
+            <!-- Start Consult DIV -->
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 338px;">
+              <span class="section-title1">Consult</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; /*margin-left: 10px;*/ width: 112px;">
+                <div>
+                  <label class="radio-label" style="margin-left: 10px;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-CMA" value="CMA" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> CMA
+                  </label><br>
+                  <select id="ws-CMASite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label" style="margin-left: 10px;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-CSA" value="CSA" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> CSA
+                  </label><br>
+                  <select id="ws-CSASite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+
+              </div>
+              <div style="float: left; position: relative; width:112px;">
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Neuro" value="Neuro" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Neuro
+                  </label>
+                  <br>
+                  <select id="ws-NeuroSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label" style="margin-right: 10px !important;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Pain Consult" id="ws-Pain" value="Pain" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> Pain Consult
+                  </label>
+                  <br>
+                  <select id="ws-PainSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+              </div>
+              <div style="float: left; position: relative; width: 112px;">
+                <div>
+                  <label class="radio-label" style="margin-right: 8px !important;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Spec Consult" value="Spec Consult" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Type').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);"></span> Spec Consult
+                  </label><br>
+                  <select id="ws-SpecConsultType" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-Select Type-</option>
+                    <option value="2nd Opinion">2nd Opinion</option><option value="Colorectal Surgeon">Colorectal Surgeon</option><option value="Dermatology">Dermatology</option><option value="ENT">ENT</option><option value="Gastrointestinal">Gastrointestinal</option><option value="Infectious Disease">Infectious Disease</option><option value="Internal Medicine">Internal Medicine</option><option value="Interventional Radiology">Interventional Radiology</option><option value="Other">Other</option><option value="Physiatry">Physiatry</option><option value="Plastics">Plastics</option><option value="Rheumatology">Rheumatology</option><option value="Urology">Urology</option><option value="Vascular">Vascular</option>
+                  </select>
+                  <br>
+                  <select id="ws-SpecConsultSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-OtherConsult" id="ws-OtherConsult" value="OtherConsult" onclick="javascript: $('#div-consultInput').toggle(); $('#ws-consultInput').focus();"></span> Other
+                  </label><br>
+                </div>
+              </div>
+              <div style="clear: both; position: relative; float: left; margin: 15px 0px!important;left: -40px; display: none;" id="div-consultInput">
+                <div class="labelTop">
+                  <div class="css">
+                    <label for="ws-consultInput">OTHER</label>
+                    <input type="text" id="ws-consultInput" class="ui-autocomplete-input" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Consult Div-->
+            <!-- Start Treatment Div-->
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px;">
+              <span class="section-title1">Treatment</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left:10px; display:none;" id="divFppTx">
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-FPP Standard Tx" id="ws-FPPStandardTx" value="FPP Standard Tx" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> FPP Standard Tx</label><br>
+                  <select id="ws-FPPStandardTxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-FPP Customised Tx" id="ws-FPPCustomisedTx" value="FPP Customised Tx" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> FPP Customised Tx</label><br>
+                  <select id="ws-FPPCustomisedTxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+              </div>
+              <div style="float: left; position: relative; width:112px;">
+                <div>
+                  <label class="radio-label" style="margin-left: 10px;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-A/SA" value="A/SA" id="ws-ASA" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> A/SA
+                  </label><br>
+                  <select id="ws-ASASite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label" style="margin-right: 0px !important; margin-left: 10px;">
+                    <span class="custom-checkbox"><input type="checkbox" name="ws-Dominance" value="Dominance" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> Dominance
+                  </label><br>
+                  <select id="ws-DominanceSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+              </div>
+              <div style="float: left; position: relative; margin-left:10px;">
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-NSR" value="NSR" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> NSR</label><br>
+                  <select id="ws-NSRSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-P/SR" id="ws-PSR" value="P/SR" onclick="$('#'+$(this).attr('id')+'Site').toggle();$('#'+$(this).attr('id')+'Site').val(siteid);"></span> P/SR</label><br>
+                  <select id="ws-PSRSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+              </div>
+              <div style="float: left; position: relative;">
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-WR" value="WR" onclick="$('#'+$(this).attr('name')+'Site').toggle();$('#'+$(this).attr('name')+'Site').val(siteid);"></span> WR</label><br>
+                  <select id="ws-WRSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label"><span class="custom-checkbox"><input type="checkbox" name="ws-OtherSPTX" id="ws-OtherSPTX" value="OtherSPTX" onclick="javascript: $('#div-txInput').toggle(); $('#ws-txInput').focus();"></span> Other</label>
+                </div>
+              </div>
+
+              <div style="clear: both; position: relative; float: left; margin: 15px 0px!important;left: -40px; display: none;" id="div-txInput">
+                <div class="labelTop">
+                  <div class="css">
+                    <label for="ws-txInput">OTHER</label>
+                    <input type="text" id="ws-txInput" class="ui-autocomplete-input" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Start Surgical Services -->
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 100%; margin-top: 20px; height:150px;">
+											<span class="section-title1">
+												<label class="radio-label" style="margin-right: 5px !important;">
+                          <span class="custom-checkbox"><input type="checkbox" name="ws-Surgery" id="ws-surgical" value="Surgery"></span> Surgical Services
+                        </label>
+											</span>
+              <div style="position: relative; width: 100%; height: auto;">
+                <div style="position: absolute; top:30px; left:20px;">
+                  <label class="radio-label">
+                    Consent Pending <span class="custom-checkbox"><input type="checkbox" name="ws-surgical-consentPending" id="ws-surgical-consentPending" value="Yes" onclick="consentPendingFollowup();"></span>
+                  </label>
+                </div>
+                <div style="position: absolute; left: 23px; top:75px;height:50px; width:230px;">
+                  <div class="labelTop" style="position: absolute;left: -90px;">
+                    <div class="css">
+                      <label for="ws-surgical-procedure">Procedure</label>
+                      <input type="text" id="ws-surgical-procedure">
+                    </div>
+                  </div>
+                </div>
+                <div style="position: absolute; display: inline-block;top: 30px;left: 180px;">
+                  <label class="radio-label" style="margin-right: 5px !important;">
+                    Implants/Device Required? <span class="custom-checkbox"><input type="checkbox" name="ws-surgical-implants" id="ws-surgical-implants" value="Yes" onclick="javascript:$('#divSurgicalDevice').toggle();"></span>
+                  </label>
+
+                  <div class="labelTop" style="position: absolute;top: -10px;left: 120px;display:none;" id="divSurgicalDevice">
+                    <div class="css">
+                      <label for="ws-surgical-implant-list">Implant/Device Type:</label>
+                      <input type="text" id="ws-surgical-implant-list" style="width: 175px;">
+                    </div>
+                  </div>
+                  <!--	<div style="position: relative; top: 20px; left: -250px; width:620px; height: 50px; display:none;">
+                                                  <label class="radio-label" style="margin-right: 75px !important;">
+                                                      Inpatient Stay: <input type="checkbox" name="ws-surgical-inpatient" id="ws-surgical-inpatient" value="Yes"/>
+                                                  </label>
+                                                  <label class="radio-label" style="margin-right: 70px !important;">
+                                                      Restrictions Post Surgery: <input type="checkbox" name="ws-surgical-restrictions" id="ws-surgical-restrictions" value="Yes"/>
+                                                  </label>
+                                                  <label class="radio-label" style="margin-right: 20px !important;">
+                                                       Post Surgical Rehab: <input type="checkbox" name="ws-surgical-rehab" id="ws-surgical-rehab" value="Yes"/>
+                                                  </label>
+                                              </div>
+                                              <div style="position: relative; top: 20px; left: -250px; width:620px; height: 80px; border: 1px #cccccc solid; border-radius: 5px; margin-top: 20px; display:none;">
+                                                  <span class="section-title1">Level of functional recovery if surgery is successful: </span>
+                                                  <label class="radio-label" style="position: absolute; left:20px; margin-top:30px;">
+                                                      Fair: <input type="radio" name="ws-surgical-functional" value="Fair"/>
+                                                  </label>
+                                                  <label class="radio-label" style="position: absolute; left:250px; margin-top:30px;">
+                                                      Good: <input type="radio" name="ws-surgical-functional" value="Good"/>
+                                                  </label>
+                                                  <label class="radio-label" style="position: absolute; left:510px;margin-top:30px;">
+                                                       Excellent: <input type="radio" name="ws-surgical-functional" value="Excellent"/>
+                                                  </label>
+                                              </div>-->
+                </div>
+              </div>
+            </div>
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-top: 23px; width: 100%; display: none;">
+              <span class="section-title1">Notes:</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <textarea style="margin-left: 0px; margin-right: 0px; width: 98%;position: relative;left: 1%; height:100px; margin-bottom: 20px;" id="ws-notes"></textarea>
+            </div>
+          </div>
+          <!--Section Title End -->
+        </div>
+        </div>
+        <!--END Altum WSIB Specialty Services Content-->
+        <br/>
+<div styl="clear:both"><br/>
+        <!--Altum WSIB NON-Specialty Services Title-->
+        <h2 class="accordion-header inactive-header" id="wsib-non-spec-header">
+
+          <span class="custom-checkbox"><input type="checkbox" id="wsib-nonspec-toggle" name="wsib-nonspec-toggle" value="aaa"></span><label for="wsib-nonspec-toggle" class="accordion-label"> Altum WSIB Non-Speciality</label>
+
+        </h2>
+</div>
+        <div class="accordion-content" id="wsib-nonspec-div" style="width: 100%;">
+          <!--<div class="disabled" style="display:block;" id="wsib-nonspec-disabled-div">Disabled</div>-->
+          <div class="serviceMask" id="wsib-nonspec-mask"></div>
+          <div class="section-title">
+
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 338px; height: auto;">
+              <span class="section-title1">Consultations</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-Psychological Ax" class="wsib-spec-class" value="wns-Pyschological Ax" onclick="$('#'+$(this).attr('name').replace(' ', '')+'Site').toggle();$('#'+$(this).attr('name').replace(' ', '')+'Site').val(siteid);" disabled="disabled"></span> Psychological Ax
+                  </label><br>
+                  <select id="wns-PsychologicalAxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-Psychiatry Ax" value="wns-Psychiatry Ax" onclick="$('#'+$(this).attr('name').replace(' ', '')+'Site').toggle();$('#'+$(this).attr('name').replace(' ', '')+'Site').val(siteid);" disabled="disabled"></span> Psychiatry Ax
+                  </label><br>
+                  <select id="wns-PsychiatryAxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-Independent Psych Eval" value="wns-Independent Psychological Evaluation" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> 	Independent Psychological Evaluation
+                  </label><br>
+                  <select id="wns-IndependentPsychEvalSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-Neuro IME" value="wns-Neurology (IME)" onclick="$('#'+$(this).attr('name').replace(' ', '')+'Site').toggle();$('#'+$(this).attr('name').replace(' ', '')+'Site').val(siteid);" disabled="disabled"></span> Neurology (IME)
+                  </label><br>
+                  <select id="wns-NeuroIMESite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-Neuro Psych Ax" value="wns-Neuropsychological Assessment" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> Neuropsychological Assessment
+                  </label><br>
+                  <select id="wns-NeuroPsychAxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                    <option value="0">-- Select Site --</option>
+                    <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+                </div>
+                <div>
+                  <label class="radio-label">
+                    <span class="custom-checkbox"><input type="checkbox" name="wns-ConsultOther" value="wns-ConsultOther" onclick="javascript: $('#div-wns-consultInput').toggle(); $('#ws-consultInput').focus();" disabled="disabled"></span> Other
+                  </label>
+                </div>
+              </div>
+
+              <div style="clear: both; position: relative; float: left; margin: 15px 0px!important;left: -40px; display: none;" id="div-wns-consultInput">
+                <div class="labelTop">
+                  <div class="css">
+                    <label for="wns-consultInput">OTHER</label>
+                    <input type="text" id="wns-consultInput" disabled="disabled" class="ui-autocomplete-input" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px; height: auto; ">
+              <span class="section-title1">Other</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="wns-PGAP" value="wns-PGAP" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> PGAP
+                </label><br>
+                <select id="wns-PGAPSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                  <option value="0">-- Select Site --</option>
+                  <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+
+              </div>
+
+            </div>
+
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px; margin-top:20px; height: auto;">
+              <span class="section-title1">Treatment</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="wns-Psychology Tx" id="wns-PsychologyTx" value="wns-Psychology Tx" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> Psychology
+                </label><br>
+                <select id="wns-PsychologyTxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                  <option value="0">-- Select Site --</option>
+                  <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+
+              </div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="wns-Psychiatry Tx" id="wns-PsychiatryTx" value="wns-Psychiatry Tx" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> Psychiatry
+                </label><br>
+                <select id="wns-PsychiatryTxSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                  <option value="0">-- Select Site --</option>
+                  <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+              </div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="wns-Rehabilitation" id="wns-Rehabilitation" value="wns-Rehabilitation" onclick="$('#'+$(this).attr('name').replace(/ /g, '')+'Site').toggle();$('#'+$(this).attr('name').replace(/ /g, '')+'Site').val(siteid);" disabled="disabled"></span> Rehabilitation
+                </label><br>
+                <select id="wns-RehabilitationSite" style="width: 111px; margin-bottom: 10px; display: none; font-size: 14px; color: rgb(147, 147, 147);" disabled="disabled">
+                  <option value="0">-- Select Site --</option>
+                  <option value="Ajax">Ajax</option><option value="Cambridge">Cambridge</option><option value="Mississauga">Mississauga</option><option value="Ottawa">Ottawa</option><option value="Sudbury">Sudbury</option><option value="TWH">TWH</option><option value="Vaughan">Vaughan</option><option value="Hamilton">Hamilton</option><option value="Barrie">Barrie</option>													</select>
+              </div>
+            </div>
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-top: 23px; width: 100%;display:none;">
+              <span class="section-title1">Notes:</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <textarea style="margin-left: 0px; margin-right: 0px; width: 98%;position: relative;left: 1%; height:100px; margin-bottom: 20px;" id="wns-notes" disabled="disabled"></textarea>
+            </div>
+          </div>
+
+        </div>
+
+
+        <h2 class="" id="community-provider-header">
+
+          <span class="custom-checkbox"><input type="checkbox" name="community-toggle" id="community-toggle" value="aaa"></span><label for="community-toggle" class="accordion-label"> Community</label>
+
+        </h2>
+
+        <div class="accordion-content" id="community-div" style="width: 100%;">
+          <!--<div class="disabled" style="display:block;" id="community-disabled-div">Disabled</div>-->
+          <div class="serviceMask" id="cp-mask"></div>
+          <div class="section-title">
+
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 338px; height:auto;">
+              <span class="section-title1">Diagnostic</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-BloodWork" value="BloodWork" disabled="disabled"></span> Blood Work
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-BoneScan" value="Bone Scan" disabled="disabled"></span> Bone Scan
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-CT" value="CT" disabled="disabled"></span> CT
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-EMG" value="EMG" disabled="disabled"></span> EMG
+                </label><br>
+
+              </div>
+              <div style="float: left; position: relative;">
+                <label class="radio-label-nomargin-right">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-UltraSound" value="UltraSound" disabled="disabled"></span> UltraSound
+                </label><br>
+                <label class="radio-label-nomargin-right">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-UGI" value="UGI" disabled="disabled"></span> UltraSound Guided Injection
+                </label><br>
+                <label class="radio-label-nomargin-right">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-XRAY" value="XRAY" disabled="disabled"></span> XRAY
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-MRI" value="MRI" disabled="disabled"></span> MRI
+                </label><br>
+                <!--<label class="radio-label-nomargin-right">
+                                            <input type="checkbox" name="cp-OtherDiagnostic" value="OtherDiagnostic"/> Other
+                                        </label><br/>
+                                        <div style="clear: both; position: relative; float: left;">
+                                        Place Holder-Input Box
+                                        </div>-->
+              </div>
+
+            </div>
+            <!-- Start Other DIV -->
+            <!--<div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px; height: 223px;">
+                                    <span class="section-title1">Other</span><br/>
+                                    <div style="clear: both; margin-top: 5px;"></div>
+                                    <div style="float: left; position: relative; margin-left: 10px;">
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-AlliedHealth" value="Allied Health"/> Allied Health
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Brace" value="Brace"/> Brace
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-FAE" value="FAE"/> FAE
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Glove" value="Glove"/> Glove
+                                        </label><br/>
+                                    </div>
+                                    <div style="float: left; position: relative;">
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Gauntlet" value="Gauntlet"/> Gauntlet
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Prothesis" value="Prothesis"/> Prothesis
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Splint" value="Splint"/> Splint
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-OtherOther" value="OtherOther"/> Other
+                                        </label><br/>
+                                        <div style="clear: both; position: relative; float: left;">
+                                            Place Holder-Input Box
+                                        </div>
+                                    </div>
+                                </div>-->
+            <!-- End Other Div
+                                <div style="clear: both; margin-bottom: 20px;"></div>-->
+            <!-- Start Consult DIV -->
+            <!--<div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; width: 338px;">
+                                    <span class="section-title1">Consult</span><br/>
+                                    <div style="clear: both; margin-top: 5px;"></div>
+                                    <div style="float: left; position: relative; margin-left: 10px;">
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-CMA" value="CMA"/> CMA
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-CSA" value="CSA"/> CSA
+                                        </label><br/>
+                                    </div>
+                                    <div style="float: left; position: relative;">
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Neuro" value="Neuro"/> Neuro
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-Pain" value="Pain"/> Pain
+                                        </label><br/>
+
+                                    </div>
+                                    <div style="float: left; position: relative;">
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-MedSpec" value="MedSpec"/> Med-Spec
+                                        </label><br/>
+                                        <label class="radio-label">
+                                            <input type="checkbox" name="cp-OtherConsult" value="OtherConsult"/> Other
+                                        </label><br/>
+                                        <div style="clear: both; position: relative; float: left;">
+                                            Place Holder-Input Box
+                                        </div>
+                                    </div>
+                                </div>-->
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-left: 8px; width: 338px;">
+              <span class="section-title1">Treatment</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <div style="float: left; position: relative; margin-left: 10px;width:155px;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Dominance" value="Dominance" disabled="disabled"></span> Dominance
+                </label><br>
+                <label class="radio-label" style="margin-right: 20px !important;">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-P/SR" value="P/SR" disabled="disabled"></span> P/SR
+                </label><br>
+                <label class="radio-label" style="margin-right: 20px !important;">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Psychological Tx" value="Psychological Tx" disabled="disabled"></span> Psychological Tx
+                </label><br>
+                <label class="radio-label" style="margin-right: 20px !important;">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Custom Footwear" value="Custom Footwear" disabled="disabled"></span> Custom Footwear
+                </label><br>
+              </div>
+              <div style="float: left; position: relative;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Work Hardening" value="Work Hardening" disabled="disabled"></span> Work Hardening
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Rehabilitation" value="Rehabilitation" disabled="disabled"></span> Rehabilitation
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Driver Evaluation" value="Driver Evaluation" disabled="disabled"></span> Driver Evaluation
+                </label><br>
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Orthotics" value="Orthotics" disabled="disabled"></span> Orthotics
+                </label><br>
+                <!--<label class="radio-label">
+                                            <input type="checkbox" name="cp-OtherSPTX" value="OtherSPTX"/> Other
+                                        </label><br/>
+                                        <div style="clear: both; position: relative; float: left;">
+                                            Place Holder-Input Box
+                                        </div>-->
+              </div>
+              <div style="float: left; position: relative; margin-left: 10px;clear:both; width:155px;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-JAS Brace" value="JAS Brace" disabled="disabled"></span> JAS Brace
+                </label><br>
+
+              </div>
+              <div style="float: left; position: relative;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-UCBL Brace" value="UCBL Brace" disabled="disabled"></span> UCBL Brace
+                </label><br>
+
+              </div>
+              <div style="float: left; position: relative; margin-left: 10px;clear:both; width:155px;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-Compression Stocking" value="Compression Stocking" disabled="disabled"></span> Compression Stocking
+                </label>
+              </div>
+              <div style="float: left; position: relative;">
+                <label class="radio-label">
+                  <span class="custom-checkbox"><input type="checkbox" name="cp-PRP" value="PRP" disabled="disabled"></span> PRP
+                </label><br>
+              </div>
+            </div>
+            <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-top: 23px; width: 100%;display:none;">
+              <span class="section-title1">Notes:</span><br>
+              <div style="clear: both; margin-top: 5px;"></div>
+              <textarea style="margin-left: 0px; margin-right: 0px; width: 98%;position: relative;left: 1%; height:100px; margin-bottom: 20px;" id="cp-notes" disabled="disabled"></textarea>
+            </div>
+          </div>
+          <!--Section Title End -->
+        </div>
+        <!--END Community Provider Services Content-->
+      </div>
+      <!-- END Accordion DIV -->
+    </div>
+  </div>
+</div>
