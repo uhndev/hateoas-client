@@ -5,9 +5,9 @@
     .module('dados')
     .controller('DadosController', DadosController);
 
-  DadosController.$inject = ['$scope', '$state', '$location', 'AuthService'];
+  DadosController.$inject = ['$scope', '$state', '$location', 'AuthService', 'LocaleService'];
 
-  function DadosController($scope, $state, $location, Auth) {
+  function DadosController($scope, $state, $location, Auth, Locale) {
 
     var vm = this;
     vm.submenu = {};
@@ -17,6 +17,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      Locale.updateLocales();
       if (_.isEmpty($location.path())) {
         $location.path('/study');
       }

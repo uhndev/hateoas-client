@@ -123,7 +123,9 @@ module.exports = {
       'vendor/angular-ui-ace/ui-ace.js',
 
       // translation libs
+      'vendor/defiant.js/dist/defiant.js',
       'vendor/angular-translate/angular-translate.js',
+      'vendor/angular-translate-editor/dist/angular-translate-editor.js',
       'vendor/angular-translate-handler-log/angular-translate-handler-log.js',
       'vendor/angular-translate-loader-url/angular-translate-loader-url.js',
       'vendor/angular-dynamic-locale/dist/tmhDynamicLocale.js',

@@ -13,8 +13,13 @@
         replace: true,
         templateUrl: 'directives/languageSelect/language-select.tpl.html',
         controller: function ($scope) {
-          $scope.currentLocaleDisplayName = LocaleService.getLocaleDisplayName();
-          $scope.localesDisplayNames = LocaleService.getLocalesDisplayNames();
+          function setLocale() {
+            $scope.currentLocaleDisplayName = LocaleService.getLocaleDisplayName();
+            $scope.localesDisplayNames = LocaleService.getLocalesDisplayNames();
+          }
+
+          setLocale();
+          $scope.$on('locales.update', setLocale);
           $scope.visible = $scope.localesDisplayNames && $scope.localesDisplayNames.length > 1;
 
           $scope.changeLanguage = function (locale) {

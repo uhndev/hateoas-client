@@ -27,6 +27,7 @@
       'dados.formbuilder',
       'dados.systemformbuilder',
       'dados.collectioncentre',
+      'dados.translation',
 
       'dados.filters.formatter',
       'dados.filters.type',
