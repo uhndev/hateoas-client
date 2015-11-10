@@ -37,6 +37,11 @@
 
     init();
 
+    // on successfully logging in, update locales
+    $rootScope.$on('events.authorized', function (event, data) {
+      service.updateLocales();
+    });
+
     // on successful applying translations by angular-translate
     $rootScope.$on('$translateChangeSuccess', function (event, data) {
       document.documentElement.setAttribute('lang', data.language);// sets "lang" attribute to html
