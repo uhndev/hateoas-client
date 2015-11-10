@@ -13,25 +13,25 @@
         'read': {
           method: 'get',
           requiresItem: true,
-          prompt: 'HATEOAS.CONTROLS.OPEN_BTN',
+          prompt: 'COMMON.HATEOAS.CONTROLS.OPEN_BTN',
           icon: 'fa-folder-o'
         },
         'create' : {
           method: 'post',
           requiresItem: false,
-          prompt: 'HATEOAS.CONTROLS.NEW_BTN',
+          prompt: 'COMMON.HATEOAS.CONTROLS.NEW_BTN',
           icon: 'fa-file-o'
         },
         'update' : {
           method: 'put',
           requiresItem: true,
-          prompt: 'HATEOAS.CONTROLS.EDIT_BTN',
+          prompt: 'COMMON.HATEOAS.CONTROLS.EDIT_BTN',
           icon: 'fa-edit'
         },
         'delete': {
           method: 'delete',
           requiresItem: true,
-          prompt: 'HATEOAS.CONTROLS.ARCHIVE_BTN',
+          prompt: 'COMMON.HATEOAS.CONTROLS.ARCHIVE_BTN',
           icon: 'fa-trash-o'
         }
       };

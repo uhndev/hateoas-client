@@ -52,9 +52,6 @@ module.exports = {
     ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
     tsunit: [ 'src/**/*.spec.ts' ],
 
-    ai18n: [ 'src/app/**/i18n/*.json', 'src/app/**/**/i18n/*.json' ],
-    ci18n: [ 'src/common/i18n/*.json' ],
-
     atpl: [ 'src/app/**/*.tpl.html' ],
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
@@ -104,6 +101,7 @@ module.exports = {
       'vendor/angular-loader/angular-loader.js',
       'vendor/moment/moment.js',
       'vendor/angular-moment/angular-moment.js',
+      'vendor/angular-local-storage/dist/angular-local-storage.js',
       'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',
@@ -125,9 +123,11 @@ module.exports = {
       'vendor/angular-ui-ace/ui-ace.js',
 
       // translation libs
+      'vendor/defiant.js/dist/defiant.js',
       'vendor/angular-translate/angular-translate.js',
+      'vendor/angular-translate-editor/dist/angular-translate-editor.js',
       'vendor/angular-translate-handler-log/angular-translate-handler-log.js',
-      'vendor/angular-translate-loader-partial/angular-translate-loader-partial.js',
+      'vendor/angular-translate-loader-url/angular-translate-loader-url.js',
       'vendor/angular-dynamic-locale/dist/tmhDynamicLocale.js',
       'vendor/angular-i18n/angular-locale_en-us.js',
       'vendor/angular-i18n/angular-locale_fr.js',

@@ -2,7 +2,7 @@
   <h1 id="Title">
     {{ pageTitle }}
     <small translate translate-values="{ total: studyForm.resource.total }">
-      HATEOAS.TITLE.TOTAL
+      COMMON.HATEOAS.TITLE.TOTAL
     </small>
   </h1>
   <div id="Query" class="clearfix">
@@ -21,7 +21,7 @@
           <select ng-model="studyForm.formToAdd"
                   class="form-control"
                   ng-options="selected.id as selected.name for selected in studyForm.forms | orderBy:'name'">
-            <option value="" disabled translate>STUDY_FORM.CONTROLS.ADD_FORM_PLACEHOLDER</option>
+            <option value="" disabled translate>APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER</option>
           </select>
         </div>
         <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()" ng-disabled="!!!studyForm.formToAdd">
@@ -36,21 +36,21 @@
            ng-if="studyForm.allow.create"
            ng-href="#/formbuilder?study={{studyForm.study}}">
           <i class="fa fa-file-o"></i>
-          <span translate>STUDY_FORM.CONTROLS.NEW_BTN</span>
+          <span translate>APP.STUDY.FORM.CONTROLS.NEW_BTN</span>
         </a>
         <a type="button" class="btn btn-default"
            ng-if="studyForm.allow.update"
            ng-href="#/formbuilder?&idPlugin={{studyForm.selected.id}}"
            ng-disabled="!!!studyForm.selected">
           <i class="fa fa-edit"></i>
-          <span translate>STUDY_FORM.CONTROLS.EDIT_BTN</span>
+          <span translate>APP.STUDY.FORM.CONTROLS.EDIT_BTN</span>
         </a>
         <button type="button" class="btn btn-default"
                 ng-if="studyForm.allow.delete"
                 ng-click="studyForm.archiveForm()"
                 ng-disabled="!!!studyForm.selected">
           <i class="fa fa-trash-o"></i>
-          <span translate>STUDY_FORM.CONTROLS.ARCHIVE_BTN</span>
+          <span translate>APP.STUDY.FORM.CONTROLS.ARCHIVE_BTN</span>
         </button>
       </div>
     </div>

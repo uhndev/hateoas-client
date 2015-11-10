@@ -44,10 +44,10 @@
 
         vm.studyInfo = {
           rows: {
-            'name': { title: 'STUDY.NAME', type: 'text' },
-            'reb': { title: 'STUDY.REB', type: 'text' },
-            'administrator': { title: 'STUDY.ADMINISTRATOR', type: 'user' },
-            'pi': { title: 'STUDY.PI', type: 'user' }
+            'name': { title: 'COMMON.MODELS.STUDY.NAME', type: 'text' },
+            'reb': { title: 'COMMON.MODELS.STUDY.REB', type: 'text' },
+            'administrator': { title: 'COMMON.MODELS.STUDY.ADMINISTRATOR', type: 'user' },
+            'pi': { title: 'COMMON.MODELS.STUDY.PI', type: 'user' }
           },
           tableData: _.objToPair(robj)
         };
@@ -63,10 +63,10 @@
           coordinators_total: coordTotal,
           tableData: data.items.centreSummary || [],
           columns: [
-            { title: 'STUDY_OVERVIEW.ENROLLMENT.COLLECTION_CENTRES', field: 'name', type: 'text' },
-            { title: 'STUDY_OVERVIEW.ENROLLMENT.CONTACT', field: 'contact', type: 'text' },
-            { title: 'STUDY_OVERVIEW.ENROLLMENT.COORDINATORS', field: 'coordinators_count', type: 'number'},
-            { title: 'STUDY_OVERVIEW.ENROLLMENT.SUBJECTS_ENROLLED', field: 'subjects_count', type: 'number'}
+            { title: 'APP.STUDY.OVERVIEW.ENROLLMENT.COLLECTION_CENTRES', field: 'name', type: 'text' },
+            { title: 'APP.STUDY.OVERVIEW.ENROLLMENT.CONTACT', field: 'contact', type: 'text' },
+            { title: 'APP.STUDY.OVERVIEW.ENROLLMENT.COORDINATORS', field: 'coordinators_count', type: 'number'},
+            { title: 'APP.STUDY.OVERVIEW.ENROLLMENT.SUBJECTS_ENROLLED', field: 'subjects_count', type: 'number'}
           ]
         };
 

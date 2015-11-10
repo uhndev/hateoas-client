@@ -31,9 +31,12 @@
     "angular-translate": "~2.8.1",
     "angular-translate-handler-log": "~2.8.1",
     "angular-sanitize": "~1.4.7",
-    "angular-translate-loader-partial": "~2.8.1",
     "angular-dynamic-locale": "~0.1.28",
-    "angular-i18n": "~1.4.7"
+    "angular-i18n": "~1.4.7",
+    "angular-translate-loader-url": "~2.8.1",
+    "angular-local-storage": "~0.2.3",
+    "defiant.js": "defiantjs#~1.3.4",
+    "angular-translate-editor": "khchan/angular-translate-editor"
   },
   "resolutions": {
     "lodash": "~2.4.1",

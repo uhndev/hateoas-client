@@ -3,11 +3,11 @@
     <div class="form-group no-margin has-feedback has-feedback-left">
       <i class="no-top form-control-feedback fa fa-search"></i>
       <label class="control-label ng-hide" translate>
-        HATEOAS.QUERY.PLACEHOLDER
+        COMMON.HATEOAS.QUERY.PLACEHOLDER
       </label>
       <input type="text"
              class="form-control"
-             placeholder="{{ 'HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+             placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
              ng-model-options="{ debounce: 700 }"
              ng-model="value"
              ng-change="search(value)"/>
@@ -48,12 +48,12 @@
       <button ng-disabled="!!!field || !!!comparator || !!!value"
               class="btn btn-default"
               ng-click="add(field.name, comparator, value)" translate>
-        HATEOAS.QUERY.ADD_BTN
+        COMMON.HATEOAS.QUERY.ADD_BTN
       </button>
       <button ng-disabled="!!!query"
               class="btn btn-warning"
               ng-click="reset()" translate>
-        HATEOAS.QUERY.RESET_BTN
+        COMMON.HATEOAS.QUERY.RESET_BTN
       </button>
     </form>
   </div>
@@ -63,6 +63,6 @@
           btn-checkbox
           btn-checkbox-true="1"
           btn-checkbox-false="0">
-    <span translate>HATEOAS.QUERY.ADVANCED.SEARCH_BTN</span>
+    <span translate>COMMON.HATEOAS.QUERY.ADVANCED.SEARCH_BTN</span>
   </button>
 </div>

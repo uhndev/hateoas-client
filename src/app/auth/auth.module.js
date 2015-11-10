@@ -7,9 +7,7 @@
     'dados.auth.service',
     'dados.auth.controller'
   ])
-  .config(function config( $stateProvider, $translatePartialLoaderProvider ) {
-    $translatePartialLoaderProvider.addPart('auth');
-
+  .config(function config( $stateProvider ) {
     $stateProvider
       .state( 'login', {
         url: '/login',
