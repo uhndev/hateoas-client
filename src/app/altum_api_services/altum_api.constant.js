@@ -8,13 +8,19 @@
       .service('REFERRALDETAIL_API', ReferralDetail)
       .service('ADDRESS_API', Address)
       .service('PHYSICIAN_API', Address)
+      .service('PAYOR_API', Payor)
+      .service('WORKSTATUS_API', WorkStatus)
+      .service('PROGNOSIS_API', Prognosis)
       .service('SITE_API', Site);
 
-    Program.$inject = ['API'];
+  Program.$inject = ['API'];
   Address.$inject = ['API'];
   Referral.$inject = ['API'];
   Site.$inject = ['API'];
   Physician.$inject = ['API'];
+  Payor.$inject = ['API'];
+  WorkStatus.$inject = ['API'];
+  Prognosis.$inject = ['API'];
 
   function Altum_API(API) {
     return {url: API.url() + '/altum_api/:id'};
@@ -39,5 +45,14 @@
   }
   function Physician(API) {
     return {url: API.url() + '/physician/:id'};
+  }
+  function Payor(API) {
+    return {url: API.url() + '/payor/:id'};
+  }
+  function WorkStatus(API) {
+    return {url: API.url() + '/workstatus/:id'};
+  }
+  function Prognosis(API) {
+    return {url: API.url() + '/prognosis/:id'};
   }
 })();
