@@ -20,9 +20,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService', 'uiGmapIsReady'];
+  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'PayorService','uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService','WorkStatusService','PrognosisService', 'uiGmapIsReady' ];
 
-  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi, Physician, Program, uiGmapIsReady) {
+  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, Payor, uiGmapGoogleMapApi, Physician, Program, WorkStatus, Prognosis, uiGmapIsReady) {
     var vm = this;
 
     // bindable variables
@@ -43,6 +43,11 @@
     vm.geoDistance = null;
     vm.directionsService = null; //placeholder for directionsService object
     vm.googleMaps = uiGmapGoogleMapApi;
+    vm.fullReferral=null;
+
+    //placeholders for data driving form dropdowns/radios
+    vm.workStatuses=[];
+    vm.prognosises=[];
 
     // google distance placeholders for distance call
     vm.origins = [];
@@ -66,6 +71,14 @@
     function init() {
       Program.query({}).$promise.then(function (resp) {
         vm.programs = angular.copy(resp);
+      });
+
+      WorkStatus.query({}).$promise.then(function(resp) {
+        vm.workStatuses= angular.copy(resp);
+      });
+
+      Prognosis.query({}).$promise.then(function(resp) {
+        vm.prognosises= angular.copy(resp);
       });
 
       Site.query({}).$promise.then(function (resp) {
@@ -136,6 +149,18 @@
     function selectReferral(referral) {
       vm.selectedReferral = referral;
 
+      Referral.query({
+        where: [
+          {id: vm.selectedReferral.id}
+        ]
+      }).$promise
+        .then(function (resp) {
+          vm.fullReferral= resp[0];
+        },
+        function error(err) {
+          alert('error');
+        });
+
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
 
@@ -149,7 +174,7 @@
         latitude: referral.client_latitude,
         longitude: referral.client_longitude,
         title: referral.client_name,
-        icon: {url: 'assets/img/firstaid.png'},
+        icon: {url: 'assets/img/patienticon.png'},
         click: function () {
           selectSite(site);
         }

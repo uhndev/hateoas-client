@@ -111,7 +111,6 @@
       <tr>
         <td>Program</td>
         <td>Doctor</td>
-        <td>Therapist Initials</td>
         <td>Clinic Date</td>
       </tr>
       </thead>
@@ -127,26 +126,21 @@
         <td>{{assessment.selectedReferral.recieveDate}}</td>
       </tr>
     </table>
+    <div id="payorDiv">
+
+    </div>
     <div id="assessmentType">
       <h2>Assessment Type</h2>
       <input type="radio" name="WSIBSpeciality" value="WSIBSpeciality">WSIBSpeciality
       <input type="radio" name="WSIBNonSpecialty" value="WSIBNonSpecialty">WSIBNonSpecialty
-  </div>
+    </div>
     <div id="workStatus">
       <h2>Work Status</h2>
-      <input type="radio" name="Full Time Duties" value="Full Time Duties">Full Time\Duties
-      <input type="radio" name="Modified Time Duties" value="Modified Time Duties">Modified Time\Duties
-      <input type="radio" name="Modified Time" value="Full Time">Full Time\Modified Duties
-      <input type="radio" name="" value="WSIBNonSpecialty">Not Working
-  </div>
+      <label class="radio-label" ng-repeat="workStatus in assessment.workStatuses"><input type="radio" name="workStatus" id="{{workStatus}}" value="{{workStatus}}" />{{workStatus.name}}</label>
+    </div>
     <div>
       <select class="form-control" id="prognosis" >
-        <option value="" selected="">--- Select One ---</option>
-        <option value="1">Too soon to render a prognosis</option>
-        <option value="1">Fully Recovered Now</option>
-        <option value="2">Partially Recovered Now and No Further Recovery Expected </option>
-        <option value="3">Partially Recovered Now and Full Recovery Anticipated in </option>
-        <option value="4">Partially Recovered Now and Full Recovery Not Anticipated but may continue to improve for </option>
+        <option ng-repeat="prognosis in assessment.prognosises" value="{{prognosis}}" >{{prognosis.name}}</option>
       </select>
     </div>
     <div class="section">
@@ -1014,7 +1008,6 @@
             </div>
             <div style="float: left; position: relative; border: 1px #cccccc solid; border-radius: 5px; margin-top: 23px; width: 100%;display:none;">
               <span class="section-title1">Notes:</span><br>
-              <div style="clear: both; margin-top: 5px;"></div>
               <textarea style="margin-left: 0px; margin-right: 0px; width: 98%;position: relative;left: 1%; height:100px; margin-bottom: 20px;" id="cp-notes" disabled="disabled"></textarea>
             </div>
           </div>

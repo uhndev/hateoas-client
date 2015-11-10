@@ -15,6 +15,9 @@
     .service('ReferralDetailService', ReferralDetailService)
     .service('AddressService', AddressService)
     .service('PhysicianService', PhysicianService)
+    .service('PayorService', PayorService)
+    .service('WorkStatusService', WorkStatusService)
+    .service('PrognosisService', PrognosisService)
     .service('SiteService', SiteService);
 
   Altum_APIService.$inject = ['ResourceFactory','ALTUM_API_API'];
@@ -24,6 +27,9 @@
   AddressService.$inject = ['ResourceFactory','ADDRESS_API'];
   SiteService.$inject = ['ResourceFactory','SITE_API'];
   PhysicianService.$inject = ['ResourceFactory','PHYSICIAN_API'];
+  PayorService.$inject = ['ResourceFactory','PAYOR_API'];
+  WorkStatusService.$inject = ['ResourceFactory','WORKSTATUS_API'];
+  PrognosisService.$inject = ['ResourceFactory','PROGNOSIS_API'];
 
   function Altum_APIService(ResourceFactory,ALTUM_API_API) {
     return ResourceFactory.create(ALTUM_API_API.url);
@@ -45,5 +51,14 @@
   }
   function PhysicianService(ResourceFactory,PHYSICIAN_API) {
     return ResourceFactory.create(PHYSICIAN_API.url);
+  }
+  function PayorService(ResourceFactory,PAYOR_API) {
+    return ResourceFactory.create(PAYOR_API.url);
+  }
+  function WorkStatusService(ResourceFactory,WORKSTATUS_API) {
+    return ResourceFactory.create(WORKSTATUS_API.url);
+  }
+  function PrognosisService(ResourceFactory,PROGNOSIS_API) {
+    return ResourceFactory.create(PROGNOSIS_API.url);
   }
 })();
