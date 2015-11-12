@@ -50,6 +50,12 @@
       tmhDynamicLocale.set(data.language.toLowerCase().replace(/_/g, '-'));
     });
 
+    // use preferredLocale as fallback if locale file not found
+    $rootScope.$on('$localeChangeError', function (event) {
+      event.preventDefault();
+      tmhDynamicLocale.set(LOCALES.preferredLocale.toLowerCase().replace(/_/g, '-'));
+    });
+
     return service;
 
     ///////////////////////////////////////////////////////////////////////////

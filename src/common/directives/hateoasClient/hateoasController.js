@@ -8,12 +8,12 @@
   .controller('HateoasController', HateoasController);
 
   HateoasController.$inject = [
-    '$scope', '$resource', '$location', 'AuthService',
-    'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
+    '$scope', '$resource', '$location', 'AuthService', 'HeaderService',
+    'API', 'ngTableParams', 'sailsNgTable'
   ];
 
-  function HateoasController($scope, $resource, $location, AuthService,
-                              API, TableParams, SailsNgTable, Utils) {
+  function HateoasController($scope, $resource, $location, AuthService, HeaderService,
+                              API, TableParams, SailsNgTable) {
 
     var vm = this;
 
@@ -47,6 +47,7 @@
       $scope.tableParams = new TableParams(TABLE_SETTINGS, {
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, vm.query);
+          var state = {};
 
           Resource.get(api, function(data, headers) {
             vm.selected = null;
@@ -60,10 +61,13 @@
             // to be able to prepend to appropriate rest calls
             if (currStudy) {
               vm.template.study = currStudy;
+              state.prompt = currStudy;
+              state.value = currStudy;
+              state.rel = 'study';
             }
 
             // initialize submenu
-            AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+            HeaderService.setSubmenu(state, data, $scope.dados.submenu);
           });
         }
       });
@@ -82,9 +86,9 @@
       vm.selected = (vm.selected === item ? null : item);
       if (_.has(vm.selected, 'links')) {
         var submenu = {
-          href: vm.selected.slug,
+          href: vm.selected.slug || vm.selected.href,
           name: vm.selected.name,
-          links: AuthService.getRoleLinks(vm.selected.links)
+          links: AuthService.getRoleLinks(vm.selected.rel, vm.selected.links)
         };
         angular.copy(submenu, $scope.dados.submenu);
       }

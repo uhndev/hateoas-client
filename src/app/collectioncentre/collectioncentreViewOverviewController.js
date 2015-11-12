@@ -8,10 +8,10 @@
     .controller('CollectionCentreOverviewController', CollectionCentreOverviewController);
 
   CollectionCentreOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API', 'AuthService'
+    '$scope', '$resource', '$location', 'API', 'HeaderService'
   ];
 
-  function CollectionCentreOverviewController($scope, $resource, $location, API, AuthService) {
+  function CollectionCentreOverviewController($scope, $resource, $location, API, HeaderService) {
     var vm = this;
 
     // bindable variables
@@ -39,13 +39,17 @@
         vm.title = data.items.name;
 
         // initialize submenu
-        AuthService.setSubmenu(vm.resource.items.study.name, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: vm.resource.items.study.name,
+          value: vm.resource.items.study.name,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
 
         vm.centreInfo = {
           rows: {
-            'name': { title: 'Name', type: 'text' },
-            'study': { title: 'Study', type: 'study' },
-            'contact': { title: 'Contact', type: 'user' }
+            'name': { title: 'COMMON.MODELS.COLLECTION_CENTRE.NAME', type: 'text' },
+            'study': { title: 'COMMON.MODELS.STUDY.IDENTITY', type: 'study' },
+            'contact': { title: 'COMMON.MODELS.COLLECTION_CENTRE.CONTACT', type: 'user' }
           },
           tableData: _.objToPair(robj)
         };

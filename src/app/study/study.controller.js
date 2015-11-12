@@ -75,7 +75,7 @@
           var submenu = {
             href: data.items.slug,
             name: data.items.name,
-            links: AuthService.getRoleLinks(data.items.links)
+            links: AuthService.getRoleLinks(data.items.rel, data.items.links)
           };
           angular.copy(submenu, $scope.dados.submenu);
         }

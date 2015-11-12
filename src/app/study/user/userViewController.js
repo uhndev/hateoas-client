@@ -9,10 +9,10 @@
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
-		'$scope', '$q', '$location', '$modal', 'AuthService', 'UserEnrollment', 'toastr', 'API'
+		'$scope', '$q', '$location', '$modal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
 	];
 
-	function StudyUserController($scope, $q, $location, $modal, AuthService, UserEnrollment, toastr, API) {
+	function StudyUserController($scope, $q, $location, $modal, HeaderService, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
@@ -75,7 +75,11 @@
         });
 
         // initialize submenu
-        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: currStudy,
+          value: currStudy,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
       }
 
       return data;

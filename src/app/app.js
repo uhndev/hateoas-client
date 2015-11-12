@@ -39,7 +39,8 @@
     .constant('LOCALES', {
       'locales': {
         'en_US': 'COMMON.LANGUAGES.ENGLISH',
-        'fr': 'COMMON.LANGUAGES.FRENCH'
+        'fr': 'COMMON.LANGUAGES.FRENCH',
+        'altum': 'COMMON.LANGUAGES.ALTUM'
       },
       preferredLocale: 'en_US'
     })

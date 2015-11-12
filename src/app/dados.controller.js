@@ -34,6 +34,13 @@
     });
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
+      var prevBaseUrl = _.parseUrl($location, prev)[0];
+      var basePath = _.pathnameToArray($location.path());
+      var currBaseUrl = _.first(basePath);
+      if (prevBaseUrl !== currBaseUrl) {
+        vm.submenu = {};
+      }
+
       $scope.pageTitle = _.titleCase($location.path()
         .replace(/\//g, ' ')
         .toLowerCase()

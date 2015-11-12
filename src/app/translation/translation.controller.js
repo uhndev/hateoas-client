@@ -56,7 +56,7 @@
             vm.translations[translation.language] = angular.copy(translation.translation);
           });
           vm.languages = _.keys(vm.translations);
-          vm.translationKeys = _.pluck(translations, 'translationKeys');
+          vm.translationKeys = _.pluck(translations, 'translationKey');
         })
         .then(function () {
           vm.translationsReady = true;
@@ -137,10 +137,11 @@
      * @param newLang     Key of new language i.e. en_US
      */
     function cloneLanguage(oldLang, newLangKey, newLang) {
+      var newTranslationKey = 'COMMON.LANGUAGES.' + angular.uppercase(newLangKey);
       if (_.contains(vm.languages, newLang)) {
         toastr.warning('The language ' + newLang + ' already exists!', 'Translation');
       }
-      else if (_.contains(vm.translationKeys, newLangKey)) {
+      else if (_.contains(vm.translationKeys, newTranslationKey)) {
         toastr.warning('A language with translation key: ' + newLang + ' already exists!', 'Translation');
       }
       else {
@@ -149,7 +150,7 @@
 
         var newTranslation = new Translation({
           language: newLang,
-          translationKey: 'COMMON.LANGUAGES.' + angular.uppercase(newLangKey),
+          translationKey: newTranslationKey,
           translation: angular.copy(vm.translations[oldLang])
         });
         newTranslation.$save().then(function (data) {
