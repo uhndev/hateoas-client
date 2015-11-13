@@ -34,7 +34,15 @@
     });
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
-      $scope.pageTitle = _.titleCase($location.path()
+      var prevBaseUrl = _.parseUrl($location, prev)[0];     // e.g. /study
+      var basePath = _.pathnameToArray($location.path());
+      var currBaseUrl = _.first(basePath);                  // e.g. /user
+      if (prevBaseUrl !== currBaseUrl) { // clear submenu if base path changes
+        vm.submenu = {};
+      }
+
+      // construct pageTitle from location url
+      $scope.pageTitle = _.startCase($location.path()
         .replace(/\//g, ' ')
         .toLowerCase()
         .trim());

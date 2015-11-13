@@ -68,39 +68,10 @@
      * @param  {Array} links  response links from HATEOAS
      * @return {Array}        filtered submenu links
      */
-    this.getRoleLinks = function(links) {
+    this.getRoleLinks = function(baseRel, links) {
       return _.filter(links, function(link) {
-        return _.contains(self.subview, link.rel);
+        return _.contains(self.subview[baseRel], link.rel);
       });
-    };
-
-    /**
-     * [setSubmenu]
-     * From any submenu page, we need to parse and render a hateoas resource's
-     * links array to populate our submenu in our top level scope
-     * @param {String} currStudy     string representation of our current study state
-     * @param {Object} resource      a hateoas response object containing a links array
-     * @param {Object} submenuScope  a reference to the scope where the submenu is defined
-     */
-    this.setSubmenu = function(currStudy, resource, submenuScope) {
-      // initialize submenu
-      if (currStudy && _.has(resource, 'links') && resource.links.length > 0) {
-        // from workflowstate and current url study
-        // replace wildcards in href with study name
-        _.map(resource.links, function(link) {
-          if (link.rel === 'name' && link.prompt === '*') {
-            link.prompt = currStudy;
-          }
-          if (_.contains(link.href, '*')) {
-            link.href = link.href.replace(/\*/g, currStudy);
-          }
-          return link;
-        });
-        var submenu = {
-          links: self.getRoleLinks(resource.links)
-        };
-        angular.copy(submenu, submenuScope);
-      }
     };
 
     /**

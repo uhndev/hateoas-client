@@ -56,7 +56,7 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in ::header.navigation track by $index" dropdown
+            <li ng-repeat="link in ::header.navigation" dropdown
                 ng-class="{
                 'active': link.isActive,
                 'dropdown': link.dropdown
@@ -73,7 +73,7 @@
                 {{ link.prompt | translate }} <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
-                <li ng-repeat="droplink in link.dropdown track by $index"
+                <li ng-repeat="droplink in link.dropdown"
                     ng-class="{
                   'active': droplink.isActive
                 }">
@@ -104,27 +104,13 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.submenuCollapsed">
           <ul class="nav navbar-nav">
-            <li>
-              <a href class="navbar-brand">
-                <span class="submenu-link-colour" translate>APP.HEADER.SELECTED_STUDY</span>
-              <a/>
-            </li>
-            <li class="dropdown" dropdown>
-              <a href class="navbar-brand dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
-                <span style="color: white">{{header.submenu.links[0].prompt}} <span class="caret"></span></span>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="study in header.studies track by $index" role="menuitem"
-                    ng-class="{
-                  'active': header.submenu.links[0].prompt === study.name
-                }">
-                  <a hateoas-link state-href="/study/{{study.name}}">{{study.name}}</a>
-                </li>
-              </ul>
-            </li>
-            <li ng-repeat="link in header.submenu.links.slice(1) track by $index"
+            <li ng-repeat="link in header.submenu.links"
                 ng-class="{ 'active': link.isActive }">
-              <a hateoas-link url="{{::link.href}}">
+              <div href ng-if="link.rel == 'name'" class="navbar-brand">
+                <span class="submenu-link-colour" translate>APP.HEADER.SELECTED_STUDY</span>
+                <span style="color: white">{{ link.prompt }}</span>
+              </div>
+              <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}">
                 {{ link.prompt | translate }}
               </a>
             </li>

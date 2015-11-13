@@ -6,7 +6,8 @@
       'dados.auth.service',
       'dados.header.constants',
       'dados.header.directive',
-      'dados.header.controller'
+      'dados.header.controller',
+      'dados.header.service'
     ]);
 
 })();
