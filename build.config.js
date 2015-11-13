@@ -91,8 +91,7 @@ module.exports = {
       // angular dependencies
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
-      'vendor/lodash/dist/lodash.js',
-      'vendor/lodash-contrib/dist/lodash-contrib.js',
+      'vendor/lodash/lodash.js',
       'sails-io-settings.js',
       'vendor/sails.io.js/dist/sails.io.js',
 

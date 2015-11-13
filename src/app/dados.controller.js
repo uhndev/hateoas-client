@@ -41,7 +41,7 @@
         vm.submenu = {};
       }
 
-      $scope.pageTitle = _.titleCase($location.path()
+      $scope.pageTitle = _.startCase($location.path()
         .replace(/\//g, ' ')
         .toLowerCase()
         .trim());
