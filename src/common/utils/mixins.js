@@ -8,8 +8,6 @@
 (function() {
 	'use strict';
 
-  var _ = _ || window._;
-
 	_.mixin({
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
