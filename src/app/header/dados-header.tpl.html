@@ -109,11 +109,12 @@
             <li ng-repeat="link in header.submenu.links"
                 ng-class="{ 'active': link.isActive }">
               <div href ng-if="link.rel == 'name'" class="navbar-brand">
-                <span class="submenu-link-colour" context-translator translate="APP.HEADER.SELECTED"></span>
+                <span class="submenu-link-colour" context-translator="APP.HEADER.SELECTED" translate>APP.HEADER.SELECTED</span>
                 <span style="color: white">{{ link.prompt }}</span>
               </div>
-              <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}">
-                {{ link.prompt | translate }}
+              <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}"
+                 context-translator="{{link.prompt}}">
+                <span translate>{{link.prompt}}</span>
               </a>
             </li>
           </ul>

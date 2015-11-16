@@ -1,5 +1,5 @@
 <div ng-controller="StudySubjectController as studySubject">
-  <h1 id="Title">
+  <h1 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
     {{ pageTitle }}
     <small translate translate-values="{ total: studySubject.resource.total }">
       COMMON.HATEOAS.TITLE.TOTAL
@@ -18,27 +18,31 @@
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.read"
               ng-click="studySubject.openSubject()"
-              ng-disabled="!!!studySubject.selected">
+              ng-disabled="!!!studySubject.selected"
+              context-translator="APP.STUDY.SUBJECT.CONTROLS.OPEN_BTN">
         <i class="fa fa-folder-o"></i>
         <span translate>APP.STUDY.SUBJECT.CONTROLS.OPEN_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.create"
-              ng-click="studySubject.openAddSubject()">
+              ng-click="studySubject.openAddSubject()"
+              context-translator="APP.STUDY.SUBJECT.CONTROLS.NEW_BTN">
         <i class="fa fa-file-o"></i>
         <span translate>APP.STUDY.SUBJECT.CONTROLS.NEW_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.update"
               ng-click="studySubject.openEditSubject()"
-              ng-disabled="!!!studySubject.selected">
+              ng-disabled="!!!studySubject.selected"
+              context-translator="APP.STUDY.SUBJECT.CONTROLS.EDIT_BTN">
         <i class="fa fa-edit"></i>
         <span translate>APP.STUDY.SUBJECT.CONTROLS.EDIT_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySubject.allow.delete"
               ng-click="studySubject.archiveSubject()"
-              ng-disabled="!!!studySubject.selected">
+              ng-disabled="!!!studySubject.selected"
+              context-translator="APP.STUDY.SUBJECT.CONTROLS.ARCHIVE_BTN">
         <i class="fa fa-trash-o"></i>
         <span translate>APP.STUDY.SUBJECT.CONTROLS.ARCHIVE_BTN</span>
       </button>

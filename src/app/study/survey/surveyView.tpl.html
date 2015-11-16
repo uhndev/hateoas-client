@@ -1,5 +1,5 @@
 <div ng-controller="StudySurveyController as studySurvey">
-  <h1 id="Title">
+  <h1 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
     {{ pageTitle }}
     <small translate translate-values="{ total: studySurvey.resource.total }">
       COMMON.HATEOAS.TITLE.TOTAL
@@ -18,27 +18,31 @@
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.read"
               ng-click="studySurvey.openSurvey()"
-              ng-disabled="!!!studySurvey.selected">
+              ng-disabled="!!!studySurvey.selected"
+              context-translator="APP.STUDY.SURVEY.CONTROLS.OPEN_BTN">
         <i class="fa fa-folder-o"></i>
         <span translate>APP.STUDY.SURVEY.CONTROLS.OPEN_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.create"
-              ng-click="studySurvey.openAddSurvey()">
+              ng-click="studySurvey.openAddSurvey()"
+              context-translator="APP.STUDY.SURVEY.CONTROLS.NEW_BTN">
         <i class="fa fa-file-o"></i>
         <span translate>APP.STUDY.SURVEY.CONTROLS.NEW_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.update"
               ng-click="studySurvey.openEditSurvey()"
-              ng-disabled="!!!studySurvey.selected">
+              ng-disabled="!!!studySurvey.selected"
+              context-translator="APP.STUDY.SURVEY.CONTROLS.EDIT_BTN">
         <i class="fa fa-edit"></i>
         <span translate>APP.STUDY.SURVEY.CONTROLS.EDIT_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studySurvey.allow.delete"
               ng-click="studySurvey.archiveSurvey()"
-              ng-disabled="!!!studySurvey.selected">
+              ng-disabled="!!!studySurvey.selected"
+              context-translator="APP.STUDY.SURVEY.CONTROLS.ARCHIVE_BTN">
         <i class="fa fa-trash-o"></i>
         <span translate>APP.STUDY.SURVEY.CONTROLS.ARCHIVE_BTN</span>
       </button>

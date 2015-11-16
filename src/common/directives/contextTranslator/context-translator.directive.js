@@ -13,35 +13,39 @@
     .directive('contextTranslator', contextTranslator)
     .controller('ContextEditorController', ContextEditorController);
 
-  ContextEditorController.$inject = ['$modalInstance', '$q', 'toastr', 'TranslationService', 'LocaleService', 'key'];
+  ContextEditorController.$inject = [
+    '$translate', '$modalInstance', '$q', 'toastr', 'TranslationService', 'LocaleService', 'key'
+  ];
 
-  function contextTranslator($modal) {
+  function contextTranslator($modal, AuthService) {
     return {
       restrict: 'A',
       link: function(scope, element, attributes) {
-        element.bind("contextmenu", function(ev) {
-          ev.preventDefault();
-          ev.stopPropagation();
+        if (AuthService.isAdmin()) {
+          element.bind("contextmenu", function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
 
-          var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'directives/contextTranslator/context-translator.tpl.html',
-            controller: 'ContextEditorController',
-            controllerAs: 'context',
-            bindToController: true,
-            size: 'lg',
-            resolve: {
-              key: function () {
-                return attributes.contextTranslator;
+            var modalInstance = $modal.open({
+              animation: true,
+              templateUrl: 'directives/contextTranslator/context-translator.tpl.html',
+              controller: 'ContextEditorController',
+              controllerAs: 'context',
+              bindToController: true,
+              size: 'lg',
+              resolve: {
+                key: function () {
+                  return attributes.contextTranslator;
+                }
               }
-            }
+            });
           });
-        });
+        }
       }
     };
   }
 
-  function ContextEditorController($modalInstance, $q, toastr, Translation, Locale, key) {
+  function ContextEditorController($translate, $modalInstance, $q, toastr, Translation, Locale, key) {
     var vm = this;
 
     // resolved
@@ -52,12 +56,6 @@
     vm.resource = [];
     vm.translations = {};
     vm.translationsReady = false;
-    vm.queries = [
-      {
-        label: key,
-        search: vm.key
-      }
-    ];
 
     // bindable methods;
     vm.saveChanges = saveChanges;
@@ -77,7 +75,15 @@
           vm.languages = _.keys(vm.translations);
         })
         .then(function () {
-          vm.translationsReady = true;
+          $translate(key).then(function (translatedKey) {
+            vm.queries = [
+              {
+                label: translatedKey,
+                search: vm.key
+              }
+            ];
+            vm.translationsReady = true;
+          });
         });
     }
 
