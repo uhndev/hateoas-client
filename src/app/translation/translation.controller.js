@@ -142,7 +142,7 @@
         toastr.warning('The language ' + newLang + ' already exists!', 'Translation');
       }
       else if (_.contains(vm.translationKeys, newTranslationKey)) {
-        toastr.warning('A language with translation key: ' + newLang + ' already exists!', 'Translation');
+        toastr.warning('A language with translation key: ' + newLangKey + ' already exists!', 'Translation');
       }
       else {
         vm.translations[newLang] = angular.copy(vm.translations[oldLang]);
