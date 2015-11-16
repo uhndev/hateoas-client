@@ -23,6 +23,11 @@
       $state.go('hateoas');
     }
 
+    /**
+     * setPageTitle
+     * @description Breaks current URL into array and attempts to translate each item accordingly.
+     *              If no translation is found, the item is returned as-is.
+     */
     function setPageTitle() {
       // construct translated pageTitle from location url
       var translatePrefix = 'COMMON.MODELS.';
