@@ -11,6 +11,7 @@
 
     // bindable variables
     vm.languages = Locale.getLocaleKeys();
+    vm.enableContextTranslation = Locale.enableContextTranslation;
     vm.translationKeys = [];
     vm.resource = [];
     vm.translations = {};
@@ -39,6 +40,7 @@
     ];
 
     // bindable methods
+    vm.toggleContextTranslation = toggleContextTranslation;
     vm.saveChanges = saveChanges;
     vm.onUpdate = onUpdate;
     vm.onRemove = onRemove;
@@ -61,6 +63,14 @@
         .then(function () {
           vm.translationsReady = true;
         });
+    }
+
+    /**
+     * toggleContextTranslation
+     * @description Toggles context menu override for translations
+     */
+    function toggleContextTranslation() {
+      Locale.enableContextTranslation = vm.enableContextTranslation;
     }
 
     /**

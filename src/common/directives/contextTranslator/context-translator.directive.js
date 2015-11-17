@@ -17,28 +17,30 @@
     '$translate', '$modalInstance', '$q', 'toastr', 'TranslationService', 'LocaleService', 'key'
   ];
 
-  function contextTranslator($modal, AuthService) {
+  function contextTranslator($modal, AuthService, LocaleService) {
     return {
       restrict: 'A',
       link: function(scope, element, attributes) {
         if (AuthService.isAdmin()) {
           element.bind("contextmenu", function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
+            if (LocaleService.enableContextTranslation) {
+              ev.preventDefault();
+              ev.stopPropagation();
 
-            var modalInstance = $modal.open({
-              animation: true,
-              templateUrl: 'directives/contextTranslator/context-translator.tpl.html',
-              controller: 'ContextEditorController',
-              controllerAs: 'context',
-              bindToController: true,
-              size: 'lg',
-              resolve: {
-                key: function () {
-                  return attributes.contextTranslator;
+              $modal.open({
+                animation: true,
+                templateUrl: 'directives/contextTranslator/context-translator.tpl.html',
+                controller: 'ContextEditorController',
+                controllerAs: 'context',
+                bindToController: true,
+                size: 'lg',
+                resolve: {
+                  key: function () {
+                    return attributes.contextTranslator;
+                  }
                 }
-              }
-            });
+              });
+            }
           });
         }
       }
