@@ -7,6 +7,7 @@
       </label>
       <input type="text"
              class="form-control"
+             context-translator="COMMON.HATEOAS.QUERY.PLACEHOLDER"
              placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
              ng-model-options="{ debounce: 700 }"
              ng-model="value"
@@ -47,12 +48,14 @@
       </div>
       <button ng-disabled="!!!field || !!!comparator || !!!value"
               class="btn btn-default"
-              ng-click="add(field.name, comparator, value)" translate>
+              ng-click="add(field.name, comparator, value)" translate
+              context-translator="{{COMMON.HATEOAS.QUERY.ADD_BTN}}">
         COMMON.HATEOAS.QUERY.ADD_BTN
       </button>
       <button ng-disabled="!!!query"
               class="btn btn-warning"
-              ng-click="reset()" translate>
+              ng-click="reset()" translate
+              context-translator="{{COMMON.HATEOAS.QUERY.RESET_BTN}}">
         COMMON.HATEOAS.QUERY.RESET_BTN
       </button>
     </form>
@@ -62,7 +65,8 @@
           ng-model="advanceSearch"
           btn-checkbox
           btn-checkbox-true="1"
-          btn-checkbox-false="0">
+          btn-checkbox-false="0"
+          context-translator="COMMON.HATEOAS.QUERY.ADVANCED.SEARCH_BTN">
     <span translate>COMMON.HATEOAS.QUERY.ADVANCED.SEARCH_BTN</span>
   </button>
 </div>

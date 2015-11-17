@@ -16,13 +16,14 @@
     var localesObj = LOCALES.locales;
 
     // locales and locales display names
-    var _LOCALES = Object.keys(localesObj);
+    var _LOCALES = _.keys(localesObj);
     var _LOCALES_DISPLAY_NAMES = [];
 
     // STORING CURRENT LOCALE
     var currentLocale = $translate.proposedLanguage();// because of async loading
 
     var service = {
+      currentLocale: currentLocale,
       localesObj: localesObj,
       _LOCALES: _LOCALES,
       _LOCALES_DISPLAY_NAMES: _LOCALES_DISPLAY_NAMES,
@@ -65,16 +66,16 @@
      */
 
     function init() {
-      if (!_LOCALES || _LOCALES.length === 0) {
+      if (!service._LOCALES || service._LOCALES.length === 0) {
         console.error('There are no _LOCALES provided');
       }
-      _LOCALES.forEach(function (locale) {
-        _LOCALES_DISPLAY_NAMES.push(localesObj[locale]);
+      service._LOCALES.forEach(function (locale) {
+        service._LOCALES_DISPLAY_NAMES.push(service.localesObj[locale]);
       });
     }
 
     function checkLocaleIsValid(locale) {
-      return _LOCALES.indexOf(locale) !== -1;
+      return service._LOCALES.indexOf(locale) !== -1;
     }
 
     function setLocale(locale) {
@@ -82,7 +83,7 @@
         console.error('Locale name "' + locale + '" is invalid');
         return;
       }
-      currentLocale = locale;// updating current locale
+      service.currentLocale = locale;// updating current locale
       // asking angular-translate to load and apply proper translations
       $translate.use(locale);
     }
@@ -92,7 +93,7 @@
      */
 
     function getLocaleDisplayName() {
-      return localesObj[currentLocale];
+      return service.localesObj[service.currentLocale];
     }
 
     /**
@@ -102,8 +103,8 @@
      */
     function setLocaleByDisplayName(localeDisplayName) {
       setLocale(
-        _LOCALES[
-          _LOCALES_DISPLAY_NAMES.indexOf(localeDisplayName)// get locale index
+        service._LOCALES[
+          service._LOCALES_DISPLAY_NAMES.indexOf(localeDisplayName)// get locale index
         ]
       );
     }
@@ -114,7 +115,7 @@
      * @returns {*}
      */
     function getLocaleKeys() {
-      return _.keys(LOCALES.locales);
+      return _.keys(service._LOCALES);
     }
 
     /**
@@ -123,7 +124,7 @@
      * @returns {Array}
      */
     function getLocalesDisplayNames() {
-      return _LOCALES_DISPLAY_NAMES;
+      return service._LOCALES_DISPLAY_NAMES;
     }
 
     /**
@@ -154,12 +155,17 @@
     function updateLocales() {
       Translation.query().$promise
         .then(function (translations) {
+          delete service.localesObj;
+          delete service._LOCALES;
+          delete service._LOCALES_DISPLAY_NAMES;
+
+          service.localesObj = {};
           _.each(translations, function (translation) {
-            localesObj[translation.language] = translation.translationKey;
+            service.localesObj[translation.language] = translation.translationKey;
             localStorageService.set(translation.language, angular.copy(translation.translation));
           });
-          _LOCALES = Object.keys(localesObj);
-          _LOCALES_DISPLAY_NAMES = _.pluck(translations, 'translationKey');
+          service._LOCALES = _.keys(service.localesObj);
+          service._LOCALES_DISPLAY_NAMES = _.pluck(translations, 'translationKey');
           $translate.refresh();
           $rootScope.$broadcast('locales.update');
         });

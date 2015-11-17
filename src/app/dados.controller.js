@@ -5,9 +5,9 @@
     .module('dados')
     .controller('DadosController', DadosController);
 
-  DadosController.$inject = ['$scope', '$state', '$location', 'AuthService', 'LocaleService'];
+  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'AuthService'];
 
-  function DadosController($scope, $state, $location, Auth, Locale) {
+  function DadosController($scope, $state, $translate, $rootScope, $location, Auth) {
 
     var vm = this;
     vm.submenu = {};
@@ -17,18 +17,40 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      Locale.updateLocales();
       if (_.isEmpty($location.path())) {
         $location.path('/study');
       }
       $state.go('hateoas');
     }
 
+    /**
+     * setPageTitle
+     * @description Breaks current URL into array and attempts to translate each item accordingly.
+     *              If no translation is found, the item is returned as-is.
+     */
+    function setPageTitle() {
+      // construct translated pageTitle from location url
+      var translatePrefix = 'COMMON.MODELS.';
+      var translateSuffix = '.IDENTITY';
+      var currentPaths = _.pathnameToArray($location.path());
+      var possibleKeys = _.map(currentPaths, function (path) {
+        return [translatePrefix, path.toUpperCase(), translateSuffix].join('');
+      });
+
+      $translate(possibleKeys).then(function (translations) {
+        $scope.pageTitle = _.map(_.zip(possibleKeys, currentPaths), function (path) {
+          // if translation found, replace with translation
+          if (!_.startsWith(translations[path[0]], translatePrefix)) {
+            return _.capitalize(translations[path[0]]);
+          }
+          return _.capitalize(path[1]);
+        }).join(' ');
+      });
+    }
+
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
-      if (_.has(Auth.currentUser, 'group') &&
-        Auth.currentUser.group.level > 1 &&
-        (page == '/systemformbuilder' || page == '/formbuilder' || page == '/access')) {
+      if (!Auth.isAdmin() && Auth.isAdminPage(page)) {
         $location.path('/400');
       }
     });
@@ -42,10 +64,12 @@
       }
 
       // construct pageTitle from location url
-      $scope.pageTitle = _.startCase($location.path()
-        .replace(/\//g, ' ')
-        .toLowerCase()
-        .trim());
+      setPageTitle();
+    });
+
+    // on successful applying translations by angular-translate
+    $rootScope.$on('$translateChangeSuccess', function (event, data) {
+      setPageTitle();
     });
 
     $scope.$on('submenu.clear', function(e) {
