@@ -11,6 +11,11 @@
       </div>
       <div class="pull-right">
         <br/>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="tc.enableContextTranslation" ng-change="tc.toggleContextTranslation()"/> Enable Context Translation
+          </label>
+        </div>
         <button type="button"
                 class="btn btn-success"
                 ng-click="tc.saveChanges()">

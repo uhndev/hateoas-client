@@ -23,6 +23,7 @@
     var currentLocale = $translate.proposedLanguage();// because of async loading
 
     var service = {
+      enableContextTranslation: false,
       currentLocale: currentLocale,
       localesObj: localesObj,
       _LOCALES: _LOCALES,
