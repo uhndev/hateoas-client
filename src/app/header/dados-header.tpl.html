@@ -62,8 +62,13 @@
                 'active': link.isActive,
                 'dropdown': link.dropdown
               }">
+              <!-- UI-State or Single Link -->
+              <a ui-sref="{{::link.sref}}" ng-if="link.sref">
+                <i class="fa {{ ::link.icon }}"></i>
+                <span translate>{{link.prompt}}</span>
+              </a>
               <!-- Single Link -->
-              <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown">
+              <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown && link.href && !link.sref">
                 <i class="fa {{ ::link.icon }}"></i>
                 <span translate>{{link.prompt}}</span>
               </a>

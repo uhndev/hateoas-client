@@ -1,0 +1,28 @@
+<div layout="row" class="subjectportal">
+  <md-content flex>
+    <md-tabs md-dynamic-height md-border-bottom class="md-accent">
+      <md-tab label="My Studies" >
+        <md-content class="md-padding">
+          <table ng-table="sp.tableParams" class="table table-hover ng-table-responsive">
+            <tr ng-repeat="studySubject in sp.studySubjects">
+              <td sortable="'subjectNumber'" data-title="'Subject ID'">
+                {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
+              </td>
+              <td sortable="'studyName'" data-title="'Study Name'">
+                {{studySubject.studyName}}
+              </td>
+              <td sortable="'collectionCentreName'" data-title="'Collection Centre'">
+                {{studySubject.collectionCentreName}}
+              </td>
+            </tr>
+          </table>
+        </md-content>
+      </md-tab>
+      <md-tab label="Upcoming Surveys">
+        <md-content class="md-padding">
+          <pre>{{sp.subjectSchedules | json}}</pre>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>

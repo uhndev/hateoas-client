@@ -13,7 +13,6 @@
 @import '../../vendor/bootstrap/less/bootstrap.less';
 @import '../../vendor/bootstrap/less/glyphicons.less';
 @import '../../vendor/font-awesome/less/font-awesome.less';
-@import (inline) '../../vendor/angular-timeline/dist/angular-timeline-bootstrap.css';
 
 /**
  * This is our main variables file. We must include it last so we can overwrite any variable
@@ -28,9 +27,11 @@
 
 @font-face {
   font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto Regular'), local('Roboto-Regular'), url(fonts/Roboto-Regular.woff) format('woff');
+  src: url("Roboto-Regular.eot");
+  src: url('Roboto-Regular.eot?#iefix') format('embedded-opentype'),
+  url('Roboto-Regular.woff') format('woff'),
+  url('Roboto-Regular.ttf') format('truetype'),
+  url('Roboto-Regular.svg') format('svg');
 }
 
 @font-face {
@@ -123,6 +124,7 @@ a {
 @import '../app/access/access.less';
 @import '../app/workflow/workflow.less';
 @import '../app/study/studyViewOverview.less';
+@import '../app/subjectportal/subjectportal.less';
 
 @import '../common/directives/formBuilder/form-builder.less';
 @import '../common/directives/pluginEditor/plugin-editor.less';
@@ -133,5 +135,5 @@ a {
 @import (inline) '../../vendor/angular-multi-select/isteven-multi-select.css';
 @import (inline) '../../vendor/jquery-ui/themes/base/jquery-ui.css';
 @import (inline) '../../vendor/angular-timeline/dist/angular-timeline.css';
-@import (inline) '../../vendor/angular-timeline/dist/angular-timeline-animations.css';
+@import (inline) '../../vendor/angular-material/angular-material.css';
 
