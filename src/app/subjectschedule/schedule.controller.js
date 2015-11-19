@@ -26,9 +26,6 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      if (_.has($location.search(), "form")) {
-        vm.url += '/form/' + $location.search().form;
-      }      
       var SubjectSchedule = $resource(vm.url);
       
       SubjectSchedule.get(function(data, headers) {
@@ -37,7 +34,6 @@
         } else {
           vm.form = data;
         }
-        console.log(vm.form);
         $scope.$broadcast("FormLoaded", vm.form);
       });
     }
