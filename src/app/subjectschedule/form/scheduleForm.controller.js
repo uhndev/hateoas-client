@@ -1,29 +1,22 @@
 (function() {
   'use strict';
   angular
-    .module('dados.schedule.controller', [
-      'dados.common.services.resource',
-      'dados.common.directives.selectLoader',
-      'dados.common.directives.simpleTable'
+    .module('dados.schedule.form.controller', [
+      'dados.common.services.resource'
     ])
-    .controller('ScheduleController', ScheduleController);
+    .controller('ScheduleFormController', ScheduleFormController);
 
-  ScheduleController.$inject = [
+  ScheduleFormController.$inject = [
     '$scope', '$resource', '$location', 'toastr', 'API', 'AuthService'
   ];
 
-  function ScheduleController($scope, $resource, $location, toastr, API, AuthService) {
+  function ScheduleFormController($scope, $resource, $location, toastr, API, AuthService) {
     var vm = this;
 
     // bindable variables
     vm.url = API.url() + $location.path();
-
-    // bindable methods
-    
     
     init();
-
-    ///////////////////////////////////////////////////////////////////////////
 
     function init() {
       var SubjectSchedule = $resource(vm.url);

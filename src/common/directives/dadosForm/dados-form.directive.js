@@ -1,11 +1,7 @@
 /**
  * @name dados-form
- * @description Directive representation of an individual grid element (question).
- *              Expects a question object from the array form.questions. This directive
- *              is used in plugin-editor.tpl.html as part of an ng-repeat.
- *
- * @example  <dados-form source="vm.form">
-             </dados-form>
+ * @description Directive that renders the form based on broadcasted data. Listens for 'FormLoaded' event.
+ * @see  dados.schedule.form.controller
  */
 
 (function() {
@@ -21,10 +17,7 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'directives/dadosForm/dados-form.tpl.html',
-        controller: 'DadosFormController',
-        scope: {
-          source: '='
-        }
+        controller: 'DadosFormController'
       };
     });
 })();

@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
 	angular.module('dados.schedule', [
-	  'dados.schedule.controller',
+	  'dados.schedule.form.controller',
 	]);
 })();
