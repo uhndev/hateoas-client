@@ -132,7 +132,9 @@
                   </div>
                 </td>
                 <td data-title="'Status'">
+                  <a href="#/subjectschedule/{{::schedule.id}}?form={{::schedule.scheduledForm.id}}">
                   {{(schedule.type !== 'non-scheduled') ? schedule.scheduledForm.status : 'N/A'}}
+                  </a>
                 </td>
               </tr>
             </tbody>

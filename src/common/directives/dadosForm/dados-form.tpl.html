@@ -1,0 +1,15 @@
+<ng-form name="plugin">
+  <h2 id="Title">{{form.name}}</h2>
+  <ol class="form-horizontal" ng-model="questions" class="ui-grid" style="padding-top: 30px;">
+    <li ng-repeat="widget in questions track by $index" class="panel panel-default" ng-style="widget.css">
+      <ui-widget ng-if="widget.template" widget="widget"
+                 widget-model="widget"
+                 class="panel-body"></ui-widget>
+    </li>	
+  </ol>    
+  <button class="btn btn-default pull-right" ng-model="isSaving"
+          ng-click="saveFormAnswers()" ng-disabled="isSaving">
+    <span class="glyphicon glyphicon-floppy-disk" tooltip="Save form"></span>
+    Save
+  </button>
+</ng-form>

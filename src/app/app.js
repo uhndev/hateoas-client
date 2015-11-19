@@ -18,6 +18,7 @@
       'dados.access',
       'dados.auth',
       'dados.study',
+      'dados.schedule',
       'dados.subject',
       'dados.survey',
       'dados.user',

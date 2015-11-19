@@ -78,6 +78,10 @@
         var pathArr = _.pathnameToArray(path);
         var model = _.first(pathArr);
         var fragment;
+        
+        // process path with two regexes
+        // to strip study name (/study/leap to /study) then to strip ids (/subject/1 to /subject)
+        
         if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
           var view = _.last(pathArr);
           fragment = '<div ng-controller="HateoasController as hateoas">';
