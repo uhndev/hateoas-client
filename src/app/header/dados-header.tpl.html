@@ -18,7 +18,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 hidden-xs">
-              <small id="tagline" translate>HEADER.TAGLINE</small>
+              <small id="tagline" context-translator="APP.HEADER.TAGLINE" translate>APP.HEADER.TAGLINE</small>
             </div>
           </div>
         </div>
@@ -56,7 +56,8 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in ::header.navigation track by $index" dropdown
+            <li ng-repeat="link in ::header.navigation" dropdown
+                context-translator="{{link.prompt}}"
                 ng-class="{
                 'active': link.isActive,
                 'dropdown': link.dropdown
@@ -64,22 +65,23 @@
               <!-- Single Link -->
               <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown">
                 <i class="fa {{ ::link.icon }}"></i>
-                {{ link.prompt | translate }}
+                <span translate>{{link.prompt}}</span>
               </a>
               <!-- Dropdown Link -->
               <a href class="dropdown-toggle" ng-if="link.dropdown"
                  dropdown-toggle role="button" aria-expanded="false">
                 <i class="fa {{ ::link.icon }}"></i>
-                {{ link.prompt | translate }} <span class="caret"></span>
+                <span translate>{{link.prompt}}</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
-                <li ng-repeat="droplink in link.dropdown track by $index"
+                <li context-translator="{{droplink.prompt}}"
+                    ng-repeat="droplink in link.dropdown"
                     ng-class="{
-                  'active': droplink.isActive
-                }">
+                      'active': droplink.isActive
+                    }">
                   <a hateoas-link state-href="{{ ::droplink.href }}">
                     <i class="fa {{ ::droplink.icon }}"></i>
-                    {{ droplink.prompt | translate }}
+                    <span translate>{{ droplink.prompt }}</span>
                   </a>
                 </li>
               </ul>
@@ -104,28 +106,15 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.submenuCollapsed">
           <ul class="nav navbar-nav">
-            <li>
-              <a href class="navbar-brand">
-                <span class="submenu-link-colour" translate>HEADER.SELECTED_STUDY</span>
-              <a/>
-            </li>
-            <li class="dropdown" dropdown>
-              <a href class="navbar-brand dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
-                <span style="color: white">{{header.submenu.links[0].prompt}} <span class="caret"></span></span>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="study in header.studies track by $index" role="menuitem"
-                    ng-class="{
-                  'active': header.submenu.links[0].prompt === study.name
-                }">
-                  <a hateoas-link state-href="/study/{{study.name}}">{{study.name}}</a>
-                </li>
-              </ul>
-            </li>
-            <li ng-repeat="link in header.submenu.links.slice(1) track by $index"
+            <li ng-repeat="link in header.submenu.links"
                 ng-class="{ 'active': link.isActive }">
-              <a hateoas-link url="{{::link.href}}">
-                {{ link.prompt | translate }}
+              <div href ng-if="link.rel == 'name'" class="navbar-brand">
+                <span class="submenu-link-colour" context-translator="APP.HEADER.SELECTED" translate>APP.HEADER.SELECTED</span>
+                <span style="color: white">{{ link.prompt }}</span>
+              </div>
+              <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}"
+                 context-translator="{{link.prompt}}">
+                <span translate>{{link.prompt}}</span>
               </a>
             </li>
           </ul>

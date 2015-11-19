@@ -10,10 +10,10 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams', 'API', 'AuthService', 'SubjectScheduleService'
+    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams', 'API', 'HeaderService', 'SubjectScheduleService'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams, API, AuthService, SubjectSchedule) {
+  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams, API, HeaderService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables
@@ -59,7 +59,11 @@
         });
 
         // initialize submenu
-        AuthService.setSubmenu(vm.resource.studyName, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: vm.resource.studyName,
+          value: vm.resource.studyName,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
       });
     }
 

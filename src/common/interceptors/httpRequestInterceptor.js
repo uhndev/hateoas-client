@@ -59,9 +59,9 @@
         switch (response.status) {
           case 400:
             if (response.data.status == 401 || response.status == 401) {
-              title = response.data.message;
               $location.path('/login');
               $injector.get('AuthService').setUnauthenticated();
+              return $q.reject(response);
             }
             break;
           case 403: $location.path('/400'); break;

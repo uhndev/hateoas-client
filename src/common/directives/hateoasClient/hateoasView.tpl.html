@@ -2,7 +2,7 @@
   <h1 id="Title">
     {{ pageTitle }}
     <small translate translate-values="{ total: hateoas.resource.total }">
-      HATEOAS.TITLE.TOTAL
+      COMMON.HATEOAS.TITLE.TOTAL
     </small>
   </h1>
   <div id="Query" class="clearfix">
@@ -29,6 +29,7 @@
         <th ng-repeat="column in hateoas.template.data track by $index"
           ng-if="!column.data"
           class="text-center sortable"
+          context-translator="{{column.prompt}}"
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
           <span translate>{{ column.prompt }}</span> <i class="pull-left" ng-class="{
             'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),

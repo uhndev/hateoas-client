@@ -19,17 +19,6 @@
       "json"      : "json"
     };
 
-    var BASE_FIELD = {
-      field_validation: {
-        rule: "none",
-        expression: ""
-      },
-      field_helpertext: 'required',
-      field_options: [],
-      field_hasOptions: false,
-      field_required: true
-    };
-
     /**
      * [formToObject - converts a form to an object]
      * @param  {[form]} form [form object]
@@ -54,8 +43,16 @@
       var fields = {
         field_name: item.name,
         field_title: item.prompt,
-        field_placeholder: _.titleCase(relation + ' ' + item.prompt),
-        field_type: TYPE_MAP[item.type]
+        field_placeholder: _.startCase(relation) + ' ' + _.startCase(item.prompt),
+        field_type: TYPE_MAP[item.type],
+        field_validation: {
+          rule: "none",
+          expression: ""
+        },
+        field_helpertext: 'required',
+        field_options: [],
+        field_hasOptions: false,
+        field_required: true
       };
       if (_.isArray(item.value)) { // for enum fields
         fields.field_type = 'dropdown';
@@ -78,7 +75,7 @@
      */
     function transformDeep(list, listField, relation) {
       if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
-        return _.merge(list, _.chain(BASE_FIELD).merge(toField(list, relation)).value());
+        return _.merge(list, toField(list, relation));
       } else if (!_.isArray(list) && _.has(list, listField)) { // single model field
         return _.merge(list, {
           field_helpertext: 'required',
@@ -87,7 +84,7 @@
           field_required: true,
           field_type: 'singleselect',
           field_name: list.name,
-          field_title: _.titleCase(list.name),
+          field_title: _.startCase(list.name),
           field_userURL: list.type,
           field_questions: _.map(list[listField], function (dataItem, index) {
             dataItem.field_id = index + 1;
@@ -148,7 +145,7 @@
       return {
         form_type: "system",
         form_name: template.rel + "_form",
-        form_title: _.titleCase(template.rel) + " Form",
+        form_title: _.startCase(template.rel) + " Form",
         form_submitText: "Submit",
         form_cancelText: "Cancel",
         form_questions: questions

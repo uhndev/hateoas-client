@@ -5,10 +5,10 @@
     .controller('HeaderController', HeaderController);
 
   HeaderController.$inject = [
-    '$scope', '$location', '$translate', '$rootScope', 'StudyService', 'AuthService', 'API'
+    '$scope', '$location', '$translate', '$rootScope', 'AuthService', 'API'
   ];
 
-  function HeaderController($scope, $location, $translate, $rootScope, Study, AuthService, API) {
+  function HeaderController($scope, $location, $translate, $rootScope, AuthService, API) {
 
     var vm = this;
 
@@ -16,7 +16,6 @@
     vm.isVisible = AuthService.isAuthenticated();
     vm.currentUser = '';
     vm.navigation = [];
-    vm.studies = [];
 
     // bindable methods
     vm.logout = logout;
@@ -29,7 +28,6 @@
     function init() {
       vm.locale = $translate.use();
       if (AuthService.isAuthenticated()) {
-        vm.studies = Study.query();
         updateHeader();
       }
       updateActive();
@@ -108,14 +106,6 @@
 
     $rootScope.$on('$translateChangeSuccess', function (event, data) {
       vm.locale = data.language;
-    });
-
-    // header loads before authentication is valid, so wait until navigation populated
-    var unreg = $scope.$watch('header.navigation', function(oldVal, newVal) {
-      if (oldVal !== newVal && !_.isEmpty(oldVal)) {
-        vm.studies = Study.query();
-        unreg();
-      }
     });
   }
 

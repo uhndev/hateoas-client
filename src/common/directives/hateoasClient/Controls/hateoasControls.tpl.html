@@ -2,6 +2,7 @@
   <button type="button" class="btn btn-default"
     ng-repeat="button in controls track by $index"
     ng-click="launch(button, item)"
+    context-translator="{{button.prompt}}"
     ng-disabled="button.requiresItem && !!!item">
     <i class="fa {{ button.icon }}"></i>
     <span translate>{{ button.prompt }}</span>

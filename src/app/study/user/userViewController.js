@@ -6,16 +6,13 @@
 			'dados.study.user.addUser.controller',
 			'dados.collectioncentre.service'
 		])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studyuser');
-    })
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
-		'$scope', '$q', '$location', '$modal', 'AuthService', 'UserEnrollment', 'toastr', 'API'
+		'$scope', '$q', '$location', '$modal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
 	];
 
-	function StudyUserController($scope, $q, $location, $modal, AuthService, UserEnrollment, toastr, API) {
+	function StudyUserController($scope, $q, $location, $modal, HeaderService, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
@@ -60,13 +57,13 @@
           {
             "name": columnName,
             "type": columnType,
-            "prompt": "USER_ENROLLMENT.COLLECTION_CENTRE",
+            "prompt": "COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE",
             "value": centreHref
           },
           {
             "name": "centreAccess",
             "type": "string",
-            "prompt": "USER_ENROLLMENT.CENTRE_ACCESS",
+            "prompt": "COMMON.MODELS.USER_ENROLLMENT.CENTRE_ACCESS",
             "value": "role"
           }
         ]);
@@ -78,7 +75,11 @@
         });
 
         // initialize submenu
-        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: currStudy,
+          value: currStudy,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
       }
 
       return data;

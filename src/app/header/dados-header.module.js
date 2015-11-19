@@ -6,10 +6,8 @@
       'dados.auth.service',
       'dados.header.constants',
       'dados.header.directive',
-      'dados.header.controller'
-    ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('header');
-    });
+      'dados.header.controller',
+      'dados.header.service'
+    ]);
 
 })();

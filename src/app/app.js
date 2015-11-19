@@ -10,6 +10,7 @@
       'ngSanitize',
       'pascalprecht.translate',
       'tmh.dynamicLocale',
+      'LocalStorageModule',
 
       'templates-app',
       'templates-common',
@@ -27,6 +28,7 @@
       'dados.formbuilder',
       'dados.systemformbuilder',
       'dados.collectioncentre',
+      'dados.translation',
 
       'dados.filters.formatter',
       'dados.filters.type',
@@ -38,27 +40,24 @@
     .constant('LOCALES', {
       'locales': {
         'en_US': 'COMMON.LANGUAGES.ENGLISH',
-        'fr': 'COMMON.LANGUAGES.FRENCH'
+        'fr': 'COMMON.LANGUAGES.FRENCH',
+        'altum': 'COMMON.LANGUAGES.ALTUM'
       },
       preferredLocale: 'en_US'
     })
     .config(dadosConfig);
 
   dadosConfig.$inject = [
-    '$stateProvider', '$translateProvider', '$translatePartialLoaderProvider', '$tooltipProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
+    '$stateProvider', '$translateProvider', '$tooltipProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
   ];
 
-  function dadosConfig($stateProvider, $translateProvider, $translatePartialLoaderProvider, $tooltipProvider, dynamicLocale, toastrConfig) {
+  function dadosConfig($stateProvider, $translateProvider, $tooltipProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
 
-    $translateProvider.useLoader('$translatePartialLoader', {
-      urlTemplate: 'i18n/{part}-{lang}.json'
-    });
-
-    $translatePartialLoaderProvider.addPart('common');
-    $translateProvider.determinePreferredLanguage();
+    $translateProvider.useLoader('localeLoader');
+    $translateProvider.preferredLanguage('en_US');
     $translateProvider.useMissingTranslationHandlerLog();
     $translateProvider.useSanitizeValueStrategy('escaped');
 

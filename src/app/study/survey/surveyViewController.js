@@ -7,16 +7,13 @@
       'dados.study.survey.addSurvey.controller',
       'dados.study.survey.editSurvey.controller'
     ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studysurvey');
-    })
     .controller('StudySurveyController', StudySurveyController);
 
   StudySurveyController.$inject = [
-    '$scope', '$location', '$resource', '$modal', 'AuthService', 'toastr', 'StudyService', 'SurveyService', 'API'
+    '$scope', '$location', '$resource', '$modal', 'HeaderService', 'toastr', 'StudyService', 'SurveyService', 'API'
   ];
 
-  function StudySurveyController($scope, $location, $resource, $modal, AuthService, toastr, Study, Survey, API) {
+  function StudySurveyController($scope, $location, $resource, $modal, HeaderService, toastr, Study, Survey, API) {
 
     var vm = this;
 
@@ -111,7 +108,11 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: currStudy,
+          value: currStudy,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
       }
       return data;
     }

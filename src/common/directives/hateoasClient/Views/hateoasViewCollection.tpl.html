@@ -8,7 +8,7 @@
           'sort-desc': tableParams.isSortBy(column.name, 'desc')
         }"
         ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-        {{ column.prompt }}
+        <span translate>{{ column.prompt }}</span>
       </th>
     </tr>
   </thead>
