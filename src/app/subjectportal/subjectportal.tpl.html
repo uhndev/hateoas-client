@@ -3,24 +3,51 @@
     <md-tabs md-dynamic-height md-border-bottom class="md-accent">
       <md-tab label="My Studies" >
         <md-content class="md-padding">
-          <table ng-table="sp.tableParams" class="table table-hover ng-table-responsive">
-            <tr ng-repeat="studySubject in sp.studySubjects">
-              <td sortable="'subjectNumber'" data-title="'Subject ID'">
-                {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
-              </td>
-              <td sortable="'studyName'" data-title="'Study Name'">
-                {{studySubject.studyName}}
-              </td>
-              <td sortable="'collectionCentreName'" data-title="'Collection Centre'">
-                {{studySubject.collectionCentreName}}
-              </td>
-            </tr>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Subject ID</th>
+                <th>Study Name</th>
+                <th>Collection Centre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="studySubject in sp.studySubjects">
+                <td>{{studySubject.subjectNumber | formatter:{"type": "mrn"} }}</td>
+                <td>{{studySubject.studyName}}</td>
+                <td>{{studySubject.collectionCentreName}}</td>
+              </tr>
+            </tbody>
+
           </table>
         </md-content>
       </md-tab>
       <md-tab label="Upcoming Surveys">
         <md-content class="md-padding">
-          <pre>{{sp.subjectSchedules | json}}</pre>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Subject ID</th>
+                <th>Study Name</th>
+                <th>Collection Centre</th>
+                <th>Survey Name</th>
+                <th>Session Name</th>
+                <th>Available From</th>
+                <th>Available To</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="scheduleSubject in sp.scheduleSubjects">
+                <td>{{scheduleSubject.subjectNumber | formatter:{"type": "mrn"} }}</td>
+                <td>{{scheduleSubject.studyName}}</td>
+                <td>{{scheduleSubject.collectionCentreName}}</td>
+                <td>{{scheduleSubject.surveyName}}</td>
+                <td>{{scheduleSubject.name}}</td>
+                <td>{{scheduleSubject.availableFrom | date:'EEE, MMM d, y'}}</td>
+                <td>{{scheduleSubject.availableTo | date:'EEE, MMM d, y'}}</td>
+              </tr>
+            </tbody>
+          </table>
         </md-content>
       </md-tab>
     </md-tabs>

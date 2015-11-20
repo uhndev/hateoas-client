@@ -17,8 +17,8 @@
             StudySubjects: function (StudySubjectService) {
               return StudySubjectService.query();
             },
-            SubjectSchedules: function (SubjectScheduleService) {
-              return SubjectScheduleService.query({ 'populate': 'subjectEnrollment' });
+            ScheduleSubjects: function (ScheduleSubjectsService) {
+              return ScheduleSubjectsService.query();
             }
           }
         });
