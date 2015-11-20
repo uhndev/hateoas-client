@@ -8,8 +8,5 @@
       'dados.study.form',
       'dados.study.survey',
       'dados.study.service'
-    ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('study-overview');
-    });
+    ]);
 })();

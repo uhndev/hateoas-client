@@ -1,8 +1,8 @@
 <div ng-controller="StudyUserController as studyUser">
-  <h1 id="Title">
+  <h1 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
     {{ pageTitle }}
-    <small>
-      Total: {{studyUser.resource.total}}
+    <small translate translate-values="{ total: studyUser.resource.total }">
+      COMMON.HATEOAS.TITLE.TOTAL
     </small>
   </h1>
   <div id="Query" class="clearfix">
@@ -18,28 +18,32 @@
       <button type="button" class="btn btn-default"
               ng-if="studyUser.allow.read"
               ng-click="studyUser.openUser()"
-              ng-disabled="!!!studyUser.selected">
+              ng-disabled="!!!studyUser.selected"
+              context-translator="APP.STUDY.USER.CONTROLS.OPEN_BTN">
         <i class="fa fa-folder-o"></i>
-        <span translate>STUDY_USER.CONTROLS.OPEN_BTN</span>
+        <span translate>APP.STUDY.USER.CONTROLS.OPEN_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studyUser.allow.create"
-              ng-click="studyUser.openAddUser()">
+              ng-click="studyUser.openAddUser()"
+              context-translator="APP.STUDY.USER.CONTROLS.NEW_BTN">
         <i class="fa fa-file-o"></i>
-        <span translate>STUDY_USER.CONTROLS.NEW_BTN</span>
+        <span translate>APP.STUDY.USER.CONTROLS.NEW_BTN</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studyUser.allow.update"
-              ng-click="studyUser.saveChanges()">
+              ng-click="studyUser.saveChanges()"
+              context-translator="APP.STUDY.USER.CONTROLS.SAVE_CHANGES">
         <i class="fa fa-floppy-o"></i>
-        <span translate>STUDY_USER.CONTROLS.EDIT_BTN</span>
+        <span translate>APP.STUDY.USER.CONTROLS.SAVE_CHANGES</span>
       </button>
       <button type="button" class="btn btn-default"
               ng-if="studyUser.allow.delete"
               ng-click="studyUser.archiveUser()"
-              ng-disabled="!!!studyUser.selected">
+              ng-disabled="!!!studyUser.selected"
+              context-translator="APP.STUDY.USER.CONTROLS.ARCHIVE_BTN">
         <i class="fa fa-trash-o"></i>
-        <span translate>STUDY_USER.CONTROLS.ARCHIVE_BTN</span>
+        <span translate>APP.STUDY.USER.CONTROLS.ARCHIVE_BTN</span>
       </button>
     </div>
   </div>

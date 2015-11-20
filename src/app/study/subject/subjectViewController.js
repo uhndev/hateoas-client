@@ -8,17 +8,14 @@
       'dados.common.directives.hateoas.controls',
       'dados.subject.service'
     ])
-    .config(function config( $translatePartialLoaderProvider ) {
-      $translatePartialLoaderProvider.addPart('studysubject');
-    })
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
-    '$scope', '$location', '$modal', 'AuthService', 'toastr',
+    '$scope', '$location', '$modal', 'HeaderService', 'toastr',
     'API', 'StudyService', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
-  function StudySubjectController($scope, $location, $modal, AuthService, toastr,
+  function StudySubjectController($scope, $location, $modal, HeaderService, toastr,
                                   API, Study, SubjectEnrollment, Subject) {
 
     var vm = this;
@@ -89,7 +86,11 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        AuthService.setSubmenu(currStudy, data, $scope.dados.submenu);
+        HeaderService.setSubmenu({
+          prompt: currStudy,
+          value: currStudy,
+          rel: 'study'
+        }, data, $scope.dados.submenu);
       }
       return data;
     }
