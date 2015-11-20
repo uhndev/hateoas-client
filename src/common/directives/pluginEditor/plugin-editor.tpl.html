@@ -1,60 +1,5 @@
 <div>
   <accordion close-others="false" class="plugin-editor">
-    <accordion-group is-open="isSettingsOpen">
-      <accordion-heading>
-				<span class="glyphicon "
-              ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
-				</span>
-        Settings
-      </accordion-heading>
-
-      <!-- PluginConfig -->
-      <tabset>
-        <tab heading="Settings">
-          <form>
-            <div class="form-group">
-              <label for="form-loader">Load Plugin:</label>
-              <select ng-model="idPlugin"
-                      class="form-control"
-                      ng-change="loadForm(idPlugin)"
-                      ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
-                <option value="" disabled>-- New --</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="form-name">Plugin Name:</label>
-              <ui-help popover="Provide a name for your plugin. Names must
-									be in upper case and cannot contain any spaces."
-                       popover-placement="right"></ui-help>
-              <input type="text" class="form-control"
-                     ng-model="form.name"
-                     ng-trim="true" title="Provide a name for your plugin"
-                     placeholder="Provide a name for your plugin"/>
-            </div>
-            <h3>Meta Data</h3>
-            <form-meta-editor></form-meta-editor>
-          </form>
-        </tab>
-        <tab heading="Import from JSON">
-          <label for="jsonImport">
-            Paste your form below:
-          </label>
-					<textarea id="jsonImport"
-                    class="form-control"
-                    ng-model="jsonForm" rows="10">
-					</textarea>
-          <button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
-            Import
-          </button>
-        </tab>
-        <tab heading="JSON">
-					<pre>
-						{{ form | json }}
-					</pre>
-        </tab>
-      </tabset>
-      <!-- PluginConfig -->
-    </accordion-group>
     <accordion-group is-open="isEditorOpen">
       <accordion-heading>
 				<span class="glyphicon "
@@ -62,6 +7,27 @@
 				</span>
         Configuration
       </accordion-heading>
+
+      <div class="form-group">
+        <label for="form-loader">Load Plugin:</label>
+        <select ng-model="idPlugin"
+                class="form-control"
+                ng-change="loadForm(idPlugin)"
+                ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
+          <option value="" disabled>-- New --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="form-name">Plugin Name:</label>
+        <ui-help popover="Provide a name for your plugin. Names must
+									be in upper case and cannot contain any spaces."
+                 popover-placement="right"></ui-help>
+        <input type="text" class="form-control"
+               ng-model="form.name"
+               ng-trim="true" title="Provide a name for your plugin"
+               placeholder="Provide a name for your plugin"/>
+      </div>
       <!-- PluginLayout -->
       <div ng-controller="LayoutController" class="row">
         <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
@@ -188,6 +154,42 @@
         </div>
       </div>
       <!-- PluginLayout -->
+    </accordion-group>
+    <accordion-group is-open="isSettingsOpen">
+      <accordion-heading>
+				<span class="glyphicon "
+              ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+				</span>
+        Settings
+      </accordion-heading>
+
+      <!-- PluginConfig -->
+      <tabset>
+        <tab heading="Settings">
+          <form>
+            <h3>Meta Data</h3>
+            <form-meta-editor></form-meta-editor>
+          </form>
+        </tab>
+        <tab heading="Import from JSON">
+          <label for="jsonImport">
+            Paste your form below:
+          </label>
+					<textarea id="jsonImport"
+                    class="form-control"
+                    ng-model="jsonForm" rows="10">
+					</textarea>
+          <button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
+            Import
+          </button>
+        </tab>
+        <tab heading="JSON">
+					<pre>
+						{{ form | json }}
+					</pre>
+        </tab>
+      </tabset>
+      <!-- PluginConfig -->
     </accordion-group>
   </accordion>
   <div class="controls">
