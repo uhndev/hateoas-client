@@ -12,10 +12,13 @@
   function DadosFormController($scope, $location, $timeout, AnswerSetService) {
     var vm = this;
     
-    $scope.answers = {};
-    $scope.answerSet = {};
-    $scope.saveFormAnswers = saveFormAnswers;
-    $scope.updateAnswers = updateAnswers;
+    // bindable variables
+    vm.answers = {};
+    vm.answerSet = {};
+    
+    // bindable methods
+    vm.saveFormAnswers = saveFormAnswers;
+    vm.updateAnswers = updateAnswers;
 
     /**
      * saveFormAnswers
@@ -24,58 +27,72 @@
     function saveFormAnswers() {
       updateAnswers();
       
-      if (angular.isDefined($scope.answerSetID)) {
+      if (angular.isDefined(vm.answerSetID)) {
         AnswerSetService.save({
-          answers : $scope.answers,
-          id : $scope.answerSetID
+          answers : vm.answers,
+          id : vm.answerSetID
         });
       } else {
         AnswerSetService.save({
-          answers : $scope.answers,
-          subjectEnrollmentID : $scope.form.subjectEnrollmentID,
-          sessionID : $scope.form.sessionID,
-          scheduleID : $scope.form.scheduleID,
-          formID : $scope.form.id,
+          answers : vm.answers,
+          scheduleID : vm.form.scheduleID,
+          formID : vm.form.id,
         }, onAnswerSetCreated);
       }
     }
-
+    
+    /**
+     * onAnswerSetCreated
+     * @description Callback that updates current answerSet id if it was succesfully created
+     */
     function onAnswerSetCreated(result) {
       console.log("AnswerSet created");
       console.log(result);
       if (angular.isDefined(result.id)) {
-        $scope.answerSetID = result.id;
+        vm.answerSetID = result.id;
       }
     }
     
+    /**
+     * updateAnswers
+     * @description This function iterates through questions and updates answers array
+     */
     function updateAnswers() {
-      _.each($scope.questions, function(question) {
+      _.each(vm.questions, function(question) {
         if (angular.isDefined(question.value)) {
-          $scope.answers[question.name] = question.value;
+          vm.answers[question.name] = question.value;
         }
       });
-      console.log($scope.answers);
     }
-
+    
+    /**
+     * FormLoaded
+     * @description Event that is fired from parent controller on initial form load.
+     *              Function sets up the form and tries to load answerSet if it was provided with id.
+     */ 
     $scope.$on('FormLoaded', function (e, form) {
-      $scope.form = form;
-      $scope.questions = form.questions;
+      vm.form = form;
+      vm.questions = form.questions;
       if (_.has(form, 'answerSetID')) {
-        $scope.answerSetID = form.answerSetID;
-        console.log($scope.answerSetID);
+        vm.answerSetID = form.answerSetID;
         
-        AnswerSetService.get({id: $scope.answerSetID}, function(data) {
-          $scope.answerSet = data.items;
-          $scope.answers = $scope.answerSet.answers;
+        AnswerSetService.get({id: vm.answerSetID}, function(data) {
+          vm.answerSet = data.items;
+          vm.answers = vm.answerSet.answers;
           $scope.$broadcast("AnswerSetLoaded");
         });
       }
     });
     
+    /**
+     * AnswerSetLoaded
+     * @description Event that fires when answerSet was reloaded.
+     *              Updates the question values accordingly.
+     */    
     $scope.$on('AnswerSetLoaded', function (e) {
-      _.each($scope.answers, function(answer, name) {
+      _.each(vm.answers, function(answer, name) {
       
-        var question = _.find($scope.questions, function (q) {
+        var question = _.find(vm.questions, function (q) {
           return q.name == name;
         });
         if (question !== undefined) {

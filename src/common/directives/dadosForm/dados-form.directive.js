@@ -17,7 +17,9 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'directives/dadosForm/dados-form.tpl.html',
-        controller: 'DadosFormController'
+        controller: 'DadosFormController',
+        controllerAs: 'dadosForm',
+        bindToController: true
       };
     });
 })();

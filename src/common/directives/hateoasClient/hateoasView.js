@@ -35,10 +35,7 @@
         var cleanPath = cleanURL(path);
         var last = _.last(_.pathnameToArray(cleanPath));
 
-        var modules = VIEW_MODULES;
-        if ((pathArr.length % 2) === 0) {
-          modules = ITEM_MODULES;
-        }
+        var modules = ((pathArr.length % 2) === 0) ? ITEM_MODULES : VIEW_MODULES;
         
         var templates = _.map(modules, function(module) {
           return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
@@ -79,6 +76,7 @@
         // Default: collection view (routes like /study/LEAP/collectioncentres)
         var fragment = '<div ng-controller="HateoasController as hateoas">';
         var modules = VIEW_MODULES;
+        
         if ((pathArr.length % 2) === 0) {
           // single item view (routes like /study/LEAP or /user/:id)
           modules = ITEM_MODULES;
