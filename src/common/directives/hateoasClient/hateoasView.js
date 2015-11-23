@@ -14,6 +14,17 @@
 
     function hateoasClient($location, $compile, $templateCache, VIEW_MODULES, ITEM_MODULES) {
       /**
+       * Private: cleanURL
+       * Helper function that strips out IDs and study names from URL.
+       * Returns a processed URL.
+       * @param path - the current URL path.
+       */
+      function cleanURL(path) {
+        var cleanPath = path.replace(/\/study\/.+?(?=\/|$)/, '/study'); // to strip study name (/study/leap to /study)
+        return cleanPath.replace(/(\/\d+)/g, '');                       // then to strip ids (/subject/1 to /subject)
+      }
+      
+      /**
        * Private: getTemplates
        * Returns a list of potential url's where a template could be stored.
        * @param path - the current URL path.
@@ -21,34 +32,17 @@
        */
       function getTemplates(path) {
         var pathArr = _.pathnameToArray(path);
-        var model = _.first(pathArr);
+        var cleanPath = cleanURL(path);
+        var last = _.last(_.pathnameToArray(cleanPath));
 
-        var templates;
-        if (pathArr.length === 3) {
-          var view = _.last(pathArr);
-          templates = _.map(VIEW_MODULES, function(module) {
-            return [model, '/', view, '/', view, 'View', module, '.tpl.html'].join('');
-          });
-          templates.push(
-            [model, '/', view, '/', view, 'View.tpl.html'].join('')
-          );
-        }
-        else if (pathArr.length === 2) {
-          templates = _.map(ITEM_MODULES, function(module) {
-            return [model, '/', model, 'View', module, '.tpl.html'].join('');
-          });
-          templates.push(
-            [model, '/', model, 'View.tpl.html'].join('')
-          );
-        } else {
-          templates = _.map(VIEW_MODULES, function(module) {
-            return [path.substring(1), path,
-              'View', module, '.tpl.html'].join('');
-          });
-          templates.push(
-            [path.substring(1), path, 'View.tpl.html'].join('')
-          );
-        }
+        var modules = ((pathArr.length % 2) === 0) ? ITEM_MODULES : VIEW_MODULES;
+        
+        var templates = _.map(modules, function(module) {
+          return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
+        });
+        templates.push(
+          [cleanPath.substring(1), '/', last, 'View.tpl.html'].join('')
+        );
 
         return templates;
       }
@@ -76,44 +70,29 @@
       function build(path) {
         var defaultViewLocation = 'directives/hateoasClient/Views/hateoasView';
         var pathArr = _.pathnameToArray(path);
-        var model = _.first(pathArr);
-        var fragment;
-        if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
-          var view = _.last(pathArr);
-          fragment = '<div ng-controller="HateoasController as hateoas">';
-          _.each(VIEW_MODULES, function(module) {
-            var templateUrl = [model, '/', view, '/', view,
-              'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation,
-              module, '.tpl.html'].join('');
-
-            fragment += $templateCache.get(templateUrl) ||
-              $templateCache.get(defaultUrl);
-          });
-        }
-        else if (pathArr.length === 2) { // routes like /study/LEAP or /user/:id
+        var cleanPath = cleanURL(path);
+        var last = _.last(_.pathnameToArray(cleanPath));
+        
+        // Default: collection view (routes like /study/LEAP/collectioncentres)
+        var fragment = '<div ng-controller="HateoasController as hateoas">';
+        var modules = VIEW_MODULES;
+        
+        if ((pathArr.length % 2) === 0) {
+          // single item view (routes like /study/LEAP or /user/:id)
+          modules = ITEM_MODULES;
           fragment = '<div>';
-          _.each(ITEM_MODULES, function(module) {
-            var templateUrl = [model, '/', model,
-              'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation,
-              module, '.tpl.html'].join('');
-
-            fragment += $templateCache.get(templateUrl) ||
-              $templateCache.get(defaultUrl);
-          });
-        } else {
-          fragment = '<div ng-controller="HateoasController as hateoas">';
-          _.each(VIEW_MODULES, function(module) {
-            var templateUrl = [path.substring(1), path,
-              'View', module, '.tpl.html'].join('');
-            var defaultUrl = [defaultViewLocation,
-              module, '.tpl.html'].join('');
-
-            fragment += $templateCache.get(templateUrl) ||
-              $templateCache.get(defaultUrl);
-          });
         }
+        
+        _.each(modules, function(module) {
+          var templateUrl = [cleanPath.substring(1), '/', last,
+            'View', module, '.tpl.html'].join('');
+            
+          var defaultUrl = [defaultViewLocation,
+            module, '.tpl.html'].join('');
+
+          fragment += $templateCache.get(templateUrl) ||
+            $templateCache.get(defaultUrl);
+        });
 
         fragment += '</div>';
         return fragment;
