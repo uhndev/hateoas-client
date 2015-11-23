@@ -43,7 +43,7 @@
   </div>
 
   <div class="menuWrapper" collapse="!header.isVisible">
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible && !header.isSubjectView">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"

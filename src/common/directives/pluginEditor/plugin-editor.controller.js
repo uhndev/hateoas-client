@@ -26,7 +26,7 @@
     $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
     $scope.study = $location.search()['study'];
-    $scope.form = { name: '', questions: [], metaData: {} };
+    $scope.form = {name: '', questions: [], metaData: {}};
     $scope.sortableOptions = {
       helper: "clone", // fixes the issue when click event intercepts the drop movement
       cursor: 'move',
@@ -35,6 +35,7 @@
 
     // bindable methods
     $scope.save = save;
+    $scope.archive = archive;
     $scope.importLegacy = importLegacy;
     $scope.importJson = importJson;
     $scope.loadForm = loadForm;
@@ -52,18 +53,18 @@
         });
       }
     }
-    
+
     /**
      * Function that picks only non-hateoas attributes from server response
      */
-    
+
     function pickFormAttributes(hateoas) {
       if (hateoas.hasOwnProperty('items')) {
         return _.pick(hateoas.items, 'id', 'name', 'questions', 'metaData', 'isDirty');
       } else {
         return _.pick(hateoas, 'id', 'name', 'questions', 'metaData', 'isDirty');
       }
-      
+
     }
 
     /**
@@ -127,10 +128,10 @@
      */
 
     function save(isManual) {
-      if (typeof(isManual)==='undefined') {
+      if (typeof(isManual) === 'undefined') {
         isManual = true;
       }
-    
+
       if (_.isEmpty($scope.form.name)) {
         if (isManual) {
           toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
@@ -155,6 +156,20 @@
           }
         } else if (isManual) {
           toastr.warning('No questions added yet!', 'Plugin Editor');
+        }
+      }
+    }
+
+    function archive() {
+      if ($scope.idPlugin && _.has($scope.form, 'id')) {
+        var conf = confirm("Are you sure you want to archive this form?");
+        if (conf) {
+          var form = new FormService({id: $scope.idPlugin});
+          return form.$delete().then(function () {
+            toastr.success('Form successfully archived!', 'Success');
+            $location.search('idPlugin', null);
+            $scope.forms = FormService.query();
+          });
         }
       }
     }
@@ -186,26 +201,26 @@
       }
       $location.search('idPlugin', id);
     }
-    
-    /* Debounce the $watch call with the hardcoded timeout 
+
+    /* Debounce the $watch call with the hardcoded timeout
      * so we are not trying to save the form on each change.
      * Save() will check if form is valid.
      */
     var onFormUpdate = debounceWatch($timeout, function (newVal, oldVal) {
       if ($scope.firstLoad) {
         // Suspend the first watch triggered until the end of digest cycle
-        $timeout(function() {
+        $timeout(function () {
           $scope.firstLoad = false;
         });
       } else if (!_.equalsDeep(newVal, oldVal)) {
         save(false);
       }
     }, 5000);
-    
+
     /* Have to watch for specific form changes
      * otherwise flag or timestamp updates may trigger save again.
      */
     $scope.$watch('form', onFormUpdate, true);
-    
+
   }
 })();

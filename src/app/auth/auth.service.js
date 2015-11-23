@@ -34,6 +34,8 @@
       subview: subview,
       // methods
       isAdmin: isAdmin,
+      isCoordinator: isCoordinator,
+      isSubject: isSubject,
       isAdminPage: isAdminPage,
       isAuthenticated: isAuthenticated,
       setUnauthenticated: setUnauthenticated,
@@ -48,12 +50,39 @@
     ///////////////////////////////////////////////////////////////////////////
 
     /**
+     * checkPrivilege
+     * @description Returns true if currentUser's group matches given level bro
+     * @param level
+     */
+    function checkPrivilege(level) {
+      return _.has(service.currentUser, 'group') && service.currentUser.group.level === level;
+    }
+
+    /**
      * isAdmin
      * @description Returns true if user is an admin
      * @returns {boolean}
      */
     function isAdmin() {
-      return _.has(service.currentUser, 'group') && service.currentUser.group.level === 1;
+      return checkPrivilege(1);
+    }
+
+    /**
+     * isCoordinator
+     * @description Returns true if user is a coordinator
+     * @returns {boolean}
+     */
+    function isCoordinator() {
+      return checkPrivilege(1);
+    }
+
+    /**
+     * isSubject
+     * @description Returns true if user is a subject
+     * @returns {boolean}
+     */
+    function isSubject() {
+      return checkPrivilege(3);
     }
 
     /**

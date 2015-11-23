@@ -12,15 +12,7 @@
           url: '/subjectportal',
           controller: 'SubjectPortalController',
           controllerAs: 'sp',
-          templateUrl: 'subjectportal/subjectportal.tpl.html',
-          resolve: {
-            StudySubjects: function (StudySubjectService) {
-              return StudySubjectService.query();
-            },
-            ScheduleSubjects: function (ScheduleSubjectsService) {
-              return ScheduleSubjectsService.query();
-            }
-          }
+          templateUrl: 'subjectportal/subjectportal.tpl.html'
         });
     });
 
