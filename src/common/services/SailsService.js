@@ -1,3 +1,8 @@
+/**
+ * @name sailsNgTable
+ * @description Service for parsing queries/pagination values from ng-table
+ *              (count, page) to sails.js query vocabulary (limit, skip).
+ */
 (function() {
   'use strict';
   angular
@@ -14,15 +19,15 @@
         };
 
         if (params.sorting()) {
-          pagination = _.reduce(params.sorting(), 
+          pagination = _.reduce(params.sorting(),
             function(query, value, key) {
               query.sort = [key, value].join(' ');
               return query;
           }, pagination);
         }
 
-        if (query && 
-            _.has(query, 'where') && 
+        if (query &&
+            _.has(query, 'where') &&
             !_.isEmpty(query.where)) {
           pagination = _.merge(pagination, query);
         } else {
