@@ -3,6 +3,13 @@
     <md-tabs md-dynamic-height md-border-bottom class="md-accent">
       <md-tab label="Upcoming Surveys">
         <md-content class="md-padding">
+          <h1 id="Title">
+            List of upcoming surveys:
+            <small translate translate-values="{ total: sp.scheduleSubjects.total }">
+              COMMON.HATEOAS.TITLE.TOTAL
+            </small>
+          </h1>
+          <md-divider></md-divider>
           <table ng-table="sp.scheduleTableParams" class="table table-hover ng-table-responsive">
             <tbody ng-repeat="name in $groups track by $index">
             <tr class="ng-table-group">
@@ -42,6 +49,13 @@
       </md-tab>
       <md-tab label="My Studies" >
         <md-content class="md-padding">
+          <h1 id="Title">
+            List of available studies:
+            <small translate translate-values="{ total: sp.studySubjects.total }">
+              COMMON.HATEOAS.TITLE.TOTAL
+            </small>
+          </h1>
+          <md-divider></md-divider>
           <table ng-table="sp.studyTableParams" class="table table-hover ng-table-responsive">
             <tbody ng-repeat="name in $groups track by $index">
             <tr class="ng-table-group">

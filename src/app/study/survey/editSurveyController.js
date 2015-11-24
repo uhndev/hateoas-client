@@ -85,7 +85,7 @@
         .then(function () {
           var message = 'Updated survey ' + vm.editSurvey.name;
           message += (sessionsToAdd.length > 0) ? ', added ' + sessionsToAdd.length + ' session(s) to survey' : '';
-          message += (sessionsToUpdate.length > 0) ? ', updated ' + sessionsToUpdate.length + ' session(s) from survey' : '';
+          message += (sessionsToUpdate.length > 0) ? ', updated ' + sessionsToUpdate.length + ' session(s) in survey' : '';
           message += (sessionsToRemove.length > 0) ? ', removed ' + sessionsToRemove.length + ' session(s) from survey' : '';
           toastr.success(message, 'Survey');
         })

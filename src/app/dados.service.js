@@ -11,9 +11,24 @@
 
   angular
     .module('dados')
+    .factory('localeHandlerFactory', localeHandlerFactory)
     .factory('localeLoader', localeLoader);
 
+  localeHandlerFactory.$inject = [ 'LOCALES' ];
   localeLoader.$inject = [ '$http', '$q', 'localStorageService', 'API' ];
+
+  function localeHandlerFactory(LOCALES) {
+    return function (translationID) {
+      // if translation key is missing for a common model identity, return the preceding key
+      if (_.startsWith(translationID, LOCALES.translationPrefix)) {
+        return translationID.split('.')[-2];
+      }
+      // otherwise, just take the leaf and return in startCase
+      else {
+        return _.startCase(_.last(translationID.split('.')).toLowerCase());
+      }
+    };
+  }
 
   function localeLoader($http, $q, localStorageService, API) {
     var fallback = function (promise, options) {

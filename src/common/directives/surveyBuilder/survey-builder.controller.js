@@ -100,20 +100,34 @@
         vm.cascadeDefaults = false;
         vm.isDefaultsCollapsed = true;
 
-        // check if any new forms have been added and add them if so
-        var formDiffs = _.filter(vm.forms, function (form) {
-          return !_.contains(_.pluck(vm.survey.defaultFormVersions, 'id'), form.id);
+        // update any out of date info in survey.defaultFormVersions (if name/revision changed)
+        _.map(vm.survey.defaultFormVersions, function (formVersion) {
+          var updatedForm = _.find(vm.forms, { id: formVersion.id });
+          if (updatedForm) {
+            formVersion.name = updatedForm.name;
+            formVersion.revision = updatedForm.revision;
+          }
+          return formVersion;
         });
 
-        // add any new forms to survey.defaultFormVersions
-        if (formDiffs.length > 0) {
-          _.each(formDiffs, function (formToAdd) {
-            formToAdd.active = false;
-            vm.survey.defaultFormVersions.push(formToAdd);
+        var formDiffs = _.findArrayDiff(_.pluck(vm.forms, 'id'), _.pluck(vm.survey.defaultFormVersions, 'id'));
+
+        // check if any new forms have been added and add them if so
+        if (!_.isEmpty(formDiffs.toAdd)) {
+          _.each(formDiffs.toAdd, function (formToAdd) {
+            var newForm = _.find(vm.forms, { id: formToAdd });
+            newForm.active = false;
+            vm.survey.defaultFormVersions.push(newForm);
+          });
+        }
+        // check if any new forms have been removed and remove them if so
+        if (!_.isEmpty(formDiffs.toRemove)) {
+          vm.survey.defaultFormVersions = _.reject(vm.survey.defaultFormVersions, function (formVersion) {
+            return _.contains(formDiffs.toRemove, formVersion.id);
           });
         }
 
-        // add any new forms to each session.formOrder
+        // add any new forms to each session.formOrder (list of forms per session)
         var formIds = _.pluck(vm.forms, 'id');
         _.map(vm.survey.sessions, function (session) {
           var diff = _.difference(formIds, session.formOrder);

@@ -30,7 +30,7 @@
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, vm.studyQuery);
           StudySubjects.query(api,function (studySubjects) {
-            vm.studySubjects = angular.copy(studySubjects.items);
+            vm.studySubjects = angular.copy(studySubjects);
             params.total(studySubjects.total);
             $defer.resolve(studySubjects.items);
           });
@@ -46,7 +46,7 @@
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, vm.scheduleQuery);
           ScheduleSubjects.query(api, function (scheduleSubjects) {
-            vm.scheduleSubjects = angular.copy(scheduleSubjects.items);
+            vm.scheduleSubjects = angular.copy(scheduleSubjects);
             params.total(scheduleSubjects.total);
             $defer.resolve(scheduleSubjects.items);
           });

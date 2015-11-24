@@ -49,7 +49,9 @@
         'fr': 'COMMON.LANGUAGES.FRENCH',
         'altum': 'COMMON.LANGUAGES.ALTUM'
       },
-      preferredLocale: 'en_US'
+      'translationPrefix': 'COMMON.MODELS.',
+      'translateSuffix': '.IDENTITY',
+      'preferredLocale': 'en_US'
     })
     .config(dadosConfig);
 
@@ -66,6 +68,7 @@
     $translateProvider.preferredLanguage('en_US');
     $translateProvider.useMissingTranslationHandlerLog();
     $translateProvider.useSanitizeValueStrategy('escaped');
+    $translateProvider.useMissingTranslationHandler('localeHandlerFactory');
 
     dynamicLocale.localeLocationPattern('vendor/angular-i18n/angular-locale_{{locale}}.js');
 
