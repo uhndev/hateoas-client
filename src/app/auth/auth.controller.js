@@ -6,20 +6,20 @@
 
   angular
     .module('dados.auth.controller', [
+      'dados.auth.constants',
       'ngCookies'
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookies', 'AuthService'];
+  AuthController.$inject = ['$location', '$state', '$cookies', 'DefaultRouteService', 'AuthService'];
 
-  function AuthController($location, $state, $cookies, AuthService) {
+  function AuthController($location, $state, $cookies, DefaultRouteService, AuthService) {
     var vm = this;
     vm.error = '';
 
     // check if already logged in
     if (AuthService.isAuthenticated()) {
-      $location.url('/study');
-      $state.go('hateoas');
+      DefaultRouteService.route(AuthService.currentUser.group.level);
     } else {
       $location.url('/login');
       $state.go('login');
@@ -39,8 +39,7 @@
           expires: new Date(now.getTime() + (60000 * user.token.expires))
         });
         AuthService.setAuthenticated();
-        $location.url('/study');
-        $state.go('hateoas');
+        DefaultRouteService.route(AuthService.currentUser.group.level);
       }
     };
 

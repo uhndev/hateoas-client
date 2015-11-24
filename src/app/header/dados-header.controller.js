@@ -14,6 +14,7 @@
 
     // bindable variables
     vm.isVisible = AuthService.isAuthenticated();
+    vm.isSubjectView = AuthService.isSubject();
     vm.currentUser = '';
     vm.navigation = [];
 
@@ -99,6 +100,7 @@
 
     $rootScope.$on('events.authorized', function() {
       vm.isVisible = true;
+      vm.isSubjectView = AuthService.isSubject();
       updateHeader();
     });
 

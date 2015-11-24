@@ -8,13 +8,16 @@
       'ngAnimate',
       'ngResource',
       'ngSanitize',
+      'ngMaterial',
       'pascalprecht.translate',
       'tmh.dynamicLocale',
       'LocalStorageModule',
 
+      // html templateCaches
       'templates-app',
       'templates-common',
 
+      // dados admin pages
       'dados.constants',
       'dados.access',
       'dados.auth',
@@ -29,6 +32,9 @@
       'dados.systemformbuilder',
       'dados.collectioncentre',
       'dados.translation',
+
+      // dados subject portal
+      'dados.subjectportal',
 
       'dados.filters.formatter',
       'dados.filters.type',
@@ -48,10 +54,10 @@
     .config(dadosConfig);
 
   dadosConfig.$inject = [
-    '$stateProvider', '$translateProvider', '$tooltipProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
+    '$stateProvider', '$translateProvider', '$tooltipProvider', '$mdThemingProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
   ];
 
-  function dadosConfig($stateProvider, $translateProvider, $tooltipProvider, dynamicLocale, toastrConfig) {
+  function dadosConfig($stateProvider, $translateProvider, $tooltipProvider, $mdThemingProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
@@ -75,6 +81,12 @@
     $tooltipProvider.options({
       appendToBody: true
     });
+
+    $mdThemingProvider.theme('default')
+      .primaryPalette('orange')
+      .accentPalette('light-blue', {
+        'default': '800'
+      });
   }
 
 })();

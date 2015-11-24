@@ -1,0 +1,72 @@
+<div layout="row" class="subjectportal">
+  <md-content flex>
+    <md-tabs md-dynamic-height md-border-bottom class="md-accent">
+      <md-tab label="Upcoming Surveys">
+        <md-content class="md-padding">
+          <table ng-table="sp.scheduleTableParams" class="table table-hover ng-table-responsive">
+            <tbody ng-repeat="name in $groups track by $index">
+            <tr class="ng-table-group">
+              <td colspan="{{$columns.length}}">
+                <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                  <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+                  <strong>{{ name.value }}</strong>
+                </a>
+              </td>
+            </tr>
+            <tr ng-hide="name.$hideRows" ng-repeat="scheduleSubject in name.data track by $index">
+              <td sortable="'subjectNumber'" data-title="'Subject ID'">
+                {{scheduleSubject.subjectNumber | formatter:{"type": "mrn"} }}
+              </td>
+              <td sortable="'studyName'" data-title="'Study Name'">
+                {{scheduleSubject.studyName}}
+              </td>
+              <td sortable="'collectionCentreName'" data-title="'Collection Centre'">
+                {{scheduleSubject.collectionCentreName}}
+              </td>
+              <td sortable="'surveyName'" data-title="'Survey Name'">
+                {{scheduleSubject.surveyName}}
+              </td>
+              <td sortable="'name'" data-title="'Encounter'">
+                {{scheduleSubject.name}}
+              </td>
+              <td sortable="'availableFrom'" data-title="'Available From'">
+                {{scheduleSubject.availableFrom | date:'EEE, MMM d, y'}}
+              </td>
+              <td sortable="'availableTo'" data-title="'Available To'">
+                {{scheduleSubject.availableTo | date:'EEE, MMM d, y'}}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </md-content>
+      </md-tab>
+      <md-tab label="My Studies" >
+        <md-content class="md-padding">
+          <table ng-table="sp.studyTableParams" class="table table-hover ng-table-responsive">
+            <tbody ng-repeat="name in $groups track by $index">
+            <tr class="ng-table-group">
+              <td colspan="{{$columns.length}}">
+                <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                  <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+                  <strong>{{ name.value }}</strong>
+                </a>
+              </td>
+            </tr>
+            <tr ng-hide="name.$hideRows" ng-repeat="studySubject in name.data track by $index">
+              <td sortable="'subjectNumber'" data-title="'Subject ID'">
+                {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
+              </td>
+              <td sortable="'studyName'" data-title="'Study Name'">
+                {{studySubject.studyName}}
+              </td>
+              <td sortable="'collectionCentreName'" data-title="'Collection Centre'">
+                {{studySubject.collectionCentreName}}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>

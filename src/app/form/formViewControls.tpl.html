@@ -1,0 +1,15 @@
+<div id="Controls" class="align-right">
+  <div class="btn-group">
+    <a type="button" class="btn btn-default"
+       href="#/formbuilder">
+      <i class="fa fa-file-o"></i>
+      New
+    </a>
+    <a type="button" class="btn btn-default"
+       href="#/formbuilder?idPlugin={{hateoas.selected.id}}"
+       ng-disabled="!!!hateoas.selected">
+      <i class="fa fa-edit"></i>
+      Edit
+    </a>
+  </div>
+</div>

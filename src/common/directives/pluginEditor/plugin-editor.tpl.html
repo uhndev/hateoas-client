@@ -193,10 +193,17 @@
     </accordion-group>
   </accordion>
   <div class="controls">
+    <button type="button" class="btn btn-default pull-right"
+            ng-disabled="!!!idPlugin"
+            ng-click="archive()">
+      <span class="glyphicon glyphicon-trash"
+            tooltip="Archive form"></span>
+      Archive
+    </button>
     <button class="btn btn-default pull-right" ng-model="isSaving"
             ng-click="save()" ng-disabled="isSaving">
 			<span class="glyphicon glyphicon-floppy-disk"
-            tooltip="Save plugin"></span>
+            tooltip="Save form"></span>
       Save
     </button>
   </div>

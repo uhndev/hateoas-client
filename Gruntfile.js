@@ -20,6 +20,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-json-minify');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   /**
    * Load in our build configuration file.
@@ -374,6 +375,15 @@ module.exports = function ( grunt ) {
       }
     },
 
+    connect: {
+      build: {
+        options: {
+          port: 8080,
+          base: 'build'
+        }
+      }
+    },
+
     /**
      * The `replace` task replaces the appropriate socket.io url in
      * sails-io-settings.js to match the environment and adds the livereload script
@@ -577,7 +587,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'connect:build', 'delta' ] );
   grunt.registerTask( 'compile_ts', [ 'ts:dev' ] );
 
   /**
