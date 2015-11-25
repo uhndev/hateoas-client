@@ -17,6 +17,12 @@
   localeHandlerFactory.$inject = [ 'LOCALES' ];
   localeLoader.$inject = [ '$http', '$q', 'localStorageService', 'API' ];
 
+  /**
+   * localeHandlerFactory
+   * @description Factory that handles scenarios where a translation ID is given, but no translation exists.
+   * @param LOCALES
+   * @returns {Function}
+     */
   function localeHandlerFactory(LOCALES) {
     return function (translationID) {
       // if translation key is missing for a common model identity, return the preceding key

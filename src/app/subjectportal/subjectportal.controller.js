@@ -3,11 +3,21 @@
 
   angular
     .module('dados.subjectportal.controller', [])
+    .constant('PORTAL_TABS', [
+      {
+        prompt: 'Upcoming Surveys',
+        value: 'schedule'
+      },
+      {
+        prompt: 'My Studies',
+        value: 'study'
+      }
+    ])
     .controller('SubjectPortalController', SubjectPortalController);
 
-  SubjectPortalController.$inject = [ 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'ScheduleSubjectsService' ];
+  SubjectPortalController.$inject = [ '$injector', 'ngTableParams', 'sailsNgTable', 'PORTAL_TABS' ];
 
-  function SubjectPortalController(TableParams, SailsNgTable, StudySubjects, ScheduleSubjects) {
+  function SubjectPortalController($injector, TableParams, SailsNgTable, PORTAL_TABS) {
     var vm = this;
 
     // bindable variables
@@ -23,15 +33,18 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      vm.studyTableParams = getPortalTable('study');
-      vm.scheduleTableParams = getPortalTable('schedule');
+      _.each(PORTAL_TABS, function (tab) {
+        vm[tab.value + 'TableParams'] = getPortalTable(tab.value);
+      });
     }
 
+    /**
+     * getPortalTable
+     * @description Returns an ngTableParams definition by type, which are all defined in the PORTAL_TABS constant.
+     * @param type  Any tab.value in PORTAL_TABS
+     * @returns {Object}
+       */
     function getPortalTable(type) {
-      var settings = {};
-      settings.query = (type == 'study') ? vm.studyQuery : vm.scheduleQuery;
-      settings.resource = (type == 'study') ? StudySubjects : ScheduleSubjects;
-
       return new TableParams({
         page: 1,
         count: 10,
@@ -39,9 +52,10 @@
       }, {
         groupBy: 'studyName',
         getData: function($defer, params) {
-          var api = SailsNgTable.parse(params, (type == 'study') ? vm.studyQuery : vm.scheduleQuery);
-          settings.resource.query(api, function (resource) {
-            angular.copy(resource, (type == 'study') ? vm.studySubjects : vm.scheduleSubjects);
+          var api = SailsNgTable.parse(params, vm[type + 'Query']);
+          var Resource = $injector.get(_.startCase(type) + 'SubjectService');
+          Resource.query(api, function (resource) {
+            angular.copy(resource, vm[type + 'Subjects']);
             params.total(resource.total);
             $defer.resolve(resource.items);
           });

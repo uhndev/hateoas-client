@@ -3,16 +3,16 @@
   angular
     .module('dados.subjectportal.constants', ['dados.constants'])
     .service('STUDYSUBJECT_API', StudySubject)
-    .service('SCHEDULESUBJECTS_API', ScheduleSubjects);
+    .service('SCHEDULESUBJECT_API', ScheduleSubject);
 
   StudySubject.$inject = ['API'];
-  ScheduleSubjects.$inject = ['API'];
+  ScheduleSubject.$inject = ['API'];
 
   function StudySubject(API) {
     return { url: API.url() + '/studysubject/:id' };
   }
 
-  function ScheduleSubjects(API) {
+  function ScheduleSubject(API) {
     return {url: API.url() + '/schedulesubjects/:id'};
   }
 
