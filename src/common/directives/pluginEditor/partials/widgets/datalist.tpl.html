@@ -1,6 +1,6 @@
 <input type="text"
 	ng-model="widgetModel.value"
-	id="uuid:{{ widget.uuid || plugin.id + ':' + widget.id}}"
+	id="uuid:{{ widget.name }}"
 	name="{{ widget.name }}"
 	typeahead="option.name as option.name for option in widget.properties.options | filter:{name: $viewValue}"
 	maxlength="{{widget.properties.maxlength}}"
