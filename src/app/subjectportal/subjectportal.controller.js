@@ -31,7 +31,6 @@
       var settings = {};
       settings.query = (type == 'study') ? vm.studyQuery : vm.scheduleQuery;
       settings.resource = (type == 'study') ? StudySubjects : ScheduleSubjects;
-      settings.value = (type == 'study') ? vm.studySubjects : vm.scheduleSubjects;
 
       return new TableParams({
         page: 1,
@@ -42,7 +41,7 @@
         getData: function($defer, params) {
           var api = SailsNgTable.parse(params, (type == 'study') ? vm.studyQuery : vm.scheduleQuery);
           settings.resource.query(api, function (resource) {
-            settings.value = angular.copy(resource);
+            angular.copy(resource, (type == 'study') ? vm.studySubjects : vm.scheduleSubjects);
             params.total(resource.total);
             $defer.resolve(resource.items);
           });

@@ -6,7 +6,10 @@
     <tab heading="Define Survey" active="sb.STAGES['DEFINE_SURVEY']">
       <ng-form name="sb.surveyForm" class="form-horizontal" novalidate>
         <div class="form-group">
-          <label for="name" class="col-sm-3 control-label">Survey Name&nbsp;</label>
+          <label for="name" class="col-sm-3 control-label"
+                 context-translator="COMMON.MODELS.SURVEY.NAME">
+            <span translate>COMMON.MODELS.SURVEY.NAME</span>&nbsp;
+          </label>
 
           <div class="col-sm-9">
             <input type="text" name="name" class="form-control"
@@ -17,7 +20,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="completedBy" class="col-sm-3 control-label">Completed By&nbsp;</label>
+          <label for="completedBy" class="col-sm-3 control-label"
+                 context-translator="COMMON.MODELS.SURVEY.COMPLETED_BY">
+            <span translate>COMMON.MODELS.SURVEY.COMPLETED_BY</span>&nbsp;
+          </label>
 
           <div class="col-sm-9">
             <select name="completedBy" class="form-control" ng-model="sb.survey.completedBy" required>
