@@ -192,6 +192,11 @@
       return _.inArray(session.formVersions, formId);
     }
 
+    /**
+     * onToggleCascadeDefaults
+     * @description Click handler for the toggle checkbox; if checkbox was true, changes in left panel will propogate
+     *              to all sessions in the Survey Builder interface.
+     */
     function onToggleCascadeDefaults() {
       if (vm.cascadeDefaults) {
         var formOrder = _.map(_.pluck(vm.survey.defaultFormVersions, 'id'), function (formId) { return parseInt(formId); });
