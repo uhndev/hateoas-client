@@ -10,10 +10,12 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams', 'API', 'HeaderService', 'SubjectScheduleService'
+    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams',
+    'API', 'moment', 'HeaderService', 'SubjectScheduleService'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams, API, HeaderService, SubjectSchedule) {
+  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams,
+                                     API, moment, HeaderService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables
@@ -111,10 +113,15 @@
      * @param schedule
      */
     function saveSchedule(schedule) {
-      SubjectSchedule.update(_.pick(schedule, 'id', 'availableFrom', 'availableTo'), function () {
-        toastr.success('Updated scheduled session ' + schedule.name + ' for form ' + schedule.scheduledForm.name, 'Form');
-        init();
-      });
+      if (moment(schedule.availableFrom).isBefore(schedule.availableTo) ||
+          moment(schedule.availableFrom).isSame(schedule.availableTo)) {
+        SubjectSchedule.update(_.pick(schedule, 'id', 'availableFrom', 'availableTo'), function () {
+          toastr.success('Updated scheduled session ' + schedule.name + ' for form ' + schedule.scheduledForm.name, 'Form');
+          init();
+        });
+      } else {
+        toastr.warning('Available From must be a date before Available To!', 'Schedule');
+      }
     }
   }
 })();

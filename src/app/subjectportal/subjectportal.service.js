@@ -7,10 +7,10 @@
       'dados.common.services.resource'
     ])
     .service('StudySubjectService', StudySubjectService)
-    .service('ScheduleSubjectsService', ScheduleSubjectsService);
+    .service('ScheduleSubjectService', ScheduleSubjectService);
 
   StudySubjectService.$inject = ['$resource', 'STUDYSUBJECT_API'];
-  ScheduleSubjectsService.$inject = ['$resource', 'SCHEDULESUBJECTS_API'];
+  ScheduleSubjectService.$inject = ['$resource', 'SCHEDULESUBJECT_API'];
 
   function StudySubjectService($resource, STUDYSUBJECT) {
     return $resource(STUDYSUBJECT.url, {id : '@id'},
@@ -23,8 +23,8 @@
     );
   }
 
-  function ScheduleSubjectsService($resource, SCHEDULESUBJECTS) {
-    return $resource(SCHEDULESUBJECTS.url, {id : '@id'},
+  function ScheduleSubjectService($resource, SCHEDULESUBJECT) {
+    return $resource(SCHEDULESUBJECT.url, {id : '@id'},
       {
         'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
         'query' : {method: 'GET', isArray: false },

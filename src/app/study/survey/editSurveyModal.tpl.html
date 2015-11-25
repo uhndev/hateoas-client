@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3 class="modal-title">Edit Survey</h3>
+  <h3 class="modal-title" translate>APP.STUDY.SURVEY.CONTROLS.EDIT_BTN</h3>
 </div>
 <div class="modal-body" ng-class="{ 'text-center': editSurvey.saving }">
   <div ng-class="{ 'dots-loader': editSurvey.saving }"></div>
@@ -10,12 +10,14 @@
 </div>
 <div class="modal-footer">
   <button type="submit" id="submitSurvey" class="btn btn-primary"
-          ng-disabled="!editSurvey.isValid || editSurvey.saving" ng-click="editSurvey.save()">
-    Save
+          ng-disabled="!editSurvey.isValid || editSurvey.saving" ng-click="editSurvey.save()"
+          context-translator="APP.STUDY.SURVEY.CONTROLS.SAVE_BTN" translate>
+    APP.STUDY.SURVEY.CONTROLS.SAVE_BTN
   </button>
   <button type="button" id="cancelBtn" class="btn btn-warning"
           ng-disabled="editSurvey.saving"
-          ng-click="editSurvey.cancel()">
-    Cancel
+          ng-click="editSurvey.cancel()"
+          context-translator="APP.STUDY.SURVEY.CONTROLS.CANCEL_BTN" translate>
+    APP.STUDY.SURVEY.CONTROLS.CANCEL_BTN
   </button>
 </div>

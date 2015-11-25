@@ -48,7 +48,7 @@
       var modalScope = $scope.$new(true);
       modalScope.item = (method === 'post' ?
           {} : angular.copy($scope.item));
-      modalScope.template = $scope.template;
+      modalScope.template = angular.copy($scope.template);
 
       var instance = $modal.open({
         templateUrl: 'directives/hateoasClient/Modal/hateoasModal.tpl.html',

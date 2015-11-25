@@ -5,9 +5,9 @@
     .module('dados')
     .controller('DadosController', DadosController);
 
-  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'AuthService'];
+  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'LOCALES', 'AuthService'];
 
-  function DadosController($scope, $state, $translate, $rootScope, $location, Auth) {
+  function DadosController($scope, $state, $translate, $rootScope, $location, LOCALES, Auth) {
 
     var vm = this;
     vm.submenu = {};
@@ -30,17 +30,15 @@
      */
     function setPageTitle() {
       // construct translated pageTitle from location url
-      var translatePrefix = 'COMMON.MODELS.';
-      var translateSuffix = '.IDENTITY';
       var currentPaths = _.pathnameToArray($location.path());
       var possibleKeys = _.map(currentPaths, function (path) {
-        return [translatePrefix, path.toUpperCase(), translateSuffix].join('');
+        return [LOCALES.translationPrefix, path.toUpperCase(), LOCALES.translationSuffix].join('');
       });
 
       $translate(possibleKeys).then(function (translations) {
         $scope.pageTitle = _.map(_.zip(possibleKeys, currentPaths), function (path) {
           // if translation found, replace with translation
-          if (!_.startsWith(translations[path[0]], translatePrefix)) {
+          if (!_.startsWith(translations[path[0]], LOCALES.translationPrefix)) {
             return _.capitalize(translations[path[0]]);
           }
           return _.capitalize(path[1]);
