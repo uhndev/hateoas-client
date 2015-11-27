@@ -3,26 +3,26 @@
 
 	angular
 		.module('dados.access.service', [
-      'dados.access.constants',
+      'dados.constants',
       'dados.common.services.resource'
     ])
     .service('RoleService', RoleService)
 		.service('GroupService', GroupService)
 		.service('ModelService', ModelService);
 
-  RoleService.$inject = ['ResourceFactory', 'ROLE_API'];
-	GroupService.$inject = ['ResourceFactory', 'GROUP_API'];
-	ModelService.$inject = ['ResourceFactory', 'MODEL_API'];
+  [RoleService, GroupService, ModelService].map(function (service) {
+    service.$inject = ['ResourceFactory', 'API'];
+  });
 
-  function RoleService(ResourceFactory, ROLE_API) {
-    return ResourceFactory.create(ROLE_API.url);
+  function RoleService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('role'));
   }
 
-	function GroupService(ResourceFactory, GROUP_API) {
-		return ResourceFactory.create(GROUP_API.url);
+	function GroupService(ResourceFactory, API) {
+		return ResourceFactory.create(API.url('group'));
 	}
 
-	function ModelService(ResourceFactory, MODEL_API) {
-		return ResourceFactory.create(MODEL_API.url);
+	function ModelService(ResourceFactory, API) {
+		return ResourceFactory.create(API.url('model'));
 	}
 })();

@@ -2,15 +2,15 @@
   'use strict';
   angular
     .module('dados.form.service', [
-      'dados.form.constants',
+      'dados.constants',
       'dados.common.services.resource'
     ])
     .service('SystemFormService', SystemFormService);
 
-  SystemFormService.$inject = ['ResourceFactory', 'SYSTEMFORM_API'];
+  SystemFormService.$inject = ['ResourceFactory', 'API'];
 
-  function SystemFormService(ResourceFactory, SYSTEMFORM_API) {
-    return ResourceFactory.create(SYSTEMFORM_API.url);
+  function SystemFormService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('systemform'));
   }
 
 })();

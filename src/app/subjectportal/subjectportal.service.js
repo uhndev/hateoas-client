@@ -3,17 +3,17 @@
 
   angular
     .module('dados.subjectportal.service', [
-      'dados.subjectportal.constants',
-      'dados.common.services.resource'
+      'dados.constants'
     ])
     .service('StudySubjectService', StudySubjectService)
     .service('ScheduleSubjectService', ScheduleSubjectService);
 
-  StudySubjectService.$inject = ['$resource', 'STUDYSUBJECT_API'];
-  ScheduleSubjectService.$inject = ['$resource', 'SCHEDULESUBJECT_API'];
+  [StudySubjectService, ScheduleSubjectService].map(function (service) {
+    service.$inject = ['$resource', 'API'];
+  });
 
-  function StudySubjectService($resource, STUDYSUBJECT) {
-    return $resource(STUDYSUBJECT.url, {id : '@id'},
+  function StudySubjectService($resource, API) {
+    return $resource(API.url('studysubject'), {id : '@id'},
       {
         'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
         'query' : {method: 'GET', isArray: false },
@@ -23,8 +23,8 @@
     );
   }
 
-  function ScheduleSubjectService($resource, SCHEDULESUBJECT) {
-    return $resource(SCHEDULESUBJECT.url, {id : '@id'},
+  function ScheduleSubjectService($resource, API) {
+    return $resource(API.url('schedulesubjects'), {id : '@id'},
       {
         'get' : {method: 'GET', isArray: false, transformResponse: _.transformHateoas },
         'query' : {method: 'GET', isArray: false },

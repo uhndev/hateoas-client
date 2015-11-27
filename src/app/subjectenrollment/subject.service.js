@@ -3,27 +3,27 @@
 
   angular
     .module('dados.subject.service', [
-      'dados.subject.constants',
+      'dados.constants',
       'dados.common.services.resource'
     ])
     .service('SubjectService', SubjectService)
     .service('SubjectEnrollmentService', SubjectEnrollmentService)
     .service('SubjectScheduleService', SubjectScheduleService);
 
-  SubjectService.$inject = ['ResourceFactory', 'SUBJECT_API'];
-  SubjectEnrollmentService.$inject = ['ResourceFactory', 'SUBJECTENROLLMENT_API'];
-  SubjectScheduleService.$inject = ['ResourceFactory', 'SUBJECTSCHEDULE_API'];
+  [SubjectService, SubjectEnrollmentService, SubjectScheduleService].map(function (service) {
+    service.$inject = ['ResourceFactory', 'API'];
+  });
 
-  function SubjectService(ResourceFactory, SUBJECT_API) {
-    return ResourceFactory.create(SUBJECT_API.url);
+  function SubjectService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('subject'));
   }
 
-  function SubjectEnrollmentService(ResourceFactory, SUBJECTENROLLMENT_API) {
-    return ResourceFactory.create(SUBJECTENROLLMENT_API.url);
+  function SubjectEnrollmentService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('subjectenrollment'));
   }
 
-  function SubjectScheduleService(ResourceFactory, SUBJECTSCHEDULE_API) {
-    return ResourceFactory.create(SUBJECTSCHEDULE_API.url);
+  function SubjectScheduleService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('subjectschedule'));
   }
 
 })();

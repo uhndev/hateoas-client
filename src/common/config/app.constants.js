@@ -12,8 +12,8 @@
 			base: function getBase() {
 				return BASE.protocol + "://" + BASE.host + ":" + BASE.port;
 			},
-			url: function getUrl() {
-				return this.base() + BASE.prefix;
+			url: function getUrl(model) {
+				return this.base() + BASE.prefix + (model ? ('/' + model + '/:id') : '');
 			},
 			csrfToken: function getToken() {
 				return this.base() + '/csrfToken';
