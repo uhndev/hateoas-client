@@ -128,6 +128,7 @@ module.exports = {
       'vendor/angular-translate-editor/dist/angular-translate-editor.js',
       'vendor/angular-translate-handler-log/angular-translate-handler-log.js',
       'vendor/angular-translate-loader-url/angular-translate-loader-url.js',
+      'vendor/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
       'vendor/angular-translate-storage-local/angular-translate-storage-local.js',
       'vendor/angular-dynamic-locale/dist/tmhDynamicLocale.js',
       'vendor/angular-i18n/angular-locale_en-us.js',
