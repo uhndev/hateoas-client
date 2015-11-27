@@ -3,15 +3,15 @@
 
 	angular
 		.module('dados.study.service', [
-      'dados.study.constants',
+      'dados.constants',
       'dados.common.services.resource'
     ])
 		.service('StudyService', StudyService);
 
-	StudyService.$inject = ['ResourceFactory', 'STUDY_API'];
+	StudyService.$inject = ['ResourceFactory', 'API'];
 
-	function StudyService(ResourceFactory, STUDY_API) {
-		return ResourceFactory.create(STUDY_API.url);
+	function StudyService(ResourceFactory, API) {
+		return ResourceFactory.create(API.url('study'));
 	}
 
 })();

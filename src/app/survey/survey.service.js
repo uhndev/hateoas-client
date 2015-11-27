@@ -4,23 +4,23 @@
   angular
     .module('dados.survey.service', [
       'dados.constants',
-      'dados.survey.constants',
       'dados.common.services.resource'
     ])
     .service('SurveyService', SurveyService)
     .service('SessionService', SessionService)
     .service('SurveySessionService', SurveySessionService);
 
-  SurveyService.$inject = ['ResourceFactory', 'SURVEY_API'];
-  SessionService.$inject = ['ResourceFactory', 'SESSION_API'];
+  [SurveyService, SessionService].map(function (service) {
+    service.$inject = ['ResourceFactory', 'API'];
+  });
   SurveySessionService.$inject = ['$resource', 'API'];
 
-  function SurveyService(ResourceFactory, SURVEY_API) {
-    return ResourceFactory.create(SURVEY_API.url);
+  function SurveyService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('survey'));
   }
 
-  function SessionService(ResourceFactory, SESSION_API) {
-    return ResourceFactory.create(SESSION_API.url);
+  function SessionService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('session'));
   }
 
   function SurveySessionService($resource, API) {
