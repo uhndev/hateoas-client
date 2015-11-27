@@ -66,6 +66,7 @@
 
     $translateProvider.useLoader('localeLoader');
     $translateProvider.preferredLanguage('en_US');
+    $translateProvider.useLocalStorage();
     $translateProvider.useMissingTranslationHandlerLog();
     $translateProvider.useSanitizeValueStrategy('escaped');
     $translateProvider.useMissingTranslationHandler('localeHandlerFactory');
@@ -110,9 +111,12 @@
 
     $mdThemingProvider.theme('default')
       .primaryPalette('orange')
-      .accentPalette('dadosPalette', {
-        'default': 'A200'
+      .accentPalette('light-blue', {
+        'default': '800'
       });
+      //.accentPalette('dadosPalette', {
+      //  'default': 'A200'
+      //});
   }
 
 })();
