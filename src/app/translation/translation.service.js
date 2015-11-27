@@ -2,15 +2,15 @@
   'use strict';
   angular
     .module('dados.translation.service', [
-      'dados.translation.constants',
+      'dados.constants',
       'dados.common.services.resource'
     ])
     .service('TranslationService', TranslationService);
 
-  TranslationService.$inject = ['ResourceFactory', 'TRANSLATION_API'];
+  TranslationService.$inject = ['ResourceFactory', 'API'];
 
-  function TranslationService(ResourceFactory, TRANSLATION_API) {
-    return ResourceFactory.create(TRANSLATION_API.url);
+  function TranslationService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('translation'));
   }
 
 })();

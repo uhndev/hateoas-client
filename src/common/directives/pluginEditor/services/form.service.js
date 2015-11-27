@@ -3,19 +3,18 @@
   angular
     .module('dados.common.directives.pluginEditor.formService', [
       'dados.constants',
-      'dados.form.constants',
       'dados.common.services.resource'
     ])
-    .factory('FormService', FormService)
-    .factory('StudyFormService', StudyFormService)
-    .factory('FormVersionService', FormVersionService);
+    .service('FormService', FormService)
+    .service('StudyFormService', StudyFormService)
+    .service('FormVersionService', FormVersionService);
 
-  FormService.$inject = ['ResourceFactory', 'FORM_API'];
+  FormService.$inject = ['ResourceFactory', 'API'];
   StudyFormService.$inject = ['$resource', 'API'];
   FormVersionService.$inject = ['$resource', 'API'];
 
-  function FormService(ResourceFactory, FORM_API) {
-    return ResourceFactory.create(FORM_API.url);
+  function FormService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('form'));
   }
 
   function StudyFormService($resource, API) {
@@ -42,6 +41,6 @@
 
   function FormVersionService($resource, API) {
     return $resource(API.url() + '/formversion');
-  }  
-  
+  }
+
 })();
