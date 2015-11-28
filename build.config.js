@@ -114,6 +114,7 @@ module.exports = {
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
+      'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
@@ -121,6 +122,9 @@ module.exports = {
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
+      'vendor/angular-google-maps/dist/angular-google-maps.js',
+      'vendor/angular-simple-logger/dist/angular-simple-logger.js',
+      'vendor/angular-local-storage/dist/angular-local-storage.js',
 
       // translation libs
       'vendor/defiant.js/dist/defiant.js',
