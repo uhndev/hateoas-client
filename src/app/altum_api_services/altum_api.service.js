@@ -6,11 +6,11 @@
 
   angular
     .module('dados.arm.altum_api.service',
-      [
-          'dados.altum_api.constants',
-          'dados.common.services.resource'
-      ])
-      .service('ProgramService', ProgramService)
+    [
+      'dados.altum_api.constants',
+      'dados.common.services.resource'
+    ])
+    .service('ProgramService', ProgramService)
     .service('ReferralService', ReferralService)
     .service('ReferralDetailService', ReferralDetailService)
     .service('AddressService', AddressService)
@@ -18,9 +18,11 @@
     .service('PayorService', PayorService)
     .service('WorkStatusService', WorkStatusService)
     .service('PrognosisService', PrognosisService)
+    .service('AltumAPIService', AltumAPIService)
+    .service('AltumProgramServicesService', AltumProgramServicesService)
     .service('SiteService', SiteService);
 
-  Altum_APIService.$inject = ['ResourceFactory','ALTUM_API_API'];
+  AltumAPIService.$inject = ['ResourceFactory', 'PROGRAM_API', 'REFERRAL_API','REFERRALDETAIL_API','SITE_API','ADDRESS_API','PHYSICIAN_API','PAYOR_API','WORKSTATUS_API','ALTUMPROGRAMSERVICES_API', 'PROGNOSIS_API'];
   ProgramService.$inject = ['ResourceFactory','PROGRAM_API'];
   ReferralService.$inject = ['ResourceFactory','REFERRAL_API'];
   ReferralDetailService.$inject = ['ResourceFactory','REFERRALDETAIL_API'];
@@ -30,10 +32,8 @@
   PayorService.$inject = ['ResourceFactory','PAYOR_API'];
   WorkStatusService.$inject = ['ResourceFactory','WORKSTATUS_API'];
   PrognosisService.$inject = ['ResourceFactory','PROGNOSIS_API'];
+  AltumProgramServicesService.$inject = ['ResourceFactory','ALTUMPROGRAMSERVICES_API'];
 
-  function Altum_APIService(ResourceFactory,ALTUM_API_API) {
-    return ResourceFactory.create(ALTUM_API_API.url);
-  }
   function ProgramService(ResourceFactory,PROGRAM_API) {
     return ResourceFactory.create(PROGRAM_API.url);
   }
@@ -60,5 +60,22 @@
   }
   function PrognosisService(ResourceFactory,PROGNOSIS_API) {
     return ResourceFactory.create(PROGNOSIS_API.url);
+  }
+  function AltumProgramServicesService(ResourceFactory,ALTUMPROGRAMSERVICES_API) {
+    return ResourceFactory.create(ALTUMPROGRAMSERVICES_API.url);
+  }
+  function AltumAPIService(ResourceFactory, PROGRAM_API, REFERRAL_API,REFERRALDETAIL_API,SITE_API,ADDRESS_API,PHYSICIAN_API,PAYOR_API,WORKSTATUS_API,ALTUMPROGRAMSERVICES_API, PROGNOSIS_API ) {
+    return {
+      'Program' : ResourceFactory.create(PROGRAM_API.url),
+      'Referral' : ResourceFactory.create(REFERRAL_API.url),
+      'ReferralDetail' : ResourceFactory.create(REFERRALDETAIL_API.url),
+      'Site' : ResourceFactory.create(SITE_API.url),
+      'Address' : ResourceFactory.create(ADDRESS_API.url),
+      'Physician' : ResourceFactory.create(PHYSICIAN_API.url),
+      'Payor' : ResourceFactory.create(PAYOR_API.url),
+      'WorkStatus' : ResourceFactory.create(WORKSTATUS_API.url),
+      'Prognosis' : ResourceFactory.create(PROGNOSIS_API.url),
+      'AltumProgramServices' : ResourceFactory.create(ALTUMPROGRAMSERVICES_API.url)
+    };
   }
 })();
