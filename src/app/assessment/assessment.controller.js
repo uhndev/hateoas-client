@@ -20,9 +20,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['$scope', 'AssessmentService', 'AltumAPIService', 'uiGmapGoogleMapApi', 'uiGmapIsReady' ];
+  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'PayorService','uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService','WorkStatusService','PrognosisService', 'uiGmapIsReady' ];
 
-  function AssessmentController($scope, Assessment, AltumAPI, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, Payor, uiGmapGoogleMapApi, Physician, Program, WorkStatus, Prognosis, uiGmapIsReady) {
     var vm = this;
 
     // bindable variables
@@ -69,23 +69,19 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      AltumAPI.Prognosis.query().$promise.then(function(resp) {
-        console.log(resp);
-      });
-
-      AltumAPI.Program.query({}).$promise.then(function (resp) {
+      Program.query({}).$promise.then(function (resp) {
         vm.programs = angular.copy(resp);
       });
 
-      AltumAPI.WorkStatus.query({}).$promise.then(function(resp) {
+      WorkStatus.query({}).$promise.then(function(resp) {
         vm.workStatuses= angular.copy(resp);
       });
 
-      AltumAPI.Prognosis.query({}).$promise.then(function(resp) {
+      Prognosis.query({}).$promise.then(function(resp) {
         vm.prognosises= angular.copy(resp);
       });
 
-      AltumAPI.Site.query({}).$promise.then(function (resp) {
+      Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
         return uiGmapGoogleMapApi;
       })
@@ -128,7 +124,7 @@
     }
 
     function findReferral(searchString) {
-      AltumAPI.ReferralDetail.query({
+      ReferralDetail.query({
         where: {
           or: [
             {status: {contains: searchString}},
@@ -153,7 +149,7 @@
     function selectReferral(referral) {
       vm.selectedReferral = referral;
 
-      AltumAPI.Referral.query({
+      Referral.query({
         where: [
           {id: vm.selectedReferral.id}
         ]
@@ -243,7 +239,7 @@
               vm.directionsDisplay.setMap(instanceMap);
               vm.directionsDisplay.setDirections(response);
 
-              //this is not the angular way, at all, and I hate it, but it works. Want to change it
+              //this is not the angular way, at all, and I hate it, but it works. Want to change ti
 
               vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
           });

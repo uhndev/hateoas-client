@@ -120,9 +120,6 @@ module.exports = {
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
-      'vendor/angular-google-maps/dist/angular-google-maps.js',
-      'vendor/angular-simple-logger/dist/angular-simple-logger.js',
-      'vendor/angular-local-storage/dist/angular-local-storage.js',
 
       // translation libs
       'vendor/defiant.js/dist/defiant.js',
