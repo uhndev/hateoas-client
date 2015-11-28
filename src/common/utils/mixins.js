@@ -9,6 +9,7 @@
 	'use strict';
 
 	_.mixin({
+    'stringContains': stringContains,
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
 		'convertRestUrl': convertRestUrl,
@@ -25,6 +26,10 @@
     'equalsDeep': equalsDeep,
     'findArrayDiff': findArrayDiff
 	});
+
+  function stringContains(str, value) {
+    return str.indexOf(value) > -1;
+  }
 
 	function parseUrl(location, url) {
     var baseLen = location.absUrl().length - location.url().length;

@@ -23,15 +23,14 @@
     ></hateoas-controls>
   </div>
 
-  <table id="Collection" ng-table="tableParams" class="table">
+  <table id="Collection" ng-table="tableParams" class="table table-hover table-mc-light-blue ng-table-responsive">
     <thead>
       <tr>
         <th ng-repeat="column in hateoas.template.data track by $index"
-          ng-if="!column.data"
-          class="text-center sortable"
+          ng-if="!column.data" class="sortable"
           context-translator="{{column.prompt}}"
           ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-          <span translate>{{ column.prompt }}</span> <i class="pull-left" ng-class="{
+          <span translate>{{ column.prompt }}</span> <i ng-class="{
             'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
             'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
           }"></i>

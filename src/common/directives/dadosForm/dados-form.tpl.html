@@ -1,0 +1,15 @@
+<ng-form name="plugin">
+  <h2 id="Title">{{dadosForm.form.name}}</h2>
+  <ol class="form-horizontal" ng-model="dadosForm.questions" class="ui-grid" style="padding-top: 30px;">
+    <li ng-repeat="widget in dadosForm.questions track by $index" class="panel panel-default" ng-style="widget.css">
+      <ui-widget ng-if="widget.template" widget="widget"
+                 widget-model="widget"
+                 class="panel-body"></ui-widget>
+    </li>	
+  </ol>    
+  <button class="btn btn-default pull-right" ng-model="dadosForm.isSaving"
+          ng-click="dadosForm.saveFormAnswers()" ng-disabled="dadosForm.isSaving">
+    <span class="glyphicon glyphicon-floppy-disk" tooltip="Save form"></span>
+    Save
+  </button>
+</ng-form>

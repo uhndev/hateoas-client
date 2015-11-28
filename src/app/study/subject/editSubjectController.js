@@ -71,7 +71,9 @@
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment
         .$update({ id: subject.id })
-        .then(user.$update({ id: subject.user }))
+        .then(function() {
+          return user.$update({ id: subject.user });
+        })
         .then(function() {
           toastr.success('Updated subject enrollment!', 'Subject Enrollment');
         })
