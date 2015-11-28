@@ -2,7 +2,6 @@
     'use strict';
     angular
         .module('dados.altum_api.constants', ['dados.constants'])
-        .service('ALTUM_API_API', Altum_API)
       .service('PROGRAM_API', Program)
       .service('REFERRAL_API', Referral)
       .service('REFERRALDETAIL_API', ReferralDetail)
@@ -11,6 +10,7 @@
       .service('PAYOR_API', Payor)
       .service('WORKSTATUS_API', WorkStatus)
       .service('PROGNOSIS_API', Prognosis)
+      .service('ALTUMPROGRAMSERVICES_API', AltumProgramServices )
       .service('SITE_API', Site);
 
   Program.$inject = ['API'];
@@ -21,13 +21,11 @@
   Payor.$inject = ['API'];
   WorkStatus.$inject = ['API'];
   Prognosis.$inject = ['API'];
+  AltumProgramServices.$inject = ['API'];
 
-  function Altum_API(API) {
-    return {url: API.url() + '/altum_api/:id'};
+  function Program(API) {
+    return {url: API.url() + '/program/:id'};
   }
-    function Program(API) {
-        return {url: API.url() + '/program/:id'};
-    }
   function Referral(API) {
     return {url: API.url() + '/referral/:id'};
   }
@@ -54,5 +52,8 @@
   }
   function Prognosis(API) {
     return {url: API.url() + '/prognosis/:id'};
+  }
+  function AltumProgramServices(API) {
+    return {url: API.url() + '/altumprogramservices/:id'};
   }
 })();
