@@ -1,0 +1,34 @@
+<md-content class="md-padding">
+  <h1 id="Title">
+    <span translate>APP.SUBJECT_PORTAL.STUDIES.TITLE</span>
+    <small translate translate-values="{ total: study.studySubjects.total }">
+      COMMON.HATEOAS.TITLE.TOTAL
+    </small>
+  </h1>
+  <md-divider></md-divider>
+  <table ng-table="study.studyTableParams" class="table table-hover ng-table-responsive">
+    <tbody ng-repeat="name in $groups track by $index">
+    <tr class="ng-table-group">
+      <td colspan="{{$columns.length}}">
+        <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                  <span class="glyphicon"
+                        ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+          <strong>{{ name.value }}</strong>
+        </a>
+      </td>
+    </tr>
+    <tr ng-hide="name.$hideRows" ng-repeat="studySubject in name.data track by $index">
+      <td sortable="'subjectNumber'" data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER' | translate">
+        {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
+      </td>
+      <td sortable="'studyName'" data-title="'COMMON.MODELS.STUDY.NAME' | translate">
+        {{studySubject.studyName}}
+      </td>
+      <td sortable="'collectionCentreName'"
+          data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE' | translate">
+        {{studySubject.collectionCentreName}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</md-content>

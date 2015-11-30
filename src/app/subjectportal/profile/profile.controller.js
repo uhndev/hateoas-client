@@ -1,0 +1,52 @@
+(function() {
+  'use strict';
+
+  angular
+    .module('dados.subjectportal.profile.controller', [])
+    .controller('SubjectPortalProfileController', SubjectPortalProfileController);
+
+  SubjectPortalProfileController.$inject = [ 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'UserService', 'AuthService' ];
+
+  function SubjectPortalProfileController(TableParams, SailsNgTable, StudySubjectService, UserService, Auth) {
+    var vm = this;
+
+    // bindable variables
+    vm.openedDOB = false;
+    vm.user = UserService.get({ id: Auth.currentUser.user.id });
+    vm.studyQuery = { 'where' : {} };
+    vm.studySubjects = [];
+
+    // bindable methods
+    vm.openDOB = openDOB;
+
+    init();
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      vm.studyTableParams = new TableParams({
+        page: 1,
+        count: 10,
+        sorting: { 'studyName': 'ASC' }
+      }, {
+        groupBy: 'studyName',
+        getData: function($defer, params) {
+          var api = SailsNgTable.parse(params, vm.studyQuery);
+          StudySubjectService.query(api, function (resource) {
+            angular.copy(resource, vm.studySubjects);
+            params.total(resource.total);
+            $defer.resolve(resource.items);
+          });
+        }
+      });
+    }
+
+    function openDOB($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      vm.openedDOB = true;
+    }
+
+  }
+
+})();

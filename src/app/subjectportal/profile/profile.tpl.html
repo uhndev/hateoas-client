@@ -1,0 +1,87 @@
+<div layout="column" class="md-inline-form">
+  <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+
+    <md-input-container>
+      <label translate>COMMON.MODELS.USER.USERNAME</label>
+      <input ng-model="profile.user.username" type="text">
+    </md-input-container>
+
+    <md-input-container>
+      <label translate>COMMON.MODELS.USER.EMAIL</label>
+      <input ng-model="profile.user.email" type="email">
+    </md-input-container>
+
+    <div layout layout-sm="column">
+
+      <md-input-container flex>
+        <label translate>COMMON.MODELS.USER.PREFIX</label>
+        <md-select ng-model="profile.user.prefix">
+          <md-option value="Mr.">Mr.</md-option>
+          <md-option value="Ms.">Ms.</md-option>
+          <md-option value="Mrs.">Mrs.</md-option>
+          <md-option value="Dr.">Dr.</md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container flex>
+        <label translate>COMMON.MODELS.USER.FIRSTNAME</label>
+        <input ng-model="profile.user.firstname">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label translate>COMMON.MODELS.USER.LASTNAME</label>
+        <input ng-model="profile.user.lastname">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label translate>COMMON.MODELS.USER.GENDER</label>
+        <md-select ng-model="profile.user.gender">
+          <md-option value="Male">Male</md-option>
+          <md-option value="Female">Female</md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container flex>
+        <label translate>COMMON.MODELS.USER.LASTNAME</label>
+        <input ng-model="profile.user.lastname">
+      </md-input-container>
+    </div>
+  </md-content>
+
+  <md-divider></md-divider>
+
+  <md-content class="md-padding">
+      <h4 id="Title">
+        <span translate>APP.SUBJECT_PORTAL.STUDIES.TITLE</span>
+        <small translate translate-values="{ total: profile.studySubjects.total }">
+          COMMON.HATEOAS.TITLE.TOTAL
+        </small>
+      </h4>
+      <md-divider></md-divider>
+      <table ng-table="profile.studyTableParams" class="table table-hover ng-table-responsive">
+        <tbody ng-repeat="name in $groups track by $index">
+        <tr class="ng-table-group">
+          <td colspan="{{$columns.length}}">
+            <a href="" ng-click="name.$hideRows = !name.$hideRows">
+                  <span class="glyphicon"
+                        ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
+              <strong>{{ name.value }}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr ng-hide="name.$hideRows" ng-repeat="studySubject in name.data track by $index">
+          <td sortable="'subjectNumber'" data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER' | translate">
+            {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
+          </td>
+          <td sortable="'studyName'" data-title="'COMMON.MODELS.STUDY.NAME' | translate">
+            {{studySubject.studyName}}
+          </td>
+          <td sortable="'collectionCentreName'"
+              data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE' | translate">
+            {{studySubject.collectionCentreName}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </md-content>
+</div>
