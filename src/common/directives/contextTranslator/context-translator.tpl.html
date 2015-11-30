@@ -6,9 +6,10 @@
                     base-path="{{context.key}}"
                     translations="context.translations"
                     languages="context.languages"
-                    queries="context.queries"></translate-editor>
+                    queries="context.queries"
+                    is-valid="context.isValid"></translate-editor>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-primary" type="button" ng-click="context.saveChanges()">Save Changes</button>
+  <button class="btn btn-primary" type="button" ng-disabled="!context.isValid" ng-click="context.saveChanges()">Save Changes</button>
   <button class="btn btn-warning" type="button" ng-click="context.cancel()">Cancel</button>
 </div>
