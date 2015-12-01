@@ -1,87 +1,166 @@
-<div layout="column" class="md-inline-form">
-  <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+<md-content class="md-padding" layout="row" layout-sm="column">
+  <div flex-gt-md="40" flex="grow">
+    <md-card>
+      <md-card-title layout-padding>
+        <md-card-title-text>
+          <span id="Title" class="md-headline" translate>APP.SUBJECT_PORTAL.PROFILE_TITLE</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content>
+        <ng-form name="subjectForm" class="form-horizontal" novalidate>
+          <div class="form-group">
+            <label for="username" class="col-sm-3 control-label">Username&nbsp;</label>
+            <div class="col-sm-9">
+              <input type="text" name="username" class="form-control"
+                     data-ng-model="profile.user.username"
+                     ng-minlength="5"
+                     placeholder="johndoe" required>
 
-    <md-input-container>
-      <label translate>COMMON.MODELS.USER.USERNAME</label>
-      <input ng-model="profile.user.username" type="text">
-    </md-input-container>
+              <p ng-show="subjectForm.username.$invalid && !subjectForm.username.$pristine"
+                 class="pull-right required-error">Username must be at least 5 characters</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="col-sm-3 control-label">Email&nbsp;</label>
 
-    <md-input-container>
-      <label translate>COMMON.MODELS.USER.EMAIL</label>
-      <input ng-model="profile.user.email" type="email">
-    </md-input-container>
+            <div class="col-sm-9">
+              <input type="email" name="email" class="form-control"
+                     data-ng-model="profile.user.email"
+                     placeholder="johndoe@email.com" required>
 
-    <div layout layout-sm="column">
+              <p ng-show="subjectForm.email.$invalid && !subjectForm.email.$pristine"
+                 class="pull-right required-error">Email is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password" class="col-sm-3 control-label">Password&nbsp;</label>
 
-      <md-input-container flex>
-        <label translate>COMMON.MODELS.USER.PREFIX</label>
-        <md-select ng-model="profile.user.prefix">
-          <md-option value="Mr.">Mr.</md-option>
-          <md-option value="Ms.">Ms.</md-option>
-          <md-option value="Mrs.">Mrs.</md-option>
-          <md-option value="Dr.">Dr.</md-option>
-        </md-select>
-      </md-input-container>
+            <div class="col-sm-9">
+              <input type="text" name="password" class="form-control"
+                     ng-model="profile.user.password" ng-minlength="8"
+                     ng-pattern="/(?=.*[a-z])(?=.*[^a-zA-Z])/"/>
+              <p ng-show="subjectForm.password.$invalid && !subjectForm.password.$pristine"
+                 class="pull-right required-error">
+                Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1
+                non-alphanumeric character
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="prefix" class="col-sm-3 control-label">Prefix&nbsp;</label>
 
-      <md-input-container flex>
-        <label translate>COMMON.MODELS.USER.FIRSTNAME</label>
-        <input ng-model="profile.user.firstname">
-      </md-input-container>
+            <div class="col-sm-9">
+              <select name="prefix" class="form-control" ng-model="profile.user.prefix" required>
+                <option value="" disabled>Select a prefix</option>
+                <option value="Mr." label="Mr.">Mr.</option>
+                <option value="Mrs." label="Mrs.">Mrs.</option>
+                <option value="Ms." label="Ms.">Ms.</option>
+                <option value="Dr." label="Dr.">Dr.</option>
+              </select>
 
-      <md-input-container flex>
-        <label translate>COMMON.MODELS.USER.LASTNAME</label>
-        <input ng-model="profile.user.lastname">
-      </md-input-container>
+              <p ng-show="subjectForm.prefix.$invalid && !subjectForm.prefix.$pristine"
+                 class="pull-right required-error">Prefix is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="firstname" class="col-sm-3 control-label">Firstname&nbsp;</label>
 
-      <md-input-container flex>
-        <label translate>COMMON.MODELS.USER.GENDER</label>
-        <md-select ng-model="profile.user.gender">
-          <md-option value="Male">Male</md-option>
-          <md-option value="Female">Female</md-option>
-        </md-select>
-      </md-input-container>
+            <div class="col-sm-9">
+              <input type="text" name="firstname" class="form-control"
+                     data-ng-model="profile.user.firstname"
+                     placeholder="John" required>
 
-      <md-input-container flex>
-        <label translate>COMMON.MODELS.USER.LASTNAME</label>
-        <input ng-model="profile.user.lastname">
-      </md-input-container>
-    </div>
-  </md-content>
+              <p ng-show="subjectForm.firstname.$invalid && !subjectForm.firstname.$pristine"
+                 class="pull-right required-error">Firstname is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastname" class="col-sm-3 control-label">Lastname&nbsp;</label>
 
-  <md-divider></md-divider>
+            <div class="col-sm-9">
+              <input type="text" name="lastname" class="form-control"
+                     data-ng-model="profile.user.lastname"
+                     placeholder="Doe" required>
 
-  <md-content class="md-padding">
-      <h4 id="Title">
-        <span translate>APP.SUBJECT_PORTAL.STUDIES.TITLE</span>
-        <small translate translate-values="{ total: profile.studySubjects.total }">
-          COMMON.HATEOAS.TITLE.TOTAL
-        </small>
-      </h4>
-      <md-divider></md-divider>
-      <table ng-table="profile.studyTableParams" class="table table-hover ng-table-responsive">
-        <tbody ng-repeat="name in $groups track by $index">
-        <tr class="ng-table-group">
-          <td colspan="{{$columns.length}}">
-            <a href="" ng-click="name.$hideRows = !name.$hideRows">
+              <p ng-show="subjectForm.lastname.$invalid && !subjectForm.lastname.$pristine"
+                 class="pull-right required-error">Lastname is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gender" class="col-sm-3 control-label">Gender&nbsp;</label>
+
+            <div class="col-sm-9">
+              <select name="gender" class="form-control" ng-model="profile.user.gender" required>
+                <option value="" disabled>Select a gender</option>
+                <option value="Male" label="Male">Male</option>
+                <option value="Female" label="Female">Female</option>
+              </select>
+
+              <p ng-show="subjectForm.gender.$invalid && !subjectForm.gender.$pristine"
+                 class="pull-right required-error">Gender is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dob" class="col-sm-3 control-label">Date of Birth&nbsp;</label>
+
+            <div class="col-sm-9">
+              <p class="input-group">
+                <input name="dob" type="text" class="form-control" datepicker-popup ng-model="profile.user.dob"
+                       is-open="profile.openedDOB" required disabled/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="profile.openDOB($event)"><i
+            class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+              <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine"
+                 class="pull-right required-error">Date of birth is required.</p>
+              </p>
+            </div>
+          </div>
+          <hr/>
+        </ng-form>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button class="md-raised md-primary" ng-click="profile.updateUser()" ng-disabled="subjectForm.$invalid">Save</md-button>
+      </md-card-actions>
+    </md-card>
+  </div>
+  <div flex="grow">
+    <md-card>
+      <md-card-title layout-padding>
+        <md-card-title-text>
+          <span id="Title" class="md-headline" translate>APP.SUBJECT_PORTAL.STUDIES_TITLE</span>
+          <span class="md-subhead" translate translate-values="{ total: profile.studySubjects.total }">
+            COMMON.HATEOAS.TITLE.TOTAL
+          </span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content>
+        <table ng-table="profile.studyTableParams" class="table table-hover ng-table-responsive">
+          <tbody ng-repeat="name in $groups track by $index">
+          <tr class="ng-table-group">
+            <td colspan="{{$columns.length}}">
+              <a href="" ng-click="name.$hideRows = !name.$hideRows">
                   <span class="glyphicon"
                         ng-class="{ 'glyphicon-chevron-right': name.$hideRows, 'glyphicon-chevron-down': !name.$hideRows }"></span>
-              <strong>{{ name.value }}</strong>
-            </a>
-          </td>
-        </tr>
-        <tr ng-hide="name.$hideRows" ng-repeat="studySubject in name.data track by $index">
-          <td sortable="'subjectNumber'" data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER' | translate">
-            {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
-          </td>
-          <td sortable="'studyName'" data-title="'COMMON.MODELS.STUDY.NAME' | translate">
-            {{studySubject.studyName}}
-          </td>
-          <td sortable="'collectionCentreName'"
-              data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE' | translate">
-            {{studySubject.collectionCentreName}}
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </md-content>
-</div>
+                <strong>{{ name.value }}</strong>
+              </a>
+            </td>
+          </tr>
+          <tr ng-hide="name.$hideRows" ng-repeat="studySubject in name.data track by $index">
+            <td sortable="'subjectNumber'" data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER' | translate">
+              {{studySubject.subjectNumber | formatter:{"type": "mrn"} }}
+            </td>
+            <td sortable="'studyName'" data-title="'COMMON.MODELS.STUDY.NAME' | translate">
+              {{studySubject.studyName}}
+            </td>
+            <td sortable="'collectionCentreName'"
+                data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE' | translate">
+              {{studySubject.collectionCentreName}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </md-card-content>
+    </md-card>
+  </div>
+</md-content>

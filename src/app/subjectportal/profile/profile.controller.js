@@ -5,9 +5,9 @@
     .module('dados.subjectportal.profile.controller', [])
     .controller('SubjectPortalProfileController', SubjectPortalProfileController);
 
-  SubjectPortalProfileController.$inject = [ 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'UserService', 'AuthService' ];
+  SubjectPortalProfileController.$inject = [ 'toastr', 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'UserService', 'AuthService' ];
 
-  function SubjectPortalProfileController(TableParams, SailsNgTable, StudySubjectService, UserService, Auth) {
+  function SubjectPortalProfileController(toastr, TableParams, SailsNgTable, StudySubjectService, UserService, Auth) {
     var vm = this;
 
     // bindable variables
@@ -18,6 +18,7 @@
 
     // bindable methods
     vm.openDOB = openDOB;
+    vm.updateUser = updateUser;
 
     init();
 
@@ -45,6 +46,17 @@
       $event.preventDefault();
       $event.stopPropagation();
       vm.openedDOB = true;
+    }
+
+    function updateUser() {
+      var user = new UserService(vm.user);
+      user.$update({ id: vm.user.id })
+        .then(function() {
+          toastr.success('Updated profile!', 'User Profile');
+        })
+        .finally(function () {
+          delete vm.user.password;
+        });
     }
 
   }

@@ -5,7 +5,6 @@
     .module('dados.subjectportal', [
       'dados.subjectportal.controller',
       'dados.subjectportal.surveys.controller',
-      'dados.subjectportal.studies.controller',
       'dados.subjectportal.profile.controller',
       'dados.subjectportal.service'
     ])

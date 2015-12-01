@@ -13,12 +13,12 @@
     // bindable variables
     vm.tabs = [
       {
-        title: 'APP.SUBJECT_PORTAL.SURVEYS.TAB_TITLE',
+        title: 'APP.SUBJECT_PORTAL.SURVEYS_TAB_TITLE',
         state: 'subjectportal.surveys',
         active: false
       },
       {
-        title: 'APP.SUBJECT_PORTAL.PROFILE.TAB_TITLE',
+        title: 'APP.SUBJECT_PORTAL.PROFILE_TAB_TITLE',
         state: 'subjectportal.profile',
         active: false
       }
