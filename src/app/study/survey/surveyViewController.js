@@ -10,10 +10,10 @@
     .controller('StudySurveyController', StudySurveyController);
 
   StudySurveyController.$inject = [
-    '$scope', '$location', '$resource', '$modal', 'HeaderService', 'toastr', 'StudyService', 'SurveyService', 'API'
+    '$scope', '$location', '$resource', '$uibModal', 'HeaderService', 'toastr', 'StudyService', 'SurveyService', 'API'
   ];
 
-  function StudySurveyController($scope, $location, $resource, $modal, HeaderService, toastr, Study, Survey, API) {
+  function StudySurveyController($scope, $location, $resource, $uibModal, HeaderService, toastr, Study, Survey, API) {
 
     var vm = this;
 
@@ -124,13 +124,13 @@
     }
 
     function openAddSurvey() {
-      $modal.open(loadModal('add')).result.then(function () {
+      $uibModal.open(loadModal('add')).result.then(function () {
         $scope.$broadcast('hateoas.client.refresh');
       });
     }
 
     function openEditSurvey() {
-      $modal.open(loadModal('edit')).result.then(function () {
+      $uibModal.open(loadModal('edit')).result.then(function () {
         $scope.$broadcast('hateoas.client.refresh');
       });
     }

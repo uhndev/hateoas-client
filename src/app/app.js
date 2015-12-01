@@ -56,10 +56,10 @@
     .config(dadosConfig);
 
   dadosConfig.$inject = [
-    '$stateProvider', '$translateProvider', '$tooltipProvider', '$mdThemingProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
+    '$stateProvider', '$translateProvider', '$uibTooltipProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
   ];
 
-  function dadosConfig($stateProvider, $translateProvider, $tooltipProvider, $mdThemingProvider, dynamicLocale, toastrConfig) {
+  function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
@@ -82,7 +82,7 @@
       timeOut: 3000
     });
 
-    $tooltipProvider.options({
+    $uibTooltipProvider.options({
       appendToBody: true
     });
   }

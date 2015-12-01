@@ -17,7 +17,6 @@
     vm.studySubjects = [];
 
     // bindable methods
-    vm.openDOB = openDOB;
     vm.updateUser = updateUser;
 
     init();
@@ -40,12 +39,6 @@
           });
         }
       });
-    }
-
-    function openDOB($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      vm.openedDOB = true;
     }
 
     function updateUser() {

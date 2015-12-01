@@ -105,12 +105,12 @@
 
             <div class="col-sm-9">
               <p class="input-group">
-                <input name="dob" type="text" class="form-control" datepicker-popup ng-model="profile.user.dob"
+                <input name="dob" type="text" class="form-control" uib-datepicker-popup ng-model="profile.user.dob"
                        is-open="profile.openedDOB" required disabled/>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="profile.openDOB($event)"><i
-            class="glyphicon glyphicon-calendar"></i></button>
-        </span>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="profile.openedDOB = true"><i
+                    class="glyphicon glyphicon-calendar"></i></button>
+                </span>
               <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine"
                  class="pull-right required-error">Date of birth is required.</p>
               </p>

@@ -11,11 +11,11 @@
     .controller('StudySubjectController', StudySubjectController);
 
   StudySubjectController.$inject = [
-    '$scope', '$location', '$modal', 'HeaderService', 'toastr',
+    '$scope', '$location', '$uibModal', 'HeaderService', 'toastr',
     'API', 'StudyService', 'SubjectEnrollmentService', 'SubjectService'
   ];
 
-  function StudySubjectController($scope, $location, $modal, HeaderService, toastr,
+  function StudySubjectController($scope, $location, $uibModal, HeaderService, toastr,
                                   API, Study, SubjectEnrollment, Subject) {
 
     var vm = this;
@@ -73,7 +73,9 @@
 
       if (type === 'edit') {
         modalSettings.resolve.subject = function() {
-          return angular.copy(vm.selected);
+          var subject = angular.copy(vm.selected);
+          subject.doe = new Date(subject.doe);
+          return subject;
         };
       }
 
@@ -102,13 +104,13 @@
     }
 
     function openAddSubject() {
-      $modal.open(loadModal('add')).result.then(function () {
+      $uibModal.open(loadModal('add')).result.then(function () {
         $scope.$broadcast('hateoas.client.refresh');
       });
     }
 
     function openEditSubject() {
-      $modal.open(loadModal('edit')).result.then(function () {
+      $uibModal.open(loadModal('edit')).result.then(function () {
         $scope.$broadcast('hateoas.client.refresh');
       });
     }

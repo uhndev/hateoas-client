@@ -5,9 +5,9 @@
 		.module('dados.common.directives.dadosError.controller', [])
 		.controller('ErrorController', ErrorController);
 
-	ErrorController.$inject = ['$modal', '$timeout', '$sailsSocket'];
+	ErrorController.$inject = ['$uibModal', '$timeout', '$sailsSocket'];
 
-	function ErrorController($modal, $timeout, $sailsSocket) {
+	function ErrorController($uibModal, $timeout, $sailsSocket) {
 		var vm = this;
 		var socketErrorModal = null;
 		vm.socketReady = false; // Wait for socket to connect
@@ -21,10 +21,10 @@
 
 		function openSocketErrorModal(message) {
 			closeSocketErrorModal();
-			socketErrorModal = $modal.open({
+			socketErrorModal = $uibModal.open({
 				size: 'lg',
 				templateUrl: 'directives/dadosError/dados-error.tpl.html',
-				controller: function ErrorModalCtrl($modalInstance, ErrorService) {
+				controller: function ErrorModalCtrl($uibModalInstance, ErrorService) {
 					var sm = this;
 					sm.error = ErrorService.getInfo();
 					sm.error.message = message;
@@ -51,12 +51,12 @@
 		$sailsSocket.subscribe('disconnect', function (data) {
 			$timeout(function() {
 				openSocketErrorModal('The application cannot reach the server... Please wait');
-				vm.socketReady = false;	
-			}, 500);			
+				vm.socketReady = false;
+			}, 500);
 		});
 
 		$sailsSocket.subscribe('failure', function (event, data) {
 			openSocketErrorModal('The application failed to connect to the server.');
-		});		
+		});
 	}
 })();

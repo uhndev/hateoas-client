@@ -102,10 +102,10 @@
 
       <div class="col-sm-9">
         <p class="input-group">
-          <input name="dob" type="text" class="form-control" datepicker-popup ng-model="editSubject.userData.dob"
+          <input name="dob" type="text" class="form-control" uib-datepicker-popup ng-model="editSubject.userData.dob"
                  is-open="editSubject.openedDOB" required disabled/>
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="editSubject.openDOB($event)"><i
+          <button type="button" class="btn btn-default" ng-click="editSubject.openedDOB = true"><i
             class="glyphicon glyphicon-calendar"></i></button>
         </span>
         <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine"
@@ -149,11 +149,11 @@
 
       <div class="col-sm-9">
         <p class="input-group">
-          <input name="doe" type="text" class="form-control" datepicker-popup ng-model="editSubject.newSubject.doe"
+          <input name="doe" type="text" class="form-control" uib-datepicker-popup ng-model="editSubject.newSubject.doe"
                  is-open="editSubject.openedDOE"
                  ng-required="editSubject.newSubject.studyMapping" disabled/>
           <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="editSubject.openDOE($event)"><i
+            <button type="button" class="btn btn-default" ng-click="editSubject.openedDOE = true"><i
               class="glyphicon glyphicon-calendar"></i></button>
           </span>
         <p ng-show="enrollmentForm.doe.$invalid"
