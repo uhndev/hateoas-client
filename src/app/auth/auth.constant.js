@@ -22,7 +22,7 @@
           switch (level) {
             case 1: $location.url('/study'); $state.go('hateoas'); break;
             case 2: $location.url('/study'); $state.go('hateoas'); break;
-            case 3: $state.go('subjectportal'); break;
+            case 3: $state.go('subjectportal.surveys'); break;
             default: $location.url('/study'); $state.go('hateoas'); break;
           }
         }

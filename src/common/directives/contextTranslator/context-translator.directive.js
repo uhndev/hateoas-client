@@ -14,10 +14,10 @@
     .controller('ContextEditorController', ContextEditorController);
 
   ContextEditorController.$inject = [
-    '$translate', '$modalInstance', '$q', 'toastr', 'TranslationService', 'LocaleService', 'key'
+    '$translate', '$uibModalInstance', '$q', 'toastr', 'TranslationService', 'LocaleService', 'key'
   ];
 
-  function contextTranslator($modal, AuthService, LocaleService) {
+  function contextTranslator($uibModal, AuthService, LocaleService) {
     return {
       restrict: 'A',
       link: function(scope, element, attributes) {
@@ -27,7 +27,7 @@
               ev.preventDefault();
               ev.stopPropagation();
 
-              $modal.open({
+              $uibModal.open({
                 animation: true,
                 templateUrl: 'directives/contextTranslator/context-translator.tpl.html',
                 controller: 'ContextEditorController',
@@ -47,7 +47,7 @@
     };
   }
 
-  function ContextEditorController($translate, $modalInstance, $q, toastr, Translation, Locale, key) {
+  function ContextEditorController($translate, $uibModalInstance, $q, toastr, Translation, Locale, key) {
     var vm = this;
 
     // resolved
@@ -108,12 +108,12 @@
             Locale.setLocaleStorage(translation.language, translation.translation);
           });
           toastr.success('Updated all translations!', 'Translation');
-          $modalInstance.close();
+          $uibModalInstance.close();
         });
     }
 
     function cancel() {
-      $modalInstance.close();
+      $uibModalInstance.close();
     }
 
   }

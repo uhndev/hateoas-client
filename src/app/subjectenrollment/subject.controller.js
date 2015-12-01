@@ -10,11 +10,11 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'toastr', 'ngTableParams',
+    '$scope', '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
     'API', 'moment', 'HeaderService', 'SubjectScheduleService'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, $modal, toastr, TableParams,
+  function SubjectOverviewController($scope, $resource, $location, $uibModal, toastr, TableParams,
                                      API, moment, HeaderService, SubjectSchedule) {
     var vm = this;
 
@@ -74,7 +74,7 @@
      * @description Function for opening the subject edit modal window.
      */
     function openEditSubject() {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         animation: true,
         templateUrl: 'study/subject/editSubjectModal.tpl.html',
         controller: 'EditSubjectController',

@@ -5,11 +5,11 @@
       <ui-widget ng-if="widget.template" widget="widget"
                  widget-model="widget"
                  class="panel-body"></ui-widget>
-    </li>	
-  </ol>    
+    </li>
+  </ol>
   <button class="btn btn-default pull-right" ng-model="dadosForm.isSaving"
           ng-click="dadosForm.saveFormAnswers()" ng-disabled="dadosForm.isSaving">
-    <span class="glyphicon glyphicon-floppy-disk" tooltip="Save form"></span>
+    <span class="glyphicon glyphicon-floppy-disk" uib-tooltip="Save form"></span>
     Save
   </button>
 </ng-form>

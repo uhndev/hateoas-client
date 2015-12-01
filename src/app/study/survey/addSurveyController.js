@@ -6,10 +6,10 @@
     .controller('AddSurveyController', AddSurveyController);
 
   AddSurveyController.$inject = [
-    '$modalInstance', 'toastr', 'study', 'forms', 'SurveyService'
+    '$uibModalInstance', 'toastr', 'study', 'forms', 'SurveyService'
   ];
 
-  function AddSurveyController($modalInstance, toastr, study, forms, Survey) {
+  function AddSurveyController($uibModalInstance, toastr, study, forms, Survey) {
     var vm = this;
 
     // bindable variables
@@ -32,13 +32,13 @@
           toastr.success('Added survey to study!', 'Survey');
         }).finally(function () {
           vm.newSurvey = {};
-          $modalInstance.close();
+          $uibModalInstance.close();
         });
     }
 
     function cancel() {
       vm.newSurvey = {};
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     }
   }
 })();

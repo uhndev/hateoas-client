@@ -6,7 +6,7 @@
     .controller('EditSubjectController', EditSubjectController);
 
   EditSubjectController.$inject = [
-    '$modalInstance', 'subject', 'study', 'centreHref', 'toastr',
+    '$uibModalInstance', 'subject', 'study', 'centreHref', 'toastr',
     'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
   ];
 
@@ -14,7 +14,7 @@
    * EditSubjectController
 
    * @description Controller for the edit subject in study modal window.
-   * @param $modalInstance
+   * @param $uibModalInstance
    * @param subject             resolved subject response to edit passed in from subjectViewController.js
    * @param study               resolved study response passed in from subjectViewController.js
    * @param centreHref          resolved url /study/<STUDY>/collectioncentre used for selectLoader dropdown
@@ -24,21 +24,19 @@
    * @param User
    * @constructor
    */
-  function EditSubjectController($modalInstance, subject, study, centreHref, toastr,
+  function EditSubjectController($uibModalInstance, subject, study, centreHref, toastr,
                                  ENROLLMENT_STATUSES, SubjectEnrollment, User) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
     vm.openedDOE = false;
     vm.userData = {};
-    vm.newSubject = subject || {};
+    vm.newSubject = subject;
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
 
     // bindable methods
-    vm.openDOB = openDOB;
-    vm.openDOE = openDOE;
     vm.editSubject = editSubject;
     vm.cancel = cancel;
 
@@ -52,18 +50,6 @@
           vm.userData = angular.copy(data);
         }
       });
-    }
-
-    function openDOB($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      vm.openedDOB = true;
-    }
-
-    function openDOE($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      vm.openedDOE = true;
     }
 
     function editSubject() {
@@ -80,14 +66,14 @@
         .finally(function () {
           vm.newSubject = {};
           vm.userData = {};
-          $modalInstance.close();
+          $uibModalInstance.close();
         });
     }
 
     function cancel() {
       vm.newSubject = {};
       vm.userData = {};
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     }
   }
 })();
