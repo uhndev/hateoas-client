@@ -143,7 +143,7 @@
            type="number"
            ng-required="false" ng-model="widget.properties.min"/>
     <input ng-switch-when="date" class="form-control" id="min"
-           type="text" datepicker-popup
+           type="text" uib-datepicker-popup
            ng-required="false" ng-model="widget.properties.min"/>
     <input ng-switch-default class="form-control" id="min"
            ng-attr-type="{{widget.properties.type}}"
@@ -160,7 +160,7 @@
            type="number"
            ng-required="false" ng-model="widget.properties.max"/>
     <input ng-switch-when="date" class="form-control" id="max"
-           type="text" datepicker-popup
+           type="text" uib-datepicker-popup
            ng-required="false" ng-model="widget.properties.max"/>
     <input ng-switch-default class="form-control" id="max"
            ng-attr-type="{{widget.properties.type}}"

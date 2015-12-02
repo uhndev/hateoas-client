@@ -13,33 +13,33 @@
       <div class="col-md-7">
         <div class="btn-group btn-group-sm">
           <button class="btn btn-default" ng-click="addLeft()"
-                  tooltip="Add cell to the left">
+                  uib-tooltip="Add cell to the left">
             <span class="glyphicon glyphicon-log-in flip"></span>
           </button>
           <button class="btn btn-default" ng-click="shrink()"
-                  ng-disabled="!shrinkable()" tooltip="Shrink cell">
+                  ng-disabled="!shrinkable()" uib-tooltip="Shrink cell">
             <span class="glyphicon glyphicon-resize-small"></span>
           </button>
           <button class="btn btn-default" ng-click="expand()"
                   ng-disabled="!expandable()"
-                  tooltip="Expand cell">
+                  uib-tooltip="Expand cell">
             <span class="glyphicon glyphicon-resize-full"></span>
           </button>
           <button class="btn btn-primary" ng-click="clone($index)"
-                  tooltip="Clone widget">
+                  uib-tooltip="Clone widget">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
           <button class="btn btn-warning" ng-click="configure()"
-                  tooltip="Configure widget">
+                  uib-tooltip="Configure widget">
             <span class="glyphicon glyphicon-cog"></span>
           </button>
           <button class="btn btn-danger"
                   ng-hide="cellCount <= 1" ng-click="remove($index)"
-                  tooltip="Delete widget">
+                  uib-tooltip="Delete widget">
             <span class="glyphicon glyphicon-trash"></span>
           </button>
           <button class="btn btn-default" ng-click="addRight()"
-                  tooltip="Add cell to the right">
+                  uib-tooltip="Add cell to the right">
             <span class="glyphicon glyphicon-log-in"></span>
           </button>
         </div>

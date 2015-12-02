@@ -8,10 +8,10 @@
     .controller('SurveyOverviewController', SurveyOverviewController);
 
   SurveyOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$modal', 'API', 'NgTableParams', 'HeaderService'
+    '$scope', '$resource', '$location', '$uibModal', 'API', 'NgTableParams', 'HeaderService'
   ];
 
-  function SurveyOverviewController($scope, $resource, $location, $modal, API, TableParams, HeaderService) {
+  function SurveyOverviewController($scope, $resource, $location, $uibModal, API, TableParams, HeaderService) {
     var vm = this;
 
     // bindable variables
@@ -68,7 +68,7 @@
     }
 
     function openEditSurvey() {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         animation: true,
         size: 'lg',
         templateUrl: 'study/survey/editSurveyModal.tpl.html',

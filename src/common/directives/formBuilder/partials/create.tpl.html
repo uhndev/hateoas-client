@@ -54,15 +54,15 @@
 			<div class="col-md-9">
 				<p ng-show="fb.form.form_questions.length == 0">No questions added yet.</p>
 
-				<accordion ui-sortable ng-model="fb.form.form_questions" close-others="fb.accordion.oneAtATime">
+				<uib-accordion ui-sortable ng-model="fb.form.form_questions" close-others="fb.accordion.oneAtATime">
 					<div ui-sortable="fb.sortableOptions" ng-model="fb.form.form_questions">
-						<accordion-group ng-repeat="field in fb.form.form_questions track by $index" is-open="status.open">
-							<accordion-heading>
+						<uib-accordion-group ng-repeat="field in fb.form.form_questions track by $index" is-open="status.open">
+							<uib-accordion-heading>
 								<a class="accordion-toggle">
 									{{field.field_id}}) &nbsp;{{field.field_title}}
 								</a>
 								<span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></span>
-							</accordion-heading>
+							</uib-accordion-heading>
 
 							<div class="accordion-edit">
 								<button class="btn btn-danger pull-right" type="button" ng-click="fb.deleteField(field.field_id)">
@@ -171,9 +171,9 @@
 									</div>
 								</div>
 							</div>
-						</accordion-group>
+						</uib-accordion-group>
 					</div>
-				</accordion>
+				</uib-accordion>
 			</div>
 		</div>
 
