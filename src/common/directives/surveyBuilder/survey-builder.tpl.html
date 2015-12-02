@@ -110,10 +110,10 @@
           <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
               ng-model="sb.survey.defaultFormVersions">
             <li ng-repeat="form in sb.survey.defaultFormVersions track by $index"
-                class="selectable"
+                class="selectable" ng-attr-title="version {{form.revision}}: {{form.description}}"
                 ng-switch="form.active">
               <h4><span ng-switch-when="true" class="label label-primary"
-                    ng-click="form.active = false">
+                    ng-click="form.active = false" >
                 {{$index + 1}}) {{form.name}}
                 <i class="fa fa-times"></i>
               </span>
@@ -156,7 +156,7 @@
                     <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
                         ng-model="session.formOrder">
                       <li ng-repeat="id in session.formOrder track by $index"
-                          class="selectable"
+                          class="selectable" ng-attr-title="version {{sb.formVersions[id].revision}}: {{sb.formVersions[id].description}}"
                           ng-style="{ 'margin-bottom': '-5px' }"
                           ng-switch="sb.isFormActive(id, session)">
                         <h4>

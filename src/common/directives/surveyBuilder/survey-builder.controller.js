@@ -77,16 +77,21 @@
 
       // sort and retrieve latest revisions of forms
       if (!_.has(vm.forms, 'versions')) {
+        // master list of all form versions
+        vm.allFormVersions = _.flatten(_.map(vm.forms, function (form) {
+          return form.versions;
+        }));
+
         // stored list of latest form versions
         vm.forms = _.map(vm.forms, function (form) {
           var latestForm = _.last(_.sortBy(form.versions, 'revision'));
-          latestForm = _.pick(latestForm, 'id', 'name', 'revision', 'form');
+          latestForm = _.pick(latestForm, 'id', 'name', 'description', 'revision', 'form');
           latestForm.active = true;
           return latestForm;
         });
 
-        // store dictionary of latest forms
-        vm.formVersions = _.indexBy(angular.copy(vm.forms), 'id');
+        // store dictionary of all forms
+        vm.formVersions = _.indexBy(angular.copy(vm.allFormVersions), 'id');
       }
 
       // sort and retrieve latest revisions of surveys
@@ -126,17 +131,6 @@
             return _.contains(formDiffs.toRemove, formVersion.id);
           });
         }
-
-        // add any new forms to each session.formOrder (list of forms per session)
-        var formIds = _.pluck(vm.forms, 'id');
-        _.map(vm.survey.sessions, function (session) {
-          var diff = _.difference(formIds, session.formOrder);
-          if (diff.length > 0) {
-            _.each(diff, function (formId) {
-              session.formOrder.push(formId);
-            });
-          }
-        });
       } else {
         // if creating new survey, set defaultFormVersions from vm.forms
         vm.survey.defaultFormVersions = [];
