@@ -115,6 +115,10 @@
       var savedForm = pickFormAttributes(result);
       $scope.isSaving = false;
       if ($scope.isCommitting) {
+        var description = prompt("Enter a description of changes: ");
+        if (!_.isEmpty(description)) {
+          $scope.form.description = description;
+        }
         FormVersionService.save($scope.form);
       }
       toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
