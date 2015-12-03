@@ -1,14 +1,14 @@
-<label for="uuid:{{ widget.name }}" 
+<label for="uuid:{{ widget.name }}"
 	ng-if="widget.label">
 	{{ widget.label }}
-	<ui-help popover="{{ widget.properties.title }}" 
+	<ui-help uib-popover="{{ widget.properties.title }}"
 		popover-placement="right"
 		ng-show="widget.properties.title"></ui-help>
-	<span class="glyphicon glyphicon-floppy-saved text-success" 
+	<span class="glyphicon glyphicon-floppy-saved text-success"
 	      ng-if="widgetModel.status === 'saved'">
 	</span>
 	<button class="btn btn-danger btn-xs" ng-if="widgetModel.status === 'error'"
-	  popover="An error occurred saving this question. Click here to a manually save."
+	  uib-popover="An error occurred saving this question. Click here to a manually save."
 	  popover-trigger="mouseenter"
 	  ng-click="manualSave()"
 	  >
