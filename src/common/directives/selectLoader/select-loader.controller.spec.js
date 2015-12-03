@@ -9,12 +9,12 @@ describe('select-loader controller', function() {
 		SelectService = _SelectService_;
 		scope = _$rootScope_.$new();
 		createController = function(data) {
-			return _$controller_('SelectController', { 
+			return _$controller_('SelectController', {
 				$scope: scope,
 				API: API,
 				SelectService: SelectService
 			}, data);
-		};		
+		};
 	}));
 
 	describe('atomic select-loaders', function() {
@@ -23,7 +23,7 @@ describe('select-loader controller', function() {
 			isAtomic: true,
 			isDisabled: false,
 			values: '',
-			labels: 'prefix firstname lastname',
+			labels: 'displayName', //calling displayName for label, set in inherited BaseModel.js in sails backend
 			outputProperties: 'id'
 		};
 
@@ -71,15 +71,15 @@ describe('select-loader controller', function() {
 			scope.vm = ctrl;
 			scope.$digest();
 			httpBackend.flush();
-			expect(ctrl.input.length).toBe(4);			
+			expect(ctrl.input.length).toBe(4);
 		});
 
 		it('should extract id to vm.values for atomic select-loaders', function() {
 			ctrl = createController(data);
 			scope.vm = ctrl;
-			ctrl.output = [{ 'id': "2" }]; 
+			ctrl.output = [{ 'id': "2" }];
 			ctrl.setValues();
-			scope.$digest();			
+			scope.$digest();
 			httpBackend.flush();
 			expect(ctrl.values).toEqual("2");
 		});
@@ -91,7 +91,7 @@ describe('select-loader controller', function() {
 			scope.$digest();
 			httpBackend.flush();
 			expect(ctrl.input[1].ticked).toBe(true);
-		});		
+		});
 	});
 
 	describe('non-atomic select-loaders', function() {
@@ -100,7 +100,7 @@ describe('select-loader controller', function() {
 			isAtomic: false,
 			isDisabled: false,
 			values: [],
-			labels: 'prefix firstname lastname',
+			labels: 'displayName', //calling displayName for label, set in inherited BaseModel.js in sails backend
 			outputProperties: 'id'
 		};
 
@@ -142,11 +142,11 @@ describe('select-loader controller', function() {
         ]
     	});
 		});
-		
+
 		it('should extract array of ids to vm.values for non-atomic select-loaders', function() {
 			ctrl = createController(data);
 			scope.vm = ctrl;
-			ctrl.output = [{ 'id': "2" }, { 'id': "3" }]; 
+			ctrl.output = [{ 'id': "2" }, { 'id': "3" }];
 			ctrl.setValues();
 			scope.$digest();
 			httpBackend.flush();
