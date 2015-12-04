@@ -23,7 +23,7 @@ describe('select-loader controller', function() {
 			isAtomic: true,
 			isDisabled: false,
 			values: '',
-			labels: 'displayName',
+			labels: 'displayName', //calling displayName for label, set in inherited BaseModel.js in sails backend
 			outputProperties: 'id'
 		};
 
@@ -100,7 +100,7 @@ describe('select-loader controller', function() {
 			isAtomic: false,
 			isDisabled: false,
 			values: [],
-			labels: 'displayName',
+			labels: 'displayName', //calling displayName for label, set in inherited BaseModel.js in sails backend
 			outputProperties: 'id'
 		};
 
