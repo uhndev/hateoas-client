@@ -20,7 +20,6 @@
         <button type="button" class="btn btn-default" ng-click="opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
       </span>
     </p>
-    <pre>{{sub_form.$valid | json}}</pre>
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
     </div>
