@@ -5,7 +5,7 @@
 		</label>&nbsp;
 		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && sub_form.$valid"></span>
     <span class="pull-right" ng-show="field.field_questions.length > 0">
-      <input type="checkbox" ng-model="selectToggle" ng-change="toggleSelectCreate()" /> Create New
+      <input type="checkbox" ng-model="selectToggle" ng-change="toggleSelectCreate()"/> Create New
     </span>
     <div class="row-fluid" ng-switch="selectToggle" ng-style="{ 'margin-left': '20px' }">
       <fieldset class="well" ng-switch-when="true">
@@ -19,7 +19,7 @@
         is-disabled="false"
         ng-required="field.field_required"
         values="field.field_value"
-        labels="{{field.field_labels || 'name prefix firstname lastname'}}"
+        labels="{{field.field_labels || 'displayName'}}"
         output-properties="id">
       </select-loader>
     </div>
