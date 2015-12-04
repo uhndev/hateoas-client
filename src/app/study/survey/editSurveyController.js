@@ -6,10 +6,10 @@
     .controller('EditSurveyController', EditSurveyController);
 
   EditSurveyController.$inject = [
-    '$modalInstance', 'toastr', 'study', 'forms', 'survey', 'SurveyService', 'SurveySessionService'
+    '$uibModalInstance', 'toastr', 'study', 'forms', 'survey', 'SurveyService', 'SurveySessionService'
   ];
 
-  function EditSurveyController($modalInstance, toastr, study, forms, survey, Survey, SurveySessions) {
+  function EditSurveyController($uibModalInstance, toastr, study, forms, survey, Survey, SurveySessions) {
     var vm = this;
 
     // bindable variables
@@ -91,13 +91,13 @@
         })
         .finally(function () {
           vm.editSurvey = {};
-          $modalInstance.close();
+          $uibModalInstance.close();
         });
     }
 
     function cancel() {
       vm.editSurvey = {};
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     }
   }
 })();

@@ -1,16 +1,16 @@
 (function() {
   'use strict';
   angular.module('dados.common.directives.hateoas.modal.controller', [
-    'ui.bootstrap.modal', 
+    'ui.bootstrap.modal',
     'dados.common.services.template'
   ])
   .controller('HateoasModalController', HateoasModalController);
 
   HateoasModalController.$inject = [
-    '$scope', '$resource', '$modalInstance', '$q', 'TemplateService'
+    '$scope', '$resource', '$uibModalInstance', '$q', 'TemplateService'
   ];
-  
-  function HateoasModalController($scope, $resource, $modalInstance, $q, TemplateService) {
+
+  function HateoasModalController($scope, $resource, $uibModalInstance, $q, TemplateService) {
     // Loads values into the form.
     function loadValues(form) {
       TemplateService.loadAnswerSet($scope.item, $scope.template, form);
@@ -31,11 +31,11 @@
     }
 
     $scope.done = function() {
-      $modalInstance.close(TemplateService.formToObject($scope.form));
+      $uibModalInstance.close(TemplateService.formToObject($scope.form));
     };
 
     $scope.cancel = function() {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     loadTemplate($scope.template).then(loadValues);

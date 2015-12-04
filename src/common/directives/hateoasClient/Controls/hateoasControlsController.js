@@ -7,14 +7,14 @@
   .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
-    '$scope', '$modal', '$location',
+    '$scope', '$uibModal', '$location',
     'API', 'SLUG_ROUTES', 'HateoasUtils', 'toastr'
   ];
 
   /**
    * Controller for the directive
    */
-  function HateoasControlsController($scope, $modal, $location,
+  function HateoasControlsController($scope, $uibModal, $location,
                                       API, SLUG_ROUTES, HateoasUtils, toastr) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
@@ -50,7 +50,7 @@
           {} : angular.copy($scope.item));
       modalScope.template = angular.copy($scope.template);
 
-      var instance = $modal.open({
+      var instance = $uibModal.open({
         templateUrl: 'directives/hateoasClient/Modal/hateoasModal.tpl.html',
         controller: 'HateoasModalController',
         scope: modalScope
