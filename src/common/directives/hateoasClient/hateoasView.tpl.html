@@ -43,6 +43,11 @@
         class="selectable"
         ng-class="{'active': item === hateoas.selected}">
         <td ng-repeat="column in hateoas.template.data track by $index"
+            ng-if="!column.data"
+            sortable="column.name">
+          {{ item[column.name] | formatter:column }}
+        </td>
+        <td ng-repeat="column in hateoas.template.data track by $index"
           ng-if="!column.data"
           sortable="column.name">
           {{ item[column.name] | formatter:column }}
