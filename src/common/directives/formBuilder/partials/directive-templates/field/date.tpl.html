@@ -14,11 +14,10 @@
         ng-required="field.field_required"
         class="form-control"
         uib-datepicker-popup
-        ng-model="dt"
         is-open="opened"
         disabled/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="openDate($event); opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+        <button type="button" class="btn btn-default" ng-click="opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
       </span>
     </p>
     <div ng-show="!sub_form.$pristine">

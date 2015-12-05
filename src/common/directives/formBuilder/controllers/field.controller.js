@@ -8,9 +8,9 @@
     ])
     .controller('FieldController', FieldController);
 
-  FieldController.$inject = ['$scope', '$http', '$timeout', 'SelectService'];
+  FieldController.$inject = ['$scope', 'moment'];
 
-  function FieldController($scope, $http, $timeout, SelectService) {
+  function FieldController($scope, moment) {
 
     // private variables
     var savedSingleSelect = null;
@@ -26,7 +26,6 @@
     $scope.clearExpr = clearExpr;
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
-    $scope.openDate = openDate;
 
     if ($scope.field.field_type == 'singleselect') {
       savedSingleSelect = angular.copy($scope.field.field_value);
@@ -39,6 +38,12 @@
           });
         }
       }, true);
+    }
+
+    // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker
+    // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
+    if ($scope.field.field_type == 'date' && moment($scope.field.field_value).isValid()) {
+      $scope.field.field_value = new Date($scope.field.field_value);
     }
 
     function toggleSelectCreate() {
@@ -93,11 +98,6 @@
       }
       $scope.showValidateError = !res;
       return res;
-    }
-
-    function openDate($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
     }
   }
 

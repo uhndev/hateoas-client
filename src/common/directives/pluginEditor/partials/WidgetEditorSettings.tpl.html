@@ -18,7 +18,7 @@
   <div class="form-group" ng-show="widget.hasOwnProperty('label')">
     <label for="label">
       Question
-      <ui-help popover="Specify the question for this input."></ui-help>
+      <ui-help uib-popover="Specify the question for this input."></ui-help>
     </label>
     <input class="form-control" id="label"
            type="text" maxlength="256"
@@ -27,7 +27,7 @@
   <div class="form-group">
     <label for="name">
       Field Name
-      <ui-help popover="Specify the field name for this input. Field
+      <ui-help uib-popover="Specify the field name for this input. Field
          names cannot contain spaces and must be in uppercase."></ui-help>
     </label>
     <input class="form-control" id="name"
@@ -38,7 +38,7 @@
   <div class="form-group">
     <label for="title">
       Tool Tip
-      <ui-help popover="Specify the tool tip for this input. Tool tips will
+      <ui-help uib-popover="Specify the tool tip for this input. Tool tips will
 	     appear when the user hovers over an input. As well, empty inputs will
 	     automatically show the tool tip within the input."></ui-help>
     </label>
@@ -50,7 +50,7 @@
   <div class="form-group">
     <label for="defaultValue">
       Default Value
-      <ui-help popover="Specify the default value for this question"></ui-help>
+      <ui-help uib-popover="Specify the default value for this question"></ui-help>
     </label>
     <input class="form-control" id="title"
            placeholder="Default value" type="text"
@@ -59,7 +59,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('idForm')">
     <label for="form">
       SubForm ID
-      <ui-help popover="Select a plugin to embed within this plugin.">
+      <ui-help uib-popover="Select a plugin to embed within this plugin.">
     </label>
     <input class="form-control" id="subform"
            placeholder="Form ID"
@@ -71,7 +71,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('size')">
     <label for="size">
       Widget Size
-      <ui-help popover="Specify the width of the input. Size is a measure of the
+      <ui-help uib-popover="Specify the width of the input. Size is a measure of the
          number of characters the input can fit."></ui-help>
     </label>
     <input class="form-control" id="size" placeholder="Field size"
@@ -80,7 +80,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('maxlength')">
     <label for="maxlength">
       Maximum input length
-      <ui-help popover="Specify the maximum number of characters that this
+      <ui-help uib-popover="Specify the maximum number of characters that this
          input can take."></ui-help>
     </label>
     <input class="form-control" id="maxlength" placeholder="Maximum characters"
@@ -90,7 +90,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('rows')">
     <label for="rows">
       Rows
-      <ui-help popover="Specify the number of rows for this input.">
+      <ui-help uib-popover="Specify the number of rows for this input.">
       </ui-help>
     </label>
     <input class="form-control" id="rows" placeholder="Number of rows"
@@ -99,7 +99,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('cols')">
     <label for="cols">
       Columns
-      <ui-help popover="Specify the number of columns for this input.">
+      <ui-help uib-popover="Specify the number of columns for this input.">
       </ui-help>
     </label>
 
@@ -126,7 +126,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('step')">
     <label for="step">
       Step Size
-      <ui-help popover="Specify the increment/decrement value for this widget.">
+      <ui-help uib-popover="Specify the increment/decrement value for this widget.">
       </ui-help>
     </label>
     <input class="form-control" id="step" type="number" ng-required="false"
@@ -136,7 +136,7 @@
        ng-switch="widget.properties.type">
     <label for="min">
       Minimum Input Value
-      <ui-help popover="Specify the minimum value that the user can enter.">
+      <ui-help uib-popover="Specify the minimum value that the user can enter.">
       </ui-help>
     </label>
     <input ng-switch-when="range" class="form-control" id="min"
@@ -153,7 +153,7 @@
        ng-switch="widget.properties.type">
     <label for="max">
       Max Input Value
-      <ui-help popover="Specify the maximum value that the user can enter.">
+      <ui-help uib-popover="Specify the maximum value that the user can enter.">
       </ui-help>
     </label>
     <input ng-switch-when="range" class="form-control" id="max"
@@ -169,7 +169,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('units')">
     <label for="units">
       Slider Units
-      <ui-help popover="Specify any units of measurement for this widget.">
+      <ui-help uib-popover="Specify any units of measurement for this widget.">
       </ui-help>
     </label>
     <input class="form-control" id="units" type="text" ng-required="false"
@@ -193,7 +193,7 @@
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('expression')">
     <label for="expression">
       Expression
-      <ui-help popover="Define an expression to evaluate">
+      <ui-help uib-popover="Define an expression to evaluate">
       </ui-help>
     </label>
     <button class="btn"

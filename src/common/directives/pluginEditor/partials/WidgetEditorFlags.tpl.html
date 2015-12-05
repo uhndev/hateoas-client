@@ -8,50 +8,50 @@
 	        Auto-complete
 	    </label>
 	    <input type="checkbox" id="autocomplete" ng-model="widget.properties.autocomplete" />
-	    <ui-help popover="Use the auto-complete feature on the user's browser."></ui-help>
+	    <ui-help uib-popover="Use the auto-complete feature on the user's browser."></ui-help>
 	</div>
 	<div class="form-group">
 	    <label for="required">
 	        Required
 	    </label>
-	    <button class="btn" 
+	    <button class="btn"
 	    		ng-class="!!widget.properties.required ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('required', fieldNames)">
 	            when...
         </button>
-	    <ui-help popover="Set the question as required."></ui-help>
+	    <ui-help uib-popover="Set the question as required."></ui-help>
 	</div>
 	<div class="form-group">
 	    <label for="hidden">
 	        Hidden
 	    </label>
-	    <button class="btn" 
+	    <button class="btn"
 	    		ng-class="!!widget.properties.hidden ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('hidden', fieldNames)">
 	            when...
         </button>
-	    <ui-help popover="Set the question as hidden."></ui-help>
+	    <ui-help uib-popover="Set the question as hidden."></ui-help>
 	</div>
 	<div class="form-group">
 	    <label for="readonly">
 	        Read-only
 	    </label>
-	    <button class="btn" 
+	    <button class="btn"
 	    		ng-class="!!widget.properties.readonly ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('readonly', fieldNames)">
 	            when...
         </button>
-	    <ui-help popover="Set the question as read-only."></ui-help>
+	    <ui-help uib-popover="Set the question as read-only."></ui-help>
 	</div>
 	<div class="form-group">
 	    <label for="disabled">
 	        Disabled
 	    </label>
-	    <button class="btn" 
+	    <button class="btn"
 	    		ng-class="!!widget.properties.disabled ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('disabled', fieldNames)">
 	            when...
         </button>
-	    <ui-help popover="Set the question as disabled."></ui-help>
+	    <ui-help uib-popover="Set the question as disabled."></ui-help>
 	</div>
 </form>
