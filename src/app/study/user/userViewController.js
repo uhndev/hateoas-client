@@ -9,10 +9,10 @@
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
-		'$scope', '$q', '$location', '$modal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
+		'$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
 	];
 
-	function StudyUserController($scope, $q, $location, $modal, HeaderService, UserEnrollment, toastr, API) {
+	function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
@@ -92,7 +92,7 @@
 		}
 
 		function openAddUser() {
-	    var modalInstance = $modal.open({
+	    var modalInstance = $uibModal.open({
 	      animation: true,
 	      templateUrl: 'study/user/addUserModal.tpl.html',
 	      controller: 'AddUserController',

@@ -102,7 +102,7 @@
                       <span ng-if="schedule.$editFrom"
                             ng-change="subject.saveSchedule(schedule)"
                             ng-model="schedule.availableFrom"
-                            datepicker-popup ng-model="dt" is-open="schedule.$editFrom" max-date="schedule.availableTo">
+                            uib-datepicker-popup ng-model="dt" is-open="schedule.$editFrom" max-date="schedule.availableTo">
                         {{schedule.availableFrom | date:'EEE, MMM d, y'}}
                       </span>
                       <span ng-if="!schedule.$editFrom">
@@ -120,7 +120,7 @@
                       <span ng-if="schedule.$editTo"
                             ng-change="subject.saveSchedule(schedule)"
                             ng-model="schedule.availableTo"
-                            datepicker-popup ng-model="dt" is-open="schedule.$editTo" min-date="schedule.availableFrom">
+                            uib-datepicker-popup ng-model="dt" is-open="schedule.$editTo" min-date="schedule.availableFrom">
                         {{schedule.availableTo | date:'EEE, MMM d, y'}}
                       </span>
                       <span ng-if="!schedule.$editTo">

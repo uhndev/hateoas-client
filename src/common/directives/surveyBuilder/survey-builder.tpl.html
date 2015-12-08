@@ -1,9 +1,9 @@
 <div>
-  <tabset justified="true">
+  <uib-tabset justified="true">
     <!-- Stage 1: Define 1 survey item with n sessions in survey -->
     <!-- (study, survey, completedBy) -->
     <!-- (surveyVersion, name, timepoint, availableFrom, availableTo, type) -->
-    <tab heading="Define Survey" active="sb.STAGES['DEFINE_SURVEY']">
+    <uib-tab heading="Define Survey" active="sb.STAGES['DEFINE_SURVEY']">
       <ng-form name="sb.surveyForm" class="form-horizontal" novalidate>
         <div class="form-group">
           <label for="name" class="col-sm-3 control-label"
@@ -54,11 +54,11 @@
                    can-del-col="false"
                    force-reload="sb.toggleReload">
       </list-editor>
-    </tab>
+    </uib-tab>
 
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
-    <tab heading="Select Forms" active="sb.STAGES['SELECT_FORMS']">
+    <uib-tab heading="Select Forms" active="sb.STAGES['SELECT_FORMS']">
       <div class="row">
         <form class="form-inline">
           <div class="form-group">
@@ -101,19 +101,19 @@
       </div>
       <br/>
       <div class="row">
-        <div class="col-md-3 well well-sm" collapse="sb.isDefaultsCollapsed">
+        <div class="col-md-3 well well-sm" uib-collapse="sb.isDefaultsCollapsed">
           Apply To All Encounters <input type="checkbox" ng-model="sb.cascadeDefaults" ng-change="sb.onToggleCascadeDefaults()"/>
-          <ui-help popover="If checked, changes in this panel will cascade to each selected encounter session in the survey.
+          <ui-help uib-popover="If checked, changes in this panel will cascade to each selected encounter session in the survey.
                             Clicking the calendar icons will toggle cascading.">
           </ui-help>
 
           <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
               ng-model="sb.survey.defaultFormVersions">
             <li ng-repeat="form in sb.survey.defaultFormVersions track by $index"
-                class="selectable"
+                class="selectable" ng-attr-title="version {{form.revision}}: {{form.description}}"
                 ng-switch="form.active">
               <h4><span ng-switch-when="true" class="label label-primary"
-                    ng-click="form.active = false">
+                    ng-click="form.active = false" >
                 {{$index + 1}}) {{form.name}}
                 <i class="fa fa-times"></i>
               </span>
@@ -152,11 +152,11 @@
                       Available {{session.availableFrom}} day(s) before and {{session.availableTo}} day(s) after
                     </p>
                   </timeline-heading>
-                  <div collapse="session.$isCollapsed">
+                  <div uib-collapse="session.$isCollapsed">
                     <ul class="list-unstyled" ui-sortable="{ 'ui-floating': true, 'cursor': 'move' }"
                         ng-model="session.formOrder">
                       <li ng-repeat="id in session.formOrder track by $index"
-                          class="selectable"
+                          class="selectable" ng-attr-title="version {{sb.formVersions[id].revision}}: {{sb.formVersions[id].description}}"
                           ng-style="{ 'margin-bottom': '-5px' }"
                           ng-switch="sb.isFormActive(id, session)">
                         <h4>
@@ -181,6 +181,6 @@
           </div>
         </div>
       </div>
-    </tab>
-  </tabset>
+    </uib-tab>
+  </uib-tabset>
 </div>

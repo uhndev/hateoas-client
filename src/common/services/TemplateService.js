@@ -52,7 +52,7 @@
         field_helpertext: 'required',
         field_options: [],
         field_hasOptions: false,
-        field_required: true
+        field_required: item.required || false
       };
       if (_.isArray(item.value)) { // for enum fields
         fields.field_type = 'dropdown';

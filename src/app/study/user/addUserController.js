@@ -8,10 +8,10 @@
 		.controller('AddUserController', AddUserController);
 
 	AddUserController.$inject = [
-		'$modalInstance', 'UserEnrollment', 'toastr', 'centreHref'
+		'$uibModalInstance', 'UserEnrollment', 'toastr', 'centreHref'
 	];
 
-	function AddUserController($modalInstance, UserEnrollment, toastr, centreHref) {
+	function AddUserController($uibModalInstance, UserEnrollment, toastr, centreHref) {
 		var vm = this;
 		// bindable variables
 		vm.newUser = {};
@@ -33,12 +33,12 @@
         toastr.success('Added user to collection centre!', 'Collection Centre');
       }).finally(function () {
         vm.newUser = {};
-        $modalInstance.close();
+        $uibModalInstance.close();
       });
 		}
 
 		function cancel() {
-		  $modalInstance.dismiss('cancel');
+		  $uibModalInstance.dismiss('cancel');
 		}
 
 	}

@@ -8,9 +8,9 @@
     ])
     .controller('LayoutController', LayoutController);
 
-  LayoutController.$inject = ['$scope', '$modal', 'WidgetService'];
+  LayoutController.$inject = ['$scope', 'WidgetService'];
 
-  function LayoutController($scope, $modal, WidgetService) {
+  function LayoutController($scope, WidgetService) {
     // bindable variables
     $scope.questions = [];
     $scope.selectedIndex = -1;
