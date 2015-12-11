@@ -49,7 +49,7 @@
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
       if (!Auth.isAdmin() && Auth.isAdminPage(page)) {
-        $location.path('/400');
+        $state.go('forbidden');
       }
     });
 
