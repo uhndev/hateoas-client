@@ -21,6 +21,7 @@
       'dados.constants',
       'dados.access',
       'dados.auth',
+      'dados.error',
       'dados.study',
       'dados.schedule',
       'dados.subject',
