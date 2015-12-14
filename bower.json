@@ -37,7 +37,9 @@
     "angular-translate-editor": "khchan/angular-translate-editor",
     "angular-material": "~0.11.4",
     "roboto-fontface": "~0.4.3",
-    "angular-translate-storage-local": "~2.8.1"
+    "angular-translate-storage-local": "~2.8.1",
+    "angular-google-maps": "~2.2.1",
+    "angular-simple-logger": "~0.1.5"
   },
   "resolutions": {
     "lodash": "~3.10.1",
