@@ -1,8 +1,8 @@
 <div ng-controller="CollectionCentreOverviewController as cc">
 	<div class="row">
-		<div class="col-md-8">
-			<h1 id="Title">
-				{{cc.title}}
+		<div class="col-md-8" context-translator="APP.STUDY.OVERVIEW.TITLE">
+			<h1 id="Title" translate translate-values="{ name: study.resource.items.name }">
+        APP.STUDY.OVERVIEW.TITLE>
 			</h1>
 		</div>
 	</div>
@@ -12,8 +12,8 @@
 		<!-- List User Info -->
 		<div class="col-md-4">
 			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Collection Centre Information</h3>
+				<div class="panel-heading"  context-translator="APP.STUDY.COLLECTION_CENTRE.OVERVIEW.TITLE">
+					<h3 class="panel-title" translate>APP.STUDY.COLLECTION_CENTRE.OVERVIEW.TITLE</h3>
 				</div>
 				<div class="panel-body">
 					<simple-table
@@ -28,8 +28,8 @@
 		<div class="col-md-8">
       <!-- List Users -->
 			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Coordinators</h3>
+				<div class="panel-heading" context-translator="APP.STUDY.COLLECTION_CENTRE.OVERVIEW.COORDINATORS.TITLE">
+					<h3 class="panel-title" translate>APP.STUDY.COLLECTION_CENTRE.OVERVIEW.COORDINATORS.TITLE</h3>
 				</div>
 				<div class="panel-body">
 					<table class="table table-hover">
@@ -55,8 +55,8 @@
 
 		  <!-- List Subjects -->
 			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Subjects</h3>
+				<div class="panel-heading" context-translator="APP.STUDY.COLLECTION_CENTRE.OVERVIEW.SUBJECTS.TITLE">
+					<h3 class="panel-title" translate>APP.STUDY.COLLECTION_CENTRE.OVERVIEW.SUBJECTS.TITLE</h3>
 				</div>
 				<div class="panel-body">
 					<table class="table table-hover">

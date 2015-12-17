@@ -69,9 +69,9 @@
         ]);
 
         _.each(data.items, function (item) {
-          savedAccess[item.enrollmentId] = {};
-          savedAccess[item.enrollmentId].centreAccess = item.centreAccess;
-          savedAccess[item.enrollmentId].collectionCentre = item.collectionCentre;
+          savedAccess[item.userenrollment] = {};
+          savedAccess[item.userenrollment].centreAccess = item.centreAccess;
+          savedAccess[item.userenrollment].collectionCentre = item.collectionCentre;
         });
 
         // initialize submenu
@@ -113,8 +113,8 @@
 		function saveChanges() {
 			$q.all(_.map(vm.resource.items, function (item) {
 				// only make PUT request if necessary if selection changed
-				if (!_.isEqual(savedAccess[item.enrollmentId].centreAccess, item.centreAccess) ||
-            !_.isEqual(savedAccess[item.enrollmentId].collectionCentre, item.collectionCentre)) {
+				if (!_.isEqual(savedAccess[item.userenrollment].centreAccess, item.centreAccess) ||
+            !_.isEqual(savedAccess[item.userenrollment].collectionCentre, item.collectionCentre)) {
 					var enrollment = new UserEnrollment({
             user: item.id,
             collectionCentre: item.collectionCentre,
