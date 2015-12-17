@@ -50,6 +50,8 @@
      */
     var error = function(err) {
       vm.error = err;
+      $location.url('/login');
+      $state.go('login');
     };
 
     /**

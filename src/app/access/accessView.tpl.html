@@ -58,10 +58,10 @@
           </td>
           <td ng-if="access.currentView === 'user'">
             <select class="form-control"
-                    ng-disabled="access.selected.id !== row.id"
+                    ng-disabled="access.selected.name !== row.name"
                     ng-model="row.group"
                     ng-change="access.updateRole()"
-                    ng-options="group.id as group.name for group in access.groups">
+                    ng-options="group.name as group.name for group in access.groups">
             </select>
           </td>
           <td ng-if="access.currentView === 'group'"

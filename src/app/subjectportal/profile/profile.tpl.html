@@ -90,7 +90,7 @@
             <label for="gender" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.GENDER</label>
 
             <div class="col-sm-9">
-              <select name="gender" class="form-control" ng-model="profile.user.gender" required>
+              <select name="gender" class="form-control" ng-model="profile.user.gender">
                 <option value="" disabled>Select a gender</option>
                 <option value="Male" label="Male">Male</option>
                 <option value="Female" label="Female">Female</option>
@@ -106,7 +106,7 @@
             <div class="col-sm-9">
               <p class="input-group">
                 <input name="dob" type="text" class="form-control" uib-datepicker-popup ng-model="profile.user.dob"
-                       is-open="profile.openedDOB" required disabled/>
+                       is-open="profile.openedDOB" disabled/>
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default" ng-click="profile.openedDOB = true"><i
                     class="glyphicon glyphicon-calendar"></i></button>

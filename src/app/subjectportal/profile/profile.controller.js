@@ -12,7 +12,6 @@
 
     // bindable variables
     vm.openedDOB = false;
-    vm.user = UserService.get({ id: Auth.currentUser.user.id });
     vm.studyQuery = { 'where' : {} };
     vm.studySubjects = [];
 
@@ -24,6 +23,13 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      UserService.get({ id: Auth.currentUser.user.id }).$promise.then(function (user) {
+        if (angular.isString(user.dob)) {
+          user.dob = new Date(user.dob);
+        }
+        vm.user = angular.copy(user);
+      });
+
       vm.studyTableParams = new TableParams({
         page: 1,
         count: 10,
