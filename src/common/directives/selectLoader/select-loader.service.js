@@ -5,27 +5,39 @@
 		.module('dados.common.directives.selectLoader.service', [])
 		.service('SelectService', SelectService);
 
-	SelectService.$inject = ['$http', '$q'];
+	SelectService.$inject = ['$http', '$q', '$location'];
 
-	function SelectService($http, $q) {
+	/**
+   * SelectService
+   * @description Service for optimizing $http calls when populating resource based dropdowns.  If multiple /user
+   *              dropdowns exist on a page, there is no sense in fetching the same data several times, so if the
+   *              $location is the same, fetch data from cache.
+   * @param $http
+   * @param $q
+   * @param $location
+   * @constructor
+	 */
+	function SelectService($http, $q, $location) {
 		var cache = {};
+    var currentLocation = null;
 
 		this.loadSelect = function(url, refresh) {
-      // cache[url] = $http.get(url).then(function(response) {
-      //   return response.data.items;
-      // });
-      // return cache[url];
-
 			var deferred;
-			if (!cache[url] || refresh) {
+      if (currentLocation !== $location.path()) {
+        cache = {};
+      }
+
+			if (!cache[url] || (cache[url] && currentLocation !== $location.path()) || refresh) {
 				cache[url] = $http.get(url).then(function(response) {
 					return response.data.items;
 				});
+        currentLocation = $location.path();
 				return cache[url];
 			} else {
-				deferred = $q.defer();
-				deferred.resolve(cache[url]);
-				return deferred.promise;
+        deferred = $q.defer();
+        deferred.resolve(cache[url]);
+        currentLocation = $location.path();
+        return deferred.promise;
 			}
 		};
 	}

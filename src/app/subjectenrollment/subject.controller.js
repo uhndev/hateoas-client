@@ -82,7 +82,9 @@
         bindToController: true,
         resolve: {
           subject: function() {
-            return vm.resource;
+            var subject = angular.copy(vm.resource);
+            subject.doe = new Date(subject.doe);
+            return subject;
           },
           study: function() {
             return vm.resource.studyAttributes;
