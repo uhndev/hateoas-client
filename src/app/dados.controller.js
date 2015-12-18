@@ -30,7 +30,7 @@
      */
     function setPageTitle() {
       // construct translated pageTitle from location url
-      var currentPaths = _.pathnameToArray($location.path());
+      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''));
       var possibleKeys = _.map(currentPaths, function (path) {
         return [LOCALES.translationPrefix, path.toUpperCase(), LOCALES.translationSuffix].join('');
       });
@@ -48,6 +48,9 @@
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
+      if (page.charAt(page.length -  1) == '/') { // remove trailing slashes if they exist
+        $location.url(page.slice(0, -1));
+      }
       if (!Auth.isAdmin() && Auth.isAdminPage(page)) {
         $state.go('forbidden');
       }

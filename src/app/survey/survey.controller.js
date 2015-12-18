@@ -39,7 +39,7 @@
         // initialize submenu
         HeaderService.setSubmenu({
           prompt: vm.resource.sessionStudy.name,
-          value: vm.resource.sessionStudy.name,
+          value: vm.resource.sessionStudy.id,
           rel: 'study'
         }, data, $scope.dados.submenu);
 
@@ -82,7 +82,7 @@
           },
           forms: function() {
             // resolve study forms
-            var StudyForms = $resource(API.url() + '/study/' + vm.resource.sessionStudy.name + '/form');
+            var StudyForms = $resource(API.url() + '/study/' + vm.resource.sessionStudy.id + '/form');
             return StudyForms.get().$promise.then(function (data) {
               return data.items;
             });

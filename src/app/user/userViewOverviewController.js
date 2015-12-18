@@ -71,7 +71,7 @@
           prompt: vm.title,
           value: data.items.id,
           rel: 'user'
-        }, data, $scope.dados.submenu);
+        }, data.items, $scope.dados.submenu);
       });
     }
 

@@ -13,7 +13,6 @@
           ng-if='user.allow'
           data-template='user.template'
           data-href='{{user.resource.href}}'
-          data-slug='{{user.resource.slug}}'
           data-permissions="user.allow"
           data-item='user.resource.items'>
         </hateoas-controls>
@@ -55,7 +54,7 @@
             <tbody>
             <tr ng-repeat="row in user.userStudies.tableData track by $index">
               <td>
-                <a ng-href="#/study/{{::row.study}}">{{::row.study}}</a>
+                <a ng-href="#/study/{{::row.study}}">{{::row.studyName}}</a>
               </td>
               <td>
                 <a ng-href="#/collectioncentre/{{::row.collectionCentre}}">{{::row.collectionCentreName}}</a>

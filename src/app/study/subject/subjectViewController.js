@@ -21,8 +21,8 @@
     var vm = this;
 
     // private variables
-    var currStudy = _.getStudyFromUrl($location.path());
-    var centreHref = "study/" + currStudy + "/collectioncentre";
+    var studyID = _.getStudyFromUrl($location.path());
+    var centreHref = "study/" + studyID + "/collectioncentre";
 
     // bindable variables
     vm.centreHref = '';
@@ -41,18 +41,11 @@
     vm.openEditSubject = openEditSubject;
     vm.archiveSubject = archiveSubject;
 
-    init();
-
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Private Methods
      */
-    function init() {
-      Study.query({ name: currStudy }).$promise.then(function (data) {
-        vm.study = _.first(data);
-      });
-    }
 
     function loadModal(type) {
       var modalSettings = {
@@ -63,7 +56,7 @@
         bindToController: true,
         resolve: {
           study: function () {
-            return angular.copy(vm.study);
+            return Study.get({ id: studyID });
           },
           centreHref: function () {
             return centreHref;
@@ -88,11 +81,13 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: currStudy,
-          value: currStudy,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        Study.get({ id: studyID }).$promise.then(function (study) {
+          HeaderService.setSubmenu({
+            prompt: study.displayName,
+            value: studyID,
+            rel: 'study'
+          }, data, $scope.dados.submenu);
+        });
       }
       return data;
     }

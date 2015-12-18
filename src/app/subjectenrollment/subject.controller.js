@@ -63,7 +63,7 @@
         // initialize submenu
         HeaderService.setSubmenu({
           prompt: vm.resource.studyName,
-          value: vm.resource.studyName,
+          value: vm.resource.study,
           rel: 'study'
         }, data, $scope.dados.submenu);
       });
@@ -90,7 +90,7 @@
             return vm.resource.studyAttributes;
           },
           centreHref: function () {
-            return "study/" + vm.resource.studyName + "/collectioncentre";
+            return "study/" + vm.resource.study + "/collectioncentre";
           }
         }
       });

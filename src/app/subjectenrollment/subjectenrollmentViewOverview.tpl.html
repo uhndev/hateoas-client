@@ -1,4 +1,4 @@
-<div ng-controller="SubjectOverviewController as subject" class="container">
+<div ng-controller="SubjectOverviewController as subject">
   <div class="row">
     <div class="col-md-10">
       <h1 id="Title">
@@ -42,7 +42,7 @@
             <tr>
               <td><strong>Study</strong></td>
               <td>
-                <a ng-href="#/study/{{::subject.resource.studyName}}">{{::subject.resource.studyName}}</a>
+                <a ng-href="#/study/{{::subject.resource.study}}">{{::subject.resource.studyName}}</a>
               </td>
             </tr>
             <tr>
