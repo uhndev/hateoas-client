@@ -48,6 +48,9 @@
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
+      if (page.charAt(page.length -  1) == '/') { // remove trailing slashes if they exist
+        $location.url(page.slice(0, -1));
+      }
       if (!Auth.isAdmin() && Auth.isAdminPage(page)) {
         $state.go('forbidden');
       }
