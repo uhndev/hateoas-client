@@ -107,6 +107,7 @@
        * @param path
        */
       function loadTemplate(scope, element, path) {
+        var pathArr = _.pathnameToArray(path);
         // if there was already an inherited scope, $destroy to prevent memory leak
         if (scope.inheritedScope) {
           scope.inheritedScope.$destroy();
@@ -132,6 +133,9 @@
         } else {
           // use the default
           var defaultView = 'directives/hateoasClient/hateoasView.tpl.html';
+          if ((pathArr.length % 2) === 0) {
+            defaultView = 'directives/hateoasClient/hateoasViewItem.tpl.html';
+          }
           element.html($templateCache.get(defaultView));
         }
         // use inherited scope

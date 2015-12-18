@@ -5,6 +5,7 @@
     'dados.common.directives.hateoas.view',
     'dados.common.directives.hateoas.utils',
     'dados.common.directives.hateoas.controls',
-    'dados.common.directives.hateoas.controller'
+    'dados.common.directives.hateoas.controller',
+    'dados.common.directives.hateoas.item.controller'
   ]);
 })();

@@ -1,19 +1,34 @@
-<table class="table table-hover">
+<table class="table table-hover table-striped">
   <tr ng-repeat="item in table.tableData track by $index">
     <td context-translator="{{table.rows[item.name].title}}">
       <b translate>{{table.rows[item.name].title}}</b>
     </td>
     <td ng-switch="table.rows[item.name].type">
-      <div ng-switch-when="user">
-        <a ng-href="#/user/{{item.value.id}}">{{item.value.prefix}} {{item.value.firstname}} {{item.value.lastname}}</a>
-      </div>
-      <div ng-switch-when="study">
-        <a ng-href="#/study/{{item.value.name}}">{{item.value.name}}</a>
+      <div ng-switch-when="text">{{item.value}}</div>
+      <div ng-switch-when="string">{{item.value}}</div>
+      <div ng-switch-when="integer">{{item.value}}</div>
+      <div ng-switch-when="float">{{item.value}}</div>
+      <div ng-switch-when="boolean">{{item.value}}</div>
+      <div ng-switch-when="array">{{item.value}}</div>
+      <div ng-switch-when="json">
+        <pre>{{item.value | json}}</pre>
       </div>
       <div ng-switch-when="date">
         {{item.value | date:'EEEE, MMMM d, y'}}
       </div>
-      <div ng-switch-default>{{item.value}}</div>
+      <div ng-switch-when="datetime">
+        {{item.value | date:'EEEE, MMMM d, y'}}
+      </div>
+      <div ng-switch-default>
+        <a ng-if="item.value.displayName"
+           ng-href="#/{{table.rows[item.name].type}}/{{item.value.id}}">
+          {{item.value.displayName}}
+        </a>
+        <a ng-if="!item.value.displayName"
+           ng-href="#/{{table.rows[item.name].type}}/{{item.value}}">
+          {{table.rows[item.name].title}} {{item.value}}
+        </a>
+      </div>
     </td>
   </tr>
 </table>
