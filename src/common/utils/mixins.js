@@ -12,7 +12,6 @@
     'stringContains': stringContains,
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
-    'cleanURL': cleanURL,
 		'convertRestUrl': convertRestUrl,
 		'getStudyFromUrl': getStudyFromUrl,
 		'inArray': inArray,
@@ -40,10 +39,6 @@
 	function pathnameToArray(pathname) {
 		return pathname.split('/').slice(1);
 	}
-
-  function cleanURL(url) {
-    return url.replace(/(\/\d+)/g, ''); // then to strip ids (/subject/1 to /subject)
-  }
 
 	function convertRestUrl(restURL, prefix) {
 		var index = restURL.indexOf(prefix) + prefix.length;
