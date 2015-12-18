@@ -9,11 +9,11 @@
 
   HateoasController.$inject = [
     '$scope', '$resource', '$location', 'AuthService', 'HeaderService',
-    'API', 'ngTableParams', 'sailsNgTable'
+    'StudyService', 'API', 'ngTableParams', 'sailsNgTable'
   ];
 
   function HateoasController($scope, $resource, $location, AuthService, HeaderService,
-                              API, TableParams, SailsNgTable) {
+                              Study, API, TableParams, SailsNgTable) {
     var vm = this;
 
     // bindable variables
@@ -59,14 +59,17 @@
             // if on study subpage, include study name in template
             // to be able to prepend to appropriate rest calls
             if (studyID) {
-              vm.template.study = studyID;
-              state.prompt = studyID;
-              state.value = studyID;
-              state.rel = 'study';
+              Study.get({ id: studyID }).$promise.then(function (study) {
+                vm.template.study = studyID;
+                state.prompt = study.displayName;
+                state.value = studyID;
+                state.rel = 'study';
+                HeaderService.setSubmenu(state, data, $scope.dados.submenu);
+              });
+            } else {
+              // initialize submenu
+              HeaderService.setSubmenu(state, data, $scope.dados.submenu);
             }
-
-            // initialize submenu
-            HeaderService.setSubmenu(state, data, $scope.dados.submenu);
           });
         }
       });

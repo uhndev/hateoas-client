@@ -77,7 +77,7 @@
         // initialize submenu
         Study.get({ id: studyID }).$promise.then(function (study) {
           HeaderService.setSubmenu({
-            prompt: study.name,
+            prompt: study.displayName,
             value: studyID,
             rel: 'study'
           }, data, $scope.dados.submenu);

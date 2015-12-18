@@ -102,7 +102,7 @@
       if (data) {
         // initialize submenu
         HeaderService.setSubmenu({
-          prompt: vm.study.name,
+          prompt: vm.study.displayName,
           value: studyID,
           rel: 'study'
         }, data, $scope.dados.submenu);

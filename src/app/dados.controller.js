@@ -30,7 +30,7 @@
      */
     function setPageTitle() {
       // construct translated pageTitle from location url
-      var currentPaths = _.pathnameToArray($location.path());
+      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''));
       var possibleKeys = _.map(currentPaths, function (path) {
         return [LOCALES.translationPrefix, path.toUpperCase(), LOCALES.translationSuffix].join('');
       });

@@ -40,8 +40,8 @@
 
         // initialize submenu
         HeaderService.setSubmenu({
-          prompt: vm.resource.items.study.name,
-          value: vm.resource.items.study.name,
+          prompt: vm.resource.items.study.displayName,
+          value: vm.resource.items.study.id,
           rel: 'study'
         }, data, $scope.dados.submenu);
 
