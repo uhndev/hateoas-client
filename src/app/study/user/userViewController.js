@@ -9,17 +9,17 @@
 		.controller('StudyUserController', StudyUserController);
 
 	StudyUserController.$inject = [
-		'$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
+		'$scope', '$q', '$location', '$uibModal', 'HeaderService', 'StudyService', 'UserEnrollment', 'toastr', 'API'
 	];
 
-	function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
+	function StudyUserController($scope, $q, $location, $uibModal, HeaderService, Study, UserEnrollment, toastr, API) {
 
 		var vm = this;
 		var savedAccess = {};
 
     // private variables
-    var currStudy = _.getStudyFromUrl($location.path());
-    var centreHref = "study/" + currStudy + "/collectioncentre";
+    var studyID = _.getStudyFromUrl($location.path());
+    var centreHref = "study/" + studyID + "/collectioncentre";
 
 		// bindable variables
 		vm.allow = {};
@@ -75,11 +75,13 @@
         });
 
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: currStudy,
-          value: currStudy,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        Study.get({ id: studyID }).$promise.then(function (study) {
+          HeaderService.setSubmenu({
+            prompt: study.name,
+            value: studyID,
+            rel: 'study'
+          }, data, $scope.dados.submenu);
+        });
       }
 
       return data;

@@ -10,10 +10,10 @@
     .controller('StudyOverviewController', StudyOverviewController);
 
   StudyOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API', 'FORM_NAME', 'AuthService'
+    '$scope', '$resource', '$location', 'API', 'FORM_NAME', 'HeaderService'
   ];
 
-  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME, AuthService) {
+  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME, HeaderService) {
     var vm = this;
 
     // bindable variables
@@ -71,14 +71,11 @@
         };
 
         // initialize submenu
-        if (_.has(data.items, 'links')) {
-          var submenu = {
-            href: data.items.slug,
-            name: data.items.name,
-            links: AuthService.getRoleLinks(data.items.rel, data.items.links)
-          };
-          angular.copy(submenu, $scope.dados.submenu);
-        }
+        HeaderService.setSubmenu({
+          prompt: data.items.name,
+          value: data.items.id,
+          rel: 'study'
+        }, data.items, $scope.dados.submenu);
       });
 
       SurveyForm.get(function (data) {

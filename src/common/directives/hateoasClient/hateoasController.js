@@ -14,7 +14,6 @@
 
   function HateoasController($scope, $resource, $location, AuthService, HeaderService,
                               API, TableParams, SailsNgTable) {
-
     var vm = this;
 
     // bindable variables
@@ -35,7 +34,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var currStudy = _.getStudyFromUrl($location.path());
+      var studyID = _.getStudyFromUrl($location.path());
 
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
@@ -59,10 +58,10 @@
 
             // if on study subpage, include study name in template
             // to be able to prepend to appropriate rest calls
-            if (currStudy) {
-              vm.template.study = currStudy;
-              state.prompt = currStudy;
-              state.value = currStudy;
+            if (studyID) {
+              vm.template.study = studyID;
+              state.prompt = studyID;
+              state.value = studyID;
               state.rel = 'study';
             }
 
@@ -86,7 +85,7 @@
       vm.selected = (vm.selected === item ? null : item);
       if (_.has(vm.selected, 'links')) {
         var submenu = {
-          href: vm.selected.slug || vm.selected.href,
+          href: vm.selected.href,
           name: vm.selected.name,
           links: AuthService.getRoleLinks(vm.selected.rel, vm.selected.links)
         };
