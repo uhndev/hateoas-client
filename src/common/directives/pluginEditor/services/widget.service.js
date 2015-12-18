@@ -10,17 +10,17 @@
       this.template = template;
       this.properties = properties;
       this.css = {};
-      
+
       if (answer) {
         this.answer = answer;
       } else {
         this.answer = { value: undefined };
       }
-      
+
       var self = this;
       var ctor = function() {
         var flags = ['disabled', 'required', 'readonly'];
-        
+
         for (var index in flags) {
           var flag = flags[index];
           if (!self.properties.hasOwnProperty(flag)) {
@@ -28,21 +28,20 @@
           }
         }
       };
-      
+
       ctor();
     };
-  
+
     return {
       categories: {
-        "Text Inputs" : ["text", "hidden", "email", "telephone", "textarea", "datalist"],
+        "Text Inputs" : ["text", "textlabel", "email", "telephone", "textarea", "datalist"],
         "Numeric Inputs" : ["number", "range", "date", "time"],
         "List Inputs" : ["select", "radio", "checkbox"],
         "Other" : ["image", "output", "form"]
       },
       templates: {
-        "hidden" : new Widget("Hidden", "hidden", {
-          type: "hidden",
-          maxlength: 256
+        "textlabel" : new Widget("Text Label", "textlabel", {
+          type : "hidden"
         }),
         "text" : new Widget("Text Box", "text", {
               type : "text",
@@ -93,24 +92,24 @@
           max: undefined
         }),
         "button" : new Widget("Button", "button", {type : "button"}),
-        "reset" : new Widget("Reset", "reset", {type : "button"}),    
+        "reset" : new Widget("Reset", "reset", {type : "button"}),
         "submit" : new Widget("Submit", "submit", {type : "button"}),
         "datalist" : new Widget("Data List", "datalist", {
-          type : "text", 
+          type : "text",
           options: [],
           autocomplete: true
         }),
         "select" : new Widget("Drop Down List", "select", {
-          type: "select", 
+          type: "select",
           options: []
         }),
         "radio" : new Widget("Radio List", "radio", {
-          type : "radio", 
+          type : "radio",
           options: [],
           cols: 1
         }),
         "checkbox" : new Widget("Check List", "checkbox", {
-          type : "checkbox", 
+          type : "checkbox",
           options: [],
           cols: 1
         }, {value: []}),
@@ -128,6 +127,6 @@
       }
     };
   }
-  
+
 })();
 
