@@ -31,10 +31,12 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
+    vm.availableServices= [];
     vm.selectedSite= {};
+    vm.recommendedServices= [];
     vm.siteMatrix = {};
     vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
-    vm.sites = [];            //placeholder for sites
+    vm.sites = [];              //placeholder for sites
     vm.programs = [];           //placeholder for programs
     vm.siteLocations = [];
     vm.mapReady = false;
@@ -44,6 +46,7 @@
     vm.directionsService = null; //placeholder for directionsService object
     vm.googleMaps = uiGmapGoogleMapApi;
     vm.fullReferral=null;
+    vm.searchOpenReferrals=true;
 
     //placeholders for data driving form dropdowns/radios
     vm.workStatuses=[];
@@ -57,7 +60,12 @@
     vm.markers = [];
 
     // bindable methods
+    vm.selectProgram= selectProgram;
+    vm.resetServices= resetServices;
     vm.findReferral = findReferral;
+    vm.toggleService= toggleService;
+    vm.saveServices= saveServices;
+    vm.isServiceRecommended = isServiceRecommended ;
     vm.selectReferral = selectReferral;
     vm.calculateDistances = calculateDistances;
     vm.calculateDirections = calculateDirections;
@@ -69,11 +77,13 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      vm.programs= AltumAPI.Program.query({});
+      vm.programs= angular.copy(AltumAPI.Program.query({}));
+      console.log(vm.programs);
 
       vm.workStatuses= AltumAPI.WorkStatus.query({});
 
       vm.prognosises= AltumAPI.Prognosis.query({});
+
 
       AltumAPI.Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
@@ -127,6 +137,7 @@
             {claim_claimNum: {contains: searchString}},
             {claim_policyNum: {contains: searchString}}
           ]
+          //TODO: add to query recommendations false flag recommendationsMade: false
         }
       }).$promise
         .then(function (resp) {
@@ -139,6 +150,74 @@
         });
     }
 
+    /**
+     * [isServiceRecommended]
+     * returns bool reporting if service is recommended.
+     * @param {String} service
+     */
+
+    function isServiceRecommended (service) {
+      return _.contains(vm.recommendedServices, service);
+    }
+
+    /**
+     * [toggleService]
+     * adds/removes a progrmService from recommendedServices
+     * @param {String} service
+     */
+
+    function toggleService(service) {
+      if(isServiceRecommended(service)) {
+        vm.recommendedServices= _.without(vm.recommendedServices, service);
+      } else {
+        vm.recommendedServices.push(service);
+      }
+    }
+
+    /**
+     * [saveServices]
+     * saves the currently selected services to the current referral
+     * @param {String} service
+     */
+
+    function saveServices() {
+      vm.fullReferral.services= _.union(vm.recommendedServices,vm.fullReferral.services);
+      AltumAPI.Referral.update(vm.fullReferral);
+    }
+
+    /**
+     * [selectProgram]
+     * changes the selected program of the currently selected referral
+     * @param {String} service
+     */
+
+    function selectProgram(program) {
+      vm.selectedProgram=program;
+
+      AltumAPI.AltumProgramServices.query({
+        where: [
+
+          {name: program.name}
+        ]
+      }).$promise
+        .then (function(resp) {
+
+          //reset recommended services to clear box
+          vm.recommendedServices={};
+      },
+
+      function error(err) {
+        console.log("Error querying program " + program.name + " with id " + program.id);
+        console.log(err);
+      });
+    }
+
+    /**
+     * [selectReferral]
+     * click handler for picking referral from search results lists in recommendation manager
+     * @param {String} referral
+     */
+
     function selectReferral(referral) {
       vm.selectedReferral = referral;
 
@@ -149,6 +228,8 @@
       }).$promise
         .then(function (resp) {
           vm.fullReferral= resp[0];
+          vm.resetServices();
+          vm.recommendedServices=[];
         },
         function error(err) {
           alert('error');
@@ -189,6 +270,33 @@
       //vm.geocodeSites();
     }
 
+    /**
+     * [resetServices]
+     * resets the available list of services to an empty set of the referral's programs's available services
+     * @param {none}
+     */
+
+    function resetServices() {
+      AltumAPI.ProgramService.query({
+
+        where:
+           [
+            {program: parseInt(vm.fullReferral.program)}
+          ]
+      }).$promise.then(function(resp) {
+          vm.availableServices=[];
+          _.each(resp, function (programService, index) {
+            vm.availableServices.push({name: programService.name, referral: vm.fullReferral.id, programService: programService.id });
+          });
+      });
+    }
+
+    /**
+     * [calculateDistanes]
+     * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
+     * @param {none}
+     */
+
     function calculateDistances() {
       //distanceArgs for distanceMatrix call
 
@@ -197,12 +305,12 @@
         destinations: vm.destinations,
         travelMode: vm.googleMaps.TravelMode.DRIVING
       };
-
       vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix) {
 
         vm.distanceMatrix = matrix;
       });
     }
+
 
     function calculateDirections(origin, destination) {
       var request = {
@@ -214,10 +322,6 @@
       vm.directionsService.route(request, function (response) {
         if (response.status === vm.googleMaps.DirectionsStatus.OK) {
 
-          //vm.directionsDisplay.setDirections(response);
-          //vm.directionsDisplay.setMap(vm.map.control.getGMap());
-          //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
-//alert('wait');
           //set routes
           vm.directionsDisplay.setDirections(response);
           $scope.$apply(function () {
