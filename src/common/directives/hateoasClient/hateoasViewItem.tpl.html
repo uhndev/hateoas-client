@@ -1,0 +1,12 @@
+<div ng-controller="HateoasItemController as hateoas">
+  <h1 id="Title">
+    {{ pageTitle }} Overview: {{hateoas.resource.items.displayName}}
+  </h1>
+
+  <br/>
+
+  <simple-table
+    rows="hateoas.itemInfo.rows"
+    table-data="hateoas.itemInfo.tableData">
+  </simple-table>
+</div>
