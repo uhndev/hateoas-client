@@ -45,7 +45,7 @@
     function loadModal(type) {
       var modalSettings = {
         animation: true,
-        templateUrl: 'study/survey/' + type + 'SurveyModal.tpl.html',
+        templateUrl: 'study/surveys/' + type + 'SurveyModal.tpl.html',
         controller: _.capitalize(type) + 'SurveyController',
         controllerAs: type + 'Survey',
         size: 'lg',
@@ -59,7 +59,7 @@
           },
           forms: function() {
             // resolve study forms
-            var StudyForms = $resource(API.url() + '/study/' + studyID + '/form');
+            var StudyForms = $resource(API.url() + '/study/' + studyID + '/forms');
             return StudyForms.get().$promise.then(function (data) {
               return data.items;
             });

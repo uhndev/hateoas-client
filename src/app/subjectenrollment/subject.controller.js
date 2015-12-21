@@ -83,7 +83,14 @@
         resolve: {
           subject: function() {
             var subject = angular.copy(vm.resource);
-            subject.doe = new Date(subject.doe);
+            // check for invalid doe dates
+            if (_.isUndefined(subject.doe)) {
+              delete subject.doe;
+            } else {
+              if (angular.isString(subject.doe)) {
+                subject.dob = new Date(subject.doe);
+              }
+            }
             return subject;
           },
           study: function() {

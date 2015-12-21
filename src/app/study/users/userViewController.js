@@ -19,7 +19,7 @@
 
     // private variables
     var studyID = _.getStudyFromUrl($location.path());
-    var centreHref = "study/" + studyID + "/collectioncentre";
+    var centreHref = "study/" + studyID + "/collectioncentres";
 
 		// bindable variables
 		vm.allow = {};
@@ -96,7 +96,7 @@
 		function openAddUser() {
 	    var modalInstance = $uibModal.open({
 	      animation: true,
-	      templateUrl: 'study/user/addUserModal.tpl.html',
+	      templateUrl: 'study/users/addUserModal.tpl.html',
 	      controller: 'AddUserController',
 	      controllerAs: 'addUser',
 	      bindToController: true,
