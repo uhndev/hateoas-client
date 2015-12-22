@@ -21,14 +21,27 @@
 		var cache = {};
     var currentLocation = null;
 
-		this.loadSelect = function(url, refresh) {
+		this.loadSelect = function(url, query) {
 			var deferred;
       if (currentLocation !== $location.path()) {
         cache = {};
       }
 
-			if (!cache[url] || (cache[url] && currentLocation !== $location.path()) || refresh) {
-				cache[url] = $http.get(url).then(function(response) {
+			if (!cache[url] || (cache[url] && currentLocation !== $location.path())) {
+        var httpConfig = {
+          url: url,
+          method: 'GET'
+        };
+        if (query) {
+          httpConfig.params = {
+            where: {
+              displayName: {
+                'contains': query
+              }
+            }
+          };
+        }
+				cache[url] = $http(httpConfig).then(function(response) {
 					return response.data.items;
 				});
         currentLocation = $location.path();

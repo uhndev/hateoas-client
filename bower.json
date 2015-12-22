@@ -10,7 +10,6 @@
     "angular-bootstrap": "~0.14.3",
     "angular-cookies": "~1.4.7",
     "angular-loader": "~1.4.7",
-    "angular-multi-select": "~4.0.0",
     "angular-resource": "~1.4.7",
     "angular-timeline": "~1.5.2",
     "angular-toastr": "~1.5.0",
@@ -37,7 +36,8 @@
     "angular-translate-editor": "khchan/angular-translate-editor",
     "angular-material": "~0.11.4",
     "roboto-fontface": "~0.4.3",
-    "angular-translate-storage-local": "~2.8.1"
+    "angular-translate-storage-local": "~2.8.1",
+    "ui-select": "angular-ui-select#~0.13.2"
   },
   "resolutions": {
     "lodash": "~3.10.1",

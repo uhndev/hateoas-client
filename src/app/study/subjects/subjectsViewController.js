@@ -72,7 +72,7 @@
             delete subject.doe;
           } else {
             if (angular.isString(subject.doe)) {
-              subject.dob = new Date(subject.doe);
+              subject.doe = new Date(subject.doe);
             }
           }
           return subject;

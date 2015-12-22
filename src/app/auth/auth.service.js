@@ -12,7 +12,7 @@
       'dados.header.constants'
     ])
     .constant({
-      'ADMIN_PAGES': ['/systemformbuilder', '/formbuilder', '/access', 'translation', 'workflow']
+      'ADMIN_PAGES': ['/systemformbuilder', '/formbuilder', '/access', '/translation', '/workflow']
     })
     .service('AuthService', AuthService);
 

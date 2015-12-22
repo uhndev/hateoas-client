@@ -12,8 +12,7 @@
 				is-disabled="false"
 				ng-required="field.field_required"
 				values="field.field_value"
-				labels="{{field.field_labels}}"
-				output-properties="id">
+        labels="{{field.field_labels || 'displayName'}}">
 			</select-loader>
 		</div>
 		<div ng-show="!sub_form.$pristine">

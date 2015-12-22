@@ -76,7 +76,7 @@
     function openEditSubject() {
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: 'study/subject/editSubjectModal.tpl.html',
+        templateUrl: 'study/subjects/editSubjectModal.tpl.html',
         controller: 'EditSubjectController',
         controllerAs: 'editSubject',
         bindToController: true,
@@ -88,7 +88,7 @@
               delete subject.doe;
             } else {
               if (angular.isString(subject.doe)) {
-                subject.dob = new Date(subject.doe);
+                subject.doe = new Date(subject.doe);
               }
             }
             return subject;
@@ -97,7 +97,7 @@
             return vm.resource.studyAttributes;
           },
           centreHref: function () {
-            return "study/" + vm.resource.study + "/collectioncentre";
+            return "study/" + vm.resource.study + "/collectioncentres";
           }
         }
       });

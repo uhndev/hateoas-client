@@ -12,6 +12,7 @@
       'pascalprecht.translate',
       'tmh.dynamicLocale',
       'LocalStorageModule',
+      'ui.select',
 
       // html templateCaches
       'templates-app',

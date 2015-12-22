@@ -7,9 +7,9 @@
 		])
 		.directive('selectLoader', selectLoader);
 
-	selectLoader.$inject = ['$compile'];
+	selectLoader.$inject = [];
 
-	function selectLoader($compile) {
+	function selectLoader() {
 		return {
 			restrict: 'E',
 			scope: {
@@ -17,35 +17,12 @@
 				isAtomic: '=',
 				isDisabled: '=',
 				values: '=',
-				labels: '@',
-				outputProperties: '@'
+        labels: '@'
 			},
 			templateUrl: 'directives/selectLoader/select-loader.tpl.html',
 			controller: 'SelectController',
 			controllerAs: 'select',
-			bindToController: true,
-			link: function (scope, elem, attr, ctrl) {
-				
-				var unreg = scope.$watchCollection('select.input', function (newVal) {
-					if (newVal && !_.isEmpty(newVal)) {
-						if (scope.select.isDisabled) {
-							var items = _.filter(ctrl.input, 'ticked');
-							var labels = ctrl.labels.split(' ');
-							var output = _.map(items, function (item) {
-								return _.reduce(labels, function(res, label) {
-									res.push(item[label]); 
-									return res; 
-								}, []).join(' ');	
-							});
-							
-					    var html = '<p>' + output.join(', ') + '</p>';
-			        var e = $compile(html)(scope);
-			        elem.replaceWith(e);
-						}
-						unreg();
-					}
-				});
-			}
+			bindToController: true
 		};
 	}
 })();

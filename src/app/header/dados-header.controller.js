@@ -5,12 +5,17 @@
     .controller('HeaderController', HeaderController);
 
   HeaderController.$inject = [
-    '$scope', '$location', '$translate', '$rootScope', 'AuthService', 'API'
+    '$state', '$location', '$translate', '$rootScope', 'ResourceFactory', 'AuthService', 'API'
   ];
 
-  function HeaderController($scope, $location, $translate, $rootScope, AuthService, API) {
+  function HeaderController($state, $location, $translate, $rootScope, ResourceFactory, AuthService, API) {
 
     var vm = this;
+
+    // private variables
+    var pathArray = _.pathnameToArray($location.path());
+    var baseModel = _.first(pathArray);
+    var Model = ResourceFactory.create(API.url() + '/' + baseModel);
 
     // bindable variables
     vm.isVisible = AuthService.isAuthenticated();
@@ -21,6 +26,8 @@
     // bindable methods
     vm.logout = logout;
     vm.follow = follow;
+    vm.refresh = refresh;
+    vm.changeContext = changeContext;
 
     init();
 
@@ -32,6 +39,38 @@
         updateHeader();
       }
       updateActive();
+    }
+
+    function refresh(query) {
+      if ($state.is('hateoas') && vm.navigation.length > 0 && !AuthService.isAdminPage($location.path())) {
+        pathArray = _.pathnameToArray($location.path());
+        baseModel = _.first(pathArray);
+        Model = ResourceFactory.create(API.url() + '/' + baseModel);
+
+        var queryParams = {
+          sort: 'displayName ASC'
+        };
+        if (query) {
+          queryParams.where = {
+            displayName: {
+              'contains': query
+            }
+          };
+        }
+        vm.selectionModels = Model.query(queryParams);
+      } else {
+        vm.showSearch = false;
+      }
+    }
+
+    function changeContext() {
+      if (pathArray.length > 1) {
+        pathArray[1] = vm.selected;
+        $location.url(pathArray.join('/'));
+      } else {
+        $location.url([baseModel, vm.selected].join('/'));
+      }
+      vm.showSearch = false;
     }
 
     /**
@@ -71,6 +110,9 @@
         link.isActive =
           ($location.path().toLowerCase() === clientUrl.toLowerCase());
       });
+
+      refresh();
+      delete vm.selected;
     }
 
     /**
