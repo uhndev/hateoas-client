@@ -76,21 +76,28 @@
     function openEditSubject() {
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: 'study/subject/editSubjectModal.tpl.html',
+        templateUrl: 'study/subjects/editSubjectModal.tpl.html',
         controller: 'EditSubjectController',
         controllerAs: 'editSubject',
         bindToController: true,
         resolve: {
           subject: function() {
             var subject = angular.copy(vm.resource);
-            subject.doe = new Date(subject.doe);
+            // check for invalid doe dates
+            if (_.isUndefined(subject.doe)) {
+              delete subject.doe;
+            } else {
+              if (angular.isString(subject.doe)) {
+                subject.doe = new Date(subject.doe);
+              }
+            }
             return subject;
           },
           study: function() {
             return vm.resource.studyAttributes;
           },
           centreHref: function () {
-            return "study/" + vm.resource.study + "/collectioncentre";
+            return "study/" + vm.resource.study + "/collectioncentres";
           }
         }
       });

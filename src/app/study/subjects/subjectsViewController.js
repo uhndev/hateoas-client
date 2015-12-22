@@ -22,7 +22,7 @@
 
     // private variables
     var studyID = _.getStudyFromUrl($location.path());
-    var centreHref = "study/" + studyID + "/collectioncentre";
+    var centreHref = "study/" + studyID + "/collectioncentres";
 
     // bindable variables
     vm.centreHref = '';
@@ -50,13 +50,13 @@
     function loadModal(type) {
       var modalSettings = {
         animation: true,
-        templateUrl: 'study/subject/' + type + 'SubjectModal.tpl.html',
+        templateUrl: 'study/subjects/' + type + 'SubjectModal.tpl.html',
         controller: _.capitalize(type) + 'SubjectController',
         controllerAs: type + 'Subject',
         bindToController: true,
         resolve: {
           study: function () {
-            return Study.get({ id: studyID });
+            return Study.get({ id: studyID }).$promise;
           },
           centreHref: function () {
             return centreHref;
@@ -67,7 +67,14 @@
       if (type === 'edit') {
         modalSettings.resolve.subject = function() {
           var subject = angular.copy(vm.selected);
-          subject.doe = new Date(subject.doe);
+          // check for invalid doe dates
+          if (_.isUndefined(subject.doe)) {
+            delete subject.doe;
+          } else {
+            if (angular.isString(subject.doe)) {
+              subject.doe = new Date(subject.doe);
+            }
+          }
           return subject;
         };
       }

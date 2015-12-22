@@ -82,7 +82,7 @@
           },
           forms: function() {
             // resolve study forms
-            var StudyForms = $resource(API.url() + '/study/' + vm.resource.sessionStudy.id + '/form');
+            var StudyForms = $resource(API.url() + '/study/' + vm.resource.sessionStudy.id + '/forms');
             return StudyForms.get().$promise.then(function (data) {
               return data.items;
             });

@@ -47,8 +47,12 @@
     function init() {
       User.get({ id: subject.user }, function (data, headers) {
         if (data) {
-          if (angular.isString(data.dob)) {
-            data.dob = new Date(data.dob);
+          if (_.isUndefined(data.dob)) {
+            delete data.dob;
+          } else {
+            if (angular.isString(data.dob)) {
+              data.dob = new Date(data.dob);
+            }
           }
           vm.userData = angular.copy(data);
         }

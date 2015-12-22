@@ -24,8 +24,12 @@
 
     function init() {
       UserService.get({ id: Auth.currentUser.user.id }).$promise.then(function (user) {
-        if (angular.isString(user.dob)) {
-          user.dob = new Date(user.dob);
+        if (_.isUndefined(user.dob)) {
+          delete user.dob;
+        } else {
+          if (angular.isString(user.dob)) {
+            user.dob = new Date(user.dob);
+          }
         }
         vm.user = angular.copy(user);
       });
