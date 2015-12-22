@@ -14,7 +14,6 @@
   </div>
 
   <div id="Controls" class="row">
-
     <div class="col-md-6">
       <form class="form-inline">
         <div class="form-group" context-translator="APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER">
@@ -30,18 +29,11 @@
       </form>
     </div>
 
-    <div class="pull-right">
-      <div class="btn-group">
-        <a type="button" class="btn btn-default"
-           ng-if="studyForm.allow.create"
-           ng-href="#/formbuilder?study={{studyForm.study}}"
-           context-translator="APP.STUDY.FORM.CONTROLS.NEW_BTN">
-          <i class="fa fa-file-o"></i>
-          <span translate>APP.STUDY.FORM.CONTROLS.NEW_BTN</span>
-        </a>
+    <div class="col-md-6">
+      <div class="btn-group pull-right">
         <a type="button" class="btn btn-default"
            ng-if="studyForm.allow.update"
-           ng-href="#/formbuilder?&idPlugin={{studyForm.selected.id}}"
+           ng-href="#/study/{{studyForm.study}}/forms?&idPlugin={{studyForm.selected.id}}"
            ng-disabled="!!!studyForm.selected"
            context-translator="APP.STUDY.FORM.CONTROLS.EDIT_BTN">
           <i class="fa fa-edit"></i>
@@ -72,4 +64,7 @@
     on-resource-loaded="studyForm.onResourceLoaded">
   </hateoas-table>
 
+  <hr/>
+
+  <plugin-editor></plugin-editor>
 </div>

@@ -60,6 +60,7 @@
         var studyForm = new StudyForm({ formID: vm.selected.id, studyID: vm.study });
         return studyForm.$delete().then(function () {
           toastr.success('Archived form from study '+ vm.study + '!', 'Form');
+          $location.search('idPlugin', null);
           $scope.$broadcast('hateoas.client.refresh');
         });
       }
