@@ -17,6 +17,7 @@
 
     // bindable variables
     vm.study = _.getStudyFromUrl($location.path());
+    vm.idPlugin = $location.search()['idPlugin'];
     vm.forms = [];
     vm.formToAdd = '';
     vm.allow = {};

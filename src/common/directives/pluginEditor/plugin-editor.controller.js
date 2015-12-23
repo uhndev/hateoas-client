@@ -14,17 +14,20 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'];
+  PluginController.$inject = [
+    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'
+  ];
 
-  function PluginController($scope, $location, $timeout, FormService, StudyFormService, FormVersionService, toastr) {
+  function PluginController($scope, $location, $timeout, FormService,
+                            StudyFormService, FormVersionService, toastr) {
 
     // private variables
     var EMPTY_FORM = { name: '', questions: [], metaData: {} };
     // bindable variables
     $scope.firstLoad = true;
     $scope.isSaving = false;
-    $scope.isCommitting = false;
     $scope.idPlugin = $location.search()['idPlugin'];
+    $scope.isEditorOpen = true;
     $scope.isSettingsOpen = false;
     $scope.form = EMPTY_FORM;
     $scope.sortableOptions = {
@@ -47,7 +50,6 @@
 
     function init() {
       $scope.forms = fetchAvailableForms();
-      $scope.isEditorOpen = !_.isEmpty($scope.idPlugin) || !$scope.study;
 
       // if form id set in url, load form by id
       if ($scope.idPlugin && !_.has($scope.form, 'id')) {
@@ -87,7 +89,7 @@
       } else if (!_.equalsDeep(newVal, oldVal)) {
         save(false);
       }
-    }, 500);
+    }, 5000);
 
     /* Have to watch for specific form changes
      * otherwise flag or timestamp updates may trigger save again.
@@ -117,13 +119,6 @@
     function onFormSaved(result) {
       var savedForm = null;
       $scope.isSaving = false;
-      if ($scope.isCommitting) {
-        var description = prompt("Enter a description of changes: ");
-        if (!_.isEmpty(description)) {
-          $scope.form.description = description;
-        }
-        FormVersionService.save($scope.form);
-      }
       if ($scope.study && !$scope.idPlugin) { // if saving a study form, going to return study object
         var studyResponse = _.last(_.sortBy(result.forms, 'createdAt'));
         savedForm = pickFormAttributes(studyResponse);
@@ -134,6 +129,22 @@
       }
       $location.search('idPlugin', savedForm.id);
       $scope.forms = fetchAvailableForms();
+    }
+
+    /**
+     * onFormCommitted
+     * @description Callback function for successful commits
+     * @param result
+     */
+    function onFormCommitted(result) {
+      var description = prompt("Enter a description of changes: ");
+      if (!_.isEmpty(description)) {
+        $scope.form.description = description;
+      }
+      FormVersionService.save($scope.form, function (result) {
+        var savedForm = pickFormAttributes(result);
+        toastr.success('Committed changes for form ' + savedForm.name + ' successfully!', 'Form');
+      }, onFormError);
     }
 
     /**
@@ -212,23 +223,14 @@
 
     /**
      * save
-     * @description Click handler for saving a form in the form builder.  The
-     *              form must have a name and each question must have a field
-     *              name.  Saving an existing form should 'commit' the form to
-     *              the FormVersion model depending on whether it has been
-     *              published already.
+     * @description Handler for saving a form in the form builder.  The
+     *              form must have a name and each question must have a field name.
      * @param isManual
      */
     function save(isManual) {
-      if (typeof(isManual) === 'undefined') {
-        isManual = true;
-      }
-
       if (isFormValid(true)) {
         $scope.isSaving = true;
-        $scope.isCommitting = false;
         if ($scope.form.id) {
-          $scope.isCommitting = isManual;
           FormService.update($scope.form, onFormSaved, onFormError);
         } else {
           if (!$scope.study) {
@@ -244,8 +246,31 @@
       }
     }
 
+    /**
+     * commitChanges
+     * @description Click handler for committing a form in the form builder.  The
+     *              form must have a name and each question must have a field
+     *              name.  Saving an existing form should 'commit' the form to
+     *              the FormVersion model depending on whether it has been
+     *              published already.
+     */
     function commitChanges() {
-
+      if (isFormValid(true)) {
+        $scope.isSaving = true;
+        if ($scope.form.id) {
+          FormService.update($scope.form, onFormCommitted, onFormError);
+        } else {
+          if (!$scope.study) {
+            FormService.save($scope.form, onFormSaved, onFormError);
+          } else {
+            var studyForm = new StudyFormService($scope.form);
+            studyForm.studyID = $scope.study;
+            studyForm.$save()
+              .then(onFormSaved)
+              .catch(onFormError);
+          }
+        }
+      }
     }
 
     /**

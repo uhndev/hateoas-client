@@ -57,7 +57,8 @@
     $scope.$watch('widget.template', function(newType, oldType) {
       if (newType) {
         if (newType != oldType) {
-          $scope.questions[$scope.selectedIndex] = widgetExtend(WidgetService.templates[newType], $scope.widget);
+          var question = widgetExtend(WidgetService.templates[newType], $scope.widget);
+          $scope.questions[$scope.selectedIndex] = angular.copy(question);
           $scope.widget = $scope.questions[$scope.selectedIndex];
           bindList();
         }
@@ -65,8 +66,8 @@
     });
 
     $scope.$on('setWidget', function(e, widget) {
-      //$scope.widget = widgetExtend(WidgetService.templates[widget.template], widget);
-      $scope.widget = $scope.questions[$scope.selectedIndex];
+      var question = widgetExtend(WidgetService.templates[newType], $scope.widget);
+      $scope.widget = angular.copy(question);
     });
 
     $scope.$on('listControllerLoaded', function(e) {
