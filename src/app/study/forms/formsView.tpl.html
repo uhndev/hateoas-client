@@ -5,7 +5,8 @@
       COMMON.HATEOAS.TITLE.TOTAL
     </small>
   </h1>
-  <div id="Query" class="clearfix">
+
+  <div id="Query" ng-if="!studyForm.idPlugin" class="clearfix">
     <query-builder
       template="studyForm.resource.template"
       ng-model="studyForm.query.where"
@@ -13,8 +14,17 @@
     </query-builder>
   </div>
 
-  <div id="Controls" class="row">
+  <div id="Controls" class="row" ng-if="studyForm.idPlugin">
+    <div class="col-md-12">
+      <div class="btn-group pull-right">
+        <a type="button" class="btn btn-default" ng-href="#/study/{{studyForm.study}}/forms">
+          <i class="fa fa-arrow-left"></i> Back To Study Forms
+        </a>
+      </div>
+    </div>
+  </div>
 
+  <div id="Controls" class="row" uib-collapse="studyForm.idPlugin">
     <div class="col-md-6">
       <form class="form-inline">
         <div class="form-group" context-translator="APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER">
@@ -30,18 +40,11 @@
       </form>
     </div>
 
-    <div class="pull-right">
-      <div class="btn-group">
-        <a type="button" class="btn btn-default"
-           ng-if="studyForm.allow.create"
-           ng-href="#/formbuilder?study={{studyForm.study}}"
-           context-translator="APP.STUDY.FORM.CONTROLS.NEW_BTN">
-          <i class="fa fa-file-o"></i>
-          <span translate>APP.STUDY.FORM.CONTROLS.NEW_BTN</span>
-        </a>
+    <div class="col-md-6">
+      <div class="btn-group pull-right" ng-if="!studyForm.idPlugin">
         <a type="button" class="btn btn-default"
            ng-if="studyForm.allow.update"
-           ng-href="#/formbuilder?&idPlugin={{studyForm.selected.id}}"
+           ng-href="#/study/{{studyForm.study}}/forms?&idPlugin={{studyForm.selected.id}}"
            ng-disabled="!!!studyForm.selected"
            context-translator="APP.STUDY.FORM.CONTROLS.EDIT_BTN">
           <i class="fa fa-edit"></i>
@@ -57,10 +60,10 @@
         </button>
       </div>
     </div>
-
   </div>
 
   <hateoas-table
+    uib-collapse="studyForm.idPlugin"
     class="clearfix"
     url="{{studyForm.url}}"
     query="studyForm.query"
@@ -71,5 +74,6 @@
     resource="studyForm.resource"
     on-resource-loaded="studyForm.onResourceLoaded">
   </hateoas-table>
-
+  <br/>
+  <plugin-editor></plugin-editor>
 </div>

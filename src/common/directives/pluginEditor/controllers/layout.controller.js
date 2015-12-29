@@ -175,10 +175,6 @@
 
     $scope.$on('setGrid', function(e, grid) {
       $scope.questions = grid;
-      if ($scope.questions.length === 0) {
-        $scope.questions.push( getTemplate() );
-        $scope.selectedIndex = 0;
-      }
     });
 
     $scope.$emit('layoutControllerLoaded');

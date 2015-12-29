@@ -10,7 +10,7 @@
              class="panel-body"></ui-widget>
   <div class="panel-footer">
     <div class="row">
-      <div class="col-md-7">
+      <div ng-class="{ 'col-md-7' : !cell.name.length, 'col-md-12': cell.name.length }">
         <div class="btn-group btn-group-sm">
           <button class="btn btn-default" ng-click="addLeft()"
                   uib-tooltip="Add cell to the left">
@@ -28,10 +28,6 @@
           <button class="btn btn-primary" ng-click="clone($index)"
                   uib-tooltip="Clone widget">
             <span class="glyphicon glyphicon-plus"></span>
-          </button>
-          <button class="btn btn-warning" ng-click="configure()"
-                  uib-tooltip="Configure widget">
-            <span class="glyphicon glyphicon-cog"></span>
           </button>
           <button class="btn btn-danger"
                   ng-hide="cellCount <= 1" ng-click="remove($index)"

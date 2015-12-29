@@ -1,26 +1,27 @@
 <div ng-controller="SubjectOverviewController as subject">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8">
       <h1 id="Title">
         Subject {{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}
       </h1>
     </div>
-  </div>
-  <div class="row">
-    <div class="pull-right">
-      <button type="button" class="btn btn-info">
-        <i class="fa fa-file-text"></i>
-        Real-Time Report
-      </button>
-      <button type="button" class="btn btn-info">
-        Call Log <span class="badge">4</span>
-      </button>
-      <button type="button" class="btn btn-default"
-              ng-if="subject.allow.update"
-              ng-click="subject.openEditSubject()">
-        <i class="fa fa-edit"></i>
-        Edit Subject
-      </button>
+    <div class="col-md-4">
+      <br/>
+      <div id="Controls" class="pull-right">
+        <button type="button" class="btn btn-info">
+          <i class="fa fa-file-text"></i>
+          Real-Time Report
+        </button>
+        <button type="button" class="btn btn-info">
+          Call Log <span class="badge">4</span>
+        </button>
+        <button type="button" class="btn btn-default"
+                ng-if="subject.allow.update"
+                ng-click="subject.openEditSubject()">
+          <i class="fa fa-edit"></i>
+          Edit Subject
+        </button>
+      </div>
     </div>
   </div>
 
