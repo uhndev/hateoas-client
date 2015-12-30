@@ -7,7 +7,7 @@
 
   EditSubjectController.$inject = [
     '$uibModalInstance', 'subject', 'study', 'centreHref', 'toastr',
-    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
+    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService', 'ProviderService'
   ];
 
   /**
@@ -25,7 +25,7 @@
    * @constructor
    */
   function EditSubjectController($uibModalInstance, subject, study, centreHref, toastr,
-                                 ENROLLMENT_STATUSES, SubjectEnrollment, User) {
+                                 ENROLLMENT_STATUSES, SubjectEnrollment, User, Provider) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
@@ -37,6 +37,7 @@
     vm.statuses = ENROLLMENT_STATUSES;
 
     // bindable methods
+    vm.fetchProviders = fetchProviders;
     vm.editSubject = editSubject;
     vm.cancel = cancel;
 
@@ -45,6 +46,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      if (!_.isArray(vm.newSubject.providers)) {
+        vm.newSubject.providers = [vm.newSubject.providers];
+      }
+
       User.get({ id: subject.user }, function (data, headers) {
         if (data) {
           if (_.isUndefined(data.dob)) {
@@ -57,6 +62,15 @@
           vm.userData = angular.copy(data);
         }
       });
+    }
+
+    function fetchProviders(query) {
+      var queryObj = {};
+      if (query) {
+        query.displayName = { 'contains': query };
+      }
+
+      vm.providers = Provider.query(queryObj);
     }
 
     function editSubject() {

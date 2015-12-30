@@ -18,7 +18,6 @@
     vm.loadError = false;
 		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
-    vm.values = (vm.isAtomic) ? (vm.values || '') : (vm.values || []);
     vm.labels = vm.labels || 'name';
 
     // bindable methods
@@ -27,6 +26,17 @@
     fetchData();
 
     ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      if (vm.isAtomic) {
+        vm.values = vm.values || '';
+      } else {
+        vm.values = vm.values || [];
+        if (!_.isArray(vm.values)) {
+          vm.values = [vm.values];
+        }
+      }
+    }
 
     function fetchData(query) {
       SelectService.loadSelect(vm.href, query).then(function (data) {

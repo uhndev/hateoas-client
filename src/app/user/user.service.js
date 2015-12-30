@@ -7,16 +7,21 @@
       'dados.common.services.resource'
     ])
 		.service('UserService', UserService)
+    .service('ProviderService', ProviderService)
 		.service('UserRoles', UserRoles)
     .service('UserEnrollment', UserEnrollment);
 
-  [UserService, UserRoles, UserEnrollment].map(function (service) {
+  [UserService, ProviderService, UserRoles, UserEnrollment].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
 
 	function UserService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('user'));
 	}
+
+  function ProviderService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('provider'));
+  }
 
 	function UserRoles(ResourceFactory, API) {
     return ResourceFactory.create(API.url('user') + '/roles');

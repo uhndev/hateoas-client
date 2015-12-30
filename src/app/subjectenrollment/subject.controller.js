@@ -11,11 +11,11 @@
 
   SubjectOverviewController.$inject = [
     '$scope', '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
-    'API', 'moment', 'HeaderService', 'SubjectScheduleService'
+    'API', 'moment', 'ProviderService', 'HeaderService', 'SubjectScheduleService'
   ];
 
   function SubjectOverviewController($scope, $resource, $location, $uibModal, toastr, TableParams,
-                                     API, moment, HeaderService, SubjectSchedule) {
+                                     API, moment, Provider, HeaderService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables

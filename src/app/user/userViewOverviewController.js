@@ -39,11 +39,6 @@
 
         var robj = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob');
 
-        vm.title = _.camelCase(data.items.username);
-        if (data.items.prefix && data.items.firstname && data.items.lastname) {
-          vm.title = [data.items.prefix, data.items.firstname, data.items.lastname].join(' ');
-        }
-
         vm.userInfo = {
           rows: {
             'username': { title: 'COMMON.MODELS.USER.USERNAME', type: 'text' },
