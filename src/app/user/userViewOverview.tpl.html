@@ -35,33 +35,76 @@
         </div>
       </div>
     </div>
-    <!-- List User Studies -->
+
     <div class="col-md-8">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Studies</h3>
+      <div class="row">
+        <!-- List User Studies -->
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">My Studies</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th ng-repeat="col in user.userStudies.columns track by $index">
+                    {{col.title}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in user.userStudies.tableData track by $index">
+                  <td>
+                    <a ng-href="#/study/{{::row.study}}">{{::row.studyName}}</a>
+                  </td>
+                  <td>
+                    <a ng-href="#/collectioncentre/{{::row.collectionCentre}}">{{::row.collectionCentreName}}</a>
+                  </td>
+                  <td>{{row.centreAccess}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="panel-body">
-          <table class="table table-hover">
-            <thead>
-            <tr>
-              <th ng-repeat="col in user.userStudies.columns track by $index">
-                {{col.title}}
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="row in user.userStudies.tableData track by $index">
-              <td>
-                <a ng-href="#/study/{{::row.study}}">{{::row.studyName}}</a>
-              </td>
-              <td>
-                <a ng-href="#/collectioncentre/{{::row.collectionCentre}}">{{::row.collectionCentreName}}</a>
-              </td>
-              <td>{{row.centreAccess}}</td>
-            </tr>
-            </tbody>
-          </table>
+        <!-- List Subject Enrollments if user if provider -->
+        <div class="col-md-12" ng-show="user.resource.items.providerSubjects.length">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">My Subjects</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th translate>COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER</th>
+                  <th translate>COMMON.MODELS.STUDY.IDENTITY</th>
+                  <th translate>COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE</th>
+                  <th translate>COMMON.MODELS.SUBJECT_ENROLLMENT.STUDY_MAPPING</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="subject in user.resource.items.providerSubjects track by $index">
+                  <td>
+                    <a ng-href="#/subjectenrollment/{{::subject.id}}">{{::subject.subjectNumber | formatter:{"type": "mrn"} }}</a>
+                  </td>
+                  <td>
+                    <a ng-href="#/study/{{::subject.study}}">{{::subject.studyName}}</a>
+                  </td>
+                  <td>
+                    <a ng-href="#/collectioncentre/{{::subject.collectionCentre}}">{{::subject.collectionCentreName}}</a>
+                  </td>
+                  <td>
+                    <div ng-repeat="(key, value) in ::subject.studyMapping">
+                      <b>{{key}}:</b> {{value}}
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
