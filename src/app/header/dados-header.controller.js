@@ -85,8 +85,7 @@
       }
 
       if (AuthService.currentUser) {
-        var user = AuthService.currentUser.user;
-        vm.currentUser = [user.prefix, user.lastname].join(' ');
+        vm.currentUser = AuthService.currentUser.user;
       }
     }
 

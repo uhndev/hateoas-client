@@ -34,7 +34,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var Resource = $resource(vm.url);
+      var Resource = (_.stringContains(vm.url, API.url())) ? $resource(vm.url) : $resource(API.url() + '/' + vm.url);
       var TABLE_SETTINGS = {
         page: 1,
         count: 10,
