@@ -31,7 +31,7 @@
                 </a>
               </div>
               <div class="profile_title">
-                {{::header.currentUser}}
+                <span hateoas-link state-href="/user/{{header.currentUser.id}}">{{header.currentUser.prefix}} {{header.currentUser.lastname}}</span>
               </div>
               <div class="profile_content">
               </div>

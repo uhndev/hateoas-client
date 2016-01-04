@@ -18,7 +18,6 @@
     vm.loadError = false;
 		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
-    vm.values = (vm.isAtomic) ? (vm.values || '') : (vm.values || []);
     vm.labels = vm.labels || 'name';
 
     // bindable methods
@@ -28,6 +27,22 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    function init() {
+      if (vm.isAtomic) {
+        vm.values = vm.values || '';
+      } else {
+        vm.values = vm.values || [];
+        if (!_.isArray(vm.values)) {
+          vm.values = [vm.values];
+        }
+      }
+    }
+
+		/**
+     * fetchData
+     * @description Refresh function called to fetch data on load and search updates.
+     * @param query Sails search query to pass through
+     */
     function fetchData(query) {
       SelectService.loadSelect(vm.href, query).then(function (data) {
         angular.copy(data, vm.input);
