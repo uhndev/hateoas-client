@@ -6,7 +6,7 @@
     .controller('AddSubjectController', AddSubjectController);
 
   AddSubjectController.$inject = [
-    '$uibModalInstance', 'study', 'centreHref', 'toastr', 'ProviderService', 'ENROLLMENT_STATUSES', 'SubjectEnrollmentService'
+    '$uibModalInstance', 'study', 'centreHref', 'toastr', 'ENROLLMENT_STATUSES', 'SubjectEnrollmentService'
   ];
 
   /**
@@ -21,7 +21,7 @@
    * @param SubjectEnrollment
    * @constructor
    */
-  function AddSubjectController($uibModalInstance, study, centreHref, toastr, Provider, ENROLLMENT_STATUSES, SubjectEnrollment) {
+  function AddSubjectController($uibModalInstance, study, centreHref, toastr, ENROLLMENT_STATUSES, SubjectEnrollment) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
@@ -33,11 +33,14 @@
 
     // bindable methods
     vm.addSubject = addSubject;
-    vm.fetchProviders = fetchProviders;
     vm.cancel = cancel;
 
     ///////////////////////////////////////////////////////////////////////////
 
+	  /**
+     * addSubject
+     * @description Click handler for creating a subject enrollment in the study
+     */
     function addSubject() {
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment.$save()
@@ -49,15 +52,10 @@
         });
     }
 
-    function fetchProviders(query) {
-      var queryObj = {};
-      if (query) {
-        query.displayName = { 'contains': query };
-      }
-
-      vm.providers = Provider.query(queryObj);
-    }
-
+	  /**
+     * cancel
+     * @description Closes addSubject modal window
+     */
     function cancel() {
       vm.newSubject = {};
       $uibModalInstance.dismiss('cancel');

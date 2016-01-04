@@ -38,6 +38,11 @@
       }
     }
 
+		/**
+     * fetchData
+     * @description Refresh function called to fetch data on load and search updates.
+     * @param query Sails search query to pass through
+     */
     function fetchData(query) {
       SelectService.loadSelect(vm.href, query).then(function (data) {
         angular.copy(data, vm.input);

@@ -7,7 +7,7 @@
 
   EditSubjectController.$inject = [
     '$uibModalInstance', 'subject', 'study', 'centreHref', 'toastr',
-    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService', 'ProviderService'
+    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
   ];
 
   /**
@@ -25,7 +25,7 @@
    * @constructor
    */
   function EditSubjectController($uibModalInstance, subject, study, centreHref, toastr,
-                                 ENROLLMENT_STATUSES, SubjectEnrollment, User, Provider) {
+                                 ENROLLMENT_STATUSES, SubjectEnrollment, User) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
@@ -37,7 +37,6 @@
     vm.statuses = ENROLLMENT_STATUSES;
 
     // bindable methods
-    vm.fetchProviders = fetchProviders;
     vm.editSubject = editSubject;
     vm.cancel = cancel;
 
@@ -64,15 +63,10 @@
       });
     }
 
-    function fetchProviders(query) {
-      var queryObj = {};
-      if (query) {
-        query.displayName = { 'contains': query };
-      }
-
-      vm.providers = Provider.query(queryObj);
-    }
-
+	  /**
+     * editSubject
+     * @description Click handler for editing a subject enrollment in a study
+     */
     function editSubject() {
       var user = new User(vm.userData);
       var enrollment = new SubjectEnrollment(vm.newSubject);
@@ -91,6 +85,10 @@
         });
     }
 
+    /**
+     * cancel
+     * @description Closes addSubject modal window
+     */
     function cancel() {
       vm.newSubject = {};
       vm.userData = {};
