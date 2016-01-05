@@ -118,6 +118,19 @@
 
   <ng-form name="enrollmentForm" class="form-horizontal" novalidate>
     <div class="form-group">
+      <label for="provider" class="col-sm-3 control-label">Providers&nbsp;</label>
+      <div class="col-sm-9">
+        <select-loader
+          url="provider"
+          is-atomic="false"
+          is-disabled="false"
+          values="editSubject.newSubject.providers"
+          labels="displayName">
+        </select-loader>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="status" class="col-sm-3 control-label">Status&nbsp;</label>
 
       <div class="col-sm-9">
@@ -164,7 +177,7 @@
     <div class="form-group">
       <label for="centreInput" class="col-sm-3 control-label">Collection Centre&nbsp;</label>
 
-      <div class="col-sm-5">
+      <div class="col-sm-9">
         <select-loader
           name="centreInput"
           url="{{editSubject.centreHref}}"
@@ -175,7 +188,7 @@
           required>
         </select-loader>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-9">
         <p ng-show="!editSubject.newSubject.collectionCentre"
            class="pull-right required-error">Collection Centre is required.</p>
       </div>

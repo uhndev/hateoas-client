@@ -49,7 +49,15 @@
             <tr>
               <td><strong>Collection Centre</strong></td>
               <td>
-                <a ng-href="#/collectioncentre/{{::subject.resource.collectionCentre}}">{{::subject.resource.collectionCentreName}}</a>
+                <a ng-href="#/collectioncentre/{{subject.resource.collectionCentre}}">{{subject.resource.collectionCentreName}}</a>
+              </td>
+            </tr>
+            <tr ng-show="subject.resource.providers.length > 0">
+              <td><strong>Providers</strong></td>
+              <td>
+                <p ng-repeat="provider in subject.resource.providers">
+                  <a ng-href="#/user/{{provider.user}}">{{provider.displayName}}</a>
+                </p>
               </td>
             </tr>
             <tr ng-repeat="(key, value) in subject.resource.studyMapping track by $index">
@@ -133,7 +141,7 @@
                   </div>
                 </td>
                 <td data-title="'Status'">
-                  <a href="#/subjectschedule/{{::schedule.id}}/form/{{::schedule.scheduledForm.id}}">
+                  <a href="#/subjectschedule/{{schedule.id}}/form/{{schedule.scheduledForm.id}}">
                   {{(schedule.type !== 'non-scheduled') ? schedule.scheduledForm.status : 'N/A'}}
                   </a>
                 </td>

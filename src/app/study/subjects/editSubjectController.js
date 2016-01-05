@@ -45,6 +45,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      if (!_.isArray(vm.newSubject.providers)) {
+        vm.newSubject.providers = [vm.newSubject.providers];
+      }
+
       User.get({ id: subject.user }, function (data, headers) {
         if (data) {
           if (_.isUndefined(data.dob)) {
@@ -59,6 +63,10 @@
       });
     }
 
+	  /**
+     * editSubject
+     * @description Click handler for editing a subject enrollment in a study
+     */
     function editSubject() {
       var user = new User(vm.userData);
       var enrollment = new SubjectEnrollment(vm.newSubject);
@@ -77,6 +85,10 @@
         });
     }
 
+    /**
+     * cancel
+     * @description Closes addSubject modal window
+     */
     function cancel() {
       vm.newSubject = {};
       vm.userData = {};
