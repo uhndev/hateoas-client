@@ -9,7 +9,8 @@
       'ngCookies',
       'ngResource',
       'dados.auth.constants',
-      'dados.header.constants'
+      'dados.header.constants',
+      'dados.access.service'
     ])
     .constant({
       'ADMIN_PAGES': ['/systemformbuilder', '/formbuilder', '/access', '/translation', '/workflow']
@@ -17,19 +18,21 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$location', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW'
+    'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$location', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
   ];
 
-  function AuthService(Auth, ADMIN_PAGES, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW) {
+  function AuthService(Auth, ADMIN_PAGES, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW,Group) {
 
     var LoginAuth = $resource(Auth.LOGIN_API);
     var currentUser = {};
+    var currentGroup={};
     var tabview = {};
     var subview = {};
 
     var service = {
       // variables
       currentUser: currentUser,
+      currentGroup: currentGroup,
       tabview: tabview,
       subview: subview,
       // methods
@@ -100,13 +103,7 @@
      * @return {Boolean}
      */
     function isAuthenticated() {
-      var auth = Boolean($cookies.get('user'));
-      if (!auth) {
-        setUnauthenticated();
-      } else {
-        setAuthenticated();
-      }
-      return auth;
+      return  Boolean($cookies.get('user'));
     }
 
     /**
@@ -127,9 +124,9 @@
      */
     function setAuthenticated() {
       service.currentUser = $cookies.getObject('user');
-      var view = service.currentUser.group.name.toString().toUpperCase();
-      service.tabview = $cookies.getObject('user').group.tabview || TABVIEW[view];
-      service.subview = $cookies.getObject('user').group.subview || SUBVIEW[view];
+      var view = service.currentGroup.name.toString().toUpperCase();
+      service.tabview = service.currentGroup.tabview || TABVIEW[view];
+      service.subview = service.currentGroup.subview || SUBVIEW[view];
       $rootScope.$broadcast("events.authorized");
     }
 

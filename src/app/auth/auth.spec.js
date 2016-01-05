@@ -37,7 +37,8 @@ describe('AuthService', function() {
       });
 
       it('should return true when user is logged in', function() {
-        $cookies.putObject('user', {user: 'some value', group: { tabview: {}, name: 'admin' } });
+        $cookies.putObject('user', {user: 'some value'  });
+        AuthService.currentGroup= { tabview: {}, name: 'admin' };
         expect(AuthService.isAuthenticated()).toBeTruthy();
         $cookies.remove('user');
       });
