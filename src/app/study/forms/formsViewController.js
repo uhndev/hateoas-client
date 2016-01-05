@@ -16,10 +16,10 @@
     var vm = this;
 
     // bindable variables
-    vm.study = '';
+    vm.study = _.getStudyFromUrl($location.path());
+    vm.idPlugin = $location.search()['idPlugin'];
     vm.forms = [];
     vm.formToAdd = '';
-    vm.currStudy = _.getStudyFromUrl($location.path());
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;
@@ -32,24 +32,18 @@
     vm.onResourceLoaded = onResourceLoaded;
     vm.addFormToStudy = addFormToStudy;
 
-    init();
-
     ///////////////////////////////////////////////////////////////////////////
-
-    function init() {
-      Study.query({ name: vm.currStudy }).$promise.then(function (data) {
-        vm.study = _.first(data).id;
-      });
-    }
 
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.currStudy,
-          value: vm.currStudy,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        Study.get({ id: vm.study }).$promise.then(function (study) {
+          HeaderService.setSubmenu({
+            prompt: study.displayName,
+            value: vm.study,
+            rel: 'study'
+          }, data, $scope.dados.submenu);
+        });
 
         // populate add form dropdown with forms not already added
         var filterQuery = {};
@@ -66,7 +60,8 @@
       if (conf) {
         var studyForm = new StudyForm({ formID: vm.selected.id, studyID: vm.study });
         return studyForm.$delete().then(function () {
-          toastr.success('Archived form from '+ vm.currStudy + '!', 'Form');
+          toastr.success('Archived form from study '+ vm.study + '!', 'Form');
+          $location.search('idPlugin', null);
           $scope.$broadcast('hateoas.client.refresh');
         });
       }
@@ -77,7 +72,7 @@
       studyForm.formID = vm.formToAdd;
       studyForm.studyID = vm.study;
       studyForm.$save().then(function () {
-        toastr.success('Added form to ' + vm.currStudy + '!', 'Form');
+        toastr.success('Added form to study ' + vm.study + '!', 'Form');
         vm.formToAdd = null;
         $scope.$broadcast('hateoas.client.refresh');
       });

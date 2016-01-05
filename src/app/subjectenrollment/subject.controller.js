@@ -11,11 +11,11 @@
 
   SubjectOverviewController.$inject = [
     '$scope', '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
-    'API', 'moment', 'HeaderService', 'SubjectScheduleService'
+    'API', 'moment', 'ProviderService', 'HeaderService', 'SubjectScheduleService'
   ];
 
   function SubjectOverviewController($scope, $resource, $location, $uibModal, toastr, TableParams,
-                                     API, moment, HeaderService, SubjectSchedule) {
+                                     API, moment, Provider, HeaderService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables
@@ -63,7 +63,7 @@
         // initialize submenu
         HeaderService.setSubmenu({
           prompt: vm.resource.studyName,
-          value: vm.resource.studyName,
+          value: vm.resource.study,
           rel: 'study'
         }, data, $scope.dados.submenu);
       });
@@ -76,19 +76,28 @@
     function openEditSubject() {
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: 'study/subject/editSubjectModal.tpl.html',
+        templateUrl: 'study/subjects/editSubjectModal.tpl.html',
         controller: 'EditSubjectController',
         controllerAs: 'editSubject',
         bindToController: true,
         resolve: {
           subject: function() {
-            return vm.resource;
+            var subject = angular.copy(vm.resource);
+            // check for invalid doe dates
+            if (_.isUndefined(subject.doe)) {
+              delete subject.doe;
+            } else {
+              if (angular.isString(subject.doe)) {
+                subject.doe = new Date(subject.doe);
+              }
+            }
+            return subject;
           },
           study: function() {
             return vm.resource.studyAttributes;
           },
           centreHref: function () {
-            return "study/" + vm.resource.studyName + "/collectioncentre";
+            return "study/" + vm.resource.study + "/collectioncentres";
           }
         }
       });

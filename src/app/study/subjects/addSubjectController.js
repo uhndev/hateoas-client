@@ -37,6 +37,10 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+	  /**
+     * addSubject
+     * @description Click handler for creating a subject enrollment in the study
+     */
     function addSubject() {
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment.$save()
@@ -48,6 +52,10 @@
         });
     }
 
+	  /**
+     * cancel
+     * @description Closes addSubject modal window
+     */
     function cancel() {
       vm.newSubject = {};
       $uibModalInstance.dismiss('cancel');

@@ -3,18 +3,20 @@
     <uib-accordion-group is-open="isEditorOpen">
       <uib-accordion-heading>
 				<span class="glyphicon "
-              ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+              ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
 				</span>
         Configuration
       </uib-accordion-heading>
 
       <div class="form-group">
         <label for="form-loader">Load Plugin:</label>
-        <select ng-model="idPlugin"
-                class="form-control"
-                ng-change="loadForm(idPlugin)"
-                ng-options="selected.id as selected.name for selected in forms | orderBy:'name'">
-          <option value="" disabled>-- New --</option>
+        <select ng-model="idPlugin" class="form-control"
+                ng-change="loadForm(idPlugin)">
+          <option value="" disabled>Select a form</option>
+          <option value="new">-- New --</option>
+          <option ng-repeat="selected in forms | orderBy: 'name'" value="{{selected.id}}">
+            {{selected.name}}
+          </option>
         </select>
       </div>
 
@@ -31,7 +33,7 @@
       <!-- PluginLayout -->
       <div ng-controller="LayoutController" class="row">
         <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
-          <uib-tabset>
+          <uib-tabset class="clearfix">
             <uib-tab uib-tooltip="Add new widget" active="editTabActive['add']">
               <tab-heading>
                 <i class="fa fa-plus-square"></i> Widget
@@ -50,7 +52,7 @@
               </tab-heading>
               <uib-accordion close-others="true">
                 <uib-accordion-group ng-repeat="category in unsorted(categories) track by $index"
-                                 is-open="isopen">
+                                     is-open="isopen">
                   <uib-accordion-heading>
                     {{ category }}
                     <i class="pull-right glyphicon"
@@ -78,7 +80,7 @@
               </ng-include>
             </uib-tab>
             <uib-tab uib-tooltip="Set widget list options" active="editTabActive['list_config']"
-                 ng-show="widget.properties.hasOwnProperty('options')">
+                     ng-show="widget.properties.hasOwnProperty('options')">
               <tab-heading>
                 <i class="fa fa-list-ol"></i> Options
               </tab-heading>
@@ -104,9 +106,30 @@
               </form>
             </uib-tab>
           </uib-tabset>
+          <hr/>
+          <div class="controls">
+            <span am-time-ago="lastAutoSave"></span>
+            <button type="button" class="btn btn-default pull-right"
+                    ng-disabled="!!!idPlugin" ng-if="!!!study"
+                    ng-click="archive()">
+              <span class="glyphicon glyphicon-trash"
+                    uib-tooltip="Archive form"></span>
+              Archive
+            </button>
+            <button class="btn btn-default pull-right" ng-model="isSaving"
+                    ng-click="commitChanges()" ng-disabled="isSaving">
+              <span class="glyphicon glyphicon-floppy-disk"
+                    uib-tooltip="Commit Form Changes"></span>
+              Save Changes
+            </button>
+          </div>
         </div>
         <div class="content_right col-md-8 scroll-past-anchor no-select relative">
           <legend>Workspace</legend>
+
+          <p class="text-muted" ng-if="!questions.length">
+            Use the panel on the left to add questions to the workspace.
+          </p>
           <ng-form name="plugin">
             <ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
                 ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
@@ -158,7 +181,7 @@
     <uib-accordion-group is-open="isSettingsOpen">
       <uib-accordion-heading>
 				<span class="glyphicon "
-              ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'">
+              ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
 				</span>
         Settings
       </uib-accordion-heading>
@@ -192,19 +215,4 @@
       <!-- PluginConfig -->
     </uib-accordion-group>
   </uib-accordion>
-  <div class="controls">
-    <button type="button" class="btn btn-default pull-right"
-            ng-disabled="!!!idPlugin"
-            ng-click="archive()">
-      <span class="glyphicon glyphicon-trash"
-            uib-tooltip="Archive form"></span>
-      Archive
-    </button>
-    <button class="btn btn-default pull-right" ng-model="isSaving"
-            ng-click="save()" ng-disabled="isSaving">
-			<span class="glyphicon glyphicon-floppy-disk"
-            uib-tooltip="Save form"></span>
-      Save
-    </button>
-  </div>
 </div>

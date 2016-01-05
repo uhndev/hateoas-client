@@ -14,20 +14,22 @@
     ])
     .controller('PluginController', PluginController);
 
-  PluginController.$inject = ['$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'];
+  PluginController.$inject = [
+    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'
+  ];
 
-  function PluginController($scope, $location, $timeout, FormService, StudyFormService, FormVersionService, toastr) {
+  function PluginController($scope, $location, $timeout, FormService,
+                            StudyFormService, FormVersionService, toastr) {
 
+    // private variables
+    var EMPTY_FORM = { name: '', questions: [], metaData: {} };
     // bindable variables
     $scope.firstLoad = true;
     $scope.isSaving = false;
-    $scope.isCommitting = false;
-    $scope.isSettingsOpen = true;
-    $scope.isEditorOpen = true;
-    $scope.forms = FormService.query();
     $scope.idPlugin = $location.search()['idPlugin'];
-    $scope.study = $location.search()['study'];
-    $scope.form = {name: '', questions: [], metaData: {}};
+    $scope.isEditorOpen = true;
+    $scope.isSettingsOpen = false;
+    $scope.form = EMPTY_FORM;
     $scope.sortableOptions = {
       helper: "clone", // fixes the issue when click event intercepts the drop movement
       cursor: 'move',
@@ -35,7 +37,9 @@
     };
 
     // bindable methods
+    $scope.isFormValid = isFormValid;
     $scope.save = save;
+    $scope.commitChanges = commitChanges;
     $scope.archive = archive;
     $scope.importJson = importJson;
     $scope.loadForm = loadForm;
@@ -45,7 +49,9 @@
     /////////////////////////////////////////////////////////////////////////////////////
 
     function init() {
-      // form id set in url, load form by id
+      $scope.forms = fetchAvailableForms();
+
+      // if form id set in url, load form by id
       if ($scope.idPlugin && !_.has($scope.form, 'id')) {
         FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
           // we only want non-hateoas attributes to load into our pluginEditor
@@ -75,7 +81,7 @@
      * Save() will check if form is valid.
      */
     var onFormUpdate = debounceWatch($timeout, function (newVal, oldVal) {
-      if ($scope.firstLoad) {
+      if ($scope.firstLoad || !$scope.idPlugin) {
         // Suspend the first watch triggered until the end of digest cycle
         $timeout(function () {
           $scope.firstLoad = false;
@@ -97,7 +103,6 @@
     /**
      * Function that picks only non-hateoas attributes from server response
      */
-
     function pickFormAttributes(hateoas) {
       if (hateoas.hasOwnProperty('items')) {
         return _.pick(hateoas.items, 'id', 'name', 'questions', 'metaData', 'isDirty');
@@ -112,18 +117,34 @@
      * @param result
      */
     function onFormSaved(result) {
-      var savedForm = pickFormAttributes(result);
+      var savedForm = null;
       $scope.isSaving = false;
-      if ($scope.isCommitting) {
-        var description = prompt("Enter a description of changes: ");
-        if (!_.isEmpty(description)) {
-          $scope.form.description = description;
-        }
-        FormVersionService.save($scope.form);
+      if ($scope.study && !$scope.idPlugin) { // if saving a study form, going to return study object
+        var studyResponse = _.last(_.sortBy(result.forms, 'createdAt'));
+        savedForm = pickFormAttributes(studyResponse);
+        toastr.success('Created form ' + savedForm.name + ' in study!', 'Form');
+      } else {
+        savedForm = pickFormAttributes(result);
+        toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
       }
-      toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
       $location.search('idPlugin', savedForm.id);
-      $scope.forms = FormService.query();
+      $scope.forms = fetchAvailableForms();
+    }
+
+    /**
+     * onFormCommitted
+     * @description Callback function for successful commits
+     * @param result
+     */
+    function onFormCommitted(result) {
+      var description = prompt("Enter a description of changes: ");
+      if (!_.isEmpty(description)) {
+        $scope.form.description = description;
+      }
+      FormVersionService.save($scope.form, function (result) {
+        var savedForm = pickFormAttributes(result);
+        toastr.success('Committed changes for form ' + savedForm.name + ' successfully!', 'Form');
+      }, onFormError);
     }
 
     /**
@@ -162,48 +183,92 @@
       toastr.info('Loaded form ' + $scope.form.name + ' successfully!', 'Form');
     }
 
+    function fetchAvailableForms() {
+      // if viewing plugin editor on /study/1/forms, get studyID from $location
+      var pathArray = _.pathnameToArray($location.path());
+      if (pathArray.length > 1) {
+        $scope.study = pathArray[1];
+        return StudyFormService.query({ studyID: $scope.study }); // fetch study forms if from study formbuilder
+      } else {
+        return FormService.query(); // fetch all if from global formbuilder
+      }
+    }
+
     /*************************************************************************
      * Public Methods
      *************************************************************************/
 
     /**
+     * isFormValid
+     * @description Simple validity checker for the current form.
+     * @param showMessages boolean on whether to popup toasts for errors
+     * @returns {boolean}
+     */
+    function isFormValid(showMessages) {
+      if (_.has($scope.form, 'questions')) {
+        var hasName = !_.isEmpty($scope.form.name);
+        var hasFieldNames = _.all($scope.form.questions, 'name');
+        var hasQuestions = $scope.form.questions.length > 0;
+
+        if (showMessages) {
+          if (!hasName) { toastr.warning('You must enter a name for the plugin!', 'Form Builder'); }
+          if (!hasFieldNames) { toastr.warning('All questions must have unique field names!', 'Form Builder'); }
+          if (!hasQuestions) { toastr.warning('No questions added yet!', 'Form Builder'); }
+        }
+
+        return hasName && hasFieldNames && hasQuestions;
+      }
+      return false;
+    }
+
+    /**
      * save
-     * @description Click handler for saving a form in the form builder.  The
+     * @description Handler for saving a form in the form builder.  The
+     *              form must have a name and each question must have a field name.
+     * @param isManual
+     */
+    function save(isManual) {
+      if (isFormValid(true)) {
+        $scope.isSaving = true;
+        if ($scope.form.id) {
+          FormService.update($scope.form, onFormSaved, onFormError);
+        } else {
+          if (!$scope.study) {
+            FormService.save($scope.form, onFormSaved, onFormError);
+          } else {
+            var studyForm = new StudyFormService($scope.form);
+            studyForm.studyID = $scope.study;
+            studyForm.$save()
+              .then(onFormSaved)
+              .catch(onFormError);
+          }
+        }
+      }
+    }
+
+    /**
+     * commitChanges
+     * @description Click handler for committing a form in the form builder.  The
      *              form must have a name and each question must have a field
      *              name.  Saving an existing form should 'commit' the form to
      *              the FormVersion model depending on whether it has been
      *              published already.
-     * @param isManual
      */
-    function save(isManual) {
-      if (typeof(isManual) === 'undefined') {
-        isManual = true;
-      }
-
-      if (_.isEmpty($scope.form.name)) {
-        if (isManual) {
-          toastr.warning('You must enter a name for the plugin!', 'Plugin Editor');
-        }
-      } else {
-        if (_.all($scope.form.questions, 'name')) {
-          $scope.isSaving = true;
-          $scope.isCommitting = false;
-          if ($scope.form.id) {
-            $scope.isCommitting = isManual;
-            FormService.update($scope.form, onFormSaved, onFormError);
+    function commitChanges() {
+      if (isFormValid(true)) {
+        $scope.isSaving = true;
+        if ($scope.form.id) {
+          FormService.update($scope.form, onFormCommitted, onFormError);
+        } else {
+          if (!$scope.study) {
+            FormService.save($scope.form, onFormSaved, onFormError);
           } else {
-            if (!$scope.study) {
-              FormService.save($scope.form, onFormSaved, onFormError);
-            } else {
-              var studyForm = new StudyFormService($scope.form);
-              studyForm.studyID = $scope.study;
-              studyForm.$save()
-                .then(onFormSaved)
-                .catch(onFormError);
-            }
+            var studyForm = new StudyFormService($scope.form);
+            studyForm.studyID = $scope.study;
+            studyForm.$save()
+              .then(onFormSaved)
+              .catch(onFormError);
           }
-        } else if (isManual) {
-          toastr.warning('No questions added yet!', 'Plugin Editor');
         }
       }
     }
@@ -221,7 +286,7 @@
           return form.$delete().then(function () {
             toastr.success('Form successfully archived!', 'Success');
             $location.search('idPlugin', null);
-            $scope.forms = FormService.query();
+            $scope.forms = fetchAvailableForms();
           });
         }
       }
@@ -235,8 +300,7 @@
     function importJson(jsonForm) {
       var form = JSON.parse(jsonForm);
 
-      // Strip IDs. It is vital that all id's are stripped to prevent
-      // overwriting of data
+      // Strip IDs. It is vital that all id's are stripped to prevent overwriting of data
       form = omit(form, 'id', form, true);
 
       setForm(form);
@@ -249,11 +313,16 @@
      * @param id
      */
     function loadForm(id) {
-      $scope.idPlugin = id;
-      if (!id) { // load new form palette
-        $scope.form = {};
+      if (id === 'new') {
+        $scope.form = EMPTY_FORM;
+        delete $scope.idPlugin;
+        $location.search('idPlugin', null);
+      } else {
+        if (!_.isNull(id)) {
+          $scope.idPlugin = id;
+          $location.search('idPlugin', id);
+        }
       }
-      $location.search('idPlugin', id);
     }
 
   }

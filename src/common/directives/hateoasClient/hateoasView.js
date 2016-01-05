@@ -23,7 +23,7 @@
         var cleanPath = path.replace(/\/study\/.+?(?=\/|$)/, '/study'); // to strip study name (/study/leap to /study)
         return cleanPath.replace(/(\/\d+)/g, '');                       // then to strip ids (/subject/1 to /subject)
       }
-      
+
       /**
        * Private: getTemplates
        * Returns a list of potential url's where a template could be stored.
@@ -36,7 +36,7 @@
         var last = _.last(_.pathnameToArray(cleanPath));
 
         var modules = ((pathArr.length % 2) === 0) ? ITEM_MODULES : VIEW_MODULES;
-        
+
         var templates = _.map(modules, function(module) {
           return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
         });
@@ -72,21 +72,21 @@
         var pathArr = _.pathnameToArray(path);
         var cleanPath = cleanURL(path);
         var last = _.last(_.pathnameToArray(cleanPath));
-        
+
         // Default: collection view (routes like /study/LEAP/collectioncentres)
         var fragment = '<div ng-controller="HateoasController as hateoas">';
         var modules = VIEW_MODULES;
-        
+
         if ((pathArr.length % 2) === 0) {
           // single item view (routes like /study/LEAP or /user/:id)
           modules = ITEM_MODULES;
           fragment = '<div>';
         }
-        
+
         _.each(modules, function(module) {
           var templateUrl = [cleanPath.substring(1), '/', last,
             'View', module, '.tpl.html'].join('');
-            
+
           var defaultUrl = [defaultViewLocation,
             module, '.tpl.html'].join('');
 
@@ -107,6 +107,7 @@
        * @param path
        */
       function loadTemplate(scope, element, path) {
+        var pathArr = _.pathnameToArray(path);
         // if there was already an inherited scope, $destroy to prevent memory leak
         if (scope.inheritedScope) {
           scope.inheritedScope.$destroy();
@@ -132,6 +133,9 @@
         } else {
           // use the default
           var defaultView = 'directives/hateoasClient/hateoasView.tpl.html';
+          if ((pathArr.length % 2) === 0) {
+            defaultView = 'directives/hateoasClient/hateoasViewItem.tpl.html';
+          }
           element.html($templateCache.get(defaultView));
         }
         // use inherited scope

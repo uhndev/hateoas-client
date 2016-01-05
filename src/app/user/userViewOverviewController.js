@@ -37,13 +37,10 @@
         vm.template = data.template;
         vm.resource = angular.copy(data);
 
-        var robj = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob');
+        // pick out only relevant user data
+        var userData = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob');
 
-        vm.title = _.camelCase(data.items.username);
-        if (data.items.prefix && data.items.firstname && data.items.lastname) {
-          vm.title = [data.items.prefix, data.items.firstname, data.items.lastname].join(' ');
-        }
-
+        // data for left user panel
         vm.userInfo = {
           rows: {
             'username': { title: 'COMMON.MODELS.USER.USERNAME', type: 'text' },
@@ -54,9 +51,10 @@
             'gender': { title: 'COMMON.MODELS.USER.GENDER', type: 'text' },
             'dob': { title: 'COMMON.MODELS.USER.DOB', type: 'date' }
           },
-          tableData: _.objToPair(robj)
+          tableData: _.objToPair(userData)
         };
 
+        // data for right user studies panel
         vm.userStudies = {
           tableData: data.items.enrollments || [],
           columns: [
@@ -71,7 +69,7 @@
           prompt: vm.title,
           value: data.items.id,
           rel: 'user'
-        }, data, $scope.dados.submenu);
+        }, data.items, $scope.dados.submenu);
       });
     }
 

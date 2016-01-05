@@ -18,10 +18,10 @@
     var vm = this;
 
     // private variables
-    var currStudy = _.getStudyFromUrl($location.path());
+    var studyID = _.getStudyFromUrl($location.path());
 
     // bindable variables
-    vm.study = {};
+    vm.study = Study.get({ id: studyID });
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;
@@ -36,23 +36,16 @@
     vm.openEditSurvey = openEditSurvey;
     vm.archiveSurvey = archiveSurvey;
 
-    init();
-
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Private Methods
      */
-    function init() {
-      Study.query({ name: currStudy }).$promise.then(function (data) {
-        vm.study = _.first(data);
-      });
-    }
 
     function loadModal(type) {
       var modalSettings = {
         animation: true,
-        templateUrl: 'study/survey/' + type + 'SurveyModal.tpl.html',
+        templateUrl: 'study/surveys/' + type + 'SurveyModal.tpl.html',
         controller: _.capitalize(type) + 'SurveyController',
         controllerAs: type + 'Survey',
         size: 'lg',
@@ -66,7 +59,7 @@
           },
           forms: function() {
             // resolve study forms
-            var StudyForms = $resource(API.url() + '/study/' + currStudy + '/form');
+            var StudyForms = $resource(API.url() + '/study/' + studyID + '/forms');
             return StudyForms.get().$promise.then(function (data) {
               return data.items;
             });
@@ -109,8 +102,8 @@
       if (data) {
         // initialize submenu
         HeaderService.setSubmenu({
-          prompt: currStudy,
-          value: currStudy,
+          prompt: vm.study.displayName,
+          value: studyID,
           rel: 'study'
         }, data, $scope.dados.submenu);
       }

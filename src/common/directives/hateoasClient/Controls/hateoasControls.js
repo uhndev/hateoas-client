@@ -63,7 +63,6 @@
           template: '=',
           item: '=',
           href: '@',
-          slug: '@',
           permissions: '&'
         },
         templateUrl: 'directives/hateoasClient/Controls/hateoasControls.tpl.html',

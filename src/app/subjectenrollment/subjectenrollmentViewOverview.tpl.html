@@ -1,26 +1,27 @@
-<div ng-controller="SubjectOverviewController as subject" class="container">
+<div ng-controller="SubjectOverviewController as subject">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8">
       <h1 id="Title">
         Subject {{subject.resource.subjectNumber | formatter:{"type": "mrn"} }}
       </h1>
     </div>
-  </div>
-  <div class="row">
-    <div class="pull-right">
-      <button type="button" class="btn btn-info">
-        <i class="fa fa-file-text"></i>
-        Real-Time Report
-      </button>
-      <button type="button" class="btn btn-info">
-        Call Log <span class="badge">4</span>
-      </button>
-      <button type="button" class="btn btn-default"
-              ng-if="subject.allow.update"
-              ng-click="subject.openEditSubject()">
-        <i class="fa fa-edit"></i>
-        Edit Subject
-      </button>
+    <div class="col-md-4">
+      <br/>
+      <div id="Controls" class="pull-right">
+        <button type="button" class="btn btn-info">
+          <i class="fa fa-file-text"></i>
+          Real-Time Report
+        </button>
+        <button type="button" class="btn btn-info">
+          Call Log <span class="badge">4</span>
+        </button>
+        <button type="button" class="btn btn-default"
+                ng-if="subject.allow.update"
+                ng-click="subject.openEditSubject()">
+          <i class="fa fa-edit"></i>
+          Edit Subject
+        </button>
+      </div>
     </div>
   </div>
 
@@ -42,13 +43,21 @@
             <tr>
               <td><strong>Study</strong></td>
               <td>
-                <a ng-href="#/study/{{::subject.resource.studyName}}">{{::subject.resource.studyName}}</a>
+                <a ng-href="#/study/{{::subject.resource.study}}">{{::subject.resource.studyName}}</a>
               </td>
             </tr>
             <tr>
               <td><strong>Collection Centre</strong></td>
               <td>
-                <a ng-href="#/collectioncentre/{{::subject.resource.collectionCentre}}">{{::subject.resource.collectionCentreName}}</a>
+                <a ng-href="#/collectioncentre/{{subject.resource.collectionCentre}}">{{subject.resource.collectionCentreName}}</a>
+              </td>
+            </tr>
+            <tr ng-show="subject.resource.providers.length > 0">
+              <td><strong>Providers</strong></td>
+              <td>
+                <p ng-repeat="provider in subject.resource.providers">
+                  <a ng-href="#/user/{{provider.user}}">{{provider.displayName}}</a>
+                </p>
               </td>
             </tr>
             <tr ng-repeat="(key, value) in subject.resource.studyMapping track by $index">
@@ -132,7 +141,7 @@
                   </div>
                 </td>
                 <td data-title="'Status'">
-                  <a href="#/subjectschedule/{{::schedule.id}}/form/{{::schedule.scheduledForm.id}}">
+                  <a href="#/subjectschedule/{{schedule.id}}/form/{{schedule.scheduledForm.id}}">
                   {{(schedule.type !== 'non-scheduled') ? schedule.scheduledForm.status : 'N/A'}}
                   </a>
                 </td>

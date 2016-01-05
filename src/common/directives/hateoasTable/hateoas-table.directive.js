@@ -13,9 +13,7 @@
        url="{{model.url}}"
        query="model.query"
        selected="model.selected"
-       filter="model.filter"
        allow="model.allow"
-       template="model.template"
        resource="model.resource"
        on-resource-loaded="model.onResourceLoaded">
      </hateoas-table>
@@ -46,9 +44,7 @@
         url: '@',
         query: '=',
         selected: '=',
-        filter: '=',
         allow: '=',
-        template: '=',
         resource: '=',
         onResourceLoaded: '='
       },

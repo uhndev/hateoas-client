@@ -18,33 +18,37 @@ describe("select-loader data service", function () {
         data: {
           items: [
             {
+              "displayName": "Mr. Admin User",
               "username": "admin",
               "email": "admin@example.com",
-              "id": "55649d21d0602c972781b4ff",
+              "id": 1,
               "prefix": "Mr.",
               "firstname": "Admin",
               "lastname": "User"
             },
             {
+              "displayName": "Mr. John Doe",
               "username": "johndoe",
               "email": "johndoe@email.com",
-              "id": "55649d44d0602c972781b54f",
+              "id": 2,
               "prefix": "Mr.",
               "firstname": "John",
               "lastname": "Doe"
             },
             {
+              "displayName": "Ms. Jane Doe",
               "username": "janedoe",
               "email": "janedoe@email.com",
-              "id": "55649d64d0602c972781b555",
+              "id": 3,
               "prefix": "Ms.",
               "firstname": "Jane",
               "lastname": "Doe"
             },
             {
+              "displayName": "Mr. Kevin Chan",
               "username": "khchan",
               "email": "khchan@email.com",
-              "id": "55649d76d0602c972781b559",
+              "id": 4,
               "prefix": "Mr.",
               "firstname": "Kevin",
               "lastname": "Chan"
@@ -52,15 +56,15 @@ describe("select-loader data service", function () {
           ]
         }
     });
-    
-    SelectService.loadSelect('http://localhost:1337/api/user', false).then(function(response) {
+
+    SelectService.loadSelect('http://localhost:1337/api/user').then(function(response) {
       expect(response.data.items.length).toBe(4);
       httpBackend.flush();
-    });    
+    });
   });
 
   it('should fetch data from cache the second time', function () {
-    SelectService.loadSelect('http://localhost:1337/api/user', false).then(function(response) {
+    SelectService.loadSelect('http://localhost:1337/api/user').then(function(response) {
       expect(response.data.items.length).toBe(4);
       httpBackend.flush();
     });
@@ -68,20 +72,21 @@ describe("select-loader data service", function () {
 
   it('should fetch newest data from if requested', function () {
     httpBackend.whenGET("http://localhost:1337/api/user").respond({
-        data: {
-          items: [
-            {
-              "username": "admin",
-              "email": "admin@example.com",
-              "id": "55649d21d0602c972781b4ff",
-              "prefix": "Mr.",
-              "firstname": "Admin",
-              "lastname": "User"
-            }
-          ]
-        }
-    });    
-    SelectService.loadSelect('http://localhost:1337/api/user', true).then(function(response) {
+      data: {
+        items: [
+          {
+            "displayName": "Mr. Admin User",
+            "username": "admin",
+            "email": "admin@example.com",
+            "id": 1,
+            "prefix": "Mr.",
+            "firstname": "Admin",
+            "lastname": "User"
+          }
+        ]
+      }
+    });
+    SelectService.loadSelect('http://localhost:1337/api/user').then(function(response) {
       expect(response.data.items.length).toBe(1);
       httpBackend.flush();
     });

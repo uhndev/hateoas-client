@@ -21,8 +21,8 @@
     var vm = this;
 
     // private variables
-    var currStudy = _.getStudyFromUrl($location.path());
-    var centreHref = "study/" + currStudy + "/collectioncentre";
+    var studyID = _.getStudyFromUrl($location.path());
+    var centreHref = "study/" + studyID + "/collectioncentres";
 
     // bindable variables
     vm.centreHref = '';
@@ -41,29 +41,22 @@
     vm.openEditSubject = openEditSubject;
     vm.archiveSubject = archiveSubject;
 
-    init();
-
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Private Methods
      */
-    function init() {
-      Study.query({ name: currStudy }).$promise.then(function (data) {
-        vm.study = _.first(data);
-      });
-    }
 
     function loadModal(type) {
       var modalSettings = {
         animation: true,
-        templateUrl: 'study/subject/' + type + 'SubjectModal.tpl.html',
+        templateUrl: 'study/subjects/' + type + 'SubjectModal.tpl.html',
         controller: _.capitalize(type) + 'SubjectController',
         controllerAs: type + 'Subject',
         bindToController: true,
         resolve: {
           study: function () {
-            return angular.copy(vm.study);
+            return Study.get({ id: studyID }).$promise;
           },
           centreHref: function () {
             return centreHref;
@@ -74,7 +67,14 @@
       if (type === 'edit') {
         modalSettings.resolve.subject = function() {
           var subject = angular.copy(vm.selected);
-          subject.doe = new Date(subject.doe);
+          // check for invalid doe dates
+          if (_.isUndefined(subject.doe)) {
+            delete subject.doe;
+          } else {
+            if (angular.isString(subject.doe)) {
+              subject.doe = new Date(subject.doe);
+            }
+          }
           return subject;
         };
       }
@@ -88,11 +88,13 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: currStudy,
-          value: currStudy,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        Study.get({ id: studyID }).$promise.then(function (study) {
+          HeaderService.setSubmenu({
+            prompt: study.displayName,
+            value: studyID,
+            rel: 'study'
+          }, data, $scope.dados.submenu);
+        });
       }
       return data;
     }

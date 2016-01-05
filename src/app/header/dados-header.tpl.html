@@ -31,7 +31,7 @@
                 </a>
               </div>
               <div class="profile_title">
-                {{::header.currentUser}}
+                <span hateoas-link state-href="/user/{{header.currentUser.id}}">{{header.currentUser.prefix}} {{header.currentUser.lastname}}</span>
               </div>
               <div class="profile_content">
               </div>
@@ -115,7 +115,14 @@
                 ng-class="{ 'active': link.isActive }">
               <div href ng-if="link.rel == 'name'" class="navbar-brand">
                 <span class="submenu-link-colour" context-translator="APP.HEADER.SELECTED" translate>APP.HEADER.SELECTED</span>
-                <span style="color: white">{{ link.prompt }}</span>
+                <span style="color: white" class="selectable" ng-click="header.showSearch = !header.showSearch">
+                  {{ link.prompt }}
+                  <i class="fa" ng-class="{
+                      'fa-caret-right': !header.showSearch,
+                      'fa-caret-down': header.showSearch
+                    }">
+                  </i>
+                </span>
               </div>
               <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}"
                  context-translator="{{link.prompt}}">
@@ -124,6 +131,15 @@
             </li>
           </ul>
         </div>
+        <ui-select uib-collapse="!header.showSearch"
+                   ng-model="header.selected" theme="bootstrap" ng-change="header.changeContext()">
+          <ui-select-match placeholder="Select or search">{{$select.selected.displayName}}</ui-select-match>
+          <ui-select-choices repeat="model.id as model in header.selectionModels | filter: $select.search"
+                             refresh="header.refresh($select.search)"
+                             refresh-delay="100">
+            <span ng-bind-html="model.displayName | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
       </div>
     </nav>
   </div>

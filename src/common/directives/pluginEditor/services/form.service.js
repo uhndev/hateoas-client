@@ -25,6 +25,11 @@
         studyID: '@studyID'
       },
       {
+        'query' : {
+          method: 'GET',
+          isArray: true,
+          transformResponse: _.transformHateoas
+        },
         'save' : {
           method: 'POST',
           isArray: false,
