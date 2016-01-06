@@ -59,13 +59,19 @@
           url: '/surveys',
           controller: 'SubjectPortalScheduleController',
           controllerAs: 'schedule',
-          templateUrl: 'subjectportal/surveys/surveys.tpl.html'
+          templateUrl: 'subjectportal/surveys/surveys.tpl.html',
+          data: {
+            fullUrl: '/subjectportal/surveys'
+          }
         })
         .state( 'subjectportal.profile', {
           url: '/profile',
           controller: 'SubjectPortalProfileController',
           controllerAs: 'profile',
-          templateUrl: 'subjectportal/profile/profile.tpl.html'
+          templateUrl: 'subjectportal/profile/profile.tpl.html',
+          data: {
+            fullUrl: '/subjectportal/profile'
+          }
         });
     });
 

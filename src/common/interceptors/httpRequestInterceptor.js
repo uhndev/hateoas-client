@@ -62,7 +62,10 @@
               $location.path('/login');
               $injector.get('AuthService').setUnauthenticated();
               return $q.reject(response);
+            } else if (response.data.message == 'No authorization token was found') {
+              return $q.reject(response);
             }
+
             break;
           case 403: $injector.get('$state').go('forbidden'); break;
           case 404: $injector.get('$state').go('notfound'); break;

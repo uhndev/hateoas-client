@@ -16,7 +16,7 @@
     var vm = this;
 
     // bindable variables
-    vm.study = _.getStudyFromUrl($location.path());
+    vm.study = _.getParentIDFromUrl($location.path());
     vm.idPlugin = $location.search()['idPlugin'];
     vm.forms = [];
     vm.formToAdd = '';

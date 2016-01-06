@@ -5,10 +5,10 @@
     .controller('HeaderController', HeaderController);
 
   HeaderController.$inject = [
-    '$state', '$location', '$translate', '$rootScope', 'ResourceFactory', 'AuthService', 'API'
+    '$state', '$location', '$translate', '$rootScope', '$sailsSocket', 'ResourceFactory', 'AuthService', 'API'
   ];
 
-  function HeaderController($state, $location, $translate, $rootScope, ResourceFactory, AuthService, API) {
+  function HeaderController($state, $location, $translate, $rootScope, $sailsSocket, ResourceFactory, AuthService, API) {
 
     var vm = this;
 
@@ -45,7 +45,6 @@
       if ($state.is('hateoas') && vm.navigation.length > 0 && !AuthService.isAdminPage($location.path())) {
         pathArray = _.pathnameToArray($location.path());
         baseModel = _.first(pathArray);
-        Model = ResourceFactory.create(API.url() + '/' + baseModel);
 
         var queryParams = {
           sort: 'displayName ASC'
@@ -57,7 +56,10 @@
             }
           };
         }
-        vm.selectionModels = Model.query(queryParams);
+
+        $sailsSocket.get(API.url() + '/' + baseModel, { params: queryParams }).then(function (response) {
+          vm.selectionModels = response.data.items;
+        });
       } else {
         vm.showSearch = false;
       }

@@ -21,7 +21,7 @@
     var vm = this;
 
     // private variables
-    var studyID = _.getStudyFromUrl($location.path());
+    var studyID = _.getParentIDFromUrl($location.path());
     var centreHref = "study/" + studyID + "/collectioncentres";
 
     // bindable variables
