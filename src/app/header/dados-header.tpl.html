@@ -56,26 +56,26 @@
         </div>
         <div class="collapse navbar-collapse" uib-collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in ::header.navigation" uib-dropdown
+            <li ng-repeat="link in header.navigation" uib-dropdown
                 context-translator="{{link.prompt}}"
                 ng-class="{
                 'active': link.isActive,
                 'dropdown': link.dropdown
               }">
               <!-- UI-State or Single Link -->
-              <a ui-sref="{{::link.sref}}" ng-if="link.sref">
-                <i class="fa {{ ::link.icon }}"></i>
+              <a ui-sref="{{link.sref}}" ng-if="link.sref">
+                <i class="fa {{ link.icon }}"></i>
                 <span translate>{{link.prompt}}</span>
               </a>
               <!-- Single Link -->
-              <a hateoas-link state-href="{{::link.href}}" ng-if="!link.dropdown && link.href && !link.sref">
-                <i class="fa {{ ::link.icon }}"></i>
+              <a hateoas-link state-href="{{link.href}}" ng-if="!link.dropdown && link.href && !link.sref">
+                <i class="fa {{ link.icon }}"></i>
                 <span translate>{{link.prompt}}</span>
               </a>
               <!-- Dropdown Link -->
               <a href class="dropdown-toggle" ng-if="link.dropdown"
                  uib-dropdown-toggle role="button" aria-expanded="false">
-                <i class="fa {{ ::link.icon }}"></i>
+                <i class="fa {{ link.icon }}"></i>
                 <span translate>{{link.prompt}}</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
@@ -84,8 +84,8 @@
                     ng-class="{
                       'active': droplink.isActive
                     }">
-                  <a hateoas-link state-href="{{ ::droplink.href }}">
-                    <i class="fa {{ ::droplink.icon }}"></i>
+                  <a hateoas-link state-href="{{ droplink.href }}">
+                    <i class="fa {{ droplink.icon }}"></i>
                     <span translate>{{ droplink.prompt }}</span>
                   </a>
                 </li>
@@ -124,7 +124,7 @@
                   </i>
                 </span>
               </div>
-              <a ng-if="link.rel != 'name'" hateoas-link url="{{::link.href}}"
+              <a ng-if="link.rel != 'name'" hateoas-link url="{{link.href}}"
                  context-translator="{{link.prompt}}">
                 <span translate>{{link.prompt}}</span>
               </a>

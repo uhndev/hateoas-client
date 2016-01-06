@@ -50,14 +50,14 @@
     };
 
     if(isAuthenticated()) {
-      Group.get({id: $cookies.getObject('user').user.group}, function(data) {
+      setAuthenticated();
+      /*Group.get({id: $cookies.getObject('user').user.group}, function(data) {
         service.currentGroup=data;
 
         var view = service.currentGroup.name.toString().toUpperCase();
         service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
         service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
-        $rootScope.$broadcast("events.authorized");
-      });
+      });*/
     }
 
 
@@ -143,6 +143,7 @@
         var view = service.currentGroup.name.toString().toUpperCase();
         service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
         service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
+
         $rootScope.$broadcast("events.authorized");
       });
 

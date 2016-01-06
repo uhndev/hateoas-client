@@ -35,9 +35,7 @@
 
     function init() {
       vm.locale = $translate.use();
-      if (AuthService.isAuthenticated()) {
-        updateHeader();
-      }
+      updateHeader();
       updateActive();
     }
 
@@ -85,7 +83,7 @@
       }
 
       if (AuthService.currentUser) {
-        vm.currentUser = AuthService.currentUser.username;
+        vm.currentUser = AuthService.currentUser;
       }
     }
 
