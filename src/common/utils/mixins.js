@@ -13,7 +13,7 @@
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
 		'convertRestUrl': convertRestUrl,
-		'getStudyFromUrl': getStudyFromUrl,
+		'getParentIDFromUrl': getParentIDFromUrl,
 		'inArray': inArray,
 		'isUrl': isUrl,
     'isJson': isJson,
@@ -45,7 +45,7 @@
     return restURL.substring(index);
 	}
 
-	function getStudyFromUrl(pathname) {
+	function getParentIDFromUrl(pathname) {
 		var arr = pathnameToArray(pathname);
 		if (arr.length >= 2) {
 			return arr[1];

@@ -18,7 +18,7 @@
     var vm = this;
 
     // private variables
-    var studyID = _.getStudyFromUrl($location.path());
+    var studyID = _.getParentIDFromUrl($location.path());
 
     // bindable variables
     vm.study = Study.get({ id: studyID });
