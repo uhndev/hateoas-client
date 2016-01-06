@@ -23,7 +23,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      UserService.get({ id: Auth.currentUser.user.id }).$promise.then(function (user) {
+      UserService.get({ id: Auth.currentUser.id }).$promise.then(function (user) {
         if (_.isUndefined(user.dob)) {
           delete user.dob;
         } else {
