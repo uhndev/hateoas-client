@@ -29,6 +29,7 @@
     var tabview = {};
     var subview = {};
 
+
     var service = {
       // variables
       currentUser: currentUser,
@@ -47,6 +48,18 @@
       login: login,
       logout: logout
     };
+
+    if(isAuthenticated()) {
+      Group.get({id: $cookies.getObject('user').user.group}, function(data) {
+        service.currentGroup=data;
+
+        var view = service.currentGroup.name.toString().toUpperCase();
+        service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
+        service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
+        $rootScope.$broadcast("events.authorized");
+      });
+    }
+
 
     return service;
 
@@ -123,11 +136,17 @@
      *              from response, or from angular constant settings
      */
     function setAuthenticated() {
-      service.currentUser = $cookies.getObject('user');
-      var view = service.currentGroup.name.toString().toUpperCase();
-      service.tabview = service.currentGroup.tabview || TABVIEW[view];
-      service.subview = service.currentGroup.subview || SUBVIEW[view];
-      $rootScope.$broadcast("events.authorized");
+      service.currentUser = $cookies.getObject('user').user;
+      Group.get({id: service.currentUser.group}, function(data) {
+        service.currentGroup=data;
+
+        var view = service.currentGroup.name.toString().toUpperCase();
+        service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
+        service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
+        $rootScope.$broadcast("events.authorized");
+      });
+
+
     }
 
     /**

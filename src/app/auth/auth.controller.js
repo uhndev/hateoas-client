@@ -35,8 +35,7 @@
     var success = function(user) {
       if (user) {
         var now = new Date();
-        AuthService.currentGroup= user.group;
-        delete user.group;
+        //AuthService.currentGroup= user.group;
         $cookies.putObject('user', user, {
           expires: new Date(now.getTime() + (60000 * user.token.expires))
         });
