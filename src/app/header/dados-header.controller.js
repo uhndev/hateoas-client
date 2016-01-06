@@ -85,7 +85,7 @@
       }
 
       if (AuthService.currentUser) {
-        vm.currentUser = AuthService.currentUser.user;
+        vm.currentUser = AuthService.currentUser.username;
       }
     }
 
