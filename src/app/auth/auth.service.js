@@ -49,15 +49,11 @@
       logout: logout
     };
 
+
+    // if the user is already authenticated on init (page reload) call set authenticated
+
     if(isAuthenticated()) {
       setAuthenticated();
-      /*Group.get({id: $cookies.getObject('user').user.group}, function(data) {
-        service.currentGroup=data;
-
-        var view = service.currentGroup.name.toString().toUpperCase();
-        service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
-        service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
-      });*/
     }
 
 
