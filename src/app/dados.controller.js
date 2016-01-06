@@ -5,9 +5,9 @@
     .module('dados')
     .controller('DadosController', DadosController);
 
-  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'LOCALES', 'AuthService'];
+  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'LOCALES', 'AuthService', 'DefaultRouteService'];
 
-  function DadosController($scope, $state, $translate, $rootScope, $location, LOCALES, Auth) {
+  function DadosController($scope, $state, $translate, $rootScope, $location, LOCALES, Auth, DefaultRoute) {
 
     var vm = this;
     vm.submenu = {};
@@ -17,10 +17,28 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      if (_.isEmpty($location.path())) {
-        $location.path('/study');
+      if (Auth.isAuthenticated()) {
+        if (_.isEmpty($location.path())) {
+          // url is empty, so just use default settings
+          DefaultRoute.route(Auth.currentUser.group.level);
+        } else {
+          // otherwise, try matching currentUrl to state urls to find the correct state
+          var isCustomState = false;
+          angular.forEach($state.get(), function (state) {
+            var currentUrl = $location.path();
+            if (state.name && state.url && currentUrl == state.url ||
+              (_.has(state, 'data') && currentUrl == state.data.fullUrl)) {
+              $state.go(state.name);
+              isCustomState = true;
+            }
+          });
+
+          // no matches, default to hateoas state
+          if (!isCustomState) {
+            $state.go('hateoas');
+          }
+        }
       }
-      $state.go('hateoas');
     }
 
     /**

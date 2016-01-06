@@ -9,11 +9,11 @@
 
   HateoasController.$inject = [
     '$scope', '$resource', '$location', 'AuthService', 'HeaderService',
-    'StudyService', 'API', 'ngTableParams', 'sailsNgTable'
+    'ResourceFactory', 'API', 'ngTableParams', 'sailsNgTable'
   ];
 
   function HateoasController($scope, $resource, $location, AuthService, HeaderService,
-                              Study, API, TableParams, SailsNgTable) {
+                              ResourceFactory, API, TableParams, SailsNgTable) {
     var vm = this;
 
     // bindable variables
@@ -34,7 +34,15 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var studyID = _.getStudyFromUrl($location.path());
+      var modelName = null;
+      var modelID = null;
+      var pathArray = _.pathnameToArray($location.path());
+
+      // if trying to render a hateoas collection, take note of parent base model in url
+      if (pathArray.length >= 2) {
+        modelName = pathArray[0];
+        modelID = pathArray[1];
+      }
 
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
@@ -56,14 +64,17 @@
             params.total(data.total);
             $defer.resolve(data.items);
 
-            // if on study subpage, include study name in template
+            // if on model subpage, include model name in template
             // to be able to prepend to appropriate rest calls
-            if (studyID) {
-              Study.get({ id: studyID }).$promise.then(function (study) {
-                vm.template.study = studyID;
-                state.prompt = study.displayName;
-                state.value = studyID;
-                state.rel = 'study';
+            if (modelName && modelID) {
+              var Model = ResourceFactory.create(API.url(modelName));
+
+              Model.get({ id: modelID }).$promise.then(function (model) {
+                vm.template.model = modelName;
+                vm.template.modelID = modelID;
+                state.prompt = model.displayName;
+                state.value = modelID;
+                state.rel = modelName;
                 HeaderService.setSubmenu(state, data, $scope.dados.submenu);
               });
             } else {

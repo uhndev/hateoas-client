@@ -160,11 +160,13 @@
      * @return {[null]}          [no return; objects are modified in place]
      */
     this.loadAnswerSet = function(item, template, form) {
-      if (template.study) {
+      // if template object contains this info, will try to prepend appropriate REST url for dropdowns in form
+      // i.e. /user => /study/1/user
+      if (template.model && template.modelID) {
         _.map(form.items.form_questions, function(question) {
           if ((question.field_hasItem || question.field_hasItems) &&
-               question.field_name !== 'study' && question.field_prependURL) {
-            question.field_userURL = 'study/' + template.study + '/' + question.field_userURL;
+               question.field_name !== template.model && question.field_prependURL) {
+            question.field_userURL = template.model + '/' + template.modelID + '/' + question.field_userURL;
           }
           return question;
         });
