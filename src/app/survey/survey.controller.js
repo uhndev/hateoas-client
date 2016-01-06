@@ -71,7 +71,7 @@
       var modalInstance = $uibModal.open({
         animation: true,
         size: 'lg',
-        templateUrl: 'study/survey/editSurveyModal.tpl.html',
+        templateUrl: 'study/surveys/editSurveyModal.tpl.html',
         controller: 'EditSurveyController',
         controllerAs: 'editSurvey',
         bindToController: true,
