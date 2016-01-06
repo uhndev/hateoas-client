@@ -35,9 +35,7 @@
 
     function init() {
       vm.locale = $translate.use();
-      if (AuthService.isAuthenticated()) {
-        updateHeader();
-      }
+      updateHeader();
       updateActive();
     }
 
@@ -80,14 +78,14 @@
      */
 
     function updateHeader() {
-      if (AuthService.currentUser.group) {
+      if (AuthService.currentGroup) {
         if (AuthService.tabview !== vm.navigation) {
           vm.navigation = AuthService.tabview;
         }
       }
 
       if (AuthService.currentUser) {
-        vm.currentUser = AuthService.currentUser.user;
+        vm.currentUser = AuthService.currentUser;
       }
     }
 

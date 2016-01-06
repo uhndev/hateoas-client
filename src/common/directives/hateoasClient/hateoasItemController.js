@@ -45,7 +45,9 @@
             };
 
             var template = _.find(vm.template.data, { name: key });
-            vm.itemInfo.rows[key].type = template.type;
+            if (!_.isUndefined(template)) {
+              vm.itemInfo.rows[key].type = template.type;
+            }
           }
         });
 
