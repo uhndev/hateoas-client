@@ -127,9 +127,20 @@
     </div>
     <div id="servicesDiv" >
     <h1>Services</h1>
-      <span class="custom-checkbox" ng-repeat="service in assessment.availableServices" >&nbsp;
-        <input type="checkbox" name="{{service.name}}" ng-checked="assessment.isServiceRecommended(service)" ng-click="assessment.toggleService(service)">{{service.name}}&nbsp;
-      </span>
+        <div class="panel panel-info" ng-repeat="category in assessment.currentCategories" >
+          <div class="panel-heading" context-translator="">
+            <h3 class="panel-title ng-scope" translate="">{{category.displayName}}</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-8">
+                <span class="custom-checkbox" ng-if="category.id==service.serviceCategory.id"  ng-repeat="service in assessment.availableServices" >&nbsp;
+                  <input type="checkbox" name="{{service.name}}" ng-checked="assessment.isServiceRecommended(service)" ng-click="assessment.toggleService(service)">{{service.name}}&nbsp;
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
     <!-- View Panel Permissions -->
     <div class="panel panel-default" >
