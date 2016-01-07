@@ -8,6 +8,7 @@
     ])
 		.service('UserService', UserService)
     .service('ProviderService', ProviderService)
+    .service('StudyUserService', StudyUserService)
 		.service('UserRoles', UserRoles)
     .service('UserEnrollment', UserEnrollment);
 
@@ -15,12 +16,30 @@
     service.$inject = ['ResourceFactory', 'API'];
   });
 
-	function UserService(ResourceFactory, API) {
+  StudyUserService.$inject = ['$resource', 'API'];
+
+  function UserService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('user'));
 	}
 
   function ProviderService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('provider'));
+  }
+
+  function StudyUserService($resource, API) {
+    return $resource(
+      API.url() + '/study/:studyID/users',
+      {
+        studyID: '@studyID'
+      },
+      {
+        'query' : {
+          method: 'GET',
+          isArray: true,
+          transformResponse: _.transformHateoas
+        }
+      }
+    );
   }
 
 	function UserRoles(ResourceFactory, API) {

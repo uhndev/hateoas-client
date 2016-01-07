@@ -18,6 +18,7 @@
     vm.loadError = false;
 		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
+    vm.baseQuery = vm.query || null;
     vm.labels = vm.labels || 'name';
 
     // bindable methods
@@ -43,9 +44,12 @@
      * @description Refresh function called to fetch data on load and search updates.
      * @param query Sails search query to pass through
      */
-    function fetchData(query) {
-      SelectService.loadSelect(vm.href, query).then(function (data) {
-        angular.copy(data, vm.input);
+    function fetchData(query, select) {
+      SelectService.loadSelect(vm.href, vm.baseQuery, query).then(function (data) {
+        vm.input = data;
+        if (select) { // bugfix for ui-select. See https://github.com/angular-ui/ui-select/issues/962
+          select.refreshItems();
+        }
       }).catch(function (err) {
         vm.loadError = true;
         $scope.$parent.loadError = true;
