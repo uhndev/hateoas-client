@@ -19,7 +19,7 @@
 
     // check if already logged in
     if (AuthService.isAuthenticated()) {
-      DefaultRouteService.route(AuthService.currentUser.group.level);
+      DefaultRouteService.route(AuthService.currentGroup.level);
     } else {
       $location.url('/login');
       $state.go('login');

@@ -67,7 +67,7 @@
      * @param level
      */
     function checkPrivilege(level) {
-      return _.has(service.currentUser, 'group') && service.currentUser.group.level === level;
+      return _.has(service.currentUser, 'group') && service.currentGroup.level === level;
     }
 
     /**
