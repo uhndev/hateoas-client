@@ -76,7 +76,7 @@
      * @returns {boolean}
      */
     function isAdmin() {
-      return checkPrivilege(1);
+      return checkPrivilege(1) || service.currentUser.group == 'admin';
     }
 
     /**
@@ -85,7 +85,7 @@
      * @returns {boolean}
      */
     function isCoordinator() {
-      return checkPrivilege(1);
+      return checkPrivilege(2) || service.currentUser.group == 'coordinator';
     }
 
     /**
@@ -94,7 +94,7 @@
      * @returns {boolean}
      */
     function isSubject() {
-      return checkPrivilege(3);
+      return checkPrivilege(3) || service.currentUser.group == 'subject';
     }
 
     /**

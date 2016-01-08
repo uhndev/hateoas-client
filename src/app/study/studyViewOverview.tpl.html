@@ -1,93 +1,93 @@
-<div ng-controller="StudyOverviewController as study">
-	<div class="row">
-		<div class="col-md-8" context-translator="APP.STUDY.OVERVIEW.TITLE">
-			<h1 id="Title" translate translate-values="{ name: study.resource.items.name }">
-				APP.STUDY.OVERVIEW.TITLE
-			</h1>
-		</div>
-	</div>
-	<hr/>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-info">
-				<div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.TITLE">
-					<h3 class="panel-title" translate>APP.STUDY.OVERVIEW.ENROLLMENT.TITLE</h3>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<!-- Collection Centres Panel -->
-						<div class="col-md-8">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th ng-repeat="col in study.collectionCentres.columns track by $index" translate
+<div class="container" ng-controller="StudyOverviewController as study">
+  <div class="row">
+    <div class="col-md-8" context-translator="APP.STUDY.OVERVIEW.TITLE">
+      <h1 id="Title" translate translate-values="{ name: study.resource.items.name }">
+        APP.STUDY.OVERVIEW.TITLE
+      </h1>
+    </div>
+  </div>
+  <hr/>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-info">
+        <div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.TITLE">
+          <h3 class="panel-title" translate>APP.STUDY.OVERVIEW.ENROLLMENT.TITLE</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <!-- Collection Centres Panel -->
+            <div class="col-md-8">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th ng-repeat="col in study.collectionCentres.columns track by $index" translate
                       context-translator="{{col.title}}">
-											{{col.title}}
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="row in study.collectionCentres.tableData track by $index">
-										<td>
+                      {{col.title}}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="row in study.collectionCentres.tableData track by $index">
+                    <td>
                       <a ng-href="#/collectioncentre/{{row.id}}">{{row.name}}</a>
                     </td>
-										<td>
+                    <td>
                       <a ng-href="#/user/{{row.contact}}">{{row.contactName}}</a>
                     </td>
-										<td>{{row.coordinators_count}}</td>
-										<td>{{row.subjects_count}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<!-- Total Counts -->
-						<div class="col-md-2">
-							<div class="panel panel-success">
-								<div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.COORDINATORS">
-									<h3 class="panel-title text-center" translate>APP.STUDY.OVERVIEW.ENROLLMENT.COORDINATORS</h3>
-								</div>
-								<div class="panel-body">
-									<h3 class="text-center">
-										<b>{{study.collectionCentres.coordinators_total}}</b>
-									</h3>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<div class="panel panel-success">
-								<div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.SUBJECTS">
-									<h3 class="panel-title text-center" translate>APP.STUDY.OVERVIEW.ENROLLMENT.SUBJECTS</h3>
-								</div>
-								<div class="panel-body">
-									<h3 class="text-center">
-										<b>{{study.collectionCentres.subjects_total}}</b>
-									</h3>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-info">
-				<div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.STUDY_INFORMATION.TITLE">
-					<h3 class="panel-title" translate>APP.STUDY.OVERVIEW.STUDY_INFORMATION.TITLE</h3>
-				</div>
-				<div class="panel-body">
-					<simple-table
-						rows="study.studyInfo.rows"
-						table-data="study.studyInfo.tableData">
-					</simple-table>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="well">
-				<form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
-			</div>
-		</div>
-	</div>
+                    <td>{{row.coordinators_count}}</td>
+                    <td>{{row.subjects_count}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Total Counts -->
+            <div class="col-md-2">
+              <div class="panel panel-success">
+                <div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.COORDINATORS">
+                  <h3 class="panel-title text-center" translate>APP.STUDY.OVERVIEW.ENROLLMENT.COORDINATORS</h3>
+                </div>
+                <div class="panel-body">
+                  <h3 class="text-center">
+                    <b>{{study.collectionCentres.coordinators_total}}</b>
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="panel panel-success">
+                <div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.ENROLLMENT.SUBJECTS">
+                  <h3 class="panel-title text-center" translate>APP.STUDY.OVERVIEW.ENROLLMENT.SUBJECTS</h3>
+                </div>
+                <div class="panel-body">
+                  <h3 class="text-center">
+                    <b>{{study.collectionCentres.subjects_total}}</b>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading" context-translator="APP.STUDY.OVERVIEW.STUDY_INFORMATION.TITLE">
+          <h3 class="panel-title" translate>APP.STUDY.OVERVIEW.STUDY_INFORMATION.TITLE</h3>
+        </div>
+        <div class="panel-body">
+          <simple-table
+            rows="study.studyInfo.rows"
+            table-data="study.studyInfo.tableData">
+          </simple-table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="well">
+        <form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
+      </div>
+    </div>
+  </div>
 </div>

@@ -63,7 +63,7 @@
 
   function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
-      template: '<div class="container" hateoas-client></div>'
+      template: '<div hateoas-client></div>'
     });
 
     $translateProvider.useLoader('localeLoader');
