@@ -1,77 +1,81 @@
 <div ng-controller="StudyFormController as studyForm">
-  <h1 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
-    {{ pageTitle }}
-    <small translate translate-values="{ total: studyForm.resource.total }">
-      COMMON.HATEOAS.TITLE.TOTAL
-    </small>
-  </h1>
+  <div class="container">
+    <h1 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
+      {{ pageTitle }}
+      <small translate translate-values="{ total: studyForm.resource.total }">
+        COMMON.HATEOAS.TITLE.TOTAL
+      </small>
+    </h1>
 
-  <div id="Query" ng-if="!studyForm.idPlugin" class="clearfix">
-    <query-builder
-      template="studyForm.resource.template"
-      ng-model="studyForm.query.where"
-      ng-if="studyForm.resource.template">
-    </query-builder>
-  </div>
-
-  <div id="Controls" class="row" ng-if="studyForm.idPlugin">
-    <div class="col-md-12">
-      <div class="btn-group pull-right">
-        <a type="button" class="btn btn-default" ng-href="#/study/{{studyForm.study}}/forms">
-          <i class="fa fa-arrow-left"></i> Back To Study Forms
-        </a>
-      </div>
+    <div id="Query" ng-if="!studyForm.idPlugin" class="clearfix">
+      <query-builder
+        template="studyForm.resource.template"
+        ng-model="studyForm.query.where"
+        ng-if="studyForm.resource.template">
+      </query-builder>
     </div>
-  </div>
 
-  <div id="Controls" class="row" uib-collapse="studyForm.idPlugin">
-    <div class="col-md-6">
-      <form class="form-inline">
-        <div class="form-group" context-translator="APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER">
-          <select ng-model="studyForm.formToAdd"
-                  class="form-control"
-                  ng-options="selected.id as selected.name for selected in studyForm.forms | orderBy:'name'">
-            <option value="" disabled translate>APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER</option>
-          </select>
+    <div id="Controls" class="row" ng-if="studyForm.idPlugin">
+      <div class="col-md-12">
+        <div class="btn-group pull-right">
+          <a type="button" class="btn btn-default" ng-href="#/study/{{studyForm.study}}/forms">
+            <i class="fa fa-arrow-left"></i> Back To Study Forms
+          </a>
         </div>
-        <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()" ng-disabled="!!!studyForm.formToAdd">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-      </form>
-    </div>
-
-    <div class="col-md-6">
-      <div class="btn-group pull-right" ng-if="!studyForm.idPlugin">
-        <a type="button" class="btn btn-default"
-           ng-if="studyForm.allow.update"
-           ng-href="#/study/{{studyForm.study}}/forms?&idPlugin={{studyForm.selected.id}}"
-           ng-disabled="!!!studyForm.selected"
-           context-translator="APP.STUDY.FORM.CONTROLS.EDIT_BTN">
-          <i class="fa fa-edit"></i>
-          <span translate>APP.STUDY.FORM.CONTROLS.EDIT_BTN</span>
-        </a>
-        <button type="button" class="btn btn-default"
-                ng-if="studyForm.allow.delete"
-                ng-click="studyForm.archiveForm()"
-                ng-disabled="!!!studyForm.selected"
-                context-translator="APP.STUDY.FORM.CONTROLS.ARCHIVE_BTN">
-          <i class="fa fa-trash-o"></i>
-          <span translate>APP.STUDY.FORM.CONTROLS.ARCHIVE_BTN</span>
-        </button>
       </div>
     </div>
+
+    <div id="Controls" class="row" uib-collapse="studyForm.idPlugin">
+      <div class="col-md-6">
+        <form class="form-inline">
+          <div class="form-group" context-translator="APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER">
+            <select ng-model="studyForm.formToAdd"
+                    class="form-control"
+                    ng-options="selected.id as selected.name for selected in studyForm.forms | orderBy:'name'">
+              <option value="" disabled translate>APP.STUDY.FORM.CONTROLS.ADD_FORM_PLACEHOLDER</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="studyForm.addFormToStudy()" ng-disabled="!!!studyForm.formToAdd">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </form>
+      </div>
+
+      <div class="col-md-6">
+        <div class="btn-group pull-right" ng-if="!studyForm.idPlugin">
+          <a type="button" class="btn btn-default"
+             ng-if="studyForm.allow.update"
+             ng-href="#/study/{{studyForm.study}}/forms?&idPlugin={{studyForm.selected.id}}"
+             ng-disabled="!!!studyForm.selected"
+             context-translator="APP.STUDY.FORM.CONTROLS.EDIT_BTN">
+            <i class="fa fa-edit"></i>
+            <span translate>APP.STUDY.FORM.CONTROLS.EDIT_BTN</span>
+          </a>
+          <button type="button" class="btn btn-default"
+                  ng-if="studyForm.allow.delete"
+                  ng-click="studyForm.archiveForm()"
+                  ng-disabled="!!!studyForm.selected"
+                  context-translator="APP.STUDY.FORM.CONTROLS.ARCHIVE_BTN">
+            <i class="fa fa-trash-o"></i>
+            <span translate>APP.STUDY.FORM.CONTROLS.ARCHIVE_BTN</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hateoas-table
+      uib-collapse="studyForm.idPlugin"
+      class="clearfix"
+      url="{{studyForm.url}}"
+      query="studyForm.query"
+      selected="studyForm.selected"
+      allow="studyForm.allow"
+      resource="studyForm.resource"
+      on-resource-loaded="studyForm.onResourceLoaded">
+    </hateoas-table>
   </div>
 
-  <hateoas-table
-    uib-collapse="studyForm.idPlugin"
-    class="clearfix"
-    url="{{studyForm.url}}"
-    query="studyForm.query"
-    selected="studyForm.selected"
-    allow="studyForm.allow"
-    resource="studyForm.resource"
-    on-resource-loaded="studyForm.onResourceLoaded">
-  </hateoas-table>
   <br/>
+
   <plugin-editor></plugin-editor>
 </div>

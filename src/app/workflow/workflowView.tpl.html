@@ -1,4 +1,4 @@
-<div ng-controller="WorkflowController">
+<div class="container" ng-controller="WorkflowController">
   <h1>Workflow Editor</h1>
   <div class="form-group">
     <label for="workflowState">
@@ -17,7 +17,7 @@
   <div class="jsonView" defocus>
     <json child="state.data" type="'object'"></json>
   </div>
-  
+
   <h2>JSON Text Editor</h2>
   <div>
     <div ui-ace="{
@@ -28,8 +28,8 @@
 
   <h3>Actions</h3>
   <div>
-    <button type="button" 
-      class="btn btn-default" 
+    <button type="button"
+      class="btn btn-default"
       ng-click="save(state.data)">
       <span class="fa fa-floppy-o"></span>
       Save

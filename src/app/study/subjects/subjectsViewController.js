@@ -25,7 +25,6 @@
     var centreHref = "study/" + studyID + "/collectioncentres";
 
     // bindable variables
-    vm.centreHref = '';
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;

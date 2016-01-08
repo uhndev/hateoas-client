@@ -6,7 +6,7 @@
     .controller('AddSubjectController', AddSubjectController);
 
   AddSubjectController.$inject = [
-    '$uibModalInstance', 'study', 'centreHref', 'toastr', 'ENROLLMENT_STATUSES', 'SubjectEnrollmentService'
+    '$uibModalInstance', 'study', 'centreHref', 'toastr', 'ENROLLMENT_STATUSES', 'StudyUserService', 'SubjectEnrollmentService'
   ];
 
   /**
@@ -21,7 +21,7 @@
    * @param SubjectEnrollment
    * @constructor
    */
-  function AddSubjectController($uibModalInstance, study, centreHref, toastr, ENROLLMENT_STATUSES, SubjectEnrollment) {
+  function AddSubjectController($uibModalInstance, study, centreHref, toastr, ENROLLMENT_STATUSES, StudyUser, SubjectEnrollment) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
@@ -30,6 +30,9 @@
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
+    StudyUser.query({ studyID: study.id }).$promise.then(function (data) {
+      vm.studyUsers = { user: _.pluck(data, 'id') };
+    });
 
     // bindable methods
     vm.addSubject = addSubject;

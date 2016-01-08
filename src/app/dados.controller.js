@@ -20,7 +20,7 @@
       if (Auth.isAuthenticated()) {
         if (_.isEmpty($location.path())) {
           // url is empty, so just use default settings
-          DefaultRoute.route(Auth.currentUser.group.level);
+          DefaultRoute.route(Auth.currentGroup.level);
         } else {
           // otherwise, try matching currentUrl to state urls to find the correct state
           var isCustomState = false;
@@ -38,6 +38,8 @@
             $state.go('hateoas');
           }
         }
+      } else {
+        $state.go('login');
       }
     }
 

@@ -103,9 +103,10 @@
   <ng-form name="enrollmentForm" class="form-horizontal" novalidate>
     <div class="form-group">
       <label for="provider" class="col-sm-3 control-label">Providers&nbsp;</label>
-      <div class="col-sm-9">
+      <div class="col-sm-9" ng-if="addSubject.studyUsers">
         <select-loader
           url="provider"
+          query="addSubject.studyUsers"
           is-atomic="false"
           is-disabled="false"
           values="addSubject.newSubject.providers"

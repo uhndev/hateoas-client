@@ -74,7 +74,7 @@
         var last = _.last(_.pathnameToArray(cleanPath));
 
         // Default: collection view (routes like /study/LEAP/collectioncentres)
-        var fragment = '<div ng-controller="HateoasController as hateoas">';
+        var fragment = '<div class="container" ng-controller="HateoasController as hateoas">';
         var modules = VIEW_MODULES;
 
         if ((pathArr.length % 2) === 0) {

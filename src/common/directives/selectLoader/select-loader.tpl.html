@@ -3,7 +3,7 @@
     <ui-select ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
       <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
-                         refresh="select.fetchData($select.search)"
+                         refresh="select.fetchData($select.search, $select)"
                          refresh-delay="500">
         <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
       </ui-select-choices>
@@ -13,7 +13,7 @@
     <ui-select multiple ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
       <ui-select-match placeholder="Select or search">{{$item[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
-                         refresh="select.fetchData($select.search)"
+                         refresh="select.fetchData($select.search, $select)"
                          refresh-delay="500">
         <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
       </ui-select-choices>

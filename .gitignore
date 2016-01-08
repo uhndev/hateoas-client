@@ -71,9 +71,8 @@ sails-io-settings.js
 
 node_modules
 bower_components
-build/
-bin/
-node_modules/
+build
+bin
 vendor/*
 
 ################################################

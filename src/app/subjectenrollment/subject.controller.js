@@ -11,11 +11,11 @@
 
   SubjectOverviewController.$inject = [
     '$scope', '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
-    'API', 'moment', 'ProviderService', 'HeaderService', 'SubjectScheduleService'
+    'API', 'moment', 'StudyService', 'HeaderService', 'SubjectScheduleService'
   ];
 
   function SubjectOverviewController($scope, $resource, $location, $uibModal, toastr, TableParams,
-                                     API, moment, Provider, HeaderService, SubjectSchedule) {
+                                     API, moment, Study, HeaderService, SubjectSchedule) {
     var vm = this;
 
     // bindable variables
@@ -94,7 +94,7 @@
             return subject;
           },
           study: function() {
-            return vm.resource.studyAttributes;
+            return Study.get({ id: vm.resource.study }).$promise;
           },
           centreHref: function () {
             return "study/" + vm.resource.study + "/collectioncentres";

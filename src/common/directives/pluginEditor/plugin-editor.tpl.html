@@ -1,15 +1,15 @@
-<div>
+<div ng-style="{ 'padding-left': 15, 'padding-right': 15 }">
   <uib-accordion close-others="false" class="plugin-editor">
     <uib-accordion-group is-open="isEditorOpen">
       <uib-accordion-heading>
-				<span class="glyphicon "
+        <span class="glyphicon "
               ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
-				</span>
+        </span>
         Configuration
       </uib-accordion-heading>
 
       <div class="form-group">
-        <label for="form-loader">Load Plugin:</label>
+        <label for="form-loader">Load Form:</label>
         <select ng-model="idPlugin" class="form-control"
                 ng-change="loadForm(idPlugin)">
           <option value="" disabled>Select a form</option>
@@ -21,22 +21,22 @@
       </div>
 
       <div class="form-group">
-        <label for="form-name">Plugin Name:</label>
-        <ui-help uib-popover="Provide a name for your plugin. Names must
-									be in upper case and cannot contain any spaces."
+        <label for="form-name">Form Name:</label>
+        <ui-help uib-popover="Provide a name for your form. Names must
+                  be in upper case and cannot contain any spaces."
                  popover-placement="right"></ui-help>
         <input type="text" class="form-control"
                ng-model="form.name"
-               ng-trim="true" title="Provide a name for your plugin"
-               placeholder="Provide a name for your plugin"/>
+               ng-trim="true" title="Provide a name for your form"
+               placeholder="Provide a name for your form"/>
       </div>
       <!-- PluginLayout -->
       <div ng-controller="LayoutController" class="row">
         <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
           <uib-tabset class="clearfix">
-            <uib-tab uib-tooltip="Add new widget" active="editTabActive['add']">
+            <uib-tab uib-tooltip="Add new question" active="editTabActive['add']">
               <tab-heading>
-                <i class="fa fa-plus-square"></i> Widget
+                <i class="fa fa-plus-square"></i> Question
               </tab-heading>
               <div class="tab_content_inside" ng-repeat="category in unsorted(categories) track by $index">
                 <h2>{{ category }}</h2>
@@ -46,7 +46,7 @@
                 </div>
               </div>
             </uib-tab>
-            <uib-tab uib-tooltip="Select widget type" active="editTabActive['select']" disable="!widget.template">
+            <uib-tab uib-tooltip="Select question type" active="editTabActive['select']" disable="!widget.template">
               <tab-heading>
                 <i class="fa fa-list"></i> Types
               </tab-heading>
@@ -57,7 +57,7 @@
                     {{ category }}
                     <i class="pull-right glyphicon"
                        ng-class="{'glyphicon-chevron-down': isopen,
-													'glyphicon-chevron-right': !isopen}"></i>
+                          'glyphicon-chevron-right': !isopen}"></i>
                   </uib-accordion-heading>
                   <div ng-repeat="template in categories[category] track by $index">
                     <input type="radio" ng-model="widget.template"
@@ -72,14 +72,14 @@
                 </uib-accordion-group>
               </uib-accordion>
             </uib-tab>
-            <uib-tab uib-tooltip="Configure widget" active="editTabActive['config']" disable="!widget.template">
+            <uib-tab uib-tooltip="Configure question" active="editTabActive['config']" disable="!widget.template">
               <tab-heading>
                 <i class="fa fa-wrench"></i> Config
               </tab-heading>
               <ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
               </ng-include>
             </uib-tab>
-            <uib-tab uib-tooltip="Set widget list options" active="editTabActive['list_config']"
+            <uib-tab uib-tooltip="Set question list options" active="editTabActive['list_config']"
                      ng-show="widget.properties.hasOwnProperty('options')">
               <tab-heading>
                 <i class="fa fa-list-ol"></i> Options
@@ -87,7 +87,7 @@
               <ui-list-editor list="widget.properties.options"
                               can-edit-properties="true"></ui-list-editor>
             </uib-tab>
-            <uib-tab uib-tooltip="Configure widget flags" active="editTabActive['flags']" disable="!widget.template">
+            <uib-tab uib-tooltip="Configure question flags" active="editTabActive['flags']" disable="!widget.template">
               <tab-heading>
                 <i class="fa fa-flag"></i> Flags
               </tab-heading>
@@ -98,7 +98,7 @@
                   <label for="pattern">
                     Validation
                     <ui-help uib-popover="Set the validation pattern for this input. Use
-									 Regular Expressions to defined the validation rules."></ui-help>
+                   Regular Expressions to defined the validation rules."></ui-help>
                   </label>
                   <input type="text" id="pattern" class="form-control"
                          ng-model="widget.properties.pattern"/>
@@ -142,35 +142,35 @@
           <form class="grid-settings" ng-show="showSettings">
             <p>
               <label>Default cell size:</label>
-							<span ui-slider step="5" max="100" min="20"
+              <span ui-slider step="5" max="100" min="20"
                     class="inline-slider"
                     ng-model="width"></span>
               <span class="percentage">{{ width }}%</span>
               <ui-help popover-placement="left"
-                       uib-popover="Set the default width of a widget as a
-								  % of the screen size."></ui-help>
+                       uib-popover="Set the default width of a question as a
+                  % of the screen size."></ui-help>
             </p>
             <p>
               <label>Shrink/Expand amount:</label>
-							<span ui-slider step="5" max="50" min="5"
+              <span ui-slider step="5" max="50" min="5"
                     class="inline-slider"
                     ng-model="step"></span>
               <span class="percentage">{{ step }}%</span>
               <ui-help popover-placement="left"
                        uib-popover="Set the default amount to decrease/increase
-									the width of a widget as a % of the screen."></ui-help>
+                  the width of a question as a % of the screen."></ui-help>
             </p>
           </form>
 
           <div class="open-controls btn-group">
             <button class="btn btn-default" ng-model="showList" uib-btn-checkbox>
-							<span class="glyphicon" ng-class="{ 'glyphicon-align-justify' : showList,
-								'glyphicon-th-large' : !showList }"
+              <span class="glyphicon" ng-class="{ 'glyphicon-align-justify' : showList,
+                'glyphicon-th-large' : !showList }"
                     uib-tooltip="Switch between grid view and list view."></span>
             </button>
             <button class="btn btn-primary" ng-model="showSettings"
                     uib-btn-checkbox uib-btn-checkbox-true="1" uib-btn-checkbox-false="0">
-							<span class="glyphicon glyphicon-wrench"
+              <span class="glyphicon glyphicon-wrench"
                     uib-tooltip="Modify grid settings."></span>
             </button>
           </div>
@@ -180,9 +180,9 @@
     </uib-accordion-group>
     <uib-accordion-group is-open="isSettingsOpen">
       <uib-accordion-heading>
-				<span class="glyphicon "
+        <span class="glyphicon "
               ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
-				</span>
+        </span>
         Settings
       </uib-accordion-heading>
 
@@ -198,18 +198,18 @@
           <label for="jsonImport">
             Paste your form below:
           </label>
-					<textarea id="jsonImport"
+          <textarea id="jsonImport"
                     class="form-control"
                     ng-model="jsonForm" rows="10">
-					</textarea>
+          </textarea>
           <button class="btn btn-default pull-right" ng-click="importJson(jsonForm)">
             Import
           </button>
         </uib-tab>
         <uib-tab heading="JSON">
-					<pre>
-						{{ form | json }}
-					</pre>
+          <pre>
+            {{ form | json }}
+          </pre>
         </uib-tab>
       </uib-tabset>
       <!-- PluginConfig -->
