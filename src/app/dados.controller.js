@@ -38,6 +38,8 @@
             $state.go('hateoas');
           }
         }
+      } else {
+        $state.go('login');
       }
     }
 
