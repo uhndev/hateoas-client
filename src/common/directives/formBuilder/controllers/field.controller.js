@@ -8,9 +8,9 @@
     ])
     .controller('FieldController', FieldController);
 
-  FieldController.$inject = ['$scope', 'moment'];
+  FieldController.$inject = ['$scope'];
 
-  function FieldController($scope, moment) {
+  function FieldController($scope) {
 
     // private variables
     var savedSingleSelect = null;
@@ -42,8 +42,15 @@
 
     // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker
     // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
-    if ($scope.field.field_type == 'date' && moment($scope.field.field_value).isValid()) {
-      $scope.field.field_value = new Date($scope.field.field_value);
+    if ($scope.field.field_type == 'date') {
+      // check for invalid doe dates
+      if (_.isEmpty($scope.field.field_value)) {
+        delete $scope.field.field_value;
+      } else {
+        if (angular.isString($scope.field.field_value)) {
+          $scope.field.field_value = new Date($scope.field.field_value);
+        }
+      }
     }
 
     function toggleSelectCreate() {

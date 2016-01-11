@@ -8,11 +8,11 @@
   .controller('HateoasController', HateoasController);
 
   HateoasController.$inject = [
-    '$scope', '$resource', '$location', 'AuthService', 'HeaderService',
+    '$scope', '$resource', '$location', 'HeaderService',
     'ResourceFactory', 'API', 'ngTableParams', 'sailsNgTable'
   ];
 
-  function HateoasController($scope, $resource, $location, AuthService, HeaderService,
+  function HateoasController($scope, $resource, $location, HeaderService,
                               ResourceFactory, API, TableParams, SailsNgTable) {
     var vm = this;
 
@@ -72,14 +72,11 @@
               Model.get({ id: modelID }).$promise.then(function (model) {
                 vm.template.model = modelName;
                 vm.template.modelID = modelID;
-                state.prompt = model.displayName;
-                state.value = modelID;
-                state.rel = modelName;
-                HeaderService.setSubmenu(state, data, $scope.dados.submenu);
+                HeaderService.setSubmenu(modelName, data.links);
               });
             } else {
               // initialize submenu
-              HeaderService.setSubmenu(state, data, $scope.dados.submenu);
+              HeaderService.setSubmenu(modelName, data.links);
             }
           });
         }
@@ -98,12 +95,7 @@
     function select(item) {
       vm.selected = (vm.selected === item ? null : item);
       if (_.has(vm.selected, 'links')) {
-        var submenu = {
-          href: vm.selected.href,
-          name: vm.selected.name,
-          links: AuthService.getRoleLinks(vm.selected.rel, vm.selected.links)
-        };
-        angular.copy(submenu, $scope.dados.submenu);
+        HeaderService.setSubmenu(vm.selected.rel, vm.selected.links);
       }
     }
 

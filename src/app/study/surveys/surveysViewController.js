@@ -101,11 +101,7 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.study.displayName,
-          value: studyID,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        HeaderService.setSubmenu('study', data.links);
       }
       return data;
     }
