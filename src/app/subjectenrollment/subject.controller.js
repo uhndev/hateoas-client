@@ -10,11 +10,11 @@
     .controller('SubjectOverviewController', SubjectOverviewController);
 
   SubjectOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
+    '$resource', '$location', '$uibModal', 'toastr', 'ngTableParams',
     'API', 'moment', 'StudyService', 'HeaderService', 'SubjectScheduleService'
   ];
 
-  function SubjectOverviewController($scope, $resource, $location, $uibModal, toastr, TableParams,
+  function SubjectOverviewController($resource, $location, $uibModal, toastr, TableParams,
                                      API, moment, Study, HeaderService, SubjectSchedule) {
     var vm = this;
 
@@ -61,11 +61,7 @@
         });
 
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.resource.studyName,
-          value: vm.resource.study,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        HeaderService.setSubmenu('study', data.links);
       });
     }
 

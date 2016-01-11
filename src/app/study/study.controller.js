@@ -71,11 +71,7 @@
         };
 
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: data.items.name,
-          value: data.items.id,
-          rel: 'study'
-        }, data.items, $scope.dados.submenu);
+        HeaderService.setSubmenu('study', data.links);
       });
 
       SurveyForm.get(function (data) {

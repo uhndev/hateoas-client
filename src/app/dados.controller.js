@@ -5,12 +5,11 @@
     .module('dados')
     .controller('DadosController', DadosController);
 
-  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'LOCALES', 'AuthService', 'DefaultRouteService'];
+  DadosController.$inject = ['$scope', '$state', '$translate', '$rootScope', '$location', 'LOCALES', 'HeaderService', 'AuthService', 'DefaultRouteService'];
 
-  function DadosController($scope, $state, $translate, $rootScope, $location, LOCALES, Auth, DefaultRoute) {
+  function DadosController($scope, $state, $translate, $rootScope, $location, LOCALES, Header, Auth, DefaultRoute) {
 
     var vm = this;
-    vm.submenu = {};
 
     init();
 
@@ -71,7 +70,7 @@
       if (page.charAt(page.length -  1) == '/') { // remove trailing slashes if they exist
         $location.url(page.slice(0, -1));
       }
-      if (!Auth.isAdmin() && Auth.isAdminPage(page)) {
+      if (Auth.isAuthenticated() && !Auth.isAdmin() && Auth.isAdminPage(page)) {
         $state.go('forbidden');
       }
     });
@@ -81,7 +80,7 @@
       var basePath = _.pathnameToArray($location.path());
       var currBaseUrl = _.first(basePath);                  // e.g. /user
       if (prevBaseUrl !== currBaseUrl) { // clear submenu if base path changes
-        vm.submenu = {};
+        Header.clearSubmenu();
       }
 
       // construct pageTitle from location url
@@ -91,10 +90,6 @@
     // on successful applying translations by angular-translate
     $rootScope.$on('$translateChangeSuccess', function (event, data) {
       setPageTitle();
-    });
-
-    $scope.$on('submenu.clear', function(e) {
-      vm.submenu = {};
     });
   }
 
