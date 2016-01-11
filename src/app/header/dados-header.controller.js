@@ -5,10 +5,10 @@
     .controller('HeaderController', HeaderController);
 
   HeaderController.$inject = [
-    '$state', '$location', '$translate', '$rootScope', '$sailsSocket', 'ResourceFactory', 'AuthService', 'API'
+    '$state', '$location', '$translate', '$rootScope', '$sailsSocket', 'ResourceFactory', 'HeaderService', 'AuthService', 'API'
   ];
 
-  function HeaderController($state, $location, $translate, $rootScope, $sailsSocket, ResourceFactory, AuthService, API) {
+  function HeaderController($state, $location, $translate, $rootScope, $sailsSocket, ResourceFactory, Header, AuthService, API) {
 
     var vm = this;
 
@@ -22,6 +22,7 @@
     vm.isSubjectView = AuthService.isSubject();
     vm.currentUser = '';
     vm.navigation = [];
+    vm.service = Header;
 
     // bindable methods
     vm.logout = logout;
@@ -104,7 +105,7 @@
         }
       });
 
-      _.each(vm.submenu.links, function(link) {
+      _.each(vm.submenu, function(link) {
         var clientUrl = _.convertRestUrl(link.href, API.prefix);
         link.isActive =
           ($location.path().toLowerCase() === clientUrl.toLowerCase());
@@ -129,7 +130,7 @@
     function logout() {
       vm.isVisible = false;
       vm.navigation = [];
-      vm.submenu = [];
+      Header.clearSubmenu();
       AuthService.logout();
     }
 

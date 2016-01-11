@@ -97,7 +97,7 @@
     </nav>
   </div>
 
-  <div class="submenuWrapper" uib-collapse="!header.isVisible || !header.submenu.links">
+  <div class="submenuWrapper" uib-collapse="!header.isVisible || header.service.submenu.length == 0">
     <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -111,7 +111,7 @@
         </div>
         <div class="collapse navbar-collapse" uib-collapse="header.submenuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in header.submenu.links"
+            <li ng-repeat="link in header.service.submenu"
                 ng-class="{ 'active': link.isActive }">
               <div href ng-if="link.rel == 'name'" class="navbar-brand">
                 <span class="submenu-link-colour" context-translator="APP.HEADER.SELECTED" translate>APP.HEADER.SELECTED</span>

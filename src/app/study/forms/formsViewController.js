@@ -38,11 +38,7 @@
       if (data) {
         // initialize submenu
         Study.get({ id: vm.study }).$promise.then(function (study) {
-          HeaderService.setSubmenu({
-            prompt: study.displayName,
-            value: vm.study,
-            rel: 'study'
-          }, data, $scope.dados.submenu);
+          HeaderService.setSubmenu('study', data.links);
         });
 
         // populate add form dropdown with forms not already added

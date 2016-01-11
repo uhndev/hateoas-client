@@ -8,10 +8,10 @@
     .controller('SurveyOverviewController', SurveyOverviewController);
 
   SurveyOverviewController.$inject = [
-    '$scope', '$resource', '$location', '$uibModal', 'API', 'NgTableParams', 'HeaderService'
+    '$resource', '$location', '$uibModal', 'API', 'NgTableParams', 'HeaderService'
   ];
 
-  function SurveyOverviewController($scope, $resource, $location, $uibModal, API, TableParams, HeaderService) {
+  function SurveyOverviewController($resource, $location, $uibModal, API, TableParams, HeaderService) {
     var vm = this;
 
     // bindable variables
@@ -37,11 +37,7 @@
           vm.allow[permission] = true;
         });
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.resource.sessionStudy.name,
-          value: vm.resource.sessionStudy.id,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        HeaderService.setSubmenu('study', data.links);
 
         var scheduledForms = [];
         var sessions = angular.copy(_.sortBy(vm.resource.sessionForms, 'timepoint'));
