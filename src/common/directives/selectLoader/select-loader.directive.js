@@ -14,6 +14,7 @@
 			restrict: 'E',
 			scope: {
 				url: '@',
+        query: '=',
 				isAtomic: '=',
 				isDisabled: '=',
 				values: '=',

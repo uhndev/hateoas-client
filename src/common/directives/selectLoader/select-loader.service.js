@@ -21,7 +21,7 @@
 		var cache = {};
     var currentLocation = null;
 
-		this.loadSelect = function(url, query) {
+		this.loadSelect = function(url, baseQuery, query) {
 			var deferred;
       if (currentLocation !== $location.path()) {
         cache = {};
@@ -32,15 +32,24 @@
           url: url,
           method: 'GET'
         };
-        if (query) {
+
+        if (query) { // if query given use where contains clause on search string
           httpConfig.params = {
             where: {
-              displayName: {
-                'contains': query
-              }
+              displayName: { 'contains': query }
             }
           };
+          if (baseQuery) { // if given baseQuery and some additional search string
+            _.merge(httpConfig.params.where, baseQuery);
+          }
+        } else {
+          if (baseQuery) { // otherwise if no query given and baseQuery given
+            httpConfig.params = {
+              where: baseQuery
+            };
+          }
         }
+
 				cache[url] = $http(httpConfig).then(function(response) {
 					return response.data.items;
 				});

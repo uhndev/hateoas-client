@@ -13,6 +13,10 @@ describe('AuthService', function() {
     AuthService = $injector.get('AuthService');
   }));
 
+  afterEach(function() {
+    $cookies.remove('user');
+  });
+
   describe('Auth', function() {
     describe('instantiate', function() {
       it('should have isAuthenticated function', function() {

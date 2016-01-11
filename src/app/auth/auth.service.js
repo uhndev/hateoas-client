@@ -21,11 +21,11 @@
     'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$location', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
   ];
 
-  function AuthService(Auth, ADMIN_PAGES, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW,Group) {
+  function AuthService(Auth, ADMIN_PAGES, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW, Group) {
 
     var LoginAuth = $resource(Auth.LOGIN_API);
     var currentUser = {};
-    var currentGroup={};
+    var currentGroup = {};
     var tabview = {};
     var subview = {};
 
@@ -51,11 +51,9 @@
 
 
     // if the user is already authenticated on init (page reload) call set authenticated
-
-    if(isAuthenticated()) {
+    if (isAuthenticated()) {
       setAuthenticated();
     }
-
 
     return service;
 
@@ -67,7 +65,7 @@
      * @param level
      */
     function checkPrivilege(level) {
-      return _.has(service.currentUser, 'group') && service.currentUser.group.level === level;
+      return _.has(service.currentUser, 'group') && service.currentGroup.level === level;
     }
 
     /**
@@ -76,7 +74,7 @@
      * @returns {boolean}
      */
     function isAdmin() {
-      return checkPrivilege(1);
+      return checkPrivilege(1) || service.currentUser.group == 'admin';
     }
 
     /**
@@ -85,7 +83,7 @@
      * @returns {boolean}
      */
     function isCoordinator() {
-      return checkPrivilege(1);
+      return checkPrivilege(2) || service.currentUser.group == 'coordinator';
     }
 
     /**
@@ -94,7 +92,7 @@
      * @returns {boolean}
      */
     function isSubject() {
-      return checkPrivilege(3);
+      return checkPrivilege(3) || service.currentUser.group == 'subject';
     }
 
     /**
@@ -134,7 +132,7 @@
     function setAuthenticated() {
       service.currentUser = $cookies.getObject('user').user;
       Group.get({id: service.currentUser.group}, function(data) {
-        service.currentGroup=data;
+        service.currentGroup = data;
 
         var view = service.currentGroup.name.toString().toUpperCase();
         service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
@@ -142,8 +140,6 @@
 
         $rootScope.$broadcast("events.authorized");
       });
-
-
     }
 
     /**

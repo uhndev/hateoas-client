@@ -5,13 +5,19 @@
     .module('dados.header.service', [])
     .service('HeaderService', HeaderService);
 
-  HeaderService.$inject = [ 'AuthService' ];
+  HeaderService.$inject = [ '$rootScope', 'AuthService' ];
 
-  function HeaderService(AuthService) {
+  function HeaderService($rootScope, AuthService) {
 
-    return {
-      setSubmenu: setSubmenu
+    var submenu = [];
+
+    var service = {
+      submenu: submenu,
+      setSubmenu: setSubmenu,
+      clearSubmenu: clearSubmenu
     };
+
+    return service;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -19,29 +25,30 @@
      * setSubmenu
      * @description From any submenu page, we need to parse and render a hateoas resource's
      *              links array to populate our submenu in our top level scope
-     * @param {String} state         object representation of our current relative state
-     * @param {Object} resource      a hateoas response object containing a links array
-     * @param {Object} submenuScope  a reference to the scope where the submenu is defined
+     * @param {String} state         string representation of our current relative state
+     * @param {Array}  links         a links array from a hateoas response object
      */
-    function setSubmenu(state, resource, submenuScope) {
+    function setSubmenu(state, resourceLinks) {
       // initialize submenu
-      if (!_.isEmpty(state) && _.has(resource, 'links') && resource.links.length > 0) {
-        // from workflowstate and current url study
-        // replace wildcards in href with study name
-        _.map(resource.links, function(link) {
-          if (link.rel === 'name' && link.prompt === '*') {
-            link.prompt = state.prompt;
+      if (state && _.isArray(resourceLinks) && resourceLinks.length > 0) {
+        // setup one-time watch on currentGroup to be loaded before setting submenu
+        var unreg = $rootScope.$watch(function () {
+          return AuthService.subview;
+        }, function (subview) {
+          if (_.has(subview, state)) {
+            service.submenu = AuthService.getRoleLinks(state, resourceLinks);
+            unreg(); // de-registers watch once submenu is set
           }
-          if (_.contains(link.href, '*')) {
-            link.href = link.href.replace(/\*/g, state.value);
-          }
-          return link;
         });
-
-        angular.copy({
-          links: AuthService.getRoleLinks(state.rel, resource.links)
-        }, submenuScope);
       }
+    }
+
+    /**
+     * clearSubmenu
+     * @description Empties the submenu array
+     */
+    function clearSubmenu() {
+      service.submenu = [];
     }
 
   }

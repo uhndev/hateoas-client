@@ -25,7 +25,6 @@
     var centreHref = "study/" + studyID + "/collectioncentres";
 
     // bindable variables
-    vm.centreHref = '';
     vm.allow = {};
     vm.query = { 'where' : {} };
     vm.selected = null;
@@ -89,11 +88,7 @@
       if (data) {
         // initialize submenu
         Study.get({ id: studyID }).$promise.then(function (study) {
-          HeaderService.setSubmenu({
-            prompt: study.displayName,
-            value: studyID,
-            rel: 'study'
-          }, data, $scope.dados.submenu);
+          HeaderService.setSubmenu('study', data.links);
         });
       }
       return data;

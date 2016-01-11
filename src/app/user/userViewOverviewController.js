@@ -65,11 +65,7 @@
         };
 
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.title,
-          value: data.items.id,
-          rel: 'user'
-        }, data.items, $scope.dados.submenu);
+        HeaderService.setSubmenu('user', data.links);
       });
     }
 

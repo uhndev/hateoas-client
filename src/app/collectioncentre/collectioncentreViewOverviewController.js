@@ -39,11 +39,7 @@
         vm.title = data.items.name;
 
         // initialize submenu
-        HeaderService.setSubmenu({
-          prompt: vm.resource.items.study.displayName,
-          value: vm.resource.items.study.id,
-          rel: 'study'
-        }, data, $scope.dados.submenu);
+        HeaderService.setSubmenu('study', data.links);
 
         vm.centreInfo = {
           rows: {

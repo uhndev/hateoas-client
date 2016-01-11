@@ -7,7 +7,7 @@
 
   EditSubjectController.$inject = [
     '$uibModalInstance', 'subject', 'study', 'centreHref', 'toastr',
-    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService'
+    'ENROLLMENT_STATUSES', 'SubjectEnrollmentService', 'UserService', 'StudyUserService'
   ];
 
   /**
@@ -25,7 +25,7 @@
    * @constructor
    */
   function EditSubjectController($uibModalInstance, subject, study, centreHref, toastr,
-                                 ENROLLMENT_STATUSES, SubjectEnrollment, User) {
+                                 ENROLLMENT_STATUSES, SubjectEnrollment, User, StudyUser) {
     var vm = this;
     // bindable variables
     vm.openedDOB = false;
@@ -35,6 +35,9 @@
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
+    StudyUser.query({ studyID: study.id }).$promise.then(function (data) {
+      vm.studyUsers = { user: _.pluck(data, 'id') };
+    });
 
     // bindable methods
     vm.editSubject = editSubject;
