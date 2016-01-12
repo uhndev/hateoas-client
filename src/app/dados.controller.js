@@ -16,28 +16,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      if (Auth.isAuthenticated()) {
-        if (_.isEmpty($location.path())) {
-          // url is empty, so just use default settings
-          DefaultRoute.route(Auth.currentGroup.level);
-        } else {
-          // otherwise, try matching currentUrl to state urls to find the correct state
-          var isCustomState = false;
-          angular.forEach($state.get(), function (state) {
-            var currentUrl = $location.path();
-            if (state.name && state.url && currentUrl == state.url ||
-              (_.has(state, 'data') && currentUrl == state.data.fullUrl)) {
-              $state.go(state.name);
-              isCustomState = true;
-            }
-          });
-
-          // no matches, default to hateoas state
-          if (!isCustomState) {
-            $state.go('hateoas');
-          }
-        }
-      } else {
+      if (!Auth.isAuthenticated()) {
         $state.go('login');
       }
     }
@@ -90,6 +69,10 @@
     // on successful applying translations by angular-translate
     $rootScope.$on('$translateChangeSuccess', function (event, data) {
       setPageTitle();
+    });
+
+    $rootScope.$on('events.authorized', function() {
+      DefaultRoute.route(Auth.currentGroup.level);
     });
   }
 

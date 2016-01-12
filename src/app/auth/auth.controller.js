@@ -18,9 +18,7 @@
     vm.error = '';
 
     // check if already logged in
-    if (AuthService.isAuthenticated()) {
-      DefaultRouteService.route(AuthService.currentGroup.level);
-    } else {
+    if (!AuthService.isAuthenticated()) {
       $location.url('/login');
       $state.go('login');
     }
@@ -35,12 +33,10 @@
     var success = function(user) {
       if (user) {
         var now = new Date();
-        //AuthService.currentGroup= user.group;
         $cookies.putObject('user', user, {
           expires: new Date(now.getTime() + (60000 * user.token.expires))
         });
         AuthService.setAuthenticated();
-        DefaultRouteService.route(AuthService.currentGroup.level);
       }
     };
 
