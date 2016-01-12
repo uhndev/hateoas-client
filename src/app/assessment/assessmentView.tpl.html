@@ -162,12 +162,12 @@
       <div class="panel-body">
         <ul class="list-unstyled">
           <li ng-repeat="service in assessment track by $index">
-          <li ng-repeat="service in assessment.recommendedServices track by $index">
-            <button class="btn btn-info btn-xs permission-btn" type="button"
-                    ng-click="assessment.toggleService(service)">
-              {{service.name}} <span class="glyphicon glyphicon-remove"></span>
-            </button>
-          </li>
+            <li ng-repeat="service in assessment.recommendedServices track by $index">
+              <button class="btn btn-info btn-xs permission-btn" type="button"
+                      ng-click="assessment.toggleService(service)">
+                {{service.name}} <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </li>
         </ul>
       </div>
     </div>
