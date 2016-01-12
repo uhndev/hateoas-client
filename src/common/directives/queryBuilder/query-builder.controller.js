@@ -6,6 +6,18 @@
   QueryController.$inject = ['$scope'];
 
   function QueryController($scope) {
+    var TYPE_MAP = {
+      "string"    : "textfield",
+      "text"      : "textfield",
+      "integer"   : "number",
+      "float"     : "number",
+      "date"      : "date",
+      "datetime"  : "date",
+      "boolean"   : "checkbox",
+      "array"     : "textfield",
+      "json"      : "json"
+    };
+
     $scope.query = $scope.query || {};
     $scope.operators = [];
     $scope.groupOperators = ['and', 'or'];
@@ -25,7 +37,7 @@
           $scope.query = {
             'or' : _.reduce($scope.fields, function(result, field) {
               var query = {};
-              if (/date|dateTime/i.test(field.type)) {
+              if (/date|dateTime|datetime/i.test(field.type)) {
                 try {
                   var dateObj = new Date(value).toISOString();
                   query[field.name] = { '>=': date, '<': date };
@@ -36,19 +48,27 @@
                   return result;
                 }
               }
-              else if (/json/i.test(field.type)) {
-                // do nothing
-                return result;
+              else if (/integer|mrn/i.test(field.type)) {
+                query[field.name] = parseInt(value, 10);
+                return result.concat(query);
               }
-              else {
-                query[field.name] = { 'contains': value };
-                if (/integer/i.test(field.type) || /mrn/i.test(field.type)) {
-                  query[field.name] = parseInt(value, 10);
+              else{
+                switch (field.type) {
+                  case 'json':
+                    return result; // do nothing
+                  case 'array':
+                    return result; // do nothing
+                  case 'string':
+                    query[field.name] = { 'contains': value }; break;
+                  case 'float':
+                    query[field.name] = parseFloat(value); break;
+                  default: // otherwise is probably a model id
+                    if (_.isNumber(value)) {
+                      query[field.name] = parseInt(value); break;
+                    } else {
+                      return result;
+                    }
                 }
-                if (/float/i.test(field.type)) {
-                  query[field.name] = parseFloat(value);
-                }
-
                 return result.concat(query);
               }
             }, [])
