@@ -32,6 +32,7 @@
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
     vm.availableServices= [];
+    vm.currentCategories=[];
     vm.selectedSite= {};
     vm.recommendedServices= [];
     vm.siteMatrix = {};
@@ -78,7 +79,7 @@
 
     function init() {
       vm.programs= angular.copy(AltumAPI.Program.query({}));
-      console.log(vm.programs);
+      //console.log(vm.programs);
 
       vm.workStatuses= AltumAPI.WorkStatus.query({});
 
@@ -284,9 +285,10 @@
             {program: parseInt(vm.fullReferral.program)}
           ]
       }).$promise.then(function(resp) {
-          vm.availableServices=[];
+          vm.availableServices=resp;
+          vm.currentCategories= _.unique(_.pluck(resp,'serviceCategory'),'id');
           _.each(resp, function (programService, index) {
-            vm.availableServices.push({name: programService.name, referral: vm.fullReferral.id, programService: programService.id });
+            vm.availableServices.push({name: programService.name, referral: vm.fullReferral.id, programService: programService.id, serviceCategory: programService.serviceCateory });
           });
       });
     }
