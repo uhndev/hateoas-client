@@ -4,6 +4,7 @@
 		'dados.common.services.httpstatus',
     'dados.common.services.resource',
 		'dados.common.services.sails',
-		'dados.common.services.template'
+		'dados.common.services.template',
+    'dados.common.services.altum'
 	]);
 })();

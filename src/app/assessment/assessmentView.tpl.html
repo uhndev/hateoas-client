@@ -14,7 +14,8 @@
         <fieldset>
           <div class="form-group">
             <label for="searchString">Find Referrals</label>
-            <input type="checkbox" name="searchOpenReferrals" ng-checked="assessment.searchOpenReferrals" ng-model="assessment.searchOpenReferrals">Only Open&nbsp;
+            <input type="checkbox" name="searchOpenReferrals" ng-checked="assessment.searchOpenReferrals"
+                   ng-model="assessment.searchOpenReferrals">Only Open&nbsp;
             <div class="input-group">
               <input type="text" id="searchString" name="searchString" class="form-control"
                      data-ng-model="assessment.searchString" placeholder="Search MRN / Claim / Client">
@@ -42,7 +43,7 @@
     </span>
   </h4>
 
-  <div id="referralSearchDiv" class="form-group" collapse="assessment.collapsedSearch">
+  <div id="referralSearchDiv" class="form-group" uib-collapse="assessment.collapsedSearch">
     <table id="searchResults" class="table">
       <thead>
       <tr>
@@ -63,7 +64,7 @@
       </tr>
     </table>
   </div>
-  <div id="selectedReferralDiv" class="form-group" collapse="assessment.collapsedClientDetail">
+  <div id="selectedReferralDiv" class="form-group" uib-collapse="assessment.collapsedClientDetail">
     <table id="clientDetail" class="table">
       <thead>
       <tr>
@@ -97,16 +98,16 @@
         </tr>
       </table>
     </div>
-  <div id="mapDiv" class="form-div">
-    <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
-                        zoom="assessment.map.zoom">
-      <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click" >
+    <div id="mapDiv" class="form-div">
+      <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
+                          zoom="assessment.map.zoom">
+        <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click">
         </ui-gmap-markers>
-    </ui-gmap-google-map>
-    <div id="directionsDiv" />
+      </ui-gmap-google-map>
+      <div id="directionsDiv"/>
     </div>
   </div
-    >
+  >
   <div id="recomendationsDiv">
     <table class="ng-table">
       <tr>
@@ -117,13 +118,13 @@
       </thead>
       <tr>
         <td>
-        <select-loader
-          url="program"
-          is-atomic="true"
-          is-disabled="false"
-          values="assessment.selectedReferral.program"
-          labels="displayName">
-        </select-loader>
+          <select-loader
+            url="program"
+            is-atomic="true"
+            is-disabled="false"
+            values="assessment.selectedReferral.program"
+            labels="displayName">
+          </select-loader>
         </td>
         <td>{{assessment.selectedReferral.program_name}}</td>
 
@@ -135,39 +136,41 @@
     <div id="payorDiv">
 
     </div>
-    <div id="servicesDiv" >
-    <h1>Services</h1>
-        <div class="panel panel-info" ng-repeat="category in assessment.currentCategories" >
-          <div class="panel-heading" context-translator="">
-            <h3 class="panel-title ng-scope" translate="">{{category.displayName}}</h3>
-          </div>
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-md-8">
-                <span class="custom-checkbox" ng-if="category.id==service.serviceCategory.id"  ng-repeat="service in assessment.availableServices" >&nbsp;
-                  <input type="checkbox" name="{{service.name}}" ng-checked="assessment.isServiceRecommended(service)" ng-click="assessment.toggleService(service)">{{service.name}}&nbsp;
+    <div id="servicesDiv">
+      <h1>Services</h1>
+      <div class="panel panel-info" ng-repeat="category in assessment.currentCategories">
+        <div class="panel-heading" context-translator="">
+          <h3 class="panel-title ng-scope" translate="">{{category.displayName}}</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-8">
+                <span class="custom-checkbox" ng-if="category.id==service.serviceCategory.id"
+                      ng-repeat="service in assessment.availableServices">&nbsp;
+                  <input type="checkbox" name="{{service.name}}" ng-checked="assessment.isServiceRecommended(service)"
+                         ng-click="assessment.toggleService(service)">{{service.name}}&nbsp;
                 </span>
-              </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
     <!-- View Panel Permissions -->
-    <div class="panel panel-default" >
-      <div class="panel-heading" >
+    <div class="panel panel-default">
+      <div class="panel-heading">
         Recommended Services:
 
-        <button ng-click="assessment.saveServices()" >Save</button>
+        <button ng-click="assessment.saveServices()">Save</button>
       </div>
       <div class="panel-body">
         <ul class="list-unstyled">
           <li ng-repeat="service in assessment track by $index">
-            <li ng-repeat="service in assessment.recommendedServices track by $index">
-              <button class="btn btn-info btn-xs permission-btn" type="button"
-                      ng-click="assessment.toggleService(service)">
-                {{service.name}} <span class="glyphicon glyphicon-remove"></span>
-              </button>
-            </li>
+          <li ng-repeat="service in assessment.recommendedServices track by $index">
+            <button class="btn btn-info btn-xs permission-btn" type="button"
+                    ng-click="assessment.toggleService(service)">
+              {{service.name}} <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </li>
         </ul>
       </div>
     </div>
