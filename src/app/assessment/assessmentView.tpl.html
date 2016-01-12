@@ -116,7 +116,17 @@
       </tr>
       </thead>
       <tr>
+        <td>
+        <select-loader
+          url="program"
+          is-atomic="true"
+          is-disabled="false"
+          values="assessment.selectedReferral.program"
+          labels="displayName">
+        </select-loader>
+        </td>
         <td>{{assessment.selectedReferral.program_name}}</td>
+
         <td>{{assessment.selectedReferral.physician_name}}</td>
         <td></td>
         <td>{{assessment.selectedReferral.recieveDate}}</td>
