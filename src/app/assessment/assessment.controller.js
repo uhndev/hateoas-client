@@ -20,9 +20,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['$scope', 'AssessmentService', 'AltumAPIService', 'uiGmapGoogleMapApi', 'uiGmapIsReady' ];
+  AssessmentController.$inject = ['$scope', 'AltumAPIService', 'uiGmapGoogleMapApi', 'uiGmapIsReady'];
 
-  function AssessmentController($scope, Assessment, AltumAPI, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function AssessmentController($scope, AltumAPI, uiGmapGoogleMapApi, uiGmapIsReady) {
     var vm = this;
 
     // bindable variables
@@ -31,10 +31,10 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
-    vm.availableServices= [];
-    vm.currentCategories=[];
-    vm.selectedSite= {};
-    vm.recommendedServices= [];
+    vm.availableServices = [];
+    vm.currentCategories = [];
+    vm.selectedSite = {};
+    vm.recommendedServices = [];
     vm.siteMatrix = {};
     vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
     vm.sites = [];              //placeholder for sites
@@ -46,12 +46,12 @@
     vm.geoDistance = null;
     vm.directionsService = null; //placeholder for directionsService object
     vm.googleMaps = uiGmapGoogleMapApi;
-    vm.fullReferral=null;
-    vm.searchOpenReferrals=true;
+    vm.fullReferral = null;
+    vm.searchOpenReferrals = true;
 
     //placeholders for data driving form dropdowns/radios
-    vm.workStatuses=[];
-    vm.prognosises=[];
+    vm.workStatuses = [];
+    vm.prognosises = [];
 
     // google distance placeholders for distance call
     vm.origins = [];
@@ -61,12 +61,12 @@
     vm.markers = [];
 
     // bindable methods
-    vm.selectProgram= selectProgram;
-    vm.resetServices= resetServices;
+    vm.selectProgram = selectProgram;
+    vm.resetServices = resetServices;
     vm.findReferral = findReferral;
-    vm.toggleService= toggleService;
-    vm.saveServices= saveServices;
-    vm.isServiceRecommended = isServiceRecommended ;
+    vm.toggleService = toggleService;
+    vm.saveServices = saveServices;
+    vm.isServiceRecommended = isServiceRecommended;
     vm.selectReferral = selectReferral;
     vm.calculateDistances = calculateDistances;
     vm.calculateDirections = calculateDirections;
@@ -78,25 +78,22 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      vm.programs= angular.copy(AltumAPI.Program.query({}));
-      //console.log(vm.programs);
+      vm.programs = angular.copy(AltumAPI.Program.query({}));
 
-      vm.workStatuses= AltumAPI.WorkStatus.query({});
+      vm.workStatuses = AltumAPI.WorkStatus.query({});
 
-      vm.prognosises= AltumAPI.Prognosis.query({});
-
+      vm.prognosises = AltumAPI.Prognosis.query({});
 
       AltumAPI.Site.query({}).$promise.then(function (resp) {
-        vm.sites = angular.copy(resp);
-        return uiGmapGoogleMapApi;
-      })
+          vm.sites = angular.copy(resp);
+          return uiGmapGoogleMapApi;
+        })
         .then(function (maps) {
           //init googleMaps object
           vm.googleMaps = maps;
 
           //initialize sites/destinations
           _.each(vm.sites, function (site, index) {
-            //vm.destinations.push((site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ' ' + (site.address.postalCode || '') + ' ' + (site.address.country || ''));
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
             var val = {
               idKey: index,
@@ -123,7 +120,6 @@
 
           //init directions renderer
           vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
-
         });
     }
 
@@ -142,13 +138,13 @@
         }
       }).$promise
         .then(function (resp) {
-          vm.referralList = resp;
-          vm.referrals = resp;
-          vm.collapsedSearch = false;
-        },
-        function error(err) {
-          alert('error');
-        });
+            vm.referralList = resp;
+            vm.referrals = resp;
+            vm.collapsedSearch = false;
+          },
+          function error(err) {
+            alert('error');
+          });
     }
 
     /**
@@ -157,7 +153,7 @@
      * @param {String} service
      */
 
-    function isServiceRecommended (service) {
+    function isServiceRecommended(service) {
       return _.contains(vm.recommendedServices, service);
     }
 
@@ -168,8 +164,8 @@
      */
 
     function toggleService(service) {
-      if(isServiceRecommended(service)) {
-        vm.recommendedServices= _.without(vm.recommendedServices, service);
+      if (isServiceRecommended(service)) {
+        vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(service);
       }
@@ -182,7 +178,7 @@
      */
 
     function saveServices() {
-      vm.fullReferral.services= _.union(vm.recommendedServices,vm.fullReferral.services);
+      vm.fullReferral.services = _.union(vm.recommendedServices, vm.fullReferral.services);
       AltumAPI.Referral.update(vm.fullReferral);
     }
 
@@ -193,7 +189,7 @@
      */
 
     function selectProgram(program) {
-      vm.selectedProgram=program;
+      vm.selectedProgram = program;
 
       AltumAPI.AltumProgramServices.query({
         where: [
@@ -201,16 +197,16 @@
           {name: program.name}
         ]
       }).$promise
-        .then (function(resp) {
+        .then(function (resp) {
 
-          //reset recommended services to clear box
-          vm.recommendedServices={};
-      },
+            //reset recommended services to clear box
+            vm.recommendedServices = {};
+          },
 
-      function error(err) {
-        console.log("Error querying program " + program.name + " with id " + program.id);
-        console.log(err);
-      });
+          function error(err) {
+            console.log("Error querying program " + program.name + " with id " + program.id);
+            console.log(err);
+          });
     }
 
     /**
@@ -223,18 +219,17 @@
       vm.selectedReferral = referral;
 
       AltumAPI.Referral.query({
-        where: [
-          {id: vm.selectedReferral.id}
-        ]
-      }).$promise
-        .then(function (resp) {
-          vm.fullReferral= resp[0];
-          vm.resetServices();
-          vm.recommendedServices=[];
-        },
-        function error(err) {
-          alert('error');
-        });
+        where: {
+          id: vm.selectedReferral.id
+        }
+      }).$promise.then(function (resp) {
+        vm.fullReferral = resp[0];
+        vm.resetServices();
+        vm.recommendedServices = [];
+      },
+      function error(err) {
+        alert('error');
+      });
 
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
@@ -279,41 +274,47 @@
 
     function resetServices() {
       AltumAPI.ProgramService.query({
-
-        where:
-           [
-            {program: parseInt(vm.fullReferral.program)}
-          ]
-      }).$promise.then(function(resp) {
-          vm.availableServices=resp;
-          vm.currentCategories= _.unique(_.pluck(resp,'serviceCategory'),'id');
-          _.each(resp, function (programService, index) {
-            vm.availableServices.push({name: programService.name, referral: vm.fullReferral.id, programService: programService.id, serviceCategory: programService.serviceCateory });
+        where: {
+          program: parseInt(vm.fullReferral.program)
+        }
+      }).$promise.then(function (resp) {
+        vm.availableServices = resp;
+        vm.currentCategories = _.unique(_.pluck(resp, 'serviceCategory'), 'id');
+        _.each(resp, function (programService, index) {
+          vm.availableServices.push({
+            name: programService.name,
+            referral: vm.fullReferral.id,
+            programService: programService.id,
+            serviceCategory: programService.serviceCateory
           });
+        });
       });
     }
 
     /**
-     * [calculateDistanes]
+     * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
      * @param {none}
      */
 
     function calculateDistances() {
-      //distanceArgs for distanceMatrix call
-
+      // distanceArgs for distanceMatrix call
       var distanceArgs = {
         origins: vm.origins,
         destinations: vm.destinations,
         travelMode: vm.googleMaps.TravelMode.DRIVING
       };
-      vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix) {
 
+      vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix) {
         vm.distanceMatrix = matrix;
       });
     }
 
-
+	  /**
+     * calculateDirections
+     * @param origin
+     * @param destination
+     */
     function calculateDirections(origin, destination) {
       var request = {
         origin: origin,
@@ -323,26 +324,22 @@
 
       vm.directionsService.route(request, function (response) {
         if (response.status === vm.googleMaps.DirectionsStatus.OK) {
-
-          //set routes
+          // set routes
           vm.directionsDisplay.setDirections(response);
           $scope.$apply(function () {
-
-            //vm.directionsDisplay.setMap($scope.map.control.getGMap());
+            // vm.directionsDisplay.setMap($scope.map.control.getGMap());
 
             vm.directionsSteps = response.routes[0].legs[0].steps;
             return uiGmapIsReady.promise(1);
           })
-            .then(function(instances) {
-              var instanceMap=instances[0].map;
-              vm.directionsDisplay.setMap(instanceMap);
-              vm.directionsDisplay.setDirections(response);
+          .then(function (instances) {
+            var instanceMap = instances[0].map;
+            vm.directionsDisplay.setMap(instanceMap);
+            vm.directionsDisplay.setDirections(response);
+            // this is not the angular way, at all, and I hate it, but it works. Want to change it
 
-              //this is not the angular way, at all, and I hate it, but it works. Want to change it
-
-              vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
-            });
-          console.log(vm.directionsSteps);
+            vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
+          });
         }
       });
     }
@@ -371,15 +368,10 @@
           }
         });
       });
-      // addy=[{address: '399 Bathurst, Toronto, ON'},{address: '5 abbot lane truro NS'}];
     }
 
     function selectSite(site) {
-      //alert('you just clicked the ' + site.name + ' site');
-      //vm.geocodeSites();
-      //console.log(vm.directionsSteps);
-
-      vm.selectedSite=site;
+      vm.selectedSite = site;
       var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
       var destination = new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
 

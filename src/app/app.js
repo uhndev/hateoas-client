@@ -37,7 +37,6 @@
 
       // ARM
       'dados.arm.assessment',
-      'dados.arm.altum_api',
 
       // dados subject portal
       'dados.subjectportal',

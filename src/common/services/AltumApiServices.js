@@ -1,12 +1,11 @@
 /**
- * Data service for handling all Assessmententication data
+ * Data service for handling all Altum angular resources
  */
 (function() {
   'use strict';
 
   angular
-    .module('dados.arm.altum_api.service',
-    [
+    .module('dados.common.services.altum', [
       'dados.constants',
       'dados.common.services.resource'
     ])
@@ -23,7 +22,11 @@
     .service('AltumProgramServicesService', AltumProgramServicesService)
     .service('SiteService', SiteService);
 
-  [ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService, PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService, AltumProgramServicesService, AltumAPIService].map(function (service) {
+  [
+    ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
+    PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
+    AltumProgramServicesService, AltumAPIService
+  ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
 
