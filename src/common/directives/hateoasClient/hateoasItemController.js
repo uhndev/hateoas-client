@@ -5,10 +5,10 @@
     .controller('HateoasItemController', HateoasItemController);
 
   HateoasItemController.$inject = [
-    '$resource', '$location', 'API'
+    '$resource', '$location', 'API', 'HeaderService'
   ];
 
-  function HateoasItemController($resource, $location, API) {
+  function HateoasItemController($resource, $location, API, HeaderService) {
     var vm = this;
 
     // bindable variables
@@ -30,6 +30,8 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);
+
+        HeaderService.setSubmenu(vm.template.rel, data.links);
 
         vm.itemInfo = {
           rows: {},
