@@ -39,6 +39,9 @@
       'dados.arm.assessment',
       'dados.arm.altum_api',
 
+      //Altum
+        'altum.referral',
+
       // dados subject portal
       'dados.subjectportal',
 
