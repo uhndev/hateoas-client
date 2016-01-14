@@ -7,7 +7,7 @@
   'use strict';
 
   angular
-    .module('dados.arm.assessment.controller', [
+    .module('altum.assessment.controller', [
       'dados.common.directives.selectLoader',
       'uiGmapgoogle-maps'
     ])

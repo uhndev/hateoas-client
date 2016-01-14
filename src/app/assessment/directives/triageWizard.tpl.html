@@ -1,0 +1,34 @@
+<div class="row" ng-hide="triage.hasError">
+  <div class="col-md-4">
+    <select-loader
+      url="program"
+      is-atomic="true"
+      is-disabled="false"
+      values="triage.selectedProgram"
+      labels="displayName">
+    </select-loader>
+    <br/>
+    <select-loader
+      url="program"
+      is-atomic="true"
+      is-disabled="false"
+      values="triage.selectedSite"
+      labels="displayName">
+    </select-loader>
+    <br/>
+    <select-loader
+      url="physician"
+      query="triage.physicianQuery"
+      is-atomic="true"
+      is-disabled="false"
+      values="triage.selectedPhysician"
+      labels="displayName">
+    </select-loader>
+  </div>
+  <div class="col-md-8">
+    <pre>{{triage.referral | json}}</pre>
+    <pre>{{triage.selectedProgram | json}}</pre>
+    <pre>{{triage.selectedSite | json}}</pre>
+    <pre>{{triage.selectedPhysician | json}}</pre>
+  </div>
+</div>

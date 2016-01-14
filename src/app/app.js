@@ -35,11 +35,9 @@
       'dados.collectioncentre',
       'dados.translation',
 
-      // ARM
-      'dados.arm.assessment',
-
-      //Altum
-        'altum.referral',
+      // Altum/ARM
+      'altum.referral',
+      'altum.assessment',
 
       // dados subject portal
       'dados.subjectportal',
