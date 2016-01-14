@@ -26,7 +26,7 @@
   function localeHandlerFactory(LOCALES) {
     return function (translationID) {
       // if translation key is missing for a common model identity, return the preceding key
-      if (_.startsWith(translationID, LOCALES.translationPrefix)) {
+      if (_.startsWith(translationID, LOCALES.translationPrefix) && _.endsWith(translationID, LOCALES.translateSuffix)) {
         return translationID.split('.')[-2];
       }
       // otherwise, just take the leaf and return in startCase

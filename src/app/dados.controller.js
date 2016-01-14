@@ -46,6 +46,12 @@
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
       var page = $location.path();
+      var prevBaseUrl = _.parseUrl($location, prev)[0];     // e.g. /study
+      var basePath = _.pathnameToArray($location.path());
+      var currBaseUrl = _.first(basePath);                  // e.g. /user
+      if (prevBaseUrl !== currBaseUrl) { // clear submenu if base path changes
+        Header.clearSubmenu();
+      }
       if (page.charAt(page.length -  1) == '/') { // remove trailing slashes if they exist
         $location.url(page.slice(0, -1));
       }
@@ -55,13 +61,6 @@
     });
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
-      var prevBaseUrl = _.parseUrl($location, prev)[0];     // e.g. /study
-      var basePath = _.pathnameToArray($location.path());
-      var currBaseUrl = _.first(basePath);                  // e.g. /user
-      if (prevBaseUrl !== currBaseUrl) { // clear submenu if base path changes
-        Header.clearSubmenu();
-      }
-
       // construct pageTitle from location url
       setPageTitle();
     });
