@@ -1,3 +1,72 @@
-<div ng-controller="ReferralController as referral">
-  <pre>{{referral.resource | json}}</pre>
+<div class="container" ng-controller="ReferralController as ref">
+
+  <h1 id="Title">
+    Client Referral: {{ref.referral.clientcontact.displayName}}
+  </h1>
+
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="panel panel-info">
+        <div class="panel-heading">Referral Triage</div>
+        <div class="panel-body">
+          <dl class="dl-horizontal">
+
+            <dt>Select Program:</dt>
+            <dd>
+              <select-loader
+                url="program"
+                is-atomic="true"
+                is-disabled="false"
+                values="ref.selectedProgram"
+                labels="displayName">
+              </select-loader>
+              <br/>
+            </dd>
+
+            <dt>Select Site:</dt>
+            <dd>
+              <select-loader
+                url="site"
+                is-atomic="true"
+                is-disabled="false"
+                values="ref.selectedSite"
+                labels="displayName">
+              </select-loader>
+              <br/>
+            </dd>
+
+            <dt>Select Physician:</dt>
+            <dd>
+              <select-loader
+                url="physician"
+                is-atomic="true"
+                is-disabled="false"
+                values="ref.selectedPhysician"
+                labels="displayName">
+              </select-loader>
+            </dd>
+          </dl>
+          <button class="btn btn-primary pull-right" ng-click="ref.updateReferral()"
+                  ng-disabled="!ref.selectedProgram && !ref.selectedPhysician">
+            Update Referral
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="panel panel-info">
+        <div class="panel-heading">Referral Info</div>
+        <div class="panel-body">
+          <simple-table
+            rows="ref.referralInfo.rows"
+            table-data="ref.referralInfo.tableData">
+          </simple-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
