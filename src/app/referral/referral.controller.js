@@ -1,75 +1,90 @@
-/**
- * Created by calvinsu on 2016-01-11.
- */
 (function () {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('altum.referral',[])
-        .controller('ReferralController', ReferralController);
+  angular
+    .module('altum.referral', [])
+    .controller('ReferralController', ReferralController);
 
-    ReferralController.$inject = ['$scope', '$resource', '$location', 'API', 'HeaderService'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'toastr'];
 
-    /* @ngInject */
-    function ReferralController($scope, $resource, $location, API, HeaderService) {
-        var vm = this;
-        vm.title = 'ReferralController';
-        vm.url = API.url() + $location.path();
+  function ReferralController($resource, $location, API, HeaderService, Referral, toastr) {
+    var vm = this;
 
-        init();
+    // bindable variables
+    vm.url = API.url() + $location.path();
+    vm.selectedProgram = null;
+    vm.selectedSite = null;
+    vm.selectedPhysician = null;
 
-        ////////////////
+    // bindable methods
+    vm.updateReferral = updateReferral;
 
-        function init() {
-            var Resource = $resource(vm.url);
+    init();
 
-            Resource.get(function(data, headers) {
-                vm.allow = headers('allow');
-                vm.template = data.template;
-                vm.resource = angular.copy(data);
-             //   var robj = _.pick(data.items, 'name', 'study', 'contact');
-                vm.title = data.items.name;
+    ///////////////////////////////////////////////////////////////////////////
 
-                // initialize submenu
-                HeaderService.setSubmenu('client', data.links);
+    function init() {
+      var Resource = $resource(vm.url);
 
-             /*   vm.centreInfo = {
-                    rows: {
-                        'name': { title: 'COMMON.MODELS.COLLECTION_CENTRE.NAME', type: 'text' },
-                        'study': { title: 'COMMON.MODELS.STUDY.IDENTITY', type: 'study' },
-                        'contact': { title: 'COMMON.MODELS.COLLECTION_CENTRE.CONTACT', type: 'user' }
-                    },
-                    tableData: _.objToPair(robj)
-                };
+      Resource.get(function (data, headers) {
+        vm.allow = headers('allow');
+        vm.template = data.template;
+        vm.referral = angular.copy(data.items);
 
-                vm.centreUsers = {
-                    tableData: data.items.coordinators || [],
-                    columns: ['Username', 'Email', 'Person', 'Role']
-                };
+        vm.selectedProgram = data.items.program;
+        vm.selectedSite = data.items.site;
+        vm.selectedPhysician = data.items.physician;
 
-                var subjectColumns = ['Subject ID'];
-                // add columns for keys in studyMapping
-                _.forIn(_.first(data.items.subjects).studyMapping, function (value, key) {
-                    subjectColumns.push(_.capitalize(key));
-                });
-                subjectColumns.push('Date of Event');
+        var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
+        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'referralContact', 'referralDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate');
 
-                var modSubjects = _.map(data.items.subjects, function (subject) {
-                    subject.subjectNumber = _.pad(subject.subjectNumber, 7);
-                    return subject;
-                });
+        // referral info panel
+        vm.referralInfo = {
+          rows: {
+            'MRN': {title: 'COMMON.MODELS.CLIENT.MRN', type: 'text'},
+            'displayName': {title: 'COMMON.MODELS.PERSON.NAME', type: 'text'},
+            'dateOfBirth': {title: 'COMMON.MODELS.PERSON.DATE_OF_BIRTH', type: 'date'},
+            'program': {title: 'Program', type: 'program'},
+            'site': {title: 'Site', type: 'site'},
+            'physician': {title: 'Physician', type: 'physician'},
+            'referralContact': {title: 'Referral Contact', type: 'employee'},
+            'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
+            'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
+            'sentDate': {title: 'COMMON.MODELS.REFERRAL.SENT_DATE', type: 'date'},
+            'receiveDate': {title: 'COMMON.MODELS.REFERRAL.RECEIVE_DATE', type: 'date'},
+            'dischargeDate': {title: 'COMMON.MODELS.REFERRAL.DISCHARGE_DATE', type: 'date'}
+          },
+          tableData: _.objToPair(_.merge(clientData, referralData))
+        };
 
-                vm.centreSubjects = {
-                    tableData: modSubjects || [],
-                    columns: subjectColumns
-                }; */
-            });
-        }
-
-        $scope.$on('hateoas.client.refresh', function() {
-            init();
-        });
+        // initialize submenu
+        HeaderService.setSubmenu('client', data.links);
+      });
     }
+
+    /**
+     * updateReferral
+     * @description Saves program and physician selections for a selected referral
+     */
+    function updateReferral() {
+      if (vm.selectedProgram && vm.selectedPhysician) {
+        var referral = new Referral({
+          program: vm.selectedProgram,
+          site: vm.selectedSite,
+          physician: vm.selectedPhysician
+        });
+        referral
+          .$update({id: vm.referral.id})
+          .then(function () {
+            toastr.success('Updated referral for client: ' + vm.referral.clientcontact.displayName, 'Triage');
+            init();
+          });
+      } else {
+        toastr.warning('You must select a program/site/physician!', 'Triage');
+      }
+    }
+
+  }
 
 })();
 
