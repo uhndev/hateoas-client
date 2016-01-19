@@ -109,7 +109,7 @@
           query="addSubject.studyUsers"
           is-atomic="false"
           is-disabled="false"
-          values="addSubject.newSubject.providers"
+          ng-model="addSubject.newSubject.providers"
           labels="displayName">
         </select-loader>
       </div>
@@ -157,7 +157,7 @@
           url="{{addSubject.centreHref}}"
           is-atomic="true"
           is-disabled="false"
-          values="addSubject.newSubject.collectionCentre"
+          ng-model="addSubject.newSubject.collectionCentre"
           labels="name"
           required>
         </select-loader>

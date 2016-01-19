@@ -125,7 +125,7 @@
           query="editSubject.studyUsers"
           is-atomic="false"
           is-disabled="false"
-          values="editSubject.newSubject.providers"
+          ng-model="editSubject.newSubject.providers"
           labels="displayName">
         </select-loader>
       </div>
@@ -184,7 +184,7 @@
           url="{{editSubject.centreHref}}"
           is-atomic="true"
           is-disabled="false"
-          values="editSubject.newSubject.collectionCentre"
+          ng-model="editSubject.newSubject.collectionCentre"
           labels="name"
           required>
         </select-loader>
