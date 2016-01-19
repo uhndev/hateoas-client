@@ -26,13 +26,13 @@
           name : 'radio',
           value : 'Radio Buttons',
           value_type: '',
-          hasOptions: true,
+          hasOptions: true
         },
         {
           name : 'dropdown',
           value : 'Dropdown List',
           value_type: '',
-          hasOptions: true,
+          hasOptions: true
         },
         {
           name : 'date',
@@ -47,13 +47,13 @@
         {
           name : 'checkbox',
           value : 'Checkbox',
-          value_type: ''
+          value_type: false
         },
         {
           name : 'checkbox-group',
           value : 'Checkbox Group',
           value_type: {},
-          hasOptions: true,
+          hasOptions: true
         },
         {
           name : 'number',
@@ -74,7 +74,7 @@
         {
           name: 'singleselect',
           value: 'Single Select',
-          value_type: '',
+          value_type: null,
           hasItem: true
         },
         {
