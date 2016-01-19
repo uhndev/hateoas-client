@@ -27,7 +27,7 @@
             url="{{column.value}}"
             is-atomic="true"
             is-disabled="false"
-            values="item[column.name]"
+            ng-model="item[column.name]"
             labels="name">
           </select-loader>
           <p ng-if="!!!ht.allow.update">{{::item[column.name]}}</p>
