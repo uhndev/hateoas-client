@@ -7,9 +7,9 @@
     ])
     .directive('selectLoader', selectLoader);
 
-  selectLoader.$inject = ['$timeout'];
+  selectLoader.$inject = [];
 
-  function selectLoader($timeout) {
+  function selectLoader() {
     return {
       restrict: 'E',
       require: 'ngModel',
@@ -26,9 +26,8 @@
       controllerAs: 'select',
       bindToController: true,
       link: function(scope, element, attributes, ngModel) {
-        // from model -> view
+        // from model -> view, called when the view needs to be updated
         ngModel.$render = function() {
-          scope.values = ngModel.$viewValue;
           if (attributes.ngChange) {
             scope.$parent.$eval(attributes.ngChange);
           }
