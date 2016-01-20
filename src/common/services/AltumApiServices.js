@@ -92,7 +92,9 @@
       'Prognosis': ResourceFactory.create(API.url('prognosis')),
       'ProgramService': ResourceFactory.create(API.url('programservice')),
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
-      'Service': ResourceFactory.create(API.url('service'))
+      'Service': ResourceFactory.create(API.url('service')),
+        'NoteType' : ResourceFactory.create(API.url('noteType'))
+
     };
   }
 })();

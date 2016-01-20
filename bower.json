@@ -18,7 +18,7 @@
     "angular-ui-utils": "~3.0.0",
     "angularSails": "~0.12.1",
     "bootstrap": "~3.1",
-    "font-awesome": "~4.1.0",
+    "font-awesome": "~4.4.0",
     "JSONedit": "~0.1.0",
     "lodash": "~3.10.1",
     "ng-table": "~0.8.3",
@@ -39,7 +39,10 @@
     "angular-translate-storage-local": "~2.8.1",
     "angular-google-maps": "~2.2.1",
     "angular-simple-logger": "~0.1.5",
-    "ui-select": "angular-ui-select#~0.13.2"
+    "ui-select": "angular-ui-select#~0.13.2",
+    "ckeditor": "~4.5.6",
+    "ng-ckeditor": "~0.2.1",
+    "jScrollPane": "jscrollpane#~2.0.22"
   },
   "resolutions": {
     "lodash": "~3.10.1",

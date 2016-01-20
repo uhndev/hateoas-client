@@ -5,9 +5,9 @@
     .module('altum.referral', [])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'toastr'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'toastr', 'AltumAPIService'];
 
-  function ReferralController($resource, $location, API, HeaderService, Referral, toastr) {
+  function ReferralController($resource, $location, API, HeaderService, Referral, toastr, AltumAPI) {
     var vm = this;
 
     // bindable variables
@@ -15,6 +15,8 @@
     vm.selectedProgram = null;
     vm.selectedSite = null;
     vm.selectedPhysician = null;
+      vm.noteUrl = vm.url + '/notes';
+      vm.noteTypes = AltumAPI.NoteType.query({});
 
     // bindable methods
     vm.updateReferral = updateReferral;
@@ -34,6 +36,7 @@
         vm.selectedProgram = data.items.program;
         vm.selectedSite = data.items.site;
         vm.selectedPhysician = data.items.physician;
+          vm.notes = data.items.notes;
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'referralContact', 'referralDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate');
