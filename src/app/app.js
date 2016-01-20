@@ -35,12 +35,10 @@
       'dados.collectioncentre',
       'dados.translation',
 
-      // ARM
-      'dados.arm.assessment',
+      // Altum/ARM
+      'altum.referral',
+      'altum.assessment',
 
-      //Altum
-        'ngCkeditor',
-        'altum.referral',
 
       // dados subject portal
       'dados.subjectportal',

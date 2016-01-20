@@ -14,11 +14,11 @@
       <select-loader
         ng-switch-default
         id="{{field.field_id}}"
-        url="{{field.field_userURL || field.field_name}}"
+        url="{{field.field_userURL}}"
         is-atomic="true"
         is-disabled="false"
         ng-required="field.field_required"
-        values="field.field_value"
+        ng-model="field.field_value"
         labels="{{field.field_labels || 'displayName'}}">
       </select-loader>
     </div>
