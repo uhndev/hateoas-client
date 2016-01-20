@@ -14,6 +14,7 @@
     'dados.common.directives.scrollWatch',
     'dados.common.directives.selectLoader',
     'dados.common.directives.simpleTable',
-    'dados.common.directives.surveyBuilder'
+    'dados.common.directives.surveyBuilder',
+        'altum.common.directives.notebook'
 	]);
 })();

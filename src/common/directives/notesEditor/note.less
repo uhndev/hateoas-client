@@ -1,0 +1,284 @@
+// The Theme Slide in Notes panel
+// --------------------------------------------------
+
+#page-notebar {
+	background: #fafbfc;
+	display: none;
+	width: 300px; 
+	top: 40px;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	z-index: @zindex-navbar-fixed - 1;
+	overflow: hidden;
+	position: fixed;
+	border-left: 1px solid @border-darker;
+	// padding-bottom: 40px;
+
+	//> div {padding: 0 10px;}
+
+	> div {
+		position: static !important;
+		overflow-y: hidden;
+		.jspContainer, .jspPane {width: 299px !important;}
+	}
+}
+
+#referraldetail.show-notebar {
+	#page-notebar 	{
+		display: block;
+
+		.panel-heading {
+			padding: 0 10px;
+			background-color: #f5f6f7;
+			a {
+				color: @gray !important;
+				font-size:@font-size-mini;
+				display: block;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				small {
+					color: #AEAFB1;
+					font-size: @font-size-base;
+				}
+				&:after {
+					.opacity(0.5);
+					content:"\f105";
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					float: right;
+				}
+				&.collapsed:after {
+					content:"\f104";.opacity(0.5)
+				}
+			}
+		}
+		.open .panel-heading {
+			a {
+				&:after {
+					.opacity(0.5);
+					content:"\f107";
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					float: right;
+				}
+			}
+		}
+		.panel-collapse .panel-body {
+			background: #fafbfc;
+			margin-top: 0px;
+			.clearfix();
+			.more {
+				padding-top: 0px;
+				font-size: @font-size-mini;
+				float: right;
+
+			}
+
+			.widget-block {
+				.clearfix();
+				 padding: 10px;
+				 margin-bottom: 10px;
+				 border-radius: @border-radius-small;
+				 small {
+				 	display: block;
+				 	color: #fff;
+				 	color: rgba(255,255,255,0.75)
+				 }
+				 h5 {
+				 	margin: 0;
+				 	color: #fff;
+				 	font-size: 1.3em;
+				 	>small {vertical-align: super;display: inline;font-size: 0.6em;}
+				 }
+			}
+		}
+
+		//start notes css
+		div[contenteditable] {
+			font-size:1.2em;
+			font-family: 'Source Sans Pro', sans-serif;
+			border:none;
+			box-shadow:none;
+			margin:0;
+			width:100%;
+			padding:10px 20px 10px;
+			min-height:100px;
+			background:#f9f9f9;
+
+			pre, code {
+				background:#ededed;
+			}
+		}
+
+		div[contenteditable]:focus{
+			font-family: 'Source Code Pro', courier, monospace;
+			font-size:1em;
+		}
+
+		.header {
+			margin:5px 10px 0;
+			color:#d46e58;
+			display:inline-block;
+		}
+
+		.note {
+			background: #eee;
+			box-shadow:#999 1px 1px 3px;
+			margin:10px 0;
+			padding-top:40px;
+			min-height: auto;
+			width:100%;
+			display:block;
+			position:relative;
+			overflow:hidden;
+		}
+
+		.date {
+			position:absolute;
+			top:0;
+			left:0;
+			padding:15px;
+			font-size:0.7em;
+			font-style: italic;
+			color:#71CBD0;
+		}
+
+		.icons {
+			position:absolute;
+			right:0;
+			top:0;
+			padding:10px;
+		}
+
+		.fa-trash-o, .fa-plus-circle, .fa-envelope-o  {
+			cursor:pointer;
+		}
+
+		.fa-check {
+			color:#92D788;
+		}
+
+		.fa-envelope-o {
+			color:#C2474B;
+
+			&:hover {
+				color:darken(#C2474B,20);
+			}
+		}
+
+		.fa-trash-o {
+			color:#C2474B;
+
+			&:hover {
+				color:darken(#C2474B,20);
+			}
+		}
+
+		.fa-pencil {
+			color:#DBC394;
+		}
+
+		.fa-plus-circle {
+			color:#71CBD0;
+
+			&:hover {
+				color:darken(#71CBD0,20);
+			}
+		}
+		//end notes css
+
+
+	}
+
+
+}
+
+#slideout {
+	position: fixed;
+	z-index: @zindex-navbar-fixed - 1;
+	top: 40%;
+	right: 0;
+	width: 30px;
+	padding: 12px 0;
+	text-align: left;
+	background: #fafbfc;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	-webkit-border-radius: 5px 5px 5px 0;
+	-moz-border-radius: 0 5px 5px 0;
+	border-radius: 5px 0 0 5px;
+	border: solid @border-darker;
+	border-width: 2px 0 2px 2px;
+}
+
+#slideout.button-out {
+	position: fixed;
+	top: 40%;
+	right: 300px;
+	width: 30px;
+	padding: 12px 0;
+	text-align: left;
+	background: #fafbfc;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	-webkit-border-radius: 5px -5px -5px 5px;
+	-moz-border-radius: 5px -5px -5px 5px;
+	border-radius: 5px -5px -5px 5px;
+	border: solid @border-darker;
+	border-width: 2px 0 2px 2px;
+}
+
+#feedback {
+	height: 104px;
+	width: 104px;
+	position: fixed;
+	top: 40%;
+	right: 0px;
+	z-index: 9999;
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+#slideout a {
+	display: block;
+	background: #fafbfc;
+	height: 45px;
+	width: 45px;
+	padding: 0 0 0 5px;
+//	color: #000000;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-size: 15px;
+	font-weight: bold;
+	text-decoration: none;
+	text-align: left;
+//	border-bottom: solid 1px #333;
+//	border-left: solid 1px #333;
+//	border-right: solid 1px #fff;
+	/* Safari */
+	-webkit-transform: rotate(-90deg);
+
+	/* Firefox */
+	-moz-transform: rotate(-90deg);
+
+	/* IE */
+	-ms-transform: rotate(-90deg);
+
+	/* Opera */
+	-o-transform: rotate(-90deg);
+
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+

@@ -39,6 +39,7 @@
       'dados.arm.assessment',
 
       //Altum
+        'ngCkeditor',
         'altum.referral',
 
       // dados subject portal

@@ -75,7 +75,8 @@
       'WorkStatus' : ResourceFactory.create(API.url('workstatus')),
       'Prognosis' : ResourceFactory.create(API.url('prognosis')),
       'ProgramService' : ResourceFactory.create(API.url('programservice')),
-      'AltumProgramServices' : ResourceFactory.create(API.url('altumprogramservices'))
+      'AltumProgramServices' : ResourceFactory.create(API.url('altumprogramservices')),
+      'NoteType' : ResourceFactory.create(API.url('noteType'))
     };
   }
 })();

@@ -8,13 +8,15 @@
         .module('altum.referral',[])
         .controller('ReferralController', ReferralController);
 
-    ReferralController.$inject = ['$scope', '$resource', '$location', 'API', 'HeaderService'];
+    ReferralController.$inject = ['$scope', '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService'];
 
     /* @ngInject */
-    function ReferralController($scope, $resource, $location, API, HeaderService) {
+    function ReferralController($scope, $resource, $location, API, HeaderService,AltumAPI) {
         var vm = this;
         vm.title = 'ReferralController';
         vm.url = API.url() + $location.path();
+        vm.noteUrl = vm.url + '/notes';
+        vm.noteTypes = AltumAPI.NoteType.query({});
 
         init();
 
@@ -29,40 +31,14 @@
                 vm.resource = angular.copy(data);
              //   var robj = _.pick(data.items, 'name', 'study', 'contact');
                 vm.title = data.items.name;
+                vm.notes = data.items.notes;
+                //test data
+             //   vm.noteTypes = [{id: 1, name: 'Internal', iconClass: 'fa fa-edit'},{id: 2, name: 'External', iconClass: 'fa fa-external-link'}];
 
                 // initialize submenu
                 HeaderService.setSubmenu('client', data.links);
 
-             /*   vm.centreInfo = {
-                    rows: {
-                        'name': { title: 'COMMON.MODELS.COLLECTION_CENTRE.NAME', type: 'text' },
-                        'study': { title: 'COMMON.MODELS.STUDY.IDENTITY', type: 'study' },
-                        'contact': { title: 'COMMON.MODELS.COLLECTION_CENTRE.CONTACT', type: 'user' }
-                    },
-                    tableData: _.objToPair(robj)
-                };
 
-                vm.centreUsers = {
-                    tableData: data.items.coordinators || [],
-                    columns: ['Username', 'Email', 'Person', 'Role']
-                };
-
-                var subjectColumns = ['Subject ID'];
-                // add columns for keys in studyMapping
-                _.forIn(_.first(data.items.subjects).studyMapping, function (value, key) {
-                    subjectColumns.push(_.capitalize(key));
-                });
-                subjectColumns.push('Date of Event');
-
-                var modSubjects = _.map(data.items.subjects, function (subject) {
-                    subject.subjectNumber = _.pad(subject.subjectNumber, 7);
-                    return subject;
-                });
-
-                vm.centreSubjects = {
-                    tableData: modSubjects || [],
-                    columns: subjectColumns
-                }; */
             });
         }
 
