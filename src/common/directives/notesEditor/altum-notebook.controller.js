@@ -29,20 +29,25 @@
             }
             */
         }
-
+        /**
+         * onAddNote
+         * @description function to add note to the notes array only
+         * @param type is the note type
+         * @returns {*}
+         */
         vm.addNote = function (type) {
-            alert("get called inside");
-           // NoteResource.$save(note);
             vm.newNote = {};
             vm.newNote.text = '';
             vm.newNote.noteType = type.id;
             vm.notes.push(vm.newNote);
-
-            console.log(type);
-            //vm.newNote = {};
         };
 
-
+        /**
+         * onDelete
+         * @description function to delete the note
+         * @param note is the note need to be deleted
+         * @returns {*}
+         */
 
         vm.delete = function (note) {
             var r = confirm("Are you sure you want to delete this note?");

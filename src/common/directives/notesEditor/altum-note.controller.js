@@ -24,6 +24,12 @@
         function init() {
         }
 
+        /**
+         * onUpdate
+         * @description function to update or create new note
+         * @param note is the note need to be update or create
+         * @returns {*}
+         */
 
         vm.update = function (note) {
             if (note.id) {
@@ -36,16 +42,19 @@
                 newNote.$save(newNote, function(){
                     vm.notes = vm.NoteResource.query({});
                 });
-
-                alert('this is a new note' + note.id);
             }
         };
 
-        //email Note
+        /**
+         * onEmil
+         * @description function to email the note
+         * @param note is the note need to be emailed
+         * @returns {*}
+         */
         vm.email = function (note) {
             var r = confirm("Are you sure you want to email this note?");
             if (r === true) {
-                alert("note emailed" + note.id);
+                alert("This is the email function we will add later");
             }
         };
 
