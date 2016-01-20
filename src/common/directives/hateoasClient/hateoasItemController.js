@@ -22,7 +22,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var systemFields = ['id', 'rel', 'href'];
+      var systemFields = ['id', 'rel', 'href', 'links'];
 
       var Resource = $resource(vm.url);
       Resource.get(function(data, headers) {
