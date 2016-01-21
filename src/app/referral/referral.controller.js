@@ -114,7 +114,8 @@
           vm.availableServices = _.map(programServices, function (programService) {
             return {
               name: programService.name,
-              programService: programService.id
+              programService: programService.id,
+              serviceCategory: programService.serviceCategory
             };
           });
         });
