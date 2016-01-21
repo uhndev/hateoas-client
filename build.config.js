@@ -16,24 +16,15 @@ module.exports = {
       }
     },
     production: {
-      url: 'http://localhost:1337',
+      url: 'http://ws69.uhnresearch.ca:1338',
       constants: {
         BASE: {
           protocol: 'http',
-          host : 'localhost',
-          port: '1337',
+          host : 'ws69.uhnresearch.ca',
+          port: '1338',
           prefix: '/api'
         }
       }
-      //url: 'http://ws69.uhnresearch.ca:1338',
-      //constants: {
-      //  BASE: {
-      //    protocol: 'http',
-      //    host : 'ws69.uhnresearch.ca',
-      //    port: '1338',
-      //    prefix: '/api'
-      //  }
-      //}
     }
   },
 
