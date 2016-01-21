@@ -22,10 +22,10 @@
           if (_.isEmpty($location.path()) || $state.is('login')) {
             // url is empty, so just use default settings
             switch (level) {
-              case 1: $location.url('/study'); $state.go('hateoas'); break;
-              case 2: $location.url('/study'); $state.go('hateoas'); break;
+              case 1: $location.url('/client'); $state.go('hateoas'); break;
+              case 2: $location.url('/client'); $state.go('hateoas'); break;
               case 3: $state.go('subjectportal.surveys'); break;
-              default: $location.url('/study'); $state.go('hateoas'); break;
+              default: $location.url('/client'); $state.go('hateoas'); break;
             }
           } else {
             // otherwise, try matching currentUrl to state urls to find the correct state

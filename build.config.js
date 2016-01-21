@@ -146,7 +146,7 @@ module.exports = {
       'vendor/JSONedit/js/JSONEdit.js',
       'vendor/ui-select/dist/select.min.js',
       'vendor/ng-ckeditor/ng-ckeditor.js',
-        'vendor/jScrollPane/script/jquery.jscrollpane.js'
+      'vendor/jScrollPane/script/jquery.jscrollpane.js'
     ],
     css: [
     ],
