@@ -61,7 +61,7 @@
         };
 
         // initialize submenu
-        HeaderService.setSubmenu('client', data.links);
+        HeaderService.setSubmenu('referral', data.links);
       });
     }
 
