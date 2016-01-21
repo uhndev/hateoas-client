@@ -5,7 +5,10 @@
     'use strict';
 
     angular
-        .module('altum.note', ['altum.note.controller', 'ngCkeditor'])
+        .module('altum.note', [
+          'altum.note.controller',
+          //'ngCkeditor'
+        ])
         .directive('altumNote', altumNote);
 
     altumNote.$inject = [];
@@ -32,7 +35,7 @@
         return directive;
 
         function link(scope, element, attrs) {
-            
+
         }
     }
 

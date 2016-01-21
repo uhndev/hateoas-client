@@ -106,8 +106,7 @@
       </ui-gmap-google-map>
       <div id="directionsDiv"/>
     </div>
-  </div
-  >
+  </div>
   <div id="recomendationsDiv">
     <table class="ng-table">
       <tr>
@@ -122,7 +121,7 @@
             url="program"
             is-atomic="true"
             is-disabled="false"
-            values="assessment.selectedReferral.program"
+            ng-model="assessment.selectedReferral.program"
             labels="displayName">
           </select-loader>
         </td>

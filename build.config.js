@@ -16,15 +16,24 @@ module.exports = {
       }
     },
     production: {
-      url: 'http://ws69.uhnresearch.ca:1338',
+      url: 'http://localhost:1337',
       constants: {
         BASE: {
           protocol: 'http',
-          host : 'ws69.uhnresearch.ca',
-          port: '1338',
+          host : 'localhost',
+          port: '1337',
           prefix: '/api'
         }
       }
+      //url: 'http://ws69.uhnresearch.ca:1338',
+      //constants: {
+      //  BASE: {
+      //    protocol: 'http',
+      //    host : 'ws69.uhnresearch.ca',
+      //    port: '1338',
+      //    prefix: '/api'
+      //  }
+      //}
     }
   },
 
@@ -139,19 +148,19 @@ module.exports = {
       'vendor/angular-i18n/angular-locale_fr.js',
 
       // plugins
-      'vendor/ckeditor/ckeditor.js',
-      'vendor/ckeditor/config.js',
-      'vendor/ckeditor/lang/en.js',
-      'vendor/ckeditor/styles.js',
+      // 'vendor/ckeditor/ckeditor.js',
+      // 'vendor/ckeditor/config.js',
+      // 'vendor/ckeditor/lang/en.js',
+      // 'vendor/ckeditor/styles.js',
       'vendor/JSONedit/js/JSONEdit.js',
       'vendor/ui-select/dist/select.min.js',
-      'vendor/ng-ckeditor/ng-ckeditor.js',
-      'vendor/jScrollPane/script/jquery.jscrollpane.js'
+      //'vendor/ng-ckeditor/ng-ckeditor.js',
+      //'vendor/jScrollPane/script/jquery.jscrollpane.js'
     ],
     css: [
     ],
     assets: [
-      'vendor/ckeditor/**',
+      //'vendor/ckeditor/**',
       'vendor/bootstrap/dist/fonts/*',
       'vendor/font-awesome/fonts/*',
       'vendor/roboto-fontface/fonts/Roboto-Regular.*',

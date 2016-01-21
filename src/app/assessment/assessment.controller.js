@@ -124,7 +124,7 @@
     }
 
     function findReferral(searchString) {
-      AltumAPI.ReferralDetail.query({
+      AltumAPI.Referral.query({
         where: {
           or: [
             {status: {contains: searchString}},
