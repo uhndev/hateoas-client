@@ -10,7 +10,9 @@
   <div class="row">
     <div class="col-md-5">
       <div class="panel panel-info">
-        <div class="panel-heading">Referral Triage</div>
+        <div class="panel-heading">
+          <h3 class="panel-title">Referral Triage</h3>
+        </div>
         <div class="panel-body">
           <dl class="dl-horizontal">
 
@@ -21,6 +23,7 @@
                 is-atomic="true"
                 is-disabled="false"
                 ng-model="ref.selectedProgram"
+                ng-change="ref.resetServices()"
                 labels="displayName">
               </select-loader>
               <br/>
@@ -55,16 +58,69 @@
           </button>
         </div>
       </div>
-    </div>
-
-    <div class="col-md-7">
+      <br/>
       <div class="panel panel-info">
-        <div class="panel-heading">Referral Info</div>
+        <div class="panel-heading">
+          <h3 class="panel-title">Referral Info</h3>
+        </div>
         <div class="panel-body">
           <simple-table
             rows="ref.referralInfo.rows"
             table-data="ref.referralInfo.tableData">
           </simple-table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Recommendations</h3>
+        </div>
+        <div class="panel-body">
+          <p ng-show="!ref.selectedProgram">
+            Please select a program to begin recommending services.
+          </p>
+
+          <div id="recomendationsDiv" ng-show="ref.selectedProgram">
+            <!-- Service Category / Program Services Panel -->
+            <div id="servicesDiv">
+              <div class="panel panel-info" ng-repeat="category in ref.currentCategories">
+                <div class="panel-heading">{{category.displayName}}</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="checkbox" ng-repeat="service in ref.availableServices">
+                        <label>
+                          <input type="checkbox" ng-checked="ref.isServiceRecommended(service)"
+                                 ng-click="ref.toggleService(service)" /> {{service.name}}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recommended Services Panel -->
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                Recommended Services
+                <button class="btn btn-success btn-xs pull-right" ng-disabled="ref.recommendedServices.length === 0"
+                        ng-click="ref.saveServices()">Save</button>
+              </div>
+              <div class="panel-body">
+                <ul class="list-unstyled">
+                  <li ng-repeat="service in ref.recommendedServices track by $index">
+                    <button class="btn btn-info btn-xs permission-btn" type="button"
+                            ng-click="ref.toggleService(service)">
+                      {{service.name}} <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

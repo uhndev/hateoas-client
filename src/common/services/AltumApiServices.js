@@ -12,6 +12,7 @@
     .service('ProgramService', ProgramService)
     .service('ReferralService', ReferralService)
     .service('ReferralDetailService', ReferralDetailService)
+    .service('SiteService', SiteService)
     .service('AddressService', AddressService)
     .service('PhysicianService', PhysicianService)
     .service('PayorService', PayorService)
@@ -21,12 +22,13 @@
     .service('ProgramServiceService', ProgramServiceService)
     .service('AltumProgramServicesService', AltumProgramServicesService)
     .service('ServiceService', ServiceService)
-    .service('SiteService', SiteService);
+    .service('NoteService', NoteService)
+    .service('NoteTypeService', NoteTypeService);
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
     PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
-    AltumProgramServicesService, AltumAPIService, ServiceService
+    AltumProgramServicesService, AltumAPIService, ServiceService, NoteService, NoteTypeService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
@@ -79,6 +81,14 @@
     return ResourceFactory.create(API.url('service'));
   }
 
+  function NoteService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('note'));
+  }
+
+  function NoteTypeService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('notetype'));
+  }
+
   function AltumAPIService(ResourceFactory, API) {
     return {
       'Program': ResourceFactory.create(API.url('program')),
@@ -93,8 +103,8 @@
       'ProgramService': ResourceFactory.create(API.url('programservice')),
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
       'Service': ResourceFactory.create(API.url('service')),
-        'NoteType' : ResourceFactory.create(API.url('noteType'))
-
+      'Note' : ResourceFactory.create(API.url('note')),
+      'NoteType' : ResourceFactory.create(API.url('noteType'))
     };
   }
 })();

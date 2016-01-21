@@ -5,21 +5,30 @@
     .module('altum.referral', [])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'toastr', 'AltumAPIService'];
+  ReferralController.$inject = ['$q', '$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'ProgramServiceService', 'NoteTypeService', 'toastr'];
 
-  function ReferralController($resource, $location, API, HeaderService, Referral, toastr, AltumAPI) {
+  function ReferralController($q, $resource, $location, API, HeaderService, Referral, ProgramService, NoteType, toastr) {
     var vm = this;
+    var ReferralServices;
 
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.selectedProgram = null;
     vm.selectedSite = null;
     vm.selectedPhysician = null;
-      vm.noteUrl = vm.url + '/notes';
-      vm.noteTypes = AltumAPI.NoteType.query({});
+    vm.noteUrl = vm.url + '/notes';
+    vm.noteTypes = NoteType.query();
+
+    vm.recommendedServices = [];
+    vm.availableServices = [];
+    vm.currentCategories = [];
 
     // bindable methods
     vm.updateReferral = updateReferral;
+    vm.resetServices = resetServices;
+    vm.isServiceRecommended = isServiceRecommended;
+    vm.toggleService = toggleService;
+    vm.saveServices = saveServices;
 
     init();
 
@@ -27,6 +36,7 @@
 
     function init() {
       var Resource = $resource(vm.url);
+      ReferralServices = $resource(vm.url + '/services');
 
       Resource.get(function (data, headers) {
         vm.allow = headers('allow');
@@ -36,7 +46,7 @@
         vm.selectedProgram = data.items.program;
         vm.selectedSite = data.items.site;
         vm.selectedPhysician = data.items.physician;
-          vm.notes = data.items.notes;
+        vm.notes = data.items.notes;
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'referralContact', 'referralDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate');
@@ -85,6 +95,70 @@
       } else {
         toastr.warning('You must select a program/site/physician!', 'Triage');
       }
+    }
+
+    /**
+     * resetServices
+     * @description Resets the available list of services to an empty set of the referral's programs's available services
+     */
+    function resetServices() {
+      if (vm.selectedProgram) {
+        var programID = (_.has(vm.selectedProgram, 'id')) ? vm.selectedProgram.id : vm.selectedProgram;
+        ProgramService.query({
+          where: {
+            program: programID
+          }
+        }).$promise.then(function (programServices) {
+          vm.recommendedServices = [];
+          vm.currentCategories = _.unique(_.pluck(programServices, 'serviceCategory'), 'id');
+          vm.availableServices = _.map(programServices, function (programService) {
+            return {
+              name: programService.name,
+              programService: programService.id
+            };
+          });
+        });
+      }
+    }
+
+    /**
+     * isServiceRecommended
+     * @description Returns bool reporting if service is recommended
+     * @param {String} service
+     */
+    function isServiceRecommended(service) {
+      return _.contains(vm.recommendedServices, service);
+    }
+
+    /**
+     * toggleService
+     * @description Adds/removes a programService from recommendedServices
+     * @param {String} service
+     */
+    function toggleService(service) {
+      if (isServiceRecommended(service)) {
+        vm.recommendedServices = _.without(vm.recommendedServices, service);
+      } else {
+        vm.recommendedServices.push(service);
+      }
+    }
+
+    /**
+     * saveServices
+     * @description Saves the currently selected services to the current referral
+     */
+    function saveServices() {
+      $q.all(_.map(vm.recommendedServices, function (service) {
+        var serviceObj = new ReferralServices(service);
+        return serviceObj.$save();
+      }))
+      .then(function(data) {
+        toastr.success('Added services to referral for client: ' + vm.referral.clientcontact.displayName, 'Recommendations');
+        if (vm.selectedProgram.id != vm.referral.program.id) {
+          Referral.update({ id: vm.referral.id, program: vm.selectedProgram });
+        }
+        init();
+      });
     }
 
   }

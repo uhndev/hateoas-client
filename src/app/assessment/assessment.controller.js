@@ -176,7 +176,6 @@
      * saves the currently selected services to the current referral
      * @param {String} service
      */
-
     function saveServices() {
       vm.fullReferral.services = _.union(vm.recommendedServices, vm.fullReferral.services);
       AltumAPI.Referral.update(vm.fullReferral);
@@ -271,7 +270,6 @@
      * resets the available list of services to an empty set of the referral's programs's available services
      * @param {none}
      */
-
     function resetServices() {
       AltumAPI.ProgramService.query({
         where: {
