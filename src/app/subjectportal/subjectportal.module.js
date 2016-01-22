@@ -8,7 +8,7 @@
       'dados.subjectportal.profile.controller',
       'dados.subjectportal.service'
     ])
-    .config(function config( $urlRouterProvider, $stateProvider, $mdThemingProvider ) {
+    .config(function config($urlRouterProvider, $stateProvider, $mdThemingProvider) {
       $mdThemingProvider.definePalette('dadosPalette', {
         '50': 'ffebee',
         '100': 'ffcdd2',
@@ -26,7 +26,7 @@
         'A400': 'B1CBDF', // submenu
         'A700': 'E79949', // accent
         'contrastDefaultColor': 'light',    // whether, by default, text (contrast)
-                                            // on this palette should be dark or light
+        // on this palette should be dark or light
         'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
           '200', '300', '400', 'A100'],
         'contrastLightColors': undefined    // could also specify this if default was 'dark'
@@ -48,14 +48,14 @@
 
       $urlRouterProvider.when('/subjectportal', '/subjectportal/surveys');
       $stateProvider
-        .state( 'subjectportal' , {
+        .state('subjectportal' , {
           abstract: true,
           url: '/subjectportal',
           controller: 'SubjectPortalController',
           controllerAs: 'sp',
           templateUrl: 'subjectportal/subjectportal.tpl.html'
         })
-        .state( 'subjectportal.surveys', { // default child state for subject portal
+        .state('subjectportal.surveys', { // default child state for subject portal
           url: '/surveys',
           controller: 'SubjectPortalScheduleController',
           controllerAs: 'schedule',
@@ -64,7 +64,7 @@
             fullUrl: '/subjectportal/surveys'
           }
         })
-        .state( 'subjectportal.profile', {
+        .state('subjectportal.profile', {
           url: '/profile',
           controller: 'SubjectPortalProfileController',
           controllerAs: 'profile',

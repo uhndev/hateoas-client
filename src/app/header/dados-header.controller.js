@@ -56,7 +56,7 @@
           };
         }
 
-        $sailsSocket.get(API.url() + '/' + baseModel, { params: queryParams }).then(function (response) {
+        $sailsSocket.get(API.url() + '/' + baseModel, {params: queryParams}).then(function (response) {
           vm.selectionModels = response.data.items;
         });
       } else {

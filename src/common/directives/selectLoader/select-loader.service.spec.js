@@ -1,7 +1,7 @@
-describe("select-loader data service", function () {
+describe('select-loader data service', function () {
   var SelectService, httpBackend;
 
-  beforeEach(module("dados.common.directives.selectLoader"));
+  beforeEach(module('dados.common.directives.selectLoader'));
 
   beforeEach(inject(function (_SelectService_, $httpBackend) {
     SelectService = _SelectService_;
@@ -14,44 +14,44 @@ describe("select-loader data service", function () {
   });
 
   it('should fetch data from url and save data to cache', function () {
-    httpBackend.whenGET("http://localhost:1337/api/user").respond({
-        data: {
+    httpBackend.whenGET('http://localhost:1337/api/user').respond({
+      data: {
           items: [
             {
-              "displayName": "Mr. Admin User",
-              "username": "admin",
-              "email": "admin@example.com",
-              "id": 1,
-              "prefix": "Mr.",
-              "firstname": "Admin",
-              "lastname": "User"
+              'displayName': 'Mr. Admin User',
+              'username': 'admin',
+              'email': 'admin@example.com',
+              'id': 1,
+              'prefix': 'Mr.',
+              'firstname': 'Admin',
+              'lastname': 'User'
             },
             {
-              "displayName": "Mr. John Doe",
-              "username": "johndoe",
-              "email": "johndoe@email.com",
-              "id": 2,
-              "prefix": "Mr.",
-              "firstname": "John",
-              "lastname": "Doe"
+              'displayName': 'Mr. John Doe',
+              'username': 'johndoe',
+              'email': 'johndoe@email.com',
+              'id': 2,
+              'prefix': 'Mr.',
+              'firstname': 'John',
+              'lastname': 'Doe'
             },
             {
-              "displayName": "Ms. Jane Doe",
-              "username": "janedoe",
-              "email": "janedoe@email.com",
-              "id": 3,
-              "prefix": "Ms.",
-              "firstname": "Jane",
-              "lastname": "Doe"
+              'displayName': 'Ms. Jane Doe',
+              'username': 'janedoe',
+              'email': 'janedoe@email.com',
+              'id': 3,
+              'prefix': 'Ms.',
+              'firstname': 'Jane',
+              'lastname': 'Doe'
             },
             {
-              "displayName": "Mr. Kevin Chan",
-              "username": "khchan",
-              "email": "khchan@email.com",
-              "id": 4,
-              "prefix": "Mr.",
-              "firstname": "Kevin",
-              "lastname": "Chan"
+              'displayName': 'Mr. Kevin Chan',
+              'username': 'khchan',
+              'email': 'khchan@email.com',
+              'id': 4,
+              'prefix': 'Mr.',
+              'firstname': 'Kevin',
+              'lastname': 'Chan'
             }
           ]
         }
@@ -71,17 +71,17 @@ describe("select-loader data service", function () {
   });
 
   it('should fetch newest data from if requested', function () {
-    httpBackend.whenGET("http://localhost:1337/api/user").respond({
+    httpBackend.whenGET('http://localhost:1337/api/user').respond({
       data: {
         items: [
           {
-            "displayName": "Mr. Admin User",
-            "username": "admin",
-            "email": "admin@example.com",
-            "id": 1,
-            "prefix": "Mr.",
-            "firstname": "Admin",
-            "lastname": "User"
+            'displayName': 'Mr. Admin User',
+            'username': 'admin',
+            'email': 'admin@example.com',
+            'id': 1,
+            'prefix': 'Mr.',
+            'firstname': 'Admin',
+            'lastname': 'User'
           }
         ]
       }

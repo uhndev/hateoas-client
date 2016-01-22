@@ -35,8 +35,8 @@
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
-    StudyUser.query({ studyID: study.id }).$promise.then(function (data) {
-      vm.studyUsers = { user: _.pluck(data, 'id') };
+    StudyUser.query({studyID: study.id}).$promise.then(function (data) {
+      vm.studyUsers = {user: _.pluck(data, 'id')};
     });
 
     // bindable methods
@@ -52,7 +52,7 @@
         vm.newSubject.providers = [vm.newSubject.providers];
       }
 
-      User.get({ id: subject.user }, function (data, headers) {
+      User.get({id: subject.user}, function (data, headers) {
         if (data) {
           if (_.isUndefined(data.dob)) {
             delete data.dob;
@@ -66,17 +66,17 @@
       });
     }
 
-	  /**
-     * editSubject
-     * @description Click handler for editing a subject enrollment in a study
-     */
+    /**
+         * editSubject
+         * @description Click handler for editing a subject enrollment in a study
+         */
     function editSubject() {
       var user = new User(vm.userData);
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment
-        .$update({ id: subject.id })
+        .$update({id: subject.id})
         .then(function() {
-          return user.$update({ id: subject.user });
+          return user.$update({id: subject.user});
         })
         .then(function() {
           toastr.success('Updated subject enrollment!', 'Subject Enrollment');

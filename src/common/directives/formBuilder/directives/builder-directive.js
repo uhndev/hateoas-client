@@ -1,7 +1,7 @@
 /**
  * Directive for form-builder itself:
  * Takes a JSON form and bidirectionally binds it with form-builder and form-directive
- * 
+ *
  * usage: <form-builder form="scopeForm"></form-builder>
  */
 (function() {

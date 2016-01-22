@@ -21,9 +21,9 @@
     var studyID = _.getParentIDFromUrl($location.path());
 
     // bindable variables
-    vm.study = Study.get({ id: studyID });
+    vm.study = Study.get({id: studyID});
     vm.allow = {};
-    vm.query = { 'where' : {} };
+    vm.query = {'where' : {}};
     vm.selected = null;
     vm.template = {};
     vm.resource = {};
@@ -77,7 +77,7 @@
        */
       if (type === 'edit') {
         modalSettings.resolve.survey = function() {
-          return Survey.get({ id: vm.selected.id }).$promise.then(function (survey) {
+          return Survey.get({id: vm.selected.id}).$promise.then(function (survey) {
             survey.sessions = [];
             _.each(survey.sessionForms, function(session) {
               if (!_.isArray(session.formVersions) && !_.isNull(session.formVersions)) {
@@ -125,10 +125,10 @@
     }
 
     function archiveSurvey() {
-      var conf = confirm("Are you sure you want to archive this survey?");
+      var conf = confirm('Are you sure you want to archive this survey?');
       if (conf) {
-        var survey = new Survey({ id: vm.selected.id });
-        return survey.$delete({ id: vm.selected.id }).then(function () {
+        var survey = new Survey({id: vm.selected.id});
+        return survey.$delete({id: vm.selected.id}).then(function () {
           toastr.success('Archived survey!', 'Survey');
           $scope.$broadcast('hateoas.client.refresh');
         });

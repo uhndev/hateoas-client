@@ -5,7 +5,7 @@
     .module('dados.subjectportal.controller', [])
     .controller('SubjectPortalController', SubjectPortalController);
 
-  SubjectPortalController.$inject = [ '$state' ];
+  SubjectPortalController.$inject = ['$state'];
 
   function SubjectPortalController($state) {
     var vm = this;

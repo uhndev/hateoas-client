@@ -84,7 +84,7 @@
      * and return proper evenly column-matched data
      */
     function affixMissingColumns(listInput, colInput) {
-      if (vm.affixMissing === "true") {
+      if (vm.affixMissing === 'true') {
         var missingCols = [];
         // determine duplicate-free column names from list
         _.chain(_.union(_.flatten(_.map(listInput, _.keys))))
@@ -110,7 +110,7 @@
         _.map(listInput, function(item) {
           _.each(missingCols, function(m) {
             if (!_.has(item, m.field)) {
-              item[m.field] = "";
+              item[m.field] = '';
             }
           });
           return item;

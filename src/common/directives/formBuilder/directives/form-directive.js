@@ -17,7 +17,7 @@
 
   function formDirective($http, $compile, $templateCache) {
 
-    var linker = function(scope, element, attrs, ngModel) {    
+    var linker = function(scope, element, attrs, ngModel) {
       // GET template content from path
       var templateUrl = 'directives/formBuilder/partials/directive-templates/form/form.tpl.html';
       $http.get(templateUrl, {cache:$templateCache}).success(function(data) {
