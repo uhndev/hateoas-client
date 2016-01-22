@@ -87,7 +87,7 @@
         vm.viewName = item.name;
       }
 
-      if (!_.isUndefined(_.find(item.roles, { name: 'admin' }))) {
+      if (!_.isUndefined(_.find(item.roles, {name: 'admin'}))) {
         vm.access = vm.masterRoles;
       } else {
         vm.access = _.pluck(item.roles, 'name');
@@ -176,7 +176,7 @@
       var user = new UserRoles({
         'updateGroup': vm.selected.group
       });
-      user.$update({ id: vm.selected.id })
+      user.$update({id: vm.selected.id})
       .then(function(user) {
         clearSelections();
         loadResource(vm.currentView);
@@ -194,7 +194,7 @@
       var resource = new Resource({
         'roles': vm.access
       });
-      resource.$update({ id: vm.selected.id })
+      resource.$update({id: vm.selected.id})
       .then(function(resource) {
         clearSelections();
         loadResource(vm.currentView);

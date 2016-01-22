@@ -18,7 +18,7 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
-    vm.query = { 'where' : {} };
+    vm.query = {'where' : {}};
     vm.selected = null;
     vm.filters = {};
     vm.allow = '';
@@ -69,7 +69,7 @@
             if (modelName && modelID) {
               var Model = ResourceFactory.create(API.url(modelName));
 
-              Model.get({ id: modelID }).$promise.then(function (model) {
+              Model.get({id: modelID}).$promise.then(function (model) {
                 vm.template.model = modelName;
                 vm.template.modelID = modelID;
                 HeaderService.setSubmenu(modelName, data.links);
@@ -82,7 +82,6 @@
         }
       });
     }
-
 
     function follow(link) {
       if (link) {

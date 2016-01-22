@@ -43,13 +43,13 @@
         // data for left user panel
         vm.userInfo = {
           rows: {
-            'username': { title: 'COMMON.MODELS.USER.USERNAME', type: 'text' },
-            'email': { title: 'COMMON.MODELS.USER.EMAIL', type: 'text' },
-            'prefix': { title: 'COMMON.MODELS.USER.PREFIX', type: 'text' },
-            'firstname': { title: 'COMMON.MODELS.USER.FIRSTNAME', type: 'text' },
-            'lastname': { title: 'COMMON.MODELS.USER.LASTNAME', type: 'text' },
-            'gender': { title: 'COMMON.MODELS.USER.GENDER', type: 'text' },
-            'dob': { title: 'COMMON.MODELS.USER.DOB', type: 'date' }
+            'username': {title: 'COMMON.MODELS.USER.USERNAME', type: 'text'},
+            'email': {title: 'COMMON.MODELS.USER.EMAIL', type: 'text'},
+            'prefix': {title: 'COMMON.MODELS.USER.PREFIX', type: 'text'},
+            'firstname': {title: 'COMMON.MODELS.USER.FIRSTNAME', type: 'text'},
+            'lastname': {title: 'COMMON.MODELS.USER.LASTNAME', type: 'text'},
+            'gender': {title: 'COMMON.MODELS.USER.GENDER', type: 'text'},
+            'dob': {title: 'COMMON.MODELS.USER.DOB', type: 'date'}
           },
           tableData: _.objToPair(userData)
         };
@@ -58,9 +58,9 @@
         vm.userStudies = {
           tableData: data.items.enrollments || [],
           columns: [
-            { title: 'Study', field: 'COMMON.MODELS.STUDY.IDENTITY', type: 'text' },
-            { title: 'Collection Centre', field: 'COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE', type: 'text' },
-            { title: 'Role', field: 'COMMON.MODELS.USER_ENROLLMENT.CENTRE_ACCESS', type: 'text' }
+            {title: 'Study', field: 'COMMON.MODELS.STUDY.IDENTITY', type: 'text'},
+            {title: 'Collection Centre', field: 'COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE', type: 'text'},
+            {title: 'Role', field: 'COMMON.MODELS.USER_ENROLLMENT.CENTRE_ACCESS', type: 'text'}
           ]
         };
 

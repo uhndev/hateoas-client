@@ -14,8 +14,8 @@
     .factory('localeHandlerFactory', localeHandlerFactory)
     .factory('localeLoader', localeLoader);
 
-  localeHandlerFactory.$inject = [ 'LOCALES' ];
-  localeLoader.$inject = [ '$http', '$q', 'localStorageService', 'API' ];
+  localeHandlerFactory.$inject = ['LOCALES'];
+  localeLoader.$inject = ['$http', '$q', 'localStorageService', 'API'];
 
   /**
    * localeHandlerFactory

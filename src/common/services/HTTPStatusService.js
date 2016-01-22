@@ -1,5 +1,5 @@
 /**
- * Service to wrap generic HTTP status specified helper methods. 
+ * Service to wrap generic HTTP status specified helper methods.
  * Currently this service has the following methods available:
  *
  * httpStatusService.getStatusCodeText(httpStatusCode);

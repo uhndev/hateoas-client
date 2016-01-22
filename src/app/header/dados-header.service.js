@@ -5,7 +5,7 @@
     .module('dados.header.service', [])
     .service('HeaderService', HeaderService);
 
-  HeaderService.$inject = [ '$rootScope', 'AuthService' ];
+  HeaderService.$inject = ['$rootScope', 'AuthService'];
 
   function HeaderService($rootScope, AuthService) {
 
@@ -26,7 +26,7 @@
      * @description From any submenu page, we need to parse and render a hateoas resource's
      *              links array to populate our submenu in our top level scope
      * @param {String} state         string representation of our current relative state
-     * @param {Array}  links         a links array from a hateoas response object
+     * @param {Array}  resourceLinks         a links array from a hateoas response object
      */
     function setSubmenu(state, resourceLinks) {
       // initialize submenu

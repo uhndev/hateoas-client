@@ -83,7 +83,7 @@
           var translation = new Translation({
             translation: vm.translations[translationObj.language]
           });
-          return translation.$update({ id: translationObj.id });
+          return translation.$update({id: translationObj.id});
         })
       )
       .then(function (data) {
@@ -104,11 +104,11 @@
      * @returns {*}
      */
     function onUpdate(language) {
-      var translationID = _.find(vm.resource, { language: language }).id;
+      var translationID = _.find(vm.resource, {language: language}).id;
       var translation = new Translation({
         translation: vm.translations[language]
       });
-      return translation.$update({ id: translationID }).then(function (data) {
+      return translation.$update({id: translationID}).then(function (data) {
         toastr.success('Updated translations for language ' + language + '!', 'Translation');
         Locale.setLocaleStorage(language, angular.copy(vm.translations[language]));
         init();
@@ -123,15 +123,15 @@
      * @returns {*}
      */
     function onRemove(language) {
-      var conf = confirm("Are you sure you want to archive this language?");
+      var conf = confirm('Are you sure you want to archive this language?');
       if (conf) {
         vm.languages = _.without(vm.languages, language);
         delete vm.translations[language];
 
-        var translationID = _.find(vm.resource, { language: language }).id;
-        var translation = new Translation({ id: translationID });
+        var translationID = _.find(vm.resource, {language: language}).id;
+        var translation = new Translation({id: translationID});
         translation.$delete().then(function () {
-          toastr.success('Archived translation '+ language + '!', 'Translation');
+          toastr.success('Archived translation ' + language + '!', 'Translation');
           Locale.updateLocales();
           Locale.removeLocaleStorage(language);
           init();

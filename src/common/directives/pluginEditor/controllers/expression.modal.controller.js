@@ -22,7 +22,7 @@
         result = expression;
       }
 
-      if ( (result.length === 0) || (result === 'false') ) {
+      if ((result.length === 0) || (result === 'false')) {
         result = undefined;
       }
 

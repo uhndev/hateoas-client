@@ -16,7 +16,9 @@
 
   /**
    * @name SurveyBuilderController
+   * @param $scope
    * @param STAGES
+   * @param TableParams
    * @constructor
    */
   function SurveyBuilderController($scope, STAGES, TableParams) {
@@ -34,7 +36,7 @@
     vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
     vm.cascadeDefaults = true;                 // denotes whether or not to cascade changes in form order to each session
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
-    vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
+    vm.survey = vm.survey || {sessions: []}; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
     vm.forms = vm.forms || [];                 // array storing form definitions
     vm.formVersions = {};                      // dictionary storing latest form versions by id
@@ -44,15 +46,15 @@
     vm.beginLimit = 0;                         // number of sessions in timeline to limit from the beginning
 
     vm.sessionColumns = [
-      { title: 'Name', field: 'name', type: 'text'},
-      { title: 'Type', field: 'type', type: 'dropdown', options: [
-        { prompt: 'Scheduled', value: 'scheduled' },
-        { prompt: 'Recurring', value: 'recurring' },
-        { prompt: 'Non-scheduled', value: 'non-scheduled' }
+      {title: 'Name', field: 'name', type: 'text'},
+      {title: 'Type', field: 'type', type: 'dropdown', options: [
+        {prompt: 'Scheduled', value: 'scheduled'},
+        {prompt: 'Recurring', value: 'recurring'},
+        {prompt: 'Non-scheduled', value: 'non-scheduled'}
       ]},
-      { title: 'Timepoint', field: 'timepoint', type: 'number'},
-      { title: 'Available From', field: 'availableFrom', type: 'number'},
-      { title: 'Available To', field: 'availableTo', type: 'number'}
+      {title: 'Timepoint', field: 'timepoint', type: 'number'},
+      {title: 'Available From', field: 'availableFrom', type: 'number'},
+      {title: 'Available To', field: 'availableTo', type: 'number'}
     ];
     vm.toggleReload = false;
 
@@ -107,7 +109,7 @@
 
         // update any out of date info in survey.defaultFormVersions (if name/revision changed)
         _.map(vm.survey.defaultFormVersions, function (formVersion) {
-          var updatedForm = _.find(vm.forms, { id: formVersion.id });
+          var updatedForm = _.find(vm.forms, {id: formVersion.id});
           if (updatedForm) {
             formVersion.name = updatedForm.name;
             formVersion.revision = updatedForm.revision;
@@ -120,7 +122,7 @@
         // check if any new forms have been added and add them if so
         if (!_.isEmpty(formDiffs.toAdd)) {
           _.each(formDiffs.toAdd, function (formToAdd) {
-            var newForm = _.find(vm.forms, { id: formToAdd });
+            var newForm = _.find(vm.forms, {id: formToAdd});
             newForm.active = false;
             vm.survey.defaultFormVersions.push(newForm);
           });
@@ -151,7 +153,7 @@
         page: 1,
         count: 10
       }, {
-        groupBy: "type",
+        groupBy: 'type',
         data: vm.survey.sessions
       });
     }
@@ -194,7 +196,7 @@
     function onToggleCascadeDefaults() {
       if (vm.cascadeDefaults) {
         var formOrder = _.map(_.pluck(vm.survey.defaultFormVersions, 'id'), function (formId) { return parseInt(formId); });
-        var formIds = _.map(_.pluck(_.filter(vm.survey.defaultFormVersions, { active: true }), 'id'), function (formId) { return parseInt(formId); });
+        var formIds = _.map(_.pluck(_.filter(vm.survey.defaultFormVersions, {active: true}), 'id'), function (formId) { return parseInt(formId); });
 
         _.map(vm.survey.sessions, function (session) {
           if (!session.$noCascade) {
@@ -215,9 +217,9 @@
       if (!_.isEmpty(vm.newSession)) {
         var formIds = _.map(_.pluck(vm.forms, 'id'), function (formId) { return parseInt(formId); });
         vm.newSession.formOrder = angular.copy(formIds);
-        vm.newSession.formVersions = angular.copy(_.filter(formIds, { active: false }));
+        vm.newSession.formVersions = angular.copy(_.filter(formIds, {active: false}));
 
-        switch(vm.newSession.type) {
+        switch (vm.newSession.type) {
           case 'scheduled': // if scheduled, session will have name, but repeat will be set to 1
             vm.survey.sessions.push({
               surveyVersion: vm.latestSurveyVersion,
@@ -232,7 +234,7 @@
             break;
           case 'recurring': // if recurring, session won't have name but will have repeat attributes
             // repeat as many times as needed to generate timepoints
-            for (var i=1; i <= vm.newSession.repeat; i++) {
+            for (var i = 1; i <= vm.newSession.repeat; i++) {
               var future = vm.newSession.timepoint * i;
               vm.survey.sessions.push({
                 surveyVersion: vm.latestSurveyVersion,

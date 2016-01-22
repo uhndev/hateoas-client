@@ -29,7 +29,6 @@
     var tabview = {};
     var subview = {};
 
-
     var service = {
       // variables
       currentUser: currentUser,
@@ -48,7 +47,6 @@
       login: login,
       logout: logout
     };
-
 
     // if the user is already authenticated on init (page reload) call set authenticated
     if (isAuthenticated()) {
@@ -98,7 +96,7 @@
     /**
      * isAdminPage
      * @description Returns true if requested page is an admin-only page.
-     * @param link to page
+     * @param {String} page
      */
     function isAdminPage(page) {
       return _.contains(ADMIN_PAGES, page);
@@ -110,7 +108,7 @@
      * @return {Boolean}
      */
     function isAuthenticated() {
-      return  Boolean($cookies.get('user'));
+      return Boolean($cookies.get('user'));
     }
 
     /**
@@ -120,7 +118,7 @@
     function setUnauthenticated() {
       $cookies.remove('user');
       delete service.currentUser;
-      $rootScope.$broadcast("events.unauthorized");
+      $rootScope.$broadcast('events.unauthorized');
       $location.url('/login');
     }
 
@@ -138,15 +136,15 @@
         service.tabview = service.currentGroup.menu.tabview || TABVIEW[view];
         service.subview = service.currentGroup.menu.subview || SUBVIEW[view];
 
-        $rootScope.$broadcast("events.authorized");
+        $rootScope.$broadcast('events.authorized');
       });
     }
 
     /**
      * getRoleLinks
      * @description Depending on user's role, context submenu is filtered down based on access level.
-     * @param  {Array} links  response links from HATEOAS
-     * @return {Array}        filtered submenu links
+     * @param  {String} baseRel - base relationship of model
+     * @return {Array} links - response links from HATEOAS
      */
     function getRoleLinks(baseRel, links) {
       return _.filter(links, function(link) {
@@ -175,7 +173,7 @@
       setUnauthenticated();
       $cookies.remove('user');
       return $resource(Auth.LOGOUT_API, {}, {
-        'query' : {method: 'GET', isArray: false }
+        'query' : {method: 'GET', isArray: false}
       }).query();
     }
 

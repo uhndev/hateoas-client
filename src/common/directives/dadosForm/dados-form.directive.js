@@ -5,13 +5,13 @@
  */
 
 (function() {
-	'use strict';
-	angular
-    .module('dados.common.directives.dadosForm', [
-      'dados.common.directives.pluginEditor.directives.uiGrid',
-      'dados.common.directives.dadosForm.controller',
-      'dados.common.directives.dadosForm.service'
-    ])
+  'use strict';
+  angular
+      .module('dados.common.directives.dadosForm', [
+        'dados.common.directives.pluginEditor.directives.uiGrid',
+        'dados.common.directives.dadosForm.controller',
+        'dados.common.directives.dadosForm.service'
+      ])
     .directive('dadosForm', function() {
       return {
         restrict: 'E',

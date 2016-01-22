@@ -1,22 +1,22 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	angular
-		.module('dados.common.directives.selectLoader.controller', [
-      'ui.select',
-			'dados.constants',
-      'dados.common.directives.selectLoader.service'
-		])
-		.controller('SelectController', SelectController);
+  angular
+  .module('dados.common.directives.selectLoader.controller', [
+        'ui.select',
+  'dados.constants',
+        'dados.common.directives.selectLoader.service'
+  ])
+  .controller('SelectController', SelectController);
 
-	SelectController.$inject = ['$scope', 'API', 'SelectService'];
+  SelectController.$inject = ['$scope', 'API', 'SelectService'];
 
-	function SelectController($scope, API, SelectService) {
-		var vm = this;
+  function SelectController($scope, API, SelectService) {
+    var vm = this;
 
-		// bindable variables
+    // bindable variables
     vm.loadError = false;
-		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
+    vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
     vm.baseQuery = vm.query || null;
     vm.labels = vm.labels || 'name';
@@ -39,11 +39,11 @@
       }
     }
 
-		/**
-     * fetchData
-     * @description Refresh function called to fetch data on load and search updates.
-     * @param query Sails search query to pass through
-     */
+    /**
+         * fetchData
+         * @description Refresh function called to fetch data on load and search updates.
+         * @param query Sails search query to pass through
+         */
     function fetchData(query, select) {
       SelectService.loadSelect(vm.href, vm.baseQuery, query).then(function (data) {
         vm.input = data;
@@ -55,6 +55,6 @@
         $scope.$parent.loadError = true;
       });
     }
-	}
+  }
 
 })();
