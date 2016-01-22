@@ -34,18 +34,18 @@
      * Private Methods
      */
     function getTemplate() {
-      return  {
-        css : { width : $scope.width + '%' },
+      return {
+        css : {width : $scope.width + '%'},
         isDeleted : false
       };
     }
 
     function selectWidget(idx) {
       $scope.selectedIndex = idx;
-      if($scope.questions[idx].template) {
-        $scope.editTabActive['config'] = true;
+      if ($scope.questions[idx].template) {
+        $scope.editTabActive.config = true;
       } else {
-        $scope.editTabActive['select'] = true;
+        $scope.editTabActive.select = true;
       }
     }
 
@@ -57,7 +57,7 @@
      * @param e is the event data
      * @param cell is the cell to expand
      */
-    $scope.$on("expand", function(e, cell) {
+    $scope.$on('expand', function(e, cell) {
       var width = parseInt(cell.css.width);
       width += $scope.step;
       if (width > 100) { width = 100; }
@@ -72,7 +72,7 @@
      * @param e is the event data
      * @param cell is the cell to shrink
      */
-    $scope.$on("shrink", function(e, cell) {
+    $scope.$on('shrink', function(e, cell) {
       var width = parseInt(cell.css.width);
       width -= $scope.step;
       if (width < MIN_WIDTH) { width = MIN_WIDTH; }
@@ -87,7 +87,7 @@
      * @param e is the event data
      * @param cellIndex is the index of the cell to be cloned
      */
-    $scope.$on("clone", function(e, cellIndex) {
+    $scope.$on('clone', function(e, cellIndex) {
       var newCell = angular.copy($scope.questions[cellIndex]);
       $scope.questions.splice(cellIndex, 0, newCell);
     });
@@ -100,12 +100,12 @@
      * @param e is the event data
      * @param pivotIndex is the index of the cell to be removed
      */
-    $scope.$on("remove", function(e, pivotIndex) {
+    $scope.$on('remove', function(e, pivotIndex) {
       var cell = $scope.questions[pivotIndex];
 
       if (cell.isDeleted === false &&
-          confirm("All contents of this will be removed and you will not " +
-          "be able to retrieve this. Do you want to continue?")) {
+          confirm('All contents of this will be removed and you will not ' +
+          'be able to retrieve this. Do you want to continue?')) {
         if (!!(cell.id)) {
           cell.isDeleted = true;
         } else {
@@ -124,10 +124,10 @@
      *
      * Adds a cell to the grid.
      *
-     * @param e is the event data
-     * @param pivotIndex is the index of the cell to be added.
+     * @param {Object} e is the event data
+     * @param {Integer} pivotIndex is the index of the cell to be added.
      */
-    $scope.$on("add", function(e, pivotIndex) {
+    $scope.$on('add', function(e, pivotIndex) {
       $scope.questions.splice(pivotIndex, 0, getTemplate());
     });
 
@@ -136,11 +136,11 @@
      *
      * Moves a cell from one index to another index
      *
-     * @param e is the event data
-     * @param oldIndex is the index of the cell to be moved
-     * @param newIndex is the new location of the cell
+     * @param {Object} e is the event data
+     * @param {Integer} from oldIndex is the index of the cell to be moved
+     * @param {Integer} to newIndex is the new location of the cell
      */
-    $scope.$on("move", function(e, from, to) {
+    $scope.$on('move', function(e, from, to) {
       $scope.questions.splice(to, 0, $scope.questions.splice(from, 1)[0]);
       $scope.$apply();
       selectWidget(to);
@@ -162,7 +162,7 @@
     $scope.addNewWidget = function(template) {
       var prevLen = $scope.questions.length;
       var newLen = $scope.questions.push(_.extend(WidgetService.templates[template], getTemplate()));
-      if(newLen > prevLen) {
+      if (newLen > prevLen) {
         selectWidget(prevLen);
       }
     };

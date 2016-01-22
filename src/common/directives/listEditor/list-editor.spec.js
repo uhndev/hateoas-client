@@ -14,14 +14,14 @@ describe('List Editor Directives', function() {
       canDelRow: true,
       canDelCol: false,
       list: [
-        {name: "Moroni", age: 50},
-        {name: "Tiancum", age: 43, weight: 189, complexion: "dark"},
-        {name: "Jacob", age: 27},
-        {name: "Nephi", age: 29, complexion: "fair"}
+        {name: 'Moroni', age: 50},
+        {name: 'Tiancum', age: 43, weight: 189, complexion: 'dark'},
+        {name: 'Jacob', age: 27},
+        {name: 'Nephi', age: 29, complexion: 'fair'}
       ],
       columns: [
-        { title: 'Name of Person', field: 'name', type: 'text'},
-        { title: 'Age of Person', field: 'age', type: 'number'}
+        {title: 'Name of Person', field: 'name', type: 'text'},
+        {title: 'Age of Person', field: 'age', type: 'number'}
       ],
       forceReload: false
     };
@@ -94,7 +94,7 @@ describe('List Editor Directives', function() {
           if (col.type == 'number') {
             row[col.field] = 123;
           } else {
-            row[col.field] = "test";
+            row[col.field] = 'test';
           }
         });
         ctrl.cancelRowEdit(row);
@@ -110,7 +110,7 @@ describe('List Editor Directives', function() {
           if (col.type == 'number') {
             row[col.field] = 123;
           } else {
-            row[col.field] = "test";
+            row[col.field] = 'test';
           }
         });
         ctrl.cancelColumnEdit(col);
@@ -125,7 +125,7 @@ describe('List Editor Directives', function() {
         if (col.type == 'number') {
           ctrl.rowBuffer[col.field] = 123;
         } else {
-          ctrl.rowBuffer[col.field] = "test";
+          ctrl.rowBuffer[col.field] = 'test';
         }
       });
       ctrl.reset(true);
@@ -151,7 +151,7 @@ describe('List Editor Directives', function() {
           if (col.type == 'number') {
             row[col.field] = 123;
           }	else {
-            row[col.field] = "test";
+            row[col.field] = 'test';
           }
         });
       });

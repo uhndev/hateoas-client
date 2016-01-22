@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('dados.error', [])
-    .config(function config( $stateProvider ) {
+    .config(function config($stateProvider) {
       $stateProvider
         .state('forbidden', {
           url: '/forbidden',

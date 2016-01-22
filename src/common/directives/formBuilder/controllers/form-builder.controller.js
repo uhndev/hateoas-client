@@ -80,18 +80,18 @@
       vm.addField.lastAddedID++;
 
       var newField = {
-        "field_id"            : vm.addField.lastAddedID,
-        "field_name"          : vm.form.form_name+"_"+vm.addField.new.name+"_"+vm.addField.lastAddedID,
-        "field_title"         : "New " + vm.addField.new.name + " field " + vm.addField.lastAddedID,
-        "field_type"          : vm.addField.new.name,
-        "field_value"         : vm.addField.new.value_type,
-        "field_placeholder"   : "Enter a "+vm.addField.new.name+" value",
-        "field_validation"    : {rule:'none', expression: ''},
-        "field_helpertext"    : "missing input or invalid",
-        "field_hasOptions"    : vm.addField.new.hasOptions,
-        "field_hasItems"      : vm.addField.new.hasItems,
-        "field_hasItem"       : vm.addField.new.hasItem,
-        "field_required"      : true
+        'field_id'            : vm.addField.lastAddedID,
+        'field_name'          : vm.form.form_name + '_' + vm.addField.new.name + '_' + vm.addField.lastAddedID,
+        'field_title'         : 'New ' + vm.addField.new.name + ' field ' + vm.addField.lastAddedID,
+        'field_type'          : vm.addField.new.name,
+        'field_value'         : vm.addField.new.value_type,
+        'field_placeholder'   : 'Enter a ' + vm.addField.new.name + ' value',
+        'field_validation'    : {rule:'none', expression: ''},
+        'field_helpertext'    : 'missing input or invalid',
+        'field_hasOptions'    : vm.addField.new.hasOptions,
+        'field_hasItems'      : vm.addField.new.hasItems,
+        'field_hasItem'       : vm.addField.new.hasItem,
+        'field_required'      : true
       };
 
       // put newField into fields array
@@ -99,9 +99,9 @@
     }
 
     // deletes particular field on button click
-    function deleteField(field_id){
-      for(var i = 0; i < vm.form.form_questions.length; i++){
-        if(vm.form.form_questions[i].field_id == field_id){
+    function deleteField(field_id) {
+      for (var i = 0; i < vm.form.form_questions.length; i++) {
+        if (vm.form.form_questions[i].field_id == field_id) {
           vm.form.form_questions.splice(i, 1);
           break;
         }
@@ -111,23 +111,23 @@
 
     // add new option to the field
     function addOption(field) {
-      if(!field.field_options) {
+      if (!field.field_options) {
         field.field_options = [];
       }
 
       var lastOptionID = 0;
 
-      if(field.field_options[field.field_options.length-1]) {
-        lastOptionID = field.field_options[field.field_options.length-1].option_id;
+      if (field.field_options[field.field_options.length - 1]) {
+        lastOptionID = field.field_options[field.field_options.length - 1].option_id;
       }
 
       // new option's id
       var option_id = lastOptionID + 1;
 
       var newOption = {
-        "option_id" : option_id,
-        "option_title" : "Option " + option_id,
-        "option_value" : "value_" + option_id
+        'option_id' : option_id,
+        'option_title' : 'Option ' + option_id,
+        'option_value' : 'value_' + option_id
       };
 
       // put new option into field_options array
@@ -145,7 +145,7 @@
     }
 
     // deletes all the fields
-    function reset(){
+    function reset() {
       vm.form.form_questions.splice(0, vm.form.form_questions.length);
       vm.addField.lastAddedID = 0;
     }

@@ -23,7 +23,7 @@
             function(query, value, key) {
               query.sort = [key, value].join(' ');
               return query;
-          }, pagination);
+            }, pagination);
         }
 
         if (query &&

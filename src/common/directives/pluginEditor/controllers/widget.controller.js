@@ -14,7 +14,7 @@
     $scope.categories = WidgetService.categories;
     $scope.widget = $scope.questions[$scope.selectedIndex];
 
-    $scope.unsorted = function(obj){
+    $scope.unsorted = function(obj) {
       if (!obj) {
         return [];
       }
@@ -94,7 +94,7 @@
                 angular.isDefined($scope.widget.properties) &&
                 angular.isDefined($scope.widget.properties[property]) &&
                 angular.isString($scope.widget.properties[property])) {
-                return $scope.widget.properties[property].split(' ');
+              return $scope.widget.properties[property].split(' ');
             }
             return undefined;
           }
@@ -110,9 +110,9 @@
       });
     };
 
-	$scope.$watch('selectedIndex', function() {
-		$scope.widget = $scope.questions[$scope.selectedIndex];
-	});
+    $scope.$watch('selectedIndex', function() {
+      $scope.widget = $scope.questions[$scope.selectedIndex];
+    });
 
     $scope.$emit('widgetControllerLoaded');
   }

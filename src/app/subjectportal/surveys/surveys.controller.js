@@ -5,13 +5,13 @@
     .module('dados.subjectportal.surveys.controller', [])
     .controller('SubjectPortalScheduleController', SubjectPortalScheduleController);
 
-  SubjectPortalScheduleController.$inject = [ 'ngTableParams', 'sailsNgTable', 'ScheduleSubjectService' ];
+  SubjectPortalScheduleController.$inject = ['ngTableParams', 'sailsNgTable', 'ScheduleSubjectService'];
 
   function SubjectPortalScheduleController(TableParams, SailsNgTable, ScheduleSubjectService) {
     var vm = this;
 
     // bindable variables
-    vm.scheduleQuery = { 'where' : {} };
+    vm.scheduleQuery = {'where' : {}};
     vm.scheduleSubjects = [];
 
     // bindable methods
@@ -24,7 +24,7 @@
       vm.scheduleTableParams = new TableParams({
         page: 1,
         count: 10,
-        sorting: { 'studyName': 'ASC' }
+        sorting: {'studyName': 'ASC'}
       }, {
         groupBy: 'studyName',
         getData: function($defer, params) {

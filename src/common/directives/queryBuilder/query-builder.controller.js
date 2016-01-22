@@ -7,15 +7,15 @@
 
   function QueryController($scope) {
     var TYPE_MAP = {
-      "string"    : "textfield",
-      "text"      : "textfield",
-      "integer"   : "number",
-      "float"     : "number",
-      "date"      : "date",
-      "datetime"  : "date",
-      "boolean"   : "checkbox",
-      "array"     : "textfield",
-      "json"      : "json"
+      'string'    : 'textfield',
+      'text'      : 'textfield',
+      'integer'   : 'number',
+      'float'     : 'number',
+      'date'      : 'date',
+      'datetime'  : 'date',
+      'boolean'   : 'checkbox',
+      'array'     : 'textfield',
+      'json'      : 'json'
     };
 
     $scope.query = $scope.query || {};
@@ -40,9 +40,9 @@
               if (/date|dateTime|datetime/i.test(field.type)) {
                 try {
                   var dateObj = new Date(value).toISOString();
-                  query[field.name] = { '>=': date, '<': date };
+                  query[field.name] = {'>=': date, '<': date};
                   result.concat(query);
-                } catch(e) {
+                } catch (e) {
                   // if value not date, do not concat
                 } finally {
                   return result;
@@ -52,14 +52,14 @@
                 query[field.name] = parseInt(value, 10);
                 return result.concat(query);
               }
-              else{
+              else {
                 switch (field.type) {
                   case 'json':
                     return result; // do nothing
                   case 'array':
                     return result; // do nothing
                   case 'string':
-                    query[field.name] = { 'contains': value }; break;
+                    query[field.name] = {'contains': value}; break;
                   case 'float':
                     query[field.name] = parseFloat(value); break;
                   default: // otherwise is probably a model id
@@ -84,16 +84,16 @@
         var buffer = $scope.query[field];
 
         if (!angular.isObject(buffer)) {
-            buffer = {};
+          buffer = {};
         }
         if (!angular.isArray(buffer[comparator]) && buffer[comparator]) {
-            buffer[comparator] = [buffer[comparator]];
+          buffer[comparator] = [buffer[comparator]];
         }
 
         if (angular.isArray(buffer[comparator])) {
-            buffer[comparator].push(value);
+          buffer[comparator].push(value);
         } else {
-            buffer[comparator] = value;
+          buffer[comparator] = value;
         }
         $scope.query[field] = buffer;
       }

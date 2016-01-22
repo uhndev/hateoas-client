@@ -1,16 +1,16 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	angular.module('dados.header.directive', [])
+  angular.module('dados.header.directive', [])
 	.directive('dadosHeader', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			templateUrl: 'header/dados-header.tpl.html',
-			controller: 'HeaderController',
-			controllerAs: 'header',
-			bindToController: true
-		};
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'header/dados-header.tpl.html',
+    controller: 'HeaderController',
+    controllerAs: 'header',
+    bindToController: true
+  };
 	});
 
 })();

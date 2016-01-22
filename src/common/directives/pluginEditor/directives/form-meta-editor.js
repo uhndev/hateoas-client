@@ -1,5 +1,5 @@
-/** 
- * 
+/**
+ *
  */
 (function() {
   'use strict';
@@ -13,7 +13,7 @@
   uiGrid.$inject = [];
 
   function uiGrid() {
-    
+
     return {
       templateUrl: 'directives/pluginEditor/partials/MetaDataEditor.tpl.html',
       restrict: 'E',

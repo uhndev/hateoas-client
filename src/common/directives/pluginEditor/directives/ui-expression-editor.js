@@ -1,5 +1,5 @@
-/** 
- * 
+/**
+ *
  */
 (function() {
   'use strict';
@@ -13,16 +13,16 @@
   uiExpressionEditor.$inject = [];
 
   function uiExpressionEditor() {
-    
+
     return {
       templateUrl: 'directives/pluginEditor/partials/UiExpressionEditor.tpl.html',
       controller: 'ExpressionController',
       restrict: 'E',
       replace: true,
-			require: 'ngModel',
+      require: 'ngModel',
       scope: {
-				inputs: '&',
-				expression: '=ngModel'
+        inputs: '&',
+        expression: '=ngModel'
       },
     };
   }

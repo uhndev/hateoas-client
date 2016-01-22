@@ -15,7 +15,7 @@
     // bindable variables
     vm.study = study;
     vm.forms = forms;
-    vm.newSurvey = { study: study.id };
+    vm.newSurvey = {study: study.id};
     vm.saving = false;
 
     // bindable methods

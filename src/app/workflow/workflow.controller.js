@@ -45,7 +45,7 @@
       try {
         $scope.state.data = JSON.parse(json);
         $scope.wellFormed = true;
-      } catch(e) {
+      } catch (e) {
         $scope.wellFormed = false;
       }
     });

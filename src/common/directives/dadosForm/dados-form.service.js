@@ -1,15 +1,15 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	angular
-		.module('dados.common.directives.dadosForm.service', [
-      'dados.constants',
-      'dados.common.services.resource'
-    ])
-		.service('AnswerSetService', AnswerSetService);
+  angular
+  .module('dados.common.directives.dadosForm.service', [
+        'dados.constants',
+        'dados.common.services.resource'
+      ])
+  .service('AnswerSetService', AnswerSetService);
 
   AnswerSetService.$inject = ['$resource', 'API'];
-  
+
   function AnswerSetService($resource, API) {
     return $resource(
       API.url() + '/answerset/:id',
@@ -29,6 +29,6 @@
         }
       }
     );
-	}
+  }
 
 })();
