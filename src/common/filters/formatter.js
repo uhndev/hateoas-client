@@ -15,6 +15,10 @@ angular.module('dados.filters.formatter', [])
              String(input).length < 7) {
           return _.pad(input, 7);
         }
+
+        if (/boolean/i.test(template.type)) {
+          return Boolean(input) ? "Yes" : "No";
+        }
       }
 
       return input;
