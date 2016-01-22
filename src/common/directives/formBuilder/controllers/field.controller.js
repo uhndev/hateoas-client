@@ -28,6 +28,7 @@
     $scope.validateNumber = validateNumber;
 
     if ($scope.field.field_type == 'singleselect') {
+      $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
       savedSingleSelect = angular.copy($scope.field.field_value);
       $scope.$watch('field.field_questions', function (oldVal, newVal) {
         if (oldVal !== newVal) {
@@ -38,6 +39,10 @@
           });
         }
       }, true);
+    }
+
+    if ($scope.field.field_type == 'multiselect') {
+      $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
     }
 
     // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker

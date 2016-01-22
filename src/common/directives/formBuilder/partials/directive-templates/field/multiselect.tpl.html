@@ -1,22 +1,23 @@
 <ng-form name="sub_form" ng-hide="loadError">
-	<div class="form-group">
-		<label for="field.field_id">
-			{{field.field_id}}) {{field.field_title}}
-		</label>&nbsp;
-		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
-		<div class="row-fluid">
-			<select-loader
-				id="{{field.field_id}}"
-				url="{{field.field_userURL}}"
-				is-atomic="field.field_hasItem"
-				is-disabled="false"
-				ng-required="field.field_required"
-				ng-model="field.field_value"
+  <div class="form-group">
+    <label for="field.field_id">
+      {{field.field_id}}) {{field.field_title}}
+    </label>&nbsp;
+    <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
+    <div class="row-fluid">
+      <select-loader
+        id="{{field.field_id}}"
+        url="{{field.field_userURL}}"
+        query="field.field_baseQuery"
+        is-atomic="field.field_hasItem"
+        is-disabled="false"
+        ng-required="field.field_required"
+        ng-model="field.field_value"
         labels="{{field.field_labels || 'displayName'}}">
-			</select-loader>
-		</div>
-		<div ng-show="!sub_form.$pristine">
-			<span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
-		</div>
-	</div>
+      </select-loader>
+    </div>
+    <div ng-show="!sub_form.$pristine">
+      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
+    </div>
+  </div>
 </ng-form>

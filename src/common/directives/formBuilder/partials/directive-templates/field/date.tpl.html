@@ -7,17 +7,18 @@
 
     <p class="input-group">
       <input type="text"
-        id="field.field_id"
-        name="{{field.field_name}}"
-        ng-model="field.field_value"
-        value="{{ field.field_value | date:'fullDate' }}"
-        ng-required="field.field_required"
-        class="form-control"
-        uib-datepicker-popup
-        is-open="opened"
-        disabled/>
+             id="field.field_id"
+             name="{{field.field_name}}"
+             ng-model="field.field_value"
+             value="{{ field.field_value | date:'fullDate' }}"
+             ng-required="field.field_required"
+             class="form-control"
+             uib-datepicker-popup
+             is-open="opened"
+             disabled/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="opened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+        <button type="button" class="btn btn-default" ng-click="opened = true"><i
+          class="glyphicon glyphicon-calendar"></i></button>
       </span>
     </p>
     <div ng-show="!sub_form.$pristine">
