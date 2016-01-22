@@ -2,37 +2,36 @@
  * Created by calvinsu on 2016-01-12.
  */
 (function () {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('altum.notebook', ['altum.notebook.controller'])
-        .directive('altumNotebook', altumNotebook);
+  angular
+      .module('altum.notebook', ['altum.notebook.controller'])
+      .directive('altumNotebook', altumNotebook);
 
-    altumNotebook.$inject = [];
+  altumNotebook.$inject = [];
 
-    /* @ngInject */
-    function altumNotebook() {
-        var directive = {
-            bindToController: true,
-            controller: 'AltumNotebookController',
-            controllerAs: 'notebook',
-            link: link,
-            restrict: 'E',
-            templateUrl: 'directives/notesEditor/altum-notebook.directive.tpl.html',
-            scope: {
-                url: '=',
-                notes: '=',
-                noteTypes: '=',
-                add: '&'
-            }
-        };
-        return directive;
+  /* @ngInject */
+  function altumNotebook() {
+    var directive = {
+      bindToController: true,
+      controller: 'AltumNotebookController',
+      controllerAs: 'notebook',
+      link: link,
+      restrict: 'E',
+      templateUrl: 'directives/notesEditor/altum-notebook.directive.tpl.html',
+      scope: {
+        url: '=',
+        notes: '=',
+        noteTypes: '=',
+        add: '&'
+      }
+    };
+    return directive;
 
-        function link(scope, element, attrs) {
+    function link(scope, element, attrs) {
 
-        }
     }
-
+  }
 
 })();
 

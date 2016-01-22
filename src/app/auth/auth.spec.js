@@ -41,8 +41,8 @@ describe('AuthService', function() {
       });
 
       it('should return true when user is logged in', function() {
-        $cookies.putObject('user', {user: 'some value',group:'admin'  });
-        AuthService.currentGroup= { tabview: {}, name: 'admin' };
+        $cookies.putObject('user', {user: 'some value',group:'admin'});
+        AuthService.currentGroup = {tabview: {}, name: 'admin'};
         expect(AuthService.isAuthenticated()).toBeTruthy();
         $cookies.remove('user');
       });
@@ -63,7 +63,7 @@ describe('AuthService', function() {
 
       it('should save the user token as a cookie', function() {
         var success = function() {
-          $cookies.put('user', { 'user': 'bar', group:'admin'});
+          $cookies.put('user', {'user': 'bar', group:'admin'});
         };
         var error = function() {};
         $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();

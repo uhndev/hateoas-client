@@ -46,7 +46,7 @@
               type: 'text'
             };
 
-            var template = _.find(vm.template.data, { name: key });
+            var template = _.find(vm.template.data, {name: key});
             if (!_.isUndefined(template)) {
               vm.itemInfo.rows[key].type = template.type;
             }

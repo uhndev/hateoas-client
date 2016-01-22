@@ -25,7 +25,7 @@
     vm.resource = {};
     vm.surveyFilter = {};
     vm.surveys = [];
-    vm.tempParams = { page: null, count: null };
+    vm.tempParams = {page: null, count: null};
     vm.url = API.url() + $location.path();
 
     // bindable methods
@@ -90,10 +90,10 @@
             return subject;
           },
           study: function() {
-            return Study.get({ id: vm.resource.study }).$promise;
+            return Study.get({id: vm.resource.study}).$promise;
           },
           centreHref: function () {
-            return "study/" + vm.resource.study + "/collectioncentres";
+            return 'study/' + vm.resource.study + '/collectioncentres';
           }
         }
       });

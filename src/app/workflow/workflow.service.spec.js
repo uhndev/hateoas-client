@@ -5,7 +5,7 @@ describe('Workflow', function() {
   describe('WORKFLOWSTATE_API', function() {
     var API_CONSTANT;
 
-    beforeEach( inject (function ($injector) {
+    beforeEach(inject (function ($injector) {
       API_CONSTANT = $injector.get('WORKFLOWSTATE_API');
     }));
 
@@ -36,26 +36,26 @@ describe('Workflow', function() {
     describe('save', function() {
       it('should POST when an id is unavailable', function() {
         $httpBackend.whenPOST(url).respond(
-          function(method, url, data, headers){
+          function(method, url, data, headers) {
             return [200, {method: 'post'}, {}];
-        });
+          });
 
         var result = mockWorkflowResource.set({});
 
         $httpBackend.flush();
-        expect(result.method).toEqual("post");
+        expect(result.method).toEqual('post');
       });
 
       it('should PUT when an id is available', function() {
-        $httpBackend.whenPUT(url + "/5").respond(
-          function(method, url, data, headers){
+        $httpBackend.whenPUT(url + '/5').respond(
+          function(method, url, data, headers) {
             return [200, {method: 'put'}, {}];
-        });
+          });
 
         var result = mockWorkflowResource.set({id: 5});
 
         $httpBackend.flush();
-        expect(result.method).toEqual("put");
+        expect(result.method).toEqual('put');
       });
 
       it('should return null when archiving and id is unavailable', function() {
@@ -64,15 +64,15 @@ describe('Workflow', function() {
       });
 
       it('should DELETE when archiving and an id is available', function() {
-        $httpBackend.whenDELETE(url + "/5").respond(
-          function(method, url, data, headers){
+        $httpBackend.whenDELETE(url + '/5').respond(
+          function(method, url, data, headers) {
             return [200, {method: 'delete'}, {}];
-        });
+          });
 
         var result = mockWorkflowResource.archive({id: 5});
 
         $httpBackend.flush();
-        expect(result.method).toEqual("delete");
+        expect(result.method).toEqual('delete');
       });
 
     });

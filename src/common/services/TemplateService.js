@@ -1,32 +1,32 @@
 /**
  * Utility helper functions for managing/manipulating hateoas templates
  */
-(function() {
+(function () {
   'use strict';
   angular.module('dados.common.services.template', [])
-  .service('TemplateService', TemplateService);
+    .service('TemplateService', TemplateService);
 
   function TemplateService() {
     var TYPE_MAP = {
-      "string"    : "textfield",
-      "text"      : "textfield",
-      "integer"   : "number",
-      "float"     : "number",
-      "date"      : "date",
-      "datetime"  : "date",
-      "boolean"   : "checkbox",
-      "array"     : "textfield",
-      "json"      : "json"
+      'string': 'textfield',
+      'text': 'textfield',
+      'integer': 'number',
+      'float': 'number',
+      'date': 'date',
+      'datetime': 'date',
+      'boolean': 'checkbox',
+      'array': 'textfield',
+      'json': 'json'
     };
 
     /**
      * [formToObject - converts a form to an object]
-     * @param  {[form]} form [form object]
-     * @return {[json]}      [resultant data as an object]
+     * @param  {Object} form [form object]
+     * @return {Object}      [resultant data as an object]
      */
-    this.formToObject = function(form) {
+    this.formToObject = function (form) {
       return _.reduce(form.form_questions,
-        function(item, question) {
+        function (item, question) {
           item[question.field_name] = question.field_value;
           return item;
         }, {});
@@ -35,9 +35,9 @@
     /**
      * [toField - converts a data item from the application/collection+json
      *  specification to a ng-form-builder field]
-     *  @param  {[item]} item [data item object]
-     *  @param  {[relation]} template's link relation
-     *  @return {[json]} ng-form-builder field object
+     *  @param  {Object} item [data item object]
+     *  @param  {String} relation template's link relation
+     *  @return {Object} ng-form-builder field object
      */
     function toField(item, relation) {
       var fields = {
@@ -46,8 +46,8 @@
         field_placeholder: _.startCase(relation) + ' ' + _.startCase(item.prompt),
         field_type: TYPE_MAP[item.type],
         field_validation: {
-          rule: "none",
-          expression: ""
+          rule: 'none',
+          expression: ''
         },
         field_helpertext: 'required',
         field_options: [],
@@ -59,9 +59,9 @@
         fields.hasOptions = true;
         fields.field_options = _.map(item.value, function (option, index) {
           return {
-            "option_id" : index,
-            "option_title" : option,
-            "option_value" : option
+            'option_id': index,
+            'option_title': option,
+            'option_value': option
           };
         });
       }
@@ -70,8 +70,8 @@
 
     /**
      * [transformDeep - takes template data array and converts to form]
-     *  @param  {[data]} data array from the template field
-     *  @return {[array]} data array of objects
+     *  @param  {Array} list data array from the template field
+     *  @return {Array} data array of objects
      */
     function transformDeep(list, listField, relation) {
       if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
@@ -100,9 +100,8 @@
 
     /**
      * [callbackDeep - performs a given callback at leaf nodes of given recursive lists]
-     *  @param  {[data]} data array from the template field
-     *  @return {[array]} data array of objects
-     *
+     *  @param  {Array} list data array from the template field
+     *  @return {Array} data array of objects
      */
     function callbackDeep(list, listField, callback) {
       if (!_.has(list, listField) && !_.isArray(list)) { // non-model field
@@ -121,11 +120,11 @@
 
     /**
      * [parseToForm - converts a template object to a form]
-     * @param  {[item]} item     [selected row item]
-     * @param  {[json]} template [hateoas template object]
-     * @return {[json]}          [resultant form object]
+     * @param  {Object} item     [selected row item]
+     * @param  {Object} template [hateoas template object]
+     * @return {Object}          [resultant form object]
      */
-    this.parseToForm = function(item, template) {
+    this.parseToForm = function (item, template) {
       // add form-builder fields to template object
       var questions = _.map(transformDeep(template.data, 'data', template.rel), function (question, index) {
         question.field_id = index + 1;
@@ -133,7 +132,7 @@
       });
 
       // removes template fields from form objects
-      callbackDeep(questions, 'field_questions', function(item) {
+      callbackDeep(questions, 'field_questions', function (item) {
         delete item.name;
         delete item.type;
         delete item.prompt;
@@ -143,29 +142,28 @@
       });
 
       return {
-        form_type: "system",
-        form_name: template.rel + "_form",
-        form_title: _.startCase(template.rel) + " Form",
-        form_submitText: "Submit",
-        form_cancelText: "Cancel",
+        form_type: 'system',
+        form_name: template.rel + '_form',
+        form_title: _.startCase(template.rel) + ' Form',
+        form_submitText: 'Submit',
+        form_cancelText: 'Cancel',
         form_questions: questions
       };
     };
 
     /**
      * [loadAnswerSet - when editing an item, load answers into a form]
-     * @param  {[json]} item     [selected row item to edit]
-     * @param  {[json]} template [hateoas template]
-     * @param  {[json]} form     [form object]
-     * @return {[null]}          [no return; objects are modified in place]
+     * @param  {Object} item     [selected row item to edit]
+     * @param  {Object} template [hateoas template]
+     * @param  {Object} form     [form object]
      */
-    this.loadAnswerSet = function(item, template, form) {
+    this.loadAnswerSet = function (item, template, form) {
       // if template object contains this info, will try to prepend appropriate REST url for dropdowns in form
       // i.e. /user => /study/1/user
       if (template.model && template.modelID) {
-        _.map(form.items.form_questions, function(question) {
+        _.map(form.items.form_questions, function (question) {
           if ((question.field_hasItem || question.field_hasItems) &&
-               question.field_name !== template.model && question.field_prependURL) {
+            question.field_name !== template.model && question.field_prependURL) {
             question.field_userURL = template.model + '/' + template.modelID + '/' + question.field_userURL;
           }
           return question;
@@ -174,7 +172,7 @@
 
       if (!_.isEmpty(item)) {
         var questions = _.map(form.items.form_questions,
-          function(question) {
+          function (question) {
             if (_.has(item, question.field_name)) {
               question.field_value = item[question.field_name];
             }

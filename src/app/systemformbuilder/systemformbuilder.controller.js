@@ -25,7 +25,7 @@
       if (_.has(query, 'id')) {
         SystemFormService.get(_.pick(query, 'id')).$promise.then(function (form) {
           angular.copy(form, vm.form);
-          toastr.info('Loaded form '+vm.form.form_name+' successfully!', 'Form');
+          toastr.info('Loaded form ' + vm.form.form_name + ' successfully!', 'Form');
         });
       }
     }
@@ -34,14 +34,14 @@
       var form = new SystemFormService(vm.form);
       // if current form object has an href attribute, we update
       if (_.has(vm.form, 'href')) {
-        form.$update( {id:vm.form.id} ).then(function (data) {
-          toastr.success('Updated form '+vm.form.form_name+' successfully!', 'Form');
+        form.$update({id:vm.form.id}).then(function (data) {
+          toastr.success('Updated form ' + vm.form.form_name + ' successfully!', 'Form');
         });
       }
       // otherwise, we create a new form
       else {
         form.$save().then(function (data) {
-          toastr.success('Saved form '+vm.form.form_name+' successfully!', 'Form');
+          toastr.success('Saved form ' + vm.form.form_name + ' successfully!', 'Form');
         });
       }
     }

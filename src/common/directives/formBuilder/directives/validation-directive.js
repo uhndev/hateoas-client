@@ -20,7 +20,7 @@
       $http.get(templateUrl, {cache:$templateCache}).success(function(data) {
         element.html(data);
         $compile(element.contents())(scope);
-      });    
+      });
     }
 
     return {
@@ -50,7 +50,7 @@
     }
 
     return templateUrl;
-  }  
+  }
 
   function ValidationController($scope) {
     $scope.textValidationRules = [

@@ -7,9 +7,9 @@
     'dados.auth.service',
     'dados.auth.controller'
   ])
-  .config(function config( $stateProvider ) {
+  .config(function config($stateProvider) {
     $stateProvider
-      .state( 'login', {
+      .state('login', {
         url: '/login',
         controller: 'AuthController',
         controllerAs: 'auth',

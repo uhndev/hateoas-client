@@ -17,7 +17,7 @@
 
     // bindable variables
     vm.url              = vm.url || '';
-    vm.query            = vm.query || { 'where' : {} };
+    vm.query            = vm.query || {'where' : {}};
     vm.selected         = vm.selected || null;
     vm.filters          = vm.filters || {};
     vm.allow            = vm.allow || {};

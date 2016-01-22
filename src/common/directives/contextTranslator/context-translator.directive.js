@@ -22,7 +22,7 @@
       restrict: 'A',
       link: function(scope, element, attributes) {
         if (AuthService.isAdmin()) {
-          element.bind("contextmenu", function(ev) {
+          element.bind('contextmenu', function(ev) {
             if (LocaleService.enableContextTranslation) {
               ev.preventDefault();
               ev.stopPropagation();
@@ -99,7 +99,7 @@
           var translation = new Translation({
             translation: vm.translations[translationObj.language]
           });
-          return translation.$update({ id: translationObj.id });
+          return translation.$update({id: translationObj.id});
         })
         )
         .then(function (data) {

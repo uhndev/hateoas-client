@@ -43,9 +43,9 @@
 
         vm.centreInfo = {
           rows: {
-            'name': { title: 'COMMON.MODELS.COLLECTION_CENTRE.NAME', type: 'text' },
-            'study': { title: 'COMMON.MODELS.STUDY.IDENTITY', type: 'study' },
-            'contact': { title: 'COMMON.MODELS.COLLECTION_CENTRE.CONTACT', type: 'user' }
+            'name': {title: 'COMMON.MODELS.COLLECTION_CENTRE.NAME', type: 'text'},
+            'study': {title: 'COMMON.MODELS.STUDY.IDENTITY', type: 'study'},
+            'contact': {title: 'COMMON.MODELS.COLLECTION_CENTRE.CONTACT', type: 'user'}
           },
           tableData: _.objToPair(robj)
         };

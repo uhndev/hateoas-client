@@ -1,10 +1,10 @@
 (function() {
   'use strict';
   angular.module('dados.common.directives.hateoas.controls.controller', [
-    'dados.common.directives.hateoas.modal.controller',
-    'dados.common.directives.formBuilder.directives.form'
-  ])
-  .controller('HateoasControlsController', HateoasControlsController);
+      'dados.common.directives.hateoas.modal.controller',
+      'dados.common.directives.formBuilder.directives.form'
+    ])
+    .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
     '$scope', '$uibModal', '$location', 'API', 'HateoasUtils', 'toastr'
@@ -14,7 +14,7 @@
    * Controller for the directive
    */
   function HateoasControlsController($scope, $uibModal, $location,
-                                      API, HateoasUtils, toastr) {
+                                     API, HateoasUtils, toastr) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
     var Service = HateoasUtils.getService('ControlsService');
@@ -22,11 +22,11 @@
     /**
      * Private: archive
      * Archives an item on the API.
-     * @param   item - item to archive
+     * @param {Object} item - item to archive
      * @returns $promise
      */
     function archive(item) {
-      var conf = confirm("Are you sure you want to archive this item?");
+      var conf = confirm('Are you sure you want to archive this item?');
       if (conf) {
         Service.archive(item).then(function (data) {
           toastr.success('Item successfully archived!', 'Success');
@@ -40,13 +40,13 @@
      * Private: edit
      * Launches a form to edit or create an item. Uses form-builder to draw the
      * form.
-     * @param   item - item to create/update
+     * @param {String} method - item to create/update
      * @returns null
      */
     function open(method) {
       var modalScope = $scope.$new(true);
       modalScope.item = (method === 'post' ?
-          {} : angular.copy($scope.item));
+      {} : angular.copy($scope.item));
       modalScope.template = angular.copy($scope.template);
 
       var instance = $uibModal.open({

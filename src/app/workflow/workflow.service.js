@@ -9,8 +9,8 @@
 
   function WorkflowStateService(WORKFLOWSTATE_API, $resource, toastr) {
     var Workflow = $resource(WORKFLOWSTATE_API.url + '/:id', {id : '@id'}, {
-      'query': { method: 'GET', isArray: false },
-      'update' : { method: 'PUT' }
+      'query': {method: 'GET', isArray: false},
+      'update' : {method: 'PUT'}
     });
 
     Workflow.set = function(data) {
