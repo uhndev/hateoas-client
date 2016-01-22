@@ -46,10 +46,13 @@
         vm.selectedProgram = data.items.program;
         vm.selectedSite = data.items.site;
         vm.selectedPhysician = data.items.physician;
+        vm.selectedClinician = data.items.clinician;
+        vm.selectedStatus = data.items.status;
         vm.notes = data.items.notes;
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
-        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'referralContact', 'referralDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate');
+        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'clinician', 'referralContact',
+          'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
         // referral info panel
         vm.referralInfo = {
@@ -60,12 +63,15 @@
             'program': {title: 'Program', type: 'program'},
             'site': {title: 'Site', type: 'site'},
             'physician': {title: 'Physician', type: 'physician'},
+            'clinician': {title: 'Clinician', type: 'clinician'},
             'referralContact': {title: 'Referral Contact', type: 'employee'},
             'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
+            'clinicDate': {title: 'COMMON.MODELS.REFERRAL.CLINIC_DATE', type: 'date'},
             'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
             'sentDate': {title: 'COMMON.MODELS.REFERRAL.SENT_DATE', type: 'date'},
             'receiveDate': {title: 'COMMON.MODELS.REFERRAL.RECEIVE_DATE', type: 'date'},
-            'dischargeDate': {title: 'COMMON.MODELS.REFERRAL.DISCHARGE_DATE', type: 'date'}
+            'dischargeDate': {title: 'COMMON.MODELS.REFERRAL.DISCHARGE_DATE', type: 'date'},
+            'statusName': {title: 'COMMON.MODELS.REFERRAL.STATUS', type: 'text'}
           },
           tableData: _.objToPair(_.merge(clientData, referralData))
         };
@@ -80,12 +86,21 @@
      * @description Saves program and physician selections for a selected referral
      */
     function updateReferral() {
-      if (vm.selectedProgram && vm.selectedPhysician) {
-        var referral = new Referral({
+      if (vm.selectedProgram && vm.selectedSite && vm.selectedPhysician) {
+        var updateObj = {
           program: vm.selectedProgram,
           site: vm.selectedSite,
           physician: vm.selectedPhysician
-        });
+        };
+
+        if (vm.selectedClinician) {
+          updateObj.clinician = vm.selectedClinician;
+        }
+        if (vm.selectedStatus) {
+          updateObj.status = vm.selectedStatus;
+        }
+
+        var referral = new Referral(updateObj);
         referral
           .$update({id: vm.referral.id})
           .then(function () {
