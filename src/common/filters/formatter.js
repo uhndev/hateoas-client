@@ -17,7 +17,7 @@ angular.module('dados.filters.formatter', [])
         }
 
         if (/boolean/i.test(template.type)) {
-          return Boolean(input) ? "Yes" : "No";
+          return Boolean(input) ? 'Yes' : 'No';
         }
       }
 
