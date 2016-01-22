@@ -5,7 +5,7 @@ describe('SailsService', function() {
   describe('Sails ng-table adapter', function() {
     var service = null, mockNgTableParams = null, sailsParams = null;
 
-    beforeEach( inject(function($injector) {
+    beforeEach(inject(function($injector) {
       service = $injector.get('sailsNgTable');
       mockNgTableParams = {
         count: function() {
@@ -16,7 +16,7 @@ describe('SailsService', function() {
         },
         sorting: function() {
           return {
-            name: 'ASC'  
+            name: 'ASC'
           };
         },
         filter: function() {
@@ -31,7 +31,7 @@ describe('SailsService', function() {
 
     it('exists', function() {
       expect(service).toBeTruthy();
-      expect(_.isObject(sailsParams) && 
+      expect(_.isObject(sailsParams) &&
         !_.isArray(sailsParams)).toBeTruthy();
     });
 
@@ -54,13 +54,13 @@ describe('SailsService', function() {
     it('merges filter()', function() {
       expect(_.has(sailsParams, 'name')).toBeTruthy();
       expect(_.has(sailsParams, 'age')).toBeTruthy();
-      expect(sailsParams['name']).toEqual('Fred');
-      expect(sailsParams['age']).toEqual(5);
+      expect(sailsParams.name).toEqual('Fred');
+      expect(sailsParams.age).toEqual(5);
     });
 
     it('merges the query and skips filter()', function() {
       expect(_.has(sailsParams, 'where')).not.toBeTruthy();
-      var query = { where: { name: 'Bob', age: 10 } };
+      var query = {where: {name: 'Bob', age: 10}};
       sailsParams = service.parse(mockNgTableParams, query);
       expect(_.has(sailsParams, 'name')).not.toBeTruthy();
       expect(_.has(sailsParams, 'age')).not.toBeTruthy();

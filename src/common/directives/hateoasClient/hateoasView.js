@@ -8,11 +8,11 @@
     .constant('ITEM_MODULES', ['Overview'])
     .directive('hateoasClient', hateoasClient);
 
-    hateoasClient.$inject = [
-      '$location', '$compile', '$templateCache', 'VIEW_MODULES', 'ITEM_MODULES'
-    ];
+  hateoasClient.$inject = [
+    '$location', '$compile', '$templateCache', 'VIEW_MODULES', 'ITEM_MODULES'
+  ];
 
-    function hateoasClient($location, $compile, $templateCache, VIEW_MODULES, ITEM_MODULES) {
+  function hateoasClient($location, $compile, $templateCache, VIEW_MODULES, ITEM_MODULES) {
       /**
        * Private: cleanURL
        * Helper function that strips out IDs and study names from URL.

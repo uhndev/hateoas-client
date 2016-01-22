@@ -23,8 +23,8 @@
       },
       replace: true,
       link: function(scope, elem) {
-        var button = angular.element('<span class="input-group-btn">'+
-          '<button type="button" class="btn btn-info">Generate</button>'+
+        var button = angular.element('<span class="input-group-btn">' +
+          '<button type="button" class="btn btn-info">Generate</button>' +
         '</span>');
         elem.wrap('<p class="input-group"></p>');
         elem.after(button);

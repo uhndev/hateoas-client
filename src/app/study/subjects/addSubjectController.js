@@ -26,12 +26,12 @@
     // bindable variables
     vm.openedDOB = false;
     vm.openedDOE = false;
-    vm.newSubject = { study: study.id };
+    vm.newSubject = {study: study.id};
     vm.study = study;
     vm.centreHref = centreHref;
     vm.statuses = ENROLLMENT_STATUSES;
-    StudyUser.query({ studyID: study.id }).$promise.then(function (data) {
-      vm.studyUsers = { user: _.pluck(data, 'id') };
+    StudyUser.query({studyID: study.id}).$promise.then(function (data) {
+      vm.studyUsers = {user: _.pluck(data, 'id')};
     });
 
     // bindable methods
@@ -40,10 +40,10 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-	  /**
-     * addSubject
-     * @description Click handler for creating a subject enrollment in the study
-     */
+    /**
+         * addSubject
+         * @description Click handler for creating a subject enrollment in the study
+         */
     function addSubject() {
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment.$save()
@@ -55,10 +55,10 @@
         });
     }
 
-	  /**
-     * cancel
-     * @description Closes addSubject modal window
-     */
+    /**
+         * cancel
+         * @description Closes addSubject modal window
+         */
     function cancel() {
       vm.newSubject = {};
       $uibModalInstance.dismiss('cancel');

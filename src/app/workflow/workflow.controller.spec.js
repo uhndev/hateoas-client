@@ -1,18 +1,18 @@
 describe('WorkflowController', function() {
 
-  beforeEach( module('dados.workflow.controller') );
+  beforeEach(module('dados.workflow.controller'));
 
   describe('DEFAULT_LINK', function() {
     var linkConstant;
 
-    beforeEach( inject( function( $injector ) {
+    beforeEach(inject(function($injector) {
       linkConstant = $injector.get('DEFAULT_LINK');
     }));
 
     it('exists', function() {
       expect(linkConstant).toBeTruthy();
     });
-  
+
     it('should represent a link object', function() {
       expect(_.isString(linkConstant.path)).toBeTruthy();
       expect(_.isArray(linkConstant.links)).toBeTruthy();
@@ -47,7 +47,7 @@ describe('WorkflowController', function() {
         scope = $rootScope.$new();
         defaultLink = $injector.get('DEFAULT_LINK');
         controllerFactory = $controller;
-    }));
+      }));
 
     beforeEach(function() {
       mockApi = {
@@ -73,8 +73,8 @@ describe('WorkflowController', function() {
     it('should update data when source path is updated', function() {
       createController();
       scope.state.source = {
-        "path" : "/api/test",
-        "rel" : "self"
+        'path' : '/api/test',
+        'rel' : 'self'
       };
       scope.$apply();
       expect(scope.state.data).toEqual(scope.state.source);
@@ -83,8 +83,8 @@ describe('WorkflowController', function() {
     it('should set data to default when path is empty', function() {
       createController();
       scope.state.source = {
-        "path" : "/api/test",
-        "rel" : "self"
+        'path' : '/api/test',
+        'rel' : 'self'
       };
       scope.$apply();
       expect(scope.state.data).toEqual(scope.state.source);
@@ -96,7 +96,7 @@ describe('WorkflowController', function() {
     it('should update state.string when state.data changes', function() {
       createController();
       scope.state.data = {
-        "rel": "self"
+        'rel': 'self'
       };
       scope.$apply();
       expect(scope.state.data).toEqual(JSON.parse(scope.state.string));

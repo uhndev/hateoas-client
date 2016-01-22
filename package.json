@@ -1,16 +1,16 @@
 {
-  "author": "Josh David Miller",
-  "name": "ngbp",
-  "version": "0.3.2",
-  "homepage": "https://github.com/ngbp/ngbp",
+  "author": "University Health Network",
+  "name": "dados-client",
+  "version": "0.0.0",
+  "homepage": "https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client/browse",
   "licenses": {
     "type": "MIT",
-    "url": "https://raw.github.com/ngbp/ngbp/master/LICENSE"
+    "url": "https://dados.technainstitute.com/stash/projects/DAD/repos/dados-client/browse/LICENSE"
   },
-  "bugs": "https://github.com/ngbp/ngbp/issues",
+  "bugs": "https://dados.technainstitute.com/jira",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ngbp/ngbp.git"
+    "url": "ssh://git@dados.technainstitute.com:7999/dad/dados-client.git"
   },
   "dependencies": {
     "bower": "^1.6.5",
@@ -46,9 +46,20 @@
     "karma-junit-reporter": "^0.3.3",
     "karma-phantomjs-launcher": "^0.1.4",
     "nock": "~1.4.0",
+    "precommit-hook": "^3.0.0",
     "should": "~5.2.0",
     "sinon": "~1.14.1",
     "superagent": "~1.1.0",
     "supertest": "~0.15.0"
-  }
+  },
+  "scripts": {
+    "lint": "jshint src",
+    "jscs": "jscs src",
+    "validate": "npm ls"
+  },
+  "pre-commit": [
+    "lint",
+    "jscs",
+    "validate"
+  ]
 }

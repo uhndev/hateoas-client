@@ -156,7 +156,7 @@
       .then(function(data) {
         toastr.success('Added services to referral for client: ' + vm.referral.clientcontact.displayName, 'Recommendations');
         if (vm.selectedProgram.id != vm.referral.program.id) {
-          Referral.update({ id: vm.referral.id, program: vm.selectedProgram });
+          Referral.update({id: vm.referral.id, program: vm.selectedProgram});
         }
         init();
       });

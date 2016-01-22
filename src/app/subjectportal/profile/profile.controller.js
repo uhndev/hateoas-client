@@ -5,14 +5,14 @@
     .module('dados.subjectportal.profile.controller', [])
     .controller('SubjectPortalProfileController', SubjectPortalProfileController);
 
-  SubjectPortalProfileController.$inject = [ 'toastr', 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'UserService', 'AuthService' ];
+  SubjectPortalProfileController.$inject = ['toastr', 'ngTableParams', 'sailsNgTable', 'StudySubjectService', 'UserService', 'AuthService'];
 
   function SubjectPortalProfileController(toastr, TableParams, SailsNgTable, StudySubjectService, UserService, Auth) {
     var vm = this;
 
     // bindable variables
     vm.openedDOB = false;
-    vm.studyQuery = { 'where' : {} };
+    vm.studyQuery = {'where' : {}};
     vm.studySubjects = [];
 
     // bindable methods
@@ -23,7 +23,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      UserService.get({ id: Auth.currentUser.id }).$promise.then(function (user) {
+      UserService.get({id: Auth.currentUser.id}).$promise.then(function (user) {
         if (_.isUndefined(user.dob)) {
           delete user.dob;
         } else {
@@ -37,7 +37,7 @@
       vm.studyTableParams = new TableParams({
         page: 1,
         count: 10,
-        sorting: { 'studyName': 'ASC' }
+        sorting: {'studyName': 'ASC'}
       }, {
         groupBy: 'studyName',
         getData: function($defer, params) {
@@ -53,7 +53,7 @@
 
     function updateUser() {
       var user = new UserService(vm.user);
-      user.$update({ id: vm.user.id })
+      user.$update({id: vm.user.id})
         .then(function() {
           toastr.success('Updated profile!', 'User Profile');
         })

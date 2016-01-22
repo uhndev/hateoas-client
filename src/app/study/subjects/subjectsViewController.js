@@ -22,11 +22,11 @@
 
     // private variables
     var studyID = _.getParentIDFromUrl($location.path());
-    var centreHref = "study/" + studyID + "/collectioncentres";
+    var centreHref = 'study/' + studyID + '/collectioncentres';
 
     // bindable variables
     vm.allow = {};
-    vm.query = { 'where' : {} };
+    vm.query = {'where' : {}};
     vm.selected = null;
     vm.template = {};
     vm.resource = {};
@@ -55,7 +55,7 @@
         bindToController: true,
         resolve: {
           study: function () {
-            return Study.get({ id: studyID }).$promise;
+            return Study.get({id: studyID}).$promise;
           },
           centreHref: function () {
             return centreHref;
@@ -87,7 +87,7 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        Study.get({ id: studyID }).$promise.then(function (study) {
+        Study.get({id: studyID}).$promise.then(function (study) {
           HeaderService.setSubmenu('study', data.links);
         });
       }
@@ -113,10 +113,10 @@
     }
 
     function archiveSubject() {
-      var conf = confirm("Are you sure you want to archive this enrollment?");
+      var conf = confirm('Are you sure you want to archive this enrollment?');
       if (conf) {
-        var enrollment = new SubjectEnrollment({ id: vm.selected.id });
-        return enrollment.$delete({ id: vm.selected.id }).then(function () {
+        var enrollment = new SubjectEnrollment({id: vm.selected.id});
+        return enrollment.$delete({id: vm.selected.id}).then(function () {
           toastr.success('Archived subject enrollment!', 'Enrollment');
           $scope.$broadcast('hateoas.client.refresh');
         });

@@ -54,7 +54,6 @@
     /**
      * [login]
      * Bound method to login button on form
-     * @return {[type]} [description]
      */
     vm.login = function() {
       AuthService.login(vm.credentials, success, error);

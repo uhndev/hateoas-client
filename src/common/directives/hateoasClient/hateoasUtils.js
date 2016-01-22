@@ -5,7 +5,7 @@
     .service('HateoasUtils', HateoasUtils);
 
   HateoasUtils.$inject = ['$location', '$injector', 'HATEOAS_PREFIX'];
-    
+
   function HateoasUtils($location, $injector, HATEOAS_PREFIX) {
     function getFactories(suffix) {
       var model = _.capitalize($location.path().substring(1));
@@ -21,12 +21,12 @@
      */
     this.getService = function (suffix) {
       var factories = getFactories(suffix);
-      
+
       return ($injector.has(factories.model) ?
         $injector.get(factories.model) :
           ($injector.has(factories.default) ?
             $injector.get(factories.default) :
-            null ));
+            null));
     };
   }
 })();

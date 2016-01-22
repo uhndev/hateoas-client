@@ -26,7 +26,7 @@
   function SurveySessionService($resource, API) {
     var sessionResource = function (method) {
       return $resource(API.url() + '/survey/:surveyID/' + method + 'Sessions',
-        { surveyID: '@surveyID' },
+        {surveyID: '@surveyID'},
         {
           'update' : {
             method: 'PUT',

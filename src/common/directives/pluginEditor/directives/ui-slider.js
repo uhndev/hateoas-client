@@ -4,7 +4,7 @@
  *              so we can bound element's value to ngModel.
  * @example <span ui-slider step="5" max="100" min="20" class="inline-slider" ng-model="width"></span>
  */
- 
+
 (function() {
   'use strict';
 
@@ -18,7 +18,7 @@
 
   function uiSlider(uiSliderConfig, $timeout) {
     uiSliderConfig = uiSliderConfig || {};
-    
+
     function sliderLink(scope, elm, attrs, ngModel) {
 
       function parseNumber(n, decimals) {
@@ -77,7 +77,7 @@
       // Watch ui-slider (byVal) for changes and update
       scope.$watch(attrs.uiSlider, function(newVal) {
         init();
-        if(newVal !== undefined) {
+        if (newVal !== undefined) {
           elm.slider('option', newVal);
         }
       }, true);
@@ -95,7 +95,7 @@
       ngModel.$render = function() {
         init();
         var method = options.range === true ? 'values' : 'value';
-        
+
         if (!options.range && isNaN(ngModel.$viewValue) && !(ngModel.$viewValue instanceof Array)) {
           ngModel.$viewValue = 0;
         } else if (options.range && !angular.isDefined(ngModel.$viewValue)) {
@@ -104,7 +104,7 @@
 
         // Do some sanity check of range values
         if (options.range === true) {
-          
+
           // Check outer bounds for min and max values
           if (angular.isDefined(options.min) && options.min > ngModel.$viewValue[0]) {
             ngModel.$viewValue[0] = options.min;
@@ -117,11 +117,11 @@
           if (ngModel.$viewValue[0] > ngModel.$viewValue[1]) {
             // Min value should be less to equal to max value
             if (prevRangeValues.min >= ngModel.$viewValue[1]) {
-                ngModel.$viewValue[0] = prevRangeValues.min;
+              ngModel.$viewValue[0] = prevRangeValues.min;
             }
             // Max value should be less to equal to min value
             if (prevRangeValues.max <= ngModel.$viewValue[0]) {
-                ngModel.$viewValue[1] = prevRangeValues.max;
+              ngModel.$viewValue[1] = prevRangeValues.max;
             }
           }
 
@@ -146,7 +146,7 @@
       }
       elm.bind('$destroy', destroy);
     }
-    
+
     return {
       require: 'ngModel',
       link: sliderLink,

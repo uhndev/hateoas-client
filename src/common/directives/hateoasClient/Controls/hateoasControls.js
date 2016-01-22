@@ -5,7 +5,7 @@
       'dados.common.directives.hateoas.controls.controller',
       'dados.common.directives.hateoas.controls.service'
     ])
-    .directive('hateoasControls', [ 'HateoasUtils',
+    .directive('hateoasControls', ['HateoasUtils',
 
     function(HateoasUtils) {
       // Default constants values for the buttons

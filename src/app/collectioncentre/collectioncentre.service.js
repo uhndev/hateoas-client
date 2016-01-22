@@ -1,16 +1,16 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	angular
-		.module('dados.collectioncentre.service', [
-      'dados.constants',
-      'dados.common.services.resource'
-    ])
-		.service('CollectionCentreService', CollectionCentreService);
+  angular
+  .module('dados.collectioncentre.service', [
+        'dados.constants',
+        'dados.common.services.resource'
+      ])
+  .service('CollectionCentreService', CollectionCentreService);
 
-	CollectionCentreService.$inject = ['ResourceFactory', 'API'];
+  CollectionCentreService.$inject = ['ResourceFactory', 'API'];
 
-	function CollectionCentreService(ResourceFactory, API) {
-		return ResourceFactory.create(API.url('collectioncentre'));
-	}
+  function CollectionCentreService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('collectioncentre'));
+  }
 })();

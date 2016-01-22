@@ -22,16 +22,16 @@
                             StudyFormService, FormVersionService, toastr) {
 
     // private variables
-    var EMPTY_FORM = { name: '', questions: [], metaData: {} };
+    var EMPTY_FORM = {name: '', questions: [], metaData: {}};
     // bindable variables
     $scope.firstLoad = true;
     $scope.isSaving = false;
-    $scope.idPlugin = $location.search()['idPlugin'];
+    $scope.idPlugin = $location.search().idPlugin;
     $scope.isEditorOpen = true;
     $scope.isSettingsOpen = false;
     $scope.form = EMPTY_FORM;
     $scope.sortableOptions = {
-      helper: "clone", // fixes the issue when click event intercepts the drop movement
+      helper: 'clone', // fixes the issue when click event intercepts the drop movement
       cursor: 'move',
       revert: true
     };
@@ -137,7 +137,7 @@
      * @param result
      */
     function onFormCommitted(result) {
-      var description = prompt("Enter a description of changes: ");
+      var description = prompt('Enter a description of changes: ');
       if (!_.isEmpty(description)) {
         $scope.form.description = description;
       }
@@ -188,7 +188,7 @@
       var pathArray = _.pathnameToArray($location.path());
       if (pathArray.length > 1) {
         $scope.study = pathArray[1];
-        return StudyFormService.query({ studyID: $scope.study }); // fetch study forms if from study formbuilder
+        return StudyFormService.query({studyID: $scope.study}); // fetch study forms if from study formbuilder
       } else {
         return FormService.query(); // fetch all if from global formbuilder
       }
@@ -280,7 +280,7 @@
      */
     function archive() {
       if ($scope.idPlugin && _.has($scope.form, 'id')) {
-        var conf = confirm("Are you sure you want to archive this form?");
+        var conf = confirm('Are you sure you want to archive this form?');
         if (conf) {
           var form = new FormService({id: $scope.idPlugin});
           return form.$delete().then(function () {

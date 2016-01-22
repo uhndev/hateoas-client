@@ -57,7 +57,7 @@
           page: 1,
           count: 10
         }, {
-          groupBy: "name",
+          groupBy: 'name',
           data: scheduledForms
         });
       });

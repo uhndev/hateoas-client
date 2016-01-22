@@ -5,62 +5,62 @@
  * @description A set of utility functions extending the Lodash library to be used on the client side.
  */
 
-(function() {
-	'use strict';
+(function () {
+  'use strict';
 
-	_.mixin({
+  _.mixin({
     'stringContains': stringContains,
-		'parseUrl': parseUrl,
-		'pathnameToArray': pathnameToArray,
-		'convertRestUrl': convertRestUrl,
-		'getParentIDFromUrl': getParentIDFromUrl,
-		'inArray': inArray,
-		'isUrl': isUrl,
+    'parseUrl': parseUrl,
+    'pathnameToArray': pathnameToArray,
+    'convertRestUrl': convertRestUrl,
+    'getParentIDFromUrl': getParentIDFromUrl,
+    'inArray': inArray,
+    'isUrl': isUrl,
     'isJson': isJson,
-		'sum': sum,
-		'capitalizeFirst': capitalizeFirst,
-		'objToPair': objToPair,
+    'sum': sum,
+    'capitalizeFirst': capitalizeFirst,
+    'objToPair': objToPair,
     'transformHateoas': transformHateoas,
     'pad': pad,
     'userObjToName': userObjToName,
     'equalsDeep': equalsDeep,
     'findArrayDiff': findArrayDiff
-	});
+  });
 
   function stringContains(str, value) {
     return str.indexOf(value) > -1;
   }
 
-	function parseUrl(location, url) {
+  function parseUrl(location, url) {
     var baseLen = location.absUrl().length - location.url().length;
     return pathnameToArray(url.substring(baseLen));
-	}
+  }
 
-	function pathnameToArray(pathname) {
-		return pathname.split('/').slice(1);
-	}
+  function pathnameToArray(pathname) {
+    return pathname.split('/').slice(1);
+  }
 
-	function convertRestUrl(restURL, prefix) {
-		var index = restURL.indexOf(prefix) + prefix.length;
+  function convertRestUrl(restURL, prefix) {
+    var index = restURL.indexOf(prefix) + prefix.length;
     return restURL.substring(index);
-	}
+  }
 
-	function getParentIDFromUrl(pathname) {
-		var arr = pathnameToArray(pathname);
-		if (arr.length >= 2) {
-			return arr[1];
-		}
-		return false;
-	}
+  function getParentIDFromUrl(pathname) {
+    var arr = pathnameToArray(pathname);
+    if (arr.length >= 2) {
+      return arr[1];
+    }
+    return false;
+  }
 
-	function inArray(arr, item) {
-		return (_.indexOf(arr, item) !== -1);
-	}
+  function inArray(arr, item) {
+    return (_.indexOf(arr, item) !== -1);
+  }
 
-	function isUrl(s) {
-  	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-  	return regexp.test(s);
-	}
+  function isUrl(s) {
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    return regexp.test(s);
+  }
 
   function isJson(data) {
     try {
@@ -71,22 +71,24 @@
     return true;
   }
 
-	function sum(arr) {
-		return _.reduce(arr, function(sum, num) { return sum + num; }, 0);
-	}
+  function sum(arr) {
+    return _.reduce(arr, function (sum, num) {
+      return sum + num;
+    }, 0);
+  }
 
-	function capitalizeFirst(string) {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+  function capitalizeFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-	function objToPair(obj) {
+  function objToPair(obj) {
     return _.map(_.keys(obj), function (k) {
       return {
         name: k,
         value: obj[k]
       };
     });
-	}
+  }
 
   function transformHateoas(data) {
     if (isJson(data)) {
@@ -127,7 +129,7 @@
     var result = true;
     if (angular.isObject(first) && angular.isObject(second)) {
       if (_.size(first) == _.size(second)) {
-        _.forIn(first, function(value, key) {
+        _.forIn(first, function (value, key) {
           if (angular.isDefined(second[key])) {
             result = equalsDeep(value, second[key]);
             if (!result) {

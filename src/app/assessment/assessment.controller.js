@@ -96,6 +96,7 @@
           _.each(vm.sites, function (site, index) {
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
             var val = {
+              id: index,
               idKey: index,
               latitude: site.address.latitude,
               longitude: site.address.longitude,
@@ -105,7 +106,6 @@
                 selectSite(site);
               }
             };
-            val["id"] = index;
             vm.markers.push(val);
           });
 
@@ -174,7 +174,6 @@
     /**
      * [saveServices]
      * saves the currently selected services to the current referral
-     * @param {String} service
      */
     function saveServices() {
       vm.fullReferral.services = _.union(vm.recommendedServices, vm.fullReferral.services);
@@ -184,9 +183,8 @@
     /**
      * [selectProgram]
      * changes the selected program of the currently selected referral
-     * @param {String} service
+     * @param {Object} program
      */
-
     function selectProgram(program) {
       vm.selectedProgram = program;
 
@@ -198,12 +196,12 @@
       }).$promise
         .then(function (resp) {
 
-            //reset recommended services to clear box
-            vm.recommendedServices = {};
-          },
+          //reset recommended services to clear box
+          vm.recommendedServices = {};
+        },
 
           function error(err) {
-            console.log("Error querying program " + program.name + " with id " + program.id);
+            console.log('Error querying program ' + program.name + ' with id ' + program.id);
             console.log(err);
           });
     }
@@ -239,6 +237,7 @@
       vm.mapReady = true;
 
       var val = {
+        id: 'client',
         idKey: 'client',
         latitude: referral.client_latitude,
         longitude: referral.client_longitude,
@@ -248,7 +247,6 @@
           selectSite(site);
         }
       };
-      val["id"] = 'client';
       vm.markers.pop();
       vm.markers.push(val);
 
@@ -268,7 +266,6 @@
     /**
      * [resetServices]
      * resets the available list of services to an empty set of the referral's programs's available services
-     * @param {none}
      */
     function resetServices() {
       AltumAPI.ProgramService.query({
@@ -292,9 +289,7 @@
     /**
      * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
-     * @param {none}
      */
-
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
       var distanceArgs = {
@@ -308,11 +303,11 @@
       });
     }
 
-	  /**
-     * calculateDirections
-     * @param origin
-     * @param destination
-     */
+    /**
+         * calculateDirections
+         * @param origin
+         * @param destination
+         */
     function calculateDirections(origin, destination) {
       var request = {
         origin: origin,
@@ -345,7 +340,7 @@
     function geocodeSites() {
       vm.sites.forEach(function (site) {
         console.log(site);
-        var addy = (site.address.address1 || '' ) + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
+        var addy = (site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
         vm.geocoder.geocode({address: addy}, function (location) {
           console.log(location);
           if (location[0]) {
