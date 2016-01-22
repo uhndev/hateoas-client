@@ -50,6 +50,31 @@
                 ng-model="ref.selectedPhysician"
                 labels="displayName">
               </select-loader>
+              <br/>
+            </dd>
+
+            <dt>Select Clinician:</dt>
+            <dd>
+              <select-loader
+                url="clinician"
+                is-atomic="true"
+                is-disabled="false"
+                ng-model="ref.selectedClinician"
+                labels="displayName">
+              </select-loader>
+              <br/>
+            </dd>
+
+            <dt>Status:</dt>
+            <dd>
+              <select-loader
+                url="status"
+                query="{ category: 'referral' }"
+                is-atomic="true"
+                is-disabled="false"
+                ng-model="ref.selectedStatus"
+                labels="displayName">
+              </select-loader>
             </dd>
           </dl>
           <button class="btn btn-primary pull-right" ng-click="ref.updateReferral()"
