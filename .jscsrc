@@ -1,6 +1,5 @@
 {
-    "excludeFiles": ["node_modules/**", "vendor/**", "!src/app/**/*.spec.js", "!src/common/plugins/*.js"],
-    "fileExtensions": [".js", "!.spec.js"],
+    "excludeFiles": ["node_modules/**", "vendor/**", "!src/app/**/*.spec.js", "!src/common/plugins/*.js", "!src/common/config"],
     "maxErrors": -1,
     "requireCurlyBraces": [
         "if",
