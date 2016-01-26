@@ -252,7 +252,7 @@ module.exports = function ( grunt ) {
       // Options for all targets
       options : {
         space : ' ',
-        wrap : '(function(){\n\'use strict\';\n{%= __ngModule %}})();',
+        wrap : '// jscs:disable\n(function(){\n\'use strict\';\n{%= __ngModule %}})();',
         name : 'dados.common.config',
         dest : 'src/common/config/app.config.js'
       },
