@@ -1,0 +1,11 @@
+    <div id="matrix">
+      <h1>test</h1>
+      <table id="distanceToSites" class="SiteDistanceTable">
+        <tr>
+          <td ng-repeat="destination in distance.destinations" >{{destination.name}}</td>
+        </tr>
+        <tr>
+          <td ng-repeat="destination in distance.distanceMatrix.rows[0].elements">{{destination.distance.text}}</td>
+        </tr>
+      </table>
+    </div>
