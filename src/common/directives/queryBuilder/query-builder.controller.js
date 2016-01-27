@@ -6,30 +6,66 @@
   QueryController.$inject = ['$scope'];
 
   function QueryController($scope) {
-    var TYPE_MAP = {
-      'string'    : 'textfield',
-      'text'      : 'textfield',
-      'integer'   : 'number',
-      'float'     : 'number',
-      'date'      : 'date',
-      'datetime'  : 'date',
-      'boolean'   : 'checkbox',
-      'array'     : 'textfield',
-      'json'      : 'json'
-    };
 
+    // bindable variables
     $scope.query = $scope.query || {};
+    $scope.baseQuery = {};
+    $scope.hateoasQueries = $scope.queries || [];
     $scope.operators = [];
     $scope.groupOperators = ['and', 'or'];
 
-    $scope.reset = function() {
+    // bindable methods
+    $scope.reset = reset;
+    $scope.applyQuery = applyQuery;
+    $scope.search = search;
+    $scope.add = add;
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * applyBaseQuery
+     * @description Sets whatever baseQuery is currently set to the bound hateoas query
+     */
+    function applyBaseQuery() {
+      _.forIn($scope.baseQuery, function(value, key) {
+        $scope.query[key] = value;
+      });
+    }
+
+    /**
+     * reset
+     * @description Clears all fields and queries in the queryBuilder
+     */
+    function reset() {
       $scope.value = null;
       $scope.comparator = null;
       $scope.field = null;
       $scope.query = {};
-    };
+      applyBaseQuery();
+    }
 
-    $scope.search = function(value) {
+    /**
+     * applyQuery
+     * @description Sets the baseQuery from the selected radio list if applicable of hateoas queries
+     * @param query - selected hateoas query object to set
+     */
+    function applyQuery(query) {
+      if (!query) {
+        $scope.baseQuery = {};
+        $scope.reset();
+      } else {
+        $scope.baseQuery = angular.copy(query);
+        applyBaseQuery();
+      }
+    }
+
+    /**
+     * search
+     * @description Bound function to ng-change on main fuzzy search input, will build an OR array
+     *              across all valid template fields with appropriate type contexts.
+     * @param value
+     */
+    function search(value) {
       if (_.isEmpty(value)) {
         $scope.reset();
       } else {
@@ -73,11 +109,19 @@
               }
             }, [])
           };
+          applyBaseQuery();
         }
       }
-    };
+    }
 
-    $scope.add = function (field, comparator, value) {
+    /**
+     * add
+     * @description Click handler for adding specific filter in the advanced search
+     * @param field
+     * @param comparator
+     * @param value
+     */
+    function add(field, comparator, value) {
       if (/equals|is/i.test(comparator)) {
         $scope.query[field] = value;
       } else {
@@ -97,6 +141,6 @@
         }
         $scope.query[field] = buffer;
       }
-    };
+    }
   }
 })();
