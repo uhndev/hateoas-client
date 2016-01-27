@@ -10,6 +10,7 @@
         replace: true,
         scope: {
           query: '=ngModel',
+          headers: '=',
           template: '&',
           queries: '='
         },

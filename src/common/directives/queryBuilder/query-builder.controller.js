@@ -3,9 +3,9 @@
   angular.module('dados.common.directives.queryController', [])
   .controller('QueryController', QueryController);
 
-  QueryController.$inject = ['$scope'];
+  QueryController.$inject = ['$scope', '$location'];
 
-  function QueryController($scope) {
+  function QueryController($scope, $location) {
 
     // bindable variables
     $scope.query = $scope.query || {};
@@ -17,6 +17,7 @@
     // bindable methods
     $scope.reset = reset;
     $scope.applyQuery = applyQuery;
+    $scope.applyPopulate = applyPopulate;
     $scope.search = search;
     $scope.add = add;
 
@@ -52,10 +53,25 @@
     function applyQuery(query) {
       if (!query) {
         $scope.baseQuery = {};
+        $scope.headers = {};
         $scope.reset();
       } else {
         $scope.baseQuery = angular.copy(query);
         applyBaseQuery();
+      }
+    }
+
+    /**
+     * applyPopulate
+     * @description Sets the bound headers variable from the selected radio list if applicable of hateoas queries
+     * @param populate - selected hateoas populate object to set
+     */
+    function applyPopulate(populate) {
+      if (!populate) {
+        $scope.headers = {};
+        $scope.reset();
+      } else {
+        $scope.headers = angular.copy(populate);
       }
     }
 
