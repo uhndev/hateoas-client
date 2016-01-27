@@ -58,11 +58,11 @@
         // change $location for specific response codes
         switch (response.status) {
           case 400:
-            if (response.data.message == 'jwt expired') {
+            if (response.data.message == 'jwt expired' || response.data.message == 'No authorization token was found') {
               $location.path('/login');
               $injector.get('AuthService').setUnauthenticated();
               return $q.reject(response);
-            } else if (response.data.message == 'No authorization token was found') {
+            } else {
               return $q.reject(response);
             }
 
