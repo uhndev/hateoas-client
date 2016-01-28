@@ -36,7 +36,8 @@
       </div>
       <div class="form-group">
         <select ng-disabled="!!!field.type" class="form-control" ng-model="comparator">
-          <option value="{{criterion.val}}" ng-repeat="criterion in operators track by $index" translate>{{criterion.translationKey}}
+          <option value="{{criterion.val}}" ng-repeat="criterion in operators track by $index" translate>
+            {{criterion.translationKey}}
           </option>
         </select>
       </div>
@@ -59,6 +60,18 @@
         COMMON.HATEOAS.QUERY.RESET_BTN
       </button>
     </form>
+  </div>
+  <div class="btn-group pull-left">
+    <label class="btn btn-default btn-link btn-xs" ng-repeat="queryLink in hateoasQueries">
+      <span ng-if="!queryLink.populate">
+        <input type="radio" name="queryLink.rel" ng-click="applyQuery(queryLink.where)"
+               value="queryLink.where"/> {{queryLink.prompt}}
+      </span>
+      <span ng-if="queryLink.populate">
+        <input type="radio" name="queryLink.rel" ng-click="applyPopulate(queryLink.populate)"
+               value="queryLink.populate"/> {{queryLink.prompt}}
+      </span>
+    </label>
   </div>
   <button type="button"
           class="btn btn-link btn-sm pull-right no-margin no-padding"

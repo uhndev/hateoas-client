@@ -9,10 +9,10 @@
     .directive('hateoasClient', hateoasClient);
 
   hateoasClient.$inject = [
-    '$location', '$compile', '$templateCache', 'VIEW_MODULES', 'ITEM_MODULES'
+    '$state', '$location', '$compile', '$templateCache', 'VIEW_MODULES', 'ITEM_MODULES'
   ];
 
-  function hateoasClient($location, $compile, $templateCache, VIEW_MODULES, ITEM_MODULES) {
+  function hateoasClient($state, $location, $compile, $templateCache, VIEW_MODULES, ITEM_MODULES) {
       /**
        * Private: cleanURL
        * Helper function that strips out IDs and study names from URL.
@@ -150,11 +150,13 @@
       function postLink(scope, element) {
         scope.$on('$locationChangeStart',
           function(e, currentHref, prevHref) {
-            if (currentHref && currentHref !== prevHref) {
+            if (currentHref && currentHref !== prevHref && $state.is('hateoas')) {
               loadTemplate(scope, element, $location.path());
             }
           });
-        loadTemplate(scope, element, $location.path());
+        if ($state.is('hateoas')) {
+          loadTemplate(scope, element, $location.path());
+        }
       }
 
       return {
