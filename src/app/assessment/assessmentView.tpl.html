@@ -12,19 +12,26 @@
     <div class="col-md-12">
       <form data-ng-submit="assessment.findReferral(assessment.searchString)" autocomplete="off">
         <fieldset>
+          <div id="directiveDiv">
+            <h1>directive</h1>
+            <distance-matrix origins="assessment.myorigins" destinations="assessment.mydestinations"  destination-icon= "assets/img/hospital-building.png">
+            </distance-matrix>
+            <h1>directive</h1>
+          </div>
           <div class="form-group">
             <label for="searchString">Find Referrals</label>
             <input type="checkbox" name="searchOpenReferrals" ng-checked="assessment.searchOpenReferrals"
                    ng-model="assessment.searchOpenReferrals">Only Open&nbsp;
             <div class="input-group">
               <input type="text" id="searchString" name="searchString" class="form-control"
-                     data-ng-model="assessment.searchString" placeholder="Search MRN / Claim / Client"
-                     ng-change="assessment.findReferral(assessment.searchString)"
-                     ng-model-options="{ 'debounce': 500 }">
-            <span class="input-group-addon selectable">
+                     data-ng-model="assessment.searchString" placeholder="Search MRN / Claim / Client">
+            <span class="input-group-addon selectable" ng-click="assessment.findReferral(assessment.searchString)">
               <i class="glyphicon glyphicon-search"></i>
             </span>
             </div>
+          </div>
+          <div class="text-center form-group">
+            <!--{{assessment.referrals|json}}-->
           </div>
         </fieldset>
       </form>
@@ -63,7 +70,6 @@
       </tr>
     </table>
   </div>
-
   <div id="selectedReferralDiv" class="form-group" uib-collapse="assessment.collapsedClientDetail">
     <table id="clientDetail" class="table">
       <thead>
@@ -104,35 +110,37 @@
         <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click">
         </ui-gmap-markers>
       </ui-gmap-google-map>
-      <div id="directionsDiv"></div>
+      <div id="directionsDiv"/>
     </div>
   </div>
-
   <div id="recomendationsDiv">
-    <table class="table table-hover">
+    <table class="ng-table">
       <tr>
         <td>Program</td>
-        <td>Physician</td>
+        <td>Doctor</td>
         <td>Clinic Date</td>
       </tr>
+      </thead>
       <tr>
         <td>
           <select-loader
             url="program"
             is-atomic="true"
             is-disabled="false"
-            ng-model="assessment.selectedReferral.program"
+            values="assessment.selectedReferral.program"
+            ng_model="assessment.selectedProgram"
+            ng-change="assessment.selectProgram()"
             labels="displayName">
           </select-loader>
         </td>
+        <td>{{assessment.selectedReferral.program_name}}</td>
         <td>{{assessment.selectedReferral.physician_name}}</td>
         <td>{{assessment.selectedReferral.recieveDate}}</td>
       </tr>
     </table>
-
     <div id="payorDiv">
-    </div>
 
+    </div>
     <div id="servicesDiv">
       <h1>Services</h1>
       <div class="panel panel-info" ng-repeat="category in assessment.currentCategories">
@@ -144,16 +152,14 @@
             <div class="col-md-8">
                 <span class="custom-checkbox" ng-if="category.id==service.serviceCategory.id"
                       ng-repeat="service in assessment.availableServices">&nbsp;
-                  <input type="checkbox" name="{{service.name}}"
-                         ng-checked="assessment.isServiceRecommended(service)"
-                         ng-click="assessment.toggleService(service)" />&nbsp;
+                  <input type="checkbox" name="{{service.name}}" ng-checked="assessment.isServiceRecommended(service)"
+                         ng-click="assessment.toggleService(service)">{{service.name}}&nbsp;
                 </span>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <!-- View Panel Permissions -->
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -163,12 +169,14 @@
       </div>
       <div class="panel-body">
         <ul class="list-unstyled">
+          <li ng-repeat="service in assessment track by $index">
           <li ng-repeat="service in assessment.recommendedServices track by $index">
             <button class="btn btn-info btn-xs permission-btn" type="button"
                     ng-click="assessment.toggleService(service)">
               {{service.name}} <span class="glyphicon glyphicon-remove"></span>
             </button>
           </li>
+        </ul>
       </div>
     </div>
   </div>
