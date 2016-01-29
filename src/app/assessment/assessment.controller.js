@@ -31,6 +31,7 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
+    vm.selectedProgram= {};
     vm.availableServices = [];
     vm.currentCategories = [];
     vm.selectedSite = {};
@@ -56,6 +57,8 @@
     // google distance placeholders for distance call
     vm.origins = [];
     vm.destinations = [];
+    vm.myorigins = [];
+    vm.mydestinations = [];
     vm.distanceMatrix = [];
     vm.directionsSteps = [];
     vm.markers = [];
@@ -95,8 +98,8 @@
           //initialize sites/destinations
           _.each(vm.sites, function (site, index) {
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
+            vm.mydestinations.push({name: site.name, address:_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ')});
             var val = {
-              id: index,
               idKey: index,
               latitude: site.address.latitude,
               longitude: site.address.longitude,
@@ -106,6 +109,7 @@
                 selectSite(site);
               }
             };
+            val["id"] = index;
             vm.markers.push(val);
           });
 
@@ -124,10 +128,9 @@
     }
 
     function findReferral(searchString) {
-      AltumAPI.Referral.query({
+      AltumAPI.ReferralDetail.query({
         where: {
           or: [
-            {status: {contains: searchString}},
             {id: parseInt(searchString)},
             {client_firstName: {contains: searchString}},
             {client_lastName: {contains: searchString}},
@@ -174,7 +177,9 @@
     /**
      * [saveServices]
      * saves the currently selected services to the current referral
+     * @param {String} service
      */
+
     function saveServices() {
       vm.fullReferral.services = _.union(vm.recommendedServices, vm.fullReferral.services);
       AltumAPI.Referral.update(vm.fullReferral);
@@ -183,25 +188,23 @@
     /**
      * [selectProgram]
      * changes the selected program of the currently selected referral
-     * @param {Object} program
+     * @param {String} service
      */
-    function selectProgram(program) {
-      vm.selectedProgram = program;
+
+    function selectProgram() {
 
       AltumAPI.AltumProgramServices.query({
         where: [
-
-          {name: program.name}
+          {id: vm.selectedReferral.program}
         ]
       }).$promise
         .then(function (resp) {
-
-          //reset recommended services to clear box
-          vm.recommendedServices = {};
-        },
+            vm.availableServices=resp; //assign the newly selected programServices
+            vm.recommendedServices = {}; //reset recommended services to clear box
+          },
 
           function error(err) {
-            console.log('Error querying program ' + program.name + ' with id ' + program.id);
+            //console.log("Error querying program " + vm.selectedReferral.program.name + " with id " + vm.selectedReferral.program.id);
             console.log(err);
           });
     }
@@ -230,6 +233,7 @@
 
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
+      vm.myorigins = [{name: referral.client_firstName + ' ' + referral.client_lastName, address: (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')}];
 
       // hide the search, unhide client detail on front end, unhide map
       vm.collapsedSearch = true;
@@ -237,7 +241,6 @@
       vm.mapReady = true;
 
       var val = {
-        id: 'client',
         idKey: 'client',
         latitude: referral.client_latitude,
         longitude: referral.client_longitude,
@@ -247,6 +250,7 @@
           selectSite(site);
         }
       };
+      val["id"] = 'client';
       vm.markers.pop();
       vm.markers.push(val);
 
@@ -258,15 +262,17 @@
 
       vm.calculateDistances();
       var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
-      var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
-      vm.calculateDirections(origin, destination);
+      //var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
+      //vm.calculateDirections(origin, destination);
       //vm.geocodeSites();
     }
 
     /**
      * [resetServices]
      * resets the available list of services to an empty set of the referral's programs's available services
+     * @param {none}
      */
+
     function resetServices() {
       AltumAPI.ProgramService.query({
         where: {
@@ -289,7 +295,9 @@
     /**
      * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
+     * @param {none}
      */
+
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
       var distanceArgs = {
@@ -303,11 +311,11 @@
       });
     }
 
-    /**
-         * calculateDirections
-         * @param origin
-         * @param destination
-         */
+	  /**
+     * calculateDirections
+     * @param origin
+     * @param destination
+     */
     function calculateDirections(origin, destination) {
       var request = {
         origin: origin,
@@ -340,7 +348,7 @@
     function geocodeSites() {
       vm.sites.forEach(function (site) {
         console.log(site);
-        var addy = (site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
+        var addy = (site.address.address1 || '' ) + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
         vm.geocoder.geocode({address: addy}, function (location) {
           console.log(location);
           if (location[0]) {

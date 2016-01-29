@@ -8,6 +8,7 @@
     .module('dados.auth.service', [
       'ngCookies',
       'ngResource',
+      'ui.router',
       'dados.auth.constants',
       'dados.header.constants',
       'dados.access.service'
@@ -18,10 +19,10 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$location', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
+    'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$state', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
   ];
 
-  function AuthService(Auth, ADMIN_PAGES, $rootScope, $location, $resource, $cookies, TABVIEW, SUBVIEW, Group) {
+  function AuthService(Auth, ADMIN_PAGES, $rootScope, $state, $resource, $cookies, TABVIEW, SUBVIEW, Group) {
 
     var LoginAuth = $resource(Auth.LOGIN_API);
     var currentUser = {};
@@ -119,7 +120,7 @@
       $cookies.remove('user');
       delete service.currentUser;
       $rootScope.$broadcast('events.unauthorized');
-      $location.url('/login');
+      $state.go('login');
     }
 
     /**
