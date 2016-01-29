@@ -1,0 +1,8 @@
+<div id="mapDiv" class="form-div">
+  <ui-gmap-google-map id="myMap" ng-if="sitemap.mapReady==true" center="sitemap.map.center" pan="true"
+                      zoom="sitemap.map.zoom">
+    <ui-gmap-markers models="sitemap.markers" coords="'self'" icon="'icon'" click="click">
+    </ui-gmap-markers>
+  </ui-gmap-google-map>
+  <div id="directionsDiv"></div>
+</div>
