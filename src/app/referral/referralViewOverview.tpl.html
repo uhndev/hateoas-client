@@ -111,12 +111,12 @@
             <!-- Service Category / Program Services Panel -->
             <div id="servicesDiv">
               <div class="panel panel-info" ng-repeat="category in ref.currentCategories">
-                <div class="panel-heading">{{category.displayName}}</div>
+                <div class="panel-heading">{{category.name}}</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-md-8">
                       <div class="checkbox" ng-repeat="service in ref.availableServices"
-                           ng-if="category.id === service.serviceCategory.id">
+                           ng-if="category.id === service.serviceCategory">
                         <label>
                           <input type="checkbox" ng-checked="ref.isServiceRecommended(service)"
                                  ng-click="ref.toggleService(service)" /> {{service.name}}

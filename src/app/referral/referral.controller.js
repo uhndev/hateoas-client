@@ -5,9 +5,13 @@
     .module('altum.referral', [])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$q', '$resource', '$location', 'API', 'HeaderService', 'ReferralService', 'AltumServiceService', 'NoteTypeService', 'toastr'];
+  ReferralController.$inject = [
+    '$q', '$resource', '$location', 'API', 'HeaderService',
+    'ReferralService', 'AltumProgramServices', 'NoteTypeService', 'toastr'
+  ];
 
-  function ReferralController($q, $resource, $location, API, HeaderService, Referral, AltumService, NoteType, toastr) {
+  function ReferralController($q, $resource, $location, API, HeaderService, Referral,
+                              AltumProgramServices, NoteType, toastr) {
     var vm = this;
     var ReferralServices;
 
@@ -119,30 +123,32 @@
     function resetServices() {
       if (vm.selectedProgram) {
         var programID = (_.has(vm.selectedProgram, 'id')) ? vm.selectedProgram.id : vm.selectedProgram;
-        AltumService.query({
+        AltumProgramServices.query({
           where: {
             program: programID
           }
-        }).$promise.then(function (altumServices) {
+        }).$promise.then(function (altumProgramServices) {
           vm.recommendedServices = [];
 
           // fetch and return list of unique service categories in altum services
-          vm.currentCategories = _.unique(_.pluck(altumServices, 'serviceCategory'), 'id');
+          vm.currentCategories = _.unique(_.map(altumProgramServices, function (altumProgramService) {
+            return {
+              id: altumProgramService.serviceCategory,
+              name: altumProgramService.serviceCategoryName
+            };
+          }), 'id');
 
           // available services denote all program services across each retrieved altum service
           // sorting respective program services by serviceCateogry takes place in the html template
-          vm.availableServices = _.reduce(altumServices, function (result, altumService) {
-            // append each altumService's programServices to the list of available prospective services
-            return result.concat(
-              _.map(altumService.programServices, function (programService) {
-                return {
-                  name: programService.name,
-                  programService: programService.id,
-                  serviceCategory: altumService.serviceCategory
-                };
-              })
-            );
-          }, []);
+          vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
+            // append each altumProgramService's altumProgramServices to the list of available prospective services
+            return {
+              name: altumProgramService.altumServiceName,
+              altumService: altumProgramService.id,
+              programService: altumProgramService.programService,
+              serviceCategory: altumProgramService.serviceCategory
+            };
+          });
         });
       }
     }
