@@ -1,166 +1,237 @@
-
-<div class="container" ng-controller="ReferralController as ref">
-
-  <h1 id="Title">
-    Client Referral: {{ref.referral.clientcontact.displayName}}
-  </h1>
-
-  <hr/>
-
-  <div class="row">
-    <div class="col-md-5">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Referral Triage</h3>
-        </div>
-        <div class="panel-body">
-          <dl class="dl-horizontal">
-
-            <dt>Select Program:</dt>
-            <dd>
-              <select-loader
-                url="program"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="ref.selectedProgram"
-                ng-change="ref.resetServices()"
-                labels="displayName">
-              </select-loader>
-              <br/>
-            </dd>
-
-            <dt>Select Site:</dt>
-            <dd>
-              <select-loader
-                url="site"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="ref.selectedSite"
-                labels="displayName">
-              </select-loader>
-              <br/>
-            </dd>
-
-            <dt>Select Physician:</dt>
-            <dd>
-              <select-loader
-                url="physician"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="ref.selectedPhysician"
-                labels="displayName">
-              </select-loader>
-              <br/>
-            </dd>
-
-            <dt>Select Clinician:</dt>
-            <dd>
-              <select-loader
-                url="clinician"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="ref.selectedClinician"
-                labels="displayName">
-              </select-loader>
-              <br/>
-            </dd>
-
-            <dt>Status:</dt>
-            <dd>
-              <select-loader
-                url="status"
-                query="{ category: 'referral' }"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="ref.selectedStatus"
-                labels="displayName">
-              </select-loader>
-            </dd>
-          </dl>
-          <button class="btn btn-primary pull-right" ng-click="ref.updateReferral()"
-                  ng-disabled="!ref.selectedProgram && !ref.selectedPhysician">
-            Update Referral
-          </button>
-        </div>
-      </div>
-      <br/>
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Referral Info</h3>
-        </div>
-        <div class="panel-body">
+<div id="referral-container" ng-controller="ReferralController as ref" ng-cloak>
+  <div layout-gt-md="row" layout-sm="column">
+    <div flex-gt-md="30" flex>
+      <div layout="column">
+        <h2 id="Title">
+          Referral Info
+        </h2>
+        <md-divider></md-divider>
+        <md-content flex layout-padding>
           <simple-table
             rows="ref.referralInfo.rows"
             table-data="ref.referralInfo.tableData">
           </simple-table>
-        </div>
+        </md-content>
       </div>
     </div>
 
-    <div class="col-md-7">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Recommendations</h3>
-        </div>
-        <div class="panel-body">
-          <p ng-show="!ref.selectedProgram">
-            Please select a program to begin recommending services.
-          </p>
+    <div flex>
+      <md-content flex layout-padding>
+        <md-tabs id="referral-tabs" md-dynamic-height md-border-bottom>
+          <md-tab label="Available Recommendations" ng-disabled="!ref.selectedProgram">
+            <md-content class="md-padding">
+              <p ng-show="!ref.selectedProgram">
+                Please select a program to begin recommending services.
+              </p>
 
-          <div id="recomendationsDiv" ng-show="ref.selectedProgram">
-            <!-- Service Category / Program Services Panel -->
-            <div id="servicesDiv">
-              <div class="panel panel-info" ng-repeat="category in ref.currentCategories">
-                <div class="panel-heading">{{category.name}}</div>
-                <div class="panel-body">
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="checkbox" ng-repeat="service in ref.availableServices"
-                           ng-if="category.id === service.serviceCategory">
-                        <label>
-                          <input type="checkbox" ng-checked="ref.isServiceRecommended(service)"
-                                 ng-click="ref.toggleService(service)" /> {{service.name}}
-                        </label>
+              <!-- Service Category / Program Services Panel -->
+              <div id="servicesDiv" layout="row" layout-wrap ng-show="ref.selectedProgram">
+                <div class="referral-category" flex="50" ng-repeat="category in ref.currentCategories">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">{{category.name}}</div>
+                    <div class="panel-body">
+                      <div class="row">
+                        <div class="col-md-8">
+                          <div class="checkbox" ng-repeat="service in ref.availableServices"
+                               ng-if="category.id === service.serviceCategory">
+                            <label>
+                              <input type="checkbox" ng-checked="ref.isServiceRecommended(service)"
+                                     ng-click="ref.toggleService(service)"/> {{service.name}}
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </md-content>
+          </md-tab>
+          <md-tab label="Recommended Services"
+                  ng-disabled="!ref.selectedProgram || ref.recommendedServices.length === 0">
+            <md-content class="md-padding">
+              <!-- Recommended Services Panel -->
+              <div layout="row" layout-margin layout-fill>
+                <md-virtual-repeat-container id="services-list-container" flex class="list-group">
+                  <a ng-href md-virtual-repeat="service in ref.recommendedServices"
+                     ng-click="ref.selectServiceDetail(service)"
+                     class="list-group-item service-item" ng-class="{
+                       'active': service == ref.selectedService
+                     }">
+                    {{service.name}}
+                    <span class="badge selectable" type="button" ng-hide="service == ref.selectedService"
+                          ng-click="ref.toggleService(service, $event)">
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </span>
+                  </a>
+                </md-virtual-repeat-container>
 
-            <!-- Recommended Services Panel -->
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                Recommended Services
-                <button class="btn btn-success btn-xs pull-right" ng-disabled="ref.recommendedServices.length === 0"
-                        ng-click="ref.saveServices()">Save</button>
+                <!-- Shared Service Detail Selectors -->
+                <div flex="50">
+                  <div class="panel panel-info service-detail-panel"
+                       uib-collapse="!ref.selectedService || ref.recommendedServices.length === 0">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Selected: {{ref.selectedService.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                      <dl>
+                        <dt>Select Site:</dt>
+                        <dd>
+                          <select-loader
+                            url="site"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.selectedService.site"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+                        <dt>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" ng-model="ref.selectedService.approvalNeeded"/> Approval Needed
+                          </label>
+                        </div>
+                        </dt>
+                      </dl>
+                    </div>
+                  </div>
+
+                  <div class="panel panel-info service-detail-panel">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Proposed Service Details:</h3>
+                    </div>
+                    <div class="panel-body">
+                      <dl>
+                        <dt ng-if="!ref.selectedService">Select Site for All Services:</dt>
+                        <dd ng-if="!ref.selectedService">
+                          <select-loader
+                            url="site"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.site"
+                            ng-change="ref.setServiceSelections('site')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Select Physician:</dt>
+                        <dd>
+                          <select-loader
+                            url="physician"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.physician"
+                            ng-change="ref.setServiceSelections('physician')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Select Clinician:</dt>
+                        <dd>
+                          <select-loader
+                            url="clinician"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.clinician"
+                            ng-change="ref.setServiceSelections('clinician')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Status:</dt>
+                        <dd>
+                          <select-loader
+                            url="status"
+                            query="{ category: 'referral' }"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.status"
+                            ng-change="ref.setServiceSelections('status')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Work Status:</dt>
+                        <dd>
+                          <select-loader
+                            url="workstatus"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.workStatus"
+                            ng-change="ref.setServiceSelections('workStatus')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Prognosis:</dt>
+                        <dd>
+                          <select-loader
+                            url="prognosis"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.prognosis"
+                            ng-change="ref.setServiceSelections('prognosis')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Service Type:</dt>
+                        <dd>
+                          <select-loader
+                            url="servicetype"
+                            is-atomic="true"
+                            is-disabled="false"
+                            ng-model="ref.serviceType"
+                            ng-change="ref.setServiceSelections('serviceType')"
+                            labels="displayName">
+                          </select-loader>
+                        </dd>
+
+                        <dt>Service Date:</dt>
+                        <dd>
+                          <p class="input-group">
+                            <input type="text"
+                                   ng-model="ref.serviceDate"
+                                   value="{{ ref.serviceDate | date:'fullDate' }}"
+                                   ng-change="ref.setServiceSelections('serviceDate')"
+                                   class="form-control"
+                                   uib-datepicker-popup
+                                   is-open="ref.opened"
+                                   required disabled/>
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-default" ng-click="ref.opened = true"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                          </p>
+                        </dd>
+                      </dl>
+
+                      <button class="btn btn-primary pull-right"
+                              ng-disabled="ref.recommendedServices.length === 0 || !ref.areServicesValid()"
+                              ng-click="ref.saveServices()">
+                        Make Recommendations for {{ref.recommendedServices.length}} Service(s)
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-              <div class="panel-body">
-                <ul class="list-unstyled">
-                  <li ng-repeat="service in ref.recommendedServices track by $index">
-                    <button class="btn btn-info btn-xs permission-btn" type="button"
-                            ng-click="ref.toggleService(service)">
-                      {{service.name}} <span class="glyphicon glyphicon-remove"></span>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-content>
     </div>
   </div>
 
   <!--<div id="slideout" ng-class="{'button-out': style_notebarCollapsed}">-->
-    <!--<a href="" ng-click="toggleNotebar()">Notes</a>-->
+  <!--<a href="" ng-click="toggleNotebar()">Notes</a>-->
   <!--</div>-->
 
   <!--<div id="page-notebar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed" style="">-->
-    <!--<div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">-->
+  <!--<div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">-->
 
-      <!--<altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>-->
-    <!--</div>-->
+  <!--<altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>-->
+  <!--</div>-->
   <!--</div>-->
 
 </div>
