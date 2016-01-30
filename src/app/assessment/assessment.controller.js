@@ -31,7 +31,7 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
-    vm.selectedProgram= {};
+    vm.selectedProgram = {};
     vm.availableServices = [];
     vm.currentCategories = [];
     vm.selectedSite = {};
@@ -98,8 +98,12 @@
           //initialize sites/destinations
           _.each(vm.sites, function (site, index) {
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
-            vm.mydestinations.push({name: site.name, address:_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ')});
+            vm.mydestinations.push({
+              name: site.name,
+              address: _.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ')
+            });
             var val = {
+              id: index,
               idKey: index,
               latitude: site.address.latitude,
               longitude: site.address.longitude,
@@ -109,7 +113,6 @@
                 selectSite(site);
               }
             };
-            val["id"] = index;
             vm.markers.push(val);
           });
 
@@ -199,7 +202,7 @@
         ]
       }).$promise
         .then(function (resp) {
-            vm.availableServices=resp; //assign the newly selected programServices
+            vm.availableServices = resp; //assign the newly selected programServices
             vm.recommendedServices = {}; //reset recommended services to clear box
           },
 
@@ -223,17 +226,20 @@
           id: vm.selectedReferral.id
         }
       }).$promise.then(function (resp) {
-        vm.fullReferral = resp[0];
-        vm.resetServices();
-        vm.recommendedServices = [];
-      },
-      function error(err) {
-        alert('error');
-      });
+          vm.fullReferral = resp[0];
+          vm.resetServices();
+          vm.recommendedServices = [];
+        },
+        function error(err) {
+          alert('error');
+        });
 
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
-      vm.myorigins = [{name: referral.client_firstName + ' ' + referral.client_lastName, address: (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')}];
+      vm.myorigins = [{
+        name: referral.client_firstName + ' ' + referral.client_lastName,
+        address: (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')
+      }];
 
       // hide the search, unhide client detail on front end, unhide map
       vm.collapsedSearch = true;
@@ -241,6 +247,7 @@
       vm.mapReady = true;
 
       var val = {
+        id: 'client',
         idKey: 'client',
         latitude: referral.client_latitude,
         longitude: referral.client_longitude,
@@ -250,7 +257,6 @@
           selectSite(site);
         }
       };
-      val["id"] = 'client';
       vm.markers.pop();
       vm.markers.push(val);
 
@@ -270,9 +276,7 @@
     /**
      * [resetServices]
      * resets the available list of services to an empty set of the referral's programs's available services
-     * @param {none}
      */
-
     function resetServices() {
       AltumAPI.ProgramService.query({
         where: {
@@ -295,9 +299,7 @@
     /**
      * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
-     * @param {none}
      */
-
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
       var distanceArgs = {
@@ -311,7 +313,7 @@
       });
     }
 
-	  /**
+    /**
      * calculateDirections
      * @param origin
      * @param destination
@@ -328,19 +330,19 @@
           // set routes
           vm.directionsDisplay.setDirections(response);
           $scope.$apply(function () {
-            // vm.directionsDisplay.setMap($scope.map.control.getGMap());
+              // vm.directionsDisplay.setMap($scope.map.control.getGMap());
 
-            vm.directionsSteps = response.routes[0].legs[0].steps;
-            return uiGmapIsReady.promise(1);
-          })
-          .then(function (instances) {
-            var instanceMap = instances[0].map;
-            vm.directionsDisplay.setMap(instanceMap);
-            vm.directionsDisplay.setDirections(response);
-            // this is not the angular way, at all, and I hate it, but it works. Want to change it
+              vm.directionsSteps = response.routes[0].legs[0].steps;
+              return uiGmapIsReady.promise(1);
+            })
+            .then(function (instances) {
+              var instanceMap = instances[0].map;
+              vm.directionsDisplay.setMap(instanceMap);
+              vm.directionsDisplay.setDirections(response);
+              // this is not the angular way, at all, and I hate it, but it works. Want to change it
 
-            vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
-          });
+              vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
+            });
         }
       });
     }
@@ -348,7 +350,7 @@
     function geocodeSites() {
       vm.sites.forEach(function (site) {
         console.log(site);
-        var addy = (site.address.address1 || '' ) + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
+        var addy = (site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
         vm.geocoder.geocode({address: addy}, function (location) {
           console.log(location);
           if (location[0]) {

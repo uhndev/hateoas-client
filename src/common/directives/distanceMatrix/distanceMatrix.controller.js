@@ -31,7 +31,7 @@
     // google distance placeholders for distance call
     vm.distanceMatrix = [];
     vm.markers = [];
-    vm.destinationDistance={};
+    vm.destinationDistance = {};
 
     // bindable methods
     vm.calculateDistances = calculateDistances;
@@ -43,13 +43,13 @@
     function init() {
 
       //init maps api object
-      uiGmapGoogleMapApi.then(function(mapsAPI) {
+      uiGmapGoogleMapApi.then(function (mapsAPI) {
 
-        vm.googleMaps=mapsAPI;
+        vm.googleMaps = mapsAPI;
 
         //initialize distance API
         vm.geoDistance = new mapsAPI.DistanceMatrixService();
-        $scope.$watch('distance.origins', function() {
+        $scope.$watch('distance.origins', function () {
           calculateDistances();
         });
       });
@@ -59,9 +59,7 @@
     /**
      * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
-     * @param {none}
      */
-
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
       var distanceArgs = {
