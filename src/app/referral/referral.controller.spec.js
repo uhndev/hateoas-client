@@ -17,199 +17,199 @@ describe('Controller: ReferralController Tests', function() {
     toastr = $injector.get('toastr');
     scope.vm = refCtrl;
     httpBackend.whenGET('http://localhost:1337/api/referral/1').respond({
-      "version": "1.0",
-      "href": "http://localhost:1337/api/referral",
-      "referrer": "http://localhost:1337/api/referral/1",
-      "items": {
-        "notes": [],
-        "client": 2,
-        "claim": 6,
-        "site": {
-          "displayName": "Ajax",
-          "name": "Ajax",
-          "id": 9,
-          "address": 9
+      'version': '1.0',
+      'href': 'http://localhost:1337/api/referral',
+      'referrer': 'http://localhost:1337/api/referral/1',
+      'items': {
+        'notes': [],
+        'client': 2,
+        'claim': 6,
+        'site': {
+          'displayName': 'Ajax',
+          'name': 'Ajax',
+          'id': 9,
+          'address': 9
         },
-        "program": {
-          "displayName": "[TEST] WSIB Back and Neck Program",
-          "name": "[TEST] WSIB Back and Neck Program",
-          "id": 6
+        'program': {
+          'displayName': '[TEST] WSIB Back and Neck Program',
+          'name': '[TEST] WSIB Back and Neck Program',
+          'id': 6
         },
-        "physician": {
-          "displayName": "Mr. Ansley Ondricka",
-          "id": 1,
-          "person": 2
+        'physician': {
+          'displayName': 'Mr. Ansley Ondricka',
+          'id': 1,
+          'person': 2
         },
-        "clinician": {
-          "displayName": "Dr. Bernadette Reynolds",
-          "id": 1,
-          "person": 3
+        'clinician': {
+          'displayName': 'Dr. Bernadette Reynolds',
+          'id': 1,
+          'person': 3
         },
-        "status": 1,
-        "referralContact": {
-          "displayName": "Mr. Jay Lakin",
-          "phoneNumber": "1-440-907-3837 x5875",
-          "id": 2,
-          "company": 12,
-          "person": 4
+        'status': 1,
+        'referralContact': {
+          'displayName': 'Mr. Jay Lakin',
+          'phoneNumber': '1-440-907-3837 x5875',
+          'id': 2,
+          'company': 12,
+          'person': 4
         },
-        "displayName": "No Display Name",
-        "referralDate": "2015-03-09T00:00:00.000Z",
-        "clinicDate": "2015-03-17T00:00:00.000Z",
-        "accidentDate": "2016-01-23T10:07:12.000Z",
-        "receiveDate": "2015-04-14T08:20:30.000Z",
-        "sentDate": "2015-03-23T15:04:13.000Z",
-        "dischargeDate": "2015-10-14T17:43:47.000Z",
-        "recommendationsMade": false,
-        "id": 1,
-        "rel": "referral",
-        "href": "http://localhost:1337/api/referral/1"
+        'displayName': 'No Display Name',
+        'referralDate': '2015-03-09T00:00:00.000Z',
+        'clinicDate': '2015-03-17T00:00:00.000Z',
+        'accidentDate': '2016-01-23T10:07:12.000Z',
+        'receiveDate': '2015-04-14T08:20:30.000Z',
+        'sentDate': '2015-03-23T15:04:13.000Z',
+        'dischargeDate': '2015-10-14T17:43:47.000Z',
+        'recommendationsMade': false,
+        'id': 1,
+        'rel': 'referral',
+        'href': 'http://localhost:1337/api/referral/1'
       },
-      "path": "/api/referral",
-      "queries": [],
-      "total": 5
+      'path': '/api/referral',
+      'queries': [],
+      'total': 5
     });
     httpBackend.whenGET('http://localhost:1337/api/altumprogramservices?where=%7B%22program%22:6%7D').respond([
       {
-        "serviceCategory": 2,
-        "programService": 1,
-        "program": 6,
-        "id": 1,
-        "altumServiceName": "[TEST] CT SCAN - HEAD",
-        "serviceCategoryName": "Diagnosis",
-        "programServiceName": "[TEST] CT SCAN",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": []
+        'serviceCategory': 2,
+        'programService': 1,
+        'program': 6,
+        'id': 1,
+        'altumServiceName': '[TEST] CT SCAN - HEAD',
+        'serviceCategoryName': 'Diagnosis',
+        'programServiceName': '[TEST] CT SCAN',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': []
       },
       {
-        "serviceCategory": 2,
-        "programService": 1,
-        "program": 6,
-        "id": 2,
-        "altumServiceName": "[TEST] CT SCAN - NECK",
-        "serviceCategoryName": "Diagnosis",
-        "programServiceName": "[TEST] CT SCAN",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": []
+        'serviceCategory': 2,
+        'programService': 1,
+        'program': 6,
+        'id': 2,
+        'altumServiceName': '[TEST] CT SCAN - NECK',
+        'serviceCategoryName': 'Diagnosis',
+        'programServiceName': '[TEST] CT SCAN',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': []
       },
       {
-        "serviceCategory": 2,
-        "programService": 1,
-        "program": 6,
-        "id": 3,
-        "altumServiceName": "[TEST] CT SCAN - BACK",
-        "serviceCategoryName": "Diagnosis",
-        "programServiceName": "[TEST] CT SCAN",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": []
+        'serviceCategory': 2,
+        'programService': 1,
+        'program': 6,
+        'id': 3,
+        'altumServiceName': '[TEST] CT SCAN - BACK',
+        'serviceCategoryName': 'Diagnosis',
+        'programServiceName': '[TEST] CT SCAN',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': []
       },
       {
-        "serviceCategory": 1,
-        "programService": 2,
-        "program": 6,
-        "id": 5,
-        "altumServiceName": "Neck Assessment",
-        "serviceCategoryName": "Assessment",
-        "programServiceName": "Assessment",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": []
+        'serviceCategory': 1,
+        'programService': 2,
+        'program': 6,
+        'id': 5,
+        'altumServiceName': 'Neck Assessment',
+        'serviceCategoryName': 'Assessment',
+        'programServiceName': 'Assessment',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': []
       },
       {
-        "serviceCategory": 3,
-        "programService": 3,
-        "program": 6,
-        "id": 6,
-        "altumServiceName": "Interpreter - Spanish",
-        "serviceCategoryName": "Facilitation",
-        "programServiceName": "Interpreter",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": []
+        'serviceCategory': 3,
+        'programService': 3,
+        'program': 6,
+        'id': 6,
+        'altumServiceName': 'Interpreter - Spanish',
+        'serviceCategoryName': 'Facilitation',
+        'programServiceName': 'Interpreter',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': []
       },
       {
-        "serviceCategory": 1,
-        "programService": 2,
-        "program": 6,
-        "id": 4,
-        "altumServiceName": "Back Assessment",
-        "serviceCategoryName": "Assessment",
-        "programServiceName": "Assessment",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": [
+        'serviceCategory': 1,
+        'programService': 2,
+        'program': 6,
+        'id': 4,
+        'altumServiceName': 'Back Assessment',
+        'serviceCategoryName': 'Assessment',
+        'programServiceName': 'Assessment',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': [
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "TWH",
-            "name": "TWH",
-            "id": 1,
-            "address": 1
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'TWH',
+            'name': 'TWH',
+            'id': 1,
+            'address': 1
           },
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Hamilton",
-            "name": "Hamilton",
-            "id": 3,
-            "address": 3
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Hamilton',
+            'name': 'Hamilton',
+            'id': 3,
+            'address': 3
           },
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Barrie",
-            "name": "Barrie",
-            "id": 8,
-            "address": 8
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Barrie',
+            'name': 'Barrie',
+            'id': 8,
+            'address': 8
           },
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Ajax",
-            "name": "Ajax",
-            "id": 9,
-            "address": 9
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Ajax',
+            'name': 'Ajax',
+            'id': 9,
+            'address': 9
           }
         ]
       },
       {
-        "serviceCategory": 3,
-        "programService": 3,
-        "program": 6,
-        "id": 7,
-        "altumServiceName": "Interpreter - Chinese",
-        "serviceCategoryName": "Facilitation",
-        "programServiceName": "Interpreter",
-        "programName": "[TEST] WSIB Back and Neck Program",
-        "sites": [
+        'serviceCategory': 3,
+        'programService': 3,
+        'program': 6,
+        'id': 7,
+        'altumServiceName': 'Interpreter - Chinese',
+        'serviceCategoryName': 'Facilitation',
+        'programServiceName': 'Interpreter',
+        'programName': '[TEST] WSIB Back and Neck Program',
+        'sites': [
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Hamilton",
-            "name": "Hamilton",
-            "phone": null,
-            "id": 3,
-            "address": 3
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Hamilton',
+            'name': 'Hamilton',
+            'phone': null,
+            'id': 3,
+            'address': 3
           },
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Sudbury",
-            "name": "Sudbury",
-            "id": 6,
-            "address": 6
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Sudbury',
+            'name': 'Sudbury',
+            'id': 6,
+            'address': 6
           },
           {
-            "altumServices": [],
-            "siteServices": [],
-            "siteStaff": [],
-            "displayName": "Barrie",
-            "name": "Barrie",
-            "id": 8,
-            "address": 8
+            'altumServices': [],
+            'siteServices': [],
+            'siteStaff': [],
+            'displayName': 'Barrie',
+            'name': 'Barrie',
+            'id': 8,
+            'address': 8
           }
         ]
       }

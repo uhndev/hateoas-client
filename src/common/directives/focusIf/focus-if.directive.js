@@ -13,11 +13,11 @@
   function focusIf() {
     return {
       restrict: 'A',
-      link: function(scope, element, attributes){
-        scope.$watch(function(){
+      link: function(scope, element, attributes) {
+        scope.$watch(function() {
           return scope.$eval(attributes.focusIf);
-        },function (newValue){
-          if (newValue === true){
+        },function (newValue) {
+          if (newValue === true) {
             element[0].focus();
           }
         });

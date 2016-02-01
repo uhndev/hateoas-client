@@ -198,7 +198,7 @@
     /**
      * selectServiceDetail
      * @description Selects a recommended service for detail editing
-     * @param {Number} index
+     * @param {Number} $index
      */
     function selectServiceDetail($index) {
       vm.currIndex = (vm.currIndex === $index ? null : $index);
@@ -223,7 +223,7 @@
     function navigateKey($event, $index) {
       $event.preventDefault();
       $event.stopPropagation();
-      switch($event.keyCode) {
+      switch ($event.keyCode) {
         case 37: // left
           if (!_.isNull(vm.currIndex)) {
             vm.currIndex = null;
