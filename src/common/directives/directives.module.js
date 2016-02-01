@@ -3,6 +3,7 @@
       'dados.common.directives.contextTranslator',
       'dados.common.directives.dadosError',
       'dados.common.directives.distanceMatrix',
+      'dados.common.directives.focusIf',
       'dados.common.directives.dadosForm',
       'dados.common.directives.formBuilder',
       'dados.common.directives.generatePassword',

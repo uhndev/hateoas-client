@@ -2,16 +2,21 @@
   'use strict';
 
   angular
-    .module('altum.referral', ['ngMaterial'])
+    .module('altum.referral', [
+      'ngMaterial',
+      'ngResource',
+      'toastr',
+      'dados.header.service',
+      'dados.common.services.altum',
+      'dados.common.directives.focusIf'
+    ])
     .controller('ReferralController', ReferralController);
 
   ReferralController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService',
-    'ReferralService', 'AltumProgramServices', 'NoteTypeService', 'toastr'
+    '$q', '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
   ];
 
-  function ReferralController($q, $resource, $location, API, HeaderService,
-                              Referral, AltumProgramServices, NoteType, toastr) {
+  function ReferralController($q, $resource, $location, API, HeaderService, AltumAPI, toastr) {
     var vm = this;
     var ReferralServices;
 
@@ -21,7 +26,7 @@
     vm.selectedSite = null;
     vm.selectedPhysician = null;
     vm.noteUrl = vm.url + '/notes';
-    vm.noteTypes = NoteType.query();
+    //vm.noteTypes = NoteType.query();
 
     vm.physician = null;
     vm.clinician = null;
@@ -34,6 +39,12 @@
     vm.currentDate = new Date();
     vm.validityFields = ['physician', 'clinician', 'status', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
 
+    vm.availablePrognosis = AltumAPI.Prognosis.query();
+    vm.availableTimeframes = AltumAPI.Timeframe.query();
+    AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+      vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
+    });
+
     vm.recommendedServices = [];
     vm.availableServices = [];
     vm.currentCategories = [];
@@ -44,6 +55,7 @@
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
     vm.setServiceSelections = setServiceSelections;
+    vm.navigateKey = navigateKey;
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
@@ -123,7 +135,7 @@
     function fetchAvailableServices() {
       if (vm.selectedProgram) {
         var programID = (_.has(vm.selectedProgram, 'id')) ? vm.selectedProgram.id : vm.selectedProgram;
-        AltumProgramServices.query({
+        AltumAPI.AltumProgramServices.query({
           where: {
             program: programID
           }
@@ -148,7 +160,9 @@
               programService: altumProgramService.programService,
               serviceCategory: altumProgramService.serviceCategory,
               site: null,
-              approvalNeeded: false
+              approvalNeeded: false,
+              availableSites: altumProgramService.sites,
+              siteDictionary: _.indexBy(altumProgramService.sites, 'id')
             });
           });
         });
@@ -184,10 +198,10 @@
     /**
      * selectServiceDetail
      * @description Selects a recommended service for detail editing
-     * @param {Object} service
+     * @param {Number} index
      */
-    function selectServiceDetail(service) {
-      vm.selectedService = (vm.selectedService === service ? null : service);
+    function selectServiceDetail($index) {
+      vm.currIndex = (vm.currIndex === $index ? null : $index);
     }
 
     /**
@@ -199,6 +213,42 @@
         recommendedService[attribute] = vm[attribute];
         return recommendedService;
       });
+    }
+
+    /**
+     * navigateKey
+     * @description Allows user to navigate selected recommended services via arrow keys
+     * @param $event
+     */
+    function navigateKey($event, $index) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      switch($event.keyCode) {
+        case 37: // left
+          if (!_.isNull(vm.currIndex)) {
+            vm.currIndex = null;
+          }
+          break;
+        case 38: // up
+          if (!_.isNull(vm.currIndex) && vm.currIndex > 0) {
+            vm.currIndex--;
+          } else {
+            vm.currIndex = vm.recommendedServices.length - 1;
+          }
+          break;
+        case 39: // right
+          if (_.isNull(vm.currIndex)) {
+            vm.currIndex = $index;
+          }
+          break;
+        case 40: // down
+          if (!_.isNull(vm.currIndex) && vm.currIndex < vm.recommendedServices.length - 1) {
+            vm.currIndex++;
+          } else {
+            vm.currIndex = 0;
+          }
+          break;
+      }
     }
 
     /**
@@ -223,7 +273,11 @@
      */
     function isServiceValid(service) {
       return _.all(vm.validityFields, function (field) {
-        return _.has(service, field) && !_.isNull(service[field]);
+        var isValid = _.has(service, field) && !_.isNull(service[field]);
+        if (service.availableSites.length) {
+          return isValid && !_.isNull(service.site);
+        }
+        return isValid;
       });
     }
 
