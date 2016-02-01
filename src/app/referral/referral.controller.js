@@ -272,8 +272,10 @@
      * @return {Boolean}
      */
     function isServiceValid(service) {
+      // for all required fields (see top), return true if each recommended service has non-null field
       return _.all(vm.validityFields, function (field) {
         var isValid = _.has(service, field) && !_.isNull(service[field]);
+        // if particular service requires a site selection, ensure it is not null
         if (service.availableSites.length) {
           return isValid && !_.isNull(service.site);
         }
