@@ -33,6 +33,10 @@
     vm.serviceDate = new Date();
     vm.currentDate = new Date();
     vm.validityFields = ['physician', 'clinician', 'status', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+    vm.serviceOrder = {
+      recommendedServices: 1,
+      serviceDetail: 2
+    };
 
     vm.availablePrognosis = AltumAPI.Prognosis.query();
     vm.availableTimeframes = AltumAPI.Timeframe.query();
@@ -53,6 +57,7 @@
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
+    vm.swapPanelOrder = swapPanelOrder;
 
     init();
 
@@ -64,9 +69,15 @@
       ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
       Resource.get(function (data, headers) {
-        vm.allow = headers('allow');
-        vm.template = data.template;
+        vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
+        vm.referralOverview = {
+          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
+          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
+          'COMMON.MODELS.REFERRAL.CLINICIAN': data.items.clinician_name,
+          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name,
+          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName
+        };
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
@@ -218,7 +229,7 @@
           return serviceObj.$save();
         }))
         .then(function(data) {
-          toastr.success('Added services to referral for client: ' + vm.referral.client.displayName, 'Recommendations');
+          toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
           init();
         });
     }
@@ -249,6 +260,16 @@
       return _.all(vm.recommendedServices, function (recommendedService) {
         return isServiceValid(recommendedService);
       });
+    }
+
+    /**
+     * swapPanelOrder
+     * @description Convenience method for switching order of service panels in the recommended services tab
+     */
+    function swapPanelOrder() {
+      vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
+      vm.serviceOrder.serviceDetail = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
+      vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
     }
 
   }
