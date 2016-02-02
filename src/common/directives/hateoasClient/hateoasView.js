@@ -80,7 +80,7 @@
         if ((pathArr.length % 2) === 0) {
           // single item view (routes like /study/LEAP or /user/:id)
           modules = ITEM_MODULES;
-          fragment = '<div>';
+          fragment = '<div class="container" ng-controller="HateoasItemController as hateoas">';
         }
 
         _.each(modules, function(module) {
