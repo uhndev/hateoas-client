@@ -5,18 +5,20 @@
     .module('dados.common.directives.siteMap', [
       'dados.common.directives.siteMap.controller'
     ])
-    .directive('siteMap', siteMap);
+    .directive('siteMap', SiteMap);
 
-  DistanceMatrix.$inject = [];
+  SiteMap.$inject = [];
 
-  function DistanceMatrix() {
+  function SiteMap() {
     return {
       restrict: 'E',
       scope: {
-        origins: '=origins',
-        destinations: '=destinations',
-        originIcon: '=originIcon', // 'assets/img/hospital-building.png'
-        destinationIcon: '=destinationIcon' // 'assets/img/hospital-building.png'
+        site: '=selectedSite',
+        markers: '@',
+        map: '@',
+        originIcon: '@',      // 'assets/img/hospital-building.png'
+        destinationIcon: '@', // 'assets/img/hospital-building.png'
+        destinationClick: '@' // onclick method for destination
       },
 
       templateUrl: 'directives/siteMap/siteMap.tpl.html',

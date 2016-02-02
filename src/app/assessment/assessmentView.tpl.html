@@ -94,7 +94,7 @@
       </tr>
     </table>
 
-    <site-map></site-map>
+    <site-map map="assessment.map" markers="assessment.markers" origin-icon="" destination-icon=""></site-map>
     <div id="sitesDiv">
       <table id="distanceToSites" class="SiteDistanceTable">
         <tr>
@@ -106,10 +106,8 @@
       </table>
     </div>
     <div id="mapDiv" class="form-div">
-      <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
-                          zoom="assessment.map.zoom">
-        <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click">
-        </ui-gmap-markers>
+      <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true" zoom="assessment.map.zoom">
+        <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click"></ui-gmap-markers>
       </ui-gmap-google-map>
       <div id="directionsDiv"/>
     </div>

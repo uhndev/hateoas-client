@@ -101,15 +101,15 @@
             vm.mydestinations.push({name: site.name, address:_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ')});
             var val = {
               idKey: index,
+              id: index,
               latitude: site.address.latitude,
               longitude: site.address.longitude,
               title: site.name,
               icon: {url: 'assets/img/hospital-building.png'},
               click: function () {
-                selectSite(site);
+                selectSite=site;
               }
             };
-            val["id"] = index;
             vm.markers.push(val);
           });
 
@@ -198,7 +198,8 @@
           {id: vm.selectedReferral.program}
         ]
       }).$promise
-        .then(function (resp) {
+        .then(
+          function (resp) {
             vm.availableServices=resp; //assign the newly selected programServices
             vm.recommendedServices = {}; //reset recommended services to clear box
           },
@@ -206,7 +207,8 @@
           function error(err) {
             //console.log("Error querying program " + vm.selectedReferral.program.name + " with id " + vm.selectedReferral.program.id);
             console.log(err);
-          });
+          }
+      );
     }
 
     /**

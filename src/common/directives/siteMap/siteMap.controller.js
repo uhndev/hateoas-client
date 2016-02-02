@@ -7,7 +7,7 @@
   'use strict';
 
   angular
-    .module('dados.common.directives.distanceMatrix.controller', [
+    .module('dados.common.directives.siteMap.controller', [
       'uiGmapgoogle-maps'
     ])
     .config(function (uiGmapGoogleMapApiProvider) {
@@ -25,16 +25,14 @@
     var vm = this;
 
     // bindable variables
-    vm.geoDistance = null;
     vm.googleMaps = null;
+    vm.directionsService = null;
+    vm.directionsDisplay = null;
+    vm.mapReady=false;
+    vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
 
-    // google distance placeholders for distance call
-    vm.distanceMatrix = [];
+    // google placeholders for directions call
     vm.markers = [];
-    vm.destinationDistance={};
-
-    // bindable methods
-    vm.calculateDistances = calculateDistances;
 
     init();
 
@@ -46,8 +44,8 @@
       uiGmapGoogleMapApi.then(function(mapsAPI) {
 
         //init googleMaps object
-        vm.googleMaps = maps;
-
+        vm.googleMaps = mapsAPI;
+/*
         //initialize sites/destinations
         _.each(vm.sites, function (site, index) {
           vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
@@ -57,27 +55,24 @@
             latitude: site.address.latitude,
             longitude: site.address.longitude,
             title: site.name,
-            icon: {url: 'assets/img/hospital-building.png'},
-            click: function () {
-              selectSite(site);
+            icon: {url: vm.destinationIcon},
+            click: function (arg) {
+              vm.destinationClick(arg.model.site);
             }
           };
           vm.markers.push(val);
         });
-
-        //initialize geocoder
-        vm.geocoder = new vm.googleMaps.Geocoder();
-
-        //initialize distance
-        vm.geoDistance = new vm.googleMaps.DistanceMatrixService();
+*/
 
         //initialize directions service
         vm.directionsService = new vm.googleMaps.DirectionsService();
 
         //init directions renderer
         vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
-      });
 
+        vm.mapReady=true;
+
+      });
     }
 
     /**
@@ -85,10 +80,11 @@
      * @param origin
      * @param destination
      */
+
     function calculateDirections(origin, destination) {
       var request = {
-        origin: origin,
-        destination: destination,
+        origin: origins,
+        destination: destinations,
         travelMode: vm.googleMaps.DirectionsTravelMode.DRIVING
       };
 
