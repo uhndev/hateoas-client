@@ -18,20 +18,22 @@
     .service('PayorService', PayorService)
     .service('WorkStatusService', WorkStatusService)
     .service('PrognosisService', PrognosisService)
+    .service('TimeframeService', TimeframeService)
     .service('AltumAPIService', AltumAPIService)
     .service('ProgramServiceService', ProgramServiceService)
     .service('AltumServiceService', AltumServiceService)
     .service('AltumProgramServices', AltumProgramServices)
     .service('ServiceCategoryService', ServiceCategoryService)
+    .service('ServiceTypeService', ServiceTypeService)
     .service('ServiceService', ServiceService)
     .service('NoteService', NoteService)
     .service('NoteTypeService', NoteTypeService);
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
-    PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
-    AltumServiceService, AltumProgramServices, ServiceCategoryService, AltumAPIService, ServiceService,
-    NoteService, NoteTypeService
+    PhysicianService, PayorService, WorkStatusService, PrognosisService, TimeframeService,
+    ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService,
+    ServiceTypeService, AltumAPIService, ServiceService, NoteService, NoteTypeService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
@@ -72,6 +74,10 @@
     return ResourceFactory.create(API.url('prognosis'));
   }
 
+  function TimeframeService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('timeframe'));
+  }
+
   function ProgramServiceService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('programservice'));
   }
@@ -86,6 +92,10 @@
 
   function ServiceCategoryService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('servicecategory'));
+  }
+
+  function ServiceTypeService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('servicetype'));
   }
 
   function ServiceService(ResourceFactory, API) {
@@ -111,10 +121,12 @@
       'Payor': ResourceFactory.create(API.url('payor')),
       'WorkStatus': ResourceFactory.create(API.url('workstatus')),
       'Prognosis': ResourceFactory.create(API.url('prognosis')),
+      'Timeframe': ResourceFactory.create(API.url('timeframe')),
       'ProgramService': ResourceFactory.create(API.url('programservice')),
       'AltumService': ResourceFactory.create(API.url('altumservice')),
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
       'ServiceCategory': ResourceFactory.create(API.url('servicecategory')),
+      'ServiceType': ResourceFactory.create(API.url('servicetype')),
       'Service': ResourceFactory.create(API.url('service')),
       'Note' : ResourceFactory.create(API.url('note')),
       'NoteType' : ResourceFactory.create(API.url('noteType'))

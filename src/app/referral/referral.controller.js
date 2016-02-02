@@ -2,16 +2,21 @@
   'use strict';
 
   angular
-    .module('altum.referral', [])
+    .module('altum.referral', [
+      'ngMaterial',
+      'ngResource',
+      'toastr',
+      'dados.header.service',
+      'dados.common.services.altum',
+      'dados.common.directives.focusIf'
+    ])
     .controller('ReferralController', ReferralController);
 
   ReferralController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService',
-    'ReferralService', 'AltumProgramServices', 'NoteTypeService', 'toastr'
+    '$q', '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
   ];
 
-  function ReferralController($q, $resource, $location, API, HeaderService, Referral,
-                              AltumProgramServices, NoteType, toastr) {
+  function ReferralController($q, $resource, $location, API, HeaderService, AltumAPI, toastr) {
     var vm = this;
     var ReferralServices;
 
@@ -21,18 +26,39 @@
     vm.selectedSite = null;
     vm.selectedPhysician = null;
     vm.noteUrl = vm.url + '/notes';
-    vm.noteTypes = NoteType.query();
+    //vm.noteTypes = NoteType.query();
+
+    vm.physician = null;
+    vm.clinician = null;
+    vm.status = null;
+    vm.workStatus = null;
+    vm.prognosis = null;
+    vm.serviceType = null;
+    vm.approvalNeeded = null;
+    vm.serviceDate = new Date();
+    vm.currentDate = new Date();
+    vm.validityFields = ['physician', 'clinician', 'status', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+
+    vm.availablePrognosis = AltumAPI.Prognosis.query();
+    vm.availableTimeframes = AltumAPI.Timeframe.query();
+    AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+      vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
+    });
 
     vm.recommendedServices = [];
     vm.availableServices = [];
     vm.currentCategories = [];
 
     // bindable methods
-    vm.updateReferral = updateReferral;
-    vm.resetServices = resetServices;
+    vm.fetchAvailableServices = fetchAvailableServices;
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
+    vm.selectServiceDetail = selectServiceDetail;
+    vm.setServiceSelections = setServiceSelections;
+    vm.navigateKey = navigateKey;
     vm.saveServices = saveServices;
+    vm.isServiceValid = isServiceValid;
+    vm.areServicesValid = areServicesValid;
 
     init();
 
@@ -48,10 +74,6 @@
         vm.referral = angular.copy(data.items);
 
         vm.selectedProgram = data.items.program;
-        vm.selectedSite = data.items.site;
-        vm.selectedPhysician = data.items.physician;
-        vm.selectedClinician = data.items.clinician;
-        vm.selectedStatus = data.items.status;
         vm.notes = data.items.notes;
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
@@ -82,48 +104,38 @@
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+
+        if (vm.selectedProgram) {
+          fetchAvailableServices();
+        }
       });
     }
 
     /**
-     * updateReferral
-     * @description Saves program and physician selections for a selected referral
+     * getSharedServices
+     * @description Returns shared service data for all prospective recommended services
+     * @returns {Object}
      */
-    function updateReferral() {
-      if (vm.selectedProgram && vm.selectedSite && vm.selectedPhysician) {
-        var updateObj = {
-          program: vm.selectedProgram,
-          site: vm.selectedSite,
-          physician: vm.selectedPhysician
-        };
-
-        if (vm.selectedClinician) {
-          updateObj.clinician = vm.selectedClinician;
-        }
-        if (vm.selectedStatus) {
-          updateObj.status = vm.selectedStatus;
-        }
-
-        var referral = new Referral(updateObj);
-        referral
-          .$update({id: vm.referral.id})
-          .then(function () {
-            toastr.success('Updated referral for client: ' + vm.referral.clientcontact.displayName, 'Triage');
-            init();
-          });
-      } else {
-        toastr.warning('You must select a program/site/physician!', 'Triage');
-      }
+    function getSharedServices() {
+      return {
+        physician: vm.physician,
+        clinician: vm.clinician,
+        status: vm.status,
+        workStatus: vm.workStatus,
+        prognosis: vm.prognosis,
+        serviceType: vm.serviceType,
+        serviceDate: vm.currentDate
+      };
     }
 
     /**
-     * resetServices
-     * @description Resets the available list of services to an empty set of the referral's programs's available services
+     * fetchAvailableServices
+     * @description Fetches the available list of services to an empty set of the referral's programs's available services
      */
-    function resetServices() {
+    function fetchAvailableServices() {
       if (vm.selectedProgram) {
         var programID = (_.has(vm.selectedProgram, 'id')) ? vm.selectedProgram.id : vm.selectedProgram;
-        AltumProgramServices.query({
+        AltumAPI.AltumProgramServices.query({
           where: {
             program: programID
           }
@@ -142,12 +154,16 @@
           // sorting respective program services by serviceCateogry takes place in the html template
           vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
             // append each altumProgramService's altumProgramServices to the list of available prospective services
-            return {
+            return _.merge(getSharedServices(), {
               name: altumProgramService.altumServiceName,
               altumService: altumProgramService.id,
               programService: altumProgramService.programService,
-              serviceCategory: altumProgramService.serviceCategory
-            };
+              serviceCategory: altumProgramService.serviceCategory,
+              site: null,
+              approvalNeeded: false,
+              availableSites: altumProgramService.sites,
+              siteDictionary: _.indexBy(altumProgramService.sites, 'id')
+            });
           });
         });
       }
@@ -167,11 +183,71 @@
      * @description Adds/removes a programService from recommendedServices
      * @param {String} service
      */
-    function toggleService(service) {
+    function toggleService(service, event) {
+      if (event) {
+        event.stopPropagation();
+      }
       if (isServiceRecommended(service)) {
+        service.site = null;
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
-        vm.recommendedServices.push(service);
+        vm.recommendedServices.push(_.merge(service, getSharedServices()));
+      }
+    }
+
+    /**
+     * selectServiceDetail
+     * @description Selects a recommended service for detail editing
+     * @param {Number} $index
+     */
+    function selectServiceDetail($index) {
+      vm.currIndex = (vm.currIndex === $index ? null : $index);
+    }
+
+    /**
+     * setServiceSelections
+     * @description Sets shared service details for all currently recommended services
+     */
+    function setServiceSelections(attribute) {
+      vm.recommendedServices = _.map(vm.recommendedServices, function (recommendedService) {
+        recommendedService[attribute] = vm[attribute];
+        return recommendedService;
+      });
+    }
+
+    /**
+     * navigateKey
+     * @description Allows user to navigate selected recommended services via arrow keys
+     * @param $event
+     */
+    function navigateKey($event, $index) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      switch ($event.keyCode) {
+        case 37: // left
+          if (!_.isNull(vm.currIndex)) {
+            vm.currIndex = null;
+          }
+          break;
+        case 38: // up
+          if (!_.isNull(vm.currIndex) && vm.currIndex > 0) {
+            vm.currIndex--;
+          } else {
+            vm.currIndex = vm.recommendedServices.length - 1;
+          }
+          break;
+        case 39: // right
+          if (_.isNull(vm.currIndex)) {
+            vm.currIndex = $index;
+          }
+          break;
+        case 40: // down
+          if (!_.isNull(vm.currIndex) && vm.currIndex < vm.recommendedServices.length - 1) {
+            vm.currIndex++;
+          } else {
+            vm.currIndex = 0;
+          }
+          break;
       }
     }
 
@@ -186,10 +262,35 @@
       }))
       .then(function(data) {
         toastr.success('Added services to referral for client: ' + vm.referral.clientcontact.displayName, 'Recommendations');
-        if (vm.selectedProgram.id != vm.referral.program.id) {
-          Referral.update({id: vm.referral.id, program: vm.selectedProgram});
-        }
         init();
+      });
+    }
+
+    /**
+     * isServiceValid
+     * @description Checks if service have the correct prerequisite data before saving
+     * @return {Boolean}
+     */
+    function isServiceValid(service) {
+      // for all required fields (see top), return true if each recommended service has non-null field
+      return _.all(vm.validityFields, function (field) {
+        var isValid = _.has(service, field) && !_.isNull(service[field]);
+        // if particular service requires a site selection, ensure it is not null
+        if (service.availableSites.length) {
+          return isValid && !_.isNull(service.site);
+        }
+        return isValid;
+      });
+    }
+
+    /**
+     * areServicesValid
+     * @description Checks if all proposed recommended services have the correct prerequisite data before saving
+     * @return {Boolean}
+     */
+    function areServicesValid() {
+      return _.all(vm.recommendedServices, function (recommendedService) {
+        return isServiceValid(recommendedService);
       });
     }
 
