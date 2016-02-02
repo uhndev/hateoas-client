@@ -1,0 +1,248 @@
+<div class="container" ng-controller="RecommendationsController as rec" ng-cloak>
+  <div layout="column">
+    <h1 flex id="Title">
+      <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
+    </h1>
+    <div class="table-responsive" flex>
+      <table class="table table-condensed table-striped">
+        <tr class="info">
+          <th ng-repeat="(label, value) in ::rec.referralOverview" translate>{{label}}</th>
+        </tr>
+        <tr class="info">
+          <td ng-repeat="(label, value) in ::rec.referralOverview">{{::value}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <md-tabs id="referral-tabs" md-dynamic-height md-border-bottom>
+    <md-tab ng-disabled="!rec.referral.program">
+      <md-tab-label>
+        <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS</span>
+        ({{rec.resource.total}})
+      </md-tab-label>
+      <md-tab-body>
+        <p ng-show="!rec.referral.program">
+          Please select a program to begin recommending services.
+        </p>
+
+        <md-content layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+          <!-- Service Category / Program Services Panel -->
+          <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
+               ng-repeat="category in rec.currentCategories">
+            <div class="panel panel-info">
+              <div class="panel-heading">{{category.name}}</div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="checkbox" ng-repeat="service in rec.availableServices"
+                         ng-if="category.id === service.serviceCategory">
+                      <label>
+                        <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
+                               ng-click="rec.toggleService(service)"/> {{service.name}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </md-content>
+      </md-tab-body>
+    </md-tab>
+    <md-tab ng-disabled="!rec.referral.program || rec.recommendedServices.length === 0">
+      <md-tab-label>
+        <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES</span>
+        ({{rec.recommendedServices.length}})
+      </md-tab-label>
+      <md-tab-body>
+        <!-- Recommended Services Tab -->
+        <md-content layout="row" layout-margin>
+          <!-- List of Recommended Services -->
+          <md-virtual-repeat-container id="services-list-container" class="list-group"
+                                       flex flex-order="{{rec.serviceOrder.recommendedServices}}">
+            <div md-virtual-repeat="service in rec.recommendedServices"
+                 ng-keydown="rec.navigateKey($event, $index)" focus-if="$index === rec.currIndex"
+                 ng-click="rec.selectServiceDetail($index)"
+                 class="list-group-item service-item selectable"
+                 ng-class="{ 'service-active': $index === rec.currIndex }">
+              <span>
+                {{service.name}}
+                <span ng-if="service.availableSites.length > 0 && service.site">
+                  ({{service.siteDictionary[service.site].name}})
+                </span>
+                <span class="text-danger" ng-if="service.availableSites.length > 0 && !service.site">
+                  * (select site)
+                </span>
+              </span>
+              <span class="badge selectable" type="button"
+                    ng-hide="service == rec.recommendedServices[rec.currIndex]"
+                    ng-click="rec.toggleService(service, $event)">
+                <i class="glyphicon glyphicon-remove"></i>
+              </span>
+            </div>
+          </md-virtual-repeat-container>
+
+          <!-- Service Detail Panels -->
+          <div flex="40" flex-order="{{rec.serviceOrder.serviceDetail}}">
+            <!-- Selected Serivce Sites Panel -->
+            <div class="panel panel-info service-detail-panel"
+                 uib-collapse="!rec.recommendedServices[rec.currIndex] || rec.recommendedServices.length === 0">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <i class="fa fa-file-o"></i>
+                  <b>Selected Service:</b> {{rec.recommendedServices[rec.currIndex].name}}
+                </h3>
+              </div>
+              <div class="panel-body">
+                <form>
+                  <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].availableSites.length > 0">
+                    <label>Select Site:</label>
+                    <select ng-model="rec.recommendedServices[rec.currIndex].site" class="form-control"
+                            ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"/>
+                        Approval Needed
+                      </label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Shared Service Detail Selectors -->
+            <div class="panel panel-info service-detail-panel">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <i class="fa fa-folder-open-o"></i>
+                  <b translate>APP.REFERRAL.RECOMMENDATIONS.CURRENT_VISIT_INFO</b>
+                  <span> for {{rec.recommendedServices.length}} service(s)</span>
+                  <span class="glyphicon glyphicon-transfer selectable pull-right"
+                        ng-click="rec.swapPanelOrder()"></span>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <form layout="column">
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
+                    <select-loader
+                      url="physician"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="rec.physician"
+                      ng-change="rec.setServiceSelections('physician')"
+                      labels="displayName">
+                    </select-loader>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.CLINICIAN</label>
+                    <select-loader
+                      url="clinician"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="rec.clinician"
+                      ng-change="rec.setServiceSelections('clinician')"
+                      labels="displayName">
+                    </select-loader>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.STATUS</label>
+                    <select-loader
+                      url="status"
+                      query="{ category: 'referral' }"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="rec.status"
+                      ng-change="rec.setServiceSelections('status')"
+                      labels="displayName">
+                    </select-loader>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+                    <select-loader
+                      url="workstatus"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="rec.workStatus"
+                      ng-change="rec.setServiceSelections('workStatus')"
+                      labels="displayName">
+                    </select-loader>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+                    <div flex>
+                      <select ng-model="rec.prognosis" ng-change="rec.setServiceSelections('prognosis')"
+                              class="form-control"
+                              ng-options="prognosis as prognosis.name for prognosis in rec.availablePrognosis">
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group" flex ng-if="rec.prognosis.hasTimeframe">
+                    <label>
+                      <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
+                      <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
+                    </label>
+                    <select ng-model="rec.timeframe" ng-change="rec.setServiceSelections('timeframe')"
+                            class="form-control"
+                            ng-options="timeframe as timeframe.name for timeframe in rec.availableTimeframes">
+                    </select>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.SERVICE_TYPE</label>
+                    <br/>
+                    <label ng-repeat="(category, serviceTypes) in ::rec.availableServiceTypes">
+                      <input type="radio" ng-model="rec.serviceTypeCategory" value="{{::category}}"/> {{::category}}&nbsp;
+                    </label>
+                    <label>
+                      <input type="radio" ng-model="rec.serviceTypeCategory"
+                             ng-click="rec.serviceType = null; rec.setServiceSelections('serviceType')"/> N/A&nbsp;
+                    </label>
+                    <select ng-model="rec.serviceType" ng-change="rec.setServiceSelections('serviceType')"
+                            ng-if="rec.serviceTypeCategory " class="form-control"
+                            ng-options="serviceType.id as serviceType.name for serviceType in rec.availableServiceTypes[rec.serviceTypeCategory]">
+                    </select>
+                  </div>
+
+                  <div class="form-group" flex>
+                    <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="rec.serviceDate"
+                             value="{{ rec.serviceDate | date:'fullDate' }}"
+                             ng-change="rec.setServiceSelections('serviceDate')"
+                             class="form-control"
+                             uib-datepicker-popup
+                             is-open="rec.opened"
+                             required disabled/>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="rec.opened = true"><i
+                          class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
+                  </div>
+                  <br/>
+                  <button class="btn btn-primary pull-right"
+                          ng-disabled="rec.recommendedServices.length === 0 || !rec.areServicesValid()"
+                          ng-click="rec.saveServices()">
+                    Make Recommendations for {{rec.recommendedServices.length}} Service(s)
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </md-content>
+      </md-tab-body>
+    </md-tab>
+  </md-tabs>
+</div>
