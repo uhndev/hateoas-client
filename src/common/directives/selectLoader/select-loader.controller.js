@@ -40,8 +40,10 @@
     function parseValues(values) {
       var searchIds;
       if (vm.isAtomic) {
+        // for singleselect, check if input was an object or id, and return just an id
         searchIds = _.has(values, 'id') ? values.id : values || '';
       } else {
+        // for multiselect, check if input was an array of objects or and array of ids, and return just an array of ids
         searchIds = _.has(_.first(values), 'id') ? _.pluck(values, 'id') : values || [];
         if (!_.isArray(searchIds)) {
           searchIds = [searchIds];
