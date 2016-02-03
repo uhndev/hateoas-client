@@ -12,7 +12,7 @@
    * @description Service for optimizing $http calls when populating resource based dropdowns.  If multiple /user
    *              dropdowns exist on a page, there is no sense in fetching the same data several times, so if the
    *              $location is the same, fetch data from cache.
-   * @param $http
+   * @param $sailsSocket
    * @constructor
    */
   function SelectService($sailsSocket) {
