@@ -14,10 +14,9 @@
       restrict: 'E',
       scope: {
         site: '=selectedSite',
-        markers: '@',
-        map: '@',
-        originIcon: '@',      // 'assets/img/hospital-building.png'
-        destinationIcon: '@', // 'assets/img/hospital-building.png'
+        markers: '=',
+        map: '=',
+        mapReady: '=',
         destinationClick: '@' // onclick method for destination
       },
 

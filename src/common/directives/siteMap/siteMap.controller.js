@@ -1,6 +1,6 @@
 /**
  *
- * Directive controller for Distance Matrix
+ * Directive controller for SiteMap
  */
 
 (function () {
@@ -8,7 +8,8 @@
 
   angular
     .module('dados.common.directives.siteMap.controller', [
-      'uiGmapgoogle-maps'
+      'uiGmapgoogle-maps',
+      'toastr'
     ])
     .config(function (uiGmapGoogleMapApiProvider) {
       uiGmapGoogleMapApiProvider.configure({
@@ -19,20 +20,15 @@
     })
     .controller('SiteMapController', SiteMapController);
 
-  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady'];
+  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady','toastr'];
 
-  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady,toastr) {
     var vm = this;
 
     // bindable variables
     vm.googleMaps = null;
     vm.directionsService = null;
     vm.directionsDisplay = null;
-    vm.mapReady=false;
-    vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
-
-    // google placeholders for directions call
-    vm.markers = [];
 
     init();
 
@@ -45,24 +41,6 @@
 
         //init googleMaps object
         vm.googleMaps = mapsAPI;
-/*
-        //initialize sites/destinations
-        _.each(vm.sites, function (site, index) {
-          vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
-          var val = {
-            id: index,
-            idKey: index,
-            latitude: site.address.latitude,
-            longitude: site.address.longitude,
-            title: site.name,
-            icon: {url: vm.destinationIcon},
-            click: function (arg) {
-              vm.destinationClick(arg.model.site);
-            }
-          };
-          vm.markers.push(val);
-        });
-*/
 
         //initialize directions service
         vm.directionsService = new vm.googleMaps.DirectionsService();
@@ -70,31 +48,41 @@
         //init directions renderer
         vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
 
-        vm.mapReady=true;
-
       });
     }
 
     /**
      * calculateDirections
+     *
+     * takes an array of origin/destination addresses and hits the
+     * google maps directions service and set the returned route
+     * on the map and in the directions div
+     *
      * @param origin
      * @param destination
      */
 
     function calculateDirections(origin, destination) {
+
+      //prepare the request
       var request = {
         origin: origins,
         destination: destinations,
         travelMode: vm.googleMaps.DirectionsTravelMode.DRIVING
       };
 
+      //get the route back from the service
       vm.directionsService.route(request, function (response) {
         if (response.status === vm.googleMaps.DirectionsStatus.OK) {
-          // set routes
-          vm.directionsDisplay.setDirections(response);
-          $scope.$apply(function () {
-            // vm.directionsDisplay.setMap($scope.map.control.getGMap());
 
+          // set the route on the map/dirctions display
+          vm.directionsDisplay.setDirections(response);
+
+          //scope.apply is a workaround for an angular google maps bug with how they handle scopes
+          //TODO: this should be changed when the bug is fixed, but who knows when that will be
+          $scope.$apply(function () {
+
+            //set the directions steps
             vm.directionsSteps = response.routes[0].legs[0].steps;
             return uiGmapIsReady.promise(1);
           })
@@ -102,13 +90,24 @@
               var instanceMap = instances[0].map;
               vm.directionsDisplay.setMap(instanceMap);
               vm.directionsDisplay.setDirections(response);
-              // this is not the angular way, at all, and I hate it, but it works. Want to change it
 
+              // this is not the angular way, at all, and I hate it, but it works. Want to change it
+              //TODO: change this crap
               vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
             });
+        } else {
+          toastr.warning('Problem getting route from Google Maps. Are locations set?');
         }
       });
     }
+
+    /**
+     * geocodeSites
+     *
+     * this function takes the site addresses and geocodes them storing the long/latt of each site...
+     * TODO: this function likely belongs somewhere else, but is unused now, maybe on a hook in the address model? artifact
+     *
+     */
 
     function geocodeSites() {
       vm.sites.forEach(function (site) {
