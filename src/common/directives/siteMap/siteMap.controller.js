@@ -112,11 +112,9 @@
     function geocodeSites() {
       vm.sites.forEach(function (site) {
         console.log(site);
-        var addy = (site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
+        var addy=_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ');
         vm.geocoder.geocode({address: addy}, function (location) {
-          console.log(location);
           if (location[0]) {
-            console.log(location);
 
             var newSite = new Site(site);
             newSite.address.latitude = location[0].geometry.location.lat();
