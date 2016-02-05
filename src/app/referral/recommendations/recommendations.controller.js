@@ -159,7 +159,7 @@
       } else {
         vm.recommendedServices.push(_.merge(service, getSharedServices()));
 
-        AltumAPI.AltumService.get({ id: service.altumService, populate: 'sites' }, function (data) {
+        AltumAPI.AltumService.get({id: service.altumService, populate: 'sites'}, function (data) {
           if (data.sites.length > 0) {
             _.last(vm.recommendedServices).availableSites = data.sites;
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
