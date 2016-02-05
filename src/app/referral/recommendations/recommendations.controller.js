@@ -130,9 +130,7 @@
           programService: altumProgramService.programService,
           serviceCategory: altumProgramService.serviceCategory,
           site: null,
-          approvalNeeded: false,
-          availableSites: altumProgramService.sites,
-          siteDictionary: _.indexBy(altumProgramService.sites, 'id')
+          approvalRequired: altumProgramService.approvalRequired
         });
       });
     }
@@ -160,6 +158,13 @@
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(_.merge(service, getSharedServices()));
+
+        AltumAPI.AltumService.get({id: service.altumService, populate: 'sites'}, function (data) {
+          if (data.sites.length > 0) {
+            _.last(vm.recommendedServices).availableSites = data.sites;
+            _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
+          }
+        });
       }
     }
 
@@ -244,7 +249,7 @@
       return _.all(vm.validityFields, function (field) {
         var isValid = _.has(service, field) && !_.isNull(service[field]);
         // if particular service requires a site selection, ensure it is not null
-        if (service.availableSites.length) {
+        if (_.has(service, 'availableSites') && service.availableSites.length) {
           return isValid && !_.isNull(service.site);
         }
         return isValid;

@@ -191,11 +191,6 @@ describe('Controller: RecommendationsController Tests', function() {
     httpBackend.flush();
   }));
 
-  afterEach(function() {
-    httpBackend.verifyNoOutstandingExpectation();
-    httpBackend.verifyNoOutstandingRequest();
-  });
-
   describe('Basic unit tests for adding/removing service selections', function() {
     it('should at least be defined', function() {
       expect(recCtrl).toBeDefined();
@@ -227,7 +222,7 @@ describe('Controller: RecommendationsController Tests', function() {
     });
 
     it('should un-recommend a service and make it available to be recommended again', function() {
-      recCtrl.toggleService(recCtrl.recommendedServices[0]);
+      recCtrl.toggleService(recCtrl.availableServices[0]);
       expect(recCtrl.recommendedServices.length).toEqual(1);
     });
   });

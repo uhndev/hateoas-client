@@ -105,8 +105,10 @@
                   <div class="form-group">
                     <div class="checkbox">
                       <label>
-                        <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"/>
-                        Approval Needed
+                        <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
+                               ng-checked="rec.recommendedServices[rec.currIndex].approvalRequired"
+                               ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
+                        Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
                       </label>
                     </div>
                   </div>
