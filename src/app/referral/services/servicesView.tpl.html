@@ -1,0 +1,78 @@
+<div class="container" ng-controller="ServicesController as svc" ng-cloak>
+  <div layout="column">
+    <h1 flex id="Title">
+      <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
+      <small>{{svc.resource.items.client_displayName}}</small>
+    </h1>
+    <div flex>
+      <table class="table table-condensed summary-table">
+        <tr class="summary-header-row">
+          <th ng-repeat="(label, value) in ::svc.referralOverview" translate>{{label}}</th>
+        </tr>
+        <tr class="summary-table-row">
+          <td ng-repeat="(label, value) in ::svc.referralOverview">{{::value}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <uib-accordion close-others="true">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | groupBy: svc.groupBy">
+      <uib-accordion-heading>
+        <b>VISIT #{{$index + 1}}:</b>
+        {{ groupKey }}
+        <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
+      </uib-accordion-heading>
+
+      <div layout="column">
+        <div flex layout="row">
+          <div flex class="form-group">
+            <label>Group By:</label>
+            <select class="form-control" ng-model="svc.subGroupBy">
+              <option value="{{group.name}}" ng-repeat="group in svc.subGroupFields" translate>
+                {{group.prompt}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <br/>
+
+        <uib-accordion close-others="false">
+          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy">
+            <uib-accordion-heading>
+              <b>Encounter #{{$index + 1}}: </b>
+              {{subGroup}}
+              <span class="pull-right">{{subServices.length}} Service(s)</span>
+            </uib-accordion-heading>
+            <table class="table table-condensed summary-table">
+              <tr class="summary-header-row">
+                <th ng-repeat="summary in svc.summaryFields" translate
+                    ng-if="subServices[0][summary.name]">
+                  {{summary.prompt}}
+                </th>
+              </tr>
+              <tr class="summary-table-row">
+                <td ng-repeat="summary in svc.summaryFields" ng-if="subServices[0][summary.name]">
+                  {{subServices[0][summary.name]}}
+                </td>
+              </tr>
+            </table>
+            <md-divider></md-divider>
+            <table class="table table-condensed">
+              <tr>
+                <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
+              </tr>
+              <tr ng-repeat="service in subServices | orderBy: 'createdAt'">
+                <td ng-repeat="field in svc.visitFields">
+                  {{service[field.name]}}
+                </td>
+              </tr>
+            </table>
+          </uib-accordion-group>
+        </uib-accordion>
+      </div>
+    </uib-accordion-group>
+  </uib-accordion>
+
+</div>

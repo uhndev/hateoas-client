@@ -240,7 +240,7 @@ describe('Controller: RecommendationsController Tests', function() {
     });
 
     it('should apply to all recommended services when selections are made in detail panel', function() {
-      expect(recCtrl.validityFields.length).toEqual(7);
+      expect(recCtrl.validityFields.length).toEqual(6);
       recCtrl.validityFields.forEach(function (field) {
         recCtrl.setServiceSelections(field);
       });

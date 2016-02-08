@@ -10,6 +10,7 @@
       'ngSanitize',
       'ngMaterial',
       'pascalprecht.translate',
+      'angular.filter',
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
