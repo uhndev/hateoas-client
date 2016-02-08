@@ -25,6 +25,7 @@
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
 
+    // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
       {
         name: 'workStatus',
@@ -40,6 +41,7 @@
       }
     ];
 
+    // data columns for subgroups (encounters) under visits
     vm.subGroupFields = [
       {
         name: 'physician_displayName',
@@ -51,6 +53,7 @@
       }
     ];
 
+    // data columns for groups (visits)
     vm.visitFields = [
       {
         name: 'altumServiceName',
@@ -74,9 +77,6 @@
       }
     ];
 
-    // bindable methods
-    vm.selectVisit = selectVisit;
-
     init();
 
     ///////////////////////////////////////////////////////////////////////////
@@ -86,12 +86,14 @@
 
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
+        // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
           service.serviceDate = moment(service.serviceDate).format('dddd, MMMM Do YYYY h:mm a');
           return service;
         });
 
+        // data columns for referral overview table
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
@@ -106,16 +108,6 @@
         HeaderService.setSubmenu('referral', data.links);
       });
     }
-
-    /**
-     * selectVisit
-     * @description Selects a recommended service for detail editing
-     * @param {Object} visit
-     */
-    function selectVisit(visit) {
-      vm.selectedVisit = (vm.selectedVisit === visit ? null : visit);
-    }
-
   }
 
 })();
