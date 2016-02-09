@@ -62,8 +62,8 @@
     vm.distanceMatrix = [];
     vm.directionsSteps = [];
     vm.markers = [];
-    vm.tempMarkers=[];
-    vm.selectedClientMarker={};
+    vm.tempMarkers = [];
+    vm.selectedClientMarker = {};
 
     // bindable methods
     vm.selectProgram = selectProgram;
@@ -113,7 +113,7 @@
             vm.tempMarkers.push(val);
           });
 
-          vm.markers=vm.tempMarkers;
+          vm.markers = vm.tempMarkers;
         });
     }
 
@@ -130,10 +130,10 @@
           //TODO: add to query recommendations false flag recommendationsMade: false
         }
       }).$promise.then(function (resp) {
-            vm.referralList = resp;
-            vm.referrals = resp;
-            vm.collapsedSearch = false;
-        },
+        vm.referralList = resp;
+        vm.referrals = resp;
+        vm.collapsedSearch = false;
+      },
 
         function error(err) {
           alert('error');
@@ -191,7 +191,7 @@
       }).$promise
         .then(
           function (resp) {
-            vm.availableServices=resp; //assign the newly selected programServices
+            vm.availableServices = resp; //assign the newly selected programServices
             vm.recommendedServices = {}; //reset recommended services to clear box
           },
 
@@ -217,7 +217,7 @@
         }
       }).$promise.then(function (resp) {
           vm.fullReferral = resp[0];
-        //  vm.resetServices();
+          //  vm.resetServices();
           vm.recommendedServices = [];
         },
         function error(err) {
@@ -244,7 +244,7 @@
         title: referral.client_name,
         icon: {url: 'assets/img/patienticon.png'}
       };
-      vm.selectedClientMarker=val;
+      vm.selectedClientMarker = val;
 
       vm.map = {
         control: {},
@@ -279,7 +279,6 @@
         });
       });
     }
-
 
     function geocodeSites() {
       vm.sites.forEach(function (site) {
