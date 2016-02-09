@@ -11,7 +11,13 @@
  *
  * @example
  *
- *    <site-map map-ready="true" map="{control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7}" marker="assessment.markers"></site-map>
+ * <site-map map-ready="assessment.mapReady" map="assessment.map" selected-site="assessment.selectedSite" markers="assessment.markers" selected-client-marker="assessment.selectedClientMarker"></site-map>
+ *
+ * @param mapReady boolean
+ * @param map {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7}
+ * @param selectedSite JSON arm site object
+ * @param markers json site markers
+ * @param selectedClientMarker json marker for client
  *
  */
 (function() {
