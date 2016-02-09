@@ -31,8 +31,8 @@
     // google distance placeholders for distance call
     vm.distanceMatrix = [];
     vm.destinationDistance = {};
-    vm.destinations=[];
-    vm.origins=[];
+    vm.destinations = [];
+    vm.origins = [];
 
     // bindable methods
     vm.calculateDistances = calculateDistances;
@@ -53,14 +53,14 @@
 
         $scope.$watch('distance.origin', function (newOrigin, oldOrigin) {
           console.log(newOrigin);
-          vm.origins=[];
+          vm.origins = [];
           vm.origins.push(newOrigin);
           calculateDistances();
         });
 
         $scope.$watch('distance.sites', function (newSites,oldSites) {
           //initialize sites/destinations
-          vm.destinations=[];
+          vm.destinations = [];
           _.each(newSites, function (site, index) {
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
           });
