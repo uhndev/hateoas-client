@@ -20,15 +20,22 @@
     })
     .controller('SiteMapController', SiteMapController);
 
-  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady','toastr'];
+  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'toastr'];
 
-  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady,toastr) {
+  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady, toastr) {
     var vm = this;
 
     // bindable variables
     vm.googleMaps = null;
     vm.directionsService = null;
     vm.directionsDisplay = null;
+    vm.travelModes = {};
+    vm.selectedTravelMode = 'DRIVING';
+
+    // bindable methods
+    vm.selectSite = selectSite;
+    vm.calculateDirections = calculateDirections;
+    vm.resetDirections= resetDirections;
 
     init();
 
@@ -36,8 +43,9 @@
 
     function init() {
 
+
       //init maps api object
-      uiGmapGoogleMapApi.then(function(mapsAPI) {
+      uiGmapGoogleMapApi.then(function (mapsAPI) {
 
         //init googleMaps object
         vm.googleMaps = mapsAPI;
@@ -48,6 +56,36 @@
         //init directions renderer
         vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
 
+        //init travelModes
+        vm.travelModes = vm.googleMaps.DirectionsTravelMode;
+
+        var unregister = $scope.$watch('sitemap.markers', function (newMarkers, oldMarkers) {
+          if (newMarkers.length > 1) {
+            console.log(newMarkers);
+            //init marker click functions
+            _.each(newMarkers, function (marker) {
+              marker['click'] = function () {
+                selectSite(marker.site);
+              };
+            });
+
+            unregister();
+          }
+        }, true);
+
+        $scope.$watch('sitemap.selectedClientMarker', function (newClientMarker, oldClientMarker) {
+          if (oldClientMarker.id != 'client' && newClientMarker != null) {
+            vm.markers.push(newClientMarker);
+          } else {
+            _.find(vm.markers, {id:'client'}).latitude=newClientMarker.latitude;
+            _.find(vm.markers, {id:'client'}).longitude=newClientMarker.longitude;
+          }
+          resetDirections();
+        }, true);
+
+        $scope.$watch('sitemap.selectedSite', function (newSite, oldSite) {
+          resetDirections();
+        }, true);
       });
     }
 
@@ -66,9 +104,9 @@
 
       //prepare the request
       var request = {
-        origin: origins,
-        destination: destinations,
-        travelMode: vm.googleMaps.DirectionsTravelMode.DRIVING
+        origin: origin,
+        destination: destination,
+        travelMode: vm.selectedTravelMode
       };
 
       //get the route back from the service
@@ -101,6 +139,37 @@
       });
     }
 
+
+    /**
+     * selectSite
+     *
+     * @description takes a site object, calculates origin/destination based on the client/passed site
+     * and calls calculateDirections to express the new route on the map
+     *
+     * @param site
+     */
+
+    function selectSite(site) {
+      vm.selectedSite = site;
+
+      vm.resetDirections();
+    }
+
+    /**
+     * resetDirections
+     *
+     * @description called off of watches and changes to the travelMode, resets the directions per the currently
+     * selectedSite and currently selected Client Marker
+     *
+     *
+     */
+
+    function resetDirections() {
+      var origin = new vm.googleMaps.LatLng(vm.selectedClientMarker.latitude, vm.selectedClientMarker.longitude);
+      var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
+
+      vm.calculateDirections(origin, destination);
+    }
     /**
      * geocodeSites
      *
@@ -108,31 +177,29 @@
      * TODO: this function likely belongs somewhere else, but is unused now, maybe on a hook in the address model? artifact
      *
      */
+    /*
+     function geocodeSites() {
+     vm.sites.forEach(function (site) {
+     var addy=_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ');
+     vm.geocoder.geocode({address: addy}, function (location) {
+     if (location[0]) {
 
-    function geocodeSites() {
-      vm.sites.forEach(function (site) {
-        console.log(site);
-        var addy=_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ');
-        vm.geocoder.geocode({address: addy}, function (location) {
-          if (location[0]) {
-
-            var newSite = new Site(site);
-            newSite.address.latitude = location[0].geometry.location.lat();
-            newSite.address.longitude = location[0].geometry.location.lng();
-            newSite.$update({id: site.id})
-              .then(function () {
-                toastr.success('Site geolocation updated', 'Geolocation');
-              })
-              .finally(function () {
-                newSite = {};
-                location = {};
-              });
-            newSite.$update(newSite);
-          }
-        });
-      });
-    }
-
+     var newSite = new Site(site);
+     newSite.address.latitude = location[0].geometry.location.lat();
+     newSite.address.longitude = location[0].geometry.location.lng();
+     newSite.$update({id: site.id})
+     .then(function () {
+     toastr.success('Site geolocation updated', 'Geolocation');
+     })
+     .finally(function () {
+     newSite = {};
+     location = {};
+     });
+     }
+     });
+     });
+     }
+     */
 
   }
 })();
