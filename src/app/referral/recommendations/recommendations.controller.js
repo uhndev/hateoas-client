@@ -25,14 +25,14 @@
 
     vm.physician = null;
     vm.clinician = null;
-    vm.status = null;
     vm.workStatus = null;
     vm.prognosis = null;
+    vm.prognosisTimeframe = null;
     vm.serviceType = null;
     vm.approvalNeeded = null;
     vm.serviceDate = new Date();
     vm.currentDate = new Date();
-    vm.validityFields = ['physician', 'clinician', 'status', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+    vm.validityFields = ['physician', 'clinician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 1,
       serviceDetail: 2
@@ -72,11 +72,12 @@
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
         vm.referralOverview = {
+          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
+          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
           'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
           'COMMON.MODELS.REFERRAL.CLINICIAN': data.items.clinician_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName
+          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
 
         // initialize submenu
@@ -97,9 +98,9 @@
       return {
         physician: vm.physician,
         clinician: vm.clinician,
-        status: vm.status,
         workStatus: vm.workStatus,
         prognosis: vm.prognosis,
+        prognosisTimeframe: vm.prognosisTimeframe,
         serviceType: vm.serviceType,
         serviceDate: vm.currentDate
       };

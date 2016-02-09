@@ -4,11 +4,11 @@
       <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
     </h1>
     <div class="table-responsive" flex>
-      <table class="table table-condensed table-striped">
-        <tr class="info">
+      <table class="table table-condensed summary-table">
+        <tr class="summary-header-row">
           <th ng-repeat="(label, value) in ::rec.referralOverview" translate>{{label}}</th>
         </tr>
-        <tr class="info">
+        <tr class="summary-table-row">
           <td ng-repeat="(label, value) in ::rec.referralOverview">{{::value}}</td>
         </tr>
       </table>
@@ -154,19 +154,6 @@
                   </div>
 
                   <div class="form-group" flex>
-                    <label translate>COMMON.MODELS.SERVICE.STATUS</label>
-                    <select-loader
-                      url="status"
-                      query="{ category: 'referral' }"
-                      is-atomic="true"
-                      is-disabled="false"
-                      ng-model="rec.status"
-                      ng-change="rec.setServiceSelections('status')"
-                      labels="displayName">
-                    </select-loader>
-                  </div>
-
-                  <div class="form-group" flex>
                     <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
                     <select-loader
                       url="workstatus"
@@ -193,9 +180,9 @@
                       <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
                       <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
                     </label>
-                    <select ng-model="rec.timeframe" ng-change="rec.setServiceSelections('timeframe')"
+                    <select ng-model="rec.prognosisTimeframe" ng-change="rec.setServiceSelections('prognosisTimeframe')"
                             class="form-control"
-                            ng-options="timeframe as timeframe.name for timeframe in rec.availableTimeframes">
+                            ng-options="timeframe.id as timeframe.name for timeframe in rec.availableTimeframes">
                     </select>
                   </div>
 
@@ -217,7 +204,6 @@
 
                   <div class="form-group" flex>
                     <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
-
                     <p class="input-group">
                       <input type="text"
                              ng-model="rec.serviceDate"
@@ -225,6 +211,7 @@
                              ng-change="rec.setServiceSelections('serviceDate')"
                              class="form-control"
                              uib-datepicker-popup
+                             type="datetime-local"
                              is-open="rec.opened"
                              required disabled/>
                       <span class="input-group-btn">
