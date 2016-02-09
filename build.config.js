@@ -92,8 +92,8 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
-      'sails-io-settings.js',
       'vendor/sails.io.js/dist/sails.io.js',
+			'sails-io-settings.js',
 
       'vendor/angular/angular.js',
       'vendor/angular-animate/angular-animate.js',
@@ -115,6 +115,7 @@ module.exports = {
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
+      'vendor/angular-filter/dist/angular-filter.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
