@@ -175,6 +175,7 @@
      * TODO: this function likely belongs somewhere else, but is unused now, maybe on a hook in the address model? artifact
      *
      */
+
     /*
      function geocodeSites() {
      vm.sites.forEach(function (site) {
