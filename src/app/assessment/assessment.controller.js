@@ -57,7 +57,7 @@
     // google distance placeholders for distance call
     vm.origins = [];
     vm.destinations = [];
-    vm.myorigins = [];
+    vm.myorigin = '';
     vm.mydestinations = [];
     vm.distanceMatrix = [];
     vm.directionsSteps = [];
@@ -226,10 +226,7 @@
 
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
-      vm.myorigins = [{
-        name: referral.client_firstName + ' ' + referral.client_lastName,
-        address: (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')
-      }];
+      vm.myorigin = (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '');
 
       // hide the search, unhide client detail on front end, unhide map
       vm.collapsedSearch = true;

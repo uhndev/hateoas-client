@@ -31,6 +31,8 @@
     // google distance placeholders for distance call
     vm.distanceMatrix = [];
     vm.destinationDistance = {};
+    vm.destinations=[];
+    vm.origins=[];
 
     // bindable methods
     vm.calculateDistances = calculateDistances;
@@ -48,7 +50,20 @@
 
         //initialize distance API
         vm.geoDistance = new mapsAPI.DistanceMatrixService();
-        $scope.$watch('distance.origins', function () {
+
+        $scope.$watch('distance.origin', function (newOrigin, oldOrigin) {
+          console.log(newOrigin);
+          vm.origins=[];
+          vm.origins.push(newOrigin);
+          calculateDistances();
+        });
+
+        $scope.$watch('distance.sites', function (newSites,oldSites) {
+          //initialize sites/destinations
+          vm.destinations=[];
+          _.each(newSites, function (site, index) {
+            vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
+          });
           calculateDistances();
         });
       });
@@ -56,13 +71,13 @@
 
     /**
      * [calculateDistances]
-     * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
+     * calculates the distance Matrix from the currently selected referall's origin and all of altum's sites
      */
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
       var distanceArgs = {
-        origins: _.pluck(vm.origins, 'address'),
-        destinations: _.pluck(vm.destinations, 'address'),
+        origins: vm.origins,
+        destinations: vm.destinations,
         travelMode: vm.googleMaps.TravelMode.DRIVING
       };
 
