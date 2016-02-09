@@ -92,8 +92,8 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
+      'sails-io-settings.js',
       'vendor/sails.io.js/dist/sails.io.js',
-			'sails-io-settings.js',
 
       'vendor/angular/angular.js',
       'vendor/angular-animate/angular-animate.js',
