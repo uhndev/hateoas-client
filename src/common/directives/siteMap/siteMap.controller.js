@@ -35,14 +35,13 @@
     // bindable methods
     vm.selectSite = selectSite;
     vm.calculateDirections = calculateDirections;
-    vm.resetDirections= resetDirections;
+    vm.resetDirections = resetDirections;
 
     init();
 
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-
 
       //init maps api object
       uiGmapGoogleMapApi.then(function (mapsAPI) {
@@ -64,7 +63,7 @@
             console.log(newMarkers);
             //init marker click functions
             _.each(newMarkers, function (marker) {
-              marker['click'] = function () {
+              marker.click = function () {
                 selectSite(marker.site);
               };
             });
@@ -74,11 +73,11 @@
         }, true);
 
         $scope.$watch('sitemap.selectedClientMarker', function (newClientMarker, oldClientMarker) {
-          if (oldClientMarker.id != 'client' && newClientMarker != null) {
+          if (oldClientMarker.id !== 'client' && newClientMarker !== null) {
             vm.markers.push(newClientMarker);
           } else {
-            _.find(vm.markers, {id:'client'}).latitude=newClientMarker.latitude;
-            _.find(vm.markers, {id:'client'}).longitude=newClientMarker.longitude;
+            _.find(vm.markers, {id:'client'}).latitude = newClientMarker.latitude;
+            _.find(vm.markers, {id:'client'}).longitude = newClientMarker.longitude;
           }
           resetDirections();
         }, true);
@@ -138,7 +137,6 @@
         }
       });
     }
-
 
     /**
      * selectSite
