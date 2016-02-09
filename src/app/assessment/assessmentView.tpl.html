@@ -14,7 +14,7 @@
         <fieldset>
           <div id="directiveDiv">
             <h1>directive</h1>
-            <distance-matrix origins="assessment.myorigins" destinations="assessment.mydestinations"  destination-icon= "assets/img/hospital-building.png">
+            <distance-matrix origins="assessment.myorigins" sites="assessment.sites"  destination-icon= "assets/img/hospital-building.png">
             </distance-matrix>
             <h1>directive</h1>
           </div>
@@ -94,23 +94,8 @@
       </tr>
     </table>
 
-    <div id="sitesDiv">
-      <table id="distanceToSites" class="SiteDistanceTable">
-        <tr>
-          <td ng-repeat="site in assessment.sites" ng-click="assessment.selectSite(site)">{{site.name}}</td>
-        </tr>
-        <tr>
-          <td ng-repeat="siteDistance in assessment.distanceMatrix.rows[0].elements">{{siteDistance.distance.text}}</td>
-        </tr>
-      </table>
-    </div>
-    <div id="mapDiv" class="form-div">
-      <ui-gmap-google-map id="myMap" ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
-                          zoom="assessment.map.zoom">
-        <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click">
-        </ui-gmap-markers>
-      </ui-gmap-google-map>
-      <div id="directionsDiv"/>
+    <site-map map-ready="assessment.mapReady" map="assessment.map" selected-site="assessment.selectedSite" markers="assessment.markers" selected-client-marker="assessment.selectedClientMarker"></site-map>
+    <span>Selected Site is {{assessment.selectedSite}}</span>
     </div>
   </div>
   <div id="recomendationsDiv">

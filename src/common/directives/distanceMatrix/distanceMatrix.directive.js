@@ -13,9 +13,9 @@
     return {
       restrict: 'E',
       scope: {
-        origins: '=origins',
-        destinations: '=destinations',
-        destinationIcon: '=destinationIcon' // 'assets/img/hospital-building.png'
+        origins: '=',
+        sites: '=',
+        selectedSite: '='
       },
 
       templateUrl: 'directives/distanceMatrix/distanceMatrix.tpl.html',

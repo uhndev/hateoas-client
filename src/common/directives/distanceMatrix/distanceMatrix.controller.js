@@ -30,7 +30,6 @@
 
     // google distance placeholders for distance call
     vm.distanceMatrix = [];
-    vm.markers = [];
     vm.destinationDistance = {};
 
     // bindable methods
@@ -53,7 +52,6 @@
           calculateDistances();
         });
       });
-
     }
 
     /**
