@@ -50,7 +50,7 @@
         </md-content>
       </md-tab-body>
     </md-tab>
-    <md-tab ng-disabled="!rec.referral.program || rec.recommendedServices.length === 0">
+    <md-tab ng-click="rec.fetchLoaderData()" ng-disabled="!rec.referral.program || rec.recommendedServices.length === 0">
       <md-tab-label>
         <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES</span>
         ({{rec.recommendedServices.length}})

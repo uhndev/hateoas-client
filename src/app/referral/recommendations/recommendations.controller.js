@@ -38,17 +38,12 @@
       serviceDetail: 2
     };
 
-    vm.availablePrognosis = AltumAPI.Prognosis.query();
-    vm.availableTimeframes = AltumAPI.Timeframe.query();
-    AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-      vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-    });
-
     vm.recommendedServices = [];
     vm.availableServices = [];
     vm.currentCategories = [];
 
     // bindable methods
+    vm.fetchLoaderData = fetchLoaderData;
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
@@ -74,6 +69,7 @@
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
+          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claim_claimNum,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
           'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
           'COMMON.MODELS.REFERRAL.CLINICIAN': data.items.clinician_name,
@@ -133,6 +129,18 @@
           site: null,
           approvalRequired: altumProgramService.approvalRequired
         });
+      });
+    }
+
+    /**
+     * fetchLoaderData
+     * @description Fetches data from dropdowns on visit info panel once some services have been selected
+     */
+    function fetchLoaderData() {
+      vm.availablePrognosis = AltumAPI.Prognosis.query();
+      vm.availableTimeframes = AltumAPI.Timeframe.query();
+      AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+        vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
       });
     }
 

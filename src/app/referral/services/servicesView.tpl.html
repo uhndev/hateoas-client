@@ -41,7 +41,6 @@
         <uib-accordion close-others="false">
           <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy">
             <uib-accordion-heading>
-              <b>Encounter #{{$index + 1}}: </b>
               {{subGroup}}
               <span class="pull-right">{{subServices.length}} Service(s)</span>
             </uib-accordion-heading>
