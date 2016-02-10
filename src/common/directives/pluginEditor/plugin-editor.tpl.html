@@ -13,7 +13,7 @@
         <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
           <div class="form-group">
             <label for="form-loader">Load Form:</label>
-            <select ng-model="formID" class="form-control"
+            <select id="form-loader" ng-model="formID" class="form-control"
                     ng-change="loadForm(formID)">
               <option value="" disabled>Select a form</option>
               <option value="new">-- New --</option>
@@ -28,7 +28,7 @@
             <ui-help uib-popover="Provide a name for your form. Names must
                       be in upper case and cannot contain any spaces."
                      popover-placement="right"></ui-help>
-            <input type="text" class="form-control"
+            <input id="form-name" type="text" class="form-control"
                    ng-model="form.name"
                    ng-trim="true" title="Provide a name for your form"
                    placeholder="Provide a name for your form"/>
@@ -152,7 +152,7 @@
       </div>
       <!-- FormLayout -->
     </uib-accordion-group>
-    <uib-accordion-group is-open="isSettingsOpen">
+    <uib-accordion-group is-open="isSettingsOpen" class="{ 'hidden' : !isAdmin }">
       <uib-accordion-heading>
         <span class="glyphicon "
               ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">

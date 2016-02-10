@@ -15,15 +15,16 @@
     .controller('PluginController', PluginController);
 
   PluginController.$inject = [
-    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'
+    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'AuthService', 'toastr'
   ];
 
   function PluginController($scope, $location, $timeout, FormService,
-                            StudyFormService, FormVersionService, toastr) {
+                            StudyFormService, FormVersionService, AuthService, toastr) {
 
     // private variables
     var EMPTY_FORM = {name: '', questions: [], metaData: {}};
     // bindable variables
+    $scope.isAdmin = AuthService.isAdmin();
     $scope.firstLoad = true;
     $scope.isSaving = false;
     $scope.formID = $location.search().formID;
