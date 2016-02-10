@@ -39,7 +39,8 @@
         <br/>
 
         <uib-accordion close-others="false">
-          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy">
+          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
+                               is-open="accordion.groups[$index].isOpen">
             <uib-accordion-heading>
               {{subGroup}}
               <span class="pull-right">{{subServices.length}} Service(s)</span>
@@ -58,13 +59,17 @@
               </tr>
             </table>
             <md-divider></md-divider>
-            <table class="table table-condensed">
+            <table class="table table-condensed" ng-if="accordion.groups[$index].isOpen" >
               <tr>
                 <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
+                <th>Approvals</th>
               </tr>
-              <tr ng-repeat="service in subServices | orderBy: 'createdAt'">
+              <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
                 <td ng-repeat="field in svc.visitFields">
                   {{service[field.name]}}
+                </td>
+                <td>
+                  <service-approval service="service" statuses="svc.statuses"></service-approval>
                 </td>
               </tr>
             </table>
@@ -73,5 +78,4 @@
       </div>
     </uib-accordion-group>
   </uib-accordion>
-
 </div>

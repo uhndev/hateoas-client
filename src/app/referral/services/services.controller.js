@@ -7,7 +7,8 @@
       'ngResource',
       'toastr',
       'dados.header.service',
-      'dados.common.services.altum'
+      'dados.common.services.altum',
+      'altum.referral.serviceApproval'
     ])
     .controller('ServicesController', ServicesController);
 
@@ -24,6 +25,7 @@
     vm.url = API.url() + $location.path();
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
+    vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
 
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
@@ -68,6 +70,10 @@
         prompt: 'COMMON.MODELS.SERVICE.CLINICIAN'
       },
       {
+        name: 'siteName',
+        prompt: 'COMMON.MODELS.SERVICE.SITE'
+      },
+      {
         name: 'serviceDate',
         prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       },
@@ -89,7 +95,7 @@
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
-          service.serviceDate = moment(service.serviceDate).format('dddd, MMMM Do YYYY h:mm a');
+          service.serviceDate = moment(service.serviceDate).format('MMM d, YYYY h:mm a');
           return service;
         });
 

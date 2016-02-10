@@ -29,14 +29,13 @@
         <md-content layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <!-- Service Category / Program Services Panel -->
           <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
-               ng-repeat="category in rec.currentCategories">
+               ng-repeat="(groupKey, groupServices) in rec.availableServices | groupBy: 'serviceCategory'">
             <div class="panel panel-info">
-              <div class="panel-heading">{{category.name}}</div>
+              <div class="panel-heading">{{groupServices[0].serviceCategoryName}}</div>
               <div class="panel-body">
                 <div class="row">
                   <div class="col-md-8">
-                    <div class="checkbox" ng-repeat="service in rec.availableServices"
-                         ng-if="category.id === service.serviceCategory">
+                    <div class="checkbox" ng-repeat="service in groupServices">
                       <label>
                         <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
                                ng-click="rec.toggleService(service)"/> {{service.name}}
