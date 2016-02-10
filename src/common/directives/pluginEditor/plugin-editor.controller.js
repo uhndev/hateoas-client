@@ -15,18 +15,19 @@
     .controller('PluginController', PluginController);
 
   PluginController.$inject = [
-    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'toastr'
+    '$scope', '$location', '$timeout', 'FormService', 'StudyFormService', 'FormVersionService', 'AuthService', 'toastr'
   ];
 
   function PluginController($scope, $location, $timeout, FormService,
-                            StudyFormService, FormVersionService, toastr) {
+                            StudyFormService, FormVersionService, AuthService, toastr) {
 
     // private variables
     var EMPTY_FORM = {name: '', questions: [], metaData: {}};
     // bindable variables
+    $scope.isAdmin = AuthService.isAdmin();
     $scope.firstLoad = true;
     $scope.isSaving = false;
-    $scope.idPlugin = $location.search().idPlugin;
+    $scope.formID = $location.search().formID;
     $scope.isEditorOpen = true;
     $scope.isSettingsOpen = false;
     $scope.form = EMPTY_FORM;
@@ -52,8 +53,8 @@
       $scope.forms = fetchAvailableForms();
 
       // if form id set in url, load form by id
-      if ($scope.idPlugin && !_.has($scope.form, 'id')) {
-        FormService.get({id: $scope.idPlugin}).$promise.then(function (form) {
+      if ($scope.formID && !_.has($scope.form, 'id')) {
+        FormService.get({id: $scope.formID}).$promise.then(function (form) {
           // we only want non-hateoas attributes to load into our pluginEditor
           setForm(pickFormAttributes(form));
         });
@@ -81,7 +82,7 @@
      * Save() will check if form is valid.
      */
     var onFormUpdate = debounceWatch($timeout, function (newVal, oldVal) {
-      if ($scope.firstLoad || !$scope.idPlugin) {
+      if ($scope.firstLoad || !$scope.formID) {
         // Suspend the first watch triggered until the end of digest cycle
         $timeout(function () {
           $scope.firstLoad = false;
@@ -119,7 +120,7 @@
     function onFormSaved(result) {
       var savedForm = null;
       $scope.isSaving = false;
-      if ($scope.study && !$scope.idPlugin) { // if saving a study form, going to return study object
+      if ($scope.study && !$scope.formID) { // if saving a study form, going to return study object
         var studyResponse = _.last(_.sortBy(result.forms, 'createdAt'));
         savedForm = pickFormAttributes(studyResponse);
         toastr.success('Created form ' + savedForm.name + ' in study!', 'Form');
@@ -127,7 +128,7 @@
         savedForm = pickFormAttributes(result);
         toastr.success('Saved form ' + savedForm.name + ' successfully!', 'Form');
       }
-      $location.search('idPlugin', savedForm.id);
+      $location.search('formID', savedForm.id);
       $scope.forms = fetchAvailableForms();
     }
 
@@ -279,13 +280,13 @@
      * @returns {*}
      */
     function archive() {
-      if ($scope.idPlugin && _.has($scope.form, 'id')) {
+      if ($scope.formID && _.has($scope.form, 'id')) {
         var conf = confirm('Are you sure you want to archive this form?');
         if (conf) {
-          var form = new FormService({id: $scope.idPlugin});
+          var form = new FormService({id: $scope.formID});
           return form.$delete().then(function () {
             toastr.success('Form successfully archived!', 'Success');
-            $location.search('idPlugin', null);
+            $location.search('formID', null);
             $scope.forms = fetchAvailableForms();
           });
         }
@@ -315,12 +316,12 @@
     function loadForm(id) {
       if (id === 'new') {
         $scope.form = EMPTY_FORM;
-        delete $scope.idPlugin;
-        $location.search('idPlugin', null);
+        delete $scope.formID;
+        $location.search('formID', null);
       } else {
         if (!_.isNull(id)) {
-          $scope.idPlugin = id;
-          $location.search('idPlugin', id);
+          $scope.formID = id;
+          $location.search('formID', id);
         }
       }
     }

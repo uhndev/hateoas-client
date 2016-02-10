@@ -11,8 +11,18 @@
   WidgetController.$inject = ['$scope', '$uibModal', 'WidgetService'];
 
   function WidgetController($scope, $uibModal, WidgetService) {
-    $scope.categories = WidgetService.categories;
     $scope.widget = $scope.questions[$scope.selectedIndex];
+    $scope.categories = WidgetService.categories;
+    $scope.widgetTypes = [];
+    _.each(WidgetService.categories, function (category, categoryName) {
+      _.each(category, function (type) {
+        $scope.widgetTypes.push({
+          'name' : type.charAt(0).toUpperCase() + type.slice(1),
+          'template' : type,
+          'category' : categoryName,
+        });
+      });
+    });
 
     $scope.unsorted = function(obj) {
       if (!obj) {
