@@ -14,12 +14,21 @@
         </tr>
       </table>
     </div>
+    <div flex layout="row">
+      <div flex class="form-group">
+        <label>Group Services By:</label>
+        <select class="form-control" ng-model="svc.groupBy">
+          <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
+            {{group.prompt}}
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <uib-accordion close-others="true">
     <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | groupBy: svc.groupBy">
       <uib-accordion-heading>
-        <b>VISIT #{{$index + 1}}:</b>
         {{ groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
       </uib-accordion-heading>
@@ -35,7 +44,6 @@
             </select>
           </div>
         </div>
-
         <br/>
 
         <uib-accordion close-others="false">

@@ -43,6 +43,18 @@
       }
     ];
 
+    // data columns for main groups (visits)
+    vm.groupFields = [
+      {
+        name: 'serviceGroupByDate',
+        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
+      },
+      {
+        name: 'siteName',
+        prompt: 'COMMON.MODELS.SERVICE.SITE'
+      }
+    ];
+
     // data columns for subgroups (encounters) under visits
     vm.subGroupFields = [
       {
