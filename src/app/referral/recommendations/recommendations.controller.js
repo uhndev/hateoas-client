@@ -28,35 +28,35 @@
 
     vm.query = {};  // waterline query for filtering services
     vm.queryTemplate = {        // hateoas template definition to use for query-builder
-      "rel": "altumprogramservices",
-      "data": [
+      'rel': 'altumprogramservices',
+      'data': [
         {
-          "name": "altumServiceName",
-          "type": "string",
-          "prompt": "Altum Service Name",
-          "value": "",
-          "required": false
+          'name': 'altumServiceName',
+          'type': 'string',
+          'prompt': 'Altum Service Name',
+          'value': '',
+          'required': false
         },
         {
-          "name": "serviceCategoryName",
-          "type": "string",
-          "prompt": "Service Category Name",
-          "value": "",
-          "required": false
+          'name': 'serviceCategoryName',
+          'type': 'string',
+          'prompt': 'Service Category Name',
+          'value': '',
+          'required': false
         },
         {
-          "name": "programServiceName",
-          "type": "string",
-          "prompt": "Program Service Name",
-          "value": "",
-          "required": false
+          'name': 'programServiceName',
+          'type': 'string',
+          'prompt': 'Program Service Name',
+          'value': '',
+          'required': false
         },
         {
-          "name": "approvalRequired",
-          "type": "boolean",
-          "prompt": "Approval Required",
-          "value": "",
-          "required": false
+          'name': 'approvalRequired',
+          'type': 'boolean',
+          'prompt': 'Approval Required',
+          'value': '',
+          'required': false
         }
       ]
     };
