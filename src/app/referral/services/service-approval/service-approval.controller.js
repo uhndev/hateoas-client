@@ -46,6 +46,11 @@
       }
     }
 
+    /**
+     * updateApprovalStatus
+     * @description On change handler for approval select field; sends a POST to /service/:id/approvals
+     *              to add a new approval state to the service.
+     */
     function updateApprovalStatus() {
       var newApproval = new ServiceApproval({status: vm.service.currentStatus});
       newApproval.$save(function (approval) {
