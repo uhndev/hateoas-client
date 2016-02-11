@@ -4,6 +4,20 @@
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
       <small>{{svc.resource.items.client_displayName}}</small>
     </h1>
+    <div id="Query" flex class="clearfix">
+      <form>
+        <div class="form-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <label class="control-label ng-hide" translate>
+            COMMON.HATEOAS.QUERY.PLACEHOLDER
+          </label>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+                 ng-model="svc.search"/>
+        </div>
+      </form>
+      <br/>
+    </div>
     <div flex>
       <table class="table table-condensed summary-table">
         <tr class="summary-header-row">
@@ -27,7 +41,7 @@
   </div>
 
   <uib-accordion close-others="true">
-    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | groupBy: svc.groupBy">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy">
       <uib-accordion-heading>
         {{ groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>

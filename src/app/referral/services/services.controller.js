@@ -50,6 +50,10 @@
         prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       },
       {
+        name: 'statusName',
+        prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+      },
+      {
         name: 'siteName',
         prompt: 'COMMON.MODELS.SERVICE.SITE'
       }

@@ -22,6 +22,44 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
+    var Resource = $resource(vm.url);
+    var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
+    ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
+
+    vm.query = {};  // waterline query for filtering services
+    vm.queryTemplate = {        // hateoas template definition to use for query-builder
+      "rel": "altumprogramservices",
+      "data": [
+        {
+          "name": "altumServiceName",
+          "type": "string",
+          "prompt": "Altum Service Name",
+          "value": "",
+          "required": false
+        },
+        {
+          "name": "serviceCategoryName",
+          "type": "string",
+          "prompt": "Service Category Name",
+          "value": "",
+          "required": false
+        },
+        {
+          "name": "programServiceName",
+          "type": "string",
+          "prompt": "Program Service Name",
+          "value": "",
+          "required": false
+        },
+        {
+          "name": "approvalRequired",
+          "type": "boolean",
+          "prompt": "Approval Required",
+          "value": "",
+          "required": false
+        }
+      ]
+    };
 
     vm.physician = null;
     vm.clinician = null;
@@ -58,10 +96,6 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var Resource = $resource(vm.url);
-      var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
-      ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
-
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
@@ -106,8 +140,6 @@
      * @description Fetches the available list of services to an empty set of the referral's programs's available services
      */
     function fetchAvailableServices(altumProgramServices) {
-      vm.recommendedServices = [];
-
       // available services denote all program services across each retrieved altum service
       // sorting respective program services by serviceCateogry takes place in the html template
       vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
