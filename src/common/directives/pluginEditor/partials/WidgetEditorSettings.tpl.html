@@ -15,6 +15,20 @@
     </div>
   </div>
 
+  <div class="form-group" ng-show="widget.hasOwnProperty('template')">
+    <label for="type">
+<!--
+    ng-repeat="category in unsorted(categories) track by $index" 
+    {{ category }}
+    template in categories[category] track by $index
+-->
+      Question Type
+      <ui-help uib-popover="Select the question type."></ui-help>
+    </label>
+    <select class="form-control" id="type" ng-model="widget.template" 
+      ng-options="type.template as type.name group by type.category for type in widgetTypes">
+    </select>
+  </div>
   <div class="form-group" ng-show="widget.hasOwnProperty('label')">
     <label for="label">
       Question

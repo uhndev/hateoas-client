@@ -8,6 +8,7 @@
       return {
         restrict: 'E',
         replace: true,
+        require: 'ngModel',
         scope: {
           query: '=ngModel',
           headers: '=',
@@ -61,7 +62,7 @@
    * @description Sets up watchers on changing field types to provide appropriate operators in dropdowns
    * @param scope
    */
-  function postLink(scope) {
+  function postLink(scope, element, attributes, ngModel) {
     if (scope.template()) {
       scope.advanceSearch = 0;
       scope.fields = scope.template().data;
@@ -79,5 +80,12 @@
           scope.reset();
         }
       });
+
+    // from model -> view, called when the view needs to be updated
+    ngModel.$render = function() {
+      if (attributes.ngChange) {
+        scope.$parent.$eval(attributes.ngChange);
+      }
+    };
   }
 })();
