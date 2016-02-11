@@ -26,41 +26,6 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.query = {};  // waterline query for filtering services
-    vm.queryTemplate = {        // hateoas template definition to use for query-builder
-      'rel': 'altumprogramservices',
-      'data': [
-        {
-          'name': 'altumServiceName',
-          'type': 'string',
-          'prompt': 'Altum Service Name',
-          'value': '',
-          'required': false
-        },
-        {
-          'name': 'serviceCategoryName',
-          'type': 'string',
-          'prompt': 'Service Category Name',
-          'value': '',
-          'required': false
-        },
-        {
-          'name': 'programServiceName',
-          'type': 'string',
-          'prompt': 'Program Service Name',
-          'value': '',
-          'required': false
-        },
-        {
-          'name': 'approvalRequired',
-          'type': 'boolean',
-          'prompt': 'Approval Required',
-          'value': '',
-          'required': false
-        }
-      ]
-    };
-
     vm.physician = null;
     vm.clinician = null;
     vm.workStatus = null;
