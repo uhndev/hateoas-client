@@ -1,5 +1,6 @@
 <table class="table table-condensed table-bordered">
-  <tr ng-repeat="approval in sap.service.approvals">
+  <tr ng-repeat="approval in sap.service.approvals"
+      class="{{sap.statuses[approval.status].rowClass}}">
     <td class="text-nowrap">
       <b>{{approval.displayName}}</b>
     </td>
