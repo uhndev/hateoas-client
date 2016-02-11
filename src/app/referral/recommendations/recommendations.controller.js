@@ -129,11 +129,13 @@
      * @description Fetches data from dropdowns on visit info panel once some services have been selected
      */
     function fetchLoaderData() {
-      vm.availablePrognosis = AltumAPI.Prognosis.query();
-      vm.availableTimeframes = AltumAPI.Timeframe.query();
-      AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-        vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-      });
+      if (!vm.availablePrognosis || !vm.availableTimeframes || !vm.availableServiceTypes) {
+        vm.availablePrognosis = AltumAPI.Prognosis.query();
+        vm.availableTimeframes = AltumAPI.Timeframe.query();
+        AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+          vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
+        });
+      }
     }
 
     /**

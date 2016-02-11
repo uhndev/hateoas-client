@@ -42,8 +42,12 @@
           <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
                                is-open="accordion.groups[$index].isOpen">
             <uib-accordion-heading>
+              <i class="glyphicon" ng-class="{
+                  'glyphicon-chevron-right': !accordion.groups[$index].isOpen,
+                  'glyphicon-chevron-down': accordion.groups[$index].isOpen
+                }"></i>
               {{subGroup}}
-              <span class="pull-right">{{subServices.length}} Service(s)</span>
+              <span class="pull-right badge">{{subServices.length}}</span>
             </uib-accordion-heading>
             <table class="table table-condensed summary-table">
               <tr class="summary-header-row">

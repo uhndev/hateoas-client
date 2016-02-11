@@ -2,6 +2,9 @@
   <div layout="column">
     <h1 flex id="Title">
       <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
+      <button type="button" class="btn btn-default pull-right" ng-click="rec.showListView = !rec.showListView">
+        <span class="glyphicon" ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
+      </button>
     </h1>
     <div class="table-responsive" flex>
       <table class="table table-condensed summary-table">
@@ -19,14 +22,38 @@
     <md-tab ng-disabled="!rec.referral.program">
       <md-tab-label>
         <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS</span>
-        ({{rec.resource.total}})
+        ({{rec.availableServices.length}})
       </md-tab-label>
       <md-tab-body>
         <p ng-show="!rec.referral.program">
           Please select a program to begin recommending services.
         </p>
 
-        <md-content layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+        <!-- List View -->
+        <md-content ng-if="rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+          <uib-accordion close-others="false">
+            <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | groupBy: 'serviceCategory'"
+                                 is-open="accordion.groups[$index].isOpen">
+              <uib-accordion-heading>
+                <i class="glyphicon" ng-class="{
+                  'glyphicon-chevron-right': !accordion.groups[$index].isOpen,
+                  'glyphicon-chevron-down': accordion.groups[$index].isOpen
+                }"></i>
+                {{groupServices[0].serviceCategoryName}}
+                <span class="pull-right badge">{{groupServices.length}}</span>
+              </uib-accordion-heading>
+              <div class="checkbox" ng-repeat="service in groupServices">
+                <label>
+                  <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
+                         ng-click="rec.toggleService(service)"/> {{service.name}}
+                </label>
+              </div>
+            </uib-accordion-group>
+          </uib-accordion>
+        </md-content>
+
+        <!-- Grid View -->
+        <md-content ng-if="!rec.showListView" layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <!-- Service Category / Program Services Panel -->
           <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
                ng-repeat="(groupKey, groupServices) in rec.availableServices | groupBy: 'serviceCategory'">
