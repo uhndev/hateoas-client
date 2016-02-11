@@ -6,6 +6,20 @@
         <span class="glyphicon" ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
       </button>
     </h1>
+    <div id="Query" flex class="clearfix">
+      <form>
+        <div class="form-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <label class="control-label ng-hide" translate>
+            COMMON.HATEOAS.QUERY.PLACEHOLDER
+          </label>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+                 ng-model="rec.search"/>
+        </div>
+      </form>
+      <br/>
+    </div>
     <div class="table-responsive" flex>
       <table class="table table-condensed summary-table">
         <tr class="summary-header-row">
@@ -32,7 +46,7 @@
         <!-- List View -->
         <md-content ng-if="rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <uib-accordion close-others="false">
-            <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | groupBy: 'serviceCategory'"
+            <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'"
                                  is-open="accordion.groups[$index].isOpen">
               <uib-accordion-heading>
                 <i class="glyphicon" ng-class="{
@@ -56,7 +70,7 @@
         <md-content ng-if="!rec.showListView" layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <!-- Service Category / Program Services Panel -->
           <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
-               ng-repeat="(groupKey, groupServices) in rec.availableServices | groupBy: 'serviceCategory'">
+               ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'">
             <div class="panel panel-info">
               <div class="panel-heading">{{groupServices[0].serviceCategoryName}}</div>
               <div class="panel-body">
