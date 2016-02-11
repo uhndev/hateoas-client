@@ -16,6 +16,7 @@
     .service('AddressService', AddressService)
     .service('PhysicianService', PhysicianService)
     .service('PayorService', PayorService)
+    .service('StatusService', StatusService)
     .service('WorkStatusService', WorkStatusService)
     .service('PrognosisService', PrognosisService)
     .service('TimeframeService', TimeframeService)
@@ -31,7 +32,7 @@
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
-    PhysicianService, PayorService, WorkStatusService, PrognosisService, TimeframeService,
+    PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService,
     ServiceTypeService, AltumAPIService, ServiceService, NoteService, NoteTypeService
   ].map(function (service) {
@@ -64,6 +65,10 @@
 
   function PayorService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('payor'));
+  }
+
+  function StatusService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('status'));
   }
 
   function WorkStatusService(ResourceFactory, API) {
@@ -119,6 +124,7 @@
       'Address': ResourceFactory.create(API.url('address')),
       'Physician': ResourceFactory.create(API.url('physician')),
       'Payor': ResourceFactory.create(API.url('payor')),
+      'Status': ResourceFactory.create(API.url('status')),
       'WorkStatus': ResourceFactory.create(API.url('workstatus')),
       'Prognosis': ResourceFactory.create(API.url('prognosis')),
       'Timeframe': ResourceFactory.create(API.url('timeframe')),

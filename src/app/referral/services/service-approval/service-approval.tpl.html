@@ -1,0 +1,10 @@
+<div>
+  <select class="form-control" ng-model="sap.service.currentStatus"
+          ng-options="status.id as status.name for status in sap.statuses"
+          ng-change="sap.updateApprovalStatus()"
+          uib-popover-template="sap.approvalPopover.templateUrl"
+          popover-trigger="mouseenter"
+          popover-title="Approval History"
+          popover-placement="left" popover-append-to-body="true">
+  </select>
+</div>

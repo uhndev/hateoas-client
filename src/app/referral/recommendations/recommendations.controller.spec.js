@@ -196,10 +196,6 @@ describe('Controller: RecommendationsController Tests', function() {
       expect(recCtrl).toBeDefined();
     });
 
-    it('should retrieve the correct service categories', function () {
-      expect(recCtrl.currentCategories.length).toEqual(3);
-    });
-
     it('should return unique all available altum services for a given program', function() {
       expect(recCtrl.availableServices.length).toEqual(7);
       recCtrl.availableServices.map(function (availableService) {

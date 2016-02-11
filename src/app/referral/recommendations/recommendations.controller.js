@@ -40,7 +40,6 @@
 
     vm.recommendedServices = [];
     vm.availableServices = [];
-    vm.currentCategories = [];
 
     // bindable methods
     vm.fetchLoaderData = fetchLoaderData;
@@ -109,14 +108,6 @@
     function fetchAvailableServices(altumProgramServices) {
       vm.recommendedServices = [];
 
-      // fetch and return list of unique service categories in altum services
-      vm.currentCategories = _.unique(_.map(altumProgramServices, function (altumProgramService) {
-        return {
-          id: altumProgramService.serviceCategory,
-          name: altumProgramService.serviceCategoryName
-        };
-      }), 'id');
-
       // available services denote all program services across each retrieved altum service
       // sorting respective program services by serviceCateogry takes place in the html template
       vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
@@ -126,8 +117,9 @@
           altumService: altumProgramService.id,
           programService: altumProgramService.programService,
           serviceCategory: altumProgramService.serviceCategory,
+          serviceCategoryName: altumProgramService.serviceCategoryName,
           site: null,
-          approvalRequired: altumProgramService.approvalRequired
+          approvalNeeded: altumProgramService.approvalRequired
         });
       });
     }
@@ -137,11 +129,13 @@
      * @description Fetches data from dropdowns on visit info panel once some services have been selected
      */
     function fetchLoaderData() {
-      vm.availablePrognosis = AltumAPI.Prognosis.query();
-      vm.availableTimeframes = AltumAPI.Timeframe.query();
-      AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-        vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-      });
+      if (!vm.availablePrognosis || !vm.availableTimeframes || !vm.availableServiceTypes) {
+        vm.availablePrognosis = AltumAPI.Prognosis.query();
+        vm.availableTimeframes = AltumAPI.Timeframe.query();
+        AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+          vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
+        });
+      }
     }
 
     /**
