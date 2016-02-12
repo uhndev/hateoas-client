@@ -2,9 +2,6 @@
   <div layout="column">
     <h1 flex id="Title">
       <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
-      <button type="button" class="btn btn-default pull-right" ng-click="rec.showListView = !rec.showListView">
-        <span class="glyphicon" ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
-      </button>
     </h1>
     <div id="Query" flex class="clearfix">
       <form>
@@ -39,6 +36,10 @@
         ({{rec.availableServices.length}})
       </md-tab-label>
       <md-tab-body>
+        <button type="button" class="btn btn-default pull-right"
+                ng-style="{'margin-top': 7}" ng-click="rec.showListView = !rec.showListView">
+          <span class="glyphicon" ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
+        </button>
         <p ng-show="!rec.referral.program">
           Please select a program to begin recommending services.
         </p>
@@ -47,7 +48,7 @@
         <md-content ng-if="rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <uib-accordion close-others="false">
             <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'"
-                                 is-open="accordion.groups[$index].isOpen">
+                                 is-open="accordion.groups[$index].isOpen" panel-class="panel-info">
               <uib-accordion-heading>
                 <i class="glyphicon" ng-class="{
                   'glyphicon-chevron-right': !accordion.groups[$index].isOpen,

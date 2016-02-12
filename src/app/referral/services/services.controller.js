@@ -56,11 +56,11 @@
       {
         name: 'siteName',
         prompt: 'COMMON.MODELS.SERVICE.SITE'
-      }
-    ];
-
-    // data columns for subgroups (encounters) under visits
-    vm.subGroupFields = [
+      },
+      {
+        name: 'altumServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+      },
       {
         name: 'physician_displayName',
         prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'

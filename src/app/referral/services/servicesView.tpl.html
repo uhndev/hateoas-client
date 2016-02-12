@@ -18,48 +18,43 @@
       </form>
       <br/>
     </div>
-    <div flex>
+    <div flex ng-show="svc.referralOverview">
       <table class="table table-condensed summary-table">
         <tr class="summary-header-row">
           <th ng-repeat="(label, value) in ::svc.referralOverview" translate>{{label}}</th>
+          <th>Group</th>
+          <th>Subgroup</th>
         </tr>
         <tr class="summary-table-row">
           <td ng-repeat="(label, value) in ::svc.referralOverview">{{::value}}</td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="svc.groupBy">
+              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
+                {{group.prompt}}
+              </option>
+            </select>
+          </td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="svc.subGroupBy">
+              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
+                {{group.prompt}}
+              </option>
+            </select>
+          </td>
         </tr>
       </table>
     </div>
-    <div flex layout="row">
-      <div flex class="form-group">
-        <label>Group Services By:</label>
-        <select class="form-control" ng-model="svc.groupBy">
-          <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
-            {{group.prompt}}
-          </option>
-        </select>
-      </div>
-    </div>
   </div>
 
-  <uib-accordion close-others="true">
-    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy">
+  <uib-accordion close-others="false">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy"
+                         panel-class="panel-info">
       <uib-accordion-heading>
         {{ groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
       </uib-accordion-heading>
 
       <div layout="column">
-        <div flex layout="row">
-          <div flex class="form-group">
-            <label>Group By:</label>
-            <select class="form-control" ng-model="svc.subGroupBy">
-              <option value="{{group.name}}" ng-repeat="group in svc.subGroupFields" translate>
-                {{group.prompt}}
-              </option>
-            </select>
-          </div>
-        </div>
-        <br/>
-
         <uib-accordion close-others="false">
           <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
                                is-open="accordion.groups[$index].isOpen">
