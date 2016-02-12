@@ -27,7 +27,7 @@
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
     vm.physician = null;
-    vm.clinician = null;
+    vm.staff = {};
     vm.workStatus = null;
     vm.prognosis = null;
     vm.prognosisTimeframe = null;
@@ -35,7 +35,7 @@
     vm.approvalNeeded = null;
     vm.serviceDate = new Date();
     vm.currentDate = new Date();
-    vm.validityFields = ['physician', 'clinician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 1,
       serviceDetail: 2
@@ -50,6 +50,7 @@
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
     vm.setServiceSelections = setServiceSelections;
+    vm.setStaffSelections = setStaffSelections;
     vm.navigateKey = navigateKey;
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
@@ -70,7 +71,7 @@
           'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claim_claimNum,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
           'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.CLINICIAN': data.items.clinician_name,
+          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
 
@@ -91,7 +92,7 @@
     function getSharedServices() {
       return {
         physician: vm.physician,
-        clinician: vm.clinician,
+        staff: vm.staff,
         workStatus: vm.workStatus,
         prognosis: vm.prognosis,
         prognosisTimeframe: vm.prognosisTimeframe,
@@ -105,6 +106,7 @@
      * @description Fetches the available list of services to an empty set of the referral's programs's available services
      */
     function fetchAvailableServices(altumProgramServices) {
+      vm.recommendedServices = [];
       // available services denote all program services across each retrieved altum service
       // sorting respective program services by serviceCateogry takes place in the html template
       vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
@@ -159,10 +161,20 @@
       } else {
         vm.recommendedServices.push(_.merge(service, getSharedServices()));
 
-        AltumAPI.AltumService.get({id: service.altumService, populate: 'sites'}, function (data) {
+        // upon recommending service, fetch additional info needed for visit panels like sites and staffTypes
+        AltumAPI.AltumService.get({id: service.altumService, populate: ['sites', 'staffTypes']}, function (data) {
           if (data.sites.length > 0) {
             _.last(vm.recommendedServices).availableSites = data.sites;
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
+          }
+
+          if (data.staffTypes.length > 0) {
+            _.last(vm.recommendedServices).staff = [];
+            _.last(vm.recommendedServices).staffCollection = {};
+            _.last(vm.recommendedServices).availableStaffTypes = _.map(data.staffTypes, function (staffType) {
+              staffType.baseQuery = {staffType: staffType.id};
+              return staffType;
+            });
           }
         });
       }
@@ -185,6 +197,23 @@
       vm.recommendedServices = _.map(vm.recommendedServices, function (recommendedService) {
         recommendedService[attribute] = vm[attribute];
         return recommendedService;
+      });
+    }
+
+    /**
+     * setStaffSelections
+     * @description Sets service details for all dynamically built staff selections
+     */
+    function setStaffSelections(recommendedService, staffName) {
+      // add any newly selected staff
+      recommendedService.staff = _.union(
+        recommendedService.staff,
+        recommendedService.staffCollection[staffName]
+      );
+
+      // no way of knowing if staff were unselected, so comb over with filter
+      recommendedService.staff = _.filter(recommendedService.staff, function (staffID) {
+        return _.contains(_.flatten(_.values(recommendedService.staffCollection)), staffID);
       });
     }
 
