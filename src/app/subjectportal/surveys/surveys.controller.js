@@ -5,9 +5,9 @@
     .module('dados.subjectportal.surveys.controller', [])
     .controller('SubjectPortalScheduleController', SubjectPortalScheduleController);
 
-  SubjectPortalScheduleController.$inject = ['ngTableParams', 'sailsNgTable', 'ScheduleSubjectService'];
+  SubjectPortalScheduleController.$inject = ['$state', 'ngTableParams', 'sailsNgTable', 'ScheduleSubjectService'];
 
-  function SubjectPortalScheduleController(TableParams, SailsNgTable, ScheduleSubjectService) {
+  function SubjectPortalScheduleController($state, TableParams, SailsNgTable, ScheduleSubjectService) {
     var vm = this;
 
     // bindable variables
@@ -15,6 +15,7 @@
     vm.scheduleSubjects = [];
 
     // bindable methods
+    vm.openSession = openSession;
 
     init();
 
@@ -36,6 +37,10 @@
           });
         }
       });
+    }
+
+    function openSession(schedule, session) {
+      $state.go('subjectportal.forms', {sessionID : session, scheduleID : schedule});
     }
   }
 

@@ -19,6 +19,10 @@
         templateUrl: 'directives/dadosForm/dados-form.tpl.html',
         controller: 'DadosFormController',
         controllerAs: 'dadosForm',
+        scope: {
+          form: '=',
+          mode: '@'
+        },
         bindToController: true
       };
     });

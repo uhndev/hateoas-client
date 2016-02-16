@@ -17,7 +17,8 @@
         </a>
       </td>
     </tr>
-    <tr ng-hide="name.$hideRows" ng-repeat="scheduleSubject in name.data track by $index">
+    <tr ng-hide="name.$hideRows" ng-repeat="scheduleSubject in name.data track by $index"
+        ng-click="schedule.openSession(scheduleSubject.id, scheduleSubject.session)">
       <td sortable="'subjectNumber'" data-title="'COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER' | translate">
         {{scheduleSubject.subjectNumber | formatter:{"type": "mrn"} }}
       </td>

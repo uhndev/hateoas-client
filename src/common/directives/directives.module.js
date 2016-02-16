@@ -14,6 +14,7 @@
       'dados.common.directives.scrollWatch',
       'dados.common.directives.selectLoader',
       'dados.common.directives.simpleTable',
+      'dados.common.directives.subjectForms',
       'dados.common.directives.surveyBuilder'
   ]);
 })();

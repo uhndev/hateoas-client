@@ -1,15 +1,32 @@
 <ng-form name="plugin">
-  <h2 id="Title">{{dadosForm.form.name}}</h2>
-  <ol class="form-horizontal" ng-model="dadosForm.questions" class="ui-grid" style="padding-top: 30px;">
-    <li ng-repeat="widget in dadosForm.questions track by $index" class="panel panel-default" ng-style="widget.css">
-      <ui-widget ng-if="widget.template" widget="widget"
-                 widget-model="widget"
-                 class="panel-body"></ui-widget>
-    </li>
-  </ol>
-  <button class="btn btn-default pull-right" ng-model="dadosForm.isSaving"
-          ng-click="dadosForm.saveFormAnswers()" ng-disabled="dadosForm.isSaving">
-    <span class="glyphicon glyphicon-floppy-disk" uib-tooltip="Save form"></span>
-    Save
-  </button>
+  <div ng-if="dadosForm.mode === 'single'" class="container">
+    <ui-widget ng-if="dadosForm.form.questions[dadosForm.currentQuestion].template" widget="dadosForm.form.questions[dadosForm.currentQuestion]"
+               widget-model="dadosForm.form.questions[dadosForm.currentQuestion]"
+               class="panel-body"></ui-widget>
+    <div class="btn-group btn-group-justified">
+      <a href="#" class="btn btn-success" ng-click="dadosForm.prevQuestion()"
+              ng-disabled="dadosForm.isSaving">
+        Previous Question
+      </a>
+      <a href="#" class="btn btn-success" ng-model="dadosForm.isSaving"
+              ng-click="dadosForm.nextQuestion()" ng-disabled="dadosForm.isSaving">
+        Next Question
+      </a>
+    </div>
+  </div>
+  <div ng-if="dadosForm.mode !== 'single'">
+    <h2 id="Title">{{dadosForm.form.name}}</h2>
+    <ol class="form-horizontal" ng-model="dadosForm.form.questions" class="ui-grid" style="padding-top: 30px;">
+      <li ng-repeat="widget in dadosForm.form.questions track by $index" class="panel panel-default" ng-style="widget.css">
+        <ui-widget ng-if="widget.template" widget="widget"
+                   widget-model="widget"
+                   class="panel-body"></ui-widget>
+      </li>
+    </ol>
+    <button class="btn btn-default pull-right" ng-model="dadosForm.isSaving"
+            ng-click="dadosForm.saveFormAnswers()" ng-disabled="dadosForm.isSaving">
+      <span class="glyphicon glyphicon-floppy-disk" uib-tooltip="Save form"></span>
+      Save
+    </button>
+  </div>
 </ng-form>
