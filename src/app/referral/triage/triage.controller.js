@@ -38,7 +38,6 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      vm.programs = angular.copy(AltumAPI.Program.query({}));
 
       AltumAPI.Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
@@ -54,7 +53,6 @@
         }).then(function () {
           vm.mapDisabled = false;
         });
-
       });
     }
 
