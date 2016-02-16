@@ -32,7 +32,7 @@
         vm.referral = angular.copy(data.items);
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
-        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'clinician', 'referralContact',
+        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
           'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
         // referral info panel
@@ -41,11 +41,11 @@
             'MRN': {title: 'COMMON.MODELS.CLIENT.MRN', type: 'text'},
             'displayName': {title: 'COMMON.MODELS.PERSON.NAME', type: 'text'},
             'dateOfBirth': {title: 'COMMON.MODELS.PERSON.DATE_OF_BIRTH', type: 'date'},
-            'program': {title: 'Program', type: 'program'},
-            'site': {title: 'Site', type: 'site'},
-            'physician': {title: 'Physician', type: 'physician'},
-            'clinician': {title: 'Clinician', type: 'clinician'},
-            'referralContact': {title: 'Referral Contact', type: 'employee'},
+            'program': {title: 'COMMON.MODELS.REFERRAL.PROGRAM', type: 'program'},
+            'site': {title: 'COMMON.MODELS.REFERRAL.SITE', type: 'site'},
+            'physician': {title: 'COMMON.MODELS.REFERRAL.PHYSICIAN', type: 'physician'},
+            'staff': {title: 'COMMON.MODELS.REFERRAL.STAFF', type: 'staff'},
+            'referralContact': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_CONTACT', type: 'employee'},
             'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
             'clinicDate': {title: 'COMMON.MODELS.REFERRAL.CLINIC_DATE', type: 'date'},
             'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
