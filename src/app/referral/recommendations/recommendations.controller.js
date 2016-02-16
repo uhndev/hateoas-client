@@ -27,7 +27,8 @@
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
     vm.physician = null;
-    vm.staff = {};
+    vm.staffCollection = {};
+    vm.staff = [];
     vm.workStatus = null;
     vm.prognosis = null;
     vm.prognosisTimeframe = null;
@@ -134,6 +135,12 @@
         AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
           vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
         });
+        AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
+          vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
+            staffType.baseQuery = {staffType: staffType.id};
+            return staffType;
+          });
+        });
       }
     }
 
@@ -204,17 +211,15 @@
      * setStaffSelections
      * @description Sets service details for all dynamically built staff selections
      */
-    function setStaffSelections(recommendedService, staffName) {
+    function setStaffSelections(staffName) {
       // add any newly selected staff
-      recommendedService.staff = _.union(
-        recommendedService.staff,
-        recommendedService.staffCollection[staffName]
-      );
+      vm.staff = _.union(vm.staff, vm.staffCollection[staffName]);
 
       // no way of knowing if staff were unselected, so comb over with filter
-      recommendedService.staff = _.filter(recommendedService.staff, function (staffID) {
-        return _.contains(_.flatten(_.values(recommendedService.staffCollection)), staffID);
+      vm.staff = _.filter(vm.staff, function (staffID) {
+        return _.contains(_.flatten(_.values(vm.staffCollection)), staffID);
       });
+      setServiceSelections('staff');
     }
 
     /**
