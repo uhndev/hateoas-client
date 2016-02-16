@@ -9,38 +9,25 @@
   angular
     .module('altum.triage.controller', [
       'dados.common.directives.selectLoader',
-      'uiGmapgoogle-maps',
       'altum.triage.mapModal.controller'
     ])
-    .config(function (uiGmapGoogleMapApiProvider) {
-      uiGmapGoogleMapApiProvider.configure({
-        //    key: 'your api key',
-        v: '3.20', //defaults to latest 3.X anyhow
-        libraries: 'weather,geometry,visualization'
-      });
-    })
     .controller('TriageController', TriageController);
 
-  TriageController.$inject = ['$scope', 'API', 'AltumAPIService', '$location', '$uibModal', 'uiGmapGoogleMapApi', 'uiGmapIsReady','toastr'];
+  TriageController.$inject = ['$scope', 'API', 'AltumAPIService', '$location', '$uibModal', 'toastr'];
 
-  function TriageController($scope, API, AltumAPI, $location, $uibModal, uiGmapGoogleMapApi, uiGmapIsReady,toastr) {
+  function TriageController($scope, API, AltumAPI, $location, $uibModal, toastr) {
     var vm = this;
 
     // bindable variables
     vm.referralID = _.getParentIDFromUrl($location.path());
     vm.referral = {};
-    vm.fullReferral = {};
     vm.selectedProgram = {};
     vm.selectedPhysician = {};
     vm.selectedSite = {};
-    vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
     vm.sites = [];              //placeholder for sites
     vm.mapDisabled = true;
-    vm.googleMaps = uiGmapGoogleMapApi;
 
-    vm.markers = [];
-    vm.tempMarkers = [];
-    var referralHref = 'referral/' + 1 + '/';
+    var referralHref = 'referral/' + vm.referralID + '/';
 
     // bindable methods
     vm.openMap = openMap;
@@ -55,7 +42,7 @@
 
       AltumAPI.Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
-        return uiGmapGoogleMapApi;
+        return 1;
       }).then(function (resp) {
 
         //init referral and triage form values
