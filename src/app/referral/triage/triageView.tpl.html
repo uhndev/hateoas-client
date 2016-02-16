@@ -1,0 +1,74 @@
+<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" />
+<div ng-controller="TriageController as triage" class="container">
+
+  <div class="row">
+    <div class="col-md-8">
+      <h2 id="Title">
+        Triage
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Triage Details</h3>
+        </div>
+        <div class="panel-body">
+          <form name="triageForm" id="triageForm" data-ng-submit="triage.saveTriage()" autocomplete="off">
+            <div class="form-group">
+              <table class="table">
+                <tbody>
+                <tr>
+                  <td>Program</td>
+                  <td>
+                    <select-loader
+                      url="program"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="triage.selectedProgram"
+                      labels="displayName">
+                    </select-loader>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Physician</td>
+                  <td>
+                    <select-loader
+                      url="physician"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="triage.selectedPhysician"
+                      labels="displayName">
+                    </select-loader>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Site</td>
+                  <td>
+                    <select-loader
+                      url="site"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="triage.selectedSite"
+                      labels="displayName">
+                    </select-loader>
+                  </td>
+                  <td><icon class="icon-map-marker icon-large" ng-disabled="triage.mapDisabled" ng-click="triage.openMap()" /></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <button type="submit" id="saveTriage" class="btn btn-primary"
+                      ng-disabled="triageForm.$invalid" ng-click="triage.save()">
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
