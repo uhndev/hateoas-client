@@ -46,16 +46,16 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
-    jsunit: [ 'src/**/*.spec.js' ],
+    js: ['src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js'],
+    jsunit: ['src/**/*.spec.js'],
 
-    ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
-    tsunit: [ 'src/**/*.spec.ts' ],
+    ts: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts'],
+    tsunit: ['src/**/*.spec.ts'],
 
-    atpl: [ 'src/app/**/*.tpl.html' ],
-    ctpl: [ 'src/common/**/*.tpl.html' ],
+    atpl: ['src/app/**/*.tpl.html'],
+    ctpl: ['src/common/**/*.tpl.html'],
 
-    html: [ 'src/index.html' ],
+    html: ['src/index.html'],
     less: 'src/less/main.less'
   },
 
