@@ -1,0 +1,101 @@
+//start notes css
+div[contenteditable] {
+  font-size: 1.2em;
+  font-family: 'Source Sans Pro', sans-serif;
+  border: none;
+  box-shadow: none;
+  min-height: 100px;
+  margin: 0;
+  width: 100%;
+
+  pre, code {
+    background: #ededed;
+  }
+}
+
+div[contenteditable]:focus {
+  font-family: 'Source Code Pro', courier, monospace;
+  font-size: 1em;
+}
+
+.jspVerticalBar {
+  background: none !important;
+  width: 6px !important;
+  right: 1px !important;
+}
+
+.header {
+  margin: 5px 10px 0;
+  color: #d46e58;
+  display: inline-block;
+  background: #0a4d85;
+}
+
+.note {
+  background: #eee;
+  box-shadow: #999 1px 1px 3px;
+  margin: 10px 0;
+  padding-top: 30px;
+  width: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.date {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  font-size: 1em;
+  font-style: italic;
+  color: #71CBD0;
+}
+
+.icons {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px;
+}
+
+.fa-trash-o, .fa-plus-circle, .fa-envelope-o {
+  cursor: pointer;
+}
+
+.fa-check {
+  color: #92D788;
+}
+
+.fa-envelope-o {
+  color: #C2474B;
+
+  &:hover {
+    color: darken(#C2474B, 20);
+  }
+}
+
+.fa-trash-o {
+  color: #C2474B;
+
+  &:hover {
+    color: darken(#C2474B, 20);
+  }
+}
+
+.fa-pencil {
+  color: #DBC394;
+}
+
+.fa-plus-circle {
+  color: #0b58a2;
+
+  &:hover {
+    color: darken(#71C, 20);
+  }
+}
+
+//end notes css
+
+
+

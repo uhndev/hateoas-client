@@ -37,6 +37,8 @@
 
       // Altum/ARM
       'altum.referral',
+        'altum.client',
+        'altum.client.register',
       'altum.assessment',
 
       // dados subject portal

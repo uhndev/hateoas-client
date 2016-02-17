@@ -23,7 +23,9 @@
     vm.noteUrl = vm.url + '/notes';
     vm.noteTypes = NoteType.query();
 
-    vm.recommendedServices = [];
+    vm.style_notebarCollapsed = false;
+
+        vm.recommendedServices = [];
     vm.availableServices = [];
     vm.currentCategories = [];
 
@@ -33,6 +35,8 @@
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
     vm.saveServices = saveServices;
+
+    vm.toggleNotebar = toggleNotebar;
 
     init();
 
@@ -192,6 +196,14 @@
         init();
       });
     }
+
+      /**
+       * toggleNotebar
+       * @description show or hide the notes panel
+       */
+       function toggleNotebar () {
+        vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
+      }
 
   }
 

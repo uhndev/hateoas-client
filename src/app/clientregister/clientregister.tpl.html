@@ -1,0 +1,546 @@
+<div class="container">
+    <div id="page-heading">
+
+        <h1>New Client</h1>
+
+    </div>
+
+
+    <div class="container-fluid">
+
+        <div class="form-horizontal" id="clientForm">
+            <div class="row">
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Name</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/name.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="MRN">MRN</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="MRN" ng-model="CR.client.MRN" ng-minlength="3"
+                                               ng-maxlength="8" type="text" ng-blur="CR.onBlur()" ng-required="true"
+                                               ng-pattern="/^(\d)+$/"/>
+                                        <div ng-show="clientForm.MRN.$error.pattern">Numbers only, please.</div>
+                                        <div ng-show="clientForm.MRN.$error.maxlength">MRN is too long.</div>
+                                        <div ng-show="clientForm.$submitted || clientForm.MRN.$touched">
+                                            <div ng-show="clientForm.MRN.$error.required">MRN is required.</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Salutation">Salutation</label>
+                                    <div class="col-md-9">
+                                        <select-loader
+                                                url="city"
+                                                is-atomic="true"
+                                                is-disabled="false"
+                                                ng-model="CR.person.addresses[0].city"
+                                                labels="displayName">
+                                        </select-loader>
+
+                                        <select class="form-control" placeholder="Salutation"
+                                                ng-model="CR.person.prefix" id="Salutation" ng-required="true">
+                                            <option value=1>Dr.</option>
+                                            <option value=2>Master</option>
+                                            <option value=3>Miss</option>
+                                            <option value=4>Mr.</option>
+                                            <option value=5>Mrs.</option>
+                                            <option value=6>Ms.</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="FirstName">First Name</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="CR.person.firstName" name="FirstName"
+                                               type="text" ng-required="true"/>
+                                        <div ng-show="clientForm.$submitted || clientForm.FirstName.$touched">
+                                            <div ng-show="clientForm.FirstName.$error.required">First Name is
+                                                required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="MiddleName">Middle Name</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="MiddleName" ng-model="CR.person.middleName"
+                                               name="MiddleName" type="text"/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="LastName">Last Name</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="CR.person.lastName" name="LastName"
+                                               type="text" ng-required="true"/>
+                                        <div ng-show="clientForm.$submitted || clientForm.LastName.$touched">
+                                            <div ng-show="clientForm.LastName.$error.required">Last Name is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Address</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/home.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Address1">Address1</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Street" ng-model="CR.person.addresses[0].address1" name="Address1"
+                                               type="text" value=""/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Address2">Address2</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Street" ng-model="CR.person.addresses[0].address2" name="Address2"
+                                               type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="City">City</label>
+                                    <div class="col-md-9">
+                                        <select-loader
+                                                url="city"
+                                                is-atomic="true"
+                                                is-disabled="false"
+                                                ng-model="CR.person.addresses[0].city"
+                                                labels="displayName">
+                                        </select-loader>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Province">Province</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Province" ng-model="CR.person.addresses[0].province"
+                                               name="Province" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Region">Region</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Region" ng-model="CR.person.addresses[0].region" name="Region"
+                                               type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Country">Country</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Country" ng-model="CR.person.addresses[0].country"
+                                               name="Country" type="text" value=""/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="PostalCode">Postal Code</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="PostalCode" ng-model="CR.person.addresses[0].postalCode"
+                                               name="PostalCode" type="text" value=""/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Phone numbers</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/phone.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="HomePhone">Home Phone</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="CR.person.homePhone" name="HomePhone"
+                                               type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="WorkPhone">Work Phone</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="WorkPhone" ng-model="CR.person.workPhone"
+                                               name="WorkPhone" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Fax">Fax</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Fax" ng-model="CR.person.fax" name="Fax"
+                                               type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="OtherPhone">Other Phone</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="OtherPhone" ng-model="CR.person.otherPhone"
+                                               name="OtherPhone" type="text" value=""/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Email</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/email.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="homeEmail">Home Email</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="CR.person.homeEmail" name="homeEmail"
+                                               type="email" ng-required="true"/>
+
+                                        <div ng-show="clientForm.$submitted || clientForm.homeEmail.$touched">
+                                            <span ng-show="clientForm.homeEmail.$error.required">Tell us your email.</span>
+                                            <span ng-show="clientForm.homeEmail.$error.email">This is not a valid email.</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="WorkEmail">Work Email</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="WorkEmail" ng-model="CR.person.workEmail"
+                                               name="WorkEmail" type="email" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="ContactComments">Comments</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" ng-model="CR.person.contactComments"
+                                                  id="ContactComments" rows="3" style="resize: none"></textarea>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Family Doctor</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/doctor.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <div class="boxer col-md-offset-3">
+                                        <div class="box-row">
+                                            <div class="box"><a data-ng-click="open()" class="btn btn-sm"><img
+                                                    src="/assets/icons/edit-add-2.png" alt="New"/></a></div>
+                                            <div class="box"><a data-ng-click="open(selectedPhysician.originalObject)"
+                                                                ng-class="{'disabled':!selectedPhysician}"
+                                                                class="btn btn-sm"><img src="/assets/icons/edit-2.png"
+                                                                                        alt="Edit"/></a></div>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-3" for="physician">Family Doctor</label>
+                                    <div class="col-md-9" ng-controler="clientController">
+                                        <select-loader
+                                                url="physician"
+                                                is-atomic="true"
+                                                is-disabled="false"
+                                                ng-model="CR.familyDoctor"
+                                                labels="displayName">
+                                        </select-loader>
+                                        <angucomplete-alt id="physician" placeholder="Doctor Last Name"
+                                                          input-changed="updatePhysicians"
+                                                          selected-object="setSelectedPhysician"
+                                                          input-class="form-control" search-fields="contact.LastName"
+                                                          title-field="contact.FirstName,contact.LastName"
+                                                          description-field="street" pause="500"
+                                                          minlength="1" on-type="updatePhysicians"
+                                                          local-data="physicians"></angucomplete-alt>
+                                        <div class="col-md-1"></div>
+                                        <div class="well">
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="doctorName">Doctor: </label>
+                                                <div class="col-md-9" id="doctorName">
+                                                    {{contact.LastName}},{{selectedPhysician.contact.FirstName}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="pphone">Phone: </label>
+                                                <div class="col-md-9" id="pphone">
+                                                    {{selectedPhysician.contact.HomePhone}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="pfax">Fax: </label>
+                                                <div class="col-md-9" id="pfax">{{selectedPhysician.contact.Fax}}</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="paddress">Address: </label>
+                                                <div class="col-md-9" id="paddress">
+                                                    {{selectedPhysician.contact.Street}},{{selectedPhysician.contact.City}},{{selectedPhysician.contact.PostalCode}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </div>
+
+
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Emergency Contact</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/ambulance.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="EmerFirstName">First Name</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="client.emerFirstName" id="EmerFirstName"
+                                               name="EmerFirstName" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="EmerLastName">Last Name</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="client.emerLastName" id="EmerLastName"
+                                               name="EmerLastName" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Relationship">Relationship</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="client.relationship" id="Relationship"
+                                               name="Relationship" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="EmerPhone">Phone</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="client.emerPhone" id="EmerPhone"
+                                               name="EmerPhone" type="text" value=""/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Basic Information</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/demographic.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Gender">Gender</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" id="Gender" ng-model="CR.person.gender" name="Gender">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Birth Date</label>
+                                    <div class="col-md-9">
+                                        <input kendo-date-picker
+                                               required
+                                               ng-model="CR.person.BirthDate"
+                                               k-ng-model="dateObject"
+                                               style="width: 100%;"/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Language">Language</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" ng-model="client.language" id="Language"
+                                               name="Language" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Interpreter">Interpreter</label>
+                                    <div class="col-md-9">
+                                        <div class="checkbox">
+                                            <input type="checkbox" ng-model="client.interpreter">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Employment/School Information</legend>
+                        <div class="row">
+                            <div class="col-md-1"><img src="/assets/img/job.png" height="50"/></div>
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="Occupation">Job Title</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="Occupation" ng-model="client.occupation"
+                                               name="Occupation" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="OccuType">Occupation Type</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="OccuType" ng-model="client.occuType"
+                                               name="OccuType" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="OccuSector">Occupation Sector</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="OccuSector" ng-model="client.occuSector"
+                                               name="OccuSector" type="text" value=""/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="boxer col-md-offset-3">
+                                        <div class="box-row">
+                                            <div class="box"><a data-ng-click="openemp()" class="btn btn-sm"><img
+                                                    src="/assets/icons/edit-add-2.png" alt="New"/></a></div>
+                                            <div class="box"><a data-ng-click="openemp(selectedEmployer.originalObject)"
+                                                                ng-class="{'disabled':!selectedEmployer}"
+                                                                class="btn btn-sm"><img src="/assets/icons/edit-2.png"
+                                                                                        alt="Edit"/></a></div>
+
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-3" for="employer">Employer</label>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <select-loader
+                                                    url="company"
+                                                    is-atomic="true"
+                                                    is-disabled="false"
+                                                    ng-model="CR.person.company"
+                                                    labels="displayName">
+                                            </select-loader>
+                                        </div>
+                                        <angucomplete-alt id="employer" placeholder="Employer Company Name"
+                                                          input-changed="updateEmployers"
+                                                          selected-object="setSelectedEmployer"
+                                                          input-class="form-control" search-fields="companyName"
+                                                          title-field="companyName" description-field="street"
+                                                          pause="500"
+                                                          minlength="1" local-data="employers"></angucomplete-alt>
+                                        <div class="well" ng-show="selectedEmployer">
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="companyName">Employer Name: </label>
+                                                <div class="col-md-9" id="companyName">
+                                                    {{selectedEmployer.originalObject.companyName}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="ephone">Phone: </label>
+                                                <div class="col-md-9" id="ephone">
+                                                    {{selectedEmployer.originalObject.phone}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="efax">Fax: </label>
+                                                <div class="col-md-9" id="efax">
+                                                    {{selectedEmployer.originalObject.fax}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3" for="eaddress">Address: </label>
+                                                <div class="col-md-9" id="eaddress">
+                                                    {{selectedEmployer.originalObject.street}},{{selectedEmployer.originalObject.city}},{{selectedEmployer.originalObject.postalCode}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button ng-click="CR.save()" ng-if="CR.client.id" ng-disabled="CR.client.$invalid"
+                                class="btn btn-primary"><i></i> Save
+                        </button>
+                        <button ng-click="CR.clientAdd()" type="submit" ng-if="!CR.client.id" ng-disabled="CR.client.$invalid"
+                                class="btn btn-primary"><i></i> Add
+                        </button>
+                        <button ng-click="CR.cancelClientAdd()" ng-if="CR.client.id" ng-disabled="CR.client.$invalid"
+                                class="btn">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

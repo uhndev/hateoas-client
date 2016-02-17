@@ -15,6 +15,7 @@
       'dados.common.directives.selectLoader',
       'dados.common.directives.simpleTable',
       'dados.common.directives.surveyBuilder',
-      'altum.common.directives.notebook'
+      'altum.common.directives.notebook',
+      'altum.common.directives.theme'
     ]);
 })();

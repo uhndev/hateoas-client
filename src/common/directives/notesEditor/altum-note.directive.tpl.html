@@ -1,5 +1,24 @@
-<div class="note">
-    <div class="panel panel-info">
+<div style="padding: 0 10px 0px 5px">
+
+    <!-- <div>
+         <div class="date"> {{note.note.createdAt | date: 'medium'}}
+         </div>
+         <div class="icons">
+             <i class="fa fa-check fa-lg" ng-if="note.edit == false"></i>
+             <i class="fa fa-pencil fa-lg" ng-if="note.edit == true"></i>
+             <i class="fa fa-envelope-o fa-lg" ng-click="note.email(note.note)"></i>
+             <i class="fa fa-trash-o fa-lg" ng-click="note.delete(note.note)"></i>
+         </div>
+     </div>
+     <div style="background: #FBFBFC" ng-model="note.note.text"
+          ng-focus="note.edit = true"
+          ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
+         {{ note.note.text }}
+     </div>
+     <div>
+         CreatedBy: {{ note.note.createdBy}}
+     </div>
+    <div class="panel panel-success note">
         <div class="panel-heading">
             {{note.note.createdAt | date: 'medium'}}
             <span class="icons pull-right">
@@ -18,11 +37,37 @@
             <!--    <div class="markdown-body" ng-model="note.text"
                             ng-change="update(notes.length - $index - 1,note.text)" ng-focus="note.edit = true"
                             ng-blur="note.edit = false" markdown-editable contenteditable="true">{{ note.text }}
+                       </div>
+        </div>
+        <div class="panel-footer">
+            CreatedBy: {{ note.note.displayName}}
+        </div> -->
+    <div>
+        <div class="note">
+            <div>
+                <div class="date"> {{note.note.createdAt | date: 'medium'}}
+                </div>
+                <div class="icons">
+                    <i class="fa fa-check fa-lg" ng-if="note.edit == false"></i>
+                    <i class="fa fa-pencil fa-lg" ng-if="note.edit == true"></i>
+                    <i class="fa fa-envelope-o fa-lg" ng-click="note.email(note.note)"></i>
+                    <i class="fa fa-trash-o fa-lg" ng-click="note.delete(note.note)"></i>
+                </div>
+            </div>
+
+            <div style="background: #FBFBFC" ng-model="note.note.text" ckeditor="{ inline: true }"
+                 ng-focus="note.edit = true"
+                 ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
+                {{ note.note.text }}
+            </div>
+            <!--    <div class="markdown-body" ng-model="note.text"
+                            ng-change="update(notes.length - $index - 1,note.text)" ng-focus="note.edit = true"
+                            ng-blur="note.edit = false" markdown-editable contenteditable="true">{{ note.text }}
                        </div> -->
 
 
-            <div class="panel-footer">
-                CreatedBy: {{ note.note.createdBy}}
+            <div>
+                CreatedBy: {{ note.note.displayName}}
             </div>
         </div>
     </div>
