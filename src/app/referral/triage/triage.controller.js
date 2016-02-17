@@ -1,8 +1,6 @@
 /**
- *
  * Controller for handling triage
  */
-
 (function () {
   'use strict';
 
@@ -13,21 +11,19 @@
     ])
     .controller('TriageController', TriageController);
 
-  TriageController.$inject = ['$scope', 'API', 'AltumAPIService', '$location', '$uibModal', 'toastr'];
+  TriageController.$inject = ['$resource', 'API', 'HeaderService', 'AltumAPIService', '$location', '$uibModal', 'toastr'];
 
-  function TriageController($scope, API, AltumAPI, $location, $uibModal, toastr) {
+  function TriageController($resource,  API, HeaderService, AltumAPI, $location, $uibModal, toastr) {
     var vm = this;
 
     // bindable variables
+    vm.url = API.url() + $location.path();
     vm.referralID = _.getParentIDFromUrl($location.path());
     vm.referral = {};
     vm.selectedProgram = {};
     vm.selectedPhysician = {};
     vm.selectedSite = {};
-    vm.sites = [];              //placeholder for sites
     vm.mapDisabled = true;
-
-    var referralHref = 'referral/' + vm.referralID + '/';
 
     // bindable methods
     vm.openMap = openMap;
@@ -38,29 +34,24 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      var Resource = $resource(vm.url);
 
-      AltumAPI.Site.query({}).$promise.then(function (resp) {
-        vm.sites = angular.copy(resp);
-        return 1;
-      }).then(function (resp) {
+      Resource.get(function (data, headers) {
+        vm.resource = data;
+        vm.referral = data.items;
+        vm.selectedPhysician = data.items.physician || {};
+        vm.selectedSite = data.items.site || {};
+        vm.selectedProgram = data.items.program || {};
+        vm.mapDisabled = false;
 
-        //init referral and triage form values
-        AltumAPI.Referral.get({id: vm.referralID}).$promise.then(function (referral) {
-          vm.referral = referral;
-          vm.selectedPhysician = referral.physician || {};
-          vm.selectedSite = referral.site || {};
-          vm.selectedProgram = referral.program || {};
-        }).then(function () {
-          vm.mapDisabled = false;
-        });
+        // initialize submenu
+        HeaderService.setSubmenu('referral', data.links);
       });
     }
 
     /**
-     * [openMap]
-     *
+     * openMap
      * @description opens a modal window for the mapModal site picker
-     *
      */
     function openMap() {
       var modalInstance = $uibModal.open({
@@ -71,35 +62,25 @@
         controllerAs: 'mapmodal',
         bindToController: true,
         resolve: {
-          referralHref: function () {
-            //return referralHref;
-            return referralHref;
-          },
           sites: function () {
-            return vm.sites;
+            return AltumAPI.Site.query().$promise;
           },
           referral: function () {
             return vm.referral;
           }
-
         }
       });
 
       modalInstance.result.then(function (selectedSite) {
         vm.selectedSite = selectedSite;
-      }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
       });
     }
 
     /**
-     * [save]
-     *
+     * save
      * @description save handler for the triage form
-     *
      */
     function save() {
-
       var newReferral = new AltumAPI.Referral();
 
       //set values from triage form
@@ -110,13 +91,11 @@
 
       //update referral
       newReferral.$update({id:vm.referralID}).then(function(resp) {
-        toastr.success('Updated referral!');
+        toastr.success('Updated referral for client '+ vm.referral.clientcontact.displayName +'!');
       },
-
       function(err) {
         toastr.error('Updating referral ' + vm.referralID + 'failed. ' + err);
       });
     }
-
   }
 })();

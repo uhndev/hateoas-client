@@ -60,7 +60,6 @@
 
         var unregister = $scope.$watch('sitemap.markers', function (newMarkers, oldMarkers) {
           if (newMarkers.length > 1) {
-            console.log(newMarkers);
             //init marker click functions
             _.each(newMarkers, function (marker) {
               marker.click = function () {

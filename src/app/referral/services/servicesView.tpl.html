@@ -48,8 +48,13 @@
 
   <uib-accordion close-others="false">
     <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy"
-                         panel-class="panel-info">
+                         ng-init="svc.accordionStatus[groupKey].isOpen = false"
+                         is-open="svc.accordionStatus[groupKey].isOpen" panel-class="panel-info">
       <uib-accordion-heading>
+        <i class="glyphicon" ng-class="{
+          'glyphicon-chevron-right': !svc.accordionStatus[groupKey].isOpen,
+          'glyphicon-chevron-down': svc.accordionStatus[groupKey].isOpen
+        }"></i>
         {{ groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
       </uib-accordion-heading>
@@ -57,11 +62,12 @@
       <div layout="column">
         <uib-accordion close-others="false">
           <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
-                               is-open="accordion.groups[$index].isOpen">
+                               ng-init="svc.accordionStatus[groupKey][subGroup].isOpen = false"
+                               is-open="svc.accordionStatus[groupKey][subGroup].isOpen">
             <uib-accordion-heading>
               <i class="glyphicon" ng-class="{
-                  'glyphicon-chevron-right': !accordion.groups[$index].isOpen,
-                  'glyphicon-chevron-down': accordion.groups[$index].isOpen
+                  'glyphicon-chevron-right': !svc.accordionStatus[groupKey][subGroup].isOpen,
+                  'glyphicon-chevron-down': svc.accordionStatus[groupKey][subGroup].isOpen
                 }"></i>
               {{subGroup}}
               <span class="pull-right badge">{{subServices.length}}</span>

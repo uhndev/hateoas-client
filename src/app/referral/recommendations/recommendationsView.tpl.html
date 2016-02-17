@@ -45,30 +45,34 @@
         </p>
 
         <!-- List View -->
-        <md-content ng-if="rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+        <md-content ng-if="!rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <uib-accordion close-others="false">
             <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'"
-                                 is-open="accordion.groups[$index].isOpen" panel-class="panel-info">
+                                 ng-init="rec.accordionStatus[groupKey] = true" is-open="rec.accordionStatus[groupKey]" panel-class="panel-info">
               <uib-accordion-heading>
                 <i class="glyphicon" ng-class="{
-                  'glyphicon-chevron-right': !accordion.groups[$index].isOpen,
-                  'glyphicon-chevron-down': accordion.groups[$index].isOpen
+                  'glyphicon-chevron-right': !rec.accordionStatus[groupKey],
+                  'glyphicon-chevron-down': rec.accordionStatus[groupKey]
                 }"></i>
                 {{groupServices[0].serviceCategoryName}}
                 <span class="pull-right badge">{{groupServices.length}}</span>
               </uib-accordion-heading>
-              <div class="checkbox" ng-repeat="service in groupServices">
-                <label>
-                  <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
-                         ng-click="rec.toggleService(service)"/> {{service.name}}
-                </label>
+              <div layout="row">
+                <div ng-repeat="serviceBlock in groupServices | chunkBy: 2" flex>
+                  <div class="checkbox" ng-repeat="service in serviceBlock">
+                    <label>
+                      <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
+                             ng-click="rec.toggleService(service)"/> {{service.name}}
+                    </label>
+                  </div>
+                </div>
               </div>
             </uib-accordion-group>
           </uib-accordion>
         </md-content>
 
         <!-- Grid View -->
-        <md-content ng-if="!rec.showListView" layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+        <md-content ng-if="rec.showListView" layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
           <!-- Service Category / Program Services Panel -->
           <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
                ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'">
