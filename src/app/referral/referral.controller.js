@@ -25,7 +25,7 @@
 
     vm.style_notebarCollapsed = false;
 
-        vm.recommendedServices = [];
+    vm.recommendedServices = [];
     vm.availableServices = [];
     vm.currentCategories = [];
 
@@ -197,11 +197,11 @@
       });
     }
 
-      /**
-       * toggleNotebar
-       * @description show or hide the notes panel
-       */
-       function toggleNotebar () {
+    /**
+     * toggleNotebar
+     * @description show or hide the notes panel
+     */
+    function toggleNotebar () {
         vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
       }
 

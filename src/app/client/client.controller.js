@@ -1,24 +1,24 @@
 (function () {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('altum.client', [])
-        .controller('ClientController', ClientController);
+  angular
+      .module('altum.client', [])
+      .controller('ClientController', ClientController);
 
-    ClientController.$inject = [];
+  ClientController.$inject = [];
 
-    /* @ngInject */
-    function ClientController() {
-        var vm = this;
-        vm.title = 'ClientController';
+  /* @ngInject */
+  function ClientController() {
+    var vm = this;
+    vm.title = 'ClientController';
 
-        init();
+    init();
 
-        ////////////////
+    ////////////////
 
-        function init() {
+    function init() {
         }
-    }
+  }
 
 })();
 
