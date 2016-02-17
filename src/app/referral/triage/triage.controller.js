@@ -91,7 +91,7 @@
 
       //update referral
       newReferral.$update({id:vm.referralID}).then(function(resp) {
-        toastr.success('Updated referral for client '+ vm.referral.clientcontact.displayName +'!');
+        toastr.success('Updated referral for client ' + vm.referral.clientcontact.displayName + '!');
       },
       function(err) {
         toastr.error('Updating referral ' + vm.referralID + 'failed. ' + err);
