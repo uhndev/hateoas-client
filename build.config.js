@@ -151,13 +151,13 @@ module.exports = {
       'vendor/angular-i18n/angular-locale_fr.js',
 
       // plugins
-       'vendor/ckeditor/ckeditor.js',
-       'vendor/ckeditor/config.js',
-       'vendor/ckeditor/lang/en.js',
-       'vendor/ckeditor/styles.js',
+      // 'vendor/ckeditor/ckeditor.js',
+      // 'vendor/ckeditor/config.js',
+      // 'vendor/ckeditor/lang/en.js',
+      // 'vendor/ckeditor/styles.js',
       'vendor/JSONedit/js/JSONEdit.js',
       'vendor/ui-select/dist/select.min.js',
-      'vendor/ng-ckeditor/ng-ckeditor.js',
+      // 'vendor/ng-ckeditor/ng-ckeditor.js',
       'vendor/jScrollPane/script/jquery.jscrollpane.js',
       'vendor/JScrollPane/script/jquery.mousewheel.js',
       'vendor/jScrollPane/script/mwheelintent.js',
