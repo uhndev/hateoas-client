@@ -57,15 +57,11 @@
                 {{groupServices[0].serviceCategoryName}}
                 <span class="pull-right badge">{{groupServices.length}}</span>
               </uib-accordion-heading>
-              <div layout="row">
-                <div ng-repeat="serviceBlock in groupServices | chunkBy: 2" flex>
-                  <div class="checkbox" ng-repeat="service in serviceBlock">
-                    <label>
-                      <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
-                             ng-click="rec.toggleService(service)"/> {{service.name}}
-                    </label>
-                  </div>
-                </div>
+              <div class="checkbox" ng-repeat="service in groupServices">
+                <label>
+                  <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
+                         ng-click="rec.toggleService(service)"/> {{service.name}}
+                </label>
               </div>
             </uib-accordion-group>
           </uib-accordion>
