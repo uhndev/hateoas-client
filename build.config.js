@@ -166,7 +166,7 @@ module.exports = {
       'vendor/jScrollPane/style/jquery.jscrollpane.css',
     ],
     assets: [
-      'vendor/ckeditor/**',
+      //'vendor/ckeditor/**',
       'vendor/bootstrap/dist/fonts/*',
       'vendor/font-awesome/fonts/*',
       'vendor/roboto-fontface/fonts/Roboto-Regular.*',
