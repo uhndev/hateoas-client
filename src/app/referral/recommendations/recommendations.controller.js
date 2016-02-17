@@ -26,21 +26,12 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.physician = null;
-    vm.staffCollection = {};
-    vm.staff = [];
-    vm.workStatus = null;
-    vm.prognosis = null;
-    vm.prognosisTimeframe = null;
-    vm.serviceType = null;
-    vm.approvalNeeded = null;
-    vm.serviceDate = new Date();
-    vm.currentDate = new Date();
     vm.validityFields = ['physician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 1,
       serviceDetail: 2
     };
+    vm.accordionStatus = {};
 
     vm.recommendedServices = [];
     vm.availableServices = [];
@@ -75,6 +66,14 @@
           'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
+        vm.physician = null;
+        vm.staffCollection = {};
+        vm.staff = [];
+        vm.workStatus = null;
+        vm.prognosis = null;
+        vm.prognosisTimeframe = null;
+        vm.serviceType = null;
+        vm.serviceDate = new Date();
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);

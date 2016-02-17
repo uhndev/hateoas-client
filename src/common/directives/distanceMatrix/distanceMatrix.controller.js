@@ -52,7 +52,6 @@
         vm.geoDistance = new mapsAPI.DistanceMatrixService();
 
         $scope.$watch('distance.origin', function (newOrigin, oldOrigin) {
-          console.log(newOrigin);
           vm.origins = [];
           vm.origins.push(newOrigin);
           calculateDistances();

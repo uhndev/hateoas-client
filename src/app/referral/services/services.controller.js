@@ -26,6 +26,7 @@
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
     vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.accordionStatus = {};
 
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
@@ -103,7 +104,7 @@
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
-          service.serviceDate = moment(service.serviceDate).format('MMM d, YYYY h:mm a');
+          service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
           return service;
         });
 
