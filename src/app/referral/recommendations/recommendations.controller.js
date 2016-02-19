@@ -32,6 +32,7 @@
       serviceDetail: 2
     };
     vm.accordionStatus = {};
+    vm.currentDate = new Date();
 
     vm.recommendedServices = [];
     vm.availableServices = [];
