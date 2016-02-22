@@ -606,6 +606,7 @@ module.exports = function (grunt) {
   grunt.registerTask( 'default', [ 'build', 'compile' ] );
   grunt.registerTask( 'prod', [ 'build_prod', 'compile' ]);
   grunt.registerTask( 'migrate', [ 'build_migrate', 'compile']);
+
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
@@ -628,6 +629,7 @@ module.exports = function (grunt) {
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
+
   /**
    * The `compile` task gets your app ready for deployment by concatenating and
    * minifying your code.
