@@ -258,7 +258,8 @@ module.exports = function ( grunt ) {
       },
       // Environment targets
       development: '<%= environments.development %>',
-      production: '<%= environments.production %>'
+      production: '<%= environments.production %>',
+      migrate: '<%= environments.migrate %>'
     },
 
     /**
@@ -419,6 +420,14 @@ module.exports = function ( grunt ) {
         replacements: [{
           from: "<development_url>",
           to: "<%= environments.production.url %>"
+        }]
+      },
+      migrate: {
+        src: ['sails-io-settings.tpl'],
+        dest: ['sails-io-settings.js'],
+        replacements: [{
+          from: "<development_url>",
+          to: "<%= environments.migrate.url %>"
         }]
       }
     },
@@ -595,6 +604,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'default', [ 'build', 'compile' ] );
   grunt.registerTask( 'prod', [ 'build_prod', 'compile' ]);
+  grunt.registerTask( 'migrate', [ 'build_migrate', 'compile' ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
@@ -609,6 +619,12 @@ module.exports = function ( grunt ) {
 
   grunt.registerTask( 'build_prod', [
     'clean', 'replace:production', 'replace:remove_livereload', 'ngconstant:production', 'html2js', 'jshint', 'less:build',
+    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
+  ]);
+
+  grunt.registerTask( 'build_migrate', [
+    'clean', 'replace:migrate', 'replace:remove_livereload', 'ngconstant:migrate', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
