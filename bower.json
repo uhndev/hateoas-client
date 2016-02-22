@@ -22,6 +22,7 @@
     "JSONedit": "~0.1.0",
     "lodash": "~3.10.1",
     "ng-table": "~0.8.3",
+    "sails.io.js": "~0.13.5",
     "angular-moment": "~0.10.3",
     "moment": "~2.10.6",
     "angular-translate": "~2.8.1",
@@ -36,8 +37,7 @@
     "angular-material": "~0.11.4",
     "roboto-fontface": "~0.4.3",
     "angular-translate-storage-local": "~2.8.1",
-    "ui-select": "angular-ui-select#~0.13.2",
-    "sails.io.js": "*"
+    "ui-select": "angular-ui-select#~0.13.2"
   },
   "resolutions": {
     "angular": "1.4.7"
