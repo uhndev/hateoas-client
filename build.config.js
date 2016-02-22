@@ -15,12 +15,23 @@ module.exports = {
         }
       }
     },
-    production: {
+    migrate: {
       url: 'http://ws69.uhnresearch.ca:1337',
       constants: {
         BASE: {
           protocol: 'http',
           host : 'ws69.uhnresearch.ca',
+          port: '1337',
+          prefix: '/api'
+        }
+      }
+    },
+    production: {
+      url: 'http://ws98.uhnresearch.ca:1337',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : 'ws98.uhnresearch.ca',
           port: '1337',
           prefix: '/api'
         }
