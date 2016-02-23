@@ -1,7 +1,10 @@
 <ng-form name="sub_form">
   <div class="form-group">
     <label for="{field.field_name}">
-      {{field.field_id}}) {{field.field_title}}
+      {{field.field_id}})
+    </label>
+    <label for="{field.field_name}" translate>
+      {{field.field_title}}
     </label>&nbsp;
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <div class="jsonView" defocus ng-init="field.field_value = field.field_value || {}">
@@ -13,7 +16,7 @@
     </div>
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error"
-            ng-show="(field.field_required && !field.field_value) || showValidateError">
+            ng-show="(field.field_required && !field.field_value) || showValidateError" translate>
           * {{field.field_helpertext}}
       </span>
     </div>
