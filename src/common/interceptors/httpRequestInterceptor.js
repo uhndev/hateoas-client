@@ -16,7 +16,7 @@
     return {
 
       /**
-       * Inteceptor for all $http requests to add authentication dadosHeader
+       * Inteceptor for all $http requests to add authentication header
        * @param  {*} config
        * @return {*}
        */
