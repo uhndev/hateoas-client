@@ -1,7 +1,7 @@
 <div ng-switch="select.isAtomic" ng-hide="select.loadError">
   <div ng-switch-when="true">
     <ui-select ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
-      <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
+      <ui-select-match placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}">{{$select.selected[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
                          scroll-watch onscrolldown="select.loadMore($select)"
                          refresh="select.fetchData($select.search, $select)"
