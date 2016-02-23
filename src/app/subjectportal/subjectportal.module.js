@@ -21,7 +21,7 @@
         '800': 'c62828',
         '900': 'b71c1c',
 
-        'A100': '00538B', // header
+        'A100': '00538B', // dadosHeader
         'A200': '3B7EAC', // subheader
         'A400': 'B1CBDF', // submenu
         'A700': 'E79949', // accent

@@ -56,33 +56,28 @@
 
 (function() {
   'use strict';
-  angular.module('dados.common.directives.listEditor', [
-    'ui.bootstrap',
-    'ngTable',
-    'dados.common.directives.list-editor.controller'
-  ])
-
-    .directive('listEditor', function ($timeout) {
-      return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-          list: '=',
-          columns: '=',
-          affixMissing: '@',
-          canEdit: '@',
-          canAddNewcol: '@',
-          canAddNewrow: '@',
-          canEditHeader: '@',
-          canDelRow: '@',
-          canDelCol: '@',
-          forceReload: '='
-        },
-        templateUrl: 'directives/listEditor/list-editor.tpl.html',
-        controller: 'ListEditorController',
-        controllerAs: 'ledit',
-        bindToController: true
-      };
+  angular
+    .module('dados.common.directives.listEditor', [
+      'ui.bootstrap',
+      'ngTable',
+      'dados.common.directives.list-editor.controller'
+    ])
+    .component('listEditor', {
+      bindings: {
+        list: '=',
+        columns: '=',
+        affixMissing: '@',
+        canEdit: '@',
+        canAddNewcol: '@',
+        canAddNewrow: '@',
+        canEditHeader: '@',
+        canDelRow: '@',
+        canDelCol: '@',
+        forceReload: '='
+      },
+      templateUrl: 'directives/listEditor/list-editor.tpl.html',
+      controller: 'ListEditorController',
+      controllerAs: 'ledit'
     });
 
 })();

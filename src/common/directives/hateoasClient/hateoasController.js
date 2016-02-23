@@ -57,8 +57,8 @@
           var state = {};
 
           /**
-           * if header was set from queryBuilder, modify angular resource to include the
-           * X-UHN-Deep-Query header containing a JSON object of the form:
+           * if dadosHeader was set from queryBuilder, modify angular resource to include the
+           * X-UHN-Deep-Query dadosHeader containing a JSON object of the form:
            * {
            *    collection: 'users',  // collection attribute on model to populate
            *    where: {              // where clause to conditionally populate on

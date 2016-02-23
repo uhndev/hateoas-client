@@ -114,7 +114,7 @@
 
     /**
      * setUnauthenticated
-     * @description Fires events to app (dados-header) to remove main/sub menus from view
+     * @description Fires events to app (dados-dadosHeader) to remove main/sub menus from view
      */
     function setUnauthenticated() {
       $cookies.remove('user');
