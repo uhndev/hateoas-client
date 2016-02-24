@@ -9,10 +9,10 @@
     .controller('StudyFormController', StudyFormController);
 
   StudyFormController.$inject = [
-    '$scope', '$location', 'HeaderService', 'toastr', 'API', 'StudyService', 'FormService', 'StudyFormService'
+    '$scope', '$location', 'HeaderService', 'toastr', 'API', 'FormService', 'StudyFormService'
   ];
 
-  function StudyFormController($scope, $location, HeaderService, toastr, API, Study, Form, StudyForm) {
+  function StudyFormController($scope, $location, HeaderService, toastr, API, Form, StudyForm) {
     var vm = this;
 
     // bindable variables
@@ -37,9 +37,7 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        Study.get({id: vm.study}).$promise.then(function (study) {
-          HeaderService.setSubmenu('study', data.links);
-        });
+        HeaderService.setSubmenu('study', data.links);
 
         // populate add form dropdown with forms not already added
         var filterQuery = {};

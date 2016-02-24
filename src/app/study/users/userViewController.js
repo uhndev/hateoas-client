@@ -9,10 +9,10 @@
   .controller('StudyUserController', StudyUserController);
 
   StudyUserController.$inject = [
-  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'StudyService', 'UserEnrollment', 'toastr', 'API'
+  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
   ];
 
-  function StudyUserController($scope, $q, $location, $uibModal, HeaderService, Study, UserEnrollment, toastr, API) {
+  function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
 
     var vm = this;
     var savedAccess = {};
@@ -75,9 +75,7 @@
         });
 
         // initialize submenu
-        Study.get({id: studyID}).$promise.then(function (study) {
-          HeaderService.setSubmenu('study', data.links);
-        });
+        HeaderService.setSubmenu('study', data.links);
       }
 
       return data;

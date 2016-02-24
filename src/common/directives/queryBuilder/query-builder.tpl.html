@@ -14,7 +14,7 @@
              ng-change="search(value)"/>
     </div>
   </form>
-  <div ng-show="advanceSearch">
+  <div uib-collapse="!advanceSearch">
     <ul ng-repeat="(property, expression) in query track by $index">
       <li ng-if="expression|isString">
         {{ property }}
