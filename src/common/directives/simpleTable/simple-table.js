@@ -4,19 +4,14 @@
     .module('dados.common.directives.simpleTable', [
       'dados.common.directives.selectLoader'
     ])
-    .directive('simpleTable', function() {
-      return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-          rows: '=',
-          tableData: '='
-        },
-        templateUrl: 'directives/simpleTable/simpleTable.tpl.html',
-        controller: TableController,
-        controllerAs: 'table',
-        bindToController: true
-      };
+    .component('simpleTable', {
+      bindings: {
+        rows: '=',
+        tableData: '='
+      },
+      templateUrl: 'directives/simpleTable/simpleTable.tpl.html',
+      controller: TableController,
+      controllerAs: 'table'
     });
 
   TableController.$inject = ['$scope'];
