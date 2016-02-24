@@ -1,12 +1,12 @@
-(function() {
+(function () {
   'use strict';
 
   angular
-  .module('dados.collectioncentre.service', [
-        'dados.constants',
-        'dados.common.services.resource'
-      ])
-  .service('CollectionCentreService', CollectionCentreService);
+    .module('dados.collectioncentre.service', [
+      'dados.constants',
+      'dados.common.services.resource'
+    ])
+    .service('CollectionCentreService', CollectionCentreService);
 
   CollectionCentreService.$inject = ['ResourceFactory', 'API'];
 
