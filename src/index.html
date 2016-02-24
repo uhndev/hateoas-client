@@ -12,10 +12,11 @@
     <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
   </head>
-  <body dados-status dados-error ng-cloak translate-cloak>
+  <body ng-cloak translate-cloak>
+    <dados-error></dados-error>
     <dados-header></dados-header>
 
-  	<div ui-view></div>
+    <div ui-view></div>
     <footer class="footer">
       <div class="container">
         <div class="footer-inner row">
