@@ -1,0 +1,108 @@
+<div class="container" ng-controller="ServicesController as svc" ng-cloak>
+  <div layout="column">
+    <h1 flex id="Title">
+      <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
+      <small>{{svc.resource.items.client_displayName}}</small>
+    </h1>
+    <div id="Query" flex class="clearfix">
+      <form>
+        <div class="form-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <label class="control-label ng-hide" translate>
+            COMMON.HATEOAS.QUERY.PLACEHOLDER
+          </label>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+                 ng-model="svc.search"/>
+        </div>
+      </form>
+      <br/>
+    </div>
+    <div flex ng-show="svc.referralOverview">
+      <table class="table table-condensed summary-table">
+        <tr class="summary-header-row">
+          <th ng-repeat="(label, value) in ::svc.referralOverview" translate>{{label}}</th>
+          <th>Group</th>
+          <th>Subgroup</th>
+        </tr>
+        <tr class="summary-table-row">
+          <td ng-repeat="(label, value) in ::svc.referralOverview">{{::value}}</td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="svc.groupBy">
+              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
+                {{group.prompt}}
+              </option>
+            </select>
+          </td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="svc.subGroupBy">
+              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
+                {{group.prompt}}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <uib-accordion close-others="false">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy"
+                         ng-init="svc.accordionStatus[groupKey].isOpen = false"
+                         is-open="svc.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+      <uib-accordion-heading>
+        <i class="glyphicon" ng-class="{
+          'glyphicon-chevron-right': !svc.accordionStatus[groupKey].isOpen,
+          'glyphicon-chevron-down': svc.accordionStatus[groupKey].isOpen
+        }"></i>
+        {{ groupKey }}
+        <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
+      </uib-accordion-heading>
+
+      <div layout="column">
+        <uib-accordion close-others="false">
+          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
+                               ng-init="svc.accordionStatus[groupKey][subGroup].isOpen = false"
+                               is-open="svc.accordionStatus[groupKey][subGroup].isOpen">
+            <uib-accordion-heading>
+              <i class="glyphicon" ng-class="{
+                  'glyphicon-chevron-right': !svc.accordionStatus[groupKey][subGroup].isOpen,
+                  'glyphicon-chevron-down': svc.accordionStatus[groupKey][subGroup].isOpen
+                }"></i>
+              {{subGroup}}
+              <span class="pull-right badge">{{subServices.length}}</span>
+            </uib-accordion-heading>
+            <table class="table table-condensed summary-table">
+              <tr class="summary-header-row">
+                <th ng-repeat="summary in svc.summaryFields" translate
+                    ng-if="subServices[0][summary.name]">
+                  {{summary.prompt}}
+                </th>
+              </tr>
+              <tr class="summary-table-row">
+                <td ng-repeat="summary in svc.summaryFields" ng-if="subServices[0][summary.name]">
+                  {{subServices[0][summary.name]}}
+                </td>
+              </tr>
+            </table>
+            <md-divider></md-divider>
+            <table class="table table-condensed" ng-if="accordion.groups[$index].isOpen" >
+              <tr>
+                <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
+                <th>Approvals</th>
+              </tr>
+              <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
+                <td ng-repeat="field in svc.visitFields">
+                  {{service[field.name]}}
+                </td>
+                <td>
+                  <service-approval service="service" statuses="svc.statuses"></service-approval>
+                </td>
+              </tr>
+            </table>
+          </uib-accordion-group>
+        </uib-accordion>
+      </div>
+    </uib-accordion-group>
+  </uib-accordion>
+</div>

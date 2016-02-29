@@ -15,12 +15,23 @@ module.exports = {
         }
       }
     },
-    production: {
+    migrate: {
       url: 'http://ws69.uhnresearch.ca:1338',
       constants: {
         BASE: {
           protocol: 'http',
           host : 'ws69.uhnresearch.ca',
+          port: '1338',
+          prefix: '/api'
+        }
+      }
+    },
+    production: {
+      url: 'http://10.3.128.49:1338',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : '10.3.128.49',
           port: '1338',
           prefix: '/api'
         }
@@ -46,16 +57,16 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
-    jsunit: [ 'src/**/*.spec.js' ],
+    js: ['src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js'],
+    jsunit: ['src/**/*.spec.js'],
 
-    ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
-    tsunit: [ 'src/**/*.spec.ts' ],
+    ts: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts'],
+    tsunit: ['src/**/*.spec.ts'],
 
-    atpl: [ 'src/app/**/*.tpl.html' ],
-    ctpl: [ 'src/common/**/*.tpl.html' ],
+    atpl: ['src/app/**/*.tpl.html'],
+    ctpl: ['src/common/**/*.tpl.html'],
 
-    html: [ 'src/index.html' ],
+    html: ['src/index.html'],
     less: 'src/less/main.less'
   },
 
@@ -92,8 +103,8 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
-      'sails-io-settings.js',
       'vendor/sails.io.js/dist/sails.io.js',
+      'sails-io-settings.js',
 
       'vendor/angular/angular.js',
       'vendor/angular-animate/angular-animate.js',
@@ -115,6 +126,7 @@ module.exports = {
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
+      'vendor/angular-filter/dist/angular-filter.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
@@ -150,11 +162,16 @@ module.exports = {
       'vendor/JScrollPane/script/jquery.mousewheel.js',
       'vendor/jScrollPane/script/mwheelintent.js',
 
+      // 'vendor/ng-ckeditor/ng-ckeditor.js',
+      'vendor/jScrollPane/script/jquery.jscrollpane.js',
+      'vendor/JScrollPane/script/jquery.mousewheel.js',
+      'vendor/jScrollPane/script/mwheelintent.js',
+
     ],
     css: [
+      'vendor/jScrollPane/style/jquery.jscrollpane.css',
     ],
     assets: [
-
       'vendor/bootstrap/dist/fonts/*',
       'vendor/font-awesome/fonts/*',
       'vendor/roboto-fontface/fonts/Roboto-Regular.*',

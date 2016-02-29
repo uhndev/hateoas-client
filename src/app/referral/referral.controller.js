@@ -2,21 +2,22 @@
   'use strict';
 
   angular
-    .module('altum.referral', [])
+    .module('altum.referral.controller', [
+      'ngMaterial',
+      'ngResource',
+      'dados.header.service'
+    ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService',
-    'ReferralService', 'AltumProgramServices', 'NoteTypeService', 'toastr'
-  ];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
 
-  function ReferralController($q, $resource, $location, API, HeaderService, Referral,
-                              AltumProgramServices, NoteType, toastr) {
+  function ReferralController($resource, $location, API, HeaderService) {
     var vm = this;
     var ReferralServices;
 
     // bindable variables
     vm.url = API.url() + $location.path();
+<<<<<<< HEAD
     vm.selectedProgram = null;
     vm.selectedSite = null;
     vm.selectedPhysician = null;
@@ -35,6 +36,8 @@
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
     vm.saveServices = saveServices;
+=======
+>>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
 
     vm.toggleNotebar = toggleNotebar;
 
@@ -51,15 +54,8 @@
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
 
-        vm.selectedProgram = data.items.program;
-        vm.selectedSite = data.items.site;
-        vm.selectedPhysician = data.items.physician;
-        vm.selectedClinician = data.items.clinician;
-        vm.selectedStatus = data.items.status;
-        vm.notes = data.items.notes;
-
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
-        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'clinician', 'referralContact',
+        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
           'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
         // referral info panel
@@ -68,11 +64,11 @@
             'MRN': {title: 'COMMON.MODELS.CLIENT.MRN', type: 'text'},
             'displayName': {title: 'COMMON.MODELS.PERSON.NAME', type: 'text'},
             'dateOfBirth': {title: 'COMMON.MODELS.PERSON.DATE_OF_BIRTH', type: 'date'},
-            'program': {title: 'Program', type: 'program'},
-            'site': {title: 'Site', type: 'site'},
-            'physician': {title: 'Physician', type: 'physician'},
-            'clinician': {title: 'Clinician', type: 'clinician'},
-            'referralContact': {title: 'Referral Contact', type: 'employee'},
+            'program': {title: 'COMMON.MODELS.REFERRAL.PROGRAM', type: 'program'},
+            'site': {title: 'COMMON.MODELS.REFERRAL.SITE', type: 'site'},
+            'physician': {title: 'COMMON.MODELS.REFERRAL.PHYSICIAN', type: 'physician'},
+            'staff': {title: 'COMMON.MODELS.REFERRAL.STAFF', type: 'staff'},
+            'referralContact': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_CONTACT', type: 'employee'},
             'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
             'clinicDate': {title: 'COMMON.MODELS.REFERRAL.CLINIC_DATE', type: 'date'},
             'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
@@ -88,6 +84,7 @@
         HeaderService.setSubmenu('referral', data.links);
       });
     }
+<<<<<<< HEAD
 
     /**
      * updateReferral
@@ -205,6 +202,8 @@
         vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
       }
 
+=======
+>>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
   }
 
 })();

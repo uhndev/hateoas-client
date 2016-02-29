@@ -87,9 +87,7 @@
     function onResourceLoaded(data) {
       if (data) {
         // initialize submenu
-        Study.get({id: studyID}).$promise.then(function (study) {
-          HeaderService.setSubmenu('study', data.links);
-        });
+        HeaderService.setSubmenu('study', data.links);
       }
       return data;
     }

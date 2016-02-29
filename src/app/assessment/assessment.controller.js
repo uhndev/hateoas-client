@@ -31,6 +31,7 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
+    vm.selectedProgram = {};
     vm.availableServices = [];
     vm.currentCategories = [];
     vm.selectedSite = {};
@@ -56,9 +57,13 @@
     // google distance placeholders for distance call
     vm.origins = [];
     vm.destinations = [];
+    vm.myorigin = '';
+    vm.mydestinations = [];
     vm.distanceMatrix = [];
     vm.directionsSteps = [];
     vm.markers = [];
+    vm.tempMarkers = [];
+    vm.selectedClientMarker = {};
 
     // bindable methods
     vm.selectProgram = selectProgram;
@@ -68,10 +73,7 @@
     vm.saveServices = saveServices;
     vm.isServiceRecommended = isServiceRecommended;
     vm.selectReferral = selectReferral;
-    vm.calculateDistances = calculateDistances;
-    vm.calculateDirections = calculateDirections;
     vm.geocodeSites = geocodeSites;
-    vm.selectSite = selectSite;
 
     init();
 
@@ -95,39 +97,30 @@
           //initialize sites/destinations
           _.each(vm.sites, function (site, index) {
             vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
+            vm.mydestinations.push({
+              name: site.name,
+              address: _.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ')
+            });
             var val = {
-              id: index,
               idKey: index,
+              id: index,
               latitude: site.address.latitude,
               longitude: site.address.longitude,
               title: site.name,
-              icon: {url: 'assets/img/hospital-building.png'},
-              click: function () {
-                selectSite(site);
-              }
+              site: site,
+              icon: {url: 'assets/img/hospital-building.png'}
             };
-            vm.markers.push(val);
+            vm.tempMarkers.push(val);
           });
 
-          //initialize geocoder
-          vm.geocoder = new vm.googleMaps.Geocoder();
-
-          //initialize distance
-          vm.geoDistance = new vm.googleMaps.DistanceMatrixService();
-
-          //initialize directions service
-          vm.directionsService = new vm.googleMaps.DirectionsService();
-
-          //init directions renderer
-          vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
+          vm.markers = vm.tempMarkers;
         });
     }
 
     function findReferral(searchString) {
-      AltumAPI.Referral.query({
+      AltumAPI.ReferralDetail.query({
         where: {
           or: [
-            {status: {contains: searchString}},
             {id: parseInt(searchString)},
             {client_firstName: {contains: searchString}},
             {client_lastName: {contains: searchString}},
@@ -136,15 +129,16 @@
           ]
           //TODO: add to query recommendations false flag recommendationsMade: false
         }
-      }).$promise
-        .then(function (resp) {
-            vm.referralList = resp;
-            vm.referrals = resp;
-            vm.collapsedSearch = false;
-          },
-          function error(err) {
-            alert('error');
-          });
+      }).$promise.then(function (resp) {
+        vm.referralList = resp;
+        vm.referrals = resp;
+        vm.collapsedSearch = false;
+      },
+
+        function error(err) {
+          alert('error');
+        }
+      );
     }
 
     /**
@@ -174,7 +168,9 @@
     /**
      * [saveServices]
      * saves the currently selected services to the current referral
+     * @param {String} service
      */
+
     function saveServices() {
       vm.fullReferral.services = _.union(vm.recommendedServices, vm.fullReferral.services);
       AltumAPI.Referral.update(vm.fullReferral);
@@ -183,27 +179,27 @@
     /**
      * [selectProgram]
      * changes the selected program of the currently selected referral
-     * @param {Object} program
+     * @param {String} service
      */
-    function selectProgram(program) {
-      vm.selectedProgram = program;
+
+    function selectProgram() {
 
       AltumAPI.AltumProgramServices.query({
         where: [
-
-          {name: program.name}
+          {id: vm.selectedReferral.program}
         ]
       }).$promise
-        .then(function (resp) {
-
-          //reset recommended services to clear box
-          vm.recommendedServices = {};
-        },
+        .then(
+          function (resp) {
+            vm.availableServices = resp; //assign the newly selected programServices
+            vm.recommendedServices = {}; //reset recommended services to clear box
+          },
 
           function error(err) {
-            console.log('Error querying program ' + program.name + ' with id ' + program.id);
+            //console.log("Error querying program " + vm.selectedReferral.program.name + " with id " + vm.selectedReferral.program.id);
             console.log(err);
-          });
+          }
+      );
     }
 
     /**
@@ -220,16 +216,17 @@
           id: vm.selectedReferral.id
         }
       }).$promise.then(function (resp) {
-        vm.fullReferral = resp[0];
-        vm.resetServices();
-        vm.recommendedServices = [];
-      },
-      function error(err) {
-        alert('error');
-      });
+          vm.fullReferral = resp[0];
+          //  vm.resetServices();
+          vm.recommendedServices = [];
+        },
+        function error(err) {
+          alert('error');
+        });
 
       // set origin for distance matrix
       vm.origins = [(referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '')];
+      vm.myorigin = (referral.client_address1 || '') + ' ' + (referral.client_address2 || '') + ' ' + (referral.client_city || '') + ' ' + (referral.client_province || '') + ' ' + (referral.client_postalCode || '') + ' ' + (referral.client_country || '');
 
       // hide the search, unhide client detail on front end, unhide map
       vm.collapsedSearch = true;
@@ -242,13 +239,9 @@
         latitude: referral.client_latitude,
         longitude: referral.client_longitude,
         title: referral.client_name,
-        icon: {url: 'assets/img/patienticon.png'},
-        click: function () {
-          selectSite(site);
-        }
+        icon: {url: 'assets/img/patienticon.png'}
       };
-      vm.markers.pop();
-      vm.markers.push(val);
+      vm.selectedClientMarker = val;
 
       vm.map = {
         control: {},
@@ -256,11 +249,9 @@
         zoom: 10
       };
 
-      vm.calculateDistances();
-      var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
-      var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
-      vm.calculateDirections(origin, destination);
-      //vm.geocodeSites();
+      //vm.calculateDistances();
+      //var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
+
     }
 
     /**
@@ -286,65 +277,11 @@
       });
     }
 
-    /**
-     * [calculateDistances]
-     * calculates the distance Matrix from the currently selected referall's client and all of altum's sites
-     */
-    function calculateDistances() {
-      // distanceArgs for distanceMatrix call
-      var distanceArgs = {
-        origins: vm.origins,
-        destinations: vm.destinations,
-        travelMode: vm.googleMaps.TravelMode.DRIVING
-      };
-
-      vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix) {
-        vm.distanceMatrix = matrix;
-      });
-    }
-
-    /**
-         * calculateDirections
-         * @param origin
-         * @param destination
-         */
-    function calculateDirections(origin, destination) {
-      var request = {
-        origin: origin,
-        destination: destination,
-        travelMode: vm.googleMaps.DirectionsTravelMode.DRIVING
-      };
-
-      vm.directionsService.route(request, function (response) {
-        if (response.status === vm.googleMaps.DirectionsStatus.OK) {
-          // set routes
-          vm.directionsDisplay.setDirections(response);
-          $scope.$apply(function () {
-            // vm.directionsDisplay.setMap($scope.map.control.getGMap());
-
-            vm.directionsSteps = response.routes[0].legs[0].steps;
-            return uiGmapIsReady.promise(1);
-          })
-          .then(function (instances) {
-            var instanceMap = instances[0].map;
-            vm.directionsDisplay.setMap(instanceMap);
-            vm.directionsDisplay.setDirections(response);
-            // this is not the angular way, at all, and I hate it, but it works. Want to change it
-
-            vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
-          });
-        }
-      });
-    }
-
     function geocodeSites() {
       vm.sites.forEach(function (site) {
-        console.log(site);
         var addy = (site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
         vm.geocoder.geocode({address: addy}, function (location) {
-          console.log(location);
           if (location[0]) {
-            console.log(location);
 
             var newSite = new Site(site);
             newSite.address.latitude = location[0].geometry.location.lat();
@@ -363,12 +300,5 @@
       });
     }
 
-    function selectSite(site) {
-      vm.selectedSite = site;
-      var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
-      var destination = new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
-
-      vm.calculateDirections(origin, destination);
-    }
   }
 })();

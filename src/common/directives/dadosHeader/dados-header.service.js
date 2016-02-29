@@ -2,7 +2,9 @@
   'use strict';
 
   angular
-    .module('dados.header.service', [])
+    .module('dados.header.service', [
+      'dados.auth.service'
+    ])
     .service('HeaderService', HeaderService);
 
   HeaderService.$inject = ['$rootScope', 'AuthService'];

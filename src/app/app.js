@@ -10,6 +10,7 @@
       'ngSanitize',
       'ngMaterial',
       'pascalprecht.translate',
+      'angular.filter',
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
@@ -40,6 +41,7 @@
         'altum.client',
         'altum.client.register',
       'altum.assessment',
+      'altum.triage',
 
       // dados subject portal
       'dados.subjectportal',
@@ -69,7 +71,7 @@
 
   function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
-      template: '<div hateoas-client></div>'
+      template: '<hateoas-client></hateoas-client>'
     });
 
     $translateProvider.useLoader('localeLoader');

@@ -1,0 +1,9 @@
+<div id="mapDiv" class="form-div">
+  <ui-gmap-google-map id="myMap" ng-if="sitemap.mapReady" center="sitemap.map.center" pan="true" zoom="sitemap.map.zoom">
+    <ui-gmap-markers models="sitemap.markers" coords="'self'" icon="'icon'" click="click"></ui-gmap-markers>
+  </ui-gmap-google-map>
+  <div id="travelDiv" ng-model="sitemap.travelMode">
+    <label ng-repeat="mode in sitemap.travelModes"><input type="radio" name="travelMode" ng-model="sitemap.selectedTravelMode" ng-change="sitemap.resetDirections()" value="{{mode}}" />{{mode}}&nbsp;</label>
+  </div>
+  <div id="directionsDiv"></div>
+</div>

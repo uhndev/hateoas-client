@@ -7,19 +7,14 @@
 (function() {
   'use strict';
   angular
-      .module('dados.common.directives.dadosForm', [
-        'dados.common.directives.pluginEditor.directives.uiGrid',
-        'dados.common.directives.dadosForm.controller',
-        'dados.common.directives.dadosForm.service'
-      ])
-    .directive('dadosForm', function() {
-      return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: 'directives/dadosForm/dados-form.tpl.html',
-        controller: 'DadosFormController',
-        controllerAs: 'dadosForm',
-        bindToController: true
-      };
+    .module('dados.common.directives.dadosForm', [
+      'dados.common.directives.pluginEditor.directives.uiGrid',
+      'dados.common.directives.dadosForm.controller',
+      'dados.common.directives.dadosForm.service'
+    ])
+    .component('dadosForm', {
+      templateUrl: 'directives/dadosForm/dados-form.tpl.html',
+      controller: 'DadosFormController',
+      controllerAs: 'dadosForm'
     });
 })();
