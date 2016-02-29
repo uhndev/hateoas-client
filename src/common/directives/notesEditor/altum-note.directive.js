@@ -5,7 +5,7 @@
   'use strict';
 
   angular
-      .module('altum.note', ['altum.note.controller', 'ngCkeditor'])
+      .module('altum.note', ['altum.note.controller'])
       .directive('altumNote', altumNote);
 
   altumNote.$inject = [];

@@ -29,7 +29,7 @@
                         </span>
         </div>
         <div class="panel-body">
-            <div ng-model="note.note.text" ckeditor="{ inline: true }"
+            <div ng-model="note.note.text" ui-ace
                  ng-focus="note.edit = true"
                  ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
                 {{ note.note.text }}
@@ -55,9 +55,9 @@
                 </div>
             </div>
 
-            <div style="background: #FBFBFC" ng-model="note.note.text" ckeditor="{ inline: true }"
-                 ng-focus="note.edit = true"
-                 ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
+            <div style="background: #FBFBFC" ng-model="note.note.text"
+                 ng-blur="note.update(note.note)"
+                 ng-focus="note.edit = true">
                 {{ note.note.text }}
             </div>
             <!--    <div class="markdown-body" ng-model="note.text"
