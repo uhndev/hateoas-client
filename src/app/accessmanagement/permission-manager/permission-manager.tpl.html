@@ -1,0 +1,36 @@
+<div class="panel permissions-detail-panel" ng-class="{
+    'panel-default': pm.permission.action === 'read',
+    'panel-success': pm.permission.action === 'create',
+    'panel-warning': pm.permission.action === 'update',
+    'panel-danger': pm.permission.action === 'delete'
+  }">
+  <div class="panel-heading selectable" ng-click="pm.isCollapsed = !pm.isCollapsed">
+    <i class="glyphicon" ng-class="{
+      'glyphicon-chevron-right': !pm.isCollapsed,
+      'glyphicon-chevron-down': pm.isCollapsed
+    }"></i>
+    <span>
+      {{pm.permission.role.name}} can {{pm.permission.action}} <b>{{pm.permission.model.name}}</b>
+    </span>
+  </div>
+  <div class="panel-body" uib-collapse="!pm.isCollapsed">
+    <div ng-repeat="criteria in pm.permission.criteria" class="row">
+      <div class="col-md-6">
+        <strong>Where:</strong>
+        <pre>{{criteria.where | json}}</pre>
+      </div>
+      <div class="col-md-6">
+        <strong>Blacklist:</strong>
+        <pre flex>{{criteria.blacklist | json}}</pre>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-info btn-sm" ng-hide="pm.permission.criteria.length === 0">
+        Update
+      </button>
+      <button type="button" class="btn btn-danger btn-sm">
+        Revoke
+      </button>
+    </div>
+  </div>
+</div>

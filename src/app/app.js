@@ -13,6 +13,7 @@
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
+      'angular.filter',
 
       // html templateCaches
       'templates-app',
@@ -21,6 +22,7 @@
       // dados admin pages
       'dados.constants',
       'dados.access',
+      'dados.accessmanagement',
       'dados.auth',
       'dados.error',
       'dados.study',
