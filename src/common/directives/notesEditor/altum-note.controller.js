@@ -36,6 +36,7 @@
         vm.Resource.update(note);
         alert('Funciton Called' + note.text);
       } else if (note.text) {
+        note.edit = false;
         alert('new' + note.text);
         var newNote = new vm.NoteResource(note);
         newNote.$save(newNote, function() {
@@ -53,7 +54,7 @@
     vm.email = function (note) {
       var r = confirm('Are you sure you want to email this note?');
       if (r === true) {
-        alert('This is the email function we will add later');
+        alert('This is the email function we will add later' + note.text);
       }
     };
 

@@ -42,11 +42,12 @@
             link: function (scope, element, attr) {
               scope.$watch('show', function (newVal, oldVal) {
                 if ($('body').hasClass('collapse-leftbar')) {
-                  if (newVal === true)
-                  {
-                  element.css('display', 'block'); }
-                  else
-                  { element.css('display', 'none');}
+                  if (newVal === true) {
+                    element.css('display', 'block');
+                  }
+                  else {
+                    element.css('display', 'none');
+                  }
                   return;
                 }
                 if (newVal === true) {
@@ -243,10 +244,12 @@
             },
             link: function (scope, element, attr) {
               $timeout(function () {
-                if (navigator.appVersion.indexOf('Win') != -1)
-                { element.jScrollPane($.extend({mouseWheelSpeed: 20}, scope.options));}
-                else
-                { element.jScrollPane(scope.options);}
+                if (navigator.appVersion.indexOf('Win') != -1) {
+                  element.jScrollPane($.extend({mouseWheelSpeed: 20}, scope.options));
+                }
+                else {
+                  element.jScrollPane(scope.options);
+                }
                 element.on('click', '.jspVerticalBar', function (event) {
                   event.preventDefault();
                   event.stopPropagation();
@@ -266,9 +269,12 @@
               function stickyTop() {
                 var topMax = parseInt(attr.stickyScroll);
                 var headerHeight = $('header').height();
-                if (headerHeight > topMax) {topMax = headerHeight;}
-                if ($('body').hasClass('static-header') === false)
-                { return element.css('top', topMax + 'px');}
+                if (headerHeight > topMax) {
+                  topMax = headerHeight;
+                }
+                if ($('body').hasClass('static-header') === false) {
+                  return element.css('top', topMax + 'px');
+                }
                 var window_top = $(window).scrollTop();
                 var div_top = element.offset().top;
                 if (window_top < topMax) {
@@ -297,7 +303,9 @@
                   setTimeout(function () {
                     var $pc = $('#page-content');
                     var ending_right = ($(window).width() - ($pc.offset().left + $pc.outerWidth()));
-                    if (ending_right < 0) {ending_right = 0;}
+                    if (ending_right < 0) {
+                      ending_right = 0;
+                    }
                     $('#page-rightbar').css('right', ending_right);
                   }, 100);
                 }
@@ -314,8 +322,9 @@
                 var horizontalNavHeight = $('nav.navbar').height();
                 var viewPortHeight = $(window).height() - $('header').height() - horizontalNavHeight;
                 var contentHeight = $('#page-content').height();
-                if (viewPortHeight > contentHeight)
-                {$('#page-content').css('min-height', viewPortHeight + 'px');}
+                if (viewPortHeight > contentHeight) {
+                  $('#page-content').css('min-height', viewPortHeight + 'px');
+                }
               }
 
               setInterval(resetHeight, 1000);
@@ -333,7 +342,9 @@
               scope.$watch('applyon', function (newVal) {
                 if (newVal === false) {
                   var api = element.data('jsp');
-                  if (api) { api.destroy();}
+                  if (api) {
+                    api.destroy();
+                  }
                   return;
                 }
                 $timeout(function () {
@@ -353,4 +364,6 @@
             }
           };
         });
+
+
 })();

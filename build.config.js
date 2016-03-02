@@ -155,14 +155,14 @@ module.exports = {
       // plugins
 
       'vendor/JSONedit/js/JSONEdit.js',
+        'vendor/angular-contenteditable/angular-contenteditable.js',
       'vendor/ui-select/dist/select.min.js',
-
-
-      'vendor/jScrollPane/script/jquery.jscrollpane.js',
-      'vendor/JScrollPane/script/jquery.mousewheel.js',
-      'vendor/jScrollPane/script/mwheelintent.js',
-
-      // 'vendor/ng-ckeditor/ng-ckeditor.js',
+      'vendor/ckeditor/ckeditor.js',
+      'vendor/ckeditor/config.js',
+      'vendor/ckeditor/lang/en.js',
+      'vendor/ckeditor/styles.js',
+      'vendor/ng-ckeditor/ng-ckeditor.js',
+        'vendor/ckeditor/ckeditor.js',
       'vendor/jScrollPane/script/jquery.jscrollpane.js',
       'vendor/JScrollPane/script/jquery.mousewheel.js',
       'vendor/jScrollPane/script/mwheelintent.js',

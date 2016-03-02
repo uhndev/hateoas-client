@@ -13,6 +13,7 @@
       'angular.filter',
       'tmh.dynamicLocale',
       'LocalStorageModule',
+        'contenteditable',
       'ui.select',
 
       // html templateCaches

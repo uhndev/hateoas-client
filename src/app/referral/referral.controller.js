@@ -9,15 +9,14 @@
     ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'NoteTypeService'];
 
-  function ReferralController($resource, $location, API, HeaderService) {
+  function ReferralController($resource, $location, API, HeaderService, NoteType) {
     var vm = this;
     var ReferralServices;
 
     // bindable variables
     vm.url = API.url() + $location.path();
-<<<<<<< HEAD
     vm.selectedProgram = null;
     vm.selectedSite = null;
     vm.selectedPhysician = null;
@@ -36,8 +35,6 @@
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
     vm.saveServices = saveServices;
-=======
->>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
 
     vm.toggleNotebar = toggleNotebar;
 
@@ -84,7 +81,6 @@
         HeaderService.setSubmenu('referral', data.links);
       });
     }
-<<<<<<< HEAD
 
     /**
      * updateReferral
@@ -199,11 +195,8 @@
      * @description show or hide the notes panel
      */
     function toggleNotebar () {
-        vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
-      }
-
-=======
->>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
+      vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
+    }
   }
 
 })();

@@ -1,73 +1,23 @@
 <div style="padding: 0 10px 0px 5px">
-
-    <!-- <div>
-         <div class="date"> {{note.note.createdAt | date: 'medium'}}
-         </div>
-         <div class="icons">
-             <i class="fa fa-check fa-lg" ng-if="note.edit == false"></i>
-             <i class="fa fa-pencil fa-lg" ng-if="note.edit == true"></i>
-             <i class="fa fa-envelope-o fa-lg" ng-click="note.email(note.note)"></i>
-             <i class="fa fa-trash-o fa-lg" ng-click="note.delete(note.note)"></i>
-         </div>
-     </div>
-     <div style="background: #FBFBFC" ng-model="note.note.text"
-          ng-focus="note.edit = true"
-          ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
-         {{ note.note.text }}
-     </div>
-     <div>
-         CreatedBy: {{ note.note.createdBy}}
-     </div>
-    <div class="panel panel-success note">
-        <div class="panel-heading">
-            {{note.note.createdAt | date: 'medium'}}
-            <span class="icons pull-right">
-                            <i class="fa fa-check fa-lg" ng-if="note.edit == false"></i>
-                            <i class="fa fa-pencil fa-lg" ng-if="note.edit == true"></i>
-                            <i class="fa fa-envelope-o fa-lg" ng-click="note.email(note.note)"></i>
-                            <i class="fa fa-trash-o fa-lg" ng-click="note.delete(note.note)"></i>
-                        </span>
-        </div>
-        <div class="panel-body">
-            <div ng-model="note.note.text" ui-ace
-                 ng-focus="note.edit = true"
-                 ng-blur="note.update(note.note)" CONTENTEDITABLE="true">
-                {{ note.note.text }}
-            </div>
-            <!--    <div class="markdown-body" ng-model="note.text"
-                            ng-change="update(notes.length - $index - 1,note.text)" ng-focus="note.edit = true"
-                            ng-blur="note.edit = false" markdown-editable contenteditable="true">{{ note.text }}
-                       </div>
-        </div>
-        <div class="panel-footer">
-            CreatedBy: {{ note.note.displayName}}
-        </div> -->
     <div>
         <div class="note">
             <div>
-                <div class="date"> {{note.note.createdAt | date: 'medium'}}
+                <div class="date"> {{at.note.createdAt | date: 'medium'}}
                 </div>
                 <div class="icons">
-                    <i class="fa fa-check fa-lg" ng-if="note.edit == false"></i>
-                    <i class="fa fa-pencil fa-lg" ng-if="note.edit == true"></i>
-                    <i class="fa fa-envelope-o fa-lg" ng-click="note.email(note.note)"></i>
-                    <i class="fa fa-trash-o fa-lg" ng-click="note.delete(note.note)"></i>
+                    <i class="fa fa-check fa-lg" ng-if="at.note.edit == false"></i>
+                    <i class="fa fa-pencil fa-lg" ng-if="at.note.edit == true"></i>
+                    <i class="fa fa-envelope-o fa-lg" ng-click="at.email(at.note)"></i>
+                    <i class="fa fa-trash-o fa-lg" ng-click="at.delete(at.note)"></i>
                 </div>
             </div>
 
-            <div style="background: #FBFBFC" ng-model="note.note.text"
-                 ng-blur="note.update(note.note)"
-                 ng-focus="note.edit = true">
-                {{ note.note.text }}
+            <div style="background: #FBFBFC" ng-model="at.note.text"
+                 ng-focus="at.note.edit = true" ng-blur="at.update(at.note)" contenteditable="true">
+                {{ at.note.text }}
             </div>
-            <!--    <div class="markdown-body" ng-model="note.text"
-                            ng-change="update(notes.length - $index - 1,note.text)" ng-focus="note.edit = true"
-                            ng-blur="note.edit = false" markdown-editable contenteditable="true">{{ note.text }}
-                       </div> -->
-
-
             <div>
-                CreatedBy: {{ note.note.displayName}}
+                CreatedBy: {{ at.note.displayName}}
             </div>
         </div>
     </div>

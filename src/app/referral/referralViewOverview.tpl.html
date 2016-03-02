@@ -1,159 +1,16 @@
-<<<<<<< HEAD
-<div class="container" ng-controller="ReferralController as ref">
-
+<div ng-controller="ReferralController as ref" ng-cloak>
     <h1 id="Title">
-        Client Referral: {{ref.referral.clientcontact.displayName}}
+        Referral Overview
     </h1>
 
-    <hr/>
+    <br/>
 
-    <div class="row">
-        <div class="col-md-5">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Referral Triage</h3>
-                </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal">
+    <simple-table
+            rows="ref.referralInfo.rows"
+            table-data="ref.referralInfo.tableData">
+    </simple-table>
 
-                        <dt>Select Program:</dt>
-                        <dd>
-                            <select-loader
-                                    url="program"
-                                    is-atomic="true"
-                                    is-disabled="false"
-                                    ng-model="ref.selectedProgram"
-                                    ng-change="ref.resetServices()"
-                                    labels="displayName">
-                            </select-loader>
-                            <br/>
-                        </dd>
 
-                        <dt>Select Site:</dt>
-                        <dd>
-                            <select-loader
-                                    url="site"
-                                    is-atomic="true"
-                                    is-disabled="false"
-                                    ng-model="ref.selectedSite"
-                                    labels="displayName">
-                            </select-loader>
-                            <br/>
-                        </dd>
-
-                        <dt>Select Physician:</dt>
-                        <dd>
-                            <select-loader
-                                    url="physician"
-                                    is-atomic="true"
-                                    is-disabled="false"
-                                    ng-model="ref.selectedPhysician"
-                                    labels="displayName">
-                            </select-loader>
-                            <br/>
-                        </dd>
-
-                        <dt>Select Clinician:</dt>
-                        <dd>
-                            <select-loader
-                                    url="clinician"
-                                    is-atomic="true"
-                                    is-disabled="false"
-                                    ng-model="ref.selectedClinician"
-                                    labels="displayName">
-                            </select-loader>
-                            <br/>
-                        </dd>
-
-                        <dt>Status:</dt>
-                        <dd>
-                            <select-loader
-                                    url="status"
-                                    query="{ category: 'referral' }"
-                                    is-atomic="true"
-                                    is-disabled="false"
-                                    ng-model="ref.selectedStatus"
-                                    labels="displayName">
-                            </select-loader>
-                        </dd>
-                    </dl>
-                    <button class="btn btn-primary pull-right" ng-click="ref.updateReferral()"
-                            ng-disabled="!ref.selectedProgram && !ref.selectedPhysician">
-                        Update Referral
-                    </button>
-                </div>
-            </div>
-            <br/>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Referral Info</h3>
-                </div>
-                <div class="panel-body">
-                    <simple-table
-                            rows="ref.referralInfo.rows"
-                            table-data="ref.referralInfo.tableData">
-                    </simple-table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-7">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Recommendations</h3>
-                </div>
-                <div class="panel-body">
-                    <p ng-show="!ref.selectedProgram">
-                        Please select a program to begin recommending services.
-                    </p>
-
-                    <div id="recomendationsDiv" ng-show="ref.selectedProgram">
-                        <!-- Service Category / Program Services Panel -->
-                        <div id="servicesDiv">
-                            <div class="panel panel-info" ng-repeat="category in ref.currentCategories">
-                                <div class="panel-heading">{{category.name}}</div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="checkbox" ng-repeat="service in ref.availableServices"
-                                                 ng-if="category.id === service.serviceCategory">
-                                                <label>
-                                                    <input type="checkbox"
-                                                           ng-checked="ref.isServiceRecommended(service)"
-                                                           ng-click="ref.toggleService(service)"/> {{service.name}}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recommended Services Panel -->
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Recommended Services
-                                <button class="btn btn-success btn-xs pull-right"
-                                        ng-disabled="ref.recommendedServices.length === 0"
-                                        ng-click="ref.saveServices()">Save
-                                </button>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-unstyled">
-                                    <li ng-repeat="service in ref.recommendedServices track by $index">
-                                        <button class="btn btn-info btn-xs permission-btn" type="button"
-                                                ng-click="ref.toggleService(service)">
-                                            {{service.name}} <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="referraldetail" ng-class="{'show-notebar': ref.style_notebarCollapsed}">
         <div id="slideout" ng-class="{'button-out': ref.style_notebarCollapsed}">
             <a href="" ng-click="ref.toggleNotebar()">Notes</a>
@@ -161,36 +18,24 @@
 
         <div id="page-notebar" sticky-scroll="210" rightbar-right-position="style_layoutBoxed" style="">
             <div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}"
-                style="height: 100%;padding-bottom:40px">
-=======
-<div ng-controller="ReferralController as ref" ng-cloak>
-  <h1 id="Title">
-    Referral Overview
-  </h1>
+                 style="height: 100%;padding-bottom:40px">
 
-  <br/>
 
-  <simple-table
-    rows="ref.referralInfo.rows"
-    table-data="ref.referralInfo.tableData">
-  </simple-table>
+                <!--<div id="slideout" ng-class="{'button-out': style_notebarCollapsed}">-->
+                <!--<a href="" ng-click="toggleNotebar()">Notes</a>-->
+                <!--</div>-->
 
-  <!--<div id="slideout" ng-class="{'button-out': style_notebarCollapsed}">-->
-  <!--<a href="" ng-click="toggleNotebar()">Notes</a>-->
-  <!--</div>-->
+                <!--<div id="page-notebar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed" style="">-->
+                <!--<div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">-->
 
-  <!--<div id="page-notebar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed" style="">-->
-  <!--<div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">-->
+                <!--<altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>-->
+                <!--</div>-->
+                <!--</div>-->
 
-  <!--<altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>-->
-  <!--</div>-->
-  <!--</div>-->
->>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
-
-                <altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>
+                <altum-notebook notes="ref.referral.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>
             </div>
         </div>
-        -->
     </div>
 </div>
+
 

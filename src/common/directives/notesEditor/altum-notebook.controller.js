@@ -21,13 +21,14 @@
     ////////////////
 
     function init() {
-          /*  if (!_.isUndefined(vm.add) && _.isFunction(vm.add)) {
-                vm.addNote = vm.add;
-            } else {
-                vm.addNote = addNote;
-            }
-            */
-        }
+      /*  if (!_.isUndefined(vm.add) && _.isFunction(vm.add)) {
+       vm.addNote = vm.add;
+       } else {
+       vm.addNote = addNote;
+       }
+       */
+    }
+
     /**
      * onAddNote
      * @description function to add note to the notes array only
@@ -36,9 +37,14 @@
      */
     vm.addNote = function (type) {
       vm.newNote = {};
-      vm.newNote.text = '';
+      vm.newNote.text = null;
       vm.newNote.noteType = type.id;
-      vm.notes.push(vm.newNote);
+      if (vm.notes) {
+        vm.notes.push(vm.newNote);
+      } else {
+        vm.notes = [];
+        vm.notes.push(vm.newNote);
+      }
     };
 
     /**
@@ -51,7 +57,7 @@
     vm.delete = function (note) {
       var r = confirm('Are you sure you want to delete this note?');
       if (r === true) {
-        Resource.delete(note).$promise.then(function() {
+        Resource.delete(note).$promise.then(function () {
           vm.notes = NoteResource.query({});
         });
         alert('note deleted');

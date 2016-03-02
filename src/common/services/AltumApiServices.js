@@ -36,15 +36,12 @@
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
-<<<<<<< HEAD
     PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
     AltumServiceService, AltumProgramServices, ServiceCategoryService, AltumAPIService, ServiceService,
-    NoteService, NoteTypeService, ClientService, PersonService
-=======
+    NoteService, NoteTypeService, ClientService, PersonService,
     PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService,
     ServiceTypeService, AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
->>>>>>> 5875c3cbc8e2818d06320bc9368dee7f0a852bff
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
