@@ -155,7 +155,7 @@ module.exports = {
       // plugins
 
       'vendor/JSONedit/js/JSONEdit.js',
-        'vendor/angular-contenteditable/angular-contenteditable.js',
+      'vendor/angular-contenteditable/angular-contenteditable.js',
       'vendor/ui-select/dist/select.min.js',
       'vendor/ckeditor/ckeditor.js',
       'vendor/ckeditor/config.js',
@@ -172,6 +172,7 @@ module.exports = {
       'vendor/jScrollPane/style/jquery.jscrollpane.css',
     ],
     assets: [
+      'vendor/ckeditor/**',
       'vendor/bootstrap/dist/fonts/*',
       'vendor/font-awesome/fonts/*',
       'vendor/roboto-fontface/fonts/Roboto-Regular.*',
