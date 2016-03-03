@@ -21,6 +21,11 @@
         <i class="condition"> is </i>
         <b> {{ expression | json }} </b>
       </li>
+      <li ng-if="expression|isNumber">
+        {{ property }}
+        <i class="condition"> equals </i>
+        <b> {{ expression | json }} </b>
+      </li>
       <li ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index">
         {{ property }}
         <i> {{ cond }} </i>
@@ -74,6 +79,7 @@
     </label>
   </div>
   <button type="button"
+          ng-hide="advanced"
           class="btn btn-link btn-sm pull-right no-margin no-padding"
           ng-model="advanceSearch"
           uib-btn-checkbox
