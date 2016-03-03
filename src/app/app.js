@@ -22,7 +22,6 @@
       // dados admin pages
       'dados.constants',
       'dados.access',
-      'dados.accessmanagement',
       'dados.auth',
       'dados.error',
       'dados.study',

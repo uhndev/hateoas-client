@@ -1,206 +1,206 @@
-(function() {
+(function () {
   'use strict';
+
   angular
-    .module('dados.access', [
-      'toastr',
-      'dados.access.service',
-      'dados.user.service'
-    ])
-    .controller('AccessController', AccessController);
+    .module('dados.access', [])
+    .controller('AccessManagementController', AccessManagementController);
 
-  AccessController.$inject = ['toastr', 'GroupService', 'ModelService', 'UserService', 'UserRoles'];
+  AccessManagementController.$inject = ['API', 'GroupService', 'PermissionService', 'UserService'];
 
-  function AccessController(toastr, Group, Model, User, UserRoles) {
+  function AccessManagementController(API, Group, Permission, User) {
     var vm = this;
 
     // bindable variables
-    vm.allow = '';
-    vm.template = {};
-    vm.resource = {};
-    vm.selected = null;
+    vm.current = 'group';
+    _.each(['group', 'model', 'role', 'user'], function (tab, idx) {
+      vm[tab] = {
+        index: idx,
+        selected: null,
+        query: {},
+        resource: {}
+      };
+    });
 
-    vm.actions = ['create', 'read', 'update', 'delete'];
-    vm.groups = [];
-    vm.models = [];
-    // modex x crud list of all possible roles
-    vm.masterRoles = [];
-    // proposed list of access changes
-    vm.access = [];
-    // current user or group access view
-    vm.currentView = 'user';
-    vm.viewName = '';
+    // each tab includes a fetchDetailInfo function to be called when selecting a row from a table.
+    vm.tabs = [
+      {
+        heading: 'APP.ACCESSMANAGEMENT.TABS.BY_GROUP',
+        url: 'group',
+        fetchDetailInfo: fetchGroupRoles,
+        onResourceLoaded: function(data) {
+          if (data) {
+            data.template.data = _.reject(data.template.data, {name: 'menu'});
+            return data;
+          }
+          return data;
+        }
+      },
+      {
+        heading: 'APP.ACCESSMANAGEMENT.TABS.BY_MODEL',
+        url: 'model',
+        fetchDetailInfo: fetchModelPermissions,
+        onResourceLoaded: function(data) {
+          if (data) {
+            data.template.data = _.reject(data.template.data, {name: 'attributes'});
+            return data;
+          }
+          return data;
+        }
+      },
+      {
+        heading: 'APP.ACCESSMANAGEMENT.TABS.BY_ROLE',
+        url: 'role',
+        fetchDetailInfo: fetchRolePermissions,
+        onResourceLoaded: function(data) {
+          return data;
+        }
+      },
+      {
+        heading: 'APP.ACCESSMANAGEMENT.TABS.BY_USER',
+        url: 'user',
+        fetchDetailInfo: fetchUserRolePermissions,
+        onResourceLoaded: function(data) {
+          if (data) {
+            data.template.data = [
+              {
+                'name': 'displayName',
+                'type': 'string',
+                'prompt': 'COMMON.MODELS.USER.DISPLAY_NAME',
+                'value': ''
+              },
+              {
+                'name': 'username',
+                'type': 'string',
+                'prompt': 'COMMON.MODELS.USER.USERNAME',
+                'value': ''
+              }
+            ];
+            return data;
+          }
+          return data;
+        }
+      }
+    ];
 
     // bindable methods
-    vm.select = select;
-    vm.toggleAccessType = toggleAccessType;
-    vm.isRoleSet = isRoleSet;
-    vm.addToAccess = addToAccess;
-    vm.removeAccess = removeAccess;
-    vm.updateRole = updateRole;
-    vm.saveChanges = saveChanges;
-
-    init();
+    vm.selectTab = selectTab;
+    vm.removeElement = removeElement;
 
     ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Public Methods
+     */
+
+    /**
+     * selectTab
+     * @description Convenience method for selecting a tab
+     * @param tab
+     */
+    function selectTab(tab) {
+      vm.current = tab.url;
+      vm.detailInfo = null;
+      vm.currentIndex = vm[tab.url].index;
+    }
+
+    /**
+     * removeElement
+     * @description Convenience function for removing an element from an array after deletion
+     * @param array
+     * @param item
+     */
+    function removeElement(array, item) {
+      var index = array.indexOf(item);
+      if (index > -1) {
+        array.splice(index, 1);
+      }
+    }
 
     /**
      * Private Methods
      */
 
     /**
-     * [init]
-     * Private initialization call when controller is loaded.
-     */
-    function init() {
-      // load groups
-      vm.groups = Group.query();
-      // load models
-      Model.query(function (data) {
-        vm.models = _.pluck(data, 'name');
-        vm.models.push('UserOwner');
-        _.each(vm.actions, function (action) {
-          _.each(vm.models, function (model) {
-            vm.masterRoles.push(action + model);
-          });
-        });
-
-        loadResource(vm.currentView);
-      });
-    }
-
-    /**
-     * [loadResource]
-     * Depending on user/group view, load different resource to manage
-     * @param  {String} view
-     */
-    function loadResource(view) {
-      var Resource = (view === 'user') ? User : Group;
-      Resource.query(function(data, headers) {
-        vm.resource.items = angular.copy(data);
-      });
-    }
-
-    function loadView(item) {
-      if (vm.currentView === 'user') {
-        vm.viewName = [item.prefix, item.firstname, item.lastname].join(' ');
-      } else {
-        vm.viewName = item.name;
-      }
-
-      if (!_.isUndefined(_.find(item.roles, {name: 'admin'}))) {
-        vm.access = vm.masterRoles;
-      } else {
-        vm.access = _.pluck(item.roles, 'name');
-      }
-    }
-
-    function clearSelections() {
-      vm.access = [];
-      vm.selected = null;
-    }
-
-    /*****************************
-     *  Public Bindable Methods  *
-     *****************************/
-
-    /**
-     * [select]
-     * Selects a user or group for access management
-     * @param  {Object} item
-     * @return {null}
+     * select
+     * @description Click handler for selecting a row from the currently available table
+     * @param item
      */
     function select(item) {
-      vm.selected = (vm.selected === item ? null : item);
-      if (vm.selected) {
-        loadView(vm.selected);
-      } else {
-        clearSelections();
+      vm[vm.current].selected = (vm[vm.current].selected === item ? null : item);
+      if (_.isNull(vm[vm.current].selected)) {
+        vm.detailInfo = null;
+      }
+      return !_.isNull(vm[vm.current].selected);
+    }
+
+    /**
+     * fetchPermissionsBy
+     * @description Utility function for querying the Permissions table for a given criteria
+     * @param model
+     */
+    function fetchPermissionsBy(model, id) {
+      var queryObj = {
+        populate: ['model', 'role', 'criteria']
+      };
+      queryObj[model] = id;
+      return Permission.query(queryObj);
+    }
+
+    /**
+     * fetchGroupRoles
+     * @description If on the group tab, selecting a row should display the list of roles associated
+     * @param item
+     */
+    function fetchGroupRoles(item) {
+      if (select(item)) {
+        Group.get({id: vm[vm.current].selected.id, populate: 'roles'}, function (data) {
+          vm.detailInfo = Permission.query({role: _.pluck(data.roles, 'id'), populate: ['model', 'role', 'criteria']});
+        });
       }
     }
 
     /**
-     * [toggleAccessType]
-     * Toggles between user access management and group
-     * @return {null}
+     * fetchModelPermissions
+     * @description If on the model tab, selecting a row should display the list of permissions for the model
+     * @param item
      */
-    function toggleAccessType() {
-      // clear current selections
-      clearSelections();
-      loadResource(vm.currentView);
-    }
-
-    /**
-     * [isRoleSet]
-     * Applied to each cell of access matrix to determine if role is selected
-     * @param  {String}  action
-     * @param  {String}  model
-     * @return {Boolean}
-     */
-    function isRoleSet(action, model) {
-      var role = action.toString() + model.toString();
-      return _.contains(vm.access, role);
-    }
-
-    /**
-     * [addToAccess]
-     * Selecting checkbox cell in access matrix should add role to user/group's permissions
-     * @param {String} action
-     * @param {Sting} model
-     */
-    function addToAccess(action, model) {
-      var findRole = action.toString() + model.toString();
-      if (_.contains(vm.access, findRole)) {
-        vm.access = _.without(vm.access, findRole);
-      } else {
-        vm.access.push(findRole);
+    function fetchModelPermissions(item) {
+      if (select(item)) {
+        vm.detailInfo = fetchPermissionsBy('model', vm[vm.current].selected.id);
       }
     }
 
     /**
-     * [removeAccess]
-     * Selecting badge on left panel should remove specific permission
-     * from list of proposed access changes
-     * @param  {String} permission
-     * @return {null}
+     * fetchRolePermissions
+     * @description If on the role tab, selecting a row should display the list of permissions for the role
+     * @param item
      */
-    function removeAccess(permission) {
-      vm.access = _.without(vm.access, permission);
+    function fetchRolePermissions(item) {
+      if (select(item)) {
+        vm.detailInfo = fetchPermissionsBy('role', vm[vm.current].selected.id);
+      }
     }
 
     /**
-     * [updateRole]
-     * Changing dropdown value should update user's permissions to
-     * one of the group default roles
+     * fetchUserRolePermissions
+     * @description If on the user tab, selecting a row should display the list of permissions/roles for the user
+     * @param item
      */
-    function updateRole() {
-      var user = new UserRoles({
-        'updateGroup': vm.selected.group
-      });
-      user.$update({id: vm.selected.id})
-      .then(function(user) {
-        clearSelections();
-        loadResource(vm.currentView);
-        toastr.success('Updated user group!', 'Access');
-      });
+    function fetchUserRolePermissions(item) {
+      if (select(item)) {
+        vm.detailInfo = {};
+        vm.detailInfo.permissions = fetchPermissionsBy('user', vm[vm.current].selected.id);
+        User.get({id: vm[vm.current].selected.id, populate: ['roles', 'permissions']}, function (data) {
+          fetchPermissionsBy('role', _.pluck(data.roles, 'id')).$promise.then(function (permissions) {
+            vm.detailInfo.roles = _.map(permissions, function (permission) {
+              permission.roleName = permission.role.name;
+              return permission;
+            });
+          });
+        });
+      }
     }
 
-    /**
-     * [saveChanges]
-     * Based on values added/removed from access matrix, send proposed array
-     * of access changes to update user/group roles
-     */
-    function saveChanges() {
-      var Resource = (vm.currentView === 'user') ? UserRoles : Group;
-      var resource = new Resource({
-        'roles': vm.access
-      });
-      resource.$update({id: vm.selected.id})
-      .then(function(resource) {
-        clearSelections();
-        loadResource(vm.currentView);
-        toastr.success('Updated access!', 'Access');
-      });
-    }
   }
 
 })();
