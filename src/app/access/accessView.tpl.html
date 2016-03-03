@@ -40,13 +40,16 @@
               </div>
               <div ng-switch-when="role">
                 Showing Permissions for Role: <strong>{{am[tab.url].selected.displayName}}</strong>
+                <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="am.openAddPermission()">
+                  <i class="fa fa-plus"></i> Role Permission
+                </button>
               </div>
             </div>
             <div class="panel-body" layout="column">
               <div flex ng-repeat="(action, permissions) in am.detailInfo | groupBy: 'action' track by $index">
                 <b>{{action | uppercase}}</b>
                 <md-divider></md-divider><br/>
-                <div ng-repeat="permission in permissions">
+                <div ng-repeat="permission in permissions track by $index">
                   <permission-manager permission="permission" on-remove="am.removeElement(am.detailInfo, permission)"></permission-manager>
                 </div>
               </div>
@@ -61,6 +64,7 @@
                 Showing Roles for User: <strong>{{am[tab.url].selected.displayName}}</strong>
               </div>
               <div class="panel-body">
+                <p class="text-info text-center" ng-show="am.loading">Loading...</p>
                 <uib-accordion>
                   <uib-accordion-group ng-repeat="(role, rolePermissions) in am.detailInfo.roles | groupBy: 'roleName' track by $index"
                                        ng-init="am.accordionStatus[role].isOpen = false"
@@ -75,7 +79,7 @@
                     <div ng-repeat="(action, permissions) in rolePermissions | groupBy: 'action'">
                       <b>{{action | uppercase}}</b>
                       <md-divider></md-divider><br/>
-                      <div ng-repeat="permission in permissions">
+                      <div ng-repeat="permission in permissions track by $index">
                         <permission-manager permission="permission"
                                             on-remove="am.removeElement(am.detailInfo.roles, permission)"></permission-manager>
                       </div>
@@ -85,20 +89,19 @@
               </div>
             </div>
 
-            <div class="panel panel-info" ng-if="am.detailInfo.permissions.length">
+            <div class="panel panel-info">
               <div class="panel-heading">
                 Showing Specific Permissions for User: <strong>{{am[tab.url].selected.displayName}}</strong>
-                <button class="btn btn-success btn-xs pull-right">
-                  <span class="glyphicon glyphicon-plus"></span>&nbsp;Permission
+                <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="am.openAddPermission()">
+                  <i class="fa fa-plus"></i> User Permission
                 </button>
               </div>
               <div class="panel-body" layout="column">
                 <div flex ng-repeat="(action, permissions) in am.detailInfo.permissions | groupBy: 'action' track by $index">
                   <b>{{action | uppercase}}</b>
                   <md-divider></md-divider><br/>
-                  <div ng-repeat="permission in permissions">
-                    <permission-manager permission="permission"
-                                        on-remove="am.removeElement(am.detailInfo.permissions, permission)"></permission-manager>
+                  <div ng-repeat="permission in permissions track by $index">
+                    <permission-manager permission="permission" on-remove="am.removeElement(am.detailInfo.permissions, permission)"></permission-manager>
                   </div>
                 </div>
               </div>

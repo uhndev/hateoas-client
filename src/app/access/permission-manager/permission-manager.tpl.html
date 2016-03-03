@@ -4,17 +4,17 @@
     'panel-warning': pm.permission.action === 'update',
     'panel-danger': pm.permission.action === 'delete'
   }">
-  <div class="panel-heading selectable" ng-click="pm.toggleCollapse()">
+  <div class="panel-heading selectable" ng-click="pm.isCollapsed = !pm.isCollapsed">
     <i class="glyphicon" ng-class="{
       'glyphicon-chevron-right': !pm.isCollapsed,
       'glyphicon-chevron-down': pm.isCollapsed
     }"></i>
     <span>
-      {{pm.permission.role.name}} can {{pm.permission.action}} <b>{{pm.permission.model.name}}</b>
+      {{pm.permission.role.name || pm.permission.user.displayName}} can {{pm.permission.action}} <b>{{pm.permission.model.name}}</b>
     </span>
   </div>
   <div class="panel-body" uib-collapse="!pm.isCollapsed">
-    <div ng-repeat="criteria in pm.permission.criteria" layout="column">
+    <div ng-repeat="criteria in pm.permission.criteria track by $index" layout="column">
       <div flex>
         <strong>Where:</strong>
         <query-builder
@@ -35,7 +35,7 @@
           </button>
         </div>
         <div class="well well-sm">
-          <button ng-repeat="attribute in pm.template.data"
+          <button ng-repeat="attribute in pm.template.data track by $index"
                   ng-hide="criteria.blacklist.indexOf(attribute.name) > -1"
                   ng-click="pm.addToBlacklist(criteria, attribute)"
                   type="button" class="btn btn-default btn-xs permission-btn">
@@ -45,13 +45,11 @@
       </div>
     </div>
 
-    <div class="pull-right">
-      <button type="button" class="btn btn-info btn-sm" ng-click="pm.updatePermission()"
-              ng-hide="pm.permission.criteria.length === 0">
+    <div class="pull-right" ng-if="!pm.hideControls">
+      <button type="button" class="btn btn-info btn-sm" ng-click="pm.updatePermission()">
         Save Changes
       </button>
-      <button type="button" class="btn btn-warning btn-sm" ng-click="pm.revertPermission()"
-              ng-hide="pm.permission.criteria.length === 0">
+      <button type="button" class="btn btn-warning btn-sm" ng-click="pm.revertPermission()">
         Revert
       </button>
       <button type="button" class="btn btn-danger btn-sm" ng-click="pm.revokePermission()">

@@ -5,9 +5,9 @@
     .module('dados.access', [])
     .controller('AccessManagementController', AccessManagementController);
 
-  AccessManagementController.$inject = ['API', 'GroupService', 'PermissionService', 'UserService'];
+  AccessManagementController.$inject = ['$uibModal', 'GroupService', 'PermissionService', 'UserService'];
 
-  function AccessManagementController(API, Group, Permission, User) {
+  function AccessManagementController($uibModal, Group, Permission, User) {
     var vm = this;
 
     // bindable variables
@@ -85,6 +85,7 @@
     // bindable methods
     vm.selectTab = selectTab;
     vm.removeElement = removeElement;
+    vm.openAddPermission = openAddPermission;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +141,7 @@
      */
     function fetchPermissionsBy(model, id) {
       var queryObj = {
-        populate: ['model', 'role', 'criteria']
+        populate: ['model', 'role', 'criteria', 'user']
       };
       queryObj[model] = id;
       return Permission.query(queryObj);
@@ -188,6 +189,7 @@
      */
     function fetchUserRolePermissions(item) {
       if (select(item)) {
+        vm.loading = true;
         vm.detailInfo = {};
         vm.detailInfo.permissions = fetchPermissionsBy('user', vm[vm.current].selected.id);
         User.get({id: vm[vm.current].selected.id, populate: ['roles', 'permissions']}, function (data) {
@@ -196,9 +198,44 @@
               permission.roleName = permission.role.name;
               return permission;
             });
+            vm.loading = false;
           });
         });
       }
+    }
+
+    /**
+     * openAddPermission
+     * @description Click handler for opening the add permissions to role modal window.
+     */
+    function openAddPermission() {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'access/addPermissionModal.tpl.html',
+        controller: 'AddPermissionController',
+        controllerAs: 'ap',
+        bindToController: true,
+        resolve: {
+          role: function() {
+            return vm.role.selected;
+          },
+          user: function() {
+            return vm.user.selected;
+          }
+        }
+      });
+
+      // reloads appropriate data based on what type of permission was created.
+      modalInstance.result.then(function (type) {
+        switch (type) {
+          case 'user':
+            vm.detailInfo.permissions = fetchPermissionsBy('user', vm[vm.current].selected.id);
+            break;
+          case 'role':
+            vm.detailInfo = fetchPermissionsBy('role', vm[vm.current].selected.id);
+            break;
+        }
+      });
     }
 
   }

@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <h3 class="modal-title">
+    Add New Permission
+    <span ng-if="ap.user"> for {{ap.user.displayName}}</span>
+  </h3>
+</div>
+<div class="modal-body">
+  <ng-form name="permissionForm" class="form" novalidate>
+    <div class="form-group">
+      <label>Action</label>
+      <select class="form-control" ng-model="ap.newPermission.action"
+              ng-options="action as action for action in ['create', 'read', 'update', 'delete']">
+      </select>
+    </div>
+    <div class="form-group" ng-if="ap.newPermission.relation !== 'user'">
+      <label>Relation</label>
+      <select class="form-control" ng-model="ap.newPermission.relation"
+              ng-options="relation as relation for relation in ['role', 'owner']">
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Model</label>
+      <select class="form-control" ng-model="ap.newPermission.model"
+              ng-options="model as model.name for model in ap.models">
+      </select>
+    </div>
+    <div class="form-group" ng-if="ap.newPermission.model">
+      <label>Criteria</label>
+      <permission-manager permission="ap.newPermission" hide-controls="true"></permission-manager>
+    </div>
+  </ng-form>
+</div>
+<div class="modal-footer">
+  <button type="submit" id="addUserBtn" class="btn btn-primary"
+          ng-disabled="permissionForm.$invalid" ng-click="ap.addPermission()">
+    Add permission
+    <span ng-if="!ap.user"> to role {{::ap.role.name}}</span>
+    <span ng-if="ap.user"> for {{ap.user.displayName}}</span>
+  </button>
+  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="ap.cancel()">
+    Cancel
+  </button>
+</div>

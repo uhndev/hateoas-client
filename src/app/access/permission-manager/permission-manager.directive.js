@@ -7,7 +7,8 @@
       transclude: true,
       bindings: {
         permission: '=',
-        onRemove: '&'
+        onRemove: '&',
+        hideControls: '@'
       },
       templateUrl: 'access/permission-manager/permission-manager.tpl.html',
       controller: 'PermissionController',
