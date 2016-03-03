@@ -24,7 +24,7 @@
 
     function init() {
       if (vm.client) {
-        vm.person = AltumAPIService.PersonService.get({id: vm.client.personid, populate: ['addresses', 'familyDoctor']});
+        vm.person = AltumAPIService.PersonService.get({id: vm.client.personid, populate: ['address', 'familyDoctor', 'employments']});
       }
 
     }

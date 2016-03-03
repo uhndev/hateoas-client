@@ -37,7 +37,7 @@
                                                 url="city"
                                                 is-atomic="true"
                                                 is-disabled="false"
-                                                ng-model="CR.person.addresses[0].city"
+                                                ng-model="CR.person.address.city"
                                                 labels="displayName">
                                         </select-loader>
 
@@ -99,7 +99,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Address1">Address1</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Street" ng-model="CR.person.addresses[0].address1" name="Address1"
+                                        <input class="form-control" id="Street" ng-model="CR.person.address.address1" name="Address1"
                                                type="text" value=""/>
 
                                     </div>
@@ -107,7 +107,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Address2">Address2</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Street" ng-model="CR.person.addresses[0].address2" name="Address2"
+                                        <input class="form-control" id="Street" ng-model="CR.person.address.address2" name="Address2"
                                                type="text" value=""/>
 
                                     </div>
@@ -120,7 +120,7 @@
                                                 url="city"
                                                 is-atomic="true"
                                                 is-disabled="false"
-                                                ng-model="CR.person.addresses[0].city"
+                                                ng-model="CR.person.address.city"
                                                 labels="displayName">
                                         </select-loader>
                                     </div>
@@ -129,7 +129,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Province">Province</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Province" ng-model="CR.person.addresses[0].province"
+                                        <input class="form-control" id="Province" ng-model="CR.person.address.province"
                                                name="Province" type="text" value=""/>
 
                                     </div>
@@ -140,7 +140,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Region">Region</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Region" ng-model="CR.person.addresses[0].region" name="Region"
+                                        <input class="form-control" id="Region" ng-model="CR.person.address.region" name="Region"
                                                type="text" value=""/>
 
                                     </div>
@@ -149,7 +149,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Country">Country</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Country" ng-model="CR.person.addresses[0].country"
+                                        <input class="form-control" id="Country" ng-model="CR.person.address.country"
                                                name="Country" type="text" value=""/>
 
                                     </div>
@@ -157,7 +157,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="PostalCode">Postal Code</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="PostalCode" ng-model="CR.person.addresses[0].postalCode"
+                                        <input class="form-control" id="PostalCode" ng-model="CR.person.address.postalCode"
                                                name="PostalCode" type="text" value=""/>
 
                                     </div>
@@ -410,7 +410,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="Language">Language</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" ng-model="client.language" id="Language"
+                                        <input class="form-control" ng-model="CR.person.language" id="Language"
                                                name="Language" type="text" value=""/>
 
                                     </div>
@@ -420,7 +420,7 @@
                                     <label class="control-label col-md-3" for="Interpreter">Interpreter</label>
                                     <div class="col-md-9">
                                         <div class="checkbox">
-                                            <input type="checkbox" ng-model="client.interpreter">
+                                            <input type="checkbox" ng-model="CR.person.requiresInterpreter">
                                         </div>
                                     </div>
                                 </div>
@@ -438,9 +438,9 @@
                             <div class="col-md-1"><img src="/assets/img/job.png" height="50"/></div>
                             <div class="col-md-11">
                                 <div class="form-group">
-                                    <label class="control-label col-md-3" for="Occupation">Job Title</label>
+                                    <label class="control-label col-md-3" for="Occupation">Occupation</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="Occupation" ng-model="client.occupation"
+                                        <input class="form-control" id="Occupation" ng-model="CR.person.occupation"
                                                name="Occupation" type="text" value=""/>
 
                                     </div>
@@ -449,7 +449,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="OccuType">Occupation Type</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="OccuType" ng-model="client.occuType"
+                                        <input class="form-control" id="OccuType" ng-model="CR.person.occupationType"
                                                name="OccuType" type="text" value=""/>
 
                                     </div>
@@ -458,7 +458,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="OccuSector">Occupation Sector</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="OccuSector" ng-model="client.occuSector"
+                                        <input class="form-control" id="OccuSector" ng-model="CR.person.occupationSector"
                                                name="OccuSector" type="text" value=""/>
 
                                     </div>
@@ -483,7 +483,7 @@
                                                     url="company"
                                                     is-atomic="true"
                                                     is-disabled="false"
-                                                    ng-model="CR.person.company"
+                                                    ng-model="CR.person.employments[0]"
                                                     labels="displayName">
                                             </select-loader>
                                         </div>
