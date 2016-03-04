@@ -12,6 +12,7 @@
 
     // bindable variables
     vm.current = 'group';
+    vm.currentIndex = 0;
     _.each(['group', 'model', 'role', 'user'], function (tab, idx) {
       vm[tab] = {
         index: idx,

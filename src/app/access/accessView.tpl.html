@@ -12,11 +12,11 @@
     </query-builder>
   </div>
   <uib-tabset active="am.currentIndex">
-    <uib-tab ng-repeat="tab in am.tabs" ng-click="am.selectTab(tab)" index="$index">
+    <uib-tab ng-repeat="tab in am.tabs track by $index" ng-click="am.selectTab(tab)" index="$index">
       <uib-tab-heading translate>
         {{tab.heading}}
       </uib-tab-heading>
-      <div class="row">
+      <div class="row" ng-if="am.current === tab.url">
         <div class="col-md-5">
           <hateoas-table
             url="{{tab.url}}"

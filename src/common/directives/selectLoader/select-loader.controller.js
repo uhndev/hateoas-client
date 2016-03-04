@@ -4,14 +4,17 @@
   angular
     .module('dados.common.directives.selectLoader.controller', [
       'ui.select',
+      'ngAnimate',
       'dados.constants',
       'dados.common.directives.selectLoader.service'
     ])
     .controller('SelectController', SelectController);
 
-  SelectController.$inject = ['$scope', 'API', 'SelectService'];
+  SelectController.$inject = ['$animate', '$scope', 'API', 'SelectService'];
 
-  function SelectController($scope, API, SelectService) {
+  function SelectController($animate, $scope, API, SelectService) {
+    $animate.enabled(false);
+
     var vm = this;
     var maxLimit;
     var DEFAULT_RANGE = 10; // if given vm.values, pre-search for given id +/- this amount
