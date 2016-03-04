@@ -47,7 +47,7 @@
       _.merge(httpConfig.params, baseOverride);
 
       return $http(httpConfig).then(function (response) {
-      //return $sailsSocket.get(httpConfig.url, {params: httpConfig.params}).then(function (response) {
+        //return $sailsSocket.get(httpConfig.url, {params: httpConfig.params}).then(function (response) {
         return {
           total: response.data.total,
           items: response.data.items
