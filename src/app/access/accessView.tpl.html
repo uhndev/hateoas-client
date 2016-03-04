@@ -28,20 +28,23 @@
             on-resource-loaded="tab.onResourceLoaded">
           </hateoas-table>
         </div>
-        <div class="col-md-7" ng-show="am.detailInfo">
+        <div class="col-md-7" ng-if="am.detailInfo">
           <!-- GROUP/MODEL/ROLE PANEL START -->
           <div ng-if="am.current !== 'user'" class="panel panel-info">
             <div class="panel-heading" ng-switch="am.current">
               <div ng-switch-when="group">
-                Showing Default Role Permissions for Group: <strong>{{am[tab.url].selected.displayName}}</strong>
+                <span translate>APP.ACCESS.HEADINGS.SHOWING_DEFAULT_ROLE_PERMISSIONS_FOR_GROUP</span>
+                : <strong>{{am[tab.url].selected.displayName}}</strong>
               </div>
               <div ng-switch-when="model">
-                Showing Permissions for Model: <strong>{{am[tab.url].selected.name}}</strong>
+                <span translate>APP.ACCESS.BUTTONS.ROLE_PERMISSION</span>
+                : <strong>{{am[tab.url].selected.name}}</strong>
               </div>
               <div ng-switch-when="role">
-                Showing Permissions for Role: <strong>{{am[tab.url].selected.displayName}}</strong>
+                <span translate>APP.ACCESS.HEADINGS.SHOWING_PERMISSIONS_FOR_ROLE</span>
+                : <strong>{{am[tab.url].selected.displayName}}</strong>
                 <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="am.openAddPermission()">
-                  <i class="fa fa-plus"></i> Role Permission
+                  <i class="fa fa-plus"></i> <span translate>APP.ACCESS.BUTTONS.ROLE_PERMISSION</span>
                 </button>
               </div>
             </div>
@@ -61,10 +64,10 @@
           <div ng-if="am.current === 'user'">
             <div class="panel panel-info">
               <div class="panel-heading">
-                Showing Roles for User: <strong>{{am[tab.url].selected.displayName}}</strong>
+                <span translate>APP.ACCESS.HEADINGS.SHOWING_ROLES_FOR_USERS</span>
+                : <strong>{{am[tab.url].selected.displayName}}</strong>
               </div>
               <div class="panel-body">
-                <p class="text-info text-center" ng-show="am.loading">Loading...</p>
                 <uib-accordion>
                   <uib-accordion-group ng-repeat="(role, rolePermissions) in am.detailInfo.roles | groupBy: 'roleName' track by $index"
                                        ng-init="am.accordionStatus[role].isOpen = false"
@@ -76,7 +79,7 @@
                       }"></i>
                       {{role}}
                     </uib-accordion-heading>
-                    <div ng-repeat="(action, permissions) in rolePermissions | groupBy: 'action'">
+                    <div ng-repeat="(action, permissions) in rolePermissions | groupBy: 'action' track by $index">
                       <b>{{action | uppercase}}</b>
                       <md-divider></md-divider><br/>
                       <div ng-repeat="permission in permissions track by $index">
@@ -87,13 +90,34 @@
                   </uib-accordion-group>
                 </uib-accordion>
               </div>
+              <div class="panel-footer">
+                <div layout="row">
+                  <div flex="70">
+                    <select-loader
+                      url="role"
+                      is-atomic="true"
+                      is-disabled="false"
+                      ng-model="am.selectedNewRole"
+                      labels="displayName">
+                    </select-loader>
+                  </div>
+                  <div flex>
+                    <button type="button" class="btn btn-success btn-sm pull-right"
+                            ng-disabled="!am.selectedNewRole" ng-click="am.addUserToRole()">
+                      <i class="fa fa-plus"></i>
+                      <span translate>APP.ACCESS.BUTTONS.ADD_USER_TO_ROLE</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="panel panel-info">
               <div class="panel-heading">
                 Showing Specific Permissions for User: <strong>{{am[tab.url].selected.displayName}}</strong>
                 <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="am.openAddPermission()">
-                  <i class="fa fa-plus"></i> User Permission
+                  <i class="fa fa-plus"></i>
+                  <span translate>APP.ACCESS.BUTTONS.ADD_USER_PERMISSION</span>
                 </button>
               </div>
               <div class="panel-body" layout="column">

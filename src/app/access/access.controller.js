@@ -5,9 +5,9 @@
     .module('dados.access', [])
     .controller('AccessManagementController', AccessManagementController);
 
-  AccessManagementController.$inject = ['$uibModal', 'GroupService', 'PermissionService', 'UserService'];
+  AccessManagementController.$inject = ['$uibModal', 'GroupService', 'PermissionService', 'UserRoles', 'UserPermissions'];
 
-  function AccessManagementController($uibModal, Group, Permission, User) {
+  function AccessManagementController($uibModal, Group, Permission, UserRoles, UserPermissions) {
     var vm = this;
 
     // bindable variables
@@ -85,6 +85,7 @@
     // bindable methods
     vm.selectTab = selectTab;
     vm.removeElement = removeElement;
+    vm.addUserToRole = addUserToRole;
     vm.openAddPermission = openAddPermission;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -189,17 +190,23 @@
      */
     function fetchUserRolePermissions(item) {
       if (select(item)) {
-        vm.loading = true;
-        vm.detailInfo = {};
-        vm.detailInfo.permissions = fetchPermissionsBy('user', vm[vm.current].selected.id);
-        User.get({id: vm[vm.current].selected.id, populate: ['roles', 'permissions']}, function (data) {
-          fetchPermissionsBy('role', _.pluck(data.roles, 'id')).$promise.then(function (permissions) {
-            vm.detailInfo.roles = _.map(permissions, function (permission) {
-              permission.roleName = permission.role.name;
-              return permission;
-            });
-            vm.loading = false;
-          });
+        vm.selectedNewRole = null;
+        vm.detailInfo = UserPermissions.get({id: vm[vm.current].selected.id});
+      }
+    }
+
+    /**
+     * addUserToRole
+     * @description Click handler for adding a user to a given role selected from select-loader on user tab.
+     */
+    function addUserToRole() {
+      if (vm.selectedNewRole) {
+        var userRole = new UserRoles();
+        userRole.userID = vm.user.selected.id;
+        userRole.roleID = vm.selectedNewRole;
+        userRole.$save().then(function () {
+          vm.selectedNewRole = null;
+          vm.detailInfo = UserPermissions.get({id: vm.user.selected.id});
         });
       }
     }
@@ -215,12 +222,13 @@
         controller: 'AddPermissionController',
         controllerAs: 'ap',
         bindToController: true,
+        size: 'lg',
         resolve: {
           role: function() {
-            return vm.role.selected;
+            return (vm.current === 'role') ? vm.role.selected : null;
           },
           user: function() {
-            return vm.user.selected;
+            return (vm.current === 'user') ? vm.user.selected : null;
           }
         }
       });
