@@ -1,0 +1,69 @@
+<div class="panel permissions-detail-panel" ng-class="{
+    'panel-default': pm.permission.action === 'read',
+    'panel-success': pm.permission.action === 'create',
+    'panel-warning': pm.permission.action === 'update',
+    'panel-danger': pm.permission.action === 'delete'
+  }">
+  <div class="panel-heading selectable" ng-click="pm.isCollapsed = !pm.isCollapsed">
+    <i class="glyphicon" ng-class="{
+      'glyphicon-chevron-right': !pm.isCollapsed,
+      'glyphicon-chevron-down': pm.isCollapsed
+    }"></i>
+    <span>
+      {{pm.permission.role.name || pm.permission.user.displayName}} can {{pm.permission.action}} <b>{{pm.permission.model.name}}</b>
+    </span>
+  </div>
+  <div class="panel-body" uib-collapse="!pm.isCollapsed">
+    <div ng-if="pm.isCollapsed">
+      <div ng-repeat="criteria in pm.permission.criteria track by $index" layout="column">
+        <div flex>
+          <strong translate>APP.ACCESS.LABELS.WHERE</strong>:
+          <ui-help uib-popover="A where clause uses specialized query syntax to determine if a permission is allowed.
+                                i.e. if username not 'admin', this permission will be be allowed."
+                   popover-placement="right"></ui-help>
+          <query-builder
+            template="pm.template"
+            ng-model="criteria.where"
+            advanced="true">
+          </query-builder>
+          <br/>
+        </div>
+
+        <div flex>
+          <strong translate>APP.ACCESS.LABELS.BLACKLIST</strong>:
+          <ui-help uib-popover="For the blacklist, if the request action is update or create, and there is a
+                                blacklisted attribute in the request, the request will fail.
+                                If the request action is read, the blacklisted attributes will be filtered."
+                   popover-placement="right"></ui-help>
+          <div class="well well-sm">
+            <button ng-repeat="attribute in criteria.blacklist"
+                    ng-click="criteria.blacklist.splice($index, 1)"
+                    type="button" class="btn btn-danger btn-xs permission-btn">
+              {{attribute}} <span class="fa fa-times"></span>
+            </button>
+          </div>
+          <div class="well well-sm">
+            <button ng-repeat="attribute in pm.template.data track by $index"
+                    ng-hide="criteria.blacklist.indexOf(attribute.name) > -1"
+                    ng-click="pm.addToBlacklist(criteria, attribute)"
+                    type="button" class="btn btn-default btn-xs permission-btn">
+              {{attribute.name}} <span class="fa fa-plus"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-right" ng-if="!pm.hideControls">
+      <button type="button" class="btn btn-info btn-sm" ng-click="pm.updatePermission()" translate>
+        APP.ACCESS.BUTTONS.SAVE_CHANGES
+      </button>
+      <button type="button" class="btn btn-warning btn-sm" ng-click="pm.revertPermission()" translate>
+        APP.ACCESS.BUTTONS.REVERT
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" ng-click="pm.revokePermission()" translate>
+        APP.ACCESS.BUTTONS.REVOKE
+      </button>
+    </div>
+  </div>
+</div>

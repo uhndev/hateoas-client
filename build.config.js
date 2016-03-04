@@ -125,6 +125,7 @@ module.exports = {
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
+      'vendor/angular-filter/dist/angular-filter.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',

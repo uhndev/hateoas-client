@@ -100,7 +100,7 @@
                   return result;
                 }
               }
-              else if (/integer|mrn/i.test(field.type)) {
+              else if (/integer|number|mrn/i.test(field.type)) {
                 query[field.name] = parseInt(value, 10);
                 return result.concat(query);
               }
@@ -138,7 +138,9 @@
      * @param value
      */
     function add(field, comparator, value) {
-      if (/equals|is/i.test(comparator)) {
+      if (/equals/i.test(comparator)) {
+        $scope.query[field] = parseInt(value, 10);
+      } else if (/is/i.test(comparator)) {
         $scope.query[field] = value;
       } else {
         var buffer = $scope.query[field];

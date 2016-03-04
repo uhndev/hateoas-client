@@ -37,7 +37,8 @@
     "angular-material": "~0.11.4",
     "roboto-fontface": "~0.4.3",
     "angular-translate-storage-local": "~2.8.1",
-    "ui-select": "angular-ui-select#^0.14.9"
+    "ui-select": "angular-ui-select#^0.14.9",
+    "angular-filter": "^0.5.8"
   },
   "resolutions": {
     "angular": "1.5.0",

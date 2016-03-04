@@ -13,6 +13,7 @@
           query: '=ngModel',
           headers: '=',
           template: '&',
+          advanced: '=',
           queries: '='
         },
         link: postLink,
@@ -64,18 +65,22 @@
    */
   function postLink(scope, element, attributes, ngModel) {
     if (scope.template()) {
-      scope.advanceSearch = 0;
+      scope.advanceSearch = (scope.advanced ? 1 : 0);
       scope.fields = scope.template().data;
     }
 
-    scope.$watch('advanceSearch', scope.reset);
+    scope.$watch('advanceSearch', function() {
+      if (!scope.advanced) {
+        scope.reset();
+      }
+    });
     scope.$watch('field.type', function (type) {
       scope.operators = getOperatorsByType(type);
     });
 
     scope.$watchCollection('template().data',
       function (newTemplate, oldTemplate) {
-        if (!_.isEqual(angular.toJson(newTemplate), angular.toJson(oldTemplate))) {
+        if (!angular.equals(angular.toJson(newTemplate), angular.toJson(oldTemplate)) && !scope.advanced) {
           scope.fields = scope.template().data;
           scope.reset();
         }
