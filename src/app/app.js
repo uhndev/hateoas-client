@@ -14,6 +14,7 @@
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
+      'angular.filter',
 
       // html templateCaches
       'templates-app',
