@@ -41,12 +41,17 @@
       // strip out collection attributes from model.attributes
       _.each(vm.permission.model.attributes, function (value, key) {
         if (!_.has(value, 'collection')) {
-          vm.template.data.push({
+          var template = {
             name: key,
             prompt: _.startCase(key),
-            type: ((_.has(value, 'model') || key === 'id') ? 'integer' : value.type),
+            type: ((key === 'id') ? vm.permission.model.identity : value.type),
             value: ''
-          });
+          };
+          if (_.has(value, 'model')) {
+            template.type = value.model;
+          }
+
+          vm.template.data.push(template);
         }
       });
     }

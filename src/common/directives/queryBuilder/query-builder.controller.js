@@ -7,6 +7,8 @@
 
   function QueryController($scope, $location) {
 
+    var systemTypes = [];
+
     // bindable variables
     $scope.query = $scope.query || {};
     $scope.baseQuery = {};
@@ -20,6 +22,9 @@
     $scope.applyPopulate = applyPopulate;
     $scope.search = search;
     $scope.add = add;
+    $scope.getFieldType = getFieldType;
+    $scope.getFieldTemplate = getFieldTemplate;
+    $scope.removeFromQuery = removeFromQuery;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +43,9 @@
      * @description Clears all fields and queries in the queryBuilder
      */
     function reset() {
-      $scope.value = null;
+      if ($scope.field) {
+        $scope.field.value = null;
+      }
       $scope.comparator = null;
       $scope.field = null;
       $scope.query = {};
@@ -135,15 +142,18 @@
      * @description Click handler for adding specific filter in the advanced search
      * @param field
      * @param comparator
-     * @param value
      */
-    function add(field, comparator, value) {
+    function add(field, comparator) {
       if (/equals/i.test(comparator)) {
-        $scope.query[field] = parseInt(value, 10);
+        if (!/date|dateTime|datetime/i.test(field.type)) {
+          $scope.query[field.name] = parseInt(field.value, 10);
+        } else {
+          $scope.query[field.name] = new Date(field.value);
+        }
       } else if (/is/i.test(comparator)) {
-        $scope.query[field] = value;
+        $scope.query[field.name] = field.value;
       } else {
-        var buffer = $scope.query[field];
+        var buffer = $scope.query[field.name];
 
         if (!angular.isObject(buffer)) {
           buffer = {};
@@ -153,12 +163,55 @@
         }
 
         if (angular.isArray(buffer[comparator])) {
-          buffer[comparator].push(value);
+          buffer[comparator].push(field.value);
         } else {
-          buffer[comparator] = value;
+          buffer[comparator] = field.value;
         }
-        $scope.query[field] = buffer;
+        $scope.query[field.name] = buffer;
       }
+    }
+
+    /**
+     * getFieldType
+     * @description Helper function for determining what type of field should be rendered
+     * @param type
+     * @returns {String}
+     */
+    function getFieldType(type) {
+      if (/date|dateTime|datetime/i.test(type)) {
+        return 'date';
+      } else if (/integer|number|float|mrn/i.test(type)) {
+        return 'number';
+      } else if (/string|text|json|array/i.test(type)) {
+        return 'string';
+      } else { // if matches none, must be a model type
+        return type;
+      }
+    }
+
+    /**
+     * getFieldTemplate
+     * @description Returns appropriate template given a property name
+     * @param property
+     * @returns {Object}
+     */
+    function getFieldTemplate(property) {
+      var template = _.find($scope.fields, {name: property});
+      if (template) {
+        template.type = getFieldType(template.type);
+        return template;
+      } else {
+        return {};
+      }
+    }
+
+    /**
+     * removeFromQuery
+     * @description Removes a property expression from the waterline query
+     * @param property
+     */
+    function removeFromQuery(property) {
+      delete $scope.query[property];
     }
   }
 })();

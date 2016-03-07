@@ -49,13 +49,16 @@
 
     if (!!!type) {
       return [];
-    } else {
-      if (/integer|float|date/i.test(type)) {
-        return operators.number;
-      }
     }
-
-    return operators.string;
+    else if (/integer|float|date/i.test(type)) {
+      return operators.number;
+    }
+    else if (/string/i.test(type)) {
+      return operators.string;
+    }
+    else { // catch if type === model
+      return operators.number;
+    }
   }
 
   /**
