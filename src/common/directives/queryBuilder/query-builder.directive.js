@@ -83,7 +83,8 @@
 
     scope.$watchCollection('template().data',
       function (newTemplate, oldTemplate) {
-        if (!angular.equals(angular.toJson(newTemplate), angular.toJson(oldTemplate)) && !scope.advanced) {
+        if ((newTemplate.length !== oldTemplate.length) &&
+            (_.pluck(newTemplate, 'name') !== _.pluck(oldTemplate, 'name')) && !scope.advanced) {
           scope.fields = scope.template().data;
           scope.reset();
         }

@@ -52,8 +52,6 @@
           total: response.data.total,
           items: response.data.items
         };
-      }).catch(function (err) {
-        console.log(err);
       });
     };
   }

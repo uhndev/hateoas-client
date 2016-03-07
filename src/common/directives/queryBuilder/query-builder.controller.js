@@ -7,8 +7,6 @@
 
   function QueryController($scope, $location) {
 
-    var systemTypes = [];
-
     // bindable variables
     $scope.query = $scope.query || {};
     $scope.baseQuery = {};
@@ -43,9 +41,6 @@
      * @description Clears all fields and queries in the queryBuilder
      */
     function reset() {
-      if ($scope.field) {
-        $scope.field.value = null;
-      }
       $scope.comparator = null;
       $scope.field = null;
       $scope.query = {};
@@ -183,7 +178,7 @@
       } else if (/integer|number|float|mrn/i.test(type)) {
         return 'number';
       } else if (/string|text|json|array/i.test(type)) {
-        return 'string';
+        return 'text';
       } else { // if matches none, must be a model type
         return type;
       }
