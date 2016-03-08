@@ -51,12 +51,11 @@
       if (data) {
         // depending on permissions, render select-loader or plaintext
         var columnName = (vm.allow.update || vm.allow.create) ? 'collectionCentre' : 'collectionCentreName';
-        var columnType = (vm.allow.update || vm.allow.create) ? 'integer' : 'string';
         // add role and collection centre fields
         data.template.data = data.template.data.concat([
           {
             'name': columnName,
-            'type': columnType,
+            'type': 'collectioncentre',
             'prompt': 'COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE',
             'value': centreHref
           },

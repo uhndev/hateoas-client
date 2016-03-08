@@ -47,15 +47,16 @@
       ]
     };
 
-    if (!!!type) {
-      return [];
-    } else {
-      if (/integer|float|date/i.test(type)) {
+    switch (true) {
+      case !type:
+        return [];
+      case /integer|float|date/i.test(type):
         return operators.number;
-      }
+      case /string|text/i.test(type):
+        return operators.string;
+      default: // catch if type === model
+        return operators.number;
     }
-
-    return operators.string;
   }
 
   /**
@@ -80,7 +81,8 @@
 
     scope.$watchCollection('template().data',
       function (newTemplate, oldTemplate) {
-        if (!angular.equals(angular.toJson(newTemplate), angular.toJson(oldTemplate)) && !scope.advanced) {
+        if ((newTemplate.length !== oldTemplate.length) &&
+            (_.pluck(newTemplate, 'name') !== _.pluck(oldTemplate, 'name')) && !scope.advanced) {
           scope.fields = scope.template().data;
           scope.reset();
         }
