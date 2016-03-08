@@ -17,38 +17,40 @@
   <div uib-collapse="!advanceSearch">
     <ul class="list-unstyled">
       <li ng-repeat="(property, expression) in query track by $index">
-        <div ng-if="expression|isDate" layout="row" layout-padding>
+        <div ng-if="expression|isDate" layout="row" layout-sm="column" layout-padding>
           <div flex>
             <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
             {{ property }}
             <i class="condition"> equals </i>
           </div>
-          <div flex="70">
+          <div flex="70" flex-sm="100">
             <input disabled class="form-control" type="date" ng-model="expression"/>
           </div>
         </div>
-        <div ng-if="expression|isString" layout="row" layout-padding>
+        <div ng-if="expression|isString" layout="row" layout-sm="column" layout-padding>
           <div flex>
             <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
             {{ property }}
             <i class="condition"> is </i>
           </div>
-          <div flex="70">
+          <div flex="70" flex-sm="100">
             <input disabled class="form-control" type="text" ng-model="expression"/>
           </div>
         </div>
-        <div ng-if="expression|isNumber" layout="row" layout-padding>
+        <div ng-if="expression|isNumber" layout="row" layout-sm="column" layout-padding>
           <div flex>
             <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
             <span translate>{{getFieldTemplate(property).prompt}}</span>
             <i class="condition"> equals </i>
           </div>
-          <div ng-switch="getFieldTemplate(property).type" flex="70">
-            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="expression"/>
+          <div ng-switch="getFieldTemplate(property).type" flex="70" flex-sm="100">
+            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="expression" format-date/>
             <input disabled class="form-control" type="number" ng-switch-when="number" ng-model="expression"/>
             <input disabled class="form-control" type="text" ng-switch-when="text" ng-model="expression"/>
             <div ng-switch-default>
+              <input disabled class="form-control" type="text" ng-if="expression|isString" ng-model="expression"/>
               <select-loader
+                ng-if="!(expression|isString)"
                 url="{{getFieldTemplate(property).type}}"
                 is-atomic="true"
                 is-disabled="true"
@@ -58,20 +60,21 @@
             </div>
           </div>
         </div>
-        <div ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index" layout="row" layout-padding>
+        <div ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index" layout="row" layout-sm="column" layout-padding>
           <div flex>
             <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
             <span translate>{{getFieldTemplate(property).prompt}}</span>
             <i class="condition"> {{cond}} </i>
           </div>
-          <div ng-switch="getFieldTemplate(property).type" flex="70">
-            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="val"/>
+          <div ng-switch="getFieldTemplate(property).type" flex="70" flex-sm="100">
+            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="val" format-date/>
             <input disabled class="form-control" type="number" ng-switch-when="number" ng-model="val"/>
             <input disabled class="form-control" type="text" ng-switch-when="text" ng-model="val"/>
             <div ng-switch-default>
+              <input disabled type="text" class="form-control" ng-if="val|isString" ng-model="val"/>
               <input disabled type="text" class="form-control" ng-if="val|isArray" value="{{ val.join(' or ') }}"/>
               <select-loader
-                ng-if="!(val|isArray)"
+                ng-if="!(val|isArray) && !(val|isString)"
                 url="{{getFieldTemplate(property).type}}"
                 is-atomic="true"
                 is-disabled="true"

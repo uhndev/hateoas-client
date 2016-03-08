@@ -140,10 +140,10 @@
      */
     function add(field, comparator) {
       if (/equals/i.test(comparator)) {
-        if (!/date|dateTime|datetime/i.test(field.type)) {
-          $scope.query[field.name] = parseInt(field.value, 10);
-        } else {
-          $scope.query[field.name] = new Date(field.value);
+        switch (getFieldType(field.type)) {
+          case 'date': $scope.query[field.name] = new Date(field.value); break;
+          case 'number': $scope.query[field.name] = parseInt(field.value, 10); break;
+          default: $scope.query[field.name] = field.value; break;
         }
       } else if (/is/i.test(comparator)) {
         $scope.query[field.name] = field.value;
