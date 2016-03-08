@@ -1,5 +1,5 @@
 <!-- Banner Showing Only on Login -->
-<div class="navbar-container" ng-if="!header.isVisible">
+<div class="navbar-container" ng-if="!header.isVisible || header.isSubjectView">
   <div class="headerWrapper">
     <div class="container">
       <div class="row">
@@ -18,6 +18,22 @@
           <div class="row">
             <div class="col-md-12 hidden-xs">
               <small id="tagline" translate>APP.HEADER.TAGLINE</small>
+            </div>
+          </div>
+        </div>
+        <div class="pull-right" ng-if="header.isSubjectView">
+          <div id="profile_panel" ng-if="header.isVisible">
+            <div id="profile_pannel_inner">
+              <div id="logout">
+                <a ng-href ng-click="header.logout()">
+                  <img id="logout_img" src="assets/img/ico_logout.png">
+                </a>
+              </div>
+              <div class="profile_title">
+                {{header.currentUser.prefix}} {{header.currentUser.lastname}}
+              </div>
+              <div class="profile_content">
+              </div>
             </div>
           </div>
         </div>
