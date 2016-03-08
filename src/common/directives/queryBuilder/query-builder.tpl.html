@@ -14,11 +14,16 @@
              ng-change="search(value)"/>
     </div>
   </form>
-  <div ng-show="advanceSearch">
+  <div uib-collapse="!advanceSearch">
     <ul ng-repeat="(property, expression) in query track by $index">
       <li ng-if="expression|isString">
         {{ property }}
         <i class="condition"> is </i>
+        <b> {{ expression | json }} </b>
+      </li>
+      <li ng-if="expression|isNumber">
+        {{ property }}
+        <i class="condition"> equals </i>
         <b> {{ expression | json }} </b>
       </li>
       <li ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index">
@@ -77,6 +82,7 @@
     </label>
   </div>
   <button type="button"
+          ng-hide="advanced"
           class="btn btn-link btn-sm pull-right no-margin no-padding"
           ng-model="advanceSearch"
           uib-btn-checkbox

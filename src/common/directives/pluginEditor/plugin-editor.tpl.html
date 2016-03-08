@@ -32,7 +32,7 @@
                    ng-model="form.name"
                    ng-trim="true" title="Provide a name for your form"
                    placeholder="Provide a name for your form"/>
-          </div>		
+          </div>
           <uib-tabset class="clearfix">
             <uib-tab uib-tooltip="Add new question" active="editTabActive['add']">
               <tab-heading>
@@ -104,7 +104,7 @@
           <p class="text-muted" ng-if="!questions.length">
             Use the panel on the left to add questions to the workspace.
           </p>
-          <ng-form name="form">
+          <ng-form name="panel-form">
             <ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
                 ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
               <ui-grid ng-repeat="cell in questions track by $index" cell="cell"

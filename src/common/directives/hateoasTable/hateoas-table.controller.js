@@ -23,11 +23,13 @@
     vm.allow            = vm.allow || {};
     vm.template         = vm.template || {};
     vm.resource         = vm.resource || {};
+    vm.onSelect         = vm.onSelect || function select(item) {
+      vm.selected = (vm.selected === item ? null : item);
+    };
     vm.onResourceLoaded = vm.onResourceLoaded || function(data) { return data; };
 
     // bindable methods
     vm.follow = follow;
-    vm.select = select;
 
     init();
 
@@ -71,10 +73,6 @@
           $location.path(_.convertRestUrl(link.href, API.prefix));
         }
       }
-    }
-
-    function select(item) {
-      vm.selected = (vm.selected === item ? null : item);
     }
 
     // watchers
