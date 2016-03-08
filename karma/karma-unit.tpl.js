@@ -29,6 +29,7 @@ module.exports = function ( karma ) {
     ],
 
     preprocessors: {
+      'src/**/!(*spec).js': ['coverage']
     },
 
     /**
@@ -40,10 +41,6 @@ module.exports = function ( karma ) {
       outputDir: 'karma/results',
       outputFile: 'karma-test-results.xml',
       suite: 'angular-tests'
-    },
-
-    preprocessors: {
-      'src/**/!(*spec).js': ['coverage']
     },
 
     coverageReporter: {
