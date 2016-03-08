@@ -47,17 +47,15 @@
       ]
     };
 
-    if (!!!type) {
-      return [];
-    }
-    else if (/integer|float|date/i.test(type)) {
-      return operators.number;
-    }
-    else if (/string/i.test(type)) {
-      return operators.string;
-    }
-    else { // catch if type === model
-      return operators.number;
+    switch (true) {
+      case !type:
+        return [];
+      case /integer|float|date/i.test(type):
+        return operators.number;
+      case /string|text/i.test(type):
+        return operators.string;
+      default: // catch if type === model
+        return operators.number;
     }
   }
 

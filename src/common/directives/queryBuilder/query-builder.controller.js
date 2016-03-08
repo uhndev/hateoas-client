@@ -1,7 +1,7 @@
-(function() {
+(function () {
   'use strict';
   angular.module('dados.common.directives.queryController', [])
-  .controller('QueryController', QueryController);
+    .controller('QueryController', QueryController);
 
   QueryController.$inject = ['$scope', '$location'];
 
@@ -31,7 +31,7 @@
      * @description Sets whatever baseQuery is currently set to the bound hateoas query
      */
     function applyBaseQuery() {
-      _.forIn($scope.baseQuery, function(value, key) {
+      _.forIn($scope.baseQuery, function (value, key) {
         $scope.query[key] = value;
       });
     }
@@ -89,41 +89,42 @@
       } else {
         if (_.isArray($scope.fields)) {
           $scope.query = {
-            'or' : _.reduce($scope.fields, function(result, field) {
+            'or': _.reduce($scope.fields, function(result, field) {
               var query = {};
-              if (/date|dateTime|datetime/i.test(field.type)) {
-                try {
-                  var dateObj = new Date(value).toISOString();
-                  query[field.name] = {'>=': date, '<': date};
-                  result.concat(query);
-                } catch (e) {
-                  // if value not date, do not concat
-                } finally {
+              switch (true) {
+                case /date|dateTime|datetime/i.test(field.type):
+                  try {
+                    var dateObj = new Date(value).toISOString();
+                    query[field.name] = {'>=': dateObj};
+                    return result.concat(query);
+                  } catch (e) {
+                    // if value not date, do not concat
+                    return result;
+                  }
+                  break;
+
+                case /integer|number|mrn/i.test(field.type):
+                  query[field.name] = parseInt(value, 10);
+                  return result.concat(query);
+
+                case /json|array/i.test(field.type):
                   return result;
-                }
-              }
-              else if (/integer|number|mrn/i.test(field.type)) {
-                query[field.name] = parseInt(value, 10);
-                return result.concat(query);
-              }
-              else {
-                switch (field.type) {
-                  case 'json':
-                    return result; // do nothing
-                  case 'array':
-                    return result; // do nothing
-                  case 'string':
-                    query[field.name] = {'contains': value}; break;
-                  case 'float':
-                    query[field.name] = parseFloat(value); break;
-                  default: // otherwise is probably a model id
-                    if (_.isNumber(value)) {
-                      query[field.name] = parseInt(value); break;
-                    } else {
-                      return result;
-                    }
-                }
-                return result.concat(query);
+
+                case /string|text/i.test(field.type):
+                  query[field.name] = {'contains': value};
+                  return result.concat(query);
+
+                case /float/i.test(field.type):
+                  query[field.name] = parseFloat(value);
+                  return result.concat(query);
+
+                default: // otherwise is probably a model id
+                  if (_.isNumber(value)) {
+                    query[field.name] = parseInt(value);
+                    return result.concat(query);
+                  } else {
+                    return result;
+                  }
               }
             }, [])
           };
@@ -139,30 +140,32 @@
      * @param comparator
      */
     function add(field, comparator) {
-      if (/equals/i.test(comparator)) {
-        switch (getFieldType(field.type)) {
-          case 'date': $scope.query[field.name] = new Date(field.value); break;
-          case 'number': $scope.query[field.name] = parseInt(field.value, 10); break;
-          default: $scope.query[field.name] = field.value; break;
-        }
-      } else if (/is/i.test(comparator)) {
-        $scope.query[field.name] = field.value;
-      } else {
-        var buffer = $scope.query[field.name];
+      switch (true) {
+        case /equals/i.test(comparator) && getFieldType(field.type) === 'date':
+          $scope.query[field.name] = new Date(field.value);
+          break;
+        case /equals/i.test(comparator) && getFieldType(field.type) === 'number':
+          $scope.query[field.name] = parseInt(field.value, 10);
+          break;
+        case /equals/i.test(comparator) || /is/i.test(comparator):
+          $scope.query[field.name] = field.value;
+          break;
+        default:
+          var buffer = $scope.query[field.name];
 
-        if (!angular.isObject(buffer)) {
-          buffer = {};
-        }
-        if (!angular.isArray(buffer[comparator]) && buffer[comparator]) {
-          buffer[comparator] = [buffer[comparator]];
-        }
+          if (!angular.isObject(buffer)) {
+            buffer = {};
+          }
+          if (!angular.isArray(buffer[comparator]) && buffer[comparator]) {
+            buffer[comparator] = [buffer[comparator]];
+          }
 
-        if (angular.isArray(buffer[comparator])) {
-          buffer[comparator].push(field.value);
-        } else {
-          buffer[comparator] = field.value;
-        }
-        $scope.query[field.name] = buffer;
+          if (angular.isArray(buffer[comparator])) {
+            buffer[comparator].push(field.value);
+          } else {
+            buffer[comparator] = field.value;
+          }
+          $scope.query[field.name] = buffer;
       }
     }
 
@@ -173,14 +176,15 @@
      * @returns {String}
      */
     function getFieldType(type) {
-      if (/date|dateTime|datetime/i.test(type)) {
-        return 'date';
-      } else if (/integer|number|float|mrn/i.test(type)) {
-        return 'number';
-      } else if (/string|text|json|array/i.test(type)) {
-        return 'text';
-      } else { // if matches none, must be a model type
-        return type;
+      switch (true) {
+        case /date|dateTime|datetime/i.test(type):
+          return 'date';
+        case /integer|number|float|mrn/i.test(type):
+          return 'number';
+        case /string|text|json|array/i.test(type):
+          return 'text';
+        default:
+          return type; // if matches none, must be a model type
       }
     }
 
