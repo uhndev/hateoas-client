@@ -1,8 +1,8 @@
-<div class="container" ng-controller="RecommendationsController as rec" ng-cloak>
+<div class="container-fluid" ng-controller="RecommendationsController as rec" ng-cloak>
   <div layout="column">
-    <h1 flex id="Title">
+    <h2 id="Title" flex>
       <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
-    </h1>
+    </h2>
     <div id="Query" flex class="clearfix">
       <form>
         <div class="form-group no-margin has-feedback has-feedback-left">
@@ -38,17 +38,21 @@
       <md-tab-body>
         <button type="button" class="btn btn-default pull-right"
                 ng-style="{'margin-top': 7}" ng-click="rec.showListView = !rec.showListView">
-          <span class="glyphicon" ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
+          <span class="glyphicon"
+                ng-class="{ 'glyphicon-th-list': !rec.showListView, 'glyphicon-th-large': rec.showListView }"></span>
         </button>
         <p ng-show="!rec.referral.program">
           Please select a program to begin recommending services.
         </p>
 
         <!-- List View -->
-        <md-content ng-if="!rec.showListView" layout="column" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
+        <md-content ng-if="!rec.showListView" layout="column" layout-wrap layout-margin layout-padding
+                    ng-show="rec.referral.program">
           <uib-accordion close-others="false">
-            <uib-accordion-group ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'"
-                                 ng-init="rec.accordionStatus[groupKey] = true" is-open="rec.accordionStatus[groupKey]" panel-class="panel-info">
+            <uib-accordion-group
+              ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'"
+              ng-init="rec.accordionStatus[groupKey] = true" is-open="rec.accordionStatus[groupKey]"
+              panel-class="panel-info">
               <uib-accordion-heading>
                 <i class="glyphicon" ng-class="{
                   'glyphicon-chevron-right': !rec.accordionStatus[groupKey],
@@ -57,27 +61,10 @@
                 {{groupServices[0].serviceCategoryName}}
                 <span class="pull-right badge">{{groupServices.length}}</span>
               </uib-accordion-heading>
-              <div class="checkbox" ng-repeat="service in groupServices">
-                <label>
-                  <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
-                         ng-click="rec.toggleService(service)"/> {{service.name}}
-                </label>
-              </div>
-            </uib-accordion-group>
-          </uib-accordion>
-        </md-content>
-
-        <!-- Grid View -->
-        <md-content ng-if="rec.showListView" layout="row" layout-wrap layout-margin layout-padding ng-show="rec.referral.program">
-          <!-- Service Category / Program Services Panel -->
-          <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
-               ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'">
-            <div class="panel panel-info">
-              <div class="panel-heading">{{groupServices[0].serviceCategoryName}}</div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-8">
-                    <div class="checkbox" ng-repeat="service in groupServices">
+              <div layout="row" layout-sm="column">
+                <div flex ng-repeat="block in groupServices | chunkBy: ((groupServices.length / 3) < 1 ? 1 : (groupServices.length / 3))">
+                  <div layout="column">
+                    <div class="checkbox" ng-repeat="service in block">
                       <label>
                         <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
                                ng-click="rec.toggleService(service)"/> {{service.name}}
@@ -86,12 +73,33 @@
                   </div>
                 </div>
               </div>
+            </uib-accordion-group>
+          </uib-accordion>
+        </md-content>
+
+        <!-- Grid View -->
+        <md-content ng-if="rec.showListView" layout="row" layout-wrap layout-margin layout-padding
+                    ng-show="rec.referral.program">
+          <!-- Service Category / Program Services Panel -->
+          <div class="referral-category" flex-gt-md="33" flex-md="50" flex-sm="100"
+               ng-repeat="(groupKey, groupServices) in rec.availableServices | fuzzy: rec.search | groupBy: 'serviceCategory'">
+            <div class="panel panel-info">
+              <div class="panel-heading">{{groupServices[0].serviceCategoryName}}</div>
+              <div class="panel-body">
+                <div class="checkbox" ng-repeat="service in groupServices">
+                  <label>
+                    <input type="checkbox" ng-checked="rec.isServiceRecommended(service)"
+                           ng-click="rec.toggleService(service)"/> {{service.name}}
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </md-content>
       </md-tab-body>
     </md-tab>
-    <md-tab ng-click="rec.fetchLoaderData()" ng-disabled="!rec.referral.program || rec.recommendedServices.length === 0">
+    <md-tab ng-click="rec.fetchLoaderData()"
+            ng-disabled="!rec.referral.program || rec.recommendedServices.length === 0">
       <md-tab-label>
         <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES</span>
         ({{rec.recommendedServices.length}})
@@ -145,16 +153,16 @@
                   </div>
                   <!-- Save for Scheduling -->
                   <!--<div class="form-group" flex ng-repeat="staffType in rec.recommendedServices[rec.currIndex].availableStaffTypes">-->
-                    <!--<label translate>Select {{staffType.name}}:</label>-->
-                    <!--<select-loader-->
-                      <!--url="staff"-->
-                      <!--query="staffType.baseQuery"-->
-                      <!--is-atomic="false"-->
-                      <!--is-disabled="false"-->
-                      <!--ng-model="rec.recommendedServices[rec.currIndex].staffCollection[staffType.name]"-->
-                      <!--ng-change="rec.setStaffSelections(rec.recommendedServices[rec.currIndex], staffType.name)"-->
-                      <!--labels="displayName">-->
-                    <!--</select-loader>-->
+                  <!--<label translate>Select {{staffType.name}}:</label>-->
+                  <!--<select-loader-->
+                  <!--url="staff"-->
+                  <!--query="staffType.baseQuery"-->
+                  <!--is-atomic="false"-->
+                  <!--is-disabled="false"-->
+                  <!--ng-model="rec.recommendedServices[rec.currIndex].staffCollection[staffType.name]"-->
+                  <!--ng-change="rec.setStaffSelections(rec.recommendedServices[rec.currIndex], staffType.name)"-->
+                  <!--labels="displayName">-->
+                  <!--</select-loader>-->
                   <!--</div>-->
                   <div class="form-group">
                     <div class="checkbox">

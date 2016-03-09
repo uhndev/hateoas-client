@@ -22,7 +22,8 @@
       replace: true,
       scope: {
         service: '=',
-        statuses: '='
+        statuses: '=',
+        onUpdate: '&'
       },
       templateUrl: 'referral/services/service-approval/service-approval.tpl.html',
       controller: 'ServiceApprovalController',

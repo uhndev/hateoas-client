@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ServicesController as svc" ng-cloak>
+<div class="container-fluid" ng-controller="ServicesController as svc" ng-cloak>
   <div layout="column">
     <h1 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
@@ -96,7 +96,7 @@
                   {{service[field.name]}}
                 </td>
                 <td>
-                  <service-approval service="service" statuses="svc.statuses"></service-approval>
+                  <service-approval service="service" statuses="svc.statuses" on-update="svc.init()"></service-approval>
                 </td>
               </tr>
             </table>
