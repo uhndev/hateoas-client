@@ -9,10 +9,10 @@
   .controller('StudyUserController', StudyUserController);
 
   StudyUserController.$inject = [
-  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'StudyService', 'UserEnrollment', 'toastr', 'API'
+  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
   ];
 
-  function StudyUserController($scope, $q, $location, $uibModal, HeaderService, Study, UserEnrollment, toastr, API) {
+  function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
 
     var vm = this;
     var savedAccess = {};
@@ -51,12 +51,11 @@
       if (data) {
         // depending on permissions, render select-loader or plaintext
         var columnName = (vm.allow.update || vm.allow.create) ? 'collectionCentre' : 'collectionCentreName';
-        var columnType = (vm.allow.update || vm.allow.create) ? 'integer' : 'string';
         // add role and collection centre fields
         data.template.data = data.template.data.concat([
           {
             'name': columnName,
-            'type': columnType,
+            'type': 'collectioncentre',
             'prompt': 'COMMON.MODELS.USER_ENROLLMENT.COLLECTION_CENTRE',
             'value': centreHref
           },
@@ -75,9 +74,7 @@
         });
 
         // initialize submenu
-        Study.get({id: studyID}).$promise.then(function (study) {
-          HeaderService.setSubmenu('study', data.links);
-        });
+        HeaderService.setSubmenu('study', data.links);
       }
 
       return data;

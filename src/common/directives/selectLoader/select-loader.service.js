@@ -5,17 +5,18 @@
     .module('dados.common.directives.selectLoader.service', ['sails.io'])
     .service('SelectService', SelectService);
 
-  SelectService.$inject = ['$sailsSocket'];
+  SelectService.$inject = ['$http', '$sailsSocket'];
 
   /**
    * SelectService
    * @description Service for optimizing $http calls when populating resource based dropdowns.  If multiple /user
    *              dropdowns exist on a page, there is no sense in fetching the same data several times, so if the
    *              $location is the same, fetch data from cache.
+   * @param $http
    * @param $sailsSocket
    * @constructor
    */
-  function SelectService($sailsSocket) {
+  function SelectService($http, $sailsSocket) {
     this.loadSelect = function (url, baseQuery, baseOverride, query) {
       var httpConfig = {
         url: url,
@@ -40,9 +41,13 @@
       }
 
       // extend config with any baseOverrides
+      if (_.isUndefined(httpConfig.params)) {
+        httpConfig.params = {};
+      }
       _.merge(httpConfig.params, baseOverride);
 
-      return $sailsSocket.get(httpConfig.url, {params: httpConfig.params}).then(function (response) {
+      return $http(httpConfig).then(function (response) {
+        //return $sailsSocket.get(httpConfig.url, {params: httpConfig.params}).then(function (response) {
         return {
           total: response.data.total,
           items: response.data.items

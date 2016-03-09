@@ -18,6 +18,7 @@
         query: '=',
         isAtomic: '=',
         isDisabled: '=',
+        bindObject: '@?',
         values: '=ngModel',
         labels: '@'
       },

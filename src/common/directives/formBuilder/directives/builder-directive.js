@@ -9,19 +9,13 @@
 
   angular
     .module('dados.common.directives.formBuilder.directives.builder', [])
-    .directive('formBuilder', formBuilder);
-
-  function formBuilder() {
-    return {
-      restrict: 'E',
-      scope: {
+    .component('formBuilder', {
+      bindings: {
         form: '='
       },
       templateUrl: 'directives/formBuilder/partials/create.tpl.html',
       controller: 'CreateController',
-      controllerAs: 'fb',
-      bindToController: true
-    };
-  }
+      controllerAs: 'fb'
+    });
 
 })();

@@ -15,12 +15,23 @@ module.exports = {
         }
       }
     },
-    production: {
+    migrate: {
       url: 'http://ws69.uhnresearch.ca:1337',
       constants: {
         BASE: {
           protocol: 'http',
           host : 'ws69.uhnresearch.ca',
+          port: '1337',
+          prefix: '/api'
+        }
+      }
+    },
+    production: {
+      url: 'http://ws98.uhnresearch.ca:1337',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : 'ws98.uhnresearch.ca',
           port: '1337',
           prefix: '/api'
         }
@@ -92,8 +103,8 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
-      'sails-io-settings.js',
       'vendor/sails.io.js/dist/sails.io.js',
+      'sails-io-settings.js',
 
       'vendor/angular/angular.js',
       'vendor/angular-animate/angular-animate.js',
@@ -114,6 +125,7 @@ module.exports = {
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
+      'vendor/angular-filter/dist/angular-filter.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',

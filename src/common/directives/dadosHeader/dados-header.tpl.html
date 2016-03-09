@@ -1,0 +1,170 @@
+<!-- Banner Showing Only on Login -->
+<div class="navbar-container" ng-if="!header.isVisible || header.isSubjectView">
+  <div class="headerWrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-7 col-xs-4">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="logo_dados">
+                <img id="login-brand" alt="Brand" ng-src="assets/img/dados-{{header.locale}}.png">
+              </div>
+              <div id="subBrand" class="pull-left hidden-xs">
+                <div id="subBrand_site">UNIVERSITY HEALTH NETWORK</div>
+                <div id="subBrand_dep">EXTREME EDITION</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 hidden-xs">
+              <small id="tagline" translate>APP.HEADER.TAGLINE</small>
+            </div>
+          </div>
+        </div>
+        <div class="pull-right" ng-if="header.isSubjectView">
+          <div id="profile_panel" ng-if="header.isVisible">
+            <div id="profile_pannel_inner">
+              <div id="logout">
+                <a ng-href ng-click="header.logout()">
+                  <img id="logout_img" src="assets/img/ico_logout.png">
+                </a>
+              </div>
+              <div class="profile_title">
+                {{header.currentUser.prefix}} {{header.currentUser.lastname}}
+              </div>
+              <div class="profile_content">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Banner -->
+
+<!-- Shrunk header menus only when logged in -->
+<nav class="navbar navbar-default" role="navigation" ng-if="header.isVisible && !header.isSubjectView">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href class="navbar-brand">
+        <img id="uhn-brand" alt="Brand" ng-src="assets/img/dados-{{header.locale}}.png">
+      </a>
+      <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"
+              ng-click="header.menuCollapsed = ! header.menuCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" uib-collapse="header.menuCollapsed">
+      <ul class="nav navbar-nav">
+        <li ng-repeat="link in header.navigation" uib-dropdown
+            context-translator="{{link.prompt}}"
+            ng-class="{
+                'active': link.isActive,
+                'dropdown': link.dropdown
+              }">
+          <!-- UI-State or Single Link -->
+          <a ui-sref="{{link.sref}}" ng-if="link.sref">
+            <i class="fa {{ link.icon }}"></i>
+            <span translate>{{link.prompt}}</span>
+          </a>
+          <!-- Single Link -->
+          <a hateoas-link state-href="{{link.href}}" ng-if="!link.dropdown && link.href && !link.sref">
+            <i class="fa {{ link.icon }}"></i>
+            <span translate>{{link.prompt}}</span>
+          </a>
+          <!-- Dropdown Link -->
+          <a href class="dropdown-toggle" ng-if="link.dropdown"
+             uib-dropdown-toggle role="button" aria-expanded="false">
+            <i class="fa {{ link.icon }}"></i>
+            <span translate>{{link.prompt}}</span> <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
+            <li context-translator="{{droplink.prompt}}"
+                ng-repeat="droplink in link.dropdown"
+                ng-class="{
+                      'active': droplink.isActive
+                    }">
+              <a hateoas-link state-href="{{ droplink.href }}">
+                <i class="fa {{ droplink.icon }}"></i>
+                <span translate>{{ droplink.prompt }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-if="header.isVisible">
+        <li class="dropdown" uib-dropdown>
+          <a ng-href class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+            {{header.currentUser.prefix}} {{header.currentUser.lastname}} <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a ng-href hateoas-link state-href="/user/{{header.currentUser.id}}">
+                Profile
+                <i class="fa fa-user"></i>
+              </a>
+            </li>
+            <li>
+              <a ng-href ng-click="header.logout()">
+                Logout
+                <i class="fa fa-sign-out"></i>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Context Submenu Headers -->
+<div class="submenuWrapper" uib-collapse="!header.isVisible || header.service.submenu.length == 0">
+  <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="header.submenuCollapsed = true"
+                ng-click="header.submenuCollapsed = ! header.submenuCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" uib-collapse="header.submenuCollapsed">
+        <ul class="nav navbar-nav">
+          <li ng-repeat="link in header.service.submenu"
+              ng-class="{ 'active': link.isActive }">
+            <div href ng-if="link.rel == 'name'" class="navbar-brand">
+              <span class="submenu-link-colour" context-translator="APP.HEADER.SELECTED" translate>APP.HEADER.SELECTED</span>
+                <span style="color: white" class="selectable" ng-click="header.showSearch = !header.showSearch">
+                  {{ link.prompt }}
+                  <i class="fa" ng-class="{
+                      'fa-caret-right': !header.showSearch,
+                      'fa-caret-down': header.showSearch
+                    }">
+                  </i>
+                </span>
+            </div>
+            <a ng-if="link.rel != 'name'" hateoas-link url="{{link.href}}"
+               context-translator="{{link.prompt}}">
+              <span translate>{{link.prompt}}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <ui-select uib-collapse="!header.showSearch"
+                 ng-model="header.selected" theme="bootstrap" ng-change="header.changeContext()">
+        <ui-select-match placeholder="Select or search">{{$select.selected.displayName}}</ui-select-match>
+        <ui-select-choices repeat="model.id as model in header.selectionModels | filter: $select.search"
+                           refresh="header.refresh($select.search)"
+                           refresh-delay="100">
+          <span ng-bind-html="model.displayName | highlight: $select.search"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </nav>
+</div>

@@ -9,7 +9,6 @@
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <div class="jsonView" defocus ng-init="field.field_value = field.field_value || {}">
       <json id="{{field.field_id}}"
-            data-ng-model="field.field_value"
             child="field.field_value"
             type="'object'">
       </json>
