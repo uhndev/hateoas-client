@@ -29,12 +29,12 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-    function init(reset) {
+    function init() {
       // get dictionary of statuses
       vm.statuses = _.indexBy(vm.statuses, 'id');
 
       // check if passed in service object with id without populated approvals, then fetch from server
-      if (!vm.service.approvals || reset) {
+      if (!vm.service.approvals) {
         AltumAPI.Service.get({id: vm.service.id, populate: ['currentApproval', 'approvals']}, function (data) {
           if (data.approvals.length > 0) {
             vm.service.currentStatus = data.currentApproval.status;
@@ -55,7 +55,7 @@
       var newApproval = new ServiceApproval({status: vm.service.currentStatus});
       newApproval.$save(function (approval) {
         toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
-        init(true);
+        vm.onUpdate();
       });
     }
   }

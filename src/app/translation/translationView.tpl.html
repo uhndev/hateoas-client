@@ -1,8 +1,8 @@
-<div class="container" ng-controller="TranslationController as tc">
+<div class="container-fluid" ng-controller="TranslationController as tc">
   <div class="row">
     <div class="col-md-12">
       <div class="pull-left">
-        <h1 id="Title">
+        <h2 id="Title">
           Translation Editor
           <small>
             Total: {{tc.resource.length}}
@@ -28,17 +28,15 @@
 
   <hr/>
 
-  <div class="row">
-    <div class="col-md-12">
-      <translate-editor ng-if="tc.translationsReady"
-                        translations="tc.translations"
-                        languages="tc.languages"
-                        queries="tc.queries"
-                        on-update="tc.onUpdate"
-                        on-remove="tc.onRemove"
-                        is-valid="tc.isValid">
-      </translate-editor>
-    </div>
+  <div class="container-fluid">
+    <translate-editor ng-if="tc.translationsReady"
+                      translations="tc.translations"
+                      languages="tc.languages"
+                      queries="tc.queries"
+                      on-update="tc.onUpdate"
+                      on-remove="tc.onRemove"
+                      is-valid="tc.isValid">
+    </translate-editor>
   </div>
 
   <hr/>
