@@ -44,8 +44,11 @@ module.exports = function ( karma ) {
     },
 
     coverageReporter: {
-      type: 'html',
-      dir: 'coverage'
+      dir: 'coverage',
+      reporters: [
+        {type: 'text-summary'},
+        {type: 'html'}
+      ]
     },
 
     /**
