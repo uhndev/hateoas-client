@@ -61,7 +61,7 @@
           vm.newStatus = newStatus;
           vm.approval = {
             status: newStatus.id,
-            externalApprovalID: null
+            externalID: null
           };
 
           /**
