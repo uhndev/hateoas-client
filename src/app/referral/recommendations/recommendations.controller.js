@@ -36,9 +36,19 @@
 
     vm.recommendedServices = [];
     vm.availableServices = [];
+    vm.availablePrognosis = AltumAPI.Prognosis.query();
+    vm.availableTimeframes = AltumAPI.Timeframe.query();
+    AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
+      vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
+    });
+    AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
+      vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
+        staffType.baseQuery = {staffType: staffType.id};
+        return staffType;
+      });
+    });
 
     // bindable methods
-    vm.fetchLoaderData = fetchLoaderData;
     vm.isServiceRecommended = isServiceRecommended;
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
@@ -63,7 +73,7 @@
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
           'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claim_claimNum,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
+          'COMMON.MODELS.REFERRAL.PRIMARY_PROVIDER': data.items.physician_name,
           'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
@@ -122,26 +132,6 @@
           approvalNeeded: altumProgramService.approvalRequired
         });
       });
-    }
-
-    /**
-     * fetchLoaderData
-     * @description Fetches data from dropdowns on visit info panel once some services have been selected
-     */
-    function fetchLoaderData() {
-      if (!vm.availablePrognosis || !vm.availableTimeframes || !vm.availableServiceTypes) {
-        vm.availablePrognosis = AltumAPI.Prognosis.query();
-        vm.availableTimeframes = AltumAPI.Timeframe.query();
-        AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-          vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-        });
-        AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
-          vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
-            staffType.baseQuery = {staffType: staffType.id};
-            return staffType;
-          });
-        });
-      }
     }
 
     /**
@@ -263,12 +253,15 @@
      * @description Saves the currently selected services to the current referral
      */
     function saveServices() {
+      vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
           var serviceObj = new ReferralServices(service);
           return serviceObj.$save();
         }))
         .then(function(data) {
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
+          vm.isSaving = false;
+          vm.currIndex = null;
           init();
         });
     }
