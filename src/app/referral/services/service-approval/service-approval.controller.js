@@ -8,9 +8,9 @@
     ])
     .controller('ServiceApprovalController', ServiceApprovalController);
 
-  ServiceApprovalController.$inject = ['$resource', 'AltumAPIService', 'API', 'toastr'];
+  ServiceApprovalController.$inject = ['$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr'];
 
-  function ServiceApprovalController($resource, AltumAPI, API, toastr) {
+  function ServiceApprovalController($resource, AltumAPI, API, $uibModal, toastr) {
     var vm = this;
     var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/approvals');
 
@@ -37,6 +37,7 @@
       if (!vm.service.approvals) {
         AltumAPI.Service.get({id: vm.service.id, populate: ['currentApproval', 'approvals']}, function (data) {
           if (data.approvals.length > 0) {
+            vm.service.previousStatus = data.currentApproval.status;
             vm.service.currentStatus = data.currentApproval.status;
             vm.service.iconClass = vm.statuses[data.currentApproval.status].iconClass;
             vm.service.rowClass = vm.statuses[data.currentApproval.status].rowClass;
@@ -52,10 +53,51 @@
      *              to add a new approval state to the service.
      */
     function updateApprovalStatus() {
-      var newApproval = new ServiceApproval({status: vm.service.currentStatus});
-      newApproval.$save(function (approval) {
-        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
-        vm.onUpdate();
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'referral/services/service-approval/approval-confirmation.tpl.html',
+        controller: function ApprovalConfirmationModal($uibModalInstance, newStatus) {
+          var vm = this;
+          vm.newStatus = newStatus;
+          vm.approval = {
+            status: newStatus.id,
+            externalApprovalID: null
+          };
+
+          /**
+           * confirm
+           * @description Returns the approval object upon confirmation
+           */
+          vm.confirm = function() {
+            $uibModalInstance.close(vm.approval);
+          };
+
+          /**
+           * cancel
+           * @description cancels and closes the modal window
+           */
+          vm.cancel = function() {
+            $uibModalInstance.dismiss();
+          };
+        },
+        controllerAs: 'ac',
+        bindToController: true,
+        resolve: {
+          newStatus: function () {
+            return vm.statuses[vm.service.currentStatus];
+          }
+        }
+      });
+
+      modalInstance.result.then(function (result) {
+        var newApproval = new ServiceApproval(result);
+        newApproval.$save(function (approval) {
+          toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
+          vm.onUpdate();
+        });
+      }, function () {
+        // if cancelled, revert back to previous selection
+        vm.service.currentStatus = vm.service.previousStatus;
       });
     }
   }

@@ -1,9 +1,9 @@
 <div class="container-fluid" ng-controller="ServicesController as svc" ng-cloak>
   <div layout="column">
-    <h1 flex id="Title">
+    <h2 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
       <small>{{svc.resource.items.client_displayName}}</small>
-    </h1>
+    </h2>
     <div id="Query" flex class="clearfix">
       <form>
         <div class="form-group no-margin has-feedback has-feedback-left">
@@ -86,7 +86,7 @@
               </tr>
             </table>
             <md-divider></md-divider>
-            <table class="table table-condensed" ng-if="accordion.groups[$index].isOpen" >
+            <table class="table table-condensed" ng-if="svc.accordionStatus[groupKey][subGroup].isOpen" >
               <tr>
                 <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
                 <th>Approvals</th>

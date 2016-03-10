@@ -1,11 +1,23 @@
-<table class="table table-condensed table-bordered">
-  <tr ng-repeat="approval in sap.service.approvals"
-      class="{{sap.statuses[approval.status].rowClass}}">
-    <td class="text-nowrap">
-      <b>{{approval.displayName}}</b>
-    </td>
-    <td>
-      <small>{{approval.createdAt | date: 'MMM d, y h:mm a'}}</small>
-    </td>
-  </tr>
+<table class="table table-condensed table-bordered table-responsive">
+  <thead>
+    <tr>
+      <th translate>COMMON.MODELS.APPROVAL.STATUS</th>
+      <th translate>COMMON.MODELS.APPROVAL.CREATED_AT</th>
+      <th translate>COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="approval in sap.service.approvals"
+        class="{{sap.statuses[approval.status].rowClass}}">
+      <td class="text-nowrap">
+        <b>{{approval.displayName}}</b>
+      </td>
+      <td>
+        <small>{{approval.createdAt | date: 'MMM d, y h:mm a'}}</small>
+      </td>
+      <td class="text-nowrap">
+        {{approval.externalApprovalID || "-"}}
+      </td>
+    </tr>
+  </tbody>
 </table>
