@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -53,51 +53,64 @@
      *              to add a new approval state to the service.
      */
     function updateApprovalStatus() {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: 'referral/services/service-approval/approval-confirmation.tpl.html',
-        controller: function ApprovalConfirmationModal($uibModalInstance, newStatus) {
-          var vm = this;
-          vm.newStatus = newStatus;
-          vm.approval = {
-            status: newStatus.id,
-            externalID: null
-          };
+      // only show popup when changing to Approved status
+      if (vm.statuses[vm.service.currentStatus].requiresConfirmation) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          templateUrl: 'referral/services/service-approval/approval-confirmation.tpl.html',
+          controller: function ApprovalConfirmationModal($uibModalInstance, newStatus) {
+            var vm = this;
+            vm.newStatus = newStatus;
+            vm.approval = {
+              status: newStatus.id,
+              externalID: null
+            };
 
-          /**
-           * confirm
-           * @description Returns the approval object upon confirmation
-           */
-          vm.confirm = function() {
-            $uibModalInstance.close(vm.approval);
-          };
+            /**
+             * confirm
+             * @description Returns the approval object upon confirmation
+             */
+            vm.confirm = function () {
+              $uibModalInstance.close(vm.approval);
+            };
 
-          /**
-           * cancel
-           * @description cancels and closes the modal window
-           */
-          vm.cancel = function() {
-            $uibModalInstance.dismiss();
-          };
-        },
-        controllerAs: 'ac',
-        bindToController: true,
-        resolve: {
-          newStatus: function () {
-            return vm.statuses[vm.service.currentStatus];
+            /**
+             * cancel
+             * @description cancels and closes the modal window
+             */
+            vm.cancel = function () {
+              $uibModalInstance.dismiss();
+            };
+          },
+          controllerAs: 'ac',
+          bindToController: true,
+          resolve: {
+            newStatus: function () {
+              return vm.statuses[vm.service.currentStatus];
+            }
           }
-        }
-      });
-
-      modalInstance.result.then(function (result) {
-        var newApproval = new ServiceApproval(result);
-        newApproval.$save(function (approval) {
-          toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
-          vm.onUpdate();
         });
-      }, function () {
-        // if cancelled, revert back to previous selection
-        vm.service.currentStatus = vm.service.previousStatus;
+
+        modalInstance.result.then(saveApprovalStatus, function () {
+          // if cancelled, revert back to previous selection
+          vm.service.currentStatus = vm.service.previousStatus;
+        });
+      } else {
+        // otherwise just save the new status change
+        saveApprovalStatus({status: vm.service.currentStatus});
+      }
+    }
+
+    /**
+     * saveApprovalStatus
+     * @description Private function for making actual save call to service approvals
+     * @param approvalObj
+     */
+    function saveApprovalStatus(approvalObj) {
+      var newApproval = new ServiceApproval(approvalObj);
+      newApproval.$save(function (approval) {
+        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
+        vm.onUpdate();
       });
     }
   }
