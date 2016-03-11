@@ -148,18 +148,11 @@
             </div>
 
             <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.SERVICE_TYPE</label>
+              <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
               <br/>
-              <label ng-repeat="(category, serviceTypes) in rec.availableServiceTypes">
-                <input type="radio" ng-model="rec.serviceTypeCategory" value="{{category}}"/> {{category}}&nbsp;
-              </label>
-              <label>
-                <input type="radio" ng-model="rec.serviceTypeCategory"
-                       ng-click="rec.serviceType = null; rec.setServiceSelections('serviceType')"/> N/A&nbsp;
-              </label>
-              <select ng-model="rec.serviceType" ng-change="rec.setServiceSelections('serviceType')"
-                      ng-if="rec.serviceTypeCategory " class="form-control"
-                      ng-options="serviceType.id as serviceType.name for serviceType in rec.availableServiceTypes[rec.serviceTypeCategory]">
+              <select ng-model="rec.visitService" ng-change="rec.setServiceSelections('visitService')"
+                      class="form-control"
+                      ng-options="service as service.altumServiceName for service in rec.referral.approvedServices">
               </select>
             </div>
 

@@ -87,8 +87,8 @@
         prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       },
       {
-        name: 'serviceType',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_TYPE'
+        name: 'visitServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
       }
     ];
 
@@ -107,6 +107,7 @@
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
           service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
+          service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
           return service;
         });
 
