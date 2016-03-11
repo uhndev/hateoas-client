@@ -91,6 +91,7 @@
           <form layout="column">
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
+              <span class="text-danger pull-right" ng-if="!rec.physician"> * required</span>
               <select-loader
                 url="physician"
                 is-atomic="true"
@@ -116,6 +117,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+              <span class="text-danger pull-right" ng-if="!rec.workStatus"> * required</span>
               <select-loader
                 url="workstatus"
                 is-atomic="true"
@@ -128,6 +130,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+              <span class="text-danger pull-right" ng-if="!rec.prognosis"> * required</span>
               <div flex>
                 <select ng-model="rec.prognosis" ng-change="rec.setServiceSelections('prognosis')"
                         class="form-control"
@@ -149,7 +152,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
-              <br/>
+              <span class="text-danger pull-right" ng-if="!rec.visitService"> * required</span>
               <select ng-model="rec.visitService" ng-change="rec.setServiceSelections('visitService')"
                       class="form-control"
                       ng-options="service as service.altumServiceName for service in rec.referral.approvedServices">
@@ -158,6 +161,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+              <span class="text-danger pull-right" ng-if="!rec.serviceDate"> * required</span>
               <p class="input-group">
                 <input type="text"
                        ng-model="rec.serviceDate"
