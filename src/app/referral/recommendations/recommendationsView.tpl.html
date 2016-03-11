@@ -91,6 +91,7 @@
           <form layout="column">
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
+              <span class="text-danger pull-right" ng-if="!rec.physician"> * required</span>
               <select-loader
                 url="physician"
                 is-atomic="true"
@@ -116,6 +117,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+              <span class="text-danger pull-right" ng-if="!rec.workStatus"> * required</span>
               <select-loader
                 url="workstatus"
                 is-atomic="true"
@@ -128,6 +130,7 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+              <span class="text-danger pull-right" ng-if="!rec.prognosis"> * required</span>
               <div flex>
                 <select ng-model="rec.prognosis" ng-change="rec.setServiceSelections('prognosis')"
                         class="form-control"
@@ -148,23 +151,17 @@
             </div>
 
             <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.SERVICE_TYPE</label>
-              <br/>
-              <label ng-repeat="(category, serviceTypes) in rec.availableServiceTypes">
-                <input type="radio" ng-model="rec.serviceTypeCategory" value="{{category}}"/> {{category}}&nbsp;
-              </label>
-              <label>
-                <input type="radio" ng-model="rec.serviceTypeCategory"
-                       ng-click="rec.serviceType = null; rec.setServiceSelections('serviceType')"/> N/A&nbsp;
-              </label>
-              <select ng-model="rec.serviceType" ng-change="rec.setServiceSelections('serviceType')"
-                      ng-if="rec.serviceTypeCategory " class="form-control"
-                      ng-options="serviceType.id as serviceType.name for serviceType in rec.availableServiceTypes[rec.serviceTypeCategory]">
+              <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
+              <span class="text-danger pull-right" ng-if="!rec.visitService"> * required</span>
+              <select ng-model="rec.visitService" ng-change="rec.setServiceSelections('visitService')"
+                      class="form-control"
+                      ng-options="service as service.altumServiceName for service in rec.referral.approvedServices">
               </select>
             </div>
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+              <span class="text-danger pull-right" ng-if="!rec.serviceDate"> * required</span>
               <p class="input-group">
                 <input type="text"
                        ng-model="rec.serviceDate"

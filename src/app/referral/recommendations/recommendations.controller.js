@@ -26,7 +26,7 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'visitService', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 1,
       serviceDetail: 2
@@ -39,9 +39,6 @@
     vm.availableServices = [];
     vm.availablePrognosis = AltumAPI.Prognosis.query();
     vm.availableTimeframes = AltumAPI.Timeframe.query();
-    AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-      vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-    });
     AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
       vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
         staffType.baseQuery = {staffType: staffType.id};
@@ -85,7 +82,7 @@
         vm.workStatus = null;
         vm.prognosis = null;
         vm.prognosisTimeframe = null;
-        vm.serviceType = null;
+        vm.visitService = null;
         vm.serviceDate = new Date();
 
         // initialize submenu
@@ -109,7 +106,7 @@
         workStatus: vm.workStatus,
         prognosis: vm.prognosis,
         prognosisTimeframe: vm.prognosisTimeframe,
-        serviceType: vm.serviceType,
+        visitService: vm.visitService,
         serviceDate: vm.currentDate
       };
     }
