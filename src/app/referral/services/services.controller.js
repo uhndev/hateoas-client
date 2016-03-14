@@ -87,10 +87,12 @@
         prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       },
       {
-        name: 'serviceType',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_TYPE'
+        name: 'visitServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
       }
     ];
+
+    vm.init = init;
 
     init();
 
@@ -105,6 +107,7 @@
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
           service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
+          service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
           return service;
         });
 
@@ -112,7 +115,7 @@
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claim_claimNum,
+          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
           'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
           'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,

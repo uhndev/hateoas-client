@@ -14,7 +14,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in ht.resource.items track by $index"
-      ng-click="ht.select(item)"
+      ng-click="ht.onSelect(item)"
       class="selectable"
       ng-class="{'active': item === ht.selected}">
     <td ng-repeat="column in ht.template.data track by $index"

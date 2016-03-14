@@ -26,7 +26,7 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'serviceType', 'serviceDate'];
+    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'visitService', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 1,
       serviceDetail: 2
@@ -34,12 +34,21 @@
     vm.accordionStatus = {};
     vm.currentDate = new Date();
 
+    vm.staffCollection = {};
     vm.recommendedServices = [];
     vm.availableServices = [];
+    vm.availablePrognosis = AltumAPI.Prognosis.query();
+    vm.availableTimeframes = AltumAPI.Timeframe.query();
+    AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
+      vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
+        staffType.baseQuery = {staffType: staffType.id};
+        return staffType;
+      });
+    });
 
     // bindable methods
-    vm.fetchLoaderData = fetchLoaderData;
     vm.isServiceRecommended = isServiceRecommended;
+    vm.duplicateService = duplicateService;
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
     vm.setServiceSelections = setServiceSelections;
@@ -61,7 +70,7 @@
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claim_claimNum,
+          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
           'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
           'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
@@ -73,7 +82,7 @@
         vm.workStatus = null;
         vm.prognosis = null;
         vm.prognosisTimeframe = null;
-        vm.serviceType = null;
+        vm.visitService = null;
         vm.serviceDate = new Date();
 
         // initialize submenu
@@ -97,7 +106,7 @@
         workStatus: vm.workStatus,
         prognosis: vm.prognosis,
         prognosisTimeframe: vm.prognosisTimeframe,
-        serviceType: vm.serviceType,
+        visitService: vm.visitService,
         serviceDate: vm.currentDate
       };
     }
@@ -125,32 +134,27 @@
     }
 
     /**
-     * fetchLoaderData
-     * @description Fetches data from dropdowns on visit info panel once some services have been selected
-     */
-    function fetchLoaderData() {
-      if (!vm.availablePrognosis || !vm.availableTimeframes || !vm.availableServiceTypes) {
-        vm.availablePrognosis = AltumAPI.Prognosis.query();
-        vm.availableTimeframes = AltumAPI.Timeframe.query();
-        AltumAPI.ServiceType.query().$promise.then(function (serviceTypes) {
-          vm.availableServiceTypes = _.groupBy(serviceTypes, 'category');
-        });
-        AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
-          vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
-            staffType.baseQuery = {staffType: staffType.id};
-            return staffType;
-          });
-        });
-      }
-    }
-
-    /**
      * isServiceRecommended
      * @description Returns bool reporting if service is recommended
      * @param {String} service
      */
     function isServiceRecommended(service) {
       return _.contains(vm.recommendedServices, service);
+    }
+
+    /**
+     * duplicateService
+     * @description Utility function for duplicating a service to set different variations for the same service.
+     * @param service
+     * @param index
+     * @param event
+     */
+    function duplicateService(service, index, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      vm.recommendedServices.splice(index + 1, 0, angular.copy(service));
+      vm.currIndex = vm.currIndex ? (vm.currIndex + 1) : index + 1;
     }
 
     /**
@@ -263,12 +267,15 @@
      * @description Saves the currently selected services to the current referral
      */
     function saveServices() {
+      vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
           var serviceObj = new ReferralServices(service);
           return serviceObj.$save();
         }))
         .then(function(data) {
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
+          vm.isSaving = false;
+          vm.currIndex = null;
           init();
         });
     }

@@ -15,6 +15,7 @@
       'LocalStorageModule',
         'ngCkeditor',
       'ui.select',
+      'angular.filter',
 
       // html templateCaches
       'templates-app',
@@ -40,7 +41,6 @@
       // Altum/ARM
       'altum.referral',
         'altum.client',
-        'altum.client.register',
       'altum.assessment',
       'altum.triage',
 
