@@ -22,10 +22,12 @@
     vm.referral = {};
     vm.selectedProgram = {};
     vm.selectedPhysician = {};
+    vm.selectedPrimaryProvider = {};
     vm.selectedSite = {};
     vm.mapDisabled = true;
 
     // bindable methods
+    vm.checkPrimaryProviders = checkPrimaryProviders;
     vm.openMap = openMap;
     vm.save = save;
 
@@ -40,13 +42,30 @@
         vm.resource = data;
         vm.referral = data.items;
         vm.selectedPhysician = data.items.physician || {};
+        vm.selectedPrimaryProvider = data.items.staff || {};
         vm.selectedSite = data.items.site || {};
         vm.selectedProgram = data.items.program || {};
         vm.mapDisabled = false;
 
+        checkPrimaryProviders();
+
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
       });
+    }
+
+    /**
+     * checkPrimaryProviders
+     * @description On-change handler for the program selector.  Depending on program changes,
+     *              primaryProvider settings may need to be updated.
+     */
+    function checkPrimaryProviders() {
+      // if primaryProviderType non-null, setup staff as primaryProvider
+      if (vm.selectedProgram && vm.selectedProgram.primaryProviderType) {
+        vm.staffType = AltumAPI.StaffType.get({id: vm.selectedProgram.primaryProviderType});
+        vm.providerBaseQuery = {'staffType': vm.selectedProgram.primaryProviderType};
+        vm.selectedPrimaryProvider = null;
+      }
     }
 
     /**
@@ -86,6 +105,7 @@
       //set values from triage form
       newReferral.site = vm.selectedSite;
       newReferral.physician = vm.selectedPhysician;
+      newReferral.staff = vm.selectedPrimaryProvider;
       newReferral.program = vm.selectedProgram;
       newReferral.id = vm.referralID;
 

@@ -81,7 +81,7 @@
           field_helpertext: 'required',
           field_options: [],
           field_hasOptions: false,
-          field_required: true,
+          field_required: list.required || false,
           field_type: 'singleselect',
           field_name: list.name,
           field_title: _.startCase(list.name),
