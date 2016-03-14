@@ -2,12 +2,14 @@
   <h3 class="modal-title">Translation Editor</h3>
 </div>
 <div class="modal-body">
-  <translate-editor ng-if="context.translationsReady"
-                    base-path="{{context.key}}"
-                    translations="context.translations"
-                    languages="context.languages"
-                    queries="context.queries"
-                    is-valid="context.isValid"></translate-editor>
+  <div class="container-fluid">
+    <translate-editor ng-if="context.translationsReady"
+                      base-path="{{context.key}}"
+                      translations="context.translations"
+                      languages="context.languages"
+                      queries="context.queries"
+                      is-valid="context.isValid"></translate-editor>
+  </div>
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" type="button" ng-disabled="!context.isValid" ng-click="context.saveChanges()">Save Changes</button>

@@ -42,7 +42,8 @@
         selected: '=',
         allow: '=',
         resource: '=',
-        onResourceLoaded: '='
+        onSelect: '=?',
+        onResourceLoaded: '=?'
       },
       templateUrl: 'directives/hateoasTable/hateoas-table.tpl.html',
       controller: 'HateoasTableController',

@@ -13,6 +13,7 @@
           query: '=ngModel',
           headers: '=',
           template: '&',
+          advanced: '=',
           queries: '='
         },
         link: postLink,
@@ -46,15 +47,16 @@
       ]
     };
 
-    if (!!!type) {
-      return [];
-    } else {
-      if (/integer|float|date/i.test(type)) {
+    switch (true) {
+      case !type:
+        return [];
+      case /integer|float|date/i.test(type):
         return operators.number;
-      }
+      case /string|text/i.test(type):
+        return operators.string;
+      default: // catch if type === model
+        return operators.number;
     }
-
-    return operators.string;
   }
 
   /**
@@ -64,18 +66,23 @@
    */
   function postLink(scope, element, attributes, ngModel) {
     if (scope.template()) {
-      scope.advanceSearch = 0;
+      scope.advanceSearch = (scope.advanced ? 1 : 0);
       scope.fields = scope.template().data;
     }
 
-    scope.$watch('advanceSearch', scope.reset);
+    scope.$watch('advanceSearch', function() {
+      if (!scope.advanced) {
+        scope.reset();
+      }
+    });
     scope.$watch('field.type', function (type) {
       scope.operators = getOperatorsByType(type);
     });
 
     scope.$watchCollection('template().data',
       function (newTemplate, oldTemplate) {
-        if (!_.isEqual(angular.toJson(newTemplate), angular.toJson(oldTemplate))) {
+        if ((newTemplate.length !== oldTemplate.length) &&
+            (_.pluck(newTemplate, 'name') !== _.pluck(oldTemplate, 'name')) && !scope.advanced) {
           scope.fields = scope.template().data;
           scope.reset();
         }

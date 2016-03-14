@@ -177,12 +177,12 @@
       'StaffType' : ResourceFactory.create(API.url('staffType')),
       'Note' : ResourceFactory.create(API.url('note')),
       'NoteType' : ResourceFactory.create(API.url('noteType')),
-      'ClientService': ResourceFactory.create(API.url('client')),
-      'PersonService': ResourceFactory.create(API.url('person')),
-      'EmergencyContactService': ResourceFactory.create(API.url('emergencyContact')),
-      'CityService': ResourceFactory.create(API.url('city')),
-      'CompanyService': ResourceFactory.create(API.url('company')),
-      'EmployeeService': ResourceFactory.create(API.url('employee'))
+      'Client': ResourceFactory.create(API.url('client')),
+      'Person': ResourceFactory.create(API.url('person')),
+      'EmergencyContact': ResourceFactory.create(API.url('emergencyContact')),
+      'City': ResourceFactory.create(API.url('city')),
+      'Company': ResourceFactory.create(API.url('company')),
+      'Employee': ResourceFactory.create(API.url('employee'))
     };
   }
 })();

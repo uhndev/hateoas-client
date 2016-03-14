@@ -14,9 +14,20 @@
                     data: {pageTitle: 'Add Client'},
                     resolve: {
                         resolvedClient: function () {
-                            return null;
+                            return {
+                                person: {
+                                    address: {
+                                        city: {}
+                                    },
+                                    familyDoctor: {
+                                        person: {}
+                                    },
+                                    employments: [],
+                                    primaryEmergencyContact: {},
+                                    emergencyContacts: []
+                                }
+                            };
                         }
-
                     },
                     templateUrl: 'clientregister/clientregister.tpl.html',
                     controller: 'ClientRegisterController',

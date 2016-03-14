@@ -39,10 +39,10 @@
     "angular-translate-storage-local": "~2.8.1",
     "angular-google-maps": "~2.2.1",
     "angular-simple-logger": "~0.1.5",
-    "ui-select": "angular-ui-select#^0.14.9",
     "ckeditor": "~4.5.6",
     "ng-ckeditor": "~0.2.1",
     "jScrollPane": "jscrollpane#~2.0.22",
+    "ui-select": "angular-ui-select#^0.14.9",
     "angular-filter": "^0.5.8"
   },
   "resolutions": {
