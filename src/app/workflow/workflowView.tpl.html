@@ -1,5 +1,5 @@
-<div class="container" ng-controller="WorkflowController">
-  <h1>Workflow Editor</h1>
+<div class="container-fluid" ng-controller="WorkflowController">
+  <h2 id="Title">Workflow Editor</h2>
   <div class="form-group">
     <label for="workflowState">
       Select workflow state:
@@ -8,7 +8,7 @@
       class="form-control"
       id="workflowState"
       ng-model="state.source"
-      ng-options="workflow as workflow.path for workflow in workflows.items">
+      ng-options="workflow as workflow.model for workflow in workflows.items">
       <option value="">-- New --</option>
     </select>
   </div>

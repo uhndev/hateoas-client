@@ -6,12 +6,17 @@
   padding-right: 15px;
   margin-bottom: 5px;
 }
-#dados-brand {
+#login-brand {
   height: 52px;
+}
+#uhn-brand {
+  max-height: 25px;
+  position: relative;
+  top: -3px;
 }
 #subBrand {
   float: right;
-  width: 200px;
+  width: 300px;
   position: relative;
   top: 18px;
   padding-left: 15px;
@@ -26,6 +31,7 @@
   margin: 0;
   text-transform: uppercase;
 }
+
 #subBrand_dep {
   font-size: 16px;
   color: #E79851;
@@ -33,10 +39,49 @@
   margin: 0;
   text-transform: uppercase;
 }
+
 #tagline {
   clear: both;
   font-size: 11px;
   color: #ccc;
+}
+
+.navbar-container {
+  background-color: @headerColour;
+}
+
+.headerWrapper {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.menuWrapper {
+  .navbar {
+    margin-bottom: 0px;
+  }
+  .navbar-default {
+    background-color: @menuColour;
+    border-color: @menuColour;
+  }
+}
+.submenuWrapper {
+  margin-bottom: 10px;
+  .navbar {
+    margin-bottom: 0px;
+  }
+  .navbar-inverse {
+    z-index: 10;
+    position: relative;
+  }
+  -moz-box-shadow: 0px 4px 7px -2px #666;
+  -webkit-box-shadow: 0px 4px 7px -2px #666;
+  box-shadow: 0px 4px 7px -2px #666;
+}
+.submenu-link-colour {
+  color: @submenuLinkColour;
+}
+.dropdown-menu > li > a {
+  padding: 7px 20px;
 }
 #profile_panel {
   margin-top: -20px;
@@ -85,62 +130,4 @@
   margin: 3px 2px 3px 0;
   text-align: left;
   padding: 18px 0 0 0;
-}
-@media (max-width: @screen-xs-max) {
-  .navbar-nav > li > a {
-    padding-left: 30px;
-  }
-  #profile_panel {
-    width: 150px;
-  }
-  #logo_dados img {
-    width: 100px;
-    height: auto;
-  }
-}
-.navbar-container {
-  background-color: @headerColour;
-}
-.navbar-collapse {
-  padding-left: 0px;
-}
-.headerWrapper {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  .navbar-default {
-    background-color: @headerColour;
-    border-color: @headerColour;
-    z-index: 20;
-    position: relative;
-  }
-}
-.menuWrapper {
-  .navbar {
-    margin-bottom: 0px;
-  }
-  .navbar-default {
-    background-color: @menuColour;
-    border-color: @menuColour;
-  }
-}
-.submenuWrapper {
-  margin-bottom: 10px;
-  .navbar {
-    margin-bottom: 0px;
-  }
-  .navbar-inverse {
-    background-color: @submenuColour;
-    border-color: @submenuColour;
-    z-index: 10;
-    position: relative;
-  }
-  -moz-box-shadow: 0px 4px 7px -2px #666;
-  -webkit-box-shadow: 0px 4px 7px -2px #666;
-  box-shadow: 0px 4px 7px -2px #666;
-}
-.submenu-link-colour {
-  color: @submenuLinkColour;
-}
-.dropdown-menu > li > a {
-  padding: 7px 20px;
 }

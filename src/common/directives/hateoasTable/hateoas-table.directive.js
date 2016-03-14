@@ -35,24 +35,19 @@
     .module('dados.common.directives.hateoasTable', [
       'dados.common.directives.hateoasTable.controller'
     ])
-    .directive('hateoasTable', hateoasTable);
-
-  function hateoasTable() {
-    return {
-      restrict: 'E',
-      scope: {
+    .component('hateoasTable', {
+      bindings: {
         url: '@',
         query: '=',
         selected: '=',
         allow: '=',
         resource: '=',
-        onResourceLoaded: '='
+        onSelect: '=?',
+        onResourceLoaded: '=?'
       },
       templateUrl: 'directives/hateoasTable/hateoas-table.tpl.html',
       controller: 'HateoasTableController',
-      controllerAs: 'ht',
-      bindToController: true
-    };
-  }
+      controllerAs: 'ht'
+    });
 
 })();

@@ -17,25 +17,16 @@
 
   angular
     .module('dados.common.directives.surveyBuilder.directive', [])
-    .directive('surveyBuilder', surveyBuilder);
-
-  surveyBuilder.$inject = [];
-
-  function surveyBuilder() {
-    return {
-      restrict: 'E',
-      scope: {
+    .component('surveyBuilder', {
+      bindings: {
         study: '=',   // the study object
         forms: '=',   // list of study forms
         survey: '=',  // main survey object we are creating/editing
         isValid: '='  // boolean denoting validity of survey
       },
-      replace: true,
       templateUrl: 'directives/surveyBuilder/survey-builder.tpl.html',
       controller: 'SurveyBuilderController',
-      controllerAs: 'sb',
-      bindToController: true
-    };
-  }
+      controllerAs: 'sb'
+    });
 
 })();

@@ -1,102 +1,216 @@
-(function() {
+(function () {
   'use strict';
   angular.module('dados.common.directives.queryController', [])
-  .controller('QueryController', QueryController);
+    .controller('QueryController', QueryController);
 
-  QueryController.$inject = ['$scope'];
+  QueryController.$inject = ['$scope', '$location'];
 
-  function QueryController($scope) {
-    var TYPE_MAP = {
-      'string'    : 'textfield',
-      'text'      : 'textfield',
-      'integer'   : 'number',
-      'float'     : 'number',
-      'date'      : 'date',
-      'datetime'  : 'date',
-      'boolean'   : 'checkbox',
-      'array'     : 'textfield',
-      'json'      : 'json'
-    };
+  function QueryController($scope, $location) {
 
+    // bindable variables
     $scope.query = $scope.query || {};
+    $scope.baseQuery = {};
+    $scope.hateoasQueries = $scope.queries || [];
     $scope.operators = [];
     $scope.groupOperators = ['and', 'or'];
 
-    $scope.reset = function() {
-      $scope.value = null;
+    // bindable methods
+    $scope.reset = reset;
+    $scope.applyQuery = applyQuery;
+    $scope.applyPopulate = applyPopulate;
+    $scope.search = search;
+    $scope.add = add;
+    $scope.getFieldType = getFieldType;
+    $scope.getFieldTemplate = getFieldTemplate;
+    $scope.removeFromQuery = removeFromQuery;
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * applyBaseQuery
+     * @description Sets whatever baseQuery is currently set to the bound hateoas query
+     */
+    function applyBaseQuery() {
+      _.forIn($scope.baseQuery, function (value, key) {
+        $scope.query[key] = value;
+      });
+    }
+
+    /**
+     * reset
+     * @description Clears all fields and queries in the queryBuilder
+     */
+    function reset() {
       $scope.comparator = null;
       $scope.field = null;
       $scope.query = {};
-    };
+      applyBaseQuery();
+    }
 
-    $scope.search = function(value) {
+    /**
+     * applyQuery
+     * @description Sets the baseQuery from the selected radio list if applicable of hateoas queries
+     * @param query - selected hateoas query object to set
+     */
+    function applyQuery(query) {
+      if (!query) {
+        $scope.baseQuery = {};
+        $scope.headers = {};
+        $scope.reset();
+      } else {
+        $scope.baseQuery = angular.copy(query);
+        applyBaseQuery();
+      }
+    }
+
+    /**
+     * applyPopulate
+     * @description Sets the bound headers variable from the selected radio list if applicable of hateoas queries
+     * @param populate - selected hateoas populate object to set
+     */
+    function applyPopulate(populate) {
+      if (!populate) {
+        $scope.headers = {};
+        $scope.reset();
+      } else {
+        $scope.headers = angular.copy(populate);
+      }
+    }
+
+    /**
+     * search
+     * @description Bound function to ng-change on main fuzzy search input, will build an OR array
+     *              across all valid template fields with appropriate type contexts.
+     * @param value
+     */
+    function search(value) {
       if (_.isEmpty(value)) {
         $scope.reset();
       } else {
         if (_.isArray($scope.fields)) {
           $scope.query = {
-            'or' : _.reduce($scope.fields, function(result, field) {
+            'or': _.reduce($scope.fields, function(result, field) {
               var query = {};
-              if (/date|dateTime|datetime/i.test(field.type)) {
-                try {
-                  var dateObj = new Date(value).toISOString();
-                  query[field.name] = {'>=': date, '<': date};
-                  result.concat(query);
-                } catch (e) {
-                  // if value not date, do not concat
-                } finally {
+              switch (true) {
+                case /date|dateTime|datetime/i.test(field.type):
+                  try {
+                    var dateObj = new Date(value).toISOString();
+                    query[field.name] = {'>=': dateObj};
+                    return result.concat(query);
+                  } catch (e) {
+                    // if value not date, do not concat
+                    return result;
+                  }
+                  break;
+
+                case /integer|number|mrn/i.test(field.type):
+                  query[field.name] = parseInt(value, 10);
+                  return result.concat(query);
+
+                case /json|array/i.test(field.type):
                   return result;
-                }
-              }
-              else if (/integer|mrn/i.test(field.type)) {
-                query[field.name] = parseInt(value, 10);
-                return result.concat(query);
-              }
-              else {
-                switch (field.type) {
-                  case 'json':
-                    return result; // do nothing
-                  case 'array':
-                    return result; // do nothing
-                  case 'string':
-                    query[field.name] = {'contains': value}; break;
-                  case 'float':
-                    query[field.name] = parseFloat(value); break;
-                  default: // otherwise is probably a model id
-                    if (_.isNumber(value)) {
-                      query[field.name] = parseInt(value); break;
-                    } else {
-                      return result;
-                    }
-                }
-                return result.concat(query);
+
+                case /string|text/i.test(field.type):
+                  query[field.name] = {'contains': value};
+                  return result.concat(query);
+
+                case /float/i.test(field.type):
+                  query[field.name] = parseFloat(value);
+                  return result.concat(query);
+
+                default: // otherwise is probably a model id
+                  if (_.isNumber(value)) {
+                    query[field.name] = parseInt(value);
+                    return result.concat(query);
+                  } else {
+                    return result;
+                  }
               }
             }, [])
           };
+          applyBaseQuery();
         }
       }
-    };
+    }
 
-    $scope.add = function (field, comparator, value) {
-      if (/equals|is/i.test(comparator)) {
-        $scope.query[field] = value;
+    /**
+     * add
+     * @description Click handler for adding specific filter in the advanced search
+     * @param field
+     * @param comparator
+     */
+    function add(field, comparator) {
+      switch (true) {
+        case /equals/i.test(comparator) && getFieldType(field.type) === 'date':
+          $scope.query[field.name] = new Date(field.value);
+          break;
+        case /equals/i.test(comparator) && getFieldType(field.type) === 'number':
+          $scope.query[field.name] = parseInt(field.value, 10);
+          break;
+        case /equals/i.test(comparator) || /is/i.test(comparator):
+          $scope.query[field.name] = field.value;
+          break;
+        default:
+          var buffer = $scope.query[field.name];
+
+          if (!angular.isObject(buffer)) {
+            buffer = {};
+          }
+          if (!angular.isArray(buffer[comparator]) && buffer[comparator]) {
+            buffer[comparator] = [buffer[comparator]];
+          }
+
+          if (angular.isArray(buffer[comparator])) {
+            buffer[comparator].push(field.value);
+          } else {
+            buffer[comparator] = field.value;
+          }
+          $scope.query[field.name] = buffer;
+      }
+    }
+
+    /**
+     * getFieldType
+     * @description Helper function for determining what type of field should be rendered
+     * @param type
+     * @returns {String}
+     */
+    function getFieldType(type) {
+      switch (true) {
+        case /date|dateTime|datetime/i.test(type):
+          return 'date';
+        case /integer|number|float|mrn/i.test(type):
+          return 'number';
+        case /string|text|json|array/i.test(type):
+          return 'text';
+        default:
+          return type; // if matches none, must be a model type
+      }
+    }
+
+    /**
+     * getFieldTemplate
+     * @description Returns appropriate template given a property name
+     * @param property
+     * @returns {Object}
+     */
+    function getFieldTemplate(property) {
+      var template = _.find($scope.fields, {name: property});
+      if (template) {
+        template.type = getFieldType(template.type);
+        return template;
       } else {
-        var buffer = $scope.query[field];
-
-        if (!angular.isObject(buffer)) {
-          buffer = {};
-        }
-        if (!angular.isArray(buffer[comparator]) && buffer[comparator]) {
-          buffer[comparator] = [buffer[comparator]];
-        }
-
-        if (angular.isArray(buffer[comparator])) {
-          buffer[comparator].push(value);
-        } else {
-          buffer[comparator] = value;
-        }
-        $scope.query[field] = buffer;
+        return {};
       }
-    };
+    }
+
+    /**
+     * removeFromQuery
+     * @description Removes a property expression from the waterline query
+     * @param property
+     */
+    function removeFromQuery(property) {
+      delete $scope.query[property];
+    }
   }
 })();

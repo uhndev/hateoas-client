@@ -13,6 +13,7 @@
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
+      'angular.filter',
 
       // html templateCaches
       'templates-app',
@@ -63,7 +64,7 @@
 
   function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
-      template: '<div hateoas-client></div>'
+      template: '<hateoas-client></hateoas-client>'
     });
 
     $translateProvider.useLoader('localeLoader');

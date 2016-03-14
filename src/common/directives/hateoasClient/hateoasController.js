@@ -56,6 +56,28 @@
           var api = SailsNgTable.parse(params, vm.query);
           var state = {};
 
+          /**
+           * if header was set from queryBuilder, modify angular resource to include the
+           * X-UHN-Deep-Query header containing a JSON object of the form:
+           * {
+           *    collection: 'users',  // collection attribute on model to populate
+           *    where: {              // where clause to conditionally populate on
+           *      id: 1
+           *    }
+           * }
+           */
+          if (!_.isEmpty(vm.headers)) {
+            Resource = $resource(vm.url, {}, {
+              'get': {
+                method: 'GET',
+                isArray: false,
+                headers: {'X-UHN-Deep-Query': JSON.stringify(vm.headers)}
+              }
+            });
+          } else { // otherwise, use vanilla angular resource to fetch data
+            Resource = $resource(vm.url);
+          }
+
           Resource.get(api, function(data, headers) {
             vm.selected = null;
             vm.allow = headers('allow');
@@ -109,6 +131,12 @@
         } else {
           $scope.tableParams.reload();
         }
+      }
+    });
+
+    $scope.$watch('hateoas.headers', function(newVal, oldVal) {
+      if (newVal && !_.isEqual(newVal, oldVal)) {
+        $scope.tableParams.reload();
       }
     });
 

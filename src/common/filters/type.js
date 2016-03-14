@@ -7,4 +7,7 @@ angular.module('dados.filters.type', [])
   })
   .filter('isString', function () {
     return angular.isString;
+  })
+  .filter('isDate', function () {
+    return angular.isDate;
   });

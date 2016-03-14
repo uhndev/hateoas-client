@@ -24,21 +24,31 @@ module.exports = function ( karma ) {
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-phantomjs-launcher',
-      'karma-junit-reporter'
+      'karma-junit-reporter',
+      'karma-coverage'
     ],
 
     preprocessors: {
+      'src/**/!(*spec).js': ['coverage']
     },
 
     /**
      * How to report, by default.
      */
-    reporters: ['dots', 'junit'],
+    reporters: ['dots', 'junit', 'coverage'],
 
     junitReporter: {
       outputDir: 'karma/results',
       outputFile: 'karma-test-results.xml',
       suite: 'angular-tests'
+    },
+
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        {type: 'text-summary'},
+        {type: 'html'}
+      ]
     },
 
     /**

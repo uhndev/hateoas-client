@@ -1,5 +1,5 @@
-<div class="container" ng-controller="HateoasController as hateoas">
-  <h1 id="Title">
+<div class="container-fluid" ng-controller="HateoasController as hateoas">
+  <h2 id="Title">
     {{ pageTitle }}
     <small translate translate-values="{ total: hateoas.resource.total }">
       COMMON.HATEOAS.TITLE.TOTAL
@@ -8,6 +8,8 @@
   <div id="Query" class="clearfix">
     <query-builder
       template="hateoas.resource.template"
+      queries="hateoas.resource.queries"
+      headers="hateoas.headers"
       ng-model="hateoas.query.where"
       ng-if="hateoas.resource.template">
     </query-builder>
