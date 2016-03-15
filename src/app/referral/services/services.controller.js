@@ -23,6 +23,7 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
+    vm.referralNotes = [];
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
     vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
@@ -103,6 +104,8 @@
 
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
+        vm.referralNotes = AltumAPI.Referral.get({id: vm.resource.items.id, populate: 'notes'});
+
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');

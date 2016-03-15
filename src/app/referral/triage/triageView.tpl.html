@@ -1,7 +1,7 @@
 <div class="container-fluid" ng-controller="TriageController as triage" ng-cloak>
   <h2 id="Title">
     Triage
-  </h1>
+  </h2>
 
   <hr/>
 
@@ -75,4 +75,6 @@
       </div>
     </div>
   </div>
+
+  <altum-notebook ng-if="triage.referral" notes="triage.referral.notes" collection="{'referral': triage.referral.id}"></altum-notebook>
 </div>

@@ -1,0 +1,30 @@
+<div id="notebook-container" ng-class="{'show-notebar': notebook.isCollapsed}">
+  <div id="slideout" ng-class="{'button-out': notebook.isCollapsed}">
+    <a ng-href ng-click="notebook.isCollapsed = !notebook.isCollapsed">Notes</a>
+  </div>
+  <div id="page-notebar">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        NOTES
+        <span class="icons pull-right" uib-dropdown>
+          <a ng-href uib-dropdown-toggle>
+            <span class="fa fa-plus-circle fa-2x"></span>
+          </a>
+          <ul uib-dropdown-menu>
+            <li ng-repeat="type in notebook.noteTypes">
+              <a ng-href ng-click="notebook.addNote(type)">
+                <i class="{{type.iconClass}}"></i> {{type.name}}
+              </a>
+            </li>
+          </ul>
+        </span>
+      </div>
+      <div ng-repeat="note in notebook.notes | orderBy:'createdAt': true">
+        <altum-note note="note"
+                    collection="notebook.collection"
+                    on-remove="notebook.removeElement(notebook.notes, note)">
+        </altum-note>
+      </div>
+    </div>
+  </div>
+</div>

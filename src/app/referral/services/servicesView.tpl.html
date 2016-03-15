@@ -46,6 +46,8 @@
     </div>
   </div>
 
+  <altum-notebook ng-if="svc.referralNotes" notes="svc.referralNotes.notes" collection="{'referral': svc.resource.items.id}"></altum-notebook>
+
   <uib-accordion close-others="false">
     <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy"
                          ng-init="svc.accordionStatus[groupKey].isOpen = false"

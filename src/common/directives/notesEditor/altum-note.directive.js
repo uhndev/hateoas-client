@@ -1,43 +1,24 @@
-/**
- * Created by calvinsu on 2016-01-12.
- */
 (function () {
   'use strict';
 
   angular
-      .module('altum.note', [
-        'altum.note.controller',
-        //'ngCkeditor'
-      ])
-      .directive('altumNote', altumNote);
-
-  altumNote.$inject = [];
-
-  /* @ngInject */
-  function altumNote() {
-    var directive = {
-      bindToController: true,
-      require: '^altumNotebook',
-      templateUrl: 'directives/notesEditor/altum-note.directive.tpl.html',
-      controller: 'NoteController',
-      controllerAs: 'note',
-      link: link,
-      restrict: 'E',
-      scope: {
-        delete: '=',
-        update: '=',
-        updateNote: '&',
+    .module('altum.note', ['altum.note.controller'])
+    .component('altumNote', {
+      transclude: true,
+      require: {
+        'notebook': '^altumNotebook'
+      },
+      bindings: {
         note: '=',
-        url: '=',
-        notes: '='
-      }
-    };
-    return directive;
-
-    function link(scope, element, attrs) {
-
-    }
-  }
+        collection: '=',
+        onUpdate: '&?',
+        onRemove: '&',
+        onSave: '&?'
+      },
+      templateUrl: 'directives/notesEditor/altum-note.tpl.html',
+      controller: 'NoteController',
+      controllerAs: 'at'
+    });
 
 })();
 
