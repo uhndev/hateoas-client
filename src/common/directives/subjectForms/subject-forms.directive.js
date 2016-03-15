@@ -11,18 +11,13 @@
         'dados.common.directives.subjectForms.controller',
         'dados.common.directives.dadosForm'
       ])
-    .directive('subjectForms', function() {
-      return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-          session: '=',
-          schedule: '='
-        },
-        templateUrl: 'directives/subjectForms/subject-forms.tpl.html',
-        controller: 'SubjectFormsController',
-        controllerAs: 'subjectForms',
-        bindToController: true
-      };
+    .component('subjectForms', {
+      templateUrl: 'directives/subjectForms/subject-forms.tpl.html',
+      controller: 'SubjectFormsController',
+      controllerAs: 'subjectForms',
+      bindings: {
+        session: '=',
+        schedule: '='
+      }
     });
 })();
