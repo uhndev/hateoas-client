@@ -12,15 +12,21 @@
   function SubjectFormsController($scope, $resource, $location, API) {
     var vm = this;
 
-    vm.url = API.url() + '/subjectschedule/' + vm.schedule + '/form/';
+    vm.formVersions = [];
 
     init();
 
     function init() {
+      vm.url = API.url() + '/subjectschedule/' + vm.schedule + '/form/';
       var Session = $resource(API.url() + '/session/' + vm.session);
+
       Session.get(function(data) {
         if (_.has(data, 'items')) {
-          vm.formOrder = data.items.formOrder;
+          _.each(data.items.formVersions, function(version) {
+            vm.formVersions.push(version.id);
+          });
+          vm.formOrder = _.intersection(data.items.formOrder, vm.formVersions);
+
           if (_.isArray(vm.formOrder) && vm.formOrder.length) {
             vm.current = 0;
             loadForm();
@@ -68,5 +74,12 @@
         loadForm();
       }
     });
+
+    $scope.$watchGroup(['subjectForms.schedule', 'subjectForms.session'],
+      function(newValues, oldValues, scope) {
+        if (newValues[0] !== oldValues[0] || newValues[1] !== oldValues[1]) {
+          init();
+        }
+      });
   }
 })();
