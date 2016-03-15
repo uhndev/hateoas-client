@@ -1,6 +1,5 @@
 (function () {
   angular.module('dados.common.directives', [
-
     'dados.common.directives.contextTranslator',
     'dados.common.directives.dadosError',
     'dados.common.directives.siteMap',

@@ -13,7 +13,6 @@
       'angular.filter',
       'tmh.dynamicLocale',
       'LocalStorageModule',
-        'ngCkeditor',
       'ui.select',
       'angular.filter',
 
@@ -40,8 +39,6 @@
 
       // Altum/ARM
       'altum.referral',
-        'altum.client',
-      'altum.assessment',
       'altum.triage',
 
       // dados subject portal

@@ -35,6 +35,7 @@
     vm.currentDate = new Date();
 
     vm.staffCollection = {};
+    vm.referralNotes = [];
     vm.recommendedServices = [];
     vm.availableServices = [];
     vm.availablePrognosis = AltumAPI.Prognosis.query();
@@ -67,6 +68,7 @@
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
+        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,

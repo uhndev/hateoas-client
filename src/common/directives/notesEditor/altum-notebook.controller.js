@@ -5,65 +5,52 @@
   'use strict';
 
   angular
-      .module('altum.notebook.controller', [])
-      .controller('AltumNotebookController', AltumNotebookController);
+    .module('altum.notebook.controller', [])
+    .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['ResourceFactory', 'API'];
+  AltumNotebookController.$inject = ['NoteService', 'NoteTypeService'];
 
-  /* @ngInject */
-  function AltumNotebookController(ResourceFactory, API) {
+  function AltumNotebookController(Note, NoteType) {
     var vm = this;
-    var NoteResource = ResourceFactory.create(vm.url);
-    var Resource = ResourceFactory.create(API.url('note'));
 
-    init();
+    // bindable variables
+    vm.notes = vm.notes || [];
+    vm.collection = vm.collection || {};
+    vm.noteTypes = NoteType.query();
 
-    ////////////////
+    // bindable methods
+    vm.addNote = addNote;
+    vm.removeElement = removeElement;
 
-    function init() {
-      /*  if (!_.isUndefined(vm.add) && _.isFunction(vm.add)) {
-       vm.addNote = vm.add;
-       } else {
-       vm.addNote = addNote;
-       }
-       */
-    }
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * onAddNote
-     * @description function to add note to the notes array only
+     * addNote
+     * @description Function to add note to the notes array only
      * @param type is the note type
      * @returns {*}
      */
-    vm.addNote = function (type) {
-      vm.newNote = {};
-      vm.newNote.text = null;
-      vm.newNote.noteType = type.id;
-      if (vm.notes) {
-        vm.notes.push(vm.newNote);
-      } else {
-        vm.notes = [];
-        vm.notes.push(vm.newNote);
+    function addNote(type) {
+      if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
+        vm.notes.push({
+          text: null,
+          noteType: type.id
+        });
       }
-    };
+    }
 
     /**
-     * onDelete
-     * @description function to delete the note
-     * @param note is the note need to be deleted
-     * @returns {*}
+     * removeElement
+     * @description Convenience function for removing an element from an array after deletion
+     * @param array
+     * @param item
      */
-
-    vm.delete = function (note) {
-      var r = confirm('Are you sure you want to delete this note?');
-      if (r === true) {
-        Resource.delete(note).$promise.then(function () {
-          vm.notes = NoteResource.query({});
-        });
-        alert('note deleted');
+    function removeElement(array, item) {
+      var index = array.indexOf(item);
+      if (index > -1) {
+        array.splice(index, 1);
       }
-    };
-
+    }
   }
 
 })();
