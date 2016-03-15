@@ -30,10 +30,15 @@
     .service('StaffService', StaffService)
     .service('StaffTypeService', StaffTypeService)
     .service('NoteService', NoteService)
-    .service('NoteTypeService', NoteTypeService);
+    .service('NoteTypeService', NoteTypeService)
+    .service('ClientService', ClientService)
+    .service('PersonService', PersonService);
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
+    PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
+    AltumServiceService, AltumProgramServices, ServiceCategoryService, AltumAPIService, ServiceService,
+    NoteService, NoteTypeService, ClientService, PersonService,
     PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService,
     ServiceTypeService, AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
@@ -125,6 +130,14 @@
     return ResourceFactory.create(API.url('notetype'));
   }
 
+  function ClientService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('client'));
+  }
+
+  function PersonService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('person'));
+  }
+
   function AltumAPIService(ResourceFactory, API) {
     return {
       'Program': ResourceFactory.create(API.url('program')),
@@ -147,7 +160,9 @@
       'Staff' : ResourceFactory.create(API.url('staff')),
       'StaffType' : ResourceFactory.create(API.url('staffType')),
       'Note' : ResourceFactory.create(API.url('note')),
-      'NoteType' : ResourceFactory.create(API.url('noteType'))
+      'NoteType' : ResourceFactory.create(API.url('noteType')),
+      'Client': ResourceFactory.create(API.url('client')),
+      'Person': ResourceFactory.create(API.url('person'))
     };
   }
 })();

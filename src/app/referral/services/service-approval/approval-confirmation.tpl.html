@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <h3 class="modal-title" translate
+      context-translator="APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.APPROVAL_CONFIRMATION">
+    APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.APPROVAL_CONFIRMATION
+  </h3>
+</div>
+<div class="modal-body">
+  <ng-form name="approvalConfirmationForm">
+    <div class="form-group">
+      <label translate context-translator="APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.EXTERNAL_APPROVAL_ID">
+        APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.EXTERNAL_APPROVAL_ID
+      </label>
+      <input type="text" class="form-control" ng-model="ac.approval.externalID"
+             context-translator="APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.EXTERNAL_ID_PLACEHOLDER"
+             placeholder="{{'APP.REFERRAL.SERVICES.SERVICE_APPROVAL.LABELS.EXTERNAL_ID_PLACEHOLDER' | translate}}"/>
+    </div>
+  </ng-form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" ng-click="ac.confirm()" translate>
+    APP.REFERRAL.SERVICES.SERVICE_APPROVAL.BUTTONS.CHANGE_STATUS
+  </button>
+  <button type="button" class="btn btn-warning" ng-click="ac.cancel()" translate>
+    APP.REFERRAL.SERVICES.SERVICE_APPROVAL.BUTTONS.CANCEL
+  </button>
+</div>

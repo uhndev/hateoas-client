@@ -10,24 +10,83 @@
              context-translator="COMMON.HATEOAS.QUERY.PLACEHOLDER"
              placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
              ng-model-options="{ debounce: 700 }"
-             ng-model="value"
-             ng-change="search(value)"/>
+             ng-model="field.value"
+             ng-change="search(field.value)"/>
     </div>
   </form>
   <div uib-collapse="!advanceSearch">
-    <ul ng-repeat="(property, expression) in query track by $index">
-      <li ng-if="expression|isString">
-        {{ property }}
-        <i class="condition"> is </i>
-        <b> {{ expression | json }} </b>
-      </li>
-      <li ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index">
-        {{ property }}
-        <i> {{ cond }} </i>
-        <b ng-if="val|isArray"> {{ val.join(' or ') }} </b>
-        <b ng-if="!(val|isArray)"> {{ val }} </b>
+    <ul class="list-unstyled">
+      <li ng-repeat="(property, expression) in query track by $index">
+        <div ng-if="expression|isDate" layout="row" layout-sm="column" layout-padding>
+          <div flex>
+            <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
+            {{ property }}
+            <i class="condition"> equals </i>
+          </div>
+          <div flex="70" flex-sm="100">
+            <input disabled class="form-control" type="date" ng-model="expression" format-date/>
+          </div>
+        </div>
+        <div ng-if="expression|isString" layout="row" layout-sm="column" layout-padding>
+          <div flex>
+            <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
+            {{ property }}
+            <i class="condition"> is </i>
+          </div>
+          <div flex="70" flex-sm="100">
+            <input disabled class="form-control" type="text" ng-model="expression"/>
+          </div>
+        </div>
+        <div ng-if="expression|isNumber" layout="row" layout-sm="column" layout-padding>
+          <div flex>
+            <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
+            <span translate>{{getFieldTemplate(property).prompt}}</span>
+            <i class="condition"> equals </i>
+          </div>
+          <div ng-switch="getFieldTemplate(property).type" flex="70" flex-sm="100">
+            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="expression" format-date/>
+            <input disabled class="form-control" type="number" ng-switch-when="number" ng-model="expression"/>
+            <input disabled class="form-control" type="text" ng-switch-when="text" ng-model="expression"/>
+            <div ng-switch-default>
+              <input disabled class="form-control" type="text" ng-if="expression|isString" ng-model="expression"/>
+              <select-loader
+                ng-if="!(expression|isString)"
+                url="{{getFieldTemplate(property).type}}"
+                is-atomic="true"
+                is-disabled="true"
+                ng-model="expression"
+                labels="displayName">
+              </select-loader>
+            </div>
+          </div>
+        </div>
+        <div ng-if="expression|isObject" ng-repeat="(cond, val) in expression track by $index" layout="row" layout-sm="column" layout-padding>
+          <div flex>
+            <i class="fa fa-times selectable" ng-click="removeFromQuery(property)"></i>
+            <span translate>{{getFieldTemplate(property).prompt}}</span>
+            <i class="condition"> {{cond}} </i>
+          </div>
+          <div ng-switch="getFieldTemplate(property).type" flex="70" flex-sm="100">
+            <input disabled class="form-control" type="date" ng-switch-when="date" ng-model="val" format-date/>
+            <input disabled class="form-control" type="number" ng-switch-when="number" ng-model="val"/>
+            <input disabled class="form-control" type="text" ng-switch-when="text" ng-model="val"/>
+            <div ng-switch-default>
+              <input disabled type="text" class="form-control" ng-if="val|isString" ng-model="val"/>
+              <input disabled type="text" class="form-control" ng-if="val|isArray" value="{{ val.join(' or ') }}"/>
+              <select-loader
+                ng-if="!(val|isArray) && !(val|isString)"
+                url="{{getFieldTemplate(property).type}}"
+                is-atomic="true"
+                is-disabled="true"
+                ng-model="val"
+                labels="displayName">
+              </select-loader>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
+    <hr/>
     <form class="form-inline" role="form">
       <div class="form-group">
         <select ng-model="field" class="form-control"
@@ -41,15 +100,35 @@
           </option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-switch="getFieldType(field.type)">
         <input ng-disabled="!!!field || !!!comparator"
+               ng-switch-when="date"
+               class="form-control"
+               type="date"
+               ng-model="field.value"/>
+        <input ng-disabled="!!!field || !!!comparator"
+               ng-switch-when="number"
+               class="form-control"
+               type="number"
+               ng-model="field.value"/>
+        <input ng-disabled="!!!field || !!!comparator"
+               ng-switch-when="text"
                class="form-control"
                type="text"
-               ng-model="value"/>
+               ng-model="field.value"/>
+        <select-loader
+          ng-switch-default
+          ng-if="field && comparator"
+          url="{{field.type}}"
+          is-atomic="true"
+          is-disabled="false"
+          ng-model="field.value"
+          labels="displayName">
+        </select-loader>
       </div>
-      <button ng-disabled="!!!field || !!!comparator || !!!value"
+      <button ng-disabled="!!!field || !!!comparator || !!!field.value"
               class="btn btn-default"
-              ng-click="add(field.name, comparator, value)" translate
+              ng-click="add(field, comparator)" translate
               context-translator="{{COMMON.HATEOAS.QUERY.ADD_BTN}}">
         COMMON.HATEOAS.QUERY.ADD_BTN
       </button>
@@ -74,6 +153,7 @@
     </label>
   </div>
   <button type="button"
+          ng-hide="advanced"
           class="btn btn-link btn-sm pull-right no-margin no-padding"
           ng-model="advanceSearch"
           uib-btn-checkbox

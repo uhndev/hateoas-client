@@ -14,6 +14,7 @@
       'tmh.dynamicLocale',
       'LocalStorageModule',
       'ui.select',
+      'angular.filter',
 
       // html templateCaches
       'templates-app',
@@ -38,7 +39,6 @@
 
       // Altum/ARM
       'altum.referral',
-      'altum.assessment',
       'altum.triage',
 
       // dados subject portal
