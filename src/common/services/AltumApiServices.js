@@ -161,8 +161,8 @@
       'StaffType' : ResourceFactory.create(API.url('staffType')),
       'Note' : ResourceFactory.create(API.url('note')),
       'NoteType' : ResourceFactory.create(API.url('noteType')),
-      'ClientService': ResourceFactory.create(API.url('client')),
-      'PersonService': ResourceFactory.create(API.url('person'))
+      'Client': ResourceFactory.create(API.url('client')),
+      'Person': ResourceFactory.create(API.url('person'))
     };
   }
 })();

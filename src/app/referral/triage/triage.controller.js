@@ -11,9 +11,9 @@
     ])
     .controller('TriageController', TriageController);
 
-  TriageController.$inject = ['$resource', 'API', 'HeaderService', 'AltumAPIService', '$location', '$uibModal', 'toastr'];
+  TriageController.$inject = ['$resource', 'API', 'HeaderService', 'AltumAPIService', '$location', '$uibModal', 'toastr', 'NoteTypeService'];
 
-  function TriageController($resource,  API, HeaderService, AltumAPI, $location, $uibModal, toastr) {
+  function TriageController($resource,  API, HeaderService, AltumAPI, $location, $uibModal, toastr, NoteType) {
     var vm = this;
 
     // bindable variables
@@ -24,10 +24,12 @@
     vm.selectedPhysician = {};
     vm.selectedSite = {};
     vm.mapDisabled = true;
+    vm.noteTypes = NoteType.query();
 
     // bindable methods
     vm.openMap = openMap;
     vm.save = save;
+    vm.toggleNotebar = toggleNotebar;
 
     init();
 
@@ -97,5 +99,13 @@
         toastr.error('Updating referral ' + vm.referralID + 'failed. ' + err);
       });
     }
+    /**
+     * toggleNotebar
+     * @description show or hide the notes panel
+     */
+    function toggleNotebar () {
+      vm.style_notebarCollapsed = !vm.style_notebarCollapsed;
+    }
+
   }
 })();

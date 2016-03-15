@@ -55,4 +55,17 @@
       </div>
     </div>
   </div>
+    <div id="referraldetail" ng-class="{'show-notebar': triage.style_notebarCollapsed}">
+      <div id="slideout" ng-class="{'button-out': triage.style_notebarCollapsed}">
+        <a href="" ng-click="triage.toggleNotebar()">Notes</a>
+      </div>
+
+      <div id="page-notebar" sticky-scroll="45" rightbar-right-position="style_layoutBoxed" style="">
+        <div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}"
+             style="height: 100%;padding-bottom:40px">
+
+          <altum-notebook notes="triage.referral.notes" note-types="triage.noteTypes" url="triage.noteUrl"></altum-notebook>
+        </div>
+      </div>
+    </div>
 </div>

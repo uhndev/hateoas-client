@@ -41,7 +41,6 @@
       // Altum/ARM
       'altum.referral',
         'altum.client',
-      'altum.assessment',
       'altum.triage',
 
       // dados subject portal

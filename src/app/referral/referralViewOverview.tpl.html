@@ -10,7 +10,19 @@
     </simple-table>
 
 
+    <div id="referraldetail" ng-class="{'show-notebar': ref.style_notebarCollapsed}">
+        <div id="slideout" ng-class="{'button-out': ref.style_notebarCollapsed}">
+            <a href="" ng-click="ref.toggleNotebar()">Notes</a>
+        </div>
 
+        <div id="page-notebar" sticky-scroll="45" rightbar-right-position="style_layoutBoxed" style="">
+            <div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}"
+                 style="height: 100%;padding-bottom:40px">
+
+                <altum-notebook notes="ref.referral.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>
+            </div>
+        </div>
+    </div>
 </div>
 
 
