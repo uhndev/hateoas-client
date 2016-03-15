@@ -1,7 +1,7 @@
 <div ng-controller="ReferralController as ref" ng-cloak>
   <h2 id="Title">
     Referral Overview
-  </h1>
+  </h2>
 
   <br/>
 
@@ -10,16 +10,7 @@
     table-data="ref.referralInfo.tableData">
   </simple-table>
 
-  <!--<div id="slideout" ng-class="{'button-out': style_notebarCollapsed}">-->
-  <!--<a href="" ng-click="toggleNotebar()">Notes</a>-->
-  <!--</div>-->
-
-  <!--<div id="page-notebar" sticky-scroll="40" rightbar-right-position="style_layoutBoxed" style="">-->
-  <!--<div jscrollpane="{autoReinitialise:true, autoReinitialiseDelay: 100}" style="height: 100%;padding-bottom:40px">-->
-
-  <!--<altum-notebook notes="ref.notes" note-types="ref.noteTypes" url="ref.noteUrl"></altum-notebook>-->
-  <!--</div>-->
-  <!--</div>-->
-
+  <altum-notebook ng-if="ref.referral" notes="ref.referral.notes" collection="{'referral': ref.referral.id}"></altum-notebook>
 </div>
+
 
