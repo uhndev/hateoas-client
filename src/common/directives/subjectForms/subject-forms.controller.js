@@ -16,18 +16,25 @@
 
     init();
 
+    /**
+     * init
+     * @description Function that gets Session data, parses it and loads first avaiable form
+     */
     function init() {
       vm.url = API.url() + '/subjectschedule/' + vm.schedule + '/form/';
       var Session = $resource(API.url() + '/session/' + vm.session);
 
       Session.get(function(data) {
         if (_.has(data, 'items')) {
+          // FormOrder array will contain disabled for the current session forms.
+          // We will parse actual formVersions array and skip extra records, maintaining order.
           _.each(data.items.formVersions, function(version) {
             vm.formVersions.push(version.id);
           });
           vm.formOrder = _.intersection(data.items.formOrder, vm.formVersions);
 
           if (_.isArray(vm.formOrder) && vm.formOrder.length) {
+            // reset formOrder index (open form in the session)
             vm.current = 0;
             loadForm();
           }
@@ -75,6 +82,11 @@
       }
     });
 
+    /**
+     * $scope.$watchGroup on subjectForms.schedule and subjectForms.session
+     * @description Function that watches passed schedule/session ids and
+     *              re-initializes the directive.
+     */
     $scope.$watchGroup(['subjectForms.schedule', 'subjectForms.session'],
       function(newValues, oldValues, scope) {
         if (newValues[0] !== oldValues[0] || newValues[1] !== oldValues[1]) {

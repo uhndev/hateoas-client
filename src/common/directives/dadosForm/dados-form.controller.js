@@ -29,9 +29,9 @@
 
     /**
      * nextQuestion
-     * @description Function for single question mode.
-     *              Saves the answerSet if value was changed and triggers NextFormRequest
-     *              event to parent directive.
+     * @description Function for single question mode. Increments the questions array index.
+     *              Saves the answerSet if value was changed and sends NextFormRequest
+     *              to parent directive.
      */
     function nextQuestion() {
       if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
@@ -49,9 +49,9 @@
 
     /**
      * prevQuestion
-     * @description Function for single question mode.
-     *              Saves the answerSet if value was changed and triggers PrevFormRequest
-     *              event to parent directive.
+     * @description Function for single question mode. Decrements the questions array index.
+     *              Saves the answerSet if value was changed and sends PrevFormRequest
+     *              to parent directive.
      */
     function prevQuestion() {
       if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
@@ -128,6 +128,7 @@
           AnswerSetService.get({id: vm.form.answerSetID}, function (data) {
             vm.answerSet = data.items;
             vm.answers = vm.answerSet.answers;
+            // notify that answers array was updated
             $scope.$broadcast('AnswerSetLoaded');
           });
         }
