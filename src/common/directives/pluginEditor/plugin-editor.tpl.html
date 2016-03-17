@@ -7,32 +7,32 @@
         </span>
         Configuration
       </uib-accordion-heading>
+      <div class="form-group">
+        <label for="form-loader">Load Form:</label>
+        <select id="form-loader" ng-model="formID" class="form-control"
+                ng-change="loadForm(formID)">
+          <option value="" disabled>Select a form</option>
+          <option value="new">-- New --</option>
+          <option ng-repeat="selected in forms | orderBy: 'name'" value="{{selected.id}}">
+            {{selected.name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="form-name">Form Name:</label>
+        <ui-help uib-popover="Provide a name for your form. Names must
+                      be in upper case and cannot contain any spaces."
+                 popover-placement="right"></ui-help>
+        <input id="form-name" type="text" class="form-control"
+               ng-model="form.name"
+               ng-trim="true" title="Provide a name for your form"
+               placeholder="Provide a name for your form"/>
+      </div>
 
       <!-- FormLayout -->
       <div ng-controller="LayoutController" class="row">
         <div scroll-past ng-controller="WidgetController" class="content_left col-md-4">
-          <div class="form-group">
-            <label for="form-loader">Load Form:</label>
-            <select id="form-loader" ng-model="formID" class="form-control"
-                    ng-change="loadForm(formID)">
-              <option value="" disabled>Select a form</option>
-              <option value="new">-- New --</option>
-              <option ng-repeat="selected in forms | orderBy: 'name'" value="{{selected.id}}">
-                {{selected.name}}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="form-name">Form Name:</label>
-            <ui-help uib-popover="Provide a name for your form. Names must
-                      be in upper case and cannot contain any spaces."
-                     popover-placement="right"></ui-help>
-            <input id="form-name" type="text" class="form-control"
-                   ng-model="form.name"
-                   ng-trim="true" title="Provide a name for your form"
-                   placeholder="Provide a name for your form"/>
-          </div>
           <uib-tabset class="clearfix">
             <uib-tab uib-tooltip="Add new question" active="editTabActive['add']">
               <tab-heading>
@@ -104,7 +104,7 @@
           <p class="text-muted" ng-if="!questions.length">
             Use the panel on the left to add questions to the workspace.
           </p>
-          <ng-form name="panel-form">
+          <ng-form name="form">
             <ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
                 ng-class="{'ui-grid' : !showList, 'ui-list' : showList}">
               <ui-grid ng-repeat="cell in questions track by $index" cell="cell"
