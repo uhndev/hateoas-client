@@ -1,23 +1,30 @@
 <div style="padding: 0 10px 0px 5px">
   <div>
     <div class="note">
-      <div>
-        <div class="date">
-          {{at.note.createdAt | date: 'medium'}}
-        </div>
-        <div class="icons">
-          <i tabindex="-1" class="fa fa-lg" ng-class="{
-            'fa-check': !at.note.$edit,
-            'fa-pencil': at.note.$edit
-          }"></i>
-          <i tabindex="-1" class="fa fa-envelope-o fa-lg" ng-click="at.emailNote()"></i>
-          <i tabindex="-1" class="fa fa-trash-o fa-lg" ng-click="at.removeNote()"></i>
-        </div>
-      </div>
+      <span class="date">
+        {{at.note.createdAt | date: 'medium'}}
+      </span>
+      <span class="icons">
+        <i ng-if="!at.note.$edit" tabindex="-1" class="fa fa-pencil fa-lg selectable" ng-click="at.selectEdit()"></i>
+        <i ng-if="at.note.$edit" tabindex="-1" class="fa fa-check fa-lg selectable""></i>
+        <i tabindex="-1" class="fa fa-envelope-o fa-lg selectable" ng-click="at.emailNote()"></i>
+        <i tabindex="-1" class="fa fa-trash-o fa-lg selectable" ng-click="at.removeNote()"></i>
+      </span>
 
-      <div ng-model="at.note.text" ng-focus="at.selectEdit()" ng-blur="at.updateNote()" contenteditable="true">
-        {{at.note.text}}
-      </div>
+      <div ng-show="!at.note.$edit" ng-click="at.lineHeight()" ng-focus="at.selectEdit()"
+           class="markdown-body" btf-markdown="at.note.text"></div>
+
+      <div ng-show="at.note.$edit" ng-model="at.note.text"
+           ng-style="{ 'height': at.getLineHeight() + 'px' }"
+           ui-ace="{
+             useWrapMode: true,
+             showGutter: false,
+             theme: 'crimson_editor',
+             mode: 'markdown',
+             onLoad: at.aceLoaded,
+             onBlur: at.updateNote
+           }"></div>
+
       <div>
         CreatedBy: {{ at.note.displayName}}
       </div>
