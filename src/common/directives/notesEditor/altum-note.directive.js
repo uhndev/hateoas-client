@@ -4,7 +4,6 @@
   angular
     .module('altum.note', ['altum.note.controller'])
     .component('altumNote', {
-      transclude: true,
       require: {
         'notebook': '^altumNotebook'
       },

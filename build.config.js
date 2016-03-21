@@ -103,6 +103,7 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/jquery-ui/ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
+      'vendor/showdown/src/showdown.js',
       'vendor/sails.io.js/dist/sails.io.js',
       'sails-io-settings.js',
 
@@ -127,10 +128,12 @@ module.exports = {
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/angular-filter/dist/angular-filter.js',
+      'vendor/angular-markdown-directive/markdown.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
       'vendor/ace-builds/src/ace.js',
+      'vendor/ace-builds/src/theme-crimson_editor.js',
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/mode-markdown.js',
       'vendor/ace-builds/src/worker-javascript.js',
@@ -153,7 +156,6 @@ module.exports = {
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js',
-      'vendor/angular-contenteditable/angular-contenteditable.js',
       'vendor/ui-select/dist/select.min.js'
     ],
     css: [
