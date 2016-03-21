@@ -1,3 +1,6 @@
+/**
+ * Created by calvinsu on 2016-03-15.
+ */
 (function () {
   'use strict';
 
@@ -21,4 +24,3 @@
   }
 
 })();
-

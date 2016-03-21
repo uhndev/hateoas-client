@@ -32,7 +32,7 @@
     .service('NoteService', NoteService)
     .service('NoteTypeService', NoteTypeService)
     .service('ClientService', ClientService)
-      .service('PersonService', PersonService);
+    .service('PersonService', PersonService);
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
@@ -183,6 +183,7 @@
       'City': ResourceFactory.create(API.url('city')),
       'Company': ResourceFactory.create(API.url('company')),
       'Employee': ResourceFactory.create(API.url('employee'))
+
     };
   }
 })();

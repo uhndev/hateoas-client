@@ -65,18 +65,23 @@
       vm.client.$update()
                 .then(function (resp) {
                   toastr.success('Updated client ' + resp.id + '!');
+                  $location.path('/client');
+                  $state.go('hateoas');
                 },
                     function (err) {
                       toastr.error('Updating client ' + 'failed. ' + err);
                     });
     }
 
-    function clientAdd() {
+    function clientAdd(isValid) {
       var newClient = new AltumAPIService.Client();
-
+      newClient.MRN = vm.client.MRN;
+      newClient.person = vm.client.person;
       newClient.$save()
-                .then(function (resap) {
+                .then(function (resp) {
                   toastr.success('New client created');
+                  $location.path('/client');
+                  $state.go('hateoas');
                 },
                     function (err) {
                       toastr.error('failed to created the client');
