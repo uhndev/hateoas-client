@@ -62,9 +62,14 @@
     function checkPrimaryProviders() {
       // if primaryProviderType non-null, setup staff as primaryProvider
       if (vm.selectedProgram && vm.selectedProgram.primaryProviderType) {
-        vm.staffType = AltumAPI.StaffType.get({id: vm.selectedProgram.primaryProviderType});
-        vm.providerBaseQuery = {'staffType': vm.selectedProgram.primaryProviderType};
-        vm.selectedPrimaryProvider = null;
+        vm.hideLoader = true;
+        AltumAPI.StaffType.get({id: vm.selectedProgram.primaryProviderType}, function (staffType) {
+          vm.staffType = staffType;
+          vm.providerBaseQuery = {'staffType': staffType.id};
+          vm.selectedPrimaryProvider = null;
+          vm.selectedPhysician = null;
+          vm.hideLoader = false;
+        });
       }
     }
 
