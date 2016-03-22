@@ -1,6 +1,6 @@
-<div class="container-fluid" ng-controller="TriageController as triage">
-  <h2 id="Title">
-    Triage
+<div class="container-fluid" ng-controller="TriageController as triage" ng-cloak>
+  <h2 id="Title" translate>
+    APP.REFERRAL.TRIAGE.LABELS.TRIAGE
   </h2>
 
   <hr/>
@@ -9,22 +9,51 @@
     <div class="col-md-5">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <h3 class="panel-title">Triage Details</h3>
+          <h3 class="panel-title" translate>APP.REFERRAL.TRIAGE.LABELS.TRIAGE_DETAILS</h3>
         </div>
         <div class="panel-body">
           <form name="triageForm" id="triageForm" data-ng-submit="triage.saveTriage()" autocomplete="off">
+
             <div class="form-group">
-              <label>Program</label>
+              <label translate>COMMON.MODELS.REFERRAL.PROGRAM</label>
               <select-loader
                 url="program"
                 is-atomic="true"
+                bind-object="true"
                 is-disabled="false"
                 ng-model="triage.selectedProgram"
+                ng-change="triage.checkPrimaryProviders()"
                 labels="displayName">
               </select-loader>
             </div>
-            <div class="form-group">
-              <label>Physician</label>
+
+            <div class="form-group" ng-if="triage.selectedProgram.primaryProviderType">
+              <label>
+                <span translate>APP.REFERRAL.TRIAGE.LABELS.PRIMARY_PROVIDER</span>
+                <span>
+                  ({{triage.staffType.displayName}})
+                </span>
+              </label>
+
+              <select-loader
+                ng-if="!triage.hideLoader"
+                url="staff"
+                query="triage.providerBaseQuery"
+                is-atomic="true"
+                is-disabled="false"
+                ng-model="triage.selectedPrimaryProvider"
+                labels="displayName">
+              </select-loader>
+            </div>
+
+            <div class="form-group" ng-if="!triage.selectedProgram.primaryProviderType">
+              <label>
+                <span translate>APP.REFERRAL.TRIAGE.LABELS.PRIMARY_PROVIDER</span>
+                <span>
+                  ({{'COMMON.MODELS.REFERRAL.PHYSICIAN' | translate}})
+                </span>
+              </label>
+
               <select-loader
                 url="physician"
                 is-atomic="true"
@@ -33,9 +62,10 @@
                 labels="displayName">
               </select-loader>
             </div>
+
             <div class="form-group">
               <label>
-                Site&nbsp;
+                <span translate>COMMON.MODELS.REFERRAL.SITE</span>&nbsp;
                 <span class="fa fa-map-marker fa-lg selectable" ng-disabled="triage.mapDisabled" ng-click="triage.openMap()"></span>
               </label>
               <select-loader
@@ -46,9 +76,9 @@
                 labels="displayName">
               </select-loader>
             </div>
-            <button type="submit" id="saveTriage" class="btn btn-primary"
+            <button type="submit" id="saveTriage" class="btn btn-primary" translate
                     ng-disabled="triageForm.$invalid" ng-click="triage.save()">
-              Save
+              APP.REFERRAL.TRIAGE.LABELS.SAVE
             </button>
           </form>
         </div>
