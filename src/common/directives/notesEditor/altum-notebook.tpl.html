@@ -19,7 +19,7 @@
           </ul>
         </span>
       </div>
-      <div ng-repeat="note in notebook.notes | orderBy:'createdAt': true">
+      <div ng-repeat="note in notebook.notes | orderBy:'createdAt': true track by $index">
         <altum-note note="note"
                     collection="notebook.collection"
                     on-remove="notebook.removeElement(notebook.notes, note)">

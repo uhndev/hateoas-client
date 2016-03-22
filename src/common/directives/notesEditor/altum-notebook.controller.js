@@ -33,6 +33,7 @@
     function addNote(type) {
       if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
         vm.notes.push({
+          $edit: true,
           text: null,
           noteType: type.id
         });
