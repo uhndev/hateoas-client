@@ -50,24 +50,24 @@
      * @description Click handler for updating notes and saving notes to collections
      */
     function updateNote() {
-        vm.note.$edit = false;
-        if (!angular.equals(vm.original, vm.note)) {
-            if (vm.note.id) {
-                Note.update(vm.note, function (data) {
-                    vm.onUpdate();
-                    toastr.success('Note successfully updated!', 'Notes');
-                });
-            } else {
-                if (vm.note.text) {
-                    Note.save(_.merge(vm.note, vm.collection), function (newNote) {
+      vm.note.$edit = false;
+      if (!angular.equals(vm.original, vm.note)) {
+        if (vm.note.id) {
+          Note.update(vm.note, function (data) {
+            vm.onUpdate();
+            toastr.success('Note successfully updated!', 'Notes');
+          });
+        } else {
+          if (vm.note.text) {
+            Note.save(_.merge(vm.note, vm.collection), function (newNote) {
 
-                        _.merge(_.last(vm.notebook.notes), newNote);
-                        vm.onSave();
-                        toastr.success('Note successfully added to collection!', 'Notes');
-                    });
-                }
-            }
+              _.merge(_.last(vm.notebook.notes), newNote);
+              vm.onSave();
+              toastr.success('Note successfully added to collection!', 'Notes');
+            });
+          }
         }
+      }
     }
 
     /**
@@ -92,7 +92,7 @@
      * @description Click handler for sending a note email
      */
     function emailNote() {
-        
+
       //TODO implement as part of notification system
     }
 
