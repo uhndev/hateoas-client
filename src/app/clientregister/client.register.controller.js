@@ -49,7 +49,6 @@
     }
 
     function addEmployee() {
-      alert('employee function called');
       var employee = {};
       vm.client.person.employments.push(employee);
     }

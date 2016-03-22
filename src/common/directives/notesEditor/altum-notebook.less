@@ -1,11 +1,11 @@
-//start notes css
-// The Theme Slide in Notes panel
-// --------------------------------------------------
+.ace_editor  {
+  min-height : 150px;
+}
 
 #page-notebar {
   background: #fafbfc;
   display: none;
-  width: 300px;
+  width: 350px;
   right: 0;
   bottom: 0;
   height: 100%;
@@ -55,7 +55,7 @@
 #slideout.button-out {
   position: fixed;
   top: 40%;
-  right: 300px;
+  right: 350px;
   width: 30px;
   padding: 12px 0;
   text-align: left;
@@ -104,24 +104,22 @@
 
 }
 
-div[contenteditable] {
-  font-size: 1.2em;
-  font-family: 'Source Sans Pro', sans-serif;
+.markdown-body {
   border: none;
   box-shadow: none;
   min-height: 100px;
   margin: 0;
   width: 100%;
   background: #fbfbfc;
+  padding: 7px;
 
-  pre, code {
-    background: #ededed;
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0px;
   }
-}
 
-div[contenteditable]:focus {
-  font-family: 'Source Code Pro', courier, monospace;
-  font-size: 1em;
+  ul {
+    margin-left: -5px;
+  }
 }
 
 .note {
@@ -150,45 +148,47 @@ div[contenteditable]:focus {
   right: 0;
   top: 0;
   padding: 5px;
-}
 
-.fa-trash-o, .fa-plus-circle, .fa-envelope-o {
-  cursor: pointer;
-}
+  .fa-trash-o, .fa-plus-circle, .fa-envelope-o {
+    cursor: pointer;
+  }
 
-.fa-check {
-  color: #92D788;
-}
+  .fa-check {
+    color: #92D788;
 
-.fa-envelope-o {
-  color: #C2474B;
+    &:hover {
+      color: darken(#C2474B, 20);
+    }
+  }
 
-  &:hover {
-    color: darken(#C2474B, 20);
+  .fa-envelope-o {
+    color: #C2474B;
+
+    &:hover {
+      color: darken(#C2474B, 20);
+    }
+  }
+
+  .fa-trash-o {
+    color: #C2474B;
+
+    &:hover {
+      color: darken(#C2474B, 20);
+    }
+  }
+
+  .fa-pencil {
+    color: #DBC394;
+  }
+
+  .fa-plus-circle {
+    color: #0b58a2;
+
+    &:hover {
+      color: darken(#71C, 20);
+    }
   }
 }
-
-.fa-trash-o {
-  color: #C2474B;
-
-  &:hover {
-    color: darken(#C2474B, 20);
-  }
-}
-
-.fa-pencil {
-  color: #DBC394;
-}
-
-.fa-plus-circle {
-  color: #0b58a2;
-
-  &:hover {
-    color: darken(#71C, 20);
-  }
-}
-
-//end notes css
 
 
 
