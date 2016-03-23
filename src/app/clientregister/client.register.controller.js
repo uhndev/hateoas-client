@@ -5,8 +5,8 @@
   'use strict';
 
   angular
-      .module('altum.client.register.controller', [])
-      .controller('ClientRegisterController', ClientRegisterController);
+    .module('altum.client.register.controller', [])
+    .controller('ClientRegisterController', ClientRegisterController);
 
   ClientRegisterController.$inject = ['resolvedClient', 'AltumAPIService', '$location', '$state', 'toastr'];
 
@@ -33,21 +33,28 @@
         }, function (data) {
           vm.client.person = data;
           if (data.address.city) {
-          vm.client.person.address.city = AltumAPIService.City.get({id: data.address.city});}
+            vm.client.person.address.city = AltumAPIService.City.get({id: data.address.city});
+          }
           vm.client.person.employments = AltumAPIService.Employee.query({
             person: vm.client.personid,
             populate: 'company'
           });
           if (data.familyDoctor.person) {
-          vm.client.person.familyDoctor.person = AltumAPIService.Person.get({id: data.familyDoctor.person});}
+            vm.client.person.familyDoctor.person = AltumAPIService.Person.get({id: data.familyDoctor.person});
+          }
           if (data.primaryEmergencyContact) {
-          vm.client.person.primaryEmergencyContact = AltumAPIService.EmergencyContact.get({id: data.primaryEmergencyContact});}
+            vm.client.person.primaryEmergencyContact = AltumAPIService.EmergencyContact.get({id: data.primaryEmergencyContact});
+          }
           // vm.client.person.emergencyContacts = AltumAPIService.EmergencyContact.query({person: vm.client.personid});
 
         });
       }
     }
 
+    /**
+     * addEmployee
+     * @description this is for add empty Employee object to the employments array
+     */
     function addEmployee() {
       var employee = {};
       vm.client.person.employments.push(employee);
@@ -62,29 +69,33 @@
     function save() {
       //update client
       vm.client.$update()
-                .then(function (resp) {
-                  toastr.success('Updated client ' + resp.id + '!');
-                  $location.path('/client');
-                  $state.go('hateoas');
-                },
-                    function (err) {
-                      toastr.error('Updating client ' + 'failed. ' + err);
-                    });
+        .then(function (resp) {
+            toastr.success('Updated client ' + resp.id + '!');
+            $location.path('/client');
+            $state.go('hateoas');
+          },
+          function (err) {
+            console.log('Updating client ' + 'failed. ' + err);
+          });
     }
 
+    /**
+     *
+     * @param isValid
+     */
     function clientAdd(isValid) {
       var newClient = new AltumAPIService.Client();
       newClient.MRN = vm.client.MRN;
       newClient.person = vm.client.person;
       newClient.$save()
-                .then(function (resp) {
-                  toastr.success('New client created');
-                  $location.path('/client');
-                  $state.go('hateoas');
-                },
-                    function (err) {
-                      toastr.error('failed to created the client');
-                    });
+        .then(function (resp) {
+            toastr.success('New client created');
+            $location.path('/client');
+            $state.go('hateoas');
+          },
+          function (err) {
+            toastr.error('failed to created the client');
+          });
     }
 
   }
