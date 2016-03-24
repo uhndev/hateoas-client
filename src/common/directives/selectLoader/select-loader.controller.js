@@ -21,10 +21,11 @@
 
     // bindable variables
     vm.loadError = false;
-    vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
+    vm.href = (vm.url) ? API.url() + '/' + vm.url : null;
     vm.input = vm.input || [];
     vm.baseQuery = vm.query || null;
     vm.labels = vm.labels || 'name';
+    vm.skip = 0;
     vm.limit = 20;
 
     // bindable methods
@@ -59,8 +60,10 @@
      * fetchData
      * @description Refresh function called to fetch data on load and search updates.
      * @param query Sails search query to pass through
+     * @param select ui-select object
+     * @param loadMore boolean denoting request came via scroll action
      */
-    function fetchData(query, select) {
+    function fetchData(query, select, loadMore) {
       // initial request for when no ids passed in
       var promise = SelectService.loadSelect(vm.href, vm.baseQuery, {limit: vm.limit}, query);
 
@@ -70,17 +73,21 @@
       // if values passed in, set initial search
       if (hasIds && !_.isUndefined(searchIds) && _.isEmpty(vm.baseQuery) && !query) {
         var initQuery = {
-          sort: 'id ASC'
+          limit: vm.limit,
+          skip: vm.skip
         };
 
-        if (vm.isAtomic) {
-          // for singleselect, take range of id +/- some DEFAULT_RANGE
-          initQuery.limit = searchIds + vm.limit;
-        } else {
-          // for multiselect, take max ranged id as upper bound
-          initQuery.limit = _.max(searchIds) + vm.limit;
+        // for singleselect, take range of id - some DEFAULT_RANGE; for multiselect, take min ranged id as lower bound
+        if (!loadMore) {
+          initQuery.sort = 'id ASC';
+          if (vm.isAtomic) {
+            initQuery.skip = searchIds - DEFAULT_RANGE;
+          } else {
+            initQuery.limit = _.max(searchIds) + vm.limit;
+          }
         }
-        // apply temp initQuery as baseQuery
+
+        // apply temp vm.initQuery as baseQuery
         promise = SelectService.loadSelect(vm.href, vm.baseQuery, initQuery, query)
           .then(function (data) {
             maxLimit = data.total;
@@ -98,6 +105,7 @@
           return !_.contains(ids, item.id);
         });
         if (select) { // bugfix for ui-select. See https://github.com/angular-ui/ui-select/issues/962
+          vm.refreshItems = select.refreshItems;
           select.refreshItems();
         }
       }).catch(function (err) {
@@ -114,7 +122,7 @@
     function loadMore(select) {
       if (vm.limit <= maxLimit) {
         vm.limit += DEFAULT_RANGE;
-        fetchData(null, select);
+        fetchData(null, select, true);
       }
     }
   }
