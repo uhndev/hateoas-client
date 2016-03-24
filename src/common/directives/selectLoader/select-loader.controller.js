@@ -87,7 +87,7 @@
           }
         }
 
-        // apply temp vm.initQuery as baseQuery
+        // apply temp initQuery as baseQuery
         promise = SelectService.loadSelect(vm.href, vm.baseQuery, initQuery, query)
           .then(function (data) {
             maxLimit = data.total;
@@ -105,7 +105,6 @@
           return !_.contains(ids, item.id);
         });
         if (select) { // bugfix for ui-select. See https://github.com/angular-ui/ui-select/issues/962
-          vm.refreshItems = select.refreshItems;
           select.refreshItems();
         }
       }).catch(function (err) {
