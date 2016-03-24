@@ -1,31 +1,35 @@
-<div ng-switch="select.isAtomic" ng-hide="select.loadError">
-  <div ng-switch-when="true">
-    <div ng-if="!select.bindObject">
-      <ui-select ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
-        <ui-select-match placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}">{{$select.selected[select.labels]}}</ui-select-match>
-        <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
-                           scroll-watch onscrolldown="select.loadMore($select)"
-                           refresh="select.fetchData($select.search, $select)"
-                           refresh-delay="500">
-          <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
-    </div>
-    <div ng-if="select.bindObject">
-      <ui-select ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
-        <ui-select-match placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}">{{$select.selected[select.labels]}}</ui-select-match>
-        <ui-select-choices repeat="model in select.input | filter: $select.search"
-                           scroll-watch onscrolldown="select.loadMore($select)"
-                           refresh="select.fetchData($select.search, $select)"
-                           refresh-delay="500">
-          <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
-    </div>
+<div ng-switch="select.isAtomic" ng-hide="select.loadError" ng-if="select.href">
+  <div ng-switch-when="true" class="input-group">
+    <ui-select ng-if="!select.bindObject" ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
+               on-remove="select.fetchData($select.search, $select)">
+      <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
+      <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
+                         scroll-watch onscrolldown="select.loadMore($select)"
+                         refresh="select.fetchData($select.search, $select)"
+                         refresh-delay="500">
+        <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
+      </ui-select-choices>
+    </ui-select>
+    <ui-select ng-if="select.bindObject" ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
+               on-remove="select.fetchData($select.search, $select)">
+      <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
+      <ui-select-choices repeat="model in select.input | filter: $select.search"
+                         scroll-watch onscrolldown="select.loadMore($select)"
+                         refresh="select.fetchData($select.search, $select)"
+                         refresh-delay="500">
+        <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
+      </ui-select-choices>
+    </ui-select>
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" ng-click="select.values = null">
+        <i class="fa fa-times"></i>
+      </button>
+    </span>
   </div>
   <div ng-switch-default>
-    <ui-select multiple ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap">
-      <ui-select-match placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}">{{$item[select.labels]}}</ui-select-match>
+    <ui-select multiple ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
+               on-remove="select.fetchData($select.search, $select)">
+      <ui-select-match placeholder="Select or search">{{$item[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model in select.input | filter: $select.search"
                          scroll-watch onscrolldown="select.loadMore($select)"
                          refresh="select.fetchData($select.search, $select)"
