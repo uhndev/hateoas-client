@@ -1,7 +1,9 @@
 /**
  * @name dados-form
- * @description Directive that renders the form based on broadcasted data. Listens for 'FormLoaded' event.
- * @see  dados.schedule.form.controller
+ * @description Directive that renders the form based on passed data.
+ *              'Multi' mode is default. 'Single' mode will render one question at the time
+ *              and will emit 'PrevFormRequest' or 'NextFormRequest' events when end is reached.
+ * @see         dados.schedule.form.controller
  */
 
 (function() {
@@ -15,6 +17,10 @@
     .component('dadosForm', {
       templateUrl: 'directives/dadosForm/dados-form.tpl.html',
       controller: 'DadosFormController',
-      controllerAs: 'dadosForm'
+      controllerAs: 'dadosForm',
+      bindings: {
+        form: '=',
+        mode: '@'
+      }
     });
 })();

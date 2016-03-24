@@ -15,10 +15,57 @@
     // bindable variables
     vm.answers = {};
     vm.answerSet = {};
+    vm.returned = false;
+
+    if (!vm.mode) {
+      vm.mode = 'multi';
+    }
 
     // bindable methods
     vm.saveFormAnswers = saveFormAnswers;
     vm.updateAnswers = updateAnswers;
+    vm.nextQuestion = nextQuestion;
+    vm.prevQuestion = prevQuestion;
+
+    /**
+     * nextQuestion
+     * @description Function for single question mode. Increments the questions array index.
+     *              Saves the answerSet if value was changed and sends NextFormRequest
+     *              to parent directive.
+     */
+    function nextQuestion() {
+      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
+        saveFormAnswers();
+      }
+
+      vm.currentQuestion++;
+      if (vm.currentQuestion >= vm.form.questions.length) {
+        vm.currentQuestion = vm.form.questions.length - 1;
+        vm.returned = false;
+        $scope.$emit('NextFormRequest');
+      }
+      vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
+    }
+
+    /**
+     * prevQuestion
+     * @description Function for single question mode. Decrements the questions array index.
+     *              Saves the answerSet if value was changed and sends PrevFormRequest
+     *              to parent directive.
+     */
+    function prevQuestion() {
+      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
+        saveFormAnswers();
+      }
+
+      vm.currentQuestion--;
+      if (vm.currentQuestion < 0) {
+        vm.currentQuestion = 0;
+        vm.returned = true;
+        $scope.$emit('PrevFormRequest');
+      }
+      vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
+    }
 
     /**
      * saveFormAnswers
@@ -58,7 +105,7 @@
      * @description This function iterates through questions and updates answers array
      */
     function updateAnswers() {
-      _.each(vm.questions, function (question) {
+      _.each(vm.form.questions, function (question) {
         if (angular.isDefined(question.value)) {
           vm.answers[question.name] = question.value;
         }
@@ -66,21 +113,25 @@
     }
 
     /**
-     * FormLoaded
-     * @description Event that is fired from parent controller on initial form load.
-     *              Function sets up the form and tries to load answerSet if it was provided with id.
+     * $scope.$watch on dadosForm.form
+     * @description Function sets up the form and tries to load answerSet if it was provided with id.
      */
-    $scope.$on('FormLoaded', function (e, form) {
-      vm.form = form;
-      vm.questions = form.questions;
-      if (_.has(form, 'answerSetID')) {
-        vm.answerSetID = form.answerSetID;
+    $scope.$watch('dadosForm.form', function(newForm, oldForm) {
+      if (newForm && !_.isEqual(newForm, oldForm)) {
+        if (vm.returned) {
+          vm.currentQuestion = vm.form.questions.length - 1;
+        } else {
+          vm.currentQuestion = 0;
+        }
 
-        AnswerSetService.get({id: vm.answerSetID}, function (data) {
-          vm.answerSet = data.items;
-          vm.answers = vm.answerSet.answers;
-          $scope.$broadcast('AnswerSetLoaded');
-        });
+        if (_.has(vm.form, 'answerSetID')) {
+          AnswerSetService.get({id: vm.form.answerSetID}, function (data) {
+            vm.answerSet = data.items;
+            vm.answers = vm.answerSet.answers;
+            // notify that answers array was updated
+            $scope.$broadcast('AnswerSetLoaded');
+          });
+        }
       }
     });
 
@@ -92,13 +143,15 @@
     $scope.$on('AnswerSetLoaded', function (e) {
       _.each(vm.answers, function (answer, name) {
 
-        var question = _.find(vm.questions, function (q) {
+        var question = _.find(vm.form.questions, function (q) {
           return q.name == name;
         });
         if (question !== undefined) {
           question.value = answer;
         }
       });
+
+      vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     });
 
   }

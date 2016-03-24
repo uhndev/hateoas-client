@@ -4,6 +4,7 @@
   angular
     .module('dados.subjectportal', [
       'dados.subjectportal.controller',
+      'dados.subjectportal.forms.controller',
       'dados.subjectportal.surveys.controller',
       'dados.subjectportal.profile.controller',
       'dados.subjectportal.service'
@@ -72,6 +73,12 @@
           data: {
             fullUrl: '/subjectportal/profile'
           }
+        })
+        .state('subjectportal.forms', {
+          url: '/forms/:sessionID/:scheduleID',
+          controller: 'SubjectPortalFormsController',
+          controllerAs: 'forms',
+          templateUrl: 'subjectportal/forms/forms.tpl.html'
         });
     });
 
