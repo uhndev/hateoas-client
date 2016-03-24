@@ -1,5 +1,5 @@
 <div ng-if="formPreview">
-  <h1 class="text-center">{{ form.form_title }}</h1>
+  <h1 class="text-center" translate>{{ form.form_title }}</h1>
   <section class="row">
     <div class="col-sm-12 col-sm-8 col-md-10 col-sm-offset-2 col-md-offset-1">
       <ng-form name="my_form" class="form-horizontal" novalidate autocomplete="off">
@@ -9,10 +9,10 @@
             <strong>{{error}}</strong>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary right" type="button" ng-disabled="my_form.$invalid" ng-click="onSubmit()">
+            <button class="btn btn-primary right" type="button" ng-disabled="my_form.$invalid" ng-click="onSubmit()" translate>
               {{form.form_submitText}}
             </button>
-            <button class="btn btn-warning right" type="button" ng-click="onCancel()">{{form.form_cancelText}}</button>
+            <button class="btn btn-warning right" type="button" ng-click="onCancel()" translate>{{form.form_cancelText}}</button>
           </div>
         </fieldset>
       </ng-form>
