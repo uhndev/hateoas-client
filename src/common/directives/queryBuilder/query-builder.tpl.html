@@ -142,14 +142,17 @@
   </div>
   <div class="btn-group pull-left">
     <label class="btn btn-default btn-link btn-xs" ng-repeat="queryLink in hateoasQueries">
+      <span ng-if="!queryLink.populate" translate={{queryLink.prompt}}></span>
       <span ng-if="!queryLink.populate">
         <input type="radio" name="queryLink.rel" ng-click="applyQuery(queryLink.where)"
-               value="queryLink.where"/> {{queryLink.prompt}}
+               value="queryLink.where"/>
       </span>
+      <span ng-if="queryLink.populate" translate={{queryLink.prompt}}></span>
       <span ng-if="queryLink.populate">
         <input type="radio" name="queryLink.rel" ng-click="applyPopulate(queryLink.populate)"
-               value="queryLink.populate"/> {{queryLink.prompt}}
-      </span>
+               value="queryLink.populate"/>
+        </span>
+
     </label>
   </div>
   <button type="button"
