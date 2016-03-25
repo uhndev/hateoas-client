@@ -8,10 +8,11 @@
       <div class="col-sm-9">
         <input type="text" name="username" class="form-control"
                data-ng-model="addSubject.newSubject.username"
+               validation-check criteria="{model: 'user', attribute: 'username'}"
                ng-minlength="5"
                placeholder="johndoe" required>
         <p ng-show="subjectForm.username.$invalid && !subjectForm.username.$pristine"
-           class="pull-right required-error">Username must be at least 5 characters</p>
+           class="pull-right required-error">Username must be unique and at least 5 characters</p>
       </div>
     </div>
     <div class="form-group">
@@ -19,6 +20,7 @@
       <div class="col-sm-9">
         <input type="email" name="email" class="form-control"
                data-ng-model="addSubject.newSubject.email"
+               validation-check criteria="{model: 'user', attribute: 'email'}"
                placeholder="johndoe@email.com" required>
         <p ng-show="subjectForm.email.$invalid && !subjectForm.email.$pristine"
            class="pull-right required-error">Email is required.</p>
