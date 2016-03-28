@@ -1,5 +1,5 @@
 <ng-form name="sub_form">
-  <div class="form-group" ng-class="{'has-error': sub_form.$invalid}">
+  <div class="form-group" ng-class="{'has-error': sub_form.$invalid && !sub_form.$pristine}">
     <label for="{{field.field_name}}">
       {{field.field_id}})
     </label>
@@ -14,7 +14,11 @@
            data-ng-model="field.field_value"
            data-ng-model-options="{debounce: 500}"
            ui-validate=" 'validateText($value, field)' "
-           validation-check criteria="{model: field.field_validation.unique, attribute: field.field_name}"
+           validation-check criteria="{
+             model: field.field_validation.unique,
+             id: field.field_modelID,
+             attribute: field.field_name
+           }"
            value="field.field_value"
            ng-required="field.field_required"
            placeholder="{{field.field_placeholder | translate}}"

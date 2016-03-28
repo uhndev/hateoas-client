@@ -1,8 +1,8 @@
 <div ng-switch="select.isAtomic" ng-hide="select.loadError" ng-if="select.href">
-  <div ng-switch-when="true" class="input-group">
+  <div ng-switch-when="true">
     <ui-select ng-if="!select.bindObject" ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
                on-remove="select.fetchData($select.search, $select)">
-      <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
+      <ui-select-match allow-clear="true" placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model.id as model in select.input | filter: $select.search"
                          scroll-watch onscrolldown="select.loadMore($select)"
                          refresh="select.fetchData($select.search, $select)"
@@ -12,7 +12,7 @@
     </ui-select>
     <ui-select ng-if="select.bindObject" ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
                on-remove="select.fetchData($select.search, $select)">
-      <ui-select-match placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
+      <ui-select-match allow-clear="true" placeholder="Select or search">{{$select.selected[select.labels]}}</ui-select-match>
       <ui-select-choices repeat="model in select.input | filter: $select.search"
                          scroll-watch onscrolldown="select.loadMore($select)"
                          refresh="select.fetchData($select.search, $select)"
@@ -20,11 +20,6 @@
         <span ng-bind-html="model[select.labels] | highlight: $select.search"></span>
       </ui-select-choices>
     </ui-select>
-    <span class="input-group-btn">
-      <button class="btn btn-default" type="button" ng-click="select.values = null">
-        <i class="fa fa-times"></i>
-      </button>
-    </span>
   </div>
   <div ng-switch-default>
     <ui-select multiple ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"

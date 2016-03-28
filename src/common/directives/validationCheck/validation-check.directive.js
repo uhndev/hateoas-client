@@ -2,7 +2,7 @@
  * @name validation-check
  * @description Simple directive that when given a criteria object of validation rules,
  *              will verify from backend if input is valid.
- * @example <input ng-model="passwordValue" validation-check criteria="{model: 'user', attribute: 'username'}}"/>
+ * @example <input ng-model="passwordValue" validation-check criteria="{model: 'user', id: 1, attribute: 'username'}"/>
  */
 
 (function() {
@@ -12,9 +12,9 @@
     .module('dados.common.directives.validationCheck', [])
     .directive('validationCheck', validationCheck);
 
-  validationCheck.$inject = ['$log', 'API', 'ResourceFactory'];
+  validationCheck.$inject = ['$log', 'modelValidator'];
 
-  function validationCheck($log, API, ResourceFactory) {
+  function validationCheck($log, modelValidator) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -28,11 +28,17 @@
           var currentValue = element.val();
           var query = {where: {}};
           query.where[criteria.attribute] = currentValue;
-          var Resource = ResourceFactory.create(API.url(criteria.model));
 
-          Resource.query(query).$promise
-            .then(function (results) {
-              ngModel.$setValidity('unique', (results.length === 0));
+          // ensure match on non-self reference
+          if (criteria.id) {
+            query.where.id = {'!': criteria.id};
+          }
+
+          modelValidator.isUnique(criteria.model, query)
+            .then(function (result) {
+              if (currentValue == element.val()) {
+                ngModel.$setValidity('unique', result);
+              }
             })
             .catch(function (error) {
               $log.error(error);

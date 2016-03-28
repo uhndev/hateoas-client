@@ -174,6 +174,7 @@
         var questions = _.map(form.items.form_questions,
           function (question) {
             if (_.has(item, question.field_name)) {
+              question.field_modelID = item.id;
               question.field_value = item[question.field_name];
             }
 
