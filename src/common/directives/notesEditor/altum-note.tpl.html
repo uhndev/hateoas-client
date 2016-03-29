@@ -15,7 +15,7 @@
            class="markdown-body" btf-markdown="at.note.text"></div>
 
       <div ng-show="at.note.$edit" ng-model="at.note.text"
-           ng-style="{ 'height': at.getLineHeight() + 'px' }"
+           ng-style="{ 'height': at.getLineHeight() + 'px', 'background-color': at.note.noteType.backGroundColor }"
            ui-ace="{
              useWrapMode: true,
              showGutter: false,
@@ -24,9 +24,8 @@
              onLoad: at.aceLoaded,
              onBlur: at.updateNote
            }"></div>
-
       <div>
-        CreatedBy: {{ at.note.displayName}}
+        CreatedBy: {{ at.note.displayName}} <span class="pull-right">{{at.note.noteType.name}}</span>
       </div>
     </div>
   </div>

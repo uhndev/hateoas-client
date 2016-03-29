@@ -39,6 +39,8 @@
 
       // Altum/ARM
       'altum.referral',
+
+        'altum.client',
       'altum.triage',
 
       // dados subject portal

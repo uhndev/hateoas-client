@@ -58,11 +58,14 @@
             toastr.success('Note successfully updated!', 'Notes');
           });
         } else {
-          Note.save(_.merge(vm.note, vm.collection), function (newNote) {
-            _.merge(_.last(vm.notebook.notes), newNote);
-            vm.onSave();
-            toastr.success('Note successfully added to collection!', 'Notes');
-          });
+          if (vm.note.text) {
+            Note.save(_.merge(vm.note, vm.collection), function (newNote) {
+
+              _.merge(_.last(vm.notebook.notes), newNote);
+              vm.onSave();
+              toastr.success('Note successfully added to collection!', 'Notes');
+            });
+          }
         }
       }
     }
@@ -89,6 +92,7 @@
      * @description Click handler for sending a note email
      */
     function emailNote() {
+
       //TODO implement as part of notification system
     }
 

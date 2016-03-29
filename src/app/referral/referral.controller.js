@@ -9,9 +9,9 @@
     ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'NoteService'];
 
-  function ReferralController($resource, $location, API, HeaderService) {
+  function ReferralController($resource, $location, API, HeaderService, NoteService) {
     var vm = this;
     var ReferralServices;
 
@@ -30,6 +30,9 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
+
+        //this is for testing of setup background color
+        vm.notes = NoteService.query({referral: vm.referral.id, populate: 'noteType'});
 
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',

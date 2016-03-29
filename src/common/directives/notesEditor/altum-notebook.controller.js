@@ -35,7 +35,8 @@
         vm.notes.push({
           $edit: true,
           text: null,
-          noteType: type.id
+          // noteType: type.id
+          noteType: type
         });
       }
     }

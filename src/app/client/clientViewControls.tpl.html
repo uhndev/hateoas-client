@@ -1,0 +1,25 @@
+<div id="Controls" class="pull-right">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default"
+                context-translator="APP.STUDY.USER.CONTROLS.OPEN_BTN">
+            <i class="fa fa-folder-o"></i>
+            <span translate>COMMON.HATEOAS.CONTROLS.OPEN_BTN</span>
+        </button>
+        <button type="button" class="btn btn-default">
+            <a ui-sref="newClient"> <i class="fa fa-file-o"></i>
+                <span translate>New</span>
+            </a>
+
+        </button>
+        <button type="button" class="btn btn-default">
+            <a ui-sref="editClient({id: hateoas.selected.id})">
+                <i class="fa fa-floppy-o"></i>
+                <span>Edit</span></a>
+        </button>
+        <button type="button" class="btn btn-default"
+                context-translator="APP.STUDY.USER.CONTROLS.ARCHIVE_BTN">
+            <i class="fa fa-trash-o"></i>
+            <span translate>APP.STUDY.USER.CONTROLS.ARCHIVE_BTN</span>
+        </button>
+    </div>
+</div>
