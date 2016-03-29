@@ -53,9 +53,9 @@
     }
 
     /**
-         * resolve
-         * @description Based on current href, determine correct custom state if applicable, or go to hateoas state
-         */
+     * resolve
+     * @description Based on current href, determine correct custom state if applicable, or go to hateoas state
+     */
     function resolve() {
       var isCustomState = false;
       angular.forEach($state.get(), function (state) {
@@ -89,6 +89,12 @@
     }
   }
 
+  /**
+   * AuthService
+   * @description Returns authentication route strings
+   * @returns {Object}
+   * @constructor
+   */
   function Auth(API) {
     return {
       'LOGIN_API': API.base() + '/auth/local',

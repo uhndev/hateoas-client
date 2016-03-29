@@ -70,6 +70,7 @@
       setPageTitle();
     });
 
+    // on authorization event fired, navigate to home state
     $rootScope.$on('events.authorized', function() {
       DefaultRoute.route();
     });
