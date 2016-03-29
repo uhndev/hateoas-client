@@ -35,18 +35,18 @@
     function navigateHome() {
       switch (Auth.currentGroup.level) {
         case 1:
-          $location.url('/study');
+          $location.url('/client');
           $state.go('hateoas');
           break;
         case 2:
-          $location.url('/study');
+          $location.url('/client');
           $state.go('hateoas');
           break;
         case 3:
           $state.go('subjectportal.surveys');
           break;
         default:
-          $location.url('/study');
+          $location.url('/client');
           $state.go('hateoas');
           break;
       }

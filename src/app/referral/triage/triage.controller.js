@@ -117,8 +117,8 @@
 
       //set values from triage form
       newReferral.site = vm.selectedSite;
-      newReferral.physician = (!_.isEmpty(vm.selectedPhysician)) ? vm.selectedPhysician : null;
-      newReferral.staff = (!_.isEmpty(vm.selectedPrimaryProvider)) ? vm.selectedPrimaryProvider : null;
+      newReferral.physician = (_.has(vm.selectedPhysician, 'id') || _.isNumber(vm.selectedPhysician)) ? vm.selectedPhysician : null;
+      newReferral.staff = (_.has(vm.selectedPrimaryProvider, 'id') || _.isNumber(vm.selectedPrimaryProvider)) ? vm.selectedPrimaryProvider : null;
       newReferral.program = vm.selectedProgram;
       newReferral.id = vm.referralID;
 
