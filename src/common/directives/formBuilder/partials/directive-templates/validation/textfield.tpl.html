@@ -8,7 +8,7 @@
 </div>
 <div ng-init="showValidation = false" ng-show="showValidation">
   <div class="row">
-    <div class="col-md-4">Validation Expression:</div>
+    <div class="col-md-4"><b>Validation Expression:</b></div>
     <div class="col-md-4">
       <select class="form-control" ng-change="field.field_validation.expression = ''"
               ng-model="field.field_validation.rule">
@@ -39,6 +39,18 @@
         <input type="text" ng-disabled="field.field_validation.rule == 'none'"
                ng-model="field.field_validation.expression" class="form-control"/>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="field.field_unique"/> <b>Check Unique</b>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-8" ng-if="field.field_unique">
+      <input type="text" class="form-control" placeholder="Model" ng-model="field.field_validation.unique"/>
     </div>
   </div>
 </div>
