@@ -46,7 +46,9 @@
         </div>
         <div class="panel-body">
           <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].availableSites.length > 0">
-            <label>Select Site:</label>
+            <label>
+              <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:
+            </label>
             <select ng-model="rec.recommendedServices[rec.currIndex].site" class="form-control"
                     ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
             </select>
@@ -105,7 +107,7 @@
             </div>
 
             <div class="form-group" flex ng-repeat="staffType in rec.availableStaffTypes">
-              <label translate>Select {{staffType.name}}:</label>
+              <label translate>{{staffType.name}}</label>
               <select-loader
                 url="staff"
                 query="staffType.baseQuery"

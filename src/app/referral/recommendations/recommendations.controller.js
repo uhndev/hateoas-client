@@ -28,8 +28,8 @@
 
     vm.validityFields = ['physician', 'workStatus', 'prognosis', 'visitService', 'serviceDate'];
     vm.serviceOrder = {
-      recommendedServices: 1,
-      serviceDetail: 2
+      recommendedServices: 2,
+      serviceDetail: 1
     };
     vm.accordionStatus = {};
     vm.currentDate = new Date();

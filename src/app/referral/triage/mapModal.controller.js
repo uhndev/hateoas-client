@@ -8,14 +8,14 @@
     .controller('MapModalController', MapModalController);
 
   MapModalController.$inject = [
-    '$uibModalInstance', 'sites', 'referral'
+    '$uibModalInstance', 'selectedSite', 'sites', 'referral'
   ];
 
-  function MapModalController($uibModalInstance, sites, referral) {
+  function MapModalController($uibModalInstance, selectedSite, sites, referral) {
     var vm = this;
 
     // bindable variables
-    vm.selectedSite = {};
+    vm.selectedSite = selectedSite || {};
     vm.sites = sites;
     vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
     vm.mapReady = true;
@@ -58,7 +58,9 @@
         latitude: referral.clientcontact.latitude,
         longitude: referral.clientcontact.longitude,
         title: referral.clientcontact.displayName,
-        icon: {url: 'assets/img/patienticon.png'}
+        icon: {url: 'assets/img/patienticon.png'},
+        addressID: referral.clientcontact.address,
+        addressName: vm.origin
       };
 
       vm.mapReady = true;

@@ -85,7 +85,15 @@
         controller: 'MapModalController',
         controllerAs: 'mapmodal',
         bindToController: true,
+        size: 'lg',
         resolve: {
+          selectedSite: function() {
+            if (!_.isEmpty(vm.selectedSite)) {
+              return AltumAPI.Site.get({id: vm.selectedSite.id, populate: 'address'}).$promise;
+            } else {
+              return null;
+            }
+          },
           sites: function () {
             return AltumAPI.Site.query().$promise;
           },
@@ -109,8 +117,8 @@
 
       //set values from triage form
       newReferral.site = vm.selectedSite;
-      newReferral.physician = vm.selectedPhysician;
-      newReferral.staff = vm.selectedPrimaryProvider;
+      newReferral.physician = (!_.isEmpty(vm.selectedPhysician)) ? vm.selectedPhysician : null;
+      newReferral.staff = (!_.isEmpty(vm.selectedPrimaryProvider)) ? vm.selectedPrimaryProvider : null;
       newReferral.program = vm.selectedProgram;
       newReferral.id = vm.referralID;
 
