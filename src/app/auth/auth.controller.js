@@ -11,9 +11,9 @@
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookies', 'DefaultRouteService', 'AuthService'];
+  AuthController.$inject = ['$location', '$state', '$cookies', 'AuthService'];
 
-  function AuthController($location, $state, $cookies, DefaultRouteService, AuthService) {
+  function AuthController($location, $state, $cookies, AuthService) {
     var vm = this;
     vm.error = '';
 

@@ -71,7 +71,7 @@
     });
 
     $rootScope.$on('events.authorized', function() {
-      DefaultRoute.route(Auth.currentGroup.level);
+      DefaultRoute.route();
     });
   }
 
