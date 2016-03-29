@@ -81,7 +81,7 @@
     function route(level) {
       if (_.isEmpty($location.path()) || $state.is('login')) {
         // url is empty, so just use default settings
-        navigateHomeState();
+        navigateHome();
       } else {
         // otherwise, try matching currentUrl to state urls to find the correct state
         service.resolve();
