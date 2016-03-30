@@ -19,10 +19,11 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralID = _.getParentIDFromUrl($location.path());
+    vm.staffTypes = AltumAPI.StaffType.query();
     vm.referral = {};
     vm.selectedProgram = {};
     vm.selectedPhysician = {};
-    vm.selectedPrimaryProvider = {};
+    vm.selectedStaff = {};
     vm.selectedSite = {};
     vm.mapDisabled = true;
 
@@ -42,10 +43,16 @@
         vm.resource = data;
         vm.referral = data.items;
         vm.selectedPhysician = data.items.physician || {};
-        vm.selectedPrimaryProvider = data.items.staff || {};
+        vm.selectedStaff = data.items.staff || {};
         vm.selectedSite = data.items.site || {};
         vm.selectedProgram = data.items.program || {};
+        vm.isPhysicianPrimary = data.items.isPhysicianPrimary;
+        vm.isStaffPrimary = !data.items.isPhysicianPrimary;
         vm.mapDisabled = false;
+
+        if (data.items.staff) {
+          vm.selectedStaffType = data.items.staff.staffType || null;
+        }
 
         checkPrimaryProviders();
 
@@ -60,14 +67,11 @@
      *              primaryProvider settings may need to be updated.
      */
     function checkPrimaryProviders() {
-      // if primaryProviderType non-null, setup staff as primaryProvider
-      if (vm.selectedProgram && vm.selectedProgram.primaryProviderType) {
+      if (vm.selectedStaffType) {
         vm.hideLoader = true;
-        AltumAPI.StaffType.get({id: vm.selectedProgram.primaryProviderType}, function (staffType) {
+        AltumAPI.StaffType.get({id: vm.selectedStaffType}, function (staffType) {
           vm.staffType = staffType;
           vm.providerBaseQuery = {'staffType': staffType.id};
-          vm.selectedPrimaryProvider = null;
-          vm.selectedPhysician = null;
           vm.hideLoader = false;
         });
       }
@@ -109,6 +113,16 @@
     }
 
     /**
+     * validateSelection
+     * @description Convenience function for verifying valid selections during triage
+     * @param selected
+     * @returns {Object|null}
+     */
+    function validateSelection(selected) {
+      return (_.has(vm[selected], 'id') || _.isNumber(vm[selected])) ? vm[selected] : null;
+    }
+
+    /**
      * save
      * @description save handler for the triage form
      */
@@ -116,10 +130,11 @@
       var newReferral = new AltumAPI.Referral();
 
       //set values from triage form
-      newReferral.site = vm.selectedSite;
-      newReferral.physician = (_.has(vm.selectedPhysician, 'id') || _.isNumber(vm.selectedPhysician)) ? vm.selectedPhysician : null;
-      newReferral.staff = (_.has(vm.selectedPrimaryProvider, 'id') || _.isNumber(vm.selectedPrimaryProvider)) ? vm.selectedPrimaryProvider : null;
-      newReferral.program = vm.selectedProgram;
+      newReferral.site = validateSelection('selectedSite');
+      newReferral.physician = validateSelection('selectedPhysician');
+      newReferral.staff = validateSelection('selectedStaff');
+      newReferral.program = validateSelection('selectedProgram');
+      newReferral.isPhysicianPrimary = vm.isPhysicianPrimary;
       newReferral.id = vm.referralID;
 
       //update referral

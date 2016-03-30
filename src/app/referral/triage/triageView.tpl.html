@@ -22,36 +22,15 @@
                 bind-object="true"
                 is-disabled="false"
                 ng-model="triage.selectedProgram"
-                ng-change="triage.checkPrimaryProviders()"
-                labels="displayName">
-              </select-loader>
-            </div>
-
-            <div class="form-group" ng-if="triage.selectedProgram.primaryProviderType">
-              <label>
-                <span translate>APP.REFERRAL.TRIAGE.LABELS.PRIMARY_PROVIDER</span>
-                <span>
-                  ({{triage.staffType.displayName}})
-                </span>
-              </label>
-
-              <select-loader
-                ng-if="!triage.hideLoader"
-                url="staff"
-                query="triage.providerBaseQuery"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="triage.selectedPrimaryProvider"
                 labels="displayName">
               </select-loader>
             </div>
 
             <div class="form-group" ng-if="!triage.selectedProgram.primaryProviderType">
-              <label>
-                <span translate>APP.REFERRAL.TRIAGE.LABELS.PRIMARY_PROVIDER</span>
-                <span>
-                  ({{'COMMON.MODELS.REFERRAL.PHYSICIAN' | translate}})
-                </span>
+              <label class="checkbox">
+                <span translate>COMMON.MODELS.REFERRAL.PHYSICIAN</span>
+                <input type="checkbox" ng-model="triage.isPhysicianPrimary" ng-change="triage.isStaffPrimary = false"/>
+                {{triage.isPhysicianPrimary ? "(Primary)" : ""}}
               </label>
 
               <select-loader
@@ -61,6 +40,38 @@
                 ng-model="triage.selectedPhysician"
                 labels="displayName">
               </select-loader>
+            </div>
+
+            <div class="form-group">
+              <label ng-if="!triage.selectedStaffType" translate>
+                APP.REFERRAL.TRIAGE.LABELS.SELECT_A_STAFF_TYPE
+              </label>
+
+              <label class="checkbox" ng-if="triage.selectedStaffType">
+                {{triage.staffType.displayName}}
+                <input type="checkbox" ng-model="triage.isStaffPrimary" ng-change="triage.isPhysicianPrimary = false"/>
+                {{triage.isStaffPrimary ? "(Primary)" : ""}}
+              </label>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <select ng-model="triage.selectedStaffType" class="form-control"
+                          ng-change="triage.checkPrimaryProviders()"
+                          ng-options="type.id as type.displayName for type in triage.staffTypes">
+                  </select>
+                </div>
+                <div class="col-md-8">
+                  <select-loader
+                    ng-if="!triage.hideLoader && triage.selectedStaffType"
+                    url="staff"
+                    query="triage.providerBaseQuery"
+                    is-atomic="true"
+                    is-disabled="false"
+                    ng-model="triage.selectedStaff"
+                    labels="displayName">
+                  </select-loader>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -77,9 +88,12 @@
                 labels="displayName">
               </select-loader>
             </div>
-            <button type="submit" id="saveTriage" class="btn btn-primary" translate
-                    ng-disabled="triageForm.$invalid" ng-click="triage.save()">
-              APP.REFERRAL.TRIAGE.LABELS.SAVE
+
+            <hr/>
+
+            <button type="submit" id="saveTriage" class="btn btn-primary pull-right" translate
+                    ng-disabled="triageForm.$invalid || !triage.isPhysicianPrimary && !triage.isStaffPrimary" ng-click="triage.save()">
+              APP.REFERRAL.TRIAGE.LABELS.SAVE_CHANGES
             </button>
           </form>
         </div>

@@ -74,11 +74,13 @@
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
           'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
           'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PRIMARY_PROVIDER': data.items.physician_name ? data.items.physician_name : data.items.staff_name,
+          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
+          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
 
-        vm.physician = null;
+        // load physician in from referraldetail
+        vm.physician = data.items.physician || null;
         vm.staffCollection = {};
         vm.staff = [];
         vm.workStatus = null;
@@ -86,6 +88,13 @@
         vm.prognosisTimeframe = null;
         vm.visitService = null;
         vm.serviceDate = new Date();
+
+        // load in staff selections from referraldetail
+        if (data.items.staff) {
+          vm.staff = [vm.staff];
+          vm.staffCollection[data.items.staffType_name] = [data.items.staff];
+          setStaffSelections(data.items.staffType_name);
+        }
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
