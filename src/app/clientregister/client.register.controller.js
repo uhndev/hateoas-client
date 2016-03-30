@@ -28,7 +28,7 @@
     function init() {
       if (vm.client.id) {
         AltumAPIService.Person.get({
-          id: vm.client.personid,
+          id: vm.client.personId,
           populate: ['address', 'familyDoctor', 'employments']
         }, function (data) {
           vm.client.person = data;
@@ -36,7 +36,7 @@
             vm.client.person.address.city = AltumAPIService.City.get({id: data.address.city});
           }
           vm.client.person.employments = AltumAPIService.Employee.query({
-            person: vm.client.personid,
+            person: vm.client.personId,
             populate: 'company'
           });
           if (data.familyDoctor.person) {
