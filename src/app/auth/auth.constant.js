@@ -60,8 +60,14 @@
       var isCustomState = false;
       angular.forEach($state.get(), function (state) {
         var currentUrl = $location.path();
-        if (state.name && state.url && currentUrl == state.url ||
-          (_.has(state, 'data') && currentUrl == state.data.fullUrl)) {
+        var fullUrl = null;
+        var matchesUrl = false;
+        if (_.has(state, 'data') && _.has(state.data, 'fullUrl')) {
+          fullUrl = state.data.fullUrl;
+          matchesUrl = (currentUrl === fullUrl || new RegExp(fullUrl).test(currentUrl));
+        }
+
+        if (state.name && state.url && currentUrl === state.url || matchesUrl) {
           $state.go(state.name);
           isCustomState = true;
         }
