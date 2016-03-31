@@ -8,14 +8,15 @@
     .module('altum.client.register.controller', [])
     .controller('ClientRegisterController', ClientRegisterController);
 
-  ClientRegisterController.$inject = ['resolvedClient', 'AltumAPIService', '$location', '$state', 'toastr'];
+  ClientRegisterController.$inject = ['$scope', 'resolvedClient', 'resolvedPerson', 'AltumAPIService', '$location', '$state', 'toastr', 'DefaultRouteService'];
 
   /* @ngInject */
-  function ClientRegisterController(resolvedClient, AltumAPIService, $location, $state, toastr) {
+  function ClientRegisterController($scope, resolvedClient, resolvedPerson, AltumAPIService, $location, $state, toastr, DefaultRoute) {
     var vm = this;
 
     vm.client = resolvedClient;
-
+    vm.prefixes = _.find(resolvedPerson.template.data, {name: 'prefix'}).value;
+    vm.genders = _.find(resolvedPerson.template.data, {name: 'gender'}).value;
     vm.cancelClientAdd = cancelClientAdd;
     vm.addEmployee = addEmployee;
     vm.save = save;
@@ -23,7 +24,7 @@
 
     init();
 
-    ////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
     function init() {
       if (vm.client.id) {
@@ -97,6 +98,13 @@
             toastr.error('failed to created the client');
           });
     }
+
+    // hitting back button triggers this event, which should then try to resolve whatever the previous state was
+    $scope.$on('$locationChangeStart', function(e, currentHref, prevHref) {
+      if ($state.is('editClient') || $state.is('newClient') && prevHref !== currentHref) {
+        DefaultRoute.resolve();
+      }
+    });
 
   }
 

@@ -20,14 +20,15 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="MRN">MRN</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" name="MRN" ng-model="CR.client.MRN" ng-minlength="3"
-                                               ng-maxlength="8" type="text" ng-required="true"
+                                        <input class="form-control" name="MRN" ng-model="CR.client.MRN"
+                                               validation-check criteria="{model: 'client', id: CR.client.id, attribute: 'MRN'}"
+                                               ng-minlength="3" ng-maxlength="8" type="text" ng-required="true"
                                                ng-pattern="/^(\d)+$/"/>
                                         <div ng-show="clientForm.MRN.$error.pattern">Numbers only, please.</div>
                                         <div ng-show="clientForm.MRN.$error.maxlength">MRN is too long.</div>
+                                        <div ng-show="clientForm.MRN.$invalid && !clientForm.MRN.$pristine">MRN must be unique</div>
                                         <div ng-show="clientForm.$submitted || clientForm.MRN.$touched">
                                             <div ng-show="clientForm.MRN.$error.required">MRN is required.</div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -36,11 +37,7 @@
                                     <div class="col-md-9">
                                         <select class="form-control" placeholder="Salutation"
                                                 ng-model="CR.client.person.prefix" id="Salutation" ng-required="true">
-                                            <option value="Dr.">Dr.</option>
-                                            <option value="Miss">Miss</option>
-                                            <option value="Mr.">Mr.</option>
-                                            <option value="Mrs.">Mrs.</option>
-                                            <option value="Ms.">Ms.</option>
+                                            <option ng-repeat="item in CR.prefixes">{{item}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -357,8 +354,7 @@
                                     <div class="col-md-9">
                                         <select class="form-control" id="Gender" ng-model="CR.client.person.gender"
                                                 name="Gender">
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
+                                            <option ng-repeat="item in CR.genders">{{item}}</option>
 
                                         </select>
 
