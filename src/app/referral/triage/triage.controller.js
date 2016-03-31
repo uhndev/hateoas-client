@@ -13,7 +13,7 @@
 
   TriageController.$inject = ['$resource', 'API', 'HeaderService', 'AltumAPIService', '$location', '$uibModal', 'toastr'];
 
-  function TriageController($resource,  API, HeaderService, AltumAPI, $location, $uibModal, toastr) {
+  function TriageController($resource, API, HeaderService, AltumAPI, $location, $uibModal, toastr) {
     var vm = this;
 
     // bindable variables
@@ -45,13 +45,19 @@
         vm.selectedPhysician = data.items.physician || {};
         vm.selectedStaff = data.items.staff || {};
         vm.selectedSite = data.items.site || {};
-        vm.selectedProgram = data.items.program || {};
+        vm.selectedProgram = data.items.program.id || {};
         vm.isPhysicianPrimary = data.items.isPhysicianPrimary;
         vm.isStaffPrimary = !data.items.isPhysicianPrimary;
         vm.mapDisabled = false;
 
+        // if staff set in referral, set appropriate stafftype
         if (data.items.staff) {
           vm.selectedStaffType = data.items.staff.staffType || null;
+        }
+
+        // if payor set in referral, filter list of programs
+        if (data.items.payors.length > 0) {
+          vm.programs = AltumAPI.Program.query({where: {payor: _.pluck(data.items.payors, 'id')}});
         }
 
         checkPrimaryProviders();
@@ -91,7 +97,7 @@
         bindToController: true,
         size: 'lg',
         resolve: {
-          selectedSite: function() {
+          selectedSite: function () {
             if (!_.isEmpty(vm.selectedSite)) {
               return AltumAPI.Site.get({id: vm.selectedSite.id, populate: 'address'}).$promise;
             } else {
@@ -138,12 +144,12 @@
       newReferral.id = vm.referralID;
 
       //update referral
-      newReferral.$update({id:vm.referralID}).then(function(resp) {
-        toastr.success('Updated referral for client ' + vm.referral.clientcontact.displayName + '!');
-      },
-      function(err) {
-        toastr.error('Updating referral ' + vm.referralID + 'failed. ' + err);
-      });
+      newReferral.$update({id: vm.referralID}).then(function (resp) {
+          toastr.success('Updated referral for client ' + vm.referral.clientcontact.displayName + '!');
+        },
+        function (err) {
+          toastr.error('Updating referral ' + vm.referralID + 'failed. ' + err);
+        });
     }
   }
 })();

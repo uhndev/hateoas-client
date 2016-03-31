@@ -12,11 +12,16 @@
           <h3 class="panel-title" translate>APP.REFERRAL.TRIAGE.LABELS.TRIAGE_DETAILS</h3>
         </div>
         <div class="panel-body">
-          <form name="triageForm" id="triageForm" data-ng-submit="triage.saveTriage()" autocomplete="off">
+          <form name="triageForm" id="triageForm" data-ng-submit="triage.saveTriage()" autocomplete="off" ng-if="triage.referral">
 
             <div class="form-group">
               <label translate>COMMON.MODELS.REFERRAL.PROGRAM</label>
+              <select ng-if="triage.referral.payors.length > 0" class="form-control"
+                      ng-model="triage.selectedProgram"
+                      ng-options="program.id as program.displayName for program in triage.programs">
+              </select>
               <select-loader
+                ng-if="triage.referral.payors.length === 0"
                 url="program"
                 is-atomic="true"
                 bind-object="true"
@@ -26,7 +31,7 @@
               </select-loader>
             </div>
 
-            <div class="form-group" ng-if="!triage.selectedProgram.primaryProviderType">
+            <div class="form-group">
               <label class="checkbox">
                 <span translate>COMMON.MODELS.REFERRAL.PHYSICIAN</span>
                 <input type="checkbox" ng-model="triage.isPhysicianPrimary" ng-change="triage.isStaffPrimary = false"/>
