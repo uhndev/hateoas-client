@@ -58,7 +58,7 @@
                       return person.query({where: {id: 0}, limit: 1}).$promise;
                     },
                     resolvedClient: function (ClientService, $stateParams) {
-                        return ClientService.get({id: $stateParams.id}).$promise;
+                      return ClientService.get({id: $stateParams.id}).$promise;
                     }
                   },
                   templateUrl: 'clientregister/clientregister.tpl.html',
