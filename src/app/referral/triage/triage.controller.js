@@ -21,10 +21,10 @@
     vm.referralID = _.getParentIDFromUrl($location.path());
     vm.staffTypes = AltumAPI.StaffType.query();
     vm.referral = {};
-    vm.selectedProgram = {};
-    vm.selectedPhysician = {};
-    vm.selectedStaff = {};
-    vm.selectedSite = {};
+    vm.selectedProgram = null;
+    vm.selectedPhysician = null;
+    vm.selectedStaff = null;
+    vm.selectedSite = null;
     vm.mapDisabled = true;
 
     // bindable methods
