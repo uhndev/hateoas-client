@@ -68,7 +68,14 @@
         }
 
         if (state.name && state.url && currentUrl === state.url || matchesUrl) {
-          $state.go(state.name);
+          var urlMatcher = $urlMatcherFactory.compile(state.url);
+          var matchedParams = urlMatcher.exec(currentUrl);
+          if (matchedParams) {
+            $state.go(state.name, matchedParams);
+          } else {
+            $state.go(state.name);
+          }
+
           isCustomState = true;
         }
       });
