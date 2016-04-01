@@ -4,7 +4,6 @@
   angular
     .module('altum.notebook', ['altum.notebook.controller'])
     .component('altumNotebook', {
-      transclude: true,
       bindings: {
         notes: '=',
         collection: '='

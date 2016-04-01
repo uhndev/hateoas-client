@@ -57,7 +57,7 @@
           'glyphicon-chevron-right': !svc.accordionStatus[groupKey].isOpen,
           'glyphicon-chevron-down': svc.accordionStatus[groupKey].isOpen
         }"></i>
-        {{ groupKey }}
+        {{ groupKey === "null" ? "N/A" : groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
       </uib-accordion-heading>
 
@@ -71,7 +71,7 @@
                   'glyphicon-chevron-right': !svc.accordionStatus[groupKey][subGroup].isOpen,
                   'glyphicon-chevron-down': svc.accordionStatus[groupKey][subGroup].isOpen
                 }"></i>
-              {{subGroup}}
+              {{ subGroup === "null" ? "N/A" : subGroup }}
               <span class="pull-right badge">{{subServices.length}}</span>
             </uib-accordion-heading>
             <table class="table table-condensed summary-table">

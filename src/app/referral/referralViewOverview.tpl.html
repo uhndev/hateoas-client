@@ -1,4 +1,5 @@
 <div ng-controller="ReferralController as ref" ng-cloak>
+
   <h2 id="Title">
     Referral Overview
   </h2>
@@ -10,7 +11,9 @@
     table-data="ref.referralInfo.tableData">
   </simple-table>
 
-  <altum-notebook ng-if="ref.referral" notes="ref.referral.notes" collection="{'referral': ref.referral.id}"></altum-notebook>
+
+  <altum-notebook ng-if="ref.referral" notes="ref.notes" collection="{'referral': ref.referral.id}"></altum-notebook>
+
 </div>
 
 

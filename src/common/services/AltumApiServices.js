@@ -38,9 +38,9 @@
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
     PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
     AltumServiceService, AltumProgramServices, ServiceCategoryService, AltumAPIService, ServiceService,
-    NoteService, NoteTypeService, ClientService, PersonService,
+    NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService, CityService,
     PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
-    ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService,
+    ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
     ServiceTypeService, AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
@@ -138,6 +138,22 @@
     return ResourceFactory.create(API.url('person'));
   }
 
+  function EmergencyContactService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('emergencyContact'));
+  }
+
+  function CityService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('city'));
+  }
+
+  function CompanyService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('company'));
+  }
+
+  function EmployeeService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('employee'));
+  }
+
   function AltumAPIService(ResourceFactory, API) {
     return {
       'Program': ResourceFactory.create(API.url('program')),
@@ -162,7 +178,12 @@
       'Note' : ResourceFactory.create(API.url('note')),
       'NoteType' : ResourceFactory.create(API.url('noteType')),
       'Client': ResourceFactory.create(API.url('client')),
-      'Person': ResourceFactory.create(API.url('person'))
+      'Person': ResourceFactory.create(API.url('person')),
+      'EmergencyContact': ResourceFactory.create(API.url('emergencyContact')),
+      'City': ResourceFactory.create(API.url('city')),
+      'Company': ResourceFactory.create(API.url('company')),
+      'Employee': ResourceFactory.create(API.url('employee'))
+
     };
   }
 })();

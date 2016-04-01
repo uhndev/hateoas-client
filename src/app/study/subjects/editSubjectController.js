@@ -67,9 +67,9 @@
     }
 
     /**
-         * editSubject
-         * @description Click handler for editing a subject enrollment in a study
-         */
+     * editSubject
+     * @description Click handler for editing a subject enrollment in a study
+     */
     function editSubject() {
       var user = new User(vm.userData);
       var enrollment = new SubjectEnrollment(vm.newSubject);

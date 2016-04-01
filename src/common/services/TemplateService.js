@@ -81,7 +81,7 @@
           field_helpertext: 'required',
           field_options: [],
           field_hasOptions: false,
-          field_required: true,
+          field_required: list.required || false,
           field_type: 'singleselect',
           field_name: list.name,
           field_title: _.startCase(list.name),
@@ -174,6 +174,7 @@
         var questions = _.map(form.items.form_questions,
           function (question) {
             if (_.has(item, question.field_name)) {
+              question.field_modelID = item.id;
               question.field_value = item[question.field_name];
             }
 

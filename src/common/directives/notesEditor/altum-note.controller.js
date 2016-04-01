@@ -3,7 +3,7 @@
 
   angular
     .module('altum.note.controller', [
-      'contenteditable'
+      'btford.markdown'
     ])
     .controller('NoteController', NoteController);
 
@@ -11,6 +11,9 @@
 
   function NoteController(Note, toastr) {
     var vm = this;
+    var lineHeight = 12;                               // default line height in ace-editor
+    var bufferHeight = 50;                             // extra space in ace-editor
+    var defaultHeight = 150;                           // default ace-editor height
 
     // bindable variables
     vm.original = {};                                  // buffer for checking if note changed
@@ -24,6 +27,8 @@
     vm.updateNote = updateNote;
     vm.removeNote = removeNote;
     vm.emailNote = emailNote;
+    vm.aceLoaded = aceLoaded;
+    vm.getLineHeight = getLineHeight;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -32,8 +37,12 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
+      _.map(vm.notebook.notes, function(note) {
+        note.$edit = false;
+      });
       vm.note.$edit = true;
       vm.original = angular.copy(vm.note);
+      vm.editor.focus();
     }
 
     /**
@@ -49,13 +58,14 @@
             toastr.success('Note successfully updated!', 'Notes');
           });
         } else {
-          Note.save(_.merge(vm.note, vm.collection), function (newNote) {
-            vm.notebook.notes.pop();
-            vm.note = angular.copy(newNote);
-            vm.notebook.notes.push(newNote);
-            vm.onSave();
-            toastr.success('Note successfully added to collection!', 'Notes');
-          });
+          if (vm.note.text) {
+            Note.save(_.merge(vm.note, vm.collection), function (newNote) {
+
+              _.merge(_.last(vm.notebook.notes), newNote);
+              vm.onSave();
+              toastr.success('Note successfully added to collection!', 'Notes');
+            });
+          }
         }
       }
     }
@@ -82,6 +92,43 @@
      * @description Click handler for sending a note email
      */
     function emailNote() {
+
+      //TODO implement as part of notification system
+    }
+
+    /**
+     * aceLoaded
+     * @description Function to be called as soon as ui-ace has loaded, used to add listen events
+     *              on focus as well as saving the editor to scope to manage focus.
+     * @param _editor
+     */
+    function aceLoaded(_editor) {
+      // save reference to editor
+      vm.editor = _editor;
+
+      // Editor part
+      var _session = _editor.getSession();
+      var _renderer = _editor.renderer;
+
+      _editor.$blockScrolling = Infinity;
+
+      // Events
+      _editor.on('focus', function() {
+        selectEdit();
+      });
+    }
+
+    /**
+     * getLineHeight
+     * @description Convenience method for returning css height of ui-ace window
+     * @returns {number}
+     */
+    function getLineHeight() {
+      if (vm.note.text) {
+        return vm.note.text.split(/\r\n|\r|\n/).length * lineHeight + bufferHeight;
+      } else {
+        return defaultHeight;
+      }
     }
   }
 

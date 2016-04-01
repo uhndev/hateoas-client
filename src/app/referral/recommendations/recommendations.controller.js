@@ -26,10 +26,10 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'visitService', 'serviceDate'];
+    vm.validityFields = ['visitService', 'serviceDate'];
     vm.serviceOrder = {
-      recommendedServices: 1,
-      serviceDetail: 2
+      recommendedServices: 2,
+      serviceDetail: 1
     };
     vm.accordionStatus = {};
     vm.currentDate = new Date();
@@ -78,7 +78,9 @@
           'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
         };
-        vm.physician = null;
+
+        // load physician in from referraldetail
+        vm.physician = data.items.physician || null;
         vm.staffCollection = {};
         vm.staff = [];
         vm.workStatus = null;
@@ -86,6 +88,13 @@
         vm.prognosisTimeframe = null;
         vm.visitService = null;
         vm.serviceDate = new Date();
+
+        // load in staff selections from referraldetail
+        if (data.items.staff) {
+          vm.staff = [vm.staff];
+          vm.staffCollection[data.items.staffType_name] = [data.items.staff];
+          setStaffSelections(data.items.staffType_name);
+        }
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);

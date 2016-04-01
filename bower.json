@@ -41,7 +41,7 @@
     "angular-simple-logger": "~0.1.5",
     "ui-select": "angular-ui-select#^0.14.9",
     "angular-filter": "^0.5.8",
-    "angular-contenteditable": "^0.3.8"
+    "angular-markdown-directive": "^0.3.1"
   },
   "resolutions": {
     "angular": "1.5.0",

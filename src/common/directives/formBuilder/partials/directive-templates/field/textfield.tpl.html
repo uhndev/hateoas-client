@@ -1,22 +1,31 @@
 <ng-form name="sub_form">
-  <div class="form-group">
-    <label for="{field.field_name}">
-      {{field.field_id}}) {{field.field_title}}
+  <div class="form-group" ng-class="{'has-error': sub_form.$invalid && !sub_form.$pristine}">
+    <label for="{{field.field_name}}">
+      {{field.field_id}})
+    </label>
+    <label for="{{field.field_name}}" translate>
+      {{field.field_title}}
     </label>&nbsp;
-    <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
+    <span class="glyphicon glyphicon-ok" ng-show="field.field_value && sub_form.$valid"></span>
     <input type="text"
            id="{{field.field_id}}"
            dynamic-name="field.field_name"
            class="form-control"
            data-ng-model="field.field_value"
+           data-ng-model-options="{debounce: 500}"
            ui-validate=" 'validateText($value, field)' "
+           validation-check criteria="{
+             model: field.field_validation.unique,
+             id: field.field_modelID,
+             attribute: field.field_name
+           }"
            value="field.field_value"
            ng-required="field.field_required"
-           placeholder="{{field.field_placeholder}}"
+           placeholder="{{field.field_placeholder | translate}}"
     >
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error"
-            ng-show="(field.field_required && !field.field_value) || showValidateError">
+            ng-show="(field.field_required && !field.field_value) || sub_form.$invalid" translate>
           * {{field.field_helpertext}}
       </span>
     </div>

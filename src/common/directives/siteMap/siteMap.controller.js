@@ -1,5 +1,4 @@
 /**
- *
  * Directive controller for SiteMap
  */
 
@@ -20,9 +19,9 @@
     })
     .controller('SiteMapController', SiteMapController);
 
-  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'toastr'];
+  SiteMapController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'toastr', 'AddressService'];
 
-  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady, toastr) {
+  function SiteMapController($scope, uiGmapGoogleMapApi, uiGmapIsReady, toastr, Address) {
     var vm = this;
 
     // bindable variables
@@ -42,18 +41,20 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-
-      //init maps api object
+      // init maps api object
       uiGmapGoogleMapApi.then(function (mapsAPI) {
 
-        //init googleMaps object
+        // init googleMaps object
         vm.googleMaps = mapsAPI;
 
-        //initialize directions service
+        // initialize directions service
         vm.directionsService = new vm.googleMaps.DirectionsService();
 
-        //init directions renderer
+        // init directions renderer
         vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
+
+        // init geocoder
+        vm.geocoder = new vm.googleMaps.Geocoder();
 
         //init travelModes
         vm.travelModes = vm.googleMaps.DirectionsTravelMode;
@@ -72,32 +73,32 @@
         }, true);
 
         $scope.$watch('sitemap.selectedClientMarker', function (newClientMarker, oldClientMarker) {
-          if (oldClientMarker.id !== 'client' && newClientMarker !== null) {
+          if (newClientMarker !== null && newClientMarker.id === 'client') {
             vm.markers.push(newClientMarker);
           } else {
-            _.find(vm.markers, {id:'client'}).latitude = newClientMarker.latitude;
-            _.find(vm.markers, {id:'client'}).longitude = newClientMarker.longitude;
+            _.find(vm.markers, {id: 'client'}).latitude = newClientMarker.latitude;
+            _.find(vm.markers, {id: 'client'}).longitude = newClientMarker.longitude;
           }
           resetDirections();
         }, true);
 
         $scope.$watch('sitemap.selectedSite', function (newSite, oldSite) {
-          resetDirections();
+          if (newSite !== oldSite) {
+            resetDirections();
+          }
         }, true);
       });
     }
 
     /**
      * calculateDirections
-     *
-     * takes an array of origin/destination addresses and hits the
-     * google maps directions service and set the returned route
-     * on the map and in the directions div
+     * @description Takes an array of origin/destination addresses and hits the
+     *              google maps directions service and set the returned route
+     *              on the map and in the directions div
      *
      * @param origin
      * @param destination
      */
-
     function calculateDirections(origin, destination) {
 
       //prepare the request
@@ -117,11 +118,10 @@
           //scope.apply is a workaround for an angular google maps bug with how they handle scopes
           //TODO: this should be changed when the bug is fixed, but who knows when that will be
           $scope.$apply(function () {
-
-            //set the directions steps
-            vm.directionsSteps = response.routes[0].legs[0].steps;
-            return uiGmapIsReady.promise(1);
-          })
+              //set the directions steps
+              vm.directionsSteps = response.routes[0].legs[0].steps;
+              return uiGmapIsReady.promise(1);
+            })
             .then(function (instances) {
               var instanceMap = instances[0].map;
               vm.directionsDisplay.setMap(instanceMap);
@@ -139,65 +139,63 @@
 
     /**
      * selectSite
-     *
      * @description takes a site object, calculates origin/destination based on the client/passed site
      * and calls calculateDirections to express the new route on the map
      *
      * @param site
      */
-
     function selectSite(site) {
       vm.selectedSite = site;
-
-      vm.resetDirections();
+      resetDirections();
     }
 
     /**
      * resetDirections
-     *
      * @description called off of watches and changes to the travelMode, resets the directions per the currently
      * selectedSite and currently selected Client Marker
-     *
-     *
      */
-
     function resetDirections() {
-      var origin = new vm.googleMaps.LatLng(vm.selectedClientMarker.latitude, vm.selectedClientMarker.longitude);
-      var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
+      var configureDirectionsCalculation = function() {
+        if (_.has(vm.selectedSite.address, 'latitude') && _.has(vm.selectedSite.address, 'longitude') && vm.selectedClientMarker) {
+          var origin = new vm.googleMaps.LatLng(vm.selectedClientMarker.latitude, vm.selectedClientMarker.longitude);
+          var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
 
-      vm.calculateDirections(origin, destination);
+          calculateDirections(origin, destination);
+        }
+      };
+
+      if (!vm.selectedClientMarker.latitude || !vm.selectedClientMarker.longitude) {
+        geocodeAddress(vm.selectedClientMarker, function (updatedMarker) {
+          vm.selectedClientMarker.latitude = updatedMarker.latitude;
+          vm.selectedClientMarker.longitude = updatedMarker.longitude;
+          configureDirectionsCalculation();
+        });
+      } else {
+        configureDirectionsCalculation();
+      }
     }
+
     /**
-     * geocodeSites
-     *
-     * this function takes the site addresses and geocodes them storing the long/latt of each site...
-     * TODO: this function likely belongs somewhere else, but is unused now, maybe on a hook in the address model? artifact
-     *
+     * geocodeAddress
+     * @description This function takes an address string and sets latitude and longitude on the record
      */
-
-    /*
-     function geocodeSites() {
-     vm.sites.forEach(function (site) {
-     var addy=_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' ');
-     vm.geocoder.geocode({address: addy}, function (location) {
-     if (location[0]) {
-
-     var newSite = new Site(site);
-     newSite.address.latitude = location[0].geometry.location.lat();
-     newSite.address.longitude = location[0].geometry.location.lng();
-     newSite.$update({id: site.id})
-     .then(function () {
-     toastr.success('Site geolocation updated', 'Geolocation');
-     })
-     .finally(function () {
-     newSite = {};
-     location = {};
-     });
-     }
-     });
-     });
-     }
-     */
+    function geocodeAddress(marker, callback) {
+      vm.geocoder.geocode({address: marker.addressName}, function (location) {
+        if (location[0]) {
+          var latitude = location[0].geometry.location.lat();
+          var longitude = location[0].geometry.location.lng();
+          Address.update({
+            id: marker.addressID,
+            latitude: latitude,
+            longitude: longitude
+          }, function (updatedAddress) {
+            marker.latitude = latitude;
+            marker.longitude = longitude;
+            callback(marker);
+          });
+        }
+      });
+    }
 
   }
 })();

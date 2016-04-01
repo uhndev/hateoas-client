@@ -46,7 +46,9 @@
         </div>
         <div class="panel-body">
           <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].availableSites.length > 0">
-            <label>Select Site:</label>
+            <label>
+              <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:
+            </label>
             <select ng-model="rec.recommendedServices[rec.currIndex].site" class="form-control"
                     ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
             </select>
@@ -90,10 +92,9 @@
           </h3>
         </div>
         <div class="panel-body">
-          <form layout="column">
+          <ng-form layout="column" name="visitForm">
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
-              <span class="text-danger pull-right" ng-if="!rec.physician"> * required</span>
               <select-loader
                 url="physician"
                 is-atomic="true"
@@ -105,7 +106,7 @@
             </div>
 
             <div class="form-group" flex ng-repeat="staffType in rec.availableStaffTypes">
-              <label translate>Select {{staffType.name}}:</label>
+              <label translate>{{staffType.name}}</label>
               <select-loader
                 url="staff"
                 query="staffType.baseQuery"
@@ -119,7 +120,6 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
-              <span class="text-danger pull-right" ng-if="!rec.workStatus"> * required</span>
               <select-loader
                 url="workstatus"
                 is-atomic="true"
@@ -132,7 +132,6 @@
 
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
-              <span class="text-danger pull-right" ng-if="!rec.prognosis"> * required</span>
               <div flex>
                 <select ng-model="rec.prognosis" ng-change="rec.setServiceSelections('prognosis')"
                         class="form-control"
@@ -186,7 +185,7 @@
                     ng-click="rec.saveServices()">
               Make Recommendations for {{rec.recommendedServices.length}} Service(s)
             </button>
-          </form>
+          </ng-form>
         </div>
       </div>
       <!-- End Shared Service Detail Selectors -->
