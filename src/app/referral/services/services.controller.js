@@ -18,8 +18,8 @@
 
   function ServicesController($resource, $location, API, HeaderService, AltumAPI, toastr) {
     var vm = this;
-    vm.DEFAULT_GROUP_BY = 'serviceGroupByDate';
-    vm.DEFAULT_SUBGROUP_BY = 'physician_displayName';
+    vm.DEFAULT_GROUP_BY = 'statusName';
+    vm.DEFAULT_SUBGROUP_BY = 'siteName';
 
     // bindable variables
     vm.url = API.url() + $location.path();
