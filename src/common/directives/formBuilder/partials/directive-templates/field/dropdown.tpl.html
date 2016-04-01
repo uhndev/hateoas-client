@@ -1,7 +1,10 @@
 <ng-form name="sub_form">
   <div class="form-group">
     <label for="field.field_id">
-      {{field.field_id}}) {{field.field_title}}
+      {{field.field_id}})
+    </label>
+    <label for="field.field_id" translate="">
+      {{field.field_title}}
     </label>&nbsp;
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <div class="row-fluid">
@@ -9,7 +12,7 @@
               ng-model="field.field_value"
               ng-options="option.option_value as option.option_title for option in field.field_options"
               ng-required="field.field_required">
-        <option value="" disabled>{{field.field_placeholder}}</option>
+        <option value="" disabled>{{field.field_placeholder | translate}}</option>
       </select>
     </div>
     <div ng-show="!sub_form.$pristine">
