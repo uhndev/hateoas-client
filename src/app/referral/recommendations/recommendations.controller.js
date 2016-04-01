@@ -26,7 +26,7 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
-    vm.validityFields = ['physician', 'workStatus', 'prognosis', 'visitService', 'serviceDate'];
+    vm.validityFields = ['visitService', 'serviceDate'];
     vm.serviceOrder = {
       recommendedServices: 2,
       serviceDetail: 1
