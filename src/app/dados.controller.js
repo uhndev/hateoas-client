@@ -26,13 +26,19 @@
      * @description Set the page title according to JSON namespace
      */
     function setPageTitle() {
-      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''));
-      if (currentPaths.length == 1) {
-        $scope.pageTitle = LOCALES.translationPrefix + currentPaths[0].toUpperCase() + LOCALES.translateSuffix;
-      }
-      if (currentPaths.length == 2) {
-        $scope.pageTitle = LOCALES.translationPrefix + currentPaths[0].toUpperCase() + '.' + currentPaths[1].toUpperCase() + LOCALES.translateSuffix;
-      }
+      var path_build = null;
+      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, '')).forEach(function(value) {
+        if (path_build !== null) {
+
+          path_build = path_build + '.' + value.toUpperCase();
+        }
+        else {
+
+          path_build = value.toUpperCase();
+        }
+      });
+      $scope.pageTitle = LOCALES.translationPrefix + path_build + LOCALES.translateSuffix;
+
     }
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
