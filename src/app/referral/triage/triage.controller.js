@@ -45,7 +45,7 @@
         vm.selectedPhysician = data.items.physician || {};
         vm.selectedStaff = data.items.staff || {};
         vm.selectedSite = data.items.site || {};
-        vm.selectedProgram = data.items.program.id || {};
+        vm.selectedProgram = data.items.program ? data.items.program.id : {};
         vm.isPhysicianPrimary = data.items.isPhysicianPrimary;
         vm.isStaffPrimary = !data.items.isPhysicianPrimary;
         vm.mapDisabled = false;
