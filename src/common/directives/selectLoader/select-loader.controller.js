@@ -81,7 +81,7 @@
         if (!loadMore) {
           initQuery.sort = 'id ASC';
           if (vm.isAtomic) {
-            initQuery.skip = searchIds - DEFAULT_RANGE;
+            initQuery.skip = (searchIds - DEFAULT_RANGE < 0) ? 0 : searchIds - DEFAULT_RANGE;
           } else {
             initQuery.limit = _.max(searchIds) + vm.limit;
           }
