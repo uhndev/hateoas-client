@@ -19,7 +19,7 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralID = _.getParentIDFromUrl($location.path());
-    vm.staffTypes = AltumAPI.StaffType.query();
+    vm.staffTypes = [];
     vm.referral = {};
     vm.selectedProgram = null;
     vm.selectedPhysician = null;
@@ -42,6 +42,11 @@
       Resource.get(function (data, headers) {
         vm.resource = data;
         vm.referral = data.items;
+        vm.staffTypes = AltumAPI.StaffType.query({
+          where: {
+            id: _.pluck(data.items.staffTypes, 'id')
+          }
+        });
         vm.selectedPhysician = data.items.physician || {};
         vm.selectedStaff = data.items.staff || {};
         vm.selectedSite = data.items.site || {};
