@@ -9,6 +9,7 @@
 
     // bindable variables
     $scope.query = $scope.query || {};
+    $scope.placeholder = $scope.placeholder || 'COMMON.HATEOAS.QUERY.PLACEHOLDER';
     $scope.baseQuery = {};
     $scope.hateoasQueries = $scope.queries || [];
     $scope.operators = [];

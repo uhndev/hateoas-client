@@ -20,6 +20,7 @@
         isDisabled: '=',
         bindObject: '@?',
         values: '=ngModel',
+        placeholder: '@?',
         labels: '@'
       },
       templateUrl: 'directives/selectLoader/select-loader.tpl.html',
