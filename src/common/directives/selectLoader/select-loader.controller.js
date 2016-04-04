@@ -24,6 +24,7 @@
     vm.href = (vm.url) ? API.url() + '/' + vm.url : null;
     vm.input = vm.input || [];
     vm.baseQuery = vm.query || null;
+    vm.placeholder = vm.placeholder || 'Search By ' + _.startCase(vm.url);
     vm.labels = vm.labels || 'name';
     vm.skip = 0;
     vm.limit = 20;

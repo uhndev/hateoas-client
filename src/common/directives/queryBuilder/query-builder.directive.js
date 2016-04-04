@@ -14,7 +14,8 @@
           headers: '=',
           template: '&',
           advanced: '=',
-          queries: '='
+          queries: '=',
+          placeholder: '@?'
         },
         link: postLink,
         templateUrl: 'directives/queryBuilder/query-builder.tpl.html',

@@ -8,7 +8,7 @@
       <input type="text"
              class="form-control"
              context-translator="COMMON.HATEOAS.QUERY.PLACEHOLDER"
-             placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+             placeholder="{{ placeholder | translate }}"
              ng-model-options="{ debounce: 700 }"
              ng-model="field.value"
              ng-change="search(field.value)"/>

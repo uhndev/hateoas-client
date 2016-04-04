@@ -44,6 +44,7 @@
       if ($state.is('hateoas') && vm.navigation.length > 0 && vm.service.submenu.length > 0 && !AuthService.isAdminPage($location.path())) {
         pathArray = _.pathnameToArray($location.path());
         baseModel = _.first(pathArray);
+        vm.queryPlaceholder = 'Switch To ' + _.startCase(baseModel);
 
         var queryParams = {
           sort: 'displayName ASC'
