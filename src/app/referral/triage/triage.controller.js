@@ -19,7 +19,11 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralID = _.getParentIDFromUrl($location.path());
-    vm.staffTypes = AltumAPI.StaffType.query();
+    vm.staffTypes = AltumAPI.StaffType.query({
+      where: {
+        isProvider: true
+      }
+    });
     vm.referral = {};
     vm.selectedProgram = null;
     vm.selectedPhysician = null;
@@ -108,7 +112,13 @@
             return AltumAPI.Site.query().$promise;
           },
           referral: function () {
-            return vm.referral;
+            return {
+              title: vm.referral.clientcontact.displayName,
+              addressID: vm.referral.clientcontact.address,
+              addressName: _.values(_.pick(vm.referral.clientcontact, 'address1', 'address2', 'city', 'province', 'postalCode', 'country')).join(' '),
+              latitude: vm.referral.clientcontact.latitude,
+              longitude: vm.referral.clientcontact.longitude
+            };
           }
         }
       });
