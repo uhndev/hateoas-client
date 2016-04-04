@@ -7,11 +7,8 @@
       <form>
         <div class="form-group no-margin has-feedback has-feedback-left">
           <i class="no-top form-control-feedback fa fa-search"></i>
-          <label class="control-label ng-hide" translate>
-            COMMON.HATEOAS.QUERY.PLACEHOLDER
-          </label>
           <input type="text" class="form-control"
-                 placeholder="{{ 'COMMON.HATEOAS.QUERY.PLACEHOLDER' | translate }}"
+                 placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
                  ng-model="rec.search"/>
         </div>
       </form>
@@ -29,7 +26,7 @@
     </div>
   </div>
 
-  <altum-notebook ng-if="rec.referralNotes" notes="rec.referralNotes.notes" collection="{'referral': rec.referral.id}"></altum-notebook>
+  <altum-notebook ng-if="rec.referralNotes" notes="rec.referralNotes" collection="{'referral': rec.referral.id}"></altum-notebook>
 
   <div layout="row" layout-md="column">
 
@@ -47,7 +44,8 @@
         <div class="panel-body">
           <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].availableSites.length > 0">
             <label>
-              <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:
+              <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
+              <span class="fa fa-map-marker fa-lg selectable" ng-click="rec.openMap()"></span>
             </label>
             <select ng-model="rec.recommendedServices[rec.currIndex].site" class="form-control"
                     ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
@@ -70,7 +68,7 @@
             <div class="checkbox">
               <label>
                 <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
-                       ng-checked="rec.recommendedServices[rec.currIndex].approvalRequired"
+                       ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
                        ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
                 Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
               </label>
@@ -154,10 +152,15 @@
             <div class="form-group" flex>
               <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
               <span class="text-danger pull-right" ng-if="!rec.visitService"> * required</span>
-              <select ng-model="rec.visitService" ng-change="rec.setServiceSelections('visitService')"
-                      class="form-control"
-                      ng-options="service as service.altumServiceName for service in rec.referral.approvedServices">
-              </select>
+              <ui-select ng-model="rec.visitService" theme="bootstrap" ng-change="rec.setServiceSelections('visitService')">
+                <ui-select-match placeholder="Select Service Type">
+                  {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+                </ui-select-match>
+                <ui-select-choices repeat="service in rec.referral.approvedServices | filter: $select.search">
+                  <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
+                  <span>({{service.approvalDate | date:'short'}})</span>
+                </ui-select-choices>
+              </ui-select>
             </div>
 
             <div class="form-group" flex>

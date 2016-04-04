@@ -58,7 +58,7 @@
                 {{triage.isStaffPrimary ? "(Primary)" : ""}}
               </label>
 
-              <div class="row">
+              <div class="row" ng-if="triage.staffTypes">
                 <div class="col-md-4">
                   <select ng-model="triage.selectedStaffType" class="form-control"
                           ng-change="triage.checkPrimaryProviders()"

@@ -33,7 +33,7 @@
 
     function init() {
       // init client location information
-      vm.origin = _.values(_.pick(referral.clientcontact, 'address1', 'address2', 'city', 'province', 'postalCode', 'country')).join(' ');
+      vm.origin = referral.addressName;
 
       // initialize sites/destinations
       _.each(sites, function (site, index) {
@@ -55,11 +55,11 @@
       vm.selectedClientMarker = {
         id: 'client',
         idKey: 'client',
-        latitude: referral.clientcontact.latitude,
-        longitude: referral.clientcontact.longitude,
-        title: referral.clientcontact.displayName,
+        latitude: referral.latitude,
+        longitude: referral.longitude,
+        title: referral.title,
         icon: {url: 'assets/img/patienticon.png'},
-        addressID: referral.clientcontact.address,
+        addressID: referral.addressID,
         addressName: vm.origin
       };
 

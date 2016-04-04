@@ -3,6 +3,7 @@
 
   angular
     .module('altum.referral.recommendations', [
+      'ui.bootstrap',
       'ngMaterial',
       'ngResource',
       'toastr',
@@ -13,10 +14,10 @@
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$q', '$resource', '$uibModal', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
   ];
 
-  function RecommendationsController($q, $resource, $location, API, HeaderService, AltumAPI, toastr) {
+  function RecommendationsController($q, $resource, $uibModal, $location, API, HeaderService, AltumAPI, toastr) {
     var vm = this;
     var ReferralServices;
 
@@ -59,6 +60,7 @@
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
     vm.swapPanelOrder = swapPanelOrder;
+    vm.openMap = openMap;
 
     init();
 
@@ -68,7 +70,7 @@
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
+        vm.referralNotes = AltumAPI.Note.query({referral: vm.referral.id});
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
@@ -139,7 +141,8 @@
           serviceCategory: altumProgramService.serviceCategory,
           serviceCategoryName: altumProgramService.serviceCategoryName,
           site: null,
-          approvalNeeded: altumProgramService.approvalRequired
+          approvalNeeded: altumProgramService.approvalNeeded,
+          approvalRequired: altumProgramService.approvalRequired
         });
       });
     }
@@ -327,6 +330,54 @@
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.serviceDetail = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
+    }
+
+    /**
+     * openMap
+     * @description opens a modal window for the mapModal site picker
+     */
+    function openMap() {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'map-modal-window',
+        templateUrl: 'referral/triage/mapModal.tpl.html',
+        controller: 'MapModalController',
+        controllerAs: 'mapmodal',
+        bindToController: true,
+        size: 'lg',
+        resolve: {
+          selectedSite: function () {
+            if (!_.isEmpty(vm.selectedSite)) {
+              return AltumAPI.Site.get({
+                id: rec.recommendedServices[rec.currIndex].site,
+                populate: 'address'
+              }).$promise;
+            } else {
+              return null;
+            }
+          },
+          sites: function () {
+            return AltumAPI.Site.query({
+              where: {
+                id: _.pluck(vm.recommendedServices[vm.currIndex].availableSites, 'id')
+              }
+            }).$promise;
+          },
+          referral: function () {
+            return {
+              title: vm.referral.client_displayName,
+              addressID: vm.referral.client_address,
+              addressName: _.values(_.pick(vm.referral, 'client_address1', 'client_address2', 'client_city', 'client_province', 'client_postalCode', 'client_country')).join(' '),
+              latitude: vm.referral.client_latitude,
+              longitude: vm.referral.client_longitude
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedSite) {
+        vm.recommendedServices[vm.currIndex].site = angular.copy(selectedSite.id);
+      });
     }
 
   }
