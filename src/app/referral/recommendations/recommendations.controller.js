@@ -41,7 +41,9 @@
     vm.availableServices = [];
     vm.availablePrognosis = AltumAPI.Prognosis.query();
     vm.availableTimeframes = AltumAPI.Timeframe.query();
-    AltumAPI.StaffType.query().$promise.then(function (staffTypes) {
+    AltumAPI.StaffType.query({
+      where: {isProvider: true}
+    }).$promise.then(function (staffTypes) {
       vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
         staffType.baseQuery = {staffType: staffType.id};
         return staffType;
