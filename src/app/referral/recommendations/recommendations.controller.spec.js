@@ -189,6 +189,7 @@ describe('Controller: RecommendationsController Tests', function() {
     httpBackend.whenGET('http://localhost:1337/api/servicetype').respond();
     httpBackend.whenGET('http://localhost:1337/api/staffType').respond();
     httpBackend.whenGET('http://localhost:1337/api/note?referral=1').respond();
+    httpBackend.whenGET('http://localhost:1337/api/staffType?where=%7B%22isProvider%22:true%7D').respond();
 
     httpBackend.flush();
   }));
