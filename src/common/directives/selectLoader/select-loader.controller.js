@@ -24,6 +24,7 @@
     vm.href = (vm.url) ? API.url() + '/' + vm.url : null;
     vm.input = vm.input || [];
     vm.baseQuery = vm.query || null;
+    vm.placeholder = vm.placeholder || 'Search By ' + _.startCase(vm.url);
     vm.labels = vm.labels || 'name';
     vm.skip = 0;
     vm.limit = 20;
@@ -81,7 +82,7 @@
         if (!loadMore) {
           initQuery.sort = 'id ASC';
           if (vm.isAtomic) {
-            initQuery.skip = searchIds - DEFAULT_RANGE;
+            initQuery.skip = (searchIds - DEFAULT_RANGE < 0) ? 0 : searchIds - DEFAULT_RANGE;
           } else {
             initQuery.limit = _.max(searchIds) + vm.limit;
           }
