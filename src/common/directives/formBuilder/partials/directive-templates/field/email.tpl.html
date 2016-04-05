@@ -1,11 +1,15 @@
 <ng-form name="sub_form">
   <div class="form-group">
     <label for="field.field_id">
-      {{field.field_id}}) {{field.field_title}}
-    </label>&nbsp;
+      {{field.field_id}})
+    </label>
+    <label for="field.field_id" translate>
+      {{field.field_title}}
+    </label>
+    &nbsp;
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <input type="email"
-           placeholder="{{field.field_placeholder}}"
+           placeholder="{{field.field_placeholder | translate}}"
            id="field.field_id"
            name="{{field.field_name}}"
            class="form-control"
