@@ -5,7 +5,7 @@
     .service('DefaultRouteService', DefaultRouteService)
     .service('AUTH_API', Auth);
 
-  DefaultRouteService.$inject = ['$location', '$state', 'AuthService'];
+  DefaultRouteService.$inject = ['$location', '$state', '$urlMatcherFactory', 'AuthService'];
   Auth.$inject = ['API'];
 
   /**
@@ -13,11 +13,12 @@
    * @description Returns a function that upon successful login, route accordingly to a user's access level
    * @param $location
    * @param $state
+   * @param $urlMatcherFactory
    * @param Auth
    * @returns {Object}
    * @constructor
    */
-  function DefaultRouteService($location, $state, Auth) {
+  function DefaultRouteService($location, $state, $urlMatcherFactory, Auth) {
     var service = {
       navigateHome: navigateHome,
       resolve: resolve,
