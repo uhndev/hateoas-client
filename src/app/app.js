@@ -66,10 +66,10 @@
     .config(dadosConfig);
 
   dadosConfig.$inject = [
-    '$stateProvider', '$translateProvider', '$uibTooltipProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
+    '$stateProvider', '$translateProvider', '$uibTooltipProvider', 'uiGmapGoogleMapApiProvider', 'tmhDynamicLocaleProvider', 'toastrConfig'
   ];
 
-  function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, dynamicLocale, toastrConfig) {
+  function dadosConfig($stateProvider, $translateProvider, $uibTooltipProvider, uiGmapGoogleMapApiProvider, dynamicLocale, toastrConfig) {
     $stateProvider.state('hateoas', {
       template: '<hateoas-client></hateoas-client>'
     });
@@ -94,6 +94,12 @@
 
     $uibTooltipProvider.options({
       appendToBody: true
+    });
+
+    uiGmapGoogleMapApiProvider.configure({
+      //    key: 'your api key',
+      v: '3.20', //defaults to latest 3.X anyhow
+      libraries: 'weather,geometry,visualization'
     });
   }
 
