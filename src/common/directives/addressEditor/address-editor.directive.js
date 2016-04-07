@@ -59,7 +59,7 @@
      * @param isAddressFormValid
      */
     function canUpdateGeocode(isAddressFormValid) {
-      if (isAddressFormValid && (!vm.resource.address.latitude || !vm.resource.address.longitude)) {
+      if (isAddressFormValid) {
         vm.geocodesLoading = true;
         vm.resource.address.latitude = 'Loading...';
         vm.resource.address.longitude = 'Loading...';
