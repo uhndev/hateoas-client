@@ -131,6 +131,9 @@
             // notify that answers array was updated
             $scope.$broadcast('AnswerSetLoaded');
           });
+        } else {
+          // reset answerSet anyway in case answerSetID is not set
+          vm.answerSet = {};
         }
       }
     });
