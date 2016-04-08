@@ -1,10 +1,10 @@
 <div class="modal-header">
-  <h3 class="modal-title">Add Subject to Study</h3>
+  <h3 class="modal-title" translate>COMMON.MODELS.STUDY.SUBJECTS.ADD</h3>
 </div>
 <div class="modal-body">
   <ng-form name="subjectForm" class="form-horizontal" novalidate>
     <div class="form-group" ng-class="{'has-error': subjectForm.username.$invalid && !subjectForm.username.$pristine}">
-      <label for="username" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.USERNAME&nbsp;</label>
+      <label for="username" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.USERNAME</label>
       <div class="col-sm-9">
         <input type="text" name="username" class="form-control"
                data-ng-model="addSubject.newSubject.username"
@@ -12,22 +12,22 @@
                ng-minlength="5"
                placeholder="johndoe" required>
         <p ng-show="subjectForm.username.$invalid && !subjectForm.username.$pristine"
-           class="pull-right required-error">Username must be unique and at least 5 characters</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME</p>
       </div>
     </div>
     <div class="form-group" ng-class="{'has-error': subjectForm.email.$invalid && !subjectForm.email.$pristine}">
-      <label for="email" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.EMAIL&nbsp;</label>
+      <label for="email" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.EMAIL</label>
       <div class="col-sm-9">
         <input type="email" name="email" class="form-control"
                data-ng-model="addSubject.newSubject.email"
                validation-check criteria="{model: 'user', attribute: 'email'}"
                placeholder="johndoe@email.com" required>
         <p ng-show="subjectForm.email.$invalid && !subjectForm.email.$pristine"
-           class="pull-right required-error">Email is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_EMAIL</p>
       </div>
     </div>
     <div class="form-group">
-      <label for="password" class="col-sm-3 control-label" translate>APP.AUTH.PASSWORD&nbsp;</label>
+      <label for="password" class="col-sm-3 control-label" translate>APP.AUTH.PASSWORD</label>
       <div class="col-sm-9">
         <input type="text" name="password" class="form-control"
              ng-model="addSubject.newSubject.password" ng-minlength="8"
@@ -35,13 +35,13 @@
              generate-password for-input="addSubject.newSubject.password"
              required disabled />
         <p ng-show="subjectForm.password.$invalid && !subjectForm.password.$pristine"
-           class="pull-right required-error">
-          Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character
+           class="pull-right required-error" translate>
+          COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_PASSWORD
         </p>
       </div>
     </div>
     <div class="form-group">
-      <label for="prefix" class="col-sm-3 control-label">Prefix&nbsp;</label>
+      <label for="prefix" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.PREFIX</label>
       <div class="col-sm-9">
         <select name="prefix" class="form-control" ng-model="addSubject.newSubject.prefix" required>
           <option value="" disabled>Select a prefix</option>
@@ -51,31 +51,31 @@
           <option value="Dr." label="Dr.">Dr.</option>
         </select>
         <p ng-show="subjectForm.prefix.$invalid && !subjectForm.prefix.$pristine"
-           class="pull-right required-error">Prefix is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </div>
     </div>
     <div class="form-group">
-      <label for="firstname" class="col-sm-3 control-label">Firstname&nbsp;</label>
+      <label for="firstname" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.FIRSTNAME</label>
       <div class="col-sm-9">
         <input type="text" name="firstname" class="form-control"
                data-ng-model="addSubject.newSubject.firstname"
                placeholder="John" required>
         <p ng-show="subjectForm.firstname.$invalid && !subjectForm.firstname.$pristine"
-           class="pull-right required-error">Firstname is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </div>
     </div>
     <div class="form-group">
-      <label for="lastname" class="col-sm-3 control-label">Lastname&nbsp;</label>
+      <label for="lastname" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.LASTNAME</label>
       <div class="col-sm-9">
       <input type="text" name="lastname" class="form-control"
              data-ng-model="addSubject.newSubject.lastname"
              placeholder="Doe" required>
       <p ng-show="subjectForm.lastname.$invalid && !subjectForm.lastname.$pristine"
-         class="pull-right required-error">Lastname is required.</p>
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </div>
     </div>
     <div class="form-group">
-      <label for="gender" class="col-sm-3 control-label">Gender&nbsp;</label>
+      <label for="gender" class="col-sm-3 control-label" translate>COMMON.MODELS.USER.GENDER</label>
       <div class="col-sm-9">
       <select name="gender" class="form-control" ng-model="addSubject.newSubject.gender" required>
         <option value="" disabled>Select a gender</option>
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="dob" class="col-sm-3 control-label">Date of Birth&nbsp;</label>
+      <label for="dob" class="col-sm-3 control-label" translate>COMMON.MODELS.SYSTEM_MODEL.USER.DATE_BIRTH</label>
       <div class="col-sm-9">
       <p class="input-group">
         <input name="dob" type="text" class="form-control" uib-datepicker-popup ng-model="addSubject.newSubject.dob"
@@ -96,7 +96,7 @@
           <button type="button" class="btn btn-default" ng-click="addSubject.openedDOB = true"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
         <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine"
-           class="pull-right required-error">Date of birth is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </p>
       </div>
     </div>
@@ -104,7 +104,7 @@
   <hr/>
   <ng-form name="enrollmentForm" class="form-horizontal" novalidate>
     <div class="form-group">
-      <label for="provider" class="col-sm-3 control-label">Providers&nbsp;</label>
+      <label for="provider" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.IDENTITY</label>
       <div class="col-sm-9" ng-if="addSubject.studyUsers">
         <select-loader
           url="provider"
@@ -117,14 +117,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="status" class="col-sm-3 control-label">Status&nbsp;</label>
+      <label for="status" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.STATUS</label>
       <div class="col-sm-9">
         <select name="status" class="form-control" ng-model="addSubject.newSubject.status" required>
-          <option value="" disabled>Select a status</option>
+          <option value="" disabled translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.STATUS_PLACEHOLDER</option>
           <option ng-repeat="status in addSubject.statuses track by $index" value="{{status}}">{{status}}</option>
         </select>
         <p ng-show="enrollmentForm.status.$invalid"
-           class="pull-right required-error">Status is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </div>
     </div>
     <div class="form-group" ng-repeat="(key, values) in addSubject.study.attributes track by $index">
@@ -137,7 +137,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="doe" class="col-sm-3 control-label">Date of Event&nbsp;</label>
+      <label for="doe" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.DATE_EVENT</label>
       <div class="col-sm-9">
       <p class="input-group">
         <input name="doe" type="text" class="form-control" uib-datepicker-popup ng-model="addSubject.newSubject.doe"
@@ -147,12 +147,12 @@
           <button type="button" class="btn btn-default" ng-click="addSubject.openedDOE = true"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
         <p ng-show="enrollmentForm.doe.$invalid"
-           class="pull-right required-error">Date of event is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </p>
       </div>
     </div>
     <div class="form-group">
-      <label for="centreInput" class="col-sm-3 control-label">Collection Centre&nbsp;</label>
+      <label for="centreInput" class="col-sm-3 control-label" translate>COMMON.MODELS.COLLECTION_CENTRE.IDENTITY</label>
       <div class="col-sm-9">
         <select-loader
           name="centreInput"
@@ -166,7 +166,7 @@
       </div>
       <div class="col-sm-9">
         <p ng-show="!addSubject.newSubject.collectionCentre"
-           class="pull-right required-error">Collection Centre is required.</p>
+           class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
       </div>
     </div>
   </ng-form>
@@ -174,10 +174,10 @@
 </div>
 <div class="modal-footer">
   <button type="submit" id="addSubjectBtn" class="btn btn-primary"
-          ng-disabled="subjectForm.$invalid || enrollmentForm.$invalid || !addSubject.newSubject.collectionCentre" ng-click="addSubject.addSubject()">
-    Add Subject
+          ng-disabled="subjectForm.$invalid || enrollmentForm.$invalid || !addSubject.newSubject.collectionCentre" ng-click="addSubject.addSubject()" translate>
+    COMMON.MODELS.STUDY.SUBJECTS.ADD_BUTTON
   </button>
-  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="addSubject.cancel()">
-    Cancel
+  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="addSubject.cancel()" translate>
+    COMMON.MODELS.STUDY.SUBJECTS.CANCEL
   </button>
 </div>
