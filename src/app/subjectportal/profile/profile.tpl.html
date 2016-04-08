@@ -17,7 +17,7 @@
                      placeholder="johndoe" required>
 
               <p ng-show="subjectForm.username.$invalid && !subjectForm.username.$pristine"
-                 class="pull-right required-error">Username must be at least 5 characters</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME</p>
             </div>
           </div>
           <div class="form-group">
@@ -29,7 +29,7 @@
                      placeholder="johndoe@email.com" required>
 
               <p ng-show="subjectForm.email.$invalid && !subjectForm.email.$pristine"
-                 class="pull-right required-error">Email is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_EMAIL</p>
             </div>
           </div>
           <div class="form-group">
@@ -40,8 +40,8 @@
                      ng-model="profile.user.password" ng-minlength="8"
                      ng-pattern="/(?=.*[a-z])(?=.*[^a-zA-Z])/"/>
               <p ng-show="subjectForm.password.$invalid && !subjectForm.password.$pristine"
-                 class="pull-right required-error">
-                Password must be at least 8 characters, contain 1 at least lower case letter and 1 numeric character
+                 class="pull-right required-error" translate>
+                COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_PASSWORD
               </p>
             </div>
           </div>
@@ -50,7 +50,7 @@
 
             <div class="col-sm-9">
               <select name="prefix" class="form-control" ng-model="profile.user.prefix" required>
-                <option value="" disabled>Select a prefix</option>
+                <option value="" disabled translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.PREFIX_PLACEHOLDER</option>
                 <option value="Mr." label="Mr.">Mr.</option>
                 <option value="Mrs." label="Mrs.">Mrs.</option>
                 <option value="Ms." label="Ms.">Ms.</option>
@@ -58,7 +58,7 @@
               </select>
 
               <p ng-show="subjectForm.prefix.$invalid && !subjectForm.prefix.$pristine"
-                 class="pull-right required-error">Prefix is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.PREFIX_PLACEHOLDER</p>
             </div>
           </div>
           <div class="form-group">
@@ -70,7 +70,7 @@
                      placeholder="John" required>
 
               <p ng-show="subjectForm.firstname.$invalid && !subjectForm.firstname.$pristine"
-                 class="pull-right required-error">Firstname is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
             </div>
           </div>
           <div class="form-group">
@@ -82,7 +82,7 @@
                      placeholder="Doe" required>
 
               <p ng-show="subjectForm.lastname.$invalid && !subjectForm.lastname.$pristine"
-                 class="pull-right required-error">Lastname is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
             </div>
           </div>
           <div class="form-group">
@@ -90,13 +90,13 @@
 
             <div class="col-sm-9">
               <select name="gender" class="form-control" ng-model="profile.user.gender">
-                <option value="" disabled>Select a gender</option>
+                <option value="" disabled translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GENDER_PLACEHOLDER</option>
                 <option value="Male" label="Male">Male</option>
                 <option value="Female" label="Female">Female</option>
               </select>
 
               <p ng-show="subjectForm.gender.$invalid && !subjectForm.gender.$pristine"
-                 class="pull-right required-error">Gender is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
             </div>
           </div>
           <div class="form-group">
@@ -111,7 +111,7 @@
                     class="glyphicon glyphicon-calendar"></i></button>
                 </span>
               <p ng-show="subjectForm.dob.$invalid && !subjectForm.dob.$pristine"
-                 class="pull-right required-error">Date of birth is required.</p>
+                 class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT</p>
               </p>
             </div>
           </div>
