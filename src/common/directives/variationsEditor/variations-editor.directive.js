@@ -1,3 +1,9 @@
+/**
+ * @name variations-editor
+ * @description Directive for editing variation objects (mostly JSON arrays), used for service variations.
+ * @example <variations-editor variations="serviceVariation.variations" is-valid="isValid"></variations-editor>
+ */
+
 (function() {
   'use strict';
   angular
