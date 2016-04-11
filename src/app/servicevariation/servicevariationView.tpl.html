@@ -1,0 +1,50 @@
+<div class="container-fluid" ng-controller="ServiceVariationController as sv">
+  <h2 id="Title">
+    Service Variations
+    <small translate translate-values="{ total: sv.resource.total }">
+      COMMON.HATEOAS.TITLE.TOTAL
+    </small>
+  </h2>
+
+  <div id="Query" class="clearfix">
+    <query-builder
+      template="sv.resource.template"
+      ng-model="sv.query.where"
+      ng-if="sv.resource.template">
+    </query-builder>
+  </div>
+
+  <div id="Controls" class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default"
+              ng-if="sv.allow.create"
+              ng-click="sv.openVariationModal()">
+        <i class="fa fa-file-o"></i>
+        <span translate>COMMON.HATEOAS.CONTROLS.NEW_BTN</span>
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="sv.allow.update"
+              ng-click="sv.openVariationModal(true)"
+              ng-disabled="!!!sv.selected">
+        <i class="fa fa-floppy-o"></i>
+        <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="sv.allow.delete"
+              ng-click="sv.archiveVariation()"
+              ng-disabled="!!!sv.selected">
+        <i class="fa fa-trash-o"></i>
+        <span translate>COMMON.HATEOAS.CONTROLS.ARCHIVE_BTN</span>
+      </button>
+    </div>
+  </div>
+
+  <hateoas-table
+    class="clearfix"
+    url="{{sv.url}}"
+    query="sv.query"
+    selected="sv.selected"
+    allow="sv.allow"
+    resource="sv.resource">
+  </hateoas-table>
+</div>

@@ -128,6 +128,7 @@ module.exports = {
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/angular-filter/dist/angular-filter.js',
+      'vendor/angular-ui-tree/dist/angular-ui-tree.js',
       'vendor/angular-markdown-directive/markdown.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',
