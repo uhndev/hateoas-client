@@ -1,17 +1,17 @@
 <div ng-style="{ 'padding-left': 15, 'padding-right': 15 }">
   <uib-accordion close-others="false" class="form-editor">
     <uib-accordion-group is-open="isEditorOpen">
-      <uib-accordion-heading>
+      <uib-accordion-heading translate>
         <span class="glyphicon "
-              ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
+              ng-class="isEditorOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'" translate>
         </span>
-        Configuration
+        <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.IDENTITY</span>
       </uib-accordion-heading>
       <div class="form-group">
-        <label for="form-loader">Load Form:</label>
+        <label for="form-loader" translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.LOAD_FORM</label>
         <select id="form-loader" ng-model="formID" class="form-control"
                 ng-change="loadForm(formID)">
-          <option value="" disabled>Select a form</option>
+          <option value="" disabled translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FORM_PLACEHOLDER</option>
           <option value="new">-- New --</option>
           <option ng-repeat="selected in forms | orderBy: 'name'" value="{{selected.id}}">
             {{selected.name}}
@@ -20,14 +20,13 @@
       </div>
 
       <div class="form-group">
-        <label for="form-name">Form Name:</label>
-        <ui-help uib-popover="Provide a name for your form. Names must
-                      be in upper case and cannot contain any spaces."
+        <label for="form-name" translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FORM_NAME</label>
+        <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FORM_NAME_POPOVER'| translate}}"
                  popover-placement="right"></ui-help>
         <input id="form-name" type="text" class="form-control"
                ng-model="form.name"
                ng-trim="true" title="Provide a name for your form"
-               placeholder="Provide a name for your form"/>
+               placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FORM_NAME_PLACEHOLDER'| translate}}"/>
       </div>
 
       <!-- FormLayout -->
@@ -36,7 +35,7 @@
           <uib-tabset class="clearfix">
             <uib-tab uib-tooltip="Add new question" active="editTabActive['add']">
               <tab-heading>
-                <i class="fa fa-plus-square"></i> Question
+                <i class="fa fa-plus-square"></i> <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.QUESTION</span>
               </tab-heading>
               <div class="tab_content_inside" ng-repeat="category in unsorted(categories) track by $index">
                 <h2>{{ category }}</h2>
@@ -48,7 +47,7 @@
             </uib-tab>
             <uib-tab uib-tooltip="Configure question" active="editTabActive['config']" disable="!widget.template">
               <tab-heading>
-                <i class="fa fa-wrench"></i> Config
+                <i class="fa fa-wrench"></i> <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.CONFIG</span>
               </tab-heading>
               <ng-include src="'directives/pluginEditor/partials/WidgetEditorSettings.tpl.html'">
               </ng-include>
@@ -56,14 +55,14 @@
             <uib-tab uib-tooltip="Set question list options" active="editTabActive['list_config']"
                      ng-show="widget.properties.hasOwnProperty('options')">
               <tab-heading>
-                <i class="fa fa-list-ol"></i> Options
+                <i class="fa fa-list-ol"></i><span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.OPTIONS</span>
               </tab-heading>
               <ui-list-editor list="widget.properties.options"
                               can-edit-properties="true"></ui-list-editor>
             </uib-tab>
             <uib-tab uib-tooltip="Configure question flags" active="editTabActive['flags']" disable="!widget.template">
               <tab-heading>
-                <i class="fa fa-flag"></i> Flags
+                <i class="fa fa-flag"></i><span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS</span>
               </tab-heading>
               <ng-include src="'directives/pluginEditor/partials/WidgetEditorFlags.tpl.html'">
               </ng-include>
@@ -85,24 +84,24 @@
             <span am-time-ago="lastAutoSave"></span>
             <button type="button" class="btn btn-default pull-right"
                     ng-disabled="!!!formID" ng-if="!!!study"
-                    ng-click="archive()">
+                    ng-click="archive()" translate>
               <span class="glyphicon glyphicon-trash"
                     uib-tooltip="Archive form"></span>
-              Archive
+              COMMON.MODELS.STUDY.FORMS.CONFIGURATION.ARCHIVE
             </button>
             <button class="btn btn-default pull-right" ng-model="isSaving"
-                    ng-click="commitChanges()" ng-disabled="isSaving">
+                    ng-click="commitChanges()" ng-disabled="isSaving" translate>
               <span class="glyphicon glyphicon-floppy-disk"
                     uib-tooltip="Commit Form Changes"></span>
-              Save Changes
+              COMMON.MODELS.STUDY.FORMS.CONFIGURATION.SAVE
             </button>
           </div>
         </div>
         <div class="content_right col-md-8 scroll-past-anchor no-select relative">
-          <legend>Workspace</legend>
+          <legend translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.WORKSPACE</legend>
 
-          <p class="text-muted" ng-if="!questions.length">
-            Use the panel on the left to add questions to the workspace.
+          <p class="text-muted" ng-if="!questions.length" translate>
+            COMMON.MODELS.STUDY.FORMS.CONFIGURATION.WORKSPACE_HELPER
           </p>
           <ng-form name="form">
             <ol class="form-horizontal" ui-sortable="sortableOptions" ng-model="questions"
@@ -157,7 +156,7 @@
         <span class="glyphicon "
               ng-class="isSettingsOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'">
         </span>
-        Advanced
+        <span translate>COMMON.MODELS.STUDY.FORMS.ADVANCED.IDENTITY</span>
       </uib-accordion-heading>
 
       <!-- FormConfig -->

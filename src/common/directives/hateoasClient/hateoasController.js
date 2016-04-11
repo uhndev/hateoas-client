@@ -18,7 +18,7 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
-    vm.queryPlaceholder = 'Search By ' + _.last(_.pathnameToArray($location.path()));
+    vm.queryPlaceholder = 'COMMON.HATEOAS.QUERY.SEARCH.' + _.last(_.pathnameToArray($location.path())).toUpperCase();
     vm.query = {'where' : {}};
     vm.selected = null;
     vm.filters = {};

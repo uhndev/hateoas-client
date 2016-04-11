@@ -1,7 +1,10 @@
 <ng-form name="sub_form">
   <div class="form-group">
     <label for="field.field_id">
-      {{field.field_id}}) {{field.field_title}}
+      {{field.field_id}})
+    </label>
+    <label for="field.field_id" translate>
+      {{field.field_title}}
     </label>
     <div class="row-fluid" class="checkbox-inline">
       <label ng-repeat="option in field.field_options track by $index">
@@ -13,7 +16,7 @@
       </label>
     </div>
     <div ng-show="!sub_form.$pristine">
-      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
+      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>
 </ng-form>
