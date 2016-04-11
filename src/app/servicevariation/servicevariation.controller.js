@@ -22,6 +22,12 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * openVariationModal
+     * @description Click handler for new/edit functionality for variations.  Will pass in
+     *              an empty base variation if creating new.
+     * @param canEdit
+     */
     function openVariationModal(canEdit) {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -52,6 +58,10 @@
       });
     }
 
+    /**
+     * archiveVariation
+     * @description Click handler for archiving a variation from the variations list view
+     */
     function archiveVariation() {
       var conf = confirm('Are you sure you want to archive this variation?');
       if (conf) {

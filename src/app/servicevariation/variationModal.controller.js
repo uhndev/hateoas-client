@@ -20,14 +20,28 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * collapseAll
+     * @description Broadcasts event to collapse all nodes in the ui-tree
+     */
     function collapseAll() {
       $scope.$broadcast('angular-ui-tree:collapse-all');
     }
 
+    /**
+     * expandAll
+     * @description Broadcasts event to expand all nodes in the ui-tree
+     */
     function expandAll() {
       $scope.$broadcast('angular-ui-tree:expand-all');
     }
 
+    /**
+     * saveVariations
+     * @description Click handler for the save button in the variation modal window.
+     *              Button will be enabled if and only if the internal ng-form within the
+     *              variations-editor is $valid.
+     */
     function saveVariations() {
       var method = (_.has(vm.serviceVariation, 'id') ? 'update' : 'save');
       AltumAPI.ServiceVariation[method](vm.serviceVariation, function (data) {
@@ -38,7 +52,7 @@
 
     /**
      * cancel
-     * @description cancels and closes the modal window
+     * @description Cancels and closes the modal window
      */
     function cancel() {
       $uibModalInstance.dismiss('cancel');

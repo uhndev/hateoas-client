@@ -2,24 +2,7 @@
   'use strict';
   angular
     .module('dados.common.directives.variationsEditor', [])
-    .controller('VariationsEditorController', VariationsEditorController)
-    .component('variationsEditor', {
-      bindings: {
-        variations: '=',
-        isValid: '='
-      },
-      controller: 'VariationsEditorController',
-      controllerAs: 'varedit',
-      templateUrl: 'directives/variationsEditor/variations-editor.tpl.html'
-    });
-
-  VariationsEditorController.$inject = ['$scope'];
-
-  function VariationsEditorController($scope) {
-    var vm = this;
-
-    // bindable variables
-    vm.variationTypes = [
+    .constant('VARIATION_TYPES', [
       {
         name: 'None',
         type: 'none',
@@ -86,7 +69,25 @@
           icon: ''
         }
       }
-    ];
+    ])
+    .controller('VariationsEditorController', VariationsEditorController)
+    .component('variationsEditor', {
+      bindings: {
+        variations: '=',
+        isValid: '='
+      },
+      controller: 'VariationsEditorController',
+      controllerAs: 'varedit',
+      templateUrl: 'directives/variationsEditor/variations-editor.tpl.html'
+    });
+
+  VariationsEditorController.$inject = ['$scope', 'VARIATION_TYPES'];
+
+  function VariationsEditorController($scope, VARIATION_TYPES) {
+    var vm = this;
+
+    // bindable variables
+    vm.variationTypes = VARIATION_TYPES;
     vm.variations = vm.variations || {};
 
     // bindable methods
@@ -97,14 +98,29 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * remove
+     * @description Click handler for removing a node from the ui-tree.
+     * @param scope
+     */
     function remove(scope) {
       scope.remove();
     }
 
+    /**
+     * toggle
+     * @description Click handler for opening/closing a node in the ui-tree.
+     * @param scope
+     */
     function toggle(scope) {
       scope.toggle();
     }
 
+    /**
+     * newSubItem
+     * @description Click handler for appending a node to the current node
+     * @param scope
+     */
     function newSubItem(scope) {
       var nodeData = scope.$modelValue;
       nodeData.nodes.push({
@@ -115,12 +131,23 @@
       });
     }
 
+    /**
+     * applyTypeChange
+     * @description Function that is called whenever a variation type changes in the select field.
+     * @param node
+     */
     function applyTypeChange(node) {
       node.data = angular.copy(_.find(vm.variationTypes, {type: node.type}));
     }
 
-    $scope.$watch('varedit.treeForm.$valid', function (newVal, oldVal) {
+    /**
+     * watchFormValidity
+     * @description Sets up a watch expression on the ng-form validity flags and passes through
+     *              value to the bound isValid variable in the variations-editor directive.
+     */
+    function watchFormValidity(newVal, oldVal) {
       vm.isValid = newVal;
-    });
+    }
+    $scope.$watch('varedit.treeForm.$valid', watchFormValidity);
   }
 })();
