@@ -37,8 +37,18 @@
           path_build = value.toUpperCase();
         }
       });
-      $scope.pageTitle = LOCALES.translationPrefix + path_build + LOCALES.translateSuffix;
+      var namespace = LOCALES.translationPrefix + path_build + LOCALES.translateSuffix;
 
+      $translate(namespace)
+        .then(function (translatedValue) {
+
+          $scope.pageTitle = translatedValue;
+
+          if ($scope.pageTitle === namespace || $scope.pageTitle.isEmpty || $scope.pageTitle === '') {
+
+            $scope.pageTitle = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''))[0];
+          }
+        });
     }
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
