@@ -119,7 +119,13 @@
         </ng-form>
       </md-card-content>
       <md-card-actions layout="row" layout-align="end center">
-        <md-button class="md-raised md-primary" ng-click="profile.updateUser()" ng-disabled="subjectForm.$invalid">Save</md-button>
+
+        <md-button class="md-raised md-primary" ng-click="profile.updateUser()" ng-disabled="subjectForm.$invalid">
+          <span translate>
+          APP.SUBJECT_PORTAL.SAVE_BUTTON
+          </span>
+        </md-button>
+
       </md-card-actions>
     </md-card>
   </div>
