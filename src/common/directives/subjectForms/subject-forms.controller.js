@@ -22,14 +22,14 @@
      */
     function init() {
       vm.url = API.url() + '/subjectschedule/' + vm.schedule + '/form/';
-      var Session = $resource(API.url() + '/session/' + vm.session);
+      var Session = $resource(API.url() + '/schedulesessions/' + vm.session);
 
       Session.get(function(data) {
         if (_.has(data, 'items')) {
           // FormOrder array will contain disabled for the current session forms.
           // We will parse actual formVersions array and skip extra records, maintaining order.
           _.each(data.items.formVersions, function(version) {
-            vm.formVersions.push(version.id);
+            vm.formVersions.push(version);
           });
           vm.formOrder = _.intersection(data.items.formOrder, vm.formVersions);
 

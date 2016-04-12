@@ -93,8 +93,6 @@
      * @description Callback that updates current answerSet id if it was succesfully created
      */
     function onAnswerSetCreated(result) {
-      console.log('AnswerSet created');
-      console.log(result);
       if (angular.isDefined(result.id)) {
         vm.answerSetID = result.id;
       }
