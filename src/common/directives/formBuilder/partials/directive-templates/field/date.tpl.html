@@ -25,7 +25,7 @@
       </span>
     </p>
     <div ng-show="!sub_form.$pristine">
-      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext}}</span>
+      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>
 </ng-form>
