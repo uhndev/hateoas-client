@@ -26,12 +26,23 @@ module.exports = {
         }
       }
     },
-    production: {
+    uat: {
       url: 'http://10.3.128.49:1338',
       constants: {
         BASE: {
           protocol: 'http',
           host : '10.3.128.49',
+          port: '1338',
+          prefix: '/api'
+        }
+      }
+    },
+    production: {
+      url: 'http://10.3.128.48:1338',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : '10.3.128.48',
           port: '1338',
           prefix: '/api'
         }
@@ -128,6 +139,7 @@ module.exports = {
       'vendor/angular-timeline/dist/angular-timeline.js',
       'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/angular-filter/dist/angular-filter.js',
+      'vendor/angular-ui-tree/dist/angular-ui-tree.js',
       'vendor/angular-markdown-directive/markdown.js',
       'vendor/ng-table/dist/ng-table.js',
       'vendor/angular-ui-validate/dist/validate.js',

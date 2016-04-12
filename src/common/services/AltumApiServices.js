@@ -24,6 +24,7 @@
     .service('ProgramServiceService', ProgramServiceService)
     .service('AltumServiceService', AltumServiceService)
     .service('AltumProgramServices', AltumProgramServices)
+    .service('ServiceVariationService', ServiceVariationService)
     .service('ServiceCategoryService', ServiceCategoryService)
     .service('ServiceTypeService', ServiceTypeService)
     .service('ServiceService', ServiceService)
@@ -37,9 +38,9 @@
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
     PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
-    AltumServiceService, AltumProgramServices, ServiceCategoryService, AltumAPIService, ServiceService,
-    NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService, CityService,
-    PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
+    AltumServiceService, AltumProgramServices, ServiceVariationService, ServiceCategoryService,
+    AltumAPIService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
+    CityService, PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
     ServiceTypeService, AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
   ].map(function (service) {
@@ -100,6 +101,10 @@
 
   function AltumProgramServices(ResourceFactory, API) {
     return ResourceFactory.create(API.url('altumprogramservices'));
+  }
+
+  function ServiceVariationService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('servicevariation'));
   }
 
   function ServiceCategoryService(ResourceFactory, API) {
@@ -170,6 +175,7 @@
       'ProgramService': ResourceFactory.create(API.url('programservice')),
       'AltumService': ResourceFactory.create(API.url('altumservice')),
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
+      'ServiceVariation': ResourceFactory.create(API.url('servicevariation')),
       'ServiceCategory': ResourceFactory.create(API.url('servicecategory')),
       'ServiceType': ResourceFactory.create(API.url('servicetype')),
       'Service': ResourceFactory.create(API.url('service')),
