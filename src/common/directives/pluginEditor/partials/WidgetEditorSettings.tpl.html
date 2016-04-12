@@ -17,22 +17,22 @@
 
   <div class="form-group" ng-show="widget.hasOwnProperty('template')">
     <label for="type">
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.QUESTION_TYPE</span>
 <!--
-    ng-repeat="category in unsorted(categories) track by $index" 
+    ng-repeat="category in unsorted(categories) track by $index"
     {{ category }}
     template in categories[category] track by $index
 -->
-      Question Type
-      <ui-help uib-popover="Select the question type."></ui-help>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.QUESTION_TYPE_POPOVER'| translate}}"></ui-help>
     </label>
-    <select class="form-control" id="type" ng-model="widget.template" 
+    <select class="form-control" id="type" ng-model="widget.template"
       ng-options="type.template as type.name group by type.category for type in widgetTypes">
     </select>
   </div>
   <div class="form-group" ng-show="widget.hasOwnProperty('label')">
     <label for="label">
-      Question
-      <ui-help uib-popover="Specify the question for this input."></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.QUESTION</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.QUESTION_POPOVER'| translate}}"></ui-help>
     </label>
     <input class="form-control" id="label"
            type="text" maxlength="256"
@@ -40,38 +40,35 @@
   </div>
   <div class="form-group">
     <label for="name">
-      Field Name
-      <ui-help uib-popover="Specify the field name for this input. Field
-         names cannot contain spaces and must be in uppercase."></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_POPOVER'| translate}}"></ui-help>
     </label>
     <input class="form-control" id="name"
-           placeholder="Field Name"
+           placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_PLACEHOLDER'|translate}}"
            type="text" maxlength="256" ng-capitalize
            ng-required="true" ng-trim="true" ng-model="widget.name"/>
   </div>
   <div class="form-group">
     <label for="title">
-      Tool Tip
-      <ui-help uib-popover="Specify the tool tip for this input. Tool tips will
-	     appear when the user hovers over an input. As well, empty inputs will
-	     automatically show the tool tip within the input."></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.TOOL_TIP</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.TOOL_TIP_POPVER'| translate}}"></ui-help>
     </label>
     <input class="form-control" id="title"
-           placeholder="Tool tips"
+           placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.TOOL_TIP_PLACEHOLDER' | translate}}"
            type="text" maxlength="256"
            ng-required="true" ng-trim="true" ng-model="widget.properties.title"/>
   </div>
   <div class="form-group">
     <label for="defaultValue">
-      Default Value
-      <ui-help uib-popover="Specify the default value for this question"></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.DEFAULT_VALUE</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.DEFAULT_VALUE_POPOVER'|translate}}"></ui-help>
     </label>
-    <input class="form-control" id="title"
-           placeholder="Default value" type="text"
+    <input class="form-control" id="defaultValue"
+           placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.DEFAULT_VALUE_PLACEHOLDER'|translate}}" type="text"
            ng-trim="true" ng-model="widget.properties.defaultValue.value"/>
   </div>
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('idForm')">
-    <label for="form">
+    <label for="subform">
       SubForm ID
       <ui-help uib-popover="Select a plugin to embed within this plugin.">
     </label>
@@ -84,20 +81,18 @@
   </div>
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('size')">
     <label for="size">
-      Widget Size
-      <ui-help uib-popover="Specify the width of the input. Size is a measure of the
-         number of characters the input can fit."></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.WIDGET_SIZE</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.WIDGET_SIZE_POPOVER'|translate}}"></ui-help>
     </label>
-    <input class="form-control" id="size" placeholder="Field size"
+    <input class="form-control" id="size" placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.WIDGET_SIZE_PLACEHOLDER'|translate}}"
            type="number" min="1" ng-model="widget.properties.size"/>
   </div>
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('maxlength')">
     <label for="maxlength">
-      Maximum input length
-      <ui-help uib-popover="Specify the maximum number of characters that this
-         input can take."></ui-help>
+      <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.MAXIMUM_INPUT</span>
+      <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.MAXIMUM_INPUT_POPOVER'|translate}}"></ui-help>
     </label>
-    <input class="form-control" id="maxlength" placeholder="Maximum characters"
+    <input class="form-control" id="maxlength" placeholder=""
            type="number" min="0"
            ng-required="false" ng-model="widget.properties.maxlength"/>
   </div>
@@ -134,7 +129,7 @@
 
     <input class="form-control"
            ng-if="widget.properties.type !== 'checkbox' && widget.properties.type !== 'radio'"
-           id="cols" placeholder="Number of columns"
+           id="cols1" placeholder="Number of columns"
            type="number" ng-required="false" ng-model="widget.properties.cols"/>
   </div>
   <div class="form-group" ng-show="widget.properties.hasOwnProperty('step')">
@@ -156,10 +151,10 @@
     <input ng-switch-when="range" class="form-control" id="min"
            type="number"
            ng-required="false" ng-model="widget.properties.min"/>
-    <input ng-switch-when="date" class="form-control" id="min"
+    <input ng-switch-when="date" class="form-control" id="min2"
            type="text" uib-datepicker-popup
            ng-required="false" ng-model="widget.properties.min"/>
-    <input ng-switch-default class="form-control" id="min"
+    <input ng-switch-default class="form-control" id="min3"
            ng-attr-type="{{widget.properties.type}}"
            ng-required="false" ng-model="widget.properties.min"/>
   </div>
@@ -173,10 +168,10 @@
     <input ng-switch-when="range" class="form-control" id="max"
            type="number"
            ng-required="false" ng-model="widget.properties.max"/>
-    <input ng-switch-when="date" class="form-control" id="max"
+    <input ng-switch-when="date" class="form-control" id="max1"
            type="text" uib-datepicker-popup
            ng-required="false" ng-model="widget.properties.max"/>
-    <input ng-switch-default class="form-control" id="max"
+    <input ng-switch-default class="form-control" id="max2"
            ng-attr-type="{{widget.properties.type}}"
            ng-required="false" ng-model="widget.properties.max"/>
   </div>
@@ -210,7 +205,7 @@
       <ui-help uib-popover="Define an expression to evaluate">
       </ui-help>
     </label>
-    <button class="btn"
+    <button class="btn" id="expression"
             ng-class="!!widget.properties.expression ? 'btn-success' : 'btn-default'"
             ng-click="createExpression('expression', fieldNames)">
       Define
