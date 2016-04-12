@@ -13,7 +13,10 @@
       </div>
     </div>
   </div>
-  <variations-editor variations="varmodal.serviceVariation.variations" is-valid="varmodal.isValid"></variations-editor>
+  <variations-editor variations="varmodal.serviceVariation.variations"
+                     is-valid="varmodal.isValid"
+                     omit-types="varmodal.omitTypes">
+  </variations-editor>
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" ng-click="varmodal.saveVariations()" ng-disabled="!varmodal.isValid">

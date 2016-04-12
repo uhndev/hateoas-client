@@ -36,9 +36,9 @@
   <ng-form name="this.nodeForm" ng-show="node.data.preset && visible" data-nodrag novalidate>
     <br/>
     <div ng-if="node.type === 'date' || node.type === 'number' || node.type === 'text'"
-         class="form-group" ng-class="'has-error': this.nodeForm.metaData.$invalid}">
+         class="form-group" ng-class="{'has-error': this.nodeForm.metaData.$invalid}">
       <label>{{node.data.name}}</label>
-      <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData" required/>
+      <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData" ng-required="node.preset"/>
     </div>
     <ng-form name="nodeDetailForm" ng-if="node.type === 'service' || node.type === 'measure' || node.type === 'menu'">
       <div class="form-group" ng-repeat="(key, value) in node.data.value" ng-class="{'has-error': nodeDetailForm[key].$invalid}">

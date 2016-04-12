@@ -59,10 +59,10 @@
         type: 'measure',
         preset: false,
         value: {
-          type: null,
+          unit: null,
           quantity: null,
-          price: null,
-          dimension: null
+          pricePerUnit: null,
+          measurement: null
         }
       },
       {
@@ -80,7 +80,8 @@
     .component('variationsEditor', {
       bindings: {
         variations: '=',
-        isValid: '='
+        isValid: '=',
+        omitTypes: '='
       },
       controller: 'VariationsEditorController',
       controllerAs: 'varedit',
@@ -93,7 +94,9 @@
     var vm = this;
 
     // bindable variables
-    vm.variationTypes = VARIATION_TYPES;
+    vm.variationTypes = _.reject(VARIATION_TYPES, function (type) {
+      return _.contains(vm.omitTypes, type.type);
+    });
     vm.variations = vm.variations || {};
 
     // bindable methods
@@ -129,12 +132,14 @@
      */
     function newSubItem(scope) {
       var nodeData = scope.$modelValue;
-      nodeData.nodes.push({
+      var newNode = {
         id: nodeData.id * 10 + nodeData.nodes.length,
         title: nodeData.title + ' ' + (nodeData.nodes.length + 1),
         nodes: [],
-        type: 'none'
-      });
+        type: nodeData.type || 'none',
+        data: angular.copy(nodeData.data)
+      };
+      nodeData.nodes.push(newNode);
     }
 
     /**

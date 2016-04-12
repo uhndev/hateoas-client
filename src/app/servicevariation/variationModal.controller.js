@@ -11,6 +11,7 @@
 
     // bindable variables
     vm.serviceVariation = Variation;
+    vm.omitTypes = ['menu'];
 
     // bindable methods
     vm.collapseAll = collapseAll;
