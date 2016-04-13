@@ -1,7 +1,7 @@
 <ng-form name="varedit.treeForm" ui-tree id="tree-root">
   <ol ui-tree-nodes ng-model="varedit.variations">
-    <li ng-repeat="node in varedit.variations" ui-tree-node
-        ng-include="'directives/variationsEditor/variation-node.tpl.html'">
+    <li ng-repeat="node in varedit.variations" ui-tree-node data-collapsed="true"
+        ng-include="'directives/variationsEditor/variation-editor-node.tpl.html'">
     </li>
   </ol>
 </ng-form>

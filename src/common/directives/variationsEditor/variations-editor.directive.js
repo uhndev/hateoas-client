@@ -28,7 +28,7 @@
         name: 'Number',
         type: 'number',
         preset: false,
-        value: 0
+        value: null
       },
       {
         name: 'Text',

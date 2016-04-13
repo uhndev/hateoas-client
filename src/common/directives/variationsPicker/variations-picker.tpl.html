@@ -1,0 +1,7 @@
+<ng-form name="varpicker.treeForm" ui-tree id="tree-root" data-nodrop-enabled="true" data-drag-enabled="false">
+  <ol ui-tree-nodes ng-model="varpicker.variations">
+    <li ng-repeat="node in varpicker.variations" ui-tree-node data-collapsed="true"
+        ng-include="'directives/variationsPicker/variation-picker-node.tpl.html'">
+    </li>
+  </ol>
+</ng-form>
