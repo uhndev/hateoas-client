@@ -10,13 +10,20 @@
       <div class="pull-right">
         <button class="btn btn-default" ng-click="varmodal.expandAll()">Expand all</button>
         <button class="btn btn-default" ng-click="varmodal.collapseAll()">Collapse all</button>
+        <button class="btn btn-default" ng-click="varmodal.showPreview = !varmodal.showPreview">Toggle Preview</button>
       </div>
     </div>
   </div>
-  <variations-editor variations="varmodal.serviceVariation.variations"
+
+  <variations-picker ng-if="varmodal.showPreview"
+                     variations="varmodal.serviceVariation.variations"
+                     selection="varmodal.selection"></variations-picker>
+
+  <variations-editor ng-if="!varmodal.showPreview"
+                     variations="varmodal.serviceVariation.variations"
                      is-valid="varmodal.isValid"
-                     omit-types="varmodal.omitTypes">
-  </variations-editor>
+                     omit-types="varmodal.omitTypes"></variations-editor>
+  <br/>
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" ng-click="varmodal.saveVariations()" ng-disabled="!varmodal.isValid">
