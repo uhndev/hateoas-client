@@ -34,7 +34,7 @@
       if (user) {
         var now = new Date();
         $cookies.putObject('user', user, {
-          expires: new Date(now.getTime() + (60000 * user.token.expires))
+          expires: new Date(now.getTime() + (3600000 * user.token.expires))
         });
         AuthService.setAuthenticated();
       }
