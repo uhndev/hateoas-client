@@ -95,9 +95,12 @@
               switch (true) {
                 case /date|dateTime|datetime/i.test(field.type):
                   try {
-                    var dateObj = new Date(value).toISOString();
-                    query[field.name] = {'>=': dateObj};
-                    return result.concat(query);
+                    var dateObj = new Date(value);
+                    if (dateObj.getFullYear().toString().length <= 4) {
+                      query[field.name] = {'>=': dateObj.toISOString()};
+                      return result.concat(query);
+                    }
+                    return result;
                   } catch (e) {
                     // if value not date, do not concat
                     return result;
