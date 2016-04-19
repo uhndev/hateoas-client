@@ -123,7 +123,10 @@
 
                 case /float/i.test(field.type):
                   query[field.name] = parseFloat(value);
-                  return result.concat(query);
+                  if (!_.isNaN(query[field.name])) {
+                    return result.concat(query);
+                  }
+                  return result;
 
                 default: // otherwise is probably a model id
                   if (_.isNumber(value)) {
