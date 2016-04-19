@@ -128,6 +128,14 @@
                   }
                   return result;
 
+                case /boolean/i.test(field.type):
+                  var boolean = (value == 'true' || value == 'True' || value == 'Yes' || value == 'yes');
+                  if (boolean) {
+                    query[field.name] = boolean;
+                    return result.concat(query);
+                  }
+                  return result;
+
                 default: // otherwise is probably a model id
                   if (_.isNumber(value)) {
                     query[field.name] = parseInt(value);
