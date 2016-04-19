@@ -95,9 +95,12 @@
               switch (true) {
                 case /date|dateTime|datetime/i.test(field.type):
                   try {
-                    var dateObj = new Date(value).toISOString();
-                    query[field.name] = {'>=': dateObj};
-                    return result.concat(query);
+                    var dateObj = new Date(value);
+                    if (dateObj.getFullYear().toString().length <= 4) {
+                      query[field.name] = {'>=': dateObj.toISOString()};
+                      return result.concat(query);
+                    }
+                    return result;
                   } catch (e) {
                     // if value not date, do not concat
                     return result;
@@ -106,7 +109,10 @@
 
                 case /integer|number|mrn/i.test(field.type):
                   query[field.name] = parseInt(value, 10);
-                  return result.concat(query);
+                  if (!_.isNaN(query[field.name])) {
+                    return result.concat(query);
+                  }
+                  return result;
 
                 case /json|array/i.test(field.type):
                   return result;
@@ -117,7 +123,18 @@
 
                 case /float/i.test(field.type):
                   query[field.name] = parseFloat(value);
-                  return result.concat(query);
+                  if (!_.isNaN(query[field.name])) {
+                    return result.concat(query);
+                  }
+                  return result;
+
+                case /boolean/i.test(field.type):
+                  var boolean = (value == 'true' || value == 'True' || value == 'Yes' || value == 'yes');
+                  if (boolean) {
+                    query[field.name] = boolean;
+                    return result.concat(query);
+                  }
+                  return result;
 
                 default: // otherwise is probably a model id
                   if (_.isNumber(value)) {

@@ -210,14 +210,17 @@
         var hasName = !_.isEmpty($scope.form.name);
         var hasFieldNames = _.all($scope.form.questions, 'name');
         var hasQuestions = $scope.form.questions.length > 0;
+        var unique = _.uniq($scope.form.questions, 'name');
+        var isUnique = unique.length === $scope.form.questions.length;
 
         if (showMessages) {
           if (!hasName) { toastr.warning('You must enter a name for the plugin!', 'Form Builder'); }
           if (!hasFieldNames) { toastr.warning('All questions must have unique field names!', 'Form Builder'); }
           if (!hasQuestions) { toastr.warning('No questions added yet!', 'Form Builder'); }
+          if (!isUnique) { toastr.warning('Field names are not unique!', 'Form Builder'); }
         }
 
-        return hasName && hasFieldNames && hasQuestions;
+        return hasName && hasFieldNames && hasQuestions && isUnique;
       }
       return false;
     }
