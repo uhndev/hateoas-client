@@ -109,7 +109,10 @@
 
                 case /integer|number|mrn/i.test(field.type):
                   query[field.name] = parseInt(value, 10);
-                  return result.concat(query);
+                  if (!_.isNaN(query[field.name])) {
+                    return result.concat(query);
+                  }
+                  return result;
 
                 case /json|array/i.test(field.type):
                   return result;
