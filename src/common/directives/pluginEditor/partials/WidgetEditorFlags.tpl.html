@@ -1,7 +1,6 @@
 <form class="form-horizontal" role="form">
-    <p>
-		Please note that using expressions may slow down the performance of the
-		page.
+    <p translate>
+      COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_NOTIFY
     </p>
 	<div class="form-group" ng-show="widget.properties.hasOwnProperty('autocomplete')">
 	    <label for="autocomplete">
@@ -11,19 +10,19 @@
 	    <ui-help uib-popover="Use the auto-complete feature on the user's browser."></ui-help>
 	</div>
 	<div class="form-group">
-	    <label for="required">
-	        Required
+	    <label for="required" translate>
+        COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_REQUIRED
 	    </label>
 	    <button class="btn"
 	    		ng-class="!!widget.properties.required ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('required', fieldNames)">
 	            when...
         </button>
-	    <ui-help uib-popover="Set the question as required."></ui-help>
+	    <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_REQUIRED_POPOVER'| translate}}"></ui-help>
 	</div>
 	<div class="form-group">
-	    <label for="hidden">
-	        Hidden
+	    <label for="hidden" translate>
+        COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_HIDDEN
 	    </label>
 	    <button class="btn"
 	    		ng-class="!!widget.properties.hidden ? 'btn-success' : 'btn-default'"
@@ -33,25 +32,25 @@
 	    <ui-help uib-popover="Set the question as hidden."></ui-help>
 	</div>
 	<div class="form-group">
-	    <label for="readonly">
-	        Read-only
+	    <label for="readonly" translate>
+        COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_READONLY
 	    </label>
 	    <button class="btn"
 	    		ng-class="!!widget.properties.readonly ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('readonly', fieldNames)">
 	            when...
         </button>
-	    <ui-help uib-popover="Set the question as read-only."></ui-help>
+	    <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_READONLY_POPOVER'|translate}}"></ui-help>
 	</div>
 	<div class="form-group">
-	    <label for="disabled">
-	        Disabled
+	    <label for="disabled" translate>
+        COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_DISABLED
 	    </label>
 	    <button class="btn"
 	    		ng-class="!!widget.properties.disabled ? 'btn-success' : 'btn-default'"
 	            ng-click="createExpression('disabled', fieldNames)">
 	            when...
         </button>
-	    <ui-help uib-popover="Set the question as disabled."></ui-help>
+	    <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FLAGS_DISABLED_POPOVER'| translate}}"></ui-help>
 	</div>
 </form>

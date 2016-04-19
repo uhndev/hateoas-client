@@ -1,10 +1,10 @@
-<div class="container-fluid" ng-controller="HateoasController as hateoas">
+  <div class="container-fluid" ng-controller="HateoasController as hateoas">
   <h2 id="Title">
-    {{ pageTitle }}
+    <span translate>{{ pageTitle }}</span>
     <small translate translate-values="{ total: hateoas.resource.total }">
       COMMON.HATEOAS.TITLE.TOTAL
     </small>
-  </h1>
+  </h2>
   <div id="Query" class="clearfix">
     <query-builder
       template="hateoas.resource.template"

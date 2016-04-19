@@ -25,8 +25,8 @@
     >
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error"
-            ng-show="(field.field_required && !field.field_value) || sub_form.$invalid" translate>
-          * {{field.field_helpertext}}
+            ng-show="(field.field_required && !field.field_value) || sub_form.$invalid">
+          * {{field.field_helpertext | translate}}
       </span>
     </div>
   </div>
