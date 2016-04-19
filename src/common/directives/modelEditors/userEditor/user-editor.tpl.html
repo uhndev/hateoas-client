@@ -1,0 +1,125 @@
+<ng-form name="userForm" ng-class="{'form-horizontal': user.horizontal}" novalidate>
+  <div class="form-group" ng-class="{'has-error': userForm.username.$invalid && !userForm.username.$pristine}">
+    <label for="username" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.USERNAME
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <input type="text" name="username" class="form-control"
+             data-ng-model="user.user.username"
+             validation-check criteria="{model: 'user', attribute: 'username'}"
+             ng-minlength="5"
+             placeholder="johndoe" required>
+      <p ng-show="userForm.username.$invalid && !userForm.username.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME</p>
+    </div>
+  </div>
+  <div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
+    <label for="email" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.EMAIL
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <input type="email" name="email" class="form-control"
+             data-ng-model="user.user.email"
+             validation-check criteria="{model: 'user', attribute: 'email'}"
+             placeholder="johndoe@email.com" required>
+      <p ng-show="userForm.email.$invalid && !userForm.email.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_EMAIL</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      APP.AUTH.PASSWORD
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <input type="password" name="password" class="form-control"
+             ng-if="!user.canGeneratePassword" ng-model="user.user.password" ng-minlength="8"
+             ng-pattern="/(?=.*[a-z])(?=.*[^a-zA-Z])/" />
+      <input type="text" name="password" class="form-control"
+             ng-if="user.canGeneratePassword" ng-model="user.user.password" ng-minlength="8"
+             ng-pattern="/(?=.*[a-z])(?=.*[^a-zA-Z])/"
+             generate-password for-input="user.user.password"
+             required disabled />
+      <p ng-show="userForm.password.$invalid && !userForm.password.$pristine"
+         class="pull-right required-error" translate>
+        COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_PASSWORD
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="prefix" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.PREFIX
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <select name="prefix" class="form-control" ng-model="user.user.prefix" required>
+        <option value="" disabled>Select a prefix</option>
+        <option value="Mr." label="Mr.">Mr.</option>
+        <option value="Mrs." label="Mrs.">Mrs.</option>
+        <option value="Ms." label="Ms.">Ms.</option>
+        <option value="Dr." label="Dr.">Dr.</option>
+      </select>
+      <p ng-show="userForm.prefix.$invalid && !userForm.prefix.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="firstname" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.FIRSTNAME
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <input type="text" name="firstname" class="form-control"
+             data-ng-model="user.user.firstname"
+             placeholder="John" required>
+      <p ng-show="userForm.firstname.$invalid && !userForm.firstname.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="lastname" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.LASTNAME
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <input type="text" name="lastname" class="form-control"
+             data-ng-model="user.user.lastname"
+             placeholder="Doe" required>
+      <p ng-show="userForm.lastname.$invalid && !userForm.lastname.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="gender" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.USER.GENDER
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <select name="gender" class="form-control" ng-model="user.user.gender">
+        <option value="" disabled>Select a gender</option>
+        <option value="Male" label="Male">Male</option>
+        <option value="Female" label="Female">Female</option>
+      </select>
+      <p ng-show="userForm.gender.$invalid && !userForm.gender.$pristine"
+         class="pull-right required-error">Gender is required.
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="dob" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
+      COMMON.MODELS.SYSTEM_MODEL.USER.DATE_OF_BIRTH
+    </label>
+    <div ng-class="{'col-md-9': user.horizontal}">
+      <p class="input-group">
+        <input name="dob" type="date" class="form-control" uib-datepicker-popup
+               ng-model="user.user.dob" is-open="user.openedDOB" disabled format-date/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="user.openedDOB = true"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      <p ng-show="userForm.dob.$invalid && !userForm.dob.$pristine"
+         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT
+      </p>
+    </div>
+  </div>
+
+  <button type="submit" class="pull-right btn btn-primary" ng-if="user.showSaveButton"
+          ng-click="user.updateUser()" ng-disabled="userForm.$invalid || userForm.$pristine" translate>Save</button>
+</ng-form>
