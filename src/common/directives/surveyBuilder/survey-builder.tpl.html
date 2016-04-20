@@ -3,7 +3,7 @@
     <!-- Stage 1: Define 1 survey item with n sessions in survey -->
     <!-- (study, survey, completedBy) -->
     <!-- (surveyVersion, name, timepoint, availableFrom, availableTo, type) -->
-    <uib-tab heading="Define Survey" active="sb.STAGES['DEFINE_SURVEY']">
+    <uib-tab heading="{{'COMMON.MODELS.STUDY.SURVEYS.DEFINE' | translate}}" active="sb.STAGES['DEFINE_SURVEY']">
       <ng-form name="sb.surveyForm" class="form-horizontal" novalidate>
         <div class="form-group">
           <label for="name" class="col-sm-3 control-label"
@@ -58,7 +58,7 @@
 
     <!-- Stage 2: Configure m formVersions for each n session in survey -->
     <!-- (list of formVersions applied to sessions) -->
-    <uib-tab heading="Select Forms" active="sb.STAGES['SELECT_FORMS']">
+    <uib-tab heading="{{'COMMON.MODELS.STUDY.SURVEYS.SELECT' | translate}}" active="sb.STAGES['SELECT_FORMS']">
       <div class="row">
         <form class="form-inline">
           <div class="form-group">

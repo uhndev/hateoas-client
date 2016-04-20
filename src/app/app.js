@@ -61,7 +61,7 @@
       },
       'translationPrefix': 'COMMON.MODELS.',
       'translateSuffix': '.IDENTITY',
-      'preferredLocale': 'en_US'
+      'preferredLocale': 'altum'
     })
     .config(dadosConfig);
 
@@ -75,13 +75,13 @@
     });
 
     $translateProvider.useLoader('localeLoader');
-    $translateProvider.preferredLanguage('en_US');
+    $translateProvider.preferredLanguage('altum');
     $translateProvider.useLocalStorage();
     $translateProvider.useMissingTranslationHandlerLog();
     $translateProvider.useSanitizeValueStrategy('escaped');
     $translateProvider.useMissingTranslationHandler('localeHandlerFactory');
 
-    dynamicLocale.localeLocationPattern('vendor/angular-i18n/angular-locale_{{locale}}.js');
+    dynamicLocale.localeLocationPattern('vendor/angular-i18n/angular-locale_en-us.js');
 
     angular.extend(toastrConfig, {
       autoDismiss: true,

@@ -1,10 +1,10 @@
 <div class="container-fluid" ng-controller="StudySubjectController as studySubject">
   <h2 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
-    {{ pageTitle }}
+    <span translate>APP.SUBJECT_PORTAL.STUDY_SUBJECT</span>
     <small translate translate-values="{ total: studySubject.resource.total }">
       COMMON.HATEOAS.TITLE.TOTAL
     </small>
-  </h1>
+  </h2>
   <div id="Query" class="clearfix">
     <query-builder
       template="studySubject.resource.template"

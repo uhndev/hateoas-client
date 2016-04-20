@@ -21,6 +21,7 @@
     'dados.common.directives.subjectForms',
     'dados.common.directives.surveyBuilder',
     'dados.common.directives.validationCheck',
-    'altum.common.directives.notebook'
+    'altum.common.directives.notebook',
+    'dados.common.directives.userEditor'
   ]);
 })();
