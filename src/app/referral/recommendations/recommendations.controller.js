@@ -33,7 +33,6 @@
       serviceDetail: 1
     };
     vm.accordionStatus = {};
-    vm.currentDate = new Date();
 
     vm.staffCollection = {};
     vm.referralNotes = [];
@@ -122,7 +121,7 @@
         prognosis: vm.prognosis,
         prognosisTimeframe: vm.prognosisTimeframe,
         visitService: vm.visitService,
-        serviceDate: vm.currentDate
+        serviceDate: vm.serviceDate
       };
     }
 
@@ -142,6 +141,7 @@
           programService: altumProgramService.programService,
           serviceCategory: altumProgramService.serviceCategory,
           serviceCategoryName: altumProgramService.serviceCategoryName,
+          serviceDate: new Date(),
           site: null,
           approvalNeeded: altumProgramService.approvalNeeded,
           approvalRequired: altumProgramService.approvalRequired

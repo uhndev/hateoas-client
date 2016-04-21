@@ -91,7 +91,7 @@
         </div>
         <div class="panel-body">
           <ng-form layout="column" name="visitForm">
-            <div class="form-group" flex>
+            <div class="form-group" flex ng-if="rec.physician">
               <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
               <select-loader
                 url="physician"
