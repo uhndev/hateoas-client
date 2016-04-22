@@ -27,7 +27,15 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
+    // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
+
+    // fields that are used during configuration of recommended services that will be deleted before POSTing
+    vm.configFields = [
+      'availableSites', 'availableStaffTypes', 'siteDictionary',
+      'staffCollection', 'serviceVariation', 'variationSelection'
+    ];
+
     vm.serviceOrder = {
       recommendedServices: 2,
       serviceDetail: 1
@@ -138,7 +146,6 @@
         // append each altumProgramService's altumProgramServices to the list of available prospective services
         return _.merge(getSharedServices(), {
           name: altumProgramService.altumServiceName,
-          variationName: altumProgramService.altumServiceName,
           altumService: altumProgramService.id,
           programService: altumProgramService.programService,
           serviceCategory: altumProgramService.serviceCategory,
@@ -297,6 +304,22 @@
     function saveServices() {
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
+          if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
+            switch (true) {
+              case _.has(service.variationSelection.changes, 'service'):
+                service.altumService = service.variationSelection.altumService;
+                service.programService = service.variationSelection.programService;
+                service.name = service.variationSelection.name;
+                break;
+              default: break;
+            }
+          }
+
+          // clear config data before POSTing
+          _.each(vm.configFields, function (field) {
+            delete service[field];
+          });
+
           var serviceObj = new ReferralServices(service);
           return serviceObj.$save();
         }))
