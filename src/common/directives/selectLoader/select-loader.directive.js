@@ -22,7 +22,7 @@
         values: '=ngModel',
         placeholder: '@?',
         labels: '@',
-        expiry: '@?'
+        expiresIn: '@?'
       },
       templateUrl: 'directives/selectLoader/select-loader.tpl.html',
       controller: 'SelectController',
