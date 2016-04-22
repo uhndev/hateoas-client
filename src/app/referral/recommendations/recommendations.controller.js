@@ -61,6 +61,7 @@
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
     vm.swapPanelOrder = swapPanelOrder;
+    vm.openVariationModal = openVariationModal;
     vm.openMap = openMap;
 
     init();
@@ -137,11 +138,13 @@
         // append each altumProgramService's altumProgramServices to the list of available prospective services
         return _.merge(getSharedServices(), {
           name: altumProgramService.altumServiceName,
+          variationName: altumProgramService.altumServiceName,
           altumService: altumProgramService.id,
           programService: altumProgramService.programService,
           serviceCategory: altumProgramService.serviceCategory,
           serviceCategoryName: altumProgramService.serviceCategoryName,
           serviceDate: new Date(),
+          serviceVariation: altumProgramService.serviceVariation,
           site: null,
           approvalNeeded: altumProgramService.approvalNeeded,
           approvalRequired: altumProgramService.approvalRequired
@@ -183,13 +186,22 @@
         event.stopPropagation();
       }
       if (isServiceRecommended(service)) {
-        service.site = null;
+        delete service.site;
+        delete service.variationSelection;
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(_.merge(service, getSharedServices()));
+        var toPopulate = ['sites', 'staffTypes'];
+        if (service.serviceVariation) { // populate variations if applicable
+          toPopulate.push('serviceVariation');
+        }
 
         // upon recommending service, fetch additional info needed for visit panels like sites and staffTypes
-        AltumAPI.AltumService.get({id: service.altumService, populate: ['sites', 'staffTypes']}, function (data) {
+        AltumAPI.AltumService.get({id: service.altumService, populate: toPopulate}, function (data) {
+          if (data.serviceVariation) {
+            _.last(vm.recommendedServices).serviceVariation = angular.copy(data.serviceVariation);
+          }
+
           if (data.sites.length > 0) {
             _.last(vm.recommendedServices).availableSites = data.sites;
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
@@ -332,6 +344,56 @@
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.serviceDetail = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
+    }
+
+    /**
+     * openVariationModal
+     * @description Click handler for new/edit functionality for variations.  Will pass in
+     *              an empty base variation if creating new.
+     * @param canEdit
+     */
+    function openVariationModal(canEdit) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'servicevariation/variationModal.tpl.html',
+        controller: 'VariationModalController',
+        controllerAs: 'varmodal',
+        bindToController: true,
+        windowClass: 'variations-modal-window',
+        resolve: {
+          displayMode: function() {
+            return true;
+          },
+          Variation: function() {
+            return vm.recommendedServices[vm.currIndex].serviceVariation;
+          },
+          Selection: function() {
+            var variations = angular.copy(vm.recommendedServices[vm.currIndex].variationSelection);
+            return variations ? variations.changes : null;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selection) {
+        // store selected variations
+        vm.recommendedServices[vm.currIndex].variationSelection = {
+          changes: angular.copy(selection)
+        };
+
+        // if service was selected as a variation, update appropriate data
+        if (_.has(selection, 'service')) {
+          // rename service in recommended services tab
+          AltumAPI.AltumService.get({id: selection.service.value.altumService}, function (altumService) {
+            vm.recommendedServices[vm.currIndex].variationSelection.name = altumService.name;
+          });
+
+          // store altum/program service to be applied on save
+          vm.recommendedServices[vm.currIndex].variationSelection.altumService = selection.service.value.altumService;
+          vm.recommendedServices[vm.currIndex].variationSelection.programService = selection.service.value.programService;
+        } else {
+          delete vm.recommendedServices[vm.currIndex].variationSelection;
+        }
+      });
     }
 
     /**

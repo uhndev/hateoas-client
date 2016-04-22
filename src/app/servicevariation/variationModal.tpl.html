@@ -4,29 +4,31 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-6">
-      <input type="text" class="form-control" ng-model="varmodal.serviceVariation.name"/>
+      <input ng-if="!varmodal.displayMode" type="text" class="form-control"
+             ng-model="varmodal.serviceVariation.name"/>
     </div>
     <div class="col-md-6">
       <div class="pull-right">
         <button class="btn btn-default" ng-click="varmodal.expandAll()">Expand all</button>
         <button class="btn btn-default" ng-click="varmodal.collapseAll()">Collapse all</button>
-        <button class="btn btn-default" ng-click="varmodal.showPreview = !varmodal.showPreview">Toggle Preview</button>
+        <button ng-if="!varmodal.displayMode" class="btn btn-default"
+                ng-click="varmodal.showPreview = !varmodal.showPreview">Toggle Preview</button>
       </div>
     </div>
   </div>
 
-  <variations-picker ng-if="varmodal.showPreview"
-                     variations="varmodal.serviceVariation.variations"
-                     selection="varmodal.selection"></variations-picker>
-
-  <variations-editor ng-if="!varmodal.showPreview"
+  <variations-editor ng-if="!varmodal.displayMode && !varmodal.showPreview"
                      variations="varmodal.serviceVariation.variations"
                      is-valid="varmodal.isValid"
                      omit-types="varmodal.omitTypes"></variations-editor>
+
+  <variations-picker ng-if="varmodal.displayMode || varmodal.showPreview"
+                     variations="varmodal.serviceVariation.variations"
+                     selection="varmodal.selection"></variations-picker>
   <br/>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-primary" ng-click="varmodal.saveVariations()" ng-disabled="!varmodal.isValid">
+  <button class="btn btn-primary" ng-click="varmodal.saveVariations()" ng-disabled="!varmodal.isValid && !varmodal.displayMode">
     Save
   </button>
   <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="varmodal.cancel()">

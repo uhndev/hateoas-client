@@ -4,13 +4,15 @@
     .module('altum.servicevariation')
     .controller('VariationModalController', VariationModalController);
 
-  VariationModalController.$inject = ['$scope', '$uibModalInstance', 'Variation', 'AltumAPIService', 'toastr'];
+  VariationModalController.$inject = ['$scope', '$uibModalInstance', 'displayMode', 'Variation', 'Selection', 'AltumAPIService', 'toastr'];
 
-  function VariationModalController($scope, $uibModalInstance, Variation, AltumAPI, toastr) {
+  function VariationModalController($scope, $uibModalInstance, displayMode, Variation, Selection, AltumAPI, toastr) {
     var vm = this;
 
     // bindable variables
     vm.serviceVariation = Variation;
+    vm.selection = Selection;
+    vm.displayMode = displayMode;
     vm.omitTypes = ['menu'];
 
     // bindable methods
@@ -44,11 +46,15 @@
      *              variations-editor is $valid.
      */
     function saveVariations() {
-      var method = (_.has(vm.serviceVariation, 'id') ? 'update' : 'save');
-      AltumAPI.ServiceVariation[method](vm.serviceVariation, function (data) {
-        toastr.success('Successfully saved variation ' + vm.serviceVariation.name, 'Variations');
-        $uibModalInstance.close(vm.serviceVariation);
-      });
+      if (!vm.displayMode) {
+        var method = (_.has(vm.serviceVariation, 'id') ? 'update' : 'save');
+        AltumAPI.ServiceVariation[method](vm.serviceVariation, function (data) {
+          toastr.success('Successfully saved variation ' + vm.serviceVariation.name, 'Variations');
+          $uibModalInstance.close(vm.serviceVariation);
+        });
+      } else {
+        $uibModalInstance.close(vm.selection);
+      }
     }
 
     /**

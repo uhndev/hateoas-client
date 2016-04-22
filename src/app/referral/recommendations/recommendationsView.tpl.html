@@ -51,6 +51,11 @@
                     ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
             </select>
           </div>
+          <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].serviceVariation">
+            <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.CONFIGURE_VARIATIONS</label>
+            <span class="fa fa-cog fa-lg selectable" ng-click="rec.openVariationModal()"></span>
+            <pre>{{rec.recommendedServices[rec.currIndex].variationSelection | json}}</pre>
+          </div>
           <!-- Save for Scheduling -->
           <!--<div class="form-group" flex ng-repeat="staffType in rec.recommendedServices[rec.currIndex].availableStaffTypes">-->
           <!--<label translate>Select {{staffType.name}}:</label>-->
@@ -255,7 +260,7 @@
                    class="list-group-item service-item selectable"
                    ng-class="{ 'service-active': $index === rec.currIndex }">
                 <span>
-                  {{service.name}}
+                  {{service.variationSelection.name || service.name}}
                   <span ng-if="service.availableSites.length > 0 && service.site">
                     ({{service.siteDictionary[service.site].name}})
                   </span>
