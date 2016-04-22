@@ -71,7 +71,7 @@
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.referralNotes = AltumAPI.Note.query({referral: vm.referral.id});
+        vm.referralNotes = angular.copy(data.items.notes);
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
           'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,

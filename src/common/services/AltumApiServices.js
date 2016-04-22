@@ -26,7 +26,6 @@
     .service('AltumProgramServices', AltumProgramServices)
     .service('ServiceVariationService', ServiceVariationService)
     .service('ServiceCategoryService', ServiceCategoryService)
-    .service('ServiceTypeService', ServiceTypeService)
     .service('ServiceService', ServiceService)
     .service('StaffService', StaffService)
     .service('StaffTypeService', StaffTypeService)
@@ -42,7 +41,7 @@
     AltumAPIService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
     CityService, PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
-    ServiceTypeService, AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
+    AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
@@ -76,19 +75,19 @@
   }
 
   function StatusService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('status'));
+    return ResourceFactory.create(API.url('status'), {cache: true});
   }
 
   function WorkStatusService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('workstatus'));
+    return ResourceFactory.create(API.url('workstatus'), {cache: true});
   }
 
   function PrognosisService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('prognosis'));
+    return ResourceFactory.create(API.url('prognosis'), {cache: true});
   }
 
   function TimeframeService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('timeframe'));
+    return ResourceFactory.create(API.url('timeframe'), {cache: true});
   }
 
   function ProgramServiceService(ResourceFactory, API) {
@@ -111,10 +110,6 @@
     return ResourceFactory.create(API.url('servicecategory'));
   }
 
-  function ServiceTypeService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('servicetype'));
-  }
-
   function ServiceService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('service'));
   }
@@ -124,7 +119,7 @@
   }
 
   function StaffTypeService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('stafftype'));
+    return ResourceFactory.create(API.url('stafftype'), {cache: true});
   }
 
   function NoteService(ResourceFactory, API) {
@@ -132,7 +127,7 @@
   }
 
   function NoteTypeService(ResourceFactory, API) {
-    return ResourceFactory.create(API.url('notetype'));
+    return ResourceFactory.create(API.url('notetype'), {cache: true});
   }
 
   function ClientService(ResourceFactory, API) {
@@ -168,28 +163,26 @@
       'Address': ResourceFactory.create(API.url('address')),
       'Physician': ResourceFactory.create(API.url('physician')),
       'Payor': ResourceFactory.create(API.url('payor')),
-      'Status': ResourceFactory.create(API.url('status')),
-      'WorkStatus': ResourceFactory.create(API.url('workstatus')),
-      'Prognosis': ResourceFactory.create(API.url('prognosis')),
-      'Timeframe': ResourceFactory.create(API.url('timeframe')),
+      'Status': ResourceFactory.create(API.url('status'), {cache: true}),
+      'WorkStatus': ResourceFactory.create(API.url('workstatus'), {cache: true}),
+      'Prognosis': ResourceFactory.create(API.url('prognosis'), {cache: true}),
+      'Timeframe': ResourceFactory.create(API.url('timeframe'), {cache: true}),
       'ProgramService': ResourceFactory.create(API.url('programservice')),
       'AltumService': ResourceFactory.create(API.url('altumservice')),
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
       'ServiceVariation': ResourceFactory.create(API.url('servicevariation')),
       'ServiceCategory': ResourceFactory.create(API.url('servicecategory')),
-      'ServiceType': ResourceFactory.create(API.url('servicetype')),
       'Service': ResourceFactory.create(API.url('service')),
       'Staff' : ResourceFactory.create(API.url('staff')),
-      'StaffType' : ResourceFactory.create(API.url('staffType')),
+      'StaffType' : ResourceFactory.create(API.url('staffType'), {cache: true}),
       'Note' : ResourceFactory.create(API.url('note')),
-      'NoteType' : ResourceFactory.create(API.url('noteType')),
+      'NoteType' : ResourceFactory.create(API.url('noteType'), {cache: true}),
       'Client': ResourceFactory.create(API.url('client')),
       'Person': ResourceFactory.create(API.url('person')),
       'EmergencyContact': ResourceFactory.create(API.url('emergencyContact')),
       'City': ResourceFactory.create(API.url('city')),
       'Company': ResourceFactory.create(API.url('company')),
       'Employee': ResourceFactory.create(API.url('employee'))
-
     };
   }
 })();
