@@ -3,12 +3,11 @@
 
   angular
     .module('dados.common.directives.selectLoader.service', [
-      'sails.io',
-      'LocalStorageModule'
+      'sails.io'
     ])
     .service('SelectService', SelectService);
 
-  SelectService.$inject = ['$q', '$http', '$sailsSocket', 'localStorageService'];
+  SelectService.$inject = ['$q', '$http', '$sailsSocket'];
 
   /**
    * SelectService
