@@ -304,6 +304,7 @@
     function saveServices() {
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
+          // for recommended services that have variations selected, apply to object to be sent to server
           if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
             _.each(service.variationSelection.changes, function (value, key) {
               if (key === 'service') {
@@ -324,7 +325,7 @@
           var serviceObj = new ReferralServices(service);
           return serviceObj.$save();
         }))
-        .then(function(data) {
+        .then(function (data) {
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
           vm.isSaving = false;
           vm.currIndex = null;
@@ -383,14 +384,15 @@
         controller: 'VariationModalController',
         controllerAs: 'varmodal',
         bindToController: true,
+        windowClass: 'variations-modal-window',
         resolve: {
-          displayMode: function() {
+          displayMode: function () {
             return true;
           },
-          Variation: function() {
+          Variation: function () {
             return vm.recommendedServices[vm.currIndex].serviceVariation;
           },
-          Selection: function() {
+          Selection: function () {
             var variations = angular.copy(vm.recommendedServices[vm.currIndex].variationSelection);
             return variations ? variations.changes : null;
           }

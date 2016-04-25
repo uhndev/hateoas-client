@@ -56,19 +56,19 @@
         delete vm.selection[node.type];
       } else {
         var nodeCopy = angular.copy(node);
-        // otherwise enforce only one selection for each type variation
         var selectedNode = {
           id: nodeCopy.id,
           title: nodeCopy.title,
           name: nodeCopy.title,
           value: nodeCopy.data.value
         };
-
+        // update titles and names slightly for physisian/staff to display meaningful data
         if (node.type === 'physician' || node.type === 'staff') {
           selectedNode.name = nodeCopy.data.value.displayName;
           selectedNode.value = nodeCopy.data.value.id;
         }
 
+        // otherwise enforce only one selection for each type variation
         vm.selection[node.type] = selectedNode;
       }
     }
