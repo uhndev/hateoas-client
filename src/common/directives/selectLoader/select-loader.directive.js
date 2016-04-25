@@ -21,7 +21,8 @@
         bindObject: '@?',
         values: '=ngModel',
         placeholder: '@?',
-        labels: '@'
+        labels: '@',
+        expiresIn: '@?'
       },
       templateUrl: 'directives/selectLoader/select-loader.tpl.html',
       controller: 'SelectController',
