@@ -54,7 +54,36 @@
           <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].serviceVariation">
             <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_VARIATIONS</label>
             <span class="fa fa-cog fa-lg selectable" ng-click="rec.openVariationModal()"></span>
-            <input type="text" class="form-control" ng-model="rec.recommendedServices[rec.currIndex].variationSelection.name" disabled/>
+            <br/>
+            <ul>
+              <li ng-repeat="(key, selection) in rec.recommendedServices[rec.currIndex].variationSelection.changes">
+                <div ng-switch="key">
+                  <span ng-switch-when="service">
+                    <b>Selected: </b> {{rec.recommendedServices[rec.currIndex].variationSelection.name}}
+                  </span>
+                  <span ng-switch-when="physician">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="staff">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="date">
+                    <b>{{selection.name}}: </b> {{selection.value | date:'fullDate'}}
+                  </span>
+                  <span ng-switch-when="measure">
+                    <b>{{selection.name}}: </b>
+                    <ul>
+                      <li ng-repeat="(measureKey, measureVal) in selection.value">
+                        <b>{{measureKey}}: </b> {{measureVal}}
+                      </li>
+                    </ul>
+                  </span>
+                  <span ng-switch-default>
+                    <b>{{selection.name}}: </b> {{selection.value | json}}
+                  </span>
+                </div>
+              </li>
+            </ul>
           </div>
           <!-- Save for Scheduling -->
           <!--<div class="form-group" flex ng-repeat="staffType in rec.recommendedServices[rec.currIndex].availableStaffTypes">-->

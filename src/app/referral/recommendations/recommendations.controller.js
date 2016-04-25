@@ -305,14 +305,15 @@
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
           if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
-            switch (true) {
-              case _.has(service.variationSelection.changes, 'service'):
+            _.each(service.variationSelection.changes, function (value, key) {
+              if (key === 'service') {
                 service.altumService = service.variationSelection.altumService;
                 service.programService = service.variationSelection.programService;
                 service.name = service.variationSelection.name;
-                break;
-              default: break;
-            }
+              } else {
+                service[key + 'Detail'] = service.variationSelection.changes[key].value;
+              }
+            });
           }
 
           // clear config data before POSTing
@@ -382,7 +383,6 @@
         controller: 'VariationModalController',
         controllerAs: 'varmodal',
         bindToController: true,
-        windowClass: 'variations-modal-window',
         resolve: {
           displayMode: function() {
             return true;

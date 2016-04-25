@@ -33,6 +33,7 @@
     // bindable methods
     vm.toggle = toggle;
     vm.selectNode = selectNode;
+    vm.updateMetaDataField = updateMetaDataField;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -54,9 +55,34 @@
       if (_.has(vm.selection[node.type], 'id') && vm.selection[node.type].id === node.id) {
         delete vm.selection[node.type];
       } else {
+        var nodeCopy = angular.copy(node);
         // otherwise enforce only one selection for each type variation
+        var selectedNode = {
+          id: nodeCopy.id,
+          title: nodeCopy.title,
+          name: nodeCopy.title,
+          value: nodeCopy.data.value
+        };
+
+        if (node.type === 'physician' || node.type === 'staff') {
+          selectedNode.name = nodeCopy.data.value.displayName;
+          selectedNode.value = nodeCopy.data.value.id;
+        }
+
+        vm.selection[node.type] = selectedNode;
+      }
+    }
+
+    /**
+     * updateMetaDataField
+     * @description On change handler for metadata fields that may have already been selected
+     * @param node
+     */
+    function updateMetaDataField(node) {
+      if (_.has(vm.selection[node.type], 'id') && vm.selection[node.type].id === node.id) {
         vm.selection[node.type] = {
           id: node.id,
+          name: angular.copy(node.title),
           value: angular.copy(node.data.value)
         };
       }

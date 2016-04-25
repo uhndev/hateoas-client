@@ -31,17 +31,18 @@
       <label class="col-sm-2 control-label">{{node.data.name}}</label>
       <div class="col-sm-10">
         <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData"
-               ng-required="!node.preset"/>
+               ng-required="!node.preset" ng-change="varpicker.updateMetaDataField(node)"/>
       </div>
     </div>
 
     <ng-form name="nodeDetailForm" class="form-horizontal">
       <div class="form-group" ng-if="node.type === 'service' || node.type === 'measure' || node.type === 'menu'"
-           ng-repeat="(key, value) in node.data.value track by $index" ng-class="{'has-error': nodeDetailForm[key].$invalid}">
+           ng-repeat="(key, value) in node.data.value track by $index"
+           ng-class="{'has-error': nodeDetailForm[key].$invalid}">
         <label class="col-sm-2 control-label">{{key}}</label>
         <div class="col-sm-10">
           <input type="text" ng-if="node.type !== 'service'" ng-model="node.data.value[key]" class="form-control"
-                 name="{{key}}" required/>
+                 name="{{key}}" ng-change="varpicker.updateMetaDataField(node)" required/>
 
           <select-loader
             ng-if="node.type === 'service' && !node.data.preset"
@@ -66,6 +67,7 @@
             required
             is-atomic="true"
             is-disabled="false"
+            bind-object="true"
             ng-model="node.data.value"
             labels="displayName">
           </select-loader>
@@ -75,6 +77,7 @@
   </ng-form>
 </div>
 <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-  <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'directives/variationsPicker/variation-picker-node.tpl.html'">
+  <li ng-repeat="node in node.nodes" ui-tree-node
+      ng-include="'directives/variationsPicker/variation-picker-node.tpl.html'">
   </li>
 </ol>
