@@ -54,41 +54,134 @@ angular.module('angular-visualize-directive', [])
           var spinner = new Spinner(opts).spin(target);
 
           /* Configure your jasperserver connection */
+
+          // var spinner = createSpinner();
           visualize(
             {
               auth: {
-                name: "jasperadmin",
-                password: "jasperadmin",
-                organization: "organization_1"
+                name: 'calvinsu',
+                password: 'S941130p',
+                organization: 'organization_1'
               }
             },
 
             function (v) {
-              var report = v.report({
-                runImediatly: false,
-                resource:scope.resource,
+
+              var $select = buildControl('Export to: ', v.report.exportFormats),
+                $button = $('#button'),
+
+                report = v.report({
+                resource: scope.resource,
                 params: scope.params,
-                container: "#"+element[0].id,
-                error: function(){ //TODO handle error creating report
+                container: '#' + element[0].id,
+
+                success: function () {
+                    button.removeAttribute('disabled');
+                    spinner.stop();
+                  },
+                error: function () { //TODO handle error creating report
                 }
+
+              });
+
+              $('#statusSelector').on('change', function () {
+                report.params({
+                  'Product_Family': [$(this).val()]
+                }).run();
+              });
+
+              var inputControls = v.inputControls({
+                resource: scope.resource,
+                success: renderInputControls
+              });
+
+              $button.click(function () {
+
+                console.log($select.val());
+
+                report.export({
+                    //export options here
+                    outputFormat: $select.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                  }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                  }, function (error) {
+                    console.log(error);
+                  });
+              });
+
+              function renderInputControls(data) {
+                var productFamilyInputControl = _.findWhere(data, {id: 'Status_1'});
+                var select = $('#statusSelector');
+                _.each(productFamilyInputControl.state.options, function(option) {
+                  select.append('<option ' + (option.selected ? 'selected' : '') + ' value=\'' +
+                    option.value + '\'>' + option.label + '</option>');
+                });
+              }
+
+              function buildControl(name, options) {
+
+                function buildOptions(options) {
+                  var template = '<option>{value}</option>';
+                  return options.reduce(function (memo, option) {
+                    return memo + template.replace('{value}', option);
+                  }, '');
+                }
+
+                var template = '<label>{label}</label><select>{options}</select><br>',
+                  content = template.replace('{label}', name)
+                    .replace('{options}', buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($('#button'));
+                //return select
+                return $($control[1]);
+              }
+
+              $('#previousPage').click(function() {
+                var currentPage = report.pages() || 1;
+
+                report
+                  .pages(--currentPage)
+                  .run()
+                  .fail(function(err) { alert(err); });
+              });
+
+              $('#nextPage').click(function() {
+                var currentPage = report.pages() || 1;
+
+                report
+                  .pages(++currentPage)
+                  .run()
+                  .fail(function(err) { alert(err); });
               });
 
               report.refresh()
-                .done(function(){
-                  console.log("report loaded");
+                .done(function () {
+                  console.log('report loaded');
+                  button.removeAttribute('disabled');
+                  spinner.stop();
                 })
-                .fail(function(){
-                  condole.log("report error")
+                .fail(function () {
+                  console.log('report error');
                 })
-                .always(function(){
+                .always(function () {
                   spinner.stop();
                 });
             },
 
             function (err) {
-              alert("Auth error! Server said: " + err.message);
+              alert('Auth error! Server said: ' + err.message);
             });
         }
+
+        /* function createSpinner() {
+           var container = $("#spinner");
+           var spinner = new Spinner(opts).spin(container[0]);
+           return container;
+         } */
       }
-    }
-  }); 
+    };
+  });

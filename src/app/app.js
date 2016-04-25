@@ -42,6 +42,7 @@
       'altum.client',
       'altum.triage',
       'altum.servicevariation',
+      'altum.report',
 
       // dados subject portal
       'dados.subjectportal',
