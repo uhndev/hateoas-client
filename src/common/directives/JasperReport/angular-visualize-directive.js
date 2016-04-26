@@ -70,10 +70,18 @@ angular.module('angular-visualize-directive', [])
               var $select = buildControl('Export to: ', v.report.exportFormats),
                 $button = $('#button'),
 
+                zoom = 1,
+                plus = document.getElementById('plus'),
+                minus = document.getElementById('minus'),
+                width = document.getElementById('width'),
+                height = document.getElementById('height'),
+                page = document.getElementById('page'),
+
                 report = v.report({
                 resource: scope.resource,
                 params: scope.params,
                 container: '#' + element[0].id,
+                  scale: zoom = 0.9,
 
                 success: function () {
                     button.removeAttribute('disabled');
@@ -84,9 +92,39 @@ angular.module('angular-visualize-directive', [])
 
               });
 
+              plus.onclick = function () {
+                report
+                  .scale(zoom += 0.1)
+                  .render();
+              };
+
+              minus.onclick = function () {
+                report
+                  .scale((zoom -= 0.1) > 0 ? zoom : zoom = 0.1)
+                  .render();
+              };
+
+              width.onclick = function () {
+                report
+                  .scale('width')
+                  .render();
+              };
+
+              height.onclick = function () {
+                report
+                  .scale('height')
+                  .render();
+              };
+
+              page.onclick = function () {
+                report
+                  .scale('container')
+                  .render();
+              };
+
               $('#statusSelector').on('change', function () {
                 report.params({
-                  'Product_Family': [$(this).val()]
+                  'Status_1': [$(this).val()]
                 }).run();
               });
 
@@ -113,6 +151,7 @@ angular.module('angular-visualize-directive', [])
               });
 
               function renderInputControls(data) {
+                console.log(data);
                 var productFamilyInputControl = _.findWhere(data, {id: 'Status_1'});
                 var select = $('#statusSelector');
                 _.each(productFamilyInputControl.state.options, function(option) {

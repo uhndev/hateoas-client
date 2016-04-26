@@ -15,7 +15,7 @@
       //resource: "/public/Samples/Reports/9.CustomerDetailReport",
       //params:{"customerId": [4031]}
       resource: '/reports/Altum_CMS_Report',
-      params: {'status': ['approved']}
+      params: {'Status_1': ['approved']}
     };
 
     activate();
