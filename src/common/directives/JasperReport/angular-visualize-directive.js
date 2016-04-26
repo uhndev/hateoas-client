@@ -81,7 +81,7 @@ angular.module('angular-visualize-directive', [])
                 resource: scope.resource,
                 params: scope.params,
                 container: '#' + element[0].id,
-                  scale: zoom = 0.9,
+                scale: zoom = 0.9,
 
                 success: function () {
                     button.removeAttribute('disabled');
