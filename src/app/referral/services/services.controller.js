@@ -26,7 +26,8 @@
     vm.referralNotes = [];
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
-    vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.approvalStatuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.completionStatuses = AltumAPI.Status.query({where: {category: 'completion'}});
     vm.accordionStatus = {};
 
     // data columns for subgroups (encounter) summary table

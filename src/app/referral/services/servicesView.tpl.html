@@ -89,13 +89,17 @@
               <tr>
                 <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
                 <th>Approvals</th>
+                <th>Completion</th>
               </tr>
               <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
                 <td ng-repeat="field in svc.visitFields">
                   {{service[field.name]}}
                 </td>
                 <td>
-                  <service-approval service="service" statuses="svc.statuses" on-update="svc.init()"></service-approval>
+                  <service-approval service="service" statuses="svc.approvalStatuses" on-update="svc.init()"></service-approval>
+                </td>
+                <td>
+                  <service-approval service="service" statuses="svc.completionStatuses" on-update="svc.init()"></service-approval>
                 </td>
               </tr>
             </table>
