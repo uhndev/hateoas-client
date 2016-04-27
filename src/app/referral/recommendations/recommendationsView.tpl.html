@@ -99,13 +99,24 @@
           <!--</select-loader>-->
           <!--</div>-->
           <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
-                       ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
-                       ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
-                Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
-              </label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
+                           ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
+                           ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
+                    Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6" ng-if="rec.recommendedServices[rec.currIndex].hasTelemedicine">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].telemedicine" /> Via Telemedicine
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>

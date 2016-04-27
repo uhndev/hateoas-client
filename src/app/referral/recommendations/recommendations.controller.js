@@ -153,6 +153,7 @@
           serviceDate: new Date(),
           serviceVariation: altumProgramService.serviceVariation,
           site: null,
+          hasTelemedicine: altumProgramService.hasTelemedicine,
           approvalNeeded: altumProgramService.approvalNeeded,
           approvalRequired: altumProgramService.approvalRequired
         });
