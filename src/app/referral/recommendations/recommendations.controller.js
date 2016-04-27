@@ -312,7 +312,11 @@
                 service.altumService = service.variationSelection.altumService;
                 service.programService = service.variationSelection.programService;
                 service.name = service.variationSelection.name;
+              } else if (key === 'followup') {
+                service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
+                service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
               } else {
+                service[key + 'DetailName'] = service.variationSelection.changes[key].name;
                 service[key + 'Detail'] = service.variationSelection.changes[key].value;
               }
             });

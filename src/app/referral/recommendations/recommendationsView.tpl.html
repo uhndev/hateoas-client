@@ -61,10 +61,16 @@
                   <span ng-switch-when="service">
                     <b>Selected: </b> {{rec.recommendedServices[rec.currIndex].variationSelection.name}}
                   </span>
+                  <span ng-switch-when="followup">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
                   <span ng-switch-when="physician">
                     <b>{{selection.title}}: </b> {{selection.name}}
                   </span>
                   <span ng-switch-when="staff">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="timeframe">
                     <b>{{selection.title}}: </b> {{selection.name}}
                   </span>
                   <span ng-switch-when="date">

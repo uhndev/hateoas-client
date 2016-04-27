@@ -62,10 +62,18 @@
           name: nodeCopy.title,
           value: nodeCopy.data.value
         };
-        // update titles and names slightly for physisian/staff to display meaningful data
-        if (node.type === 'physician' || node.type === 'staff') {
+        // update titles and names slightly for physician/staff/timeframe to display meaningful data
+        if (node.data.category === 'model') {
           selectedNode.name = nodeCopy.data.value.displayName;
           selectedNode.value = nodeCopy.data.value.id;
+        }
+        // special case for non-service jsonmodel types, concatenate displayNames
+        else if (node.data.category === 'jsonmodel' && node.type !== 'service') {
+          selectedNode.name = _.pluck(_.values(nodeCopy.data.value), 'displayName').join(' - ');
+          selectedNode.value = {};
+          _.each(nodeCopy.data.value, function (value, key) {
+            selectedNode.value[key] = value.id;
+          });
         }
 
         // otherwise enforce only one selection for each type variation
