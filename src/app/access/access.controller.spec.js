@@ -9,7 +9,7 @@ describe('Controller: AccessManagementController Tests', function() {
   beforeEach(inject(function($injector, _$controller_,  _$rootScope_,_$uibModal_, _GroupService_, _PermissionService_, _UserRoles_, _UserPermissions_) {
     scope = _$rootScope_.$new();
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('GET', 'http://localhost:1337/api/permission?model=1&populate=model&populate=role&populate=criteria&populate=user').respond(
+    $httpBackend.when('GET', 'https://localhost:1337/api/permission?model=1&populate=model&populate=role&populate=criteria&populate=user').respond(
       [{
         permission: {
           action: 'create',
@@ -45,7 +45,7 @@ describe('Controller: AccessManagementController Tests', function() {
       }
         ]
     );
-    $httpBackend.when('GET', 'http://localhost:1337/api/permission?model=2&populate=model&populate=role&populate=criteria&populate=user').respond(
+    $httpBackend.when('GET', 'https://localhost:1337/api/permission?model=2&populate=model&populate=role&populate=criteria&populate=user').respond(
       [{
         permission: {
           action: 'read',
@@ -81,7 +81,7 @@ describe('Controller: AccessManagementController Tests', function() {
       }
       ]
     );
-    $httpBackend.when('GET', 'http://localhost:1337/api/permission?populate=model&populate=role&populate=criteria&role=9').respond(
+    $httpBackend.when('GET', 'https://localhost:1337/api/permission?populate=model&populate=role&populate=criteria&role=9').respond(
       [{
         permission: {
           action: 'read',
@@ -117,7 +117,7 @@ describe('Controller: AccessManagementController Tests', function() {
       }
       ]
     );
-    $httpBackend.when('GET', 'http://localhost:1337/api/group/admin?populate=roles').respond(
+    $httpBackend.when('GET', 'https://localhost:1337/api/group/admin?populate=roles').respond(
       {
         displayName: 'admin',
         href: 'http://localhost:1337/api/group/admin',
@@ -166,7 +166,7 @@ describe('Controller: AccessManagementController Tests', function() {
 
         expect(t[0].permission.model.identity).toBe('model');
       });
-      $httpBackend.expectGET('http://localhost:1337/api/permission?model=1&populate=model&populate=role&populate=criteria&populate=user');
+      $httpBackend.expectGET('https://localhost:1337/api/permission?model=1&populate=model&populate=role&populate=criteria&populate=user');
       $httpBackend.flush();
 
       var queryObj1 = {
@@ -180,7 +180,7 @@ describe('Controller: AccessManagementController Tests', function() {
 
         expect(t1[0].permission.model.identity).toBe('permission');
       });
-      $httpBackend.expectGET('http://localhost:1337/api/permission?model=2&populate=model&populate=role&populate=criteria&populate=user');
+      $httpBackend.expectGET('https://localhost:1337/api/permission?model=2&populate=model&populate=role&populate=criteria&populate=user');
       $httpBackend.flush();
     });
   });
@@ -206,8 +206,8 @@ describe('Controller: AccessManagementController Tests', function() {
         expect(t1.roles[0].name).toBe('admin');
       });
 
-      $httpBackend.expectGET('http://localhost:1337/api/group/admin?populate=roles');
-      $httpBackend.expectGET('http://localhost:1337/api/permission?populate=model&populate=role&populate=criteria&role=9');
+      $httpBackend.expectGET('https://localhost:1337/api/group/admin?populate=roles');
+      $httpBackend.expectGET('https://localhost:1337/api/permission?populate=model&populate=role&populate=criteria&role=9');
       $httpBackend.flush();
     });
   });

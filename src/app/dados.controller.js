@@ -23,25 +23,32 @@
 
     /**
      * setPageTitle
-     * @description Breaks current URL into array and attempts to translate each item accordingly.
-     *              If no translation is found, the item is returned as-is.
+     * @description Set the page title according to JSON namespace
      */
     function setPageTitle() {
-      // construct translated pageTitle from location url
-      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''));
-      var possibleKeys = _.map(currentPaths, function (path) {
-        return [LOCALES.translationPrefix, path.toUpperCase(), LOCALES.translationSuffix].join('');
-      });
+      var path_build = null;
+      var currentPaths = _.pathnameToArray($location.path().replace(/(\/\d+)/g, '')).forEach(function(value) {
+        if (path_build !== null) {
 
-      $translate(possibleKeys).then(function (translations) {
-        $scope.pageTitle = _.map(_.zip(possibleKeys, currentPaths), function (path) {
-          // if translation found, replace with translation
-          if (!_.startsWith(translations[path[0]], LOCALES.translationPrefix)) {
-            return _.capitalize(translations[path[0]]);
-          }
-          return _.capitalize(path[1]);
-        }).join(' ');
+          path_build = path_build + '.' + value.toUpperCase();
+        }
+        else {
+
+          path_build = value.toUpperCase();
+        }
       });
+      var namespace = LOCALES.translationPrefix + path_build + LOCALES.translateSuffix;
+
+      $translate(namespace)
+        .then(function (translatedValue) {
+
+          $scope.pageTitle = translatedValue;
+
+          if ($scope.pageTitle === namespace || $scope.pageTitle.isEmpty || $scope.pageTitle === '') {
+
+            $scope.pageTitle = _.pathnameToArray($location.path().replace(/(\/\d+)/g, ''))[0];
+          }
+        });
     }
 
     $scope.$on('$locationChangeStart', function(e, current, prev) {
