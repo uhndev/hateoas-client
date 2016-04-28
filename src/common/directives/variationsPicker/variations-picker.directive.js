@@ -62,18 +62,22 @@
           name: nodeCopy.title,
           value: nodeCopy.data.value
         };
-        // update titles and names slightly for physician/staff/timeframe to display meaningful data
-        if (node.data.category === 'model') {
-          selectedNode.name = nodeCopy.data.value.displayName;
-          selectedNode.value = nodeCopy.data.value.id;
-        }
-        // special case for non-service jsonmodel types, concatenate displayNames
-        else if (node.data.category === 'jsonmodel' && node.type !== 'service') {
-          selectedNode.name = _.pluck(_.values(nodeCopy.data.value), 'displayName').join(' - ');
-          selectedNode.value = {};
-          _.each(nodeCopy.data.value, function (value, key) {
-            selectedNode.value[key] = value.id;
-          });
+
+        switch (true) {
+          // update titles and names slightly for physician/staff/timeframe to display meaningful data
+          case node.data.category === 'model':
+            selectedNode.name = nodeCopy.data.value.displayName;
+            selectedNode.value = nodeCopy.data.value.id;
+            break;
+            // special case for non-service jsonmodel types, concatenate displayNames
+          case node.data.category === 'jsonmodel' && node.type !== 'service':
+            selectedNode.name = _.pluck(_.values(nodeCopy.data.value), 'displayName').join(' - ');
+            selectedNode.value = {};
+            _.each(nodeCopy.data.value, function (value, key) {
+              selectedNode.value[key] = value.id;
+            });
+            break;
+          default: break;
         }
 
         // otherwise enforce only one selection for each type variation
