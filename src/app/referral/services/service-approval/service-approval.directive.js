@@ -12,23 +12,15 @@
     .module('altum.referral.serviceApproval', [
       'altum.referral.serviceApproval.controller'
     ])
-    .directive('serviceApproval', serviceApproval);
-
-  serviceApproval.$inject = [];
-
-  function serviceApproval() {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
+    .component('serviceApproval', {
+      bindings: {
         service: '=',
         statuses: '=',
-        onUpdate: '&'
+        onUpdate: '&',
+        statusType: '@'
       },
       templateUrl: 'referral/services/service-approval/service-approval.tpl.html',
       controller: 'ServiceApprovalController',
-      controllerAs: 'sap',
-      bindToController: true
-    };
-  }
+      controllerAs: 'sap'
+    });
 })();

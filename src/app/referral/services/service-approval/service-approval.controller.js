@@ -6,24 +6,59 @@
       'ngResource',
       'ngMaterial'
     ])
+    .constant('STATUS_TYPES', {
+      'approval': {
+        'endpoint': 'approvals',
+        'currentType': 'currentApproval',
+        'currentStatus': 'currentStatus',
+        'populate': ['currentApproval', 'approvals'],
+        'detailColumns': [
+          {
+            'name': 'COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID',
+            'type': 'text',
+            'value': 'externalID'
+          }
+        ]
+      },
+      'completion': {
+        'endpoint': 'completion',
+        'currentType': 'currentCompletion',
+        'currentStatus': 'currentCompletionStatus',
+        'populate': ['currentCompletion', 'completion'],
+        'detailColumns': [
+          {
+            'name': 'COMMON.MODELS.COMPLETION.CANCELLATION_DATE',
+            'type': 'date',
+            'value': 'cancellationDate'
+          },
+          {
+            'name': 'COMMON.MODELS.COMPLETION.COMPLETION_DATE',
+            'type': 'date',
+            'value': 'completionDate'
+          }
+        ]
+      }
+    })
     .controller('ServiceApprovalController', ServiceApprovalController);
 
-  ServiceApprovalController.$inject = ['$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr'];
+  ServiceApprovalController.$inject = ['$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
 
-  function ServiceApprovalController($resource, AltumAPI, API, $uibModal, toastr) {
+  function ServiceApprovalController($resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
     var vm = this;
-    var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/approvals');
 
     // bindable variables
+    vm.typeMap = STATUS_TYPES[vm.statusType];
     vm.service = vm.service || {};
     vm.statuses = vm.statuses || {};
     vm.approvalPopover = {
       templateUrl: 'referral/services/service-approval/service-approval-detail.tpl.html',
-      title: 'Approval History'
+      title: _.startCase(vm.statusType) + ' History'
     };
 
     // bindable methods
     vm.updateApprovalStatus = updateApprovalStatus;
+
+    var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.typeMap.endpoint);
 
     init();
 
@@ -33,15 +68,15 @@
       // get dictionary of statuses
       vm.statuses = _.indexBy(vm.statuses, 'id');
 
-      // check if passed in service object with id without populated approvals, then fetch from server
-      if (!vm.service.approvals) {
-        AltumAPI.Service.get({id: vm.service.id, populate: ['currentApproval', 'approvals']}, function (data) {
-          if (data.approvals.length > 0) {
-            vm.service.previousStatus = data.currentApproval.status;
-            vm.service.currentStatus = data.currentApproval.status;
-            vm.service.iconClass = vm.statuses[data.currentApproval.status].iconClass;
-            vm.service.rowClass = vm.statuses[data.currentApproval.status].rowClass;
-            vm.service.approvals = angular.copy(_.sortBy(data.approvals, 'createdAt'));
+      // check if passed in service object with id without populated approvals/completions, then fetch from server
+      if (!vm.service.approvals || !vm.service.completion) {
+        AltumAPI.Service.get({id: vm.service.id, populate: vm.typeMap.populate}, function (data) {
+          if (data[vm.typeMap.endpoint].length > 0) {
+            vm.service.previousStatus = data[vm.typeMap.currentType].status;
+            vm.service[vm.typeMap.currentStatus] = data[vm.typeMap.currentType].status;
+            vm.service.iconClass = vm.statuses[data[vm.typeMap.currentType].status].iconClass;
+            vm.service.rowClass = vm.statuses[data[vm.typeMap.currentType].status].rowClass;
+            vm.service[vm.typeMap.endpoint] = angular.copy(_.sortBy(data[vm.typeMap.endpoint], 'createdAt'));
           }
         });
       }
@@ -54,7 +89,7 @@
      */
     function updateApprovalStatus() {
       // only show popup when changing to Approved status
-      if (vm.statuses[vm.service.currentStatus].requiresConfirmation) {
+      if (vm.statuses[vm.service[vm.typeMap.currentStatus]].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'referral/services/service-approval/approval-confirmation.tpl.html',
@@ -62,8 +97,22 @@
             var vm = this;
             vm.newStatus = newStatus;
             vm.approval = {
-              status: newStatus.id,
-              externalID: null
+              status: newStatus.id
+            };
+
+            // set required fields to null in approval object
+            _.each(vm.newStatus.requiresConfirmation.require, function (field) {
+              vm.approval[field] = null;
+            });
+
+            /**
+             * isFieldRequired
+             * @description Returns true if field is required in confirmation form
+             * @param field
+             * @returns {Boolean}
+             */
+            vm.isFieldRequired = function(field) {
+              return _.contains(vm.newStatus.requiresConfirmation, field);
             };
 
             /**
@@ -86,18 +135,18 @@
           bindToController: true,
           resolve: {
             newStatus: function () {
-              return vm.statuses[vm.service.currentStatus];
+              return vm.statuses[vm.service[vm.typeMap.currentStatus]];
             }
           }
         });
 
         modalInstance.result.then(saveApprovalStatus, function () {
           // if cancelled, revert back to previous selection
-          vm.service.currentStatus = vm.service.previousStatus;
+          vm.service[vm.typeMap.currentStatus] = vm.service.previousStatus;
         });
       } else {
         // otherwise just save the new status change
-        saveApprovalStatus({status: vm.service.currentStatus});
+        saveApprovalStatus({status: vm.service[vm.typeMap.currentStatus]});
       }
     }
 
@@ -109,7 +158,7 @@
     function saveApprovalStatus(approvalObj) {
       var newApproval = new ServiceApproval(approvalObj);
       newApproval.$save(function (approval) {
-        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service.currentStatus].name, 'Services');
+        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service[vm.typeMap.currentStatus]].name, 'Services');
         vm.onUpdate();
       });
     }

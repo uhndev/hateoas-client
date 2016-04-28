@@ -3,11 +3,13 @@
     <tr>
       <th translate>COMMON.MODELS.APPROVAL.STATUS</th>
       <th translate>COMMON.MODELS.APPROVAL.CREATED_AT</th>
-      <th translate>COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID</th>
+      <th ng-repeat="column in sap.typeMap.detailColumns" translate>
+        {{column.name}}
+      </th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="approval in sap.service.approvals"
+    <tr ng-repeat="approval in sap.service[sap.typeMap.endpoint]"
         class="{{sap.statuses[approval.status].rowClass}}">
       <td class="text-nowrap">
         <b>{{approval.displayName}}</b>
@@ -15,8 +17,9 @@
       <td>
         <small>{{approval.createdAt | date: 'MMM d, y h:mm a'}}</small>
       </td>
-      <td class="text-nowrap">
-        {{approval.externalID || "-"}}
+      <td class="text-nowrap" ng-repeat="column in sap.typeMap.detailColumns" translate>
+        <span ng-if="column.type === 'text'">{{column.value || "="}}</span>
+        <span ng-if="column.type === 'date'">{{column.value | date: 'MMM d, y h:mm a' || "="}}</span>
       </td>
     </tr>
   </tbody>

@@ -13,10 +13,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, toastr) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -55,6 +55,10 @@
       {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+      },
+      {
+        name: 'completionStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
       },
       {
         name: 'siteName',
