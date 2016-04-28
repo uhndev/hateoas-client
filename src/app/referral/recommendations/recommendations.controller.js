@@ -308,12 +308,22 @@
           // for recommended services that have variations selected, apply to object to be sent to server
           if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
             _.each(service.variationSelection.changes, function (value, key) {
-              if (key === 'service') {
-                service.altumService = service.variationSelection.altumService;
-                service.programService = service.variationSelection.programService;
-                service.name = service.variationSelection.name;
-              } else {
-                service[key + 'Detail'] = service.variationSelection.changes[key].value;
+              switch (key) {
+                case 'service':
+                  service.altumService = service.variationSelection.altumService;
+                  service.programService = service.variationSelection.programService;
+                  service.name = service.variationSelection.name;
+                  break;
+                case 'followup':
+                  service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
+                  service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
+                  break;
+                default:
+                  // otherwise, variation is of type number/text/date/physician/staff/timeframe/measure
+                  // where the respective backend column name will be <type>DetailName and value will be <type>Detail
+                  service[key + 'DetailName'] = service.variationSelection.changes[key].name;
+                  service[key + 'Detail'] = service.variationSelection.changes[key].value;
+                  break;
               }
             });
           }

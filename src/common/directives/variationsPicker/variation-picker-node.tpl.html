@@ -26,7 +26,7 @@
   <ng-form name="this.nodeForm" class="form-horizontal" ng-show="!node.data.preset && visible && node.type !== 'none'"
            novalidate>
     <hr/>
-    <div ng-if="node.type === 'date' || node.type === 'number' || node.type === 'text'"
+    <div ng-if="node.type !== 'none' && node.data.category === 'basic'"
          class="form-group" ng-class="{'has-error': this.nodeForm.metaData.$invalid}">
       <label class="col-sm-2 control-label">{{node.data.name}}</label>
       <div class="col-sm-10">
@@ -36,28 +36,29 @@
     </div>
 
     <ng-form name="nodeDetailForm" class="form-horizontal">
-      <div class="form-group" ng-if="node.type === 'service' || node.type === 'measure' || node.type === 'menu'"
+      <div class="form-group" ng-if="node.data.category === 'json' || node.data.category === 'jsonmodel'"
            ng-repeat="(key, value) in node.data.value track by $index"
            ng-class="{'has-error': nodeDetailForm[key].$invalid}">
         <label class="col-sm-2 control-label">{{key}}</label>
         <div class="col-sm-10">
-          <input type="text" ng-if="node.type !== 'service'" ng-model="node.data.value[key]" class="form-control"
+          <input type="text" ng-if="node.data.category === 'json'" ng-model="node.data.value[key]" class="form-control"
                  name="{{key}}" ng-change="varpicker.updateMetaDataField(node)" required/>
 
           <select-loader
-            ng-if="node.type === 'service' && !node.data.preset"
+            ng-if="node.data.category === 'jsonmodel' && !node.data.preset"
             name="{{key}}"
             required
             url="{{key}}"
             is-atomic="true"
             is-disabled="false"
+            bind-object="true"
             ng-model="node.data.value[key]"
             labels="displayName">
           </select-loader>
         </div>
       </div>
 
-      <div class="form-group" ng-if="node.type === 'physician' || node.type === 'staff'"
+      <div class="form-group" ng-if="node.data.category === 'model'"
            ng-class="{'has-error': nodeDetailForm[node.type].$invalid}">
         <label class="col-sm-2 control-label">{{node.data.name}}</label>
         <div class="col-sm-10">
