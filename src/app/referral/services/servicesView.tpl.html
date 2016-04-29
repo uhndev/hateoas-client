@@ -96,18 +96,18 @@
                   {{service[field.name]}}
                 </td>
                 <td>
-                  <service-approval service="service"
+                  <service-status service="service"
                                     statuses="svc.approvalStatuses"
                                     on-update="svc.init()"
                                     status-type="approval">
-                  </service-approval>
+                  </service-status>
                 </td>
                 <td>
-                  <service-approval service="service"
+                  <service-status service="service"
                                     statuses="svc.completionStatuses"
                                     on-update="svc.init()"
                                     status-type="completion">
-                  </service-approval>
+                  </service-status>
                 </td>
               </tr>
             </table>

@@ -8,7 +8,7 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'altum.referral.serviceApproval'
+      'altum.referral.serviceStatus'
     ])
     .controller('ServicesController', ServicesController);
 
