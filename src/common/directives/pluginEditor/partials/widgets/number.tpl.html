@@ -1,6 +1,7 @@
-<span class="{{ widget.properties.blockDisplay }}"><input type="number" 
+<span class="{{ widget.properties.blockDisplay }}"><input type="number"
 	id="uuid:{{ widget.name }}"
 	name="{{ widget.name }}"
+  ng-disabled="disabledWhen"
 	ng-model="widgetModel.value"
 	title="{{widget.properties.title}}"
 	value="{{widget.properties.value }}"

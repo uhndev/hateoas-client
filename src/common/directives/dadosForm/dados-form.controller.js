@@ -7,15 +7,16 @@
     ])
     .controller('DadosFormController', DadosFormController);
 
-  DadosFormController.$inject = ['$scope', '$location', '$timeout', 'AnswerSetService'];
+  DadosFormController.$inject = ['$scope', 'AnswerSetService'];
 
-  function DadosFormController($scope, $location, $timeout, AnswerSetService) {
+  function DadosFormController($scope, AnswerSetService) {
     var vm = this;
 
     // bindable variables
     vm.answers = {};
     vm.answerSet = {};
     vm.returned = false;
+    vm.signed = false;
 
     if (!vm.mode) {
       vm.mode = 'multi';
@@ -23,6 +24,9 @@
 
     // bindable methods
     vm.saveFormAnswers = saveFormAnswers;
+    vm.signForm = signForm;
+    vm.revokeForm = revokeForm;
+    vm.hasAnswers = hasAnswers;
     vm.updateAnswers = updateAnswers;
     vm.nextQuestion = nextQuestion;
     vm.prevQuestion = prevQuestion;
@@ -72,6 +76,10 @@
      * @description Updates or creates the answerset
      */
     function saveFormAnswers() {
+      if (vm.signed) {
+        return;
+      }
+
       updateAnswers();
 
       if (angular.isDefined(vm.answerSetID)) {
@@ -89,12 +97,61 @@
     }
 
     /**
+     * signForm
+     * @description Locks completed form
+     */
+    function signForm() {
+      updateAnswers();
+
+      if (angular.isDefined(vm.answerSetID)) {
+        vm.signed = true;
+
+        AnswerSetService.save({
+          answers: vm.answers,
+          id: vm.answerSetID,
+          signed: true
+        });
+      }
+    }
+
+    /**
+     * revokeForm
+     * @description Expires the old answerSet
+     */
+    function revokeForm() {
+      AnswerSetService.save({
+        answers: vm.answers,
+        scheduleID: vm.form.scheduleID,
+        formID: vm.form.id,
+      }, onAnswerSetRevoked);
+    }
+
+    /**
+     * hasAnswers
+     * @description Checks if current form has answers
+     */
+    function hasAnswers() {
+      return !_.isEmpty(vm.answers);
+    }
+
+    /**
      * onAnswerSetCreated
      * @description Callback that updates current answerSet id if it was succesfully created
      */
     function onAnswerSetCreated(result) {
       if (angular.isDefined(result.id)) {
         vm.answerSetID = result.id;
+      }
+    }
+
+    /**
+     * onAnswerSetRevoked
+     * @description Callback that updates current id and unlocks the form if revoke was successful
+     */
+    function onAnswerSetRevoked(result) {
+      if (angular.isDefined(result.id)) {
+        vm.answerSetID = result.id;
+        vm.signed = false;
       }
     }
 
@@ -125,7 +182,12 @@
         if (_.has(vm.form, 'answerSetID')) {
           AnswerSetService.get({id: vm.form.answerSetID}, function (data) {
             vm.answerSet = data.items;
+            vm.answerSetID = vm.answerSet.id;
             vm.answers = vm.answerSet.answers;
+
+            if (_.isBoolean(vm.answerSet.signed)) {
+              vm.signed = vm.answerSet.signed;
+            }
             // notify that answers array was updated
             $scope.$broadcast('AnswerSetLoaded');
           });
