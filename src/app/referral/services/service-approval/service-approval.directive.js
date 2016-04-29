@@ -17,7 +17,7 @@
         service: '=',
         statuses: '=',
         onUpdate: '&',
-        statusType: '@'
+        statusType: '@'  // approval or completion
       },
       templateUrl: 'referral/services/service-approval/service-approval.tpl.html',
       controller: 'ServiceApprovalController',

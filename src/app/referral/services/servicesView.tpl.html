@@ -25,16 +25,16 @@
         <tr class="summary-table-row">
           <td ng-repeat="(label, value) in ::svc.referralOverview">{{::value}}</td>
           <td ng-style="{'padding-top': 0}">
-            <select class="form-control" ng-model="svc.groupBy">
-              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
-                {{group.prompt}}
+            <select class="form-control" ng-model="::svc.groupBy">
+              <option value="{{::group.name}}" ng-repeat="group in ::svc.groupFields" translate>
+                {{::group.prompt}}
               </option>
             </select>
           </td>
           <td ng-style="{'padding-top': 0}">
-            <select class="form-control" ng-model="svc.subGroupBy">
-              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
-                {{group.prompt}}
+            <select class="form-control" ng-model="::svc.subGroupBy">
+              <option value="{{::group.name}}" ng-repeat="group in ::svc.groupFields" translate>
+                {{::group.prompt}}
               </option>
             </select>
           </td>
@@ -96,10 +96,18 @@
                   {{service[field.name]}}
                 </td>
                 <td>
-                  <service-approval service="service" statuses="svc.approvalStatuses" on-update="svc.init()" status-type="approval"></service-approval>
+                  <service-approval service="service"
+                                    statuses="svc.approvalStatuses"
+                                    on-update="svc.init()"
+                                    status-type="approval">
+                  </service-approval>
                 </td>
                 <td>
-                  <service-approval service="service" statuses="svc.completionStatuses" on-update="svc.init()" status-type="completion"></service-approval>
+                  <service-approval service="service"
+                                    statuses="svc.completionStatuses"
+                                    on-update="svc.init()"
+                                    status-type="completion">
+                  </service-approval>
                 </td>
               </tr>
             </table>
