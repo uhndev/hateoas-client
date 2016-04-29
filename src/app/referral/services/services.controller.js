@@ -8,15 +8,15 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'altum.referral.serviceApproval'
+      'altum.referral.serviceStatus'
     ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, toastr) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -26,7 +26,8 @@
     vm.referralNotes = [];
     vm.groupBy = vm.DEFAULT_GROUP_BY;
     vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
-    vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.approvalStatuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.completionStatuses = AltumAPI.Status.query({where: {category: 'completion'}});
     vm.accordionStatus = {};
 
     // data columns for subgroups (encounter) summary table
@@ -54,6 +55,10 @@
       {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+      },
+      {
+        name: 'completionStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
       },
       {
         name: 'siteName',
