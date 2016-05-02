@@ -61,7 +61,12 @@
 
         // if payor set in referral, filter list of programs
         if (data.items.payors.length > 0) {
-          vm.programs = AltumAPI.Program.query({where: {payor: _.pluck(data.items.payors, 'id')}});
+          vm.programs = AltumAPI.Program.query({
+            where: {
+              payor: _.pluck(data.items.payors, 'id'),
+              canBeTriaged: true
+            }
+          });
         }
 
         checkPrimaryProviders();
