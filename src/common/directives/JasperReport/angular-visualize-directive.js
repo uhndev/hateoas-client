@@ -118,7 +118,7 @@ angular.module('angular-visualize-directive', [])
 
               page.onclick = function () {
                 report
-                  .scale('container')
+                  .scale('target')
                   .render();
               };
 
