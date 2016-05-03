@@ -143,7 +143,8 @@
      */
     function fetchPermissionsBy(model, id) {
       var queryObj = {
-        populate: ['model', 'role', 'criteria', 'user']
+        populate: ['model', 'role', 'criteria', 'user'],
+        limit: 1000
       };
       queryObj[model] = id;
       return Permission.query(queryObj);

@@ -65,6 +65,9 @@
      * @param loadMore boolean denoting request came via scroll action
      */
     function fetchData(query, select, loadMore) {
+      // set optional expiry in minutes (5 by default)
+      SelectService.setExpiry(parseInt(vm.expiresIn) || 5);
+
       // initial request for when no ids passed in
       var promise = SelectService.loadSelect(vm.href, vm.baseQuery, {limit: vm.limit}, query);
 
