@@ -45,8 +45,8 @@ describe('Controller: Permission Manager Tests', function() {
       }
     };
 
-    $httpBackend.when('PUT', 'http://localhost:1337/api/permission/37').respond(200);
-    $httpBackend.when('DELETE', 'http://localhost:1337/api/permission/37').respond(200);
+    $httpBackend.when('PUT', 'https://localhost:1337/api/permission/37').respond(200);
+    $httpBackend.when('DELETE', 'https://localhost:1337/api/permission/37').respond(200);
     scope = _$rootScope_.$new();
     PermissionService = _PermissionService_;
     toastr = _toastr_;
@@ -81,7 +81,7 @@ describe('Controller: Permission Manager Tests', function() {
 
       expect(permissionctrl.permission.criteria.where.name).toBe('TEST');
       permissionctrl.updatePermission();
-      $httpBackend.expectPUT('http://localhost:1337/api/permission/37');
+      $httpBackend.expectPUT('https://localhost:1337/api/permission/37');
       $httpBackend.flush();
     });
   });
@@ -113,7 +113,7 @@ describe('Controller: Permission Manager Tests', function() {
       };
 
       permissionctrl.revokePermission();
-      $httpBackend.expectDELETE('http://localhost:1337/api/permission/37');
+      $httpBackend.expectDELETE('https://localhost:1337/api/permission/37');
       $httpBackend.flush();
     });
   });

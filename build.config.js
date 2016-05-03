@@ -5,10 +5,10 @@ module.exports = {
 
   environments: {
     development: {
-      url: 'http://localhost:1337',
+      url: 'https://localhost:1337',
       constants: {
         BASE: {
-          protocol: 'http',
+          protocol: 'https',
           host : 'localhost',
           port: '1337',
           prefix: '/api'

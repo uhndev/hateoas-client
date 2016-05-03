@@ -55,7 +55,7 @@ describe('AuthService', function() {
           invoked = true;
         };
         var error = function() {};
-        $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();
+        $httpBackend.expectPOST('https://localhost:1337/auth/local').respond();
         AuthService.login({}, success, error);
         $httpBackend.flush();
         expect(invoked).toBeTruthy();
@@ -66,7 +66,7 @@ describe('AuthService', function() {
           $cookies.put('user', {'user': 'bar', group:'admin'});
         };
         var error = function() {};
-        $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();
+        $httpBackend.expectPOST('https://localhost:1337/auth/local').respond();
         AuthService.login({}, success, error);
         $httpBackend.flush();
         expect($cookies.get('user')).toBeDefined();
