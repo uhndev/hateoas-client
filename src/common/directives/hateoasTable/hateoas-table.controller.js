@@ -31,6 +31,15 @@
     // bindable methods
     vm.follow = follow;
 
+    $scope.predicate = 'name'; //default
+
+    $scope.reverse = false; // for ascending order
+
+    $scope.order = function(predicate) {
+      $scope.predicate = predicate;
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+    };
+
     init();
 
     ///////////////////////////////////////////////////////////////////////////
