@@ -71,7 +71,7 @@
      * @description adds a top level node
      */
     function add() {
-      var newNode={nodes:[],title:'Options',type:'none'};
+      var newNode = {nodes:[],title:'Options',type:'none'};
       vm.serviceVariation.variations.unshift(newNode);
     }
   }
