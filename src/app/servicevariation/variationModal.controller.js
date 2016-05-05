@@ -20,6 +20,7 @@
     vm.expandAll = expandAll;
     vm.saveVariations = saveVariations;
     vm.cancel = cancel;
+    vm.add = add;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -63,6 +64,15 @@
      */
     function cancel() {
       $uibModalInstance.dismiss('cancel');
+    }
+
+    /**
+     * add
+     * @description adds a top level node
+     */
+    function add() {
+      var newNode = {nodes:[],title:'Options',type:'none'};
+      vm.serviceVariation.variations.unshift(newNode);
     }
   }
 })();
