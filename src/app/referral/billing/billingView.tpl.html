@@ -1,0 +1,111 @@
+<div class="container-fluid" ng-controller="ServicesController as billing" ng-cloak>
+  <div layout="column">
+    <h2 flex id="Title">
+      <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
+      <small>{{billing.resource.items.client_displayName}}</small>
+    </h2>
+    <div id="Query" flex class="clearfix">
+      <form>
+        <div class="form-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'APP.REFERRAL.SERVICES.LABELS.SEARCH_REFERRED_SERVICES' | translate }}"
+                 ng-model="billing.search"/>
+        </div>
+      </form>
+      <br/>
+    </div>
+    <div flex ng-show="billing.referralOverview">
+      <table class="table table-condensed summary-table">
+        <tr class="summary-header-row">
+          <th ng-repeat="(label, value) in ::billing.referralOverview" translate>{{label}}</th>
+          <th>Group</th>
+          <th>Subgroup</th>
+        </tr>
+        <tr class="summary-table-row">
+          <td ng-repeat="(label, value) in ::billing.referralOverview">{{::value}}</td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="::billing.groupBy">
+              <option value="{{::group.name}}" ng-repeat="group in ::billing.groupFields" translate>
+                {{::group.prompt}}
+              </option>
+            </select>
+          </td>
+          <td ng-style="{'padding-top': 0}">
+            <select class="form-control" ng-model="::billing.subGroupBy">
+              <option value="{{::group.name}}" ng-repeat="group in ::billing.groupFields" translate>
+                {{::group.prompt}}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <altum-notebook ng-if="billing.referralNotes" notes="billing.referralNotes.notes" collection="{'referral': billing.resource.items.id}"></altum-notebook>
+
+  <uib-accordion close-others="false">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in billing.services | fuzzy: billing.search | groupBy: billing.groupBy"
+                         ng-init="billing.accordionStatus[groupKey].isOpen = false"
+                         is-open="billing.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+      <uib-accordion-heading>
+        <i class="glyphicon" ng-class="{
+          'glyphicon-chevron-right': !billing.accordionStatus[groupKey].isOpen,
+          'glyphicon-chevron-down': billing.accordionStatus[groupKey].isOpen
+        }"></i>
+        {{ groupKey === "null" ? "N/A" : groupKey }}
+        <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
+      </uib-accordion-heading>
+
+      <div layout="column">
+        <uib-accordion close-others="false">
+          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: billing.subGroupBy"
+                               ng-init="billing.accordionStatus[groupKey][subGroup].isOpen = false"
+                               is-open="billing.accordionStatus[groupKey][subGroup].isOpen">
+            <uib-accordion-heading>
+              <i class="glyphicon" ng-class="{
+                  'glyphicon-chevron-right': !billing.accordionStatus[groupKey][subGroup].isOpen,
+                  'glyphicon-chevron-down': billing.accordionStatus[groupKey][subGroup].isOpen
+                }"></i>
+              {{ subGroup === "null" ? "N/A" : subGroup }}
+              <span class="pull-right badge">{{subServices.length}}</span>
+            </uib-accordion-heading>
+            <table class="table table-condensed summary-table">
+              <tr class="summary-header-row">
+                <th ng-repeat="summary in billing.summaryFields" translate
+                    ng-if="subServices[0][summary.name]">
+                  {{summary.prompt}}
+                </th>
+              </tr>
+              <tr class="summary-table-row">
+                <td ng-repeat="summary in billing.summaryFields" ng-if="subServices[0][summary.name]">
+                  {{subServices[0][summary.name]}}
+                </td>
+              </tr>
+            </table>
+            <md-divider></md-divider>
+            <table class="table table-condensed" ng-if="billing.accordionStatus[groupKey][subGroup].isOpen" >
+              <tr>
+                <th ng-repeat="field in billing.visitFields" translate>{{field.prompt}}</th>
+                <th>Approvals</th>
+                <th>Completion</th>
+                <th>Edit Service</th>
+              </tr>
+              <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
+                <td ng-repeat="field in billing.visitFields">
+                  {{service[field.name]}}
+                </td>
+                <td>{{service.statusName}}</td>
+                <td>{{service.completionStatusName}}</td>
+                <td>
+                  <button ng-click="billing.openServiceEditor(service)">Edit</button>
+                </td>
+              </tr>
+            </table>
+          </uib-accordion-group>
+        </uib-accordion>
+      </div>
+    </uib-accordion-group>
+  </uib-accordion>
+</div>

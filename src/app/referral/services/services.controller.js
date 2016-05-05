@@ -13,10 +13,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -33,15 +33,15 @@
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
       {
-        name: 'workStatus',
+        name: 'workStatusName',
         prompt: 'COMMON.MODELS.SERVICE.WORK_STATUS'
       },
       {
-        name: 'prognosis',
+        name: 'prognosisName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS'
       },
       {
-        name: 'prognosisTimeframe',
+        name: 'prognosisTimeframeName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS_TIMEFRAME'
       }
     ];
@@ -99,6 +99,7 @@
     ];
 
     vm.init = init;
+    vm.openServiceEditor = openServiceEditor;
 
     init();
 
@@ -132,6 +133,33 @@
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+      });
+    }
+
+    /**
+     * openServiceEditor
+     * @description opens a modal window for the serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'variations-modal-window',
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        bindToController: true,
+        resolve: {
+          Service: function() {
+            return angular.copy(service);
+          },
+          ApprovedServices: function() {
+            return angular.copy(vm.resource.items.approvedServices);
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        vm.init();
       });
     }
   }

@@ -419,8 +419,13 @@
         // if service was selected as a variation, update appropriate data
         if (_.has(selection, 'service')) {
           // rename service in recommended services tab
-          AltumAPI.AltumService.get({id: selection.service.value.altumService}, function (altumService) {
+          AltumAPI.AltumService.get({id: selection.service.value.altumService, populate: 'sites'}, function (altumService) {
             vm.recommendedServices[vm.currIndex].variationSelection.name = altumService.name;
+
+            if (altumService.sites.length > 0) {
+              vm.recommendedServices[vm.currIndex].availableSites = altumService.sites;
+              vm.recommendedServices[vm.currIndex].siteDictionary = _.indexBy(altumService.sites, 'id');
+            }
           });
 
           // store altum/program service to be applied on save
