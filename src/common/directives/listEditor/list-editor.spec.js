@@ -1,11 +1,11 @@
 describe('List Editor Directives', function() {
-  var ctrl, scope, ngTableParams;
+  var ctrl, scope, ngTableParams, naturalSort;
   // load the list-editor module
-  beforeEach(module('dados.common.directives.listEditor'));
+  beforeEach(module('dados.common.directives.listEditor', 'naturalSort'));
 
-  beforeEach(inject(function (_$rootScope_, _$controller_, _ngTableParams_) {
+  beforeEach(inject(function (_$rootScope_, $filter, _$controller_, _ngTableParams_) {
     ngTableParams = _ngTableParams_;
-
+    naturalSort = _$rootScope_.natural('name');
     var data = {
       canEdit: true,
       canAddNewcol: false,

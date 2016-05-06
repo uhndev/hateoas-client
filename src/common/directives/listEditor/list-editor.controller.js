@@ -4,9 +4,9 @@
     .module('dados.common.directives.list-editor.controller', [])
     .controller('ListEditorController', ListEditorController);
 
-  ListEditorController.$inject = ['$scope', '$filter', 'ngTableParams'];
+  ListEditorController.$inject = ['$rootScope', '$scope', '$filter', 'ngTableParams'];
 
-  function ListEditorController($scope, $filter, NgTableParams) {
+  function ListEditorController($rootScope, $scope, $filter, NgTableParams) {
     var vm = this;
 
     /************************
@@ -58,6 +58,11 @@
     vm.reset = reset;
     vm.isSortBy = isSortBy;
     vm.sortTable = sortTable;
+
+    //default
+    $scope.predicate = {field: 'name', title: '', type: ''};
+    // for ascending order
+    $scope.reverse = false;
 
     init();
 
@@ -247,6 +252,7 @@
 
     function isSortBy(column, order) {
       return $scope.tableParams.isSortBy(column, order);
+
     }
 
     function sortTable(column) {
@@ -259,13 +265,11 @@
 
     function getFOData(data, params) {
       var orderedData = data;
-      if (params.orderBy().length > 0) {
-        orderedData = params.sorting() ?
-          $filter('orderBy')(data, params.orderBy()) : data;
+      if ($scope.predicate.field === 'name') {
+        orderedData = $filter('orderBy')(data, $rootScope.natural('name'));
       }
       return orderedData;
     }
-
     /**
      * Watchers for validating new col/row fields without forms
      */
@@ -316,6 +320,15 @@
         $scope.tableParams.reload();
       }
     });
-  }
 
+    /**
+     * Order a selected column
+     */
+    $scope.order = function(predicate) {
+      getFOData(vm.list, null);
+      $scope.predicate = predicate;
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.tableParams.reload();
+    };
+  }
 })();

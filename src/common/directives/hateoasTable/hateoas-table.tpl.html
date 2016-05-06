@@ -4,16 +4,16 @@
     <th ng-repeat="column in ht.template.data track by $index"
         ng-if="!column.data" class="sortable"
         context-translator="{{column.prompt}}"
-        ng-click="order(column.name)">
+        ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
       <span translate>{{ column.prompt }}</span> <i ng-class="{
-            'fa fa-sort-asc': reverse===false? true : false,
-            'fa fa-sort-desc': reverse===true? true : false}"></i>
-      <span class="sortorder" ng-show="predicate === column.name" ng-class="{reverse:reverse}"></span>
+            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
+            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
+          }"></i>
     </th>
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="item in ht.resource.items | orderBy:predicate:reverse track by $index"
+  <tr ng-repeat="item in ht.resource.items track by $index"
       ng-click="ht.onSelect(item)"
       class="selectable"
       ng-class="{'active': item === ht.selected}">
