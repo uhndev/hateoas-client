@@ -27,6 +27,7 @@ describe('List Editor Directives', function() {
     };
 
     scope = _$rootScope_.$new();
+    scope.reverse = null;
     ctrl = _$controller_('ListEditorController', {$scope: scope}, data);
     scope.vm = ctrl;
   }));
@@ -217,7 +218,8 @@ describe('List Editor Directives', function() {
     it('should delete all data in the row', function() {
       spyOn(window, 'confirm').and.returnValue(true);
       ctrl.removeRow(ctrl.list[0]);
-      expect(angular.copy(ctrl.list)).toEqual(delRow);
+
+      expect(angular.copy(ctrl.list)).toEqual(delRow.reverse());
     });
 
     // it('should delete all data in the col and associated rows', function() {

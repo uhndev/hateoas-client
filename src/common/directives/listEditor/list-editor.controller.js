@@ -58,9 +58,8 @@
     vm.reset = reset;
     vm.isSortBy = isSortBy;
     vm.sortTable = sortTable;
-
     //default
-    $scope.predicate = {field: 'name', title: '', type: ''};
+    $scope.predicate = {field: '', title: '', type: ''};
     // for ascending order
     $scope.reverse = false;
 
@@ -70,17 +69,24 @@
 
     function init() {
       $scope.tableParams = new NgTableParams({
-        page: 1,              // show first page
-        count: 10             // count per page
-      }, {
-        total: vm.list.length,
-        getData: function($defer, params) {
-          var FOData = getFOData(vm.list, params);
-          params.total(FOData.length); // set total for recalc pagination
-          $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-      });
+          page: 1,              // show first page
+          count: 10             // count per page
+        }, {
+          total: vm.list.length,
+          getData: function ($defer, params) {
+            var FOData = getFOData(vm.list, params);
+            params.total(FOData.length); // set total for recalc pagination
+
+            if ($scope.reverse === true) {
+              $defer.resolve(FOData.slice(((Math.ceil(FOData.length / params.count())) - params.page()) * params.count(), (Math.ceil(FOData.length / params.count()) * params.count()) - ((params.page() - 1) * params.count())));
+            }
+            if ($scope.reverse === false) {
+              $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+          }
+        });
       $scope.tableParams.settings().$scope = $scope;
+
     }
 
     /**
@@ -265,8 +271,12 @@
 
     function getFOData(data, params) {
       var orderedData = data;
-      if ($scope.predicate.field === 'name') {
-        orderedData = $filter('orderBy')(data, $rootScope.natural('name'));
+      if ($scope.predicate.field !== '') {
+        orderedData = $filter('orderBy')(data, $rootScope.natural($scope.predicate.field));
+      }
+      if ($scope.reverse === true || $scope.reverse === false) {
+
+        return orderedData.reverse();
       }
       return orderedData;
     }
