@@ -4,9 +4,9 @@
     .module('dados.common.directives.list-editor.controller', [])
     .controller('ListEditorController', ListEditorController);
 
-  ListEditorController.$inject = ['$scope', '$filter', 'ngTableParams'];
+  ListEditorController.$inject = ['$rootScope', '$scope', '$filter', 'ngTableParams'];
 
-  function ListEditorController($scope, $filter, NgTableParams) {
+  function ListEditorController($rootScope, $scope, $filter, NgTableParams) {
     var vm = this;
 
     /************************
@@ -58,6 +58,10 @@
     vm.reset = reset;
     vm.isSortBy = isSortBy;
     vm.sortTable = sortTable;
+    //default
+    $scope.predicate = {field: '', title: '', type: ''};
+    // for ascending order
+    $scope.reverse = false;
 
     init();
 
@@ -65,17 +69,24 @@
 
     function init() {
       $scope.tableParams = new NgTableParams({
-        page: 1,              // show first page
-        count: 10             // count per page
-      }, {
-        total: vm.list.length,
-        getData: function($defer, params) {
-          var FOData = getFOData(vm.list, params);
-          params.total(FOData.length); // set total for recalc pagination
-          $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-      });
+          page: 1,              // show first page
+          count: 10             // count per page
+        }, {
+          total: vm.list.length,
+          getData: function ($defer, params) {
+            var FOData = getFOData(vm.list, params);
+            params.total(FOData.length); // set total for recalc pagination
+
+            if ($scope.reverse === true) {
+              $defer.resolve(FOData.slice(((Math.ceil(FOData.length / params.count())) - params.page()) * params.count(), (Math.ceil(FOData.length / params.count()) * params.count()) - ((params.page() - 1) * params.count())));
+            }
+            if ($scope.reverse === false) {
+              $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+          }
+        });
       $scope.tableParams.settings().$scope = $scope;
+
     }
 
     /**
@@ -247,6 +258,7 @@
 
     function isSortBy(column, order) {
       return $scope.tableParams.isSortBy(column, order);
+
     }
 
     function sortTable(column) {
@@ -259,13 +271,15 @@
 
     function getFOData(data, params) {
       var orderedData = data;
-      if (params.orderBy().length > 0) {
-        orderedData = params.sorting() ?
-          $filter('orderBy')(data, params.orderBy()) : data;
+      if ($scope.predicate.field !== '') {
+        orderedData = $filter('orderBy')(data, $rootScope.natural($scope.predicate.field));
+      }
+      if ($scope.reverse === true || $scope.reverse === false) {
+
+        return orderedData.reverse();
       }
       return orderedData;
     }
-
     /**
      * Watchers for validating new col/row fields without forms
      */
@@ -316,6 +330,15 @@
         $scope.tableParams.reload();
       }
     });
-  }
 
+    /**
+     * Order a selected column
+     */
+    $scope.order = function(predicate) {
+      getFOData(vm.list, null);
+      $scope.predicate = predicate;
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.tableParams.reload();
+    };
+  }
 })();
