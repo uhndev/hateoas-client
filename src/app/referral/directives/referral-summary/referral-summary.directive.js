@@ -23,7 +23,7 @@
       },
       controller: 'ReferralSummaryController',
       controllerAs: 'summary',
-      templateUrl: 'referral/referral-summary.tpl.html'
+      templateUrl: 'referral/directives/referral-summary/referral-summary.tpl.html'
     });
 
   ReferralSummaryController.$inject = ['$scope'];

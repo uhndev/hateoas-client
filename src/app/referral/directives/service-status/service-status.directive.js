@@ -19,7 +19,7 @@
         onUpdate: '&',
         statusType: '@'  // approval or completion
       },
-      templateUrl: 'referral/services/service-status/service-status.tpl.html',
+      templateUrl: 'referral/directives/service-status/service-status.tpl.html',
       controller: 'ServiceStatusController',
       controllerAs: 'serviceStatus'
     });
