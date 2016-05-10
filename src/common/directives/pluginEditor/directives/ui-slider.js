@@ -1,4 +1,4 @@
- /**
+/**
  * @name jQuery UI Slider widget wrapper
  * @description Directive that wraps the slider widget as an angular directive,
  *              so we can bound element's value to ngModel.

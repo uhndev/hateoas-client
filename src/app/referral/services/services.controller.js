@@ -24,8 +24,10 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralNotes = [];
-    vm.groupBy = vm.DEFAULT_GROUP_BY;
-    vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
+    vm.boundGroupTypes = {
+      groupBy: vm.DEFAULT_GROUP_BY,
+      subGroupBy: vm.DEFAULT_SUBGROUP_BY
+    };
     vm.approvalStatuses = AltumAPI.Status.query({where: {category: 'approval'}});
     vm.completionStatuses = AltumAPI.Status.query({where: {category: 'completion'}});
     vm.accordionStatus = {};
@@ -44,6 +46,11 @@
         name: 'prognosisTimeframeName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS_TIMEFRAME'
       }
+    ];
+
+    vm.groupTypes = [
+      {name: 'groupBy', prompt: 'Group'},
+      {name: 'subGroupBy', prompt: 'Subgroup'}
     ];
 
     // data columns for main groups (visits)
@@ -119,17 +126,6 @@
           service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
           return service;
         });
-
-        // data columns for referral overview table
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);

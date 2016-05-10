@@ -1,15 +1,15 @@
-(function() {
+(function () {
   'use strict';
   angular
-  .module('dados.study.user', [
-  'dados.user.service',
-  'dados.study.user.addUser.controller',
-  'dados.collectioncentre.service'
-  ])
-  .controller('StudyUserController', StudyUserController);
+    .module('dados.study.user', [
+      'dados.user.service',
+      'dados.study.user.addUser.controller',
+      'dados.collectioncentre.service'
+    ])
+    .controller('StudyUserController', StudyUserController);
 
   StudyUserController.$inject = [
-  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
+    '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
   ];
 
   function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
@@ -23,7 +23,7 @@
 
     // bindable variables
     vm.allow = {};
-    vm.query = {'where' : {}};
+    vm.query = {'where': {}};
     vm.toggleEdit = true;
     vm.selected = null;
     vm.filters = {};
@@ -107,24 +107,23 @@
 
     function saveChanges() {
       $q.all(_.map(vm.resource.items, function (item) {
-        // only make PUT request if necessary if selection changed
-        if (!_.isEqual(savedAccess[item.userenrollment].centreAccess, item.centreAccess) ||
-                    !_.isEqual(savedAccess[item.userenrollment].collectionCentre, item.collectionCentre)) {
-          var enrollment = new UserEnrollment({
-            user: item.id,
-            collectionCentre: item.collectionCentre,
-            centreAccess: item.centreAccess
-          });
-          return enrollment.$update({id: item.userenrollment});
-        }
-        return;
-      }))
-			.then(function(data) {
-  if (!_.all(data, _.isUndefined)) {
-    toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-    $scope.$broadcast('hateoas.client.refresh');
-  }
-			});
+          // only make PUT request if necessary if selection changed
+          if (!_.isEqual(savedAccess[item.userenrollment].centreAccess, item.centreAccess) || !_.isEqual(savedAccess[item.userenrollment].collectionCentre, item.collectionCentre)) {
+            var enrollment = new UserEnrollment({
+              user: item.id,
+              collectionCentre: item.collectionCentre,
+              centreAccess: item.centreAccess
+            });
+            return enrollment.$update({id: item.userenrollment});
+          }
+          return;
+        }))
+        .then(function (data) {
+          if (!_.all(data, _.isUndefined)) {
+            toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
+            $scope.$broadcast('hateoas.client.refresh');
+          }
+        });
     }
 
     function archiveUser() {

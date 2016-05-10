@@ -81,15 +81,6 @@
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
         vm.referralNotes = angular.copy(data.items.notes);
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
 
         // load physician in from referraldetail
         vm.physician = data.items.physician || null;

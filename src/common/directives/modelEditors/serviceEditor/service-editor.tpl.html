@@ -1,165 +1,138 @@
-<ng-form name="serviceForm">
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.ALTUM_SERVICE</label>
-        <select-loader
-          name="altumService"
-          url="altumservice"
-          is-atomic="true"
-          is-disabled="false"
-          ng-model="svc.service.altumService"
-          labels="displayName">
-        </select-loader>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.PROGRAM_SERVICE</label>
-        <select-loader
-          name="programService"
-          url="programservice"
-          is-atomic="true"
-          is-disabled="false"
-          ng-model="svc.service.programService"
-          labels="displayName">
-        </select-loader>
-      </div>
-
-      <div class="form-group" ng-if="svc.availableSites.length > 0">
-        <label>
-          <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
-          <span class="fa fa-map-marker fa-lg selectable" ng-click="svc.openMap()"></span>
-        </label>
-        <select ng-model="svc.service.site" class="form-control"
-                ng-options="site.id as site.name for site in svc.availableSites">
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
-        <select-loader
-          url="physician"
-          is-atomic="true"
-          is-disabled="false"
-          ng-model="svc.service.physician"
-          labels="displayName">
-        </select-loader>
-      </div>
-
-      <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes">
-        <label translate>{{staffType.name}}</label>
-        <select-loader
-          url="staff"
-          query="staffType.baseQuery"
-          is-atomic="false"
-          is-disabled="false"
-          ng-model="svc.service.staff"
-          labels="displayName">
-        </select-loader>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
-        <select ng-model="svc.service.workStatus" class="form-control"
-                ng-options="workstatus.id as workstatus.name for workstatus in svc.availableWorkstatus">
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
-        <select ng-model="svc.service.prognosis" class="form-control"
-                ng-options="prognosis.id as prognosis.name for prognosis in svc.availablePrognosis">
-        </select>
-      </div>
-
-      <div class="form-group" ng-if="svc.hasTimeframe()">
-        <label>
-          <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
-          <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
-        </label>
-        <select ng-model="svc.service.prognosisTimeframe" class="form-control"
-                ng-options="timeframe.id as timeframe.name for timeframe in svc.availableTimeframes">
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
-        <ui-select ng-model="svc.service.visitService" theme="bootstrap">
-          <ui-select-match placeholder="Select Service Type">
-            {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
-          </ui-select-match>
-          <ui-select-choices repeat="service.id as service in svc.approvedServices | filter: $select.search">
-            <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-            <span>({{service.approvalDate | date:'short'}})</span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-
-      <div class="form-group">
-        <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
-        <p class="input-group">
-          <input type="text"
-                 ng-model="svc.service.serviceDate"
-                 value="{{ svc.service.serviceDate | date:'fullDate' }}"
-                 class="form-control"
-                 uib-datepicker-popup
-                 type="datetime-local"
-                 is-open="svc.opened"
-                 required disabled/>
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="svc.opened = true">
-          <i class="glyphicon glyphicon-calendar"></i>
-        </button>
-      </span>
-        </p>
-      </div>
+<ng-form name="serviceForm" ng-class="{'form-horizontal': svc.horizontal}" novalidate>
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}"
+           translate>COMMON.MODELS.SERVICE.ALTUM_SERVICE</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select-loader
+        name="altumService"
+        url="altumservice"
+        is-atomic="true"
+        is-disabled="false"
+        ng-model="svc.service.altumService"
+        labels="displayName">
+      </select-loader>
     </div>
+  </div>
 
-    <div class="col-md-6">
-      <div class="form-group" ng-repeat="variationType in svc.variationTypes">
-        <div ng-if="variationType.type !== 'none' && variationType.category === 'basic'">
-          <label class="col-sm-2 control-label">{{node.data.name}}</label>
-          <div class="col-sm-10">
-            <input type="{{variationType.type}}" ng-model="node.data.value" class="form-control" name="metaData"/>
-          </div>
-        </div>
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
+      COMMON.MODELS.SERVICE.PROGRAM_SERVICE
+    </label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select-loader
+        name="programService"
+        url="programservice"
+        is-atomic="true"
+        is-disabled="false"
+        ng-model="svc.service.programService"
+        labels="displayName">
+      </select-loader>
+    </div>
+  </div>
 
-        <div ng-if="variationType.category === 'json' || variationType.category === 'jsonmodel'"
-             ng-repeat="(key, value) in node.data.value track by $index">
-          <label class="col-sm-2 control-label">{{key}}</label>
-          <div class="col-sm-10">
-            <input type="text" ng-if="variationType.category === 'json'" ng-model="node.data.value[key]" class="form-control"
-                   name="{{key}}" required/>
+  <div class="form-group" ng-if="svc.availableSites.length > 0">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+      <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
+      <span class="fa fa-map-marker fa-lg selectable" ng-click="svc.openMap()"></span>
+    </label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select ng-model="svc.service.site" class="form-control"
+              ng-options="site.id as site.name for site in svc.availableSites">
+      </select>
+    </div>
+  </div>
 
-            <select-loader
-              ng-if="variationType.category === 'jsonmodel'"
-              name="{{key}}"
-              required
-              url="{{key}}"
-              is-atomic="true"
-              is-disabled="false"
-              ng-model="node.data.value[key]"
-              labels="displayName">
-            </select-loader>
-          </div>
-        </div>
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
+      COMMON.MODELS.SERVICE.PHYSICIAN
+    </label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select-loader
+        url="physician"
+        is-atomic="true"
+        is-disabled="false"
+        ng-model="svc.service.physician"
+        labels="displayName">
+      </select-loader>
+    </div>
+  </div>
 
-        <div ng-if="variationType.category === 'model'">
-          <label class="col-sm-2 control-label">{{svc.service[variationType.type + 'DetailName']}}</label>
-          <div class="col-sm-10">
-            <select-loader
-              name="{{variationType.type}}"
-              url="{{variationType.type}}"
-              required
-              is-atomic="true"
-              is-disabled="false"
-              ng-model="svc.service[variationType.type + 'Detail']"
-              labels="displayName">
-            </select-loader>
-          </div>
-        </div>
-      </div>
+  <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>{{staffType.name}}</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select-loader
+        url="staff"
+        query="staffType.baseQuery"
+        is-atomic="false"
+        is-disabled="false"
+        ng-model="svc.staffCollection[staffType.name]"
+        ng-change="svc.setStaffSelections(staffType.name)"
+        labels="displayName">
+      </select-loader>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select ng-model="svc.service.workStatus" class="form-control"
+              ng-options="workstatus.id as workstatus.name for workstatus in svc.availableWorkstatus">
+      </select></div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select ng-model="svc.service.prognosis" class="form-control"
+              ng-options="prognosis.id as prognosis.name for prognosis in svc.availablePrognosis">
+      </select></div>
+  </div>
+
+  <div class="form-group" ng-if="svc.hasTimeframe()">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+      <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
+      <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
+    </label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <select ng-model="svc.service.prognosisTimeframe" class="form-control"
+              ng-options="timeframe.id as timeframe.name for timeframe in svc.availableTimeframes">
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <ui-select ng-model="svc.service.visitService" theme="bootstrap">
+        <ui-select-match placeholder="Select Service Type">
+          {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+        </ui-select-match>
+        <ui-select-choices repeat="service.id as service in svc.approvedServices | filter: $select.search">
+          <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
+          <span>({{service.approvalDate | date:'short'}})</span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <p class="input-group">
+        <input type="text"
+               ng-model="svc.service.serviceDate"
+               value="{{ svc.service.serviceDate | date:'fullDate' }}"
+               class="form-control"
+               uib-datepicker-popup
+               type="datetime-local"
+               is-open="svc.opened"
+               required disabled/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="svc.opened = true">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
+        </span>
+      </p>
     </div>
   </div>
 </ng-form>

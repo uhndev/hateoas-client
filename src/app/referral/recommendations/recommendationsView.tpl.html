@@ -9,21 +9,13 @@
           <i class="no-top form-control-feedback fa fa-search"></i>
           <input type="text" class="form-control"
                  placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
-                 ng-model="rec.search"/>
+                 ng-model="rec.search" />
         </div>
       </form>
       <br/>
     </div>
-    <div class="table-responsive" flex>
-      <table class="table table-condensed summary-table">
-        <tr class="summary-header-row">
-          <th ng-repeat="(label, value) in rec.referralOverview" translate>{{label}}</th>
-        </tr>
-        <tr class="summary-table-row">
-          <td ng-repeat="(label, value) in rec.referralOverview">{{value}}</td>
-        </tr>
-      </table>
-    </div>
+
+    <referral-summary referral-data="rec.referral"></referral-summary>
   </div>
 
   <altum-notebook ng-if="rec.referralNotes" notes="rec.referralNotes" collection="{'referral': rec.referral.id}"></altum-notebook>
