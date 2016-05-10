@@ -2,7 +2,7 @@
   <h3 class="modal-title" translate>COMMON.MODELS.STUDY.SUBJECTS.ADD</h3>
 </div>
 <div class="modal-body">
-  <user-editor horizontal="true" can-generate-password="true" user="editSubject.userData"></user-editor>
+  <user-editor horizontal="true" can-generate-password="true" user="addSubject.newSubject"></user-editor>
   <hr/>
   <ng-form name="enrollmentForm" class="form-horizontal" novalidate>
     <div class="form-group">
@@ -10,6 +10,7 @@
       <div class="col-sm-9" ng-if="addSubject.studyUsers">
         <select-loader
           url="provider"
+          id="provider"
           query="addSubject.studyUsers"
           is-atomic="false"
           is-disabled="false"
@@ -21,7 +22,7 @@
     <div class="form-group">
       <label for="status" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.STATUS</label>
       <div class="col-sm-9">
-        <select name="status" class="form-control" ng-model="addSubject.newSubject.status" required>
+        <select id="status" class="form-control" ng-model="addSubject.newSubject.status" required>
           <option value="" disabled translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.STATUS_PLACEHOLDER</option>
           <option ng-repeat="status in addSubject.statuses track by $index" value="{{status}}">{{status}}</option>
         </select>
@@ -42,7 +43,7 @@
       <label for="doe" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.PROVIDERS.DATE_EVENT</label>
       <div class="col-sm-9">
       <p class="input-group">
-        <input name="doe" type="text" class="form-control" uib-datepicker-popup ng-model="addSubject.newSubject.doe"
+        <input id="doe" type="text" class="form-control" uib-datepicker-popup ng-model="addSubject.newSubject.doe"
                is-open="addSubject.openedDOE"
                ng-required="addSubject.newSubject.studyMapping" disabled/>
         <span class="input-group-btn">
@@ -57,7 +58,7 @@
       <label for="centreInput" class="col-sm-3 control-label" translate>COMMON.MODELS.COLLECTION_CENTRE.IDENTITY</label>
       <div class="col-sm-9">
         <select-loader
-          name="centreInput"
+          id="centreInput"
           url="{{addSubject.centreHref}}"
           is-atomic="true"
           is-disabled="false"
