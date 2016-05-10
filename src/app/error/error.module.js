@@ -49,6 +49,10 @@
 
     /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * goHome
+     * @description Goes home
+     */
     function goHome() {
       DefaultRoute.navigateHome();
     }

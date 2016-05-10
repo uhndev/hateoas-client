@@ -80,12 +80,20 @@
       return data;
     }
 
+    /**
+     * openUser
+     * @description Click handler for opening a user overview page
+     */
     function openUser() {
       if (vm.selected.rel) {
         $location.path(_.convertRestUrl(vm.selected.href, API.prefix));
       }
     }
 
+    /**
+     * openAddUser
+     * @description Click handler for opening modal window for adding a user to a study
+     */
     function openAddUser() {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -105,6 +113,10 @@
       });
     }
 
+    /**
+     * saveChanges
+     * @description Click handler for saving any changes that may have occurred with user enrollment dropdowns.
+     */
     function saveChanges() {
       $q.all(_.map(vm.resource.items, function (item) {
           // only make PUT request if necessary if selection changed
@@ -126,6 +138,10 @@
         });
     }
 
+    /**
+     * archiveUser
+     * @description Click handler for archiving a user
+     */
     function archiveUser() {
       var conf = confirm('Are you sure you want to archive this enrollment?');
       if (conf) {
