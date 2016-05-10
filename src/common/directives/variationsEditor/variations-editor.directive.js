@@ -166,6 +166,7 @@
         data: angular.copy(nodeData.data)
       };
       nodeData.nodes.push(newNode);
+      scope.expand();
     }
 
     /**
