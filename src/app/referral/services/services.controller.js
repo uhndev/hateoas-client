@@ -48,6 +48,7 @@
       }
     ];
 
+    // array of options denoting which groups can be bound to (vm.boundGroupTypes.groupBy)
     vm.groupTypes = [
       {name: 'groupBy', prompt: 'Group'},
       {name: 'subGroupBy', prompt: 'Subgroup'}

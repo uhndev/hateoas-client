@@ -1,13 +1,25 @@
+/**
+ * @name referral-summary
+ * @description Takes a referral object and renders a summary table of pertinent information
+ *              Can also optionally include groupBy fields used for grouping
+ * @example
+ *    <referral-summary referral-data="services.resource.items"
+                        bound-groups="billing.boundGroupTypes"
+                        group-types="services.groupTypes"
+                        group-fields="services.groupFields">
+      </referral-summary>
+ *
+ */
 (function() {
   angular
     .module('altum.referral.summary', [])
     .controller('ReferralSummaryController', ReferralSummaryController)
     .component('referralSummary', {
       bindings: {
-        referralData: '=',
-        boundGroups: '=?',
-        groupTypes: '=?',
-        groupFields: '=?'
+        referralData: '=',    // default referral object
+        boundGroups: '=?',    // object where groupType.name is bound outward
+        groupTypes: '=?',     // array of names and prompts that can be bound
+        groupFields: '=?'     // array of configuration data groups that can be chosen from
       },
       controller: 'ReferralSummaryController',
       controllerAs: 'summary',
@@ -19,6 +31,7 @@
   function ReferralSummaryController($scope) {
     var vm = this;
 
+    // wait for data to load, then create overview object
     var unregister = $scope.$watch('summary.referralData', function (oldVal, newVal) {
       if (oldVal !== newVal) {
         vm.referralData = vm.referralData || {};
@@ -32,7 +45,7 @@
           'COMMON.MODELS.REFERRAL.STAFF': vm.referralData.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': vm.referralData.site_name
         };
-        unregister();
+        unregister(); // unregister watcher
       }
     });
   }
