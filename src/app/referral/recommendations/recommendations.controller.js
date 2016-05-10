@@ -81,15 +81,6 @@
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
         vm.referralNotes = angular.copy(data.items.notes);
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
 
         // load physician in from referraldetail
         vm.physician = data.items.physician || null;
@@ -419,8 +410,13 @@
         // if service was selected as a variation, update appropriate data
         if (_.has(selection, 'service')) {
           // rename service in recommended services tab
-          AltumAPI.AltumService.get({id: selection.service.value.altumService}, function (altumService) {
+          AltumAPI.AltumService.get({id: selection.service.value.altumService, populate: 'sites'}, function (altumService) {
             vm.recommendedServices[vm.currIndex].variationSelection.name = altumService.name;
+
+            if (altumService.sites.length > 0) {
+              vm.recommendedServices[vm.currIndex].availableSites = altumService.sites;
+              vm.recommendedServices[vm.currIndex].siteDictionary = _.indexBy(altumService.sites, 'id');
+            }
           });
 
           // store altum/program service to be applied on save

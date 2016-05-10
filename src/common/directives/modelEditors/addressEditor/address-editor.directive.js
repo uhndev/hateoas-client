@@ -15,7 +15,7 @@
         horizontal: '@',
         resource: '='
       },
-      templateUrl: 'directives/addressEditor/address-editor.tpl.html',
+      templateUrl: 'directives/modelEditors/addressEditor/address-editor.tpl.html',
       controller: 'AddressEditorController',
       controllerAs: 'addr'
     });

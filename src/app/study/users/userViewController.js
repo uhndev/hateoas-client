@@ -1,15 +1,15 @@
-(function() {
+(function () {
   'use strict';
   angular
-  .module('dados.study.user', [
-  'dados.user.service',
-  'dados.study.user.addUser.controller',
-  'dados.collectioncentre.service'
-  ])
-  .controller('StudyUserController', StudyUserController);
+    .module('dados.study.user', [
+      'dados.user.service',
+      'dados.study.user.addUser.controller',
+      'dados.collectioncentre.service'
+    ])
+    .controller('StudyUserController', StudyUserController);
 
   StudyUserController.$inject = [
-  '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
+    '$scope', '$q', '$location', '$uibModal', 'HeaderService', 'UserEnrollment', 'toastr', 'API'
   ];
 
   function StudyUserController($scope, $q, $location, $uibModal, HeaderService, UserEnrollment, toastr, API) {
@@ -23,7 +23,7 @@
 
     // bindable variables
     vm.allow = {};
-    vm.query = {'where' : {}};
+    vm.query = {'where': {}};
     vm.toggleEdit = true;
     vm.selected = null;
     vm.filters = {};
@@ -80,12 +80,20 @@
       return data;
     }
 
+    /**
+     * openUser
+     * @description Click handler for opening a user overview page
+     */
     function openUser() {
       if (vm.selected.rel) {
         $location.path(_.convertRestUrl(vm.selected.href, API.prefix));
       }
     }
 
+    /**
+     * openAddUser
+     * @description Click handler for opening modal window for adding a user to a study
+     */
     function openAddUser() {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -105,28 +113,35 @@
       });
     }
 
+    /**
+     * saveChanges
+     * @description Click handler for saving any changes that may have occurred with user enrollment dropdowns.
+     */
     function saveChanges() {
       $q.all(_.map(vm.resource.items, function (item) {
-        // only make PUT request if necessary if selection changed
-        if (!_.isEqual(savedAccess[item.userenrollment].centreAccess, item.centreAccess) ||
-                    !_.isEqual(savedAccess[item.userenrollment].collectionCentre, item.collectionCentre)) {
-          var enrollment = new UserEnrollment({
-            user: item.id,
-            collectionCentre: item.collectionCentre,
-            centreAccess: item.centreAccess
-          });
-          return enrollment.$update({id: item.userenrollment});
-        }
-        return;
-      }))
-			.then(function(data) {
-  if (!_.all(data, _.isUndefined)) {
-    toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-    $scope.$broadcast('hateoas.client.refresh');
-  }
-			});
+          // only make PUT request if necessary if selection changed
+          if (!_.isEqual(savedAccess[item.userenrollment].centreAccess, item.centreAccess) || !_.isEqual(savedAccess[item.userenrollment].collectionCentre, item.collectionCentre)) {
+            var enrollment = new UserEnrollment({
+              user: item.id,
+              collectionCentre: item.collectionCentre,
+              centreAccess: item.centreAccess
+            });
+            return enrollment.$update({id: item.userenrollment});
+          }
+          return;
+        }))
+        .then(function (data) {
+          if (!_.all(data, _.isUndefined)) {
+            toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
+            $scope.$broadcast('hateoas.client.refresh');
+          }
+        });
     }
 
+    /**
+     * archiveUser
+     * @description Click handler for archiving a user
+     */
     function archiveUser() {
       var conf = confirm('Are you sure you want to archive this enrollment?');
       if (conf) {

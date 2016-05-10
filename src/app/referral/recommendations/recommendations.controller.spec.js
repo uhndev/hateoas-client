@@ -92,41 +92,41 @@ describe('Controller: RecommendationsController Tests', function() {
             'programName': '[TEST] WSIB Back and Neck Program',
             'sites': [
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'TWH',
-               'name': 'TWH',
-               'id': 1,
-               'address': 1
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'TWH',
+              'name': 'TWH',
+              'id': 1,
+              'address': 1
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Hamilton',
-               'name': 'Hamilton',
-               'id': 3,
-               'address': 3
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Hamilton',
+              'name': 'Hamilton',
+              'id': 3,
+              'address': 3
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Barrie',
-               'name': 'Barrie',
-               'id': 8,
-               'address': 8
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Barrie',
+              'name': 'Barrie',
+              'id': 8,
+              'address': 8
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Ajax',
-               'name': 'Ajax',
-               'id': 9,
-               'address': 9
-             }
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Ajax',
+              'name': 'Ajax',
+              'id': 9,
+              'address': 9
+            }
            ]
           },
           {
@@ -140,33 +140,33 @@ describe('Controller: RecommendationsController Tests', function() {
             'programName': '[TEST] WSIB Back and Neck Program',
             'sites': [
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Hamilton',
-               'name': 'Hamilton',
-               'phone': null,
-               'id': 3,
-               'address': 3
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Hamilton',
+              'name': 'Hamilton',
+              'phone': null,
+              'id': 3,
+              'address': 3
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Sudbury',
-               'name': 'Sudbury',
-               'id': 6,
-               'address': 6
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Sudbury',
+              'name': 'Sudbury',
+              'id': 6,
+              'address': 6
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Barrie',
-               'name': 'Barrie',
-               'id': 8,
-               'address': 8
-             }
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Barrie',
+              'name': 'Barrie',
+              'id': 8,
+              'address': 8
+            }
            ]
           }
         ],

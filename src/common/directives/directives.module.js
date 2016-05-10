@@ -1,6 +1,6 @@
 (function () {
   angular.module('dados.common.directives', [
-    'dados.common.directives.addressEditor',
+    'dados.common.directives.modelEditors',
     'dados.common.directives.contextTranslator',
     'dados.common.directives.dadosError',
     'dados.common.directives.siteMap',
@@ -22,7 +22,6 @@
     'dados.common.directives.subjectForms',
     'dados.common.directives.surveyBuilder',
     'dados.common.directives.validationCheck',
-    'dados.common.directives.userEditor',
     'dados.common.directives.variationsEditor',
     'dados.common.directives.variationsPicker',
     'altum.common.directives.notebook'
