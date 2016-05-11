@@ -109,7 +109,7 @@
       };
 
       _.merge(emailData, vm.emailInfo);
-      
+
       EmailService.sendEmail(emailData);
 
     }
