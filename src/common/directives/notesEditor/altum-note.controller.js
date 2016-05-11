@@ -97,7 +97,6 @@
      */
     function emailNote() {
       var emailData = {
-        // template: 'note', //get from collection
         data: {
           senderName: vm.note.displayName,
           msg: vm.note.text
@@ -110,15 +109,8 @@
       };
 
       _.merge(emailData, vm.emailInfo);
-      /* //TODO implement as part of notification system
-      $http.post(API.url() + '/email', emailData).then(function success(response){
-        alert("Email sent");
-        
-      }, function error(response){
-        alert("There is something wrong please contact your admin");
-        
-      }); */
-      EmailService.sendEmail(emailData);       
+      
+      EmailService.sendEmail(emailData);
 
     }
 

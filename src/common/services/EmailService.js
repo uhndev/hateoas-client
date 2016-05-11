@@ -11,13 +11,12 @@
   function EmailService(API, $http, toastr) {
     return {
       sendEmail: function (emailData) {
-
-        //TODO implement as part of notification system
+        
         $http.post(API.url() + '/email', emailData).then(function success(response) {
           toastr.success('Email sent');
 
         }, function error(response) {
-          toastr.error("There is something wrong please contact your admin");
+          toastr.error('There is something wrong please contact your admin');
 
         });
       }
