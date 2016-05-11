@@ -97,18 +97,18 @@
      */
     function emailNote() {
       var emailData = {
-       // template: 'note', //get from collection
+        // template: 'note', //get from collection
         data: {
           senderName: vm.note.displayName,
           msg: vm.note.text
         },
         options: {
           to: _.pluck(vm.toList, 'email'),
-         // subject: 'Altum CMS Communication'
+          // subject: 'Altum CMS Communication'
         }
 
       };
-      
+
       _.merge(emailData, vm.emailInfo);
       //TODO implement as part of notification system
       $http.post(API.url() + '/email', emailData);
