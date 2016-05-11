@@ -3,25 +3,29 @@
 
   angular
     .module('altum.note.controller', [
-      'btford.markdown'
+      'btford.markdown',
+      'dados.constants'
     ])
     .controller('NoteController', NoteController);
 
-  NoteController.$inject = ['NoteService', 'toastr'];
+  NoteController.$inject = ['NoteService', '$http', 'toastr', 'API'];
 
-  function NoteController(Note, toastr) {
+  function NoteController(Note, $http, toastr, API) {
     var vm = this;
     var lineHeight = 12;                               // default line height in ace-editor
     var bufferHeight = 50;                             // extra space in ace-editor
     var defaultHeight = 150;                           // default ace-editor height
 
     // bindable variables
-    vm.original = {};                                  // buffer for checking if note changed
+    vm.email = true;
+    vm.original = {};
+    vm.toList = [];
+    // buffer for checking if note changed
     vm.note = vm.note || null;                         // note binding
     vm.onSave = vm.onSave || angular.noop;             // callback upon adding note to collection
     vm.onUpdate = vm.onUpdate || angular.noop;         // callback upon editing note in place
-    vm.collection = vm.collection || {};               // collection object i.e. { referral: 1 }
-
+    vm.collection = vm.collection || {};              // collection object i.e. { referral: 1 }
+    vm.emailInfo = vm.emailInfo || {};                 //email fields
     // bindable methods
     vm.selectEdit = selectEdit;
     vm.updateNote = updateNote;
@@ -37,7 +41,7 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      _.map(vm.notebook.notes, function(note) {
+      _.map(vm.notebook.notes, function (note) {
         note.$edit = false;
       });
       vm.note.$edit = true;
@@ -92,8 +96,22 @@
      * @description Click handler for sending a note email
      */
     function emailNote() {
+      var emailData = {
+       // template: 'note', //get from collection
+        data: {
+          senderName: vm.note.displayName,
+          msg: vm.note.text
+        },
+        options: {
+          to: _.pluck(vm.toList, 'email'),
+         // subject: 'Altum CMS Communication'
+        }
 
+      };
+      
+      _.merge(emailData, vm.emailInfo);
       //TODO implement as part of notification system
+      $http.post(API.url() + '/email', emailData);
     }
 
     /**
@@ -113,7 +131,7 @@
       _editor.$blockScrolling = Infinity;
 
       // Events
-      _editor.on('focus', function() {
+      _editor.on('focus', function () {
         selectEdit();
       });
     }

@@ -10,6 +10,7 @@
       bindings: {
         note: '=',
         collection: '=',
+        emailInfo: '=',
         onUpdate: '&?',
         onRemove: '&',
         onSave: '&?'
