@@ -8,9 +8,9 @@
     ])
     .controller('NoteController', NoteController);
 
-  NoteController.$inject = ['NoteService', '$http', 'toastr', 'API'];
+  NoteController.$inject = ['NoteService', '$http', 'toastr', 'EmailService', 'API'];
 
-  function NoteController(Note, $http, toastr, API) {
+  function NoteController(Note, $http, toastr, EmailService, API) {
     var vm = this;
     var lineHeight = 12;                               // default line height in ace-editor
     var bufferHeight = 50;                             // extra space in ace-editor
@@ -110,8 +110,16 @@
       };
 
       _.merge(emailData, vm.emailInfo);
-      //TODO implement as part of notification system
-      $http.post(API.url() + '/email', emailData);
+      /* //TODO implement as part of notification system
+      $http.post(API.url() + '/email', emailData).then(function success(response){
+        alert("Email sent");
+        
+      }, function error(response){
+        alert("There is something wrong please contact your admin");
+        
+      }); */
+      EmailService.sendEmail(emailData);       
+
     }
 
     /**
