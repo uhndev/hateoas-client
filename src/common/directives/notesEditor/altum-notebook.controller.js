@@ -16,6 +16,7 @@
     // bindable variables
     vm.notes = vm.notes || [];
     vm.collection = vm.collection || {};
+    vm.emailInfo = vm.emailInfo || {};
     vm.noteTypes = NoteType.query();
 
     // bindable methods
