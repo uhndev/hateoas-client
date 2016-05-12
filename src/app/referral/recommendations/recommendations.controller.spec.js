@@ -220,10 +220,27 @@ describe('Controller: RecommendationsController Tests', function() {
       expect(recCtrl.recommendedServices.length).toEqual(2);
     });
 
+    it('should apply selection to all recommended services for shared services', function() {
+      recCtrl.sharedService.physician = 1;
+      _.each(recCtrl.recommendedServices, function (service) {
+        expect(service.physician).toEqual(1);
+      });
+    });
+
+    it('should apply staff selection to all recommended services for shared services', function () {
+      recCtrl.sharedService.staffCollection = {
+        'Clinician': [1, 2]
+      };
+      _.each(recCtrl.recommendedServices, function (service) {
+        expect(service.staff).toEqual([1, 2]);
+      });
+    });
+
     it('should un-recommend a service and make it available to be recommended again', function() {
       recCtrl.toggleService(recCtrl.availableServices[0]);
       expect(recCtrl.recommendedServices.length).toEqual(1);
     });
+
   });
 
   describe('Detail selection for recommended services', function() {
@@ -240,9 +257,6 @@ describe('Controller: RecommendationsController Tests', function() {
 
     it('should apply to all recommended services when selections are made in detail panel', function() {
       expect(recCtrl.validityFields.length).toEqual(2);
-      recCtrl.validityFields.forEach(function (field) {
-        recCtrl.setServiceSelections(field);
-      });
 
       recCtrl.recommendedServices.forEach(function (recommendedService) {
         recCtrl.validityFields.forEach(function (field) {

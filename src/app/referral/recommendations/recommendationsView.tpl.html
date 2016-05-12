@@ -134,97 +134,14 @@
         </div>
         <div class="panel-body">
           <ng-form layout="column" name="visitForm">
-            <div class="form-group" flex ng-if="rec.physician">
-              <label translate>COMMON.MODELS.SERVICE.PHYSICIAN</label>
-              <select-loader
-                url="physician"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="rec.physician"
-                ng-change="rec.setServiceSelections('physician')"
-                labels="displayName">
-              </select-loader>
-            </div>
+            <service-editor ng-if="rec.referral"
+                            referral="rec.referral"
+                            service="rec.sharedService"
+                            configuration="rec.serviceEditorConfig"
+                            approved-services="rec.referral.approvedServices"
+                            recommended-services="rec.recommendedServices">
+            </service-editor>
 
-            <div class="form-group" flex ng-repeat="staffType in rec.availableStaffTypes">
-              <label translate>{{staffType.name}}</label>
-              <select-loader
-                url="staff"
-                query="staffType.baseQuery"
-                is-atomic="false"
-                is-disabled="false"
-                ng-model="rec.staffCollection[staffType.name]"
-                ng-change="rec.setStaffSelections(staffType.name)"
-                labels="displayName">
-              </select-loader>
-            </div>
-
-            <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
-              <select-loader
-                url="workstatus"
-                is-atomic="true"
-                is-disabled="false"
-                ng-model="rec.workStatus"
-                ng-change="rec.setServiceSelections('workStatus')"
-                labels="displayName">
-              </select-loader>
-            </div>
-
-            <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
-              <div flex>
-                <select ng-model="rec.prognosis" ng-change="rec.setServiceSelections('prognosis')"
-                        class="form-control"
-                        ng-options="prognosis as prognosis.name for prognosis in rec.availablePrognosis">
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group" flex ng-if="rec.prognosis.hasTimeframe">
-              <label>
-                <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
-                <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
-              </label>
-              <select ng-model="rec.prognosisTimeframe" ng-change="rec.setServiceSelections('prognosisTimeframe')"
-                      class="form-control"
-                      ng-options="timeframe.id as timeframe.name for timeframe in rec.availableTimeframes">
-              </select>
-            </div>
-
-            <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
-              <span class="text-danger pull-right" ng-if="!rec.visitService"> * required</span>
-              <ui-select ng-model="rec.visitService" theme="bootstrap" ng-change="rec.setServiceSelections('visitService')">
-                <ui-select-match placeholder="Select Service Type">
-                  {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
-                </ui-select-match>
-                <ui-select-choices repeat="service in rec.referral.approvedServices | filter: $select.search">
-                  <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-                  <span>({{service.approvalDate | date:'short'}})</span>
-                </ui-select-choices>
-              </ui-select>
-            </div>
-
-            <div class="form-group" flex>
-              <label translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
-              <span class="text-danger pull-right" ng-if="!rec.serviceDate"> * required</span>
-              <p class="input-group">
-                <input type="text"
-                       ng-model="rec.serviceDate"
-                       value="{{ rec.serviceDate | date:'fullDate' }}"
-                       ng-change="rec.setServiceSelections('serviceDate')"
-                       class="form-control"
-                       uib-datepicker-popup
-                       type="datetime-local"
-                       is-open="rec.opened"
-                       required disabled/>
-                      <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="rec.opened = true"><i
-                          class="glyphicon glyphicon-calendar"></i></button>
-                      </span>
-              </p>
-            </div>
             <br/>
             <button class="btn btn-primary pull-right"
                     ng-disabled="rec.recommendedServices.length === 0 || !rec.areServicesValid() || rec.isSaving"
