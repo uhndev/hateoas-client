@@ -435,8 +435,8 @@ module.exports = function (grunt) {
         src: ['sails-io-settings.tpl'],
         dest: ['sails-io-settings.js'],
         replacements: [{
-          from: "<development_url>",
-          to: "<%= environments.migrate.url %>"
+          from: '<development_url>',
+          to: '<%= environments.migrate.url %>'
         }]
       }
     },
@@ -612,10 +612,10 @@ module.exports = function (grunt) {
    * The default task is to build and compile.
    */
 
-  grunt.registerTask( 'default', [ 'build', 'compile' ] );
-  grunt.registerTask( 'prod', [ 'build_prod', 'compile' ]);
-  grunt.registerTask( 'uat', [ 'build_uat', 'compile' ]);
-  grunt.registerTask( 'migrate', [ 'build_migrate', 'compile']);
+  grunt.registerTask('default', ['build', 'compile']);
+  grunt.registerTask('prod', ['build_prod', 'compile']);
+  grunt.registerTask('uat', ['build_uat', 'compile']);
+  grunt.registerTask('migrate', ['build_migrate', 'compile']);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
@@ -640,7 +640,7 @@ module.exports = function (grunt) {
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
 
-  grunt.registerTask( 'build_migrate', [
+  grunt.registerTask('build_migrate', [
     'clean', 'replace:migrate', 'replace:remove_livereload', 'ngconstant:migrate', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
