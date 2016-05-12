@@ -36,34 +36,34 @@
       'staffCollection', 'serviceVariation', 'variationSelection'
     ];
 
+    // configuration object for the service-editor component
+    vm.serviceEditorConfig = {
+      disabled: {
+        altumService: true,
+        programService: true,
+        site: true
+      },
+      required: {
+        visitService: true,
+        serviceDate: true
+      }
+    };
+
     vm.serviceOrder = {
       recommendedServices: 2,
       serviceDetail: 1
     };
     vm.accordionStatus = {};
-
-    vm.staffCollection = {};
+    vm.sharedService = {};
     vm.referralNotes = [];
     vm.recommendedServices = [];
     vm.availableServices = [];
-    vm.availablePrognosis = AltumAPI.Prognosis.query();
-    vm.availableTimeframes = AltumAPI.Timeframe.query();
-    AltumAPI.StaffType.query({
-      where: {isProvider: true}
-    }).$promise.then(function (staffTypes) {
-      vm.availableStaffTypes = _.map(staffTypes, function (staffType) {
-        staffType.baseQuery = {staffType: staffType.id};
-        return staffType;
-      });
-    });
 
     // bindable methods
     vm.isServiceRecommended = isServiceRecommended;
     vm.duplicateService = duplicateService;
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
-    vm.setServiceSelections = setServiceSelections;
-    vm.setStaffSelections = setStaffSelections;
     vm.navigateKey = navigateKey;
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
@@ -83,20 +83,19 @@
         vm.referralNotes = angular.copy(data.items.notes);
 
         // load physician in from referraldetail
-        vm.physician = data.items.physician || null;
-        vm.staffCollection = {};
-        vm.staff = [];
-        vm.workStatus = null;
-        vm.prognosis = null;
-        vm.prognosisTimeframe = null;
-        vm.visitService = null;
-        vm.serviceDate = new Date();
+        vm.sharedService.physician = data.items.physician || null;
+        vm.sharedService.staffCollection = {};
+        vm.sharedService.staff = [];
+        vm.sharedService.workStatus = null;
+        vm.sharedService.prognosis = null;
+        vm.sharedService.prognosisTimeframe = null;
+        vm.sharedService.visitService = null;
+        vm.sharedService.serviceDate = new Date();
 
         // load in staff selections from referraldetail
         if (data.items.staff) {
-          vm.staff = [vm.staff];
-          vm.staffCollection[data.items.staffType_name] = [data.items.staff];
-          setStaffSelections(data.items.staffType_name);
+          vm.sharedService.staff = [data.items.staff];
+          vm.sharedService.staffCollection[data.items.staffType_name] = [data.items.staff];
         }
 
         // initialize submenu
@@ -115,13 +114,14 @@
      */
     function getSharedServices() {
       return {
-        physician: vm.physician,
-        staff: vm.staff,
-        workStatus: vm.workStatus,
-        prognosis: vm.prognosis,
-        prognosisTimeframe: vm.prognosisTimeframe,
-        visitService: vm.visitService,
-        serviceDate: vm.serviceDate
+        physician: vm.sharedService.physician,
+        staff: vm.sharedService.staff,
+        staffCollection: vm.sharedService.staffCollection,
+        workStatus: vm.sharedService.workStatus,
+        prognosis: vm.sharedService.prognosis,
+        prognosisTimeframe: vm.sharedService.prognosisTimeframe,
+        visitService: vm.sharedService.visitService,
+        serviceDate: vm.sharedService.serviceDate
       };
     }
 
@@ -225,32 +225,6 @@
      */
     function selectServiceDetail($index) {
       vm.currIndex = (vm.currIndex === $index ? null : $index);
-    }
-
-    /**
-     * setServiceSelections
-     * @description Sets shared service details for all currently recommended services
-     */
-    function setServiceSelections(attribute) {
-      vm.recommendedServices = _.map(vm.recommendedServices, function (recommendedService) {
-        recommendedService[attribute] = vm[attribute];
-        return recommendedService;
-      });
-    }
-
-    /**
-     * setStaffSelections
-     * @description Sets service details for all dynamically built staff selections
-     */
-    function setStaffSelections(staffName) {
-      // add any newly selected staff
-      vm.staff = _.union(vm.staff, vm.staffCollection[staffName]);
-
-      // no way of knowing if staff were unselected, so comb over with filter
-      vm.staff = _.filter(vm.staff, function (staffID) {
-        return _.contains(_.flatten(_.values(vm.staffCollection)), staffID);
-      });
-      setServiceSelections('staff');
     }
 
     /**

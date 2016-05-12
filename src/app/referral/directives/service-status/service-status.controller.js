@@ -60,7 +60,7 @@
     vm.service = vm.service || {};
     vm.statuses = vm.statuses || {};
     vm.approvalPopover = {
-      templateUrl: 'referral/services/service-status/service-status-detail.tpl.html',
+      templateUrl: 'referral/directives/service-status/service-status-detail.tpl.html',
       title: _.startCase(statusType) + ' History'
     };
 
@@ -101,7 +101,7 @@
       if (vm.statuses[vm.service[vm.currentStatus]].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'referral/services/service-status/status-confirmation.tpl.html',
+          templateUrl: 'referral/directives/service-status/status-confirmation.tpl.html',
           controller: function ApprovalConfirmationModal($uibModalInstance, newStatus) {
             var vm = this;
             vm.newStatus = newStatus;
