@@ -118,6 +118,18 @@
 
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
+        //email fields for sending email from note directive
+        vm.emailInfo = {
+          template: 'referral',
+          data: {
+            claim: vm.resource.items.claimNumber,
+            client: vm.resource.items.client_displayName
+          },
+          options: {
+            subject:  'Altum CMS Communication for' + ' ' + vm.resource.items.client_displayName
+          }
+        };
+
         vm.referralNotes = AltumAPI.Referral.get({id: vm.resource.items.id, populate: 'notes'});
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key

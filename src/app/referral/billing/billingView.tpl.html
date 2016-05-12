@@ -25,7 +25,7 @@
       </div>
 
       <altum-notebook ng-if="services.referralNotes" notes="services.referralNotes.notes"
-                      collection="{'referral': services.resource.items.id}"></altum-notebook>
+                      collection="{'referral': services.resource.items.id}" email-info="services.emailInfo"></altum-notebook>
 
       <uib-accordion close-others="false">
         <uib-accordion-group
