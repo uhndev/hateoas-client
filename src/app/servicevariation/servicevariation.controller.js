@@ -37,6 +37,9 @@
         bindToController: true,
         windowClass: 'variations-modal-window',
         resolve: {
+          displayMode: function() {
+            return false;
+          },
           Variation: function() {
             return canEdit ? angular.copy(vm.selected) : {
               name: 'New Variation',
@@ -49,6 +52,9 @@
                 }
               ]
             };
+          },
+          Selection: function() {
+            return null;
           }
         }
       });

@@ -1,4 +1,4 @@
-<form class="form-horizontal" role="form">
+<form name="widget_form" class="form-horizontal" role="form">
 
   <div class="panel panel-danger" ng-if="widget.template === 'output'">
     <div class="panel-heading">
@@ -38,15 +38,28 @@
            type="text" maxlength="256"
            ng-required="true" ng-trim="true" ng-model="widget.label"/>
   </div>
-  <div class="form-group">
+  <div class="form-group" ng-class="{'has-error': widget_form.field_name.$invalid && !widget_form.field_name.$pristine}">
     <label for="name">
       <span translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME</span>
       <ui-help uib-popover="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_POPOVER'| translate}}"></ui-help>
     </label>
-    <input class="form-control" id="name"
+    <input class="form-control"
+           name="field_name"
+           id="name"
            placeholder="{{'COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_PLACEHOLDER'|translate}}"
-           type="text" maxlength="256" ng-capitalize
-           ng-required="true" ng-trim="true" ng-model="widget.name"/>
+           type="text" maxlength="256"
+           ng-capitalize
+           required
+           ng-trim="true"
+           ng-model="widget.name"
+           ng-pattern="/^[A-Z0-9]*$/"
+    />
+    <div class="required-error" ng-show="widget_form.field_name.$dirty && widget_form.field_name.$invalid">
+      *
+      <span ng-show="widget_form.field_name.$error.required" translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_REQUIRED</span>
+      <span ng-show="widget_form.field_name.$error.pattern" translate>COMMON.MODELS.STUDY.FORMS.CONFIGURATION.FIELD_NAME_INVALID_UPPERCASE</span>
+    </div>
+
   </div>
   <div class="form-group">
     <label for="title">

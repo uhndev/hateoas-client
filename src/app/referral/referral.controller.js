@@ -9,9 +9,9 @@
     ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'NoteService'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
 
-  function ReferralController($resource, $location, API, HeaderService, NoteService) {
+  function ReferralController($resource, $location, API, HeaderService) {
     var vm = this;
     var ReferralServices;
 
@@ -31,12 +31,21 @@
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
 
-        //this is for testing of setup background color
-        vm.notes = NoteService.query({referral: vm.referral.id, populate: 'noteType'});
-
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'displayName', 'dateOfBirth');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
           'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
+
+        //email fields for sending email from note directive
+        vm.emailInfo = {
+          template: 'referral',
+          data: {
+            claim: vm.referral.claimNumber,
+            client: vm.referral.clientcontact.displayName
+          },
+          options: {
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName
+          }
+        };
 
         // referral info panel
         vm.referralInfo = {

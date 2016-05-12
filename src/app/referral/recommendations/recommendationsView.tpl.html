@@ -9,21 +9,13 @@
           <i class="no-top form-control-feedback fa fa-search"></i>
           <input type="text" class="form-control"
                  placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
-                 ng-model="rec.search"/>
+                 ng-model="rec.search" />
         </div>
       </form>
       <br/>
     </div>
-    <div class="table-responsive" flex>
-      <table class="table table-condensed summary-table">
-        <tr class="summary-header-row">
-          <th ng-repeat="(label, value) in rec.referralOverview" translate>{{label}}</th>
-        </tr>
-        <tr class="summary-table-row">
-          <td ng-repeat="(label, value) in rec.referralOverview">{{value}}</td>
-        </tr>
-      </table>
-    </div>
+
+    <referral-summary referral-data="rec.referral"></referral-summary>
   </div>
 
   <altum-notebook ng-if="rec.referralNotes" notes="rec.referralNotes" collection="{'referral': rec.referral.id}"></altum-notebook>
@@ -51,6 +43,46 @@
                     ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
             </select>
           </div>
+          <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].serviceVariation">
+            <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_VARIATIONS</label>
+            <span class="fa fa-cog fa-lg selectable" ng-click="rec.openVariationModal()"></span>
+            <br/>
+            <ul>
+              <li ng-repeat="(key, selection) in rec.recommendedServices[rec.currIndex].variationSelection.changes">
+                <div ng-switch="key">
+                  <span ng-switch-when="service">
+                    <b>Selected: </b> {{rec.recommendedServices[rec.currIndex].variationSelection.name}}
+                  </span>
+                  <span ng-switch-when="followup">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="physician">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="staff">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="timeframe">
+                    <b>{{selection.title}}: </b> {{selection.name}}
+                  </span>
+                  <span ng-switch-when="date">
+                    <b>{{selection.name}}: </b> {{selection.value | date:'fullDate'}}
+                  </span>
+                  <span ng-switch-when="measure">
+                    <b>{{selection.name}}: </b>
+                    <ul>
+                      <li ng-repeat="(measureKey, measureVal) in selection.value">
+                        <b>{{measureKey}}: </b> {{measureVal}}
+                      </li>
+                    </ul>
+                  </span>
+                  <span ng-switch-default>
+                    <b>{{selection.name}}: </b> {{selection.value | json}}
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
           <!-- Save for Scheduling -->
           <!--<div class="form-group" flex ng-repeat="staffType in rec.recommendedServices[rec.currIndex].availableStaffTypes">-->
           <!--<label translate>Select {{staffType.name}}:</label>-->
@@ -65,13 +97,24 @@
           <!--</select-loader>-->
           <!--</div>-->
           <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
-                       ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
-                       ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
-                Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
-              </label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
+                           ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
+                           ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
+                    Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6" ng-if="rec.recommendedServices[rec.currIndex].hasTelemedicine">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].telemedicine" /> Via Telemedicine
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -255,7 +298,7 @@
                    class="list-group-item service-item selectable"
                    ng-class="{ 'service-active': $index === rec.currIndex }">
                 <span>
-                  {{service.name}}
+                  {{service.variationSelection.name || service.name}}
                   <span ng-if="service.availableSites.length > 0 && service.site">
                     ({{service.siteDictionary[service.site].name}})
                   </span>

@@ -8,15 +8,15 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'altum.referral.serviceApproval'
+      'altum.referral.serviceStatus'
     ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, toastr) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -24,25 +24,34 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralNotes = [];
-    vm.groupBy = vm.DEFAULT_GROUP_BY;
-    vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
-    vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.boundGroupTypes = {
+      groupBy: vm.DEFAULT_GROUP_BY,
+      subGroupBy: vm.DEFAULT_SUBGROUP_BY
+    };
+    vm.approvalStatuses = AltumAPI.Status.query({where: {category: 'approval'}});
+    vm.completionStatuses = AltumAPI.Status.query({where: {category: 'completion'}});
     vm.accordionStatus = {};
 
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
       {
-        name: 'workStatus',
+        name: 'workStatusName',
         prompt: 'COMMON.MODELS.SERVICE.WORK_STATUS'
       },
       {
-        name: 'prognosis',
+        name: 'prognosisName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS'
       },
       {
-        name: 'prognosisTimeframe',
+        name: 'prognosisTimeframeName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS_TIMEFRAME'
       }
+    ];
+
+    // array of options denoting which groups can be bound to (vm.boundGroupTypes.groupBy)
+    vm.groupTypes = [
+      {name: 'groupBy', prompt: 'Group'},
+      {name: 'subGroupBy', prompt: 'Subgroup'}
     ];
 
     // data columns for main groups (visits)
@@ -54,6 +63,10 @@
       {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+      },
+      {
+        name: 'completionStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
       },
       {
         name: 'siteName',
@@ -94,6 +107,7 @@
     ];
 
     vm.init = init;
+    vm.openServiceEditor = openServiceEditor;
 
     init();
 
@@ -114,19 +128,35 @@
           return service;
         });
 
-        // data columns for referral overview table
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
-
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+      });
+    }
+
+    /**
+     * openServiceEditor
+     * @description opens a modal window for the serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'variations-modal-window',
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        bindToController: true,
+        resolve: {
+          Service: function() {
+            return angular.copy(service);
+          },
+          ApprovedServices: function() {
+            return angular.copy(vm.resource.items.approvedServices);
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        vm.init();
       });
     }
   }

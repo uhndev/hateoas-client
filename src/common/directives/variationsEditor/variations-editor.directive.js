@@ -12,12 +12,14 @@
       {
         name: 'None',
         type: 'none',
+        category: 'basic',
         preset: false,
         value: null
       },
       {
         name: 'Service',
         type: 'service',
+        category: 'jsonmodel',
         preset: true,
         value: {
           altumService: null,
@@ -27,36 +29,59 @@
       {
         name: 'Number',
         type: 'number',
+        category: 'basic',
         preset: false,
         value: null
       },
       {
         name: 'Text',
         type: 'text',
+        category: 'basic',
         preset: false,
         value: ''
       },
       {
         name: 'Date',
         type: 'date',
+        category: 'basic',
         preset: false,
         value: null
       },
       {
         name: 'Physician',
         type: 'physician',
+        category: 'model',
         preset: false,
         value: null
       },
       {
         name: 'Staff',
         type: 'staff',
+        category: 'model',
         preset: false,
         value: null
       },
       {
+        name: 'Timeframe',
+        type: 'timeframe',
+        category: 'model',
+        preset: false,
+        value: null
+      },
+      {
+        name: 'Follow Up',
+        type: 'followup',
+        category: 'jsonmodel',
+        preset: false,
+        value: {
+          physician: null,
+          timeframe: null
+        }
+      },
+      {
         name: 'Measure',
         type: 'measure',
+        category: 'json',
         preset: false,
         value: {
           unit: null,
@@ -68,6 +93,7 @@
       {
         name: 'Menu',
         type: 'menu',
+        category: 'json',
         preset: true,
         value: {
           prompt: '',
@@ -140,6 +166,7 @@
         data: angular.copy(nodeData.data)
       };
       nodeData.nodes.push(newNode);
+      scope.expand();
     }
 
     /**

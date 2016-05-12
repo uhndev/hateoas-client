@@ -27,7 +27,15 @@
     var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
     ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
+    // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
+
+    // fields that are used during configuration of recommended services that will be deleted before POSTing
+    vm.configFields = [
+      'availableSites', 'availableStaffTypes', 'siteDictionary',
+      'staffCollection', 'serviceVariation', 'variationSelection'
+    ];
+
     vm.serviceOrder = {
       recommendedServices: 2,
       serviceDetail: 1
@@ -61,6 +69,7 @@
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
     vm.swapPanelOrder = swapPanelOrder;
+    vm.openVariationModal = openVariationModal;
     vm.openMap = openMap;
 
     init();
@@ -71,16 +80,7 @@
       Resource.get(function (data, headers) {
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.referralNotes = AltumAPI.Note.query({referral: vm.referral.id});
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
+        vm.referralNotes = angular.copy(data.items.notes);
 
         // load physician in from referraldetail
         vm.physician = data.items.physician || null;
@@ -142,7 +142,9 @@
           serviceCategory: altumProgramService.serviceCategory,
           serviceCategoryName: altumProgramService.serviceCategoryName,
           serviceDate: new Date(),
+          serviceVariation: altumProgramService.serviceVariation,
           site: null,
+          hasTelemedicine: altumProgramService.hasTelemedicine,
           approvalNeeded: altumProgramService.approvalNeeded,
           approvalRequired: altumProgramService.approvalRequired
         });
@@ -183,13 +185,22 @@
         event.stopPropagation();
       }
       if (isServiceRecommended(service)) {
-        service.site = null;
+        delete service.site;
+        delete service.variationSelection;
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(_.merge(service, getSharedServices()));
+        var toPopulate = ['sites', 'staffTypes'];
+        if (service.serviceVariation) { // populate variations if applicable
+          toPopulate.push('serviceVariation');
+        }
 
         // upon recommending service, fetch additional info needed for visit panels like sites and staffTypes
-        AltumAPI.AltumService.get({id: service.altumService, populate: ['sites', 'staffTypes']}, function (data) {
+        AltumAPI.AltumService.get({id: service.altumService, populate: toPopulate}, function (data) {
+          if (data.serviceVariation) {
+            _.last(vm.recommendedServices).serviceVariation = angular.copy(data.serviceVariation);
+          }
+
           if (data.sites.length > 0) {
             _.last(vm.recommendedServices).availableSites = data.sites;
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
@@ -285,10 +296,38 @@
     function saveServices() {
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
+          // for recommended services that have variations selected, apply to object to be sent to server
+          if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
+            _.each(service.variationSelection.changes, function (value, key) {
+              switch (key) {
+                case 'service':
+                  service.altumService = service.variationSelection.altumService;
+                  service.programService = service.variationSelection.programService;
+                  service.name = service.variationSelection.name;
+                  break;
+                case 'followup':
+                  service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
+                  service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
+                  break;
+                default:
+                  // otherwise, variation is of type number/text/date/physician/staff/timeframe/measure
+                  // where the respective backend column name will be <type>DetailName and value will be <type>Detail
+                  service[key + 'DetailName'] = service.variationSelection.changes[key].name;
+                  service[key + 'Detail'] = service.variationSelection.changes[key].value;
+                  break;
+              }
+            });
+          }
+
+          // clear config data before POSTing
+          _.each(vm.configFields, function (field) {
+            delete service[field];
+          });
+
           var serviceObj = new ReferralServices(service);
           return serviceObj.$save();
         }))
-        .then(function(data) {
+        .then(function (data) {
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
           vm.isSaving = false;
           vm.currIndex = null;
@@ -332,6 +371,61 @@
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.serviceDetail = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
+    }
+
+    /**
+     * openVariationModal
+     * @description Click handler for new/edit functionality for variations.  Will pass in
+     *              an empty base variation if creating new.
+     * @param canEdit
+     */
+    function openVariationModal(canEdit) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'servicevariation/variationModal.tpl.html',
+        controller: 'VariationModalController',
+        controllerAs: 'varmodal',
+        bindToController: true,
+        windowClass: 'variations-modal-window',
+        resolve: {
+          displayMode: function () {
+            return true;
+          },
+          Variation: function () {
+            return vm.recommendedServices[vm.currIndex].serviceVariation;
+          },
+          Selection: function () {
+            var variations = angular.copy(vm.recommendedServices[vm.currIndex].variationSelection);
+            return variations ? variations.changes : null;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selection) {
+        // store selected variations
+        vm.recommendedServices[vm.currIndex].variationSelection = {
+          changes: angular.copy(selection)
+        };
+
+        // if service was selected as a variation, update appropriate data
+        if (_.has(selection, 'service')) {
+          // rename service in recommended services tab
+          AltumAPI.AltumService.get({id: selection.service.value.altumService, populate: 'sites'}, function (altumService) {
+            vm.recommendedServices[vm.currIndex].variationSelection.name = altumService.name;
+
+            if (altumService.sites.length > 0) {
+              vm.recommendedServices[vm.currIndex].availableSites = altumService.sites;
+              vm.recommendedServices[vm.currIndex].siteDictionary = _.indexBy(altumService.sites, 'id');
+            }
+          });
+
+          // store altum/program service to be applied on save
+          vm.recommendedServices[vm.currIndex].variationSelection.altumService = selection.service.value.altumService;
+          vm.recommendedServices[vm.currIndex].variationSelection.programService = selection.service.value.programService;
+        } else {
+          delete vm.recommendedServices[vm.currIndex].variationSelection;
+        }
+      });
     }
 
     /**

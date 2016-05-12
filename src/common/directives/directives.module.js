@@ -1,6 +1,6 @@
 (function () {
   angular.module('dados.common.directives', [
-    'dados.common.directives.addressEditor',
+    'dados.common.directives.modelEditors',
     'dados.common.directives.contextTranslator',
     'dados.common.directives.dadosError',
     'dados.common.directives.siteMap',

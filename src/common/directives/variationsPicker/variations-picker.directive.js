@@ -33,6 +33,7 @@
     // bindable methods
     vm.toggle = toggle;
     vm.selectNode = selectNode;
+    vm.updateMetaDataField = updateMetaDataField;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -54,9 +55,46 @@
       if (_.has(vm.selection[node.type], 'id') && vm.selection[node.type].id === node.id) {
         delete vm.selection[node.type];
       } else {
+        var nodeCopy = angular.copy(node);
+        var selectedNode = {
+          id: nodeCopy.id,
+          title: nodeCopy.title,
+          name: nodeCopy.title,
+          value: nodeCopy.data.value
+        };
+
+        switch (true) {
+          // update titles and names slightly for physician/staff/timeframe to display meaningful data
+          case node.data.category === 'model':
+            selectedNode.name = nodeCopy.data.value.displayName;
+            selectedNode.value = nodeCopy.data.value.id;
+            break;
+            // special case for non-service jsonmodel types, concatenate displayNames
+          case node.data.category === 'jsonmodel' && node.type !== 'service':
+            selectedNode.name = _.pluck(_.values(nodeCopy.data.value), 'displayName').join(' - ');
+            selectedNode.value = {};
+            _.each(nodeCopy.data.value, function (value, key) {
+              selectedNode.value[key] = value.id;
+            });
+            break;
+          default: break;
+        }
+
         // otherwise enforce only one selection for each type variation
+        vm.selection[node.type] = selectedNode;
+      }
+    }
+
+    /**
+     * updateMetaDataField
+     * @description On change handler for metadata fields that may have already been selected
+     * @param node
+     */
+    function updateMetaDataField(node) {
+      if (_.has(vm.selection[node.type], 'id') && vm.selection[node.type].id === node.id) {
         vm.selection[node.type] = {
           id: node.id,
+          name: angular.copy(node.title),
           value: angular.copy(node.data.value)
         };
       }
