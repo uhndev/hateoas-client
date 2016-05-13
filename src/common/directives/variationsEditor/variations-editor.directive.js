@@ -193,12 +193,11 @@
 
     /**
      * removePreset
-     * @description applies the preset value to the values array
+     * @description removes preset value from values array
      * @param node
      */
-    function removePreset(node,value) {
-      console.log(value);
-      _.pullAt(node.data.values,value);
+    function removePreset(node,index) {
+      _.pullAt(node.data.values,index);
     }
 
     /**
