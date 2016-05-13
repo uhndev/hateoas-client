@@ -34,7 +34,7 @@
     vm.toggle = toggle;
     vm.selectNode = selectNode;
     vm.updateMetaDataField = updateMetaDataField;
-    vm.changeValue = changeValue;
+
     ///////////////////////////////////////////////////////////////////////////
 
     /**
