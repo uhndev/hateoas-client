@@ -34,7 +34,7 @@
     vm.toggle = toggle;
     vm.selectNode = selectNode;
     vm.updateMetaDataField = updateMetaDataField;
-
+    vm.changeValue = changeValue;
     ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -83,6 +83,14 @@
         // otherwise enforce only one selection for each type variation
         vm.selection[node.type] = selectedNode;
       }
+    }
+
+    /**
+     * changeValue
+     * @description On change handler for metadata fields that may have already been selected
+     */
+    function changeValue(node,value) {
+      node.data.value = value;
     }
 
     /**
