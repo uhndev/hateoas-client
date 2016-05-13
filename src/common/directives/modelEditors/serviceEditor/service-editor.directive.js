@@ -116,7 +116,7 @@
 
       // populate service variations if applicable
       if (!_.isNull(vm.service.altumService) && !vm.configuration.disabled.altumService) {
-        // fetchAltumServiceData();
+        fetchAltumServiceData();
       }
 
       // fetch referral data if not passed in
@@ -125,12 +125,8 @@
       }
 
       // parse service date
-      if (_.isEmpty(vm.service.serviceDate)) {
-        delete vm.service.serviceDate;
-      } else {
-        if (angular.isString(vm.service.serviceDate)) {
-          vm.service.serviceDate = new Date(vm.service.serviceDate);
-        }
+      if (angular.isString(vm.service.serviceDate)) {
+        vm.service.serviceDate = new Date(vm.service.serviceDate);
       }
 
       // sort staff into respective collections

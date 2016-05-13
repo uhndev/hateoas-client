@@ -9,7 +9,8 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'dados.common.directives.focusIf'
+      'dados.common.directives.focusIf',
+      'altum.referral.recommendationsPicker'
     ])
     .controller('RecommendationsController', RecommendationsController);
 
@@ -60,11 +61,6 @@
     vm.availableServices = [];
 
     // bindable methods
-    vm.isServiceRecommended = isServiceRecommended;
-    vm.duplicateService = duplicateService;
-    vm.toggleService = toggleService;
-    vm.selectServiceDetail = selectServiceDetail;
-    vm.navigateKey = navigateKey;
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
@@ -78,8 +74,10 @@
 
     function init() {
       Resource.get(function (data, headers) {
+        vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
+        vm.availableServices = angular.copy(data.items.availableServices);
         vm.referralNotes = angular.copy(data.items.notes);
 
         // load physician in from referraldetail
@@ -92,6 +90,18 @@
         vm.sharedService.visitService = null;
         vm.sharedService.serviceDate = new Date();
 
+        //email fields for sending email from note directive
+        vm.emailInfo = {
+          template: 'referral',
+          data: {
+            claim: vm.referral.claimNumber,
+            client: vm.referral.client_displayName
+          },
+          options: {
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.client_displayName
+          }
+        };
+
         // load in staff selections from referraldetail
         if (data.items.staff) {
           vm.sharedService.staff = [data.items.staff];
@@ -100,167 +110,7 @@
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
-
-        if (vm.referral.program) {
-          fetchAvailableServices(data.items.availableServices);
-        }
       });
-    }
-
-    /**
-     * getSharedServices
-     * @description Returns shared service data for all prospective recommended services
-     * @returns {Object}
-     */
-    function getSharedServices() {
-      return {
-        physician: vm.sharedService.physician,
-        staff: vm.sharedService.staff,
-        staffCollection: vm.sharedService.staffCollection,
-        workStatus: vm.sharedService.workStatus,
-        prognosis: vm.sharedService.prognosis,
-        prognosisTimeframe: vm.sharedService.prognosisTimeframe,
-        visitService: vm.sharedService.visitService,
-        serviceDate: vm.sharedService.serviceDate
-      };
-    }
-
-    /**
-     * fetchAvailableServices
-     * @description Fetches the available list of services to an empty set of the referral's programs's available services
-     */
-    function fetchAvailableServices(altumProgramServices) {
-      vm.recommendedServices = [];
-      // available services denote all program services across each retrieved altum service
-      // sorting respective program services by serviceCateogry takes place in the html template
-      vm.availableServices = _.map(altumProgramServices, function (altumProgramService) {
-        // append each altumProgramService's altumProgramServices to the list of available prospective services
-        return _.merge(getSharedServices(), {
-          name: altumProgramService.altumServiceName,
-          altumService: altumProgramService.id,
-          programService: altumProgramService.programService,
-          serviceCategory: altumProgramService.serviceCategory,
-          serviceCategoryName: altumProgramService.serviceCategoryName,
-          serviceDate: new Date(),
-          serviceVariation: altumProgramService.serviceVariation,
-          site: null,
-          hasTelemedicine: altumProgramService.hasTelemedicine,
-          approvalNeeded: altumProgramService.approvalNeeded,
-          approvalRequired: altumProgramService.approvalRequired
-        });
-      });
-    }
-
-    /**
-     * isServiceRecommended
-     * @description Returns bool reporting if service is recommended
-     * @param {String} service
-     */
-    function isServiceRecommended(service) {
-      return _.contains(vm.recommendedServices, service);
-    }
-
-    /**
-     * duplicateService
-     * @description Utility function for duplicating a service to set different variations for the same service.
-     * @param service
-     * @param index
-     * @param event
-     */
-    function duplicateService(service, index, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-      vm.recommendedServices.splice(index + 1, 0, angular.copy(service));
-      vm.currIndex = vm.currIndex ? (vm.currIndex + 1) : index + 1;
-    }
-
-    /**
-     * toggleService
-     * @description Adds/removes a programService from recommendedServices
-     * @param {String} service
-     */
-    function toggleService(service, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-      if (isServiceRecommended(service)) {
-        delete service.site;
-        delete service.variationSelection;
-        vm.recommendedServices = _.without(vm.recommendedServices, service);
-      } else {
-        vm.recommendedServices.push(_.merge(service, getSharedServices()));
-        var toPopulate = ['sites', 'staffTypes'];
-        if (service.serviceVariation) { // populate variations if applicable
-          toPopulate.push('serviceVariation');
-        }
-
-        // upon recommending service, fetch additional info needed for visit panels like sites and staffTypes
-        AltumAPI.AltumService.get({id: service.altumService, populate: toPopulate}, function (data) {
-          if (data.serviceVariation) {
-            _.last(vm.recommendedServices).serviceVariation = angular.copy(data.serviceVariation);
-          }
-
-          if (data.sites.length > 0) {
-            _.last(vm.recommendedServices).availableSites = data.sites;
-            _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
-          }
-
-          if (data.staffTypes.length > 0) {
-            _.last(vm.recommendedServices).staff = [];
-            _.last(vm.recommendedServices).staffCollection = {};
-            _.last(vm.recommendedServices).availableStaffTypes = _.map(data.staffTypes, function (staffType) {
-              staffType.baseQuery = {staffType: staffType.id};
-              return staffType;
-            });
-          }
-        });
-      }
-    }
-
-    /**
-     * selectServiceDetail
-     * @description Selects a recommended service for detail editing
-     * @param {Number} $index
-     */
-    function selectServiceDetail($index) {
-      vm.currIndex = (vm.currIndex === $index ? null : $index);
-    }
-
-    /**
-     * navigateKey
-     * @description Allows user to navigate selected recommended services via arrow keys
-     * @param $event
-     */
-    function navigateKey($event, $index) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      switch ($event.keyCode) {
-        case 37: // left
-          if (!_.isNull(vm.currIndex)) {
-            vm.currIndex = null;
-          }
-          break;
-        case 38: // up
-          if (!_.isNull(vm.currIndex) && vm.currIndex > 0) {
-            vm.currIndex--;
-          } else {
-            vm.currIndex = vm.recommendedServices.length - 1;
-          }
-          break;
-        case 39: // right
-          if (_.isNull(vm.currIndex)) {
-            vm.currIndex = $index;
-          }
-          break;
-        case 40: // down
-          if (!_.isNull(vm.currIndex) && vm.currIndex < vm.recommendedServices.length - 1) {
-            vm.currIndex++;
-          } else {
-            vm.currIndex = 0;
-          }
-          break;
-      }
     }
 
     /**
@@ -305,6 +155,7 @@
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
           vm.isSaving = false;
           vm.currIndex = null;
+          vm.recommendedServices = [];
           init();
         });
     }
@@ -396,8 +247,6 @@
           // store altum/program service to be applied on save
           vm.recommendedServices[vm.currIndex].variationSelection.altumService = selection.service.value.altumService;
           vm.recommendedServices[vm.currIndex].variationSelection.programService = selection.service.value.programService;
-        } else {
-          delete vm.recommendedServices[vm.currIndex].variationSelection;
         }
       });
     }

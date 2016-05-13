@@ -141,6 +141,7 @@
     vm.toggle = toggle;
     vm.newSubItem = newSubItem;
     vm.applyTypeChange = applyTypeChange;
+    vm.parseNode = parseNode;
     vm.newPreset = newPreset;
     vm.removePreset = removePreset;
 
@@ -196,9 +197,10 @@
      * removePreset
      * @description removes preset value from values array
      * @param node
+     * @param index
      */
-    function removePreset(node,index) {
-      _.pullAt(node.data.values,index);
+    function removePreset(node, index) {
+      _.pullAt(node.data.values, index);
     }
 
     /**
@@ -208,6 +210,22 @@
      */
     function applyTypeChange(node) {
       node.data = angular.copy(_.find(vm.variationTypes, {type: node.type}));
+    }
+
+    /**
+     * parseNode
+     * @description Function called on initialization of node scope to perform node verification
+     * @param node
+     */
+    function parseNode(node) {
+      switch (node.type) {
+        case 'date':
+          if (angular.isString(node.data.value)) {
+            node.data.value = new Date(node.data.value);
+          }
+          break;
+        default: break;
+      }
     }
 
     /**

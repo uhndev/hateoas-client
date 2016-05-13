@@ -34,6 +34,7 @@
     vm.toggle = toggle;
     vm.selectNode = selectNode;
     vm.updateMetaDataField = updateMetaDataField;
+    vm.parseNode = parseNode;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +98,22 @@
           name: angular.copy(node.title),
           value: angular.copy(node.data.value)
         };
+      }
+    }
+
+    /**
+     * parseNode
+     * @description Function called on initialization of node scope to perform node verification
+     * @param node
+     */
+    function parseNode(node) {
+      switch (node.type) {
+        case 'date':
+          if (angular.isString(node.data.value)) {
+            node.data.value = new Date(node.data.value);
+          }
+          break;
+        default: break;
       }
     }
   }
