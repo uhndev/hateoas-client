@@ -86,14 +86,6 @@
     }
 
     /**
-     * changeValue
-     * @description On change handler for metadata fields that may have already been selected
-     */
-    function changeValue(node,value) {
-      node.data.value = value;
-    }
-
-    /**
      * updateMetaDataField
      * @description On change handler for metadata fields that may have already been selected
      * @param node
