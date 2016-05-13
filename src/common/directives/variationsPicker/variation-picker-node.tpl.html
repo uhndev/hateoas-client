@@ -5,8 +5,11 @@
       'glyphicon-chevron-down': !collapsed
     }"></span>
   </a>
-  <label ng-click="visible = !visible" ng-class="{'text-danger': this.nodeForm.$invalid}">
+  <label ng-click="visible = !visible" ng-class="{'text-danger': this.nodeForm.$invalid}" >
     {{node.title}}
+
+    <select ng-if="node.data.category == 'basic'" ng-model="node.data.value" ng-options="option as option for option in node.data.values" >
+    </select>
     <span class="glyphicon" ng-class="{
       'glyphicon-ok': visible && !node.data.preset && node.type !== 'none',
       'glyphicon-pencil': !visible && !node.data.preset && node.type !== 'none'
