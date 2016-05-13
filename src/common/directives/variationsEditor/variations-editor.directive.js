@@ -187,7 +187,6 @@
      * @param node
      */
     function newPreset(node) {
-      console.log(node.data.value);
       node.data.values.push(node.data.value);
       node.data.value = _.find(VARIATION_TYPES,{type: node.type}).value;
     }
