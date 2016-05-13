@@ -4,9 +4,11 @@
     .module('altum.servicevariation')
     .controller('VariationModalController', VariationModalController);
 
-  VariationModalController.$inject = ['$scope', '$uibModalInstance', 'displayMode', 'Variation', 'Selection', 'AltumAPIService', 'toastr'];
+  VariationModalController.$inject = [
+    '$scope', '$uibModalInstance', 'displayMode', 'Variation', 'Selection', 'AltumAPIService', 'toastr', 'VARIATION_TYPES'
+  ];
 
-  function VariationModalController($scope, $uibModalInstance, displayMode, Variation, Selection, AltumAPI, toastr) {
+  function VariationModalController($scope, $uibModalInstance, displayMode, Variation, Selection, AltumAPI, toastr, VARIATION_TYPES) {
     var vm = this;
 
     // bindable variables
@@ -20,7 +22,7 @@
     vm.expandAll = expandAll;
     vm.saveVariations = saveVariations;
     vm.cancel = cancel;
-    vm.add = add;
+    vm.addTopLevelNode = addTopLevelNode;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -67,11 +69,17 @@
     }
 
     /**
-     * add
-     * @description adds a top level node
+     * addTopLevelNode
+     * @description Adds a top level node to the variation tree
      */
-    function add() {
-      var newNode = {nodes:[],title:'Options',type:'none'};
+    function addTopLevelNode() {
+      var newNode = {
+        id: _.last(vm.serviceVariation.variations).id * 10 + vm.serviceVariation.variations.length,
+        title: 'Options',
+        nodes: [],
+        type: 'none',
+        data: _.find(VARIATION_TYPES, {type: 'none'})
+      };
       vm.serviceVariation.variations.unshift(newNode);
     }
   }

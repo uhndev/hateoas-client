@@ -37,9 +37,9 @@
     })
     .controller('RecommendationsPickerController', RecommendationsPickerController);
 
-  RecommendationsPickerController.$inject = ['AltumAPIService'];
+  RecommendationsPickerController.$inject = ['$scope', 'AltumAPIService'];
 
-  function RecommendationsPickerController(AltumAPI) {
+  function RecommendationsPickerController($scope, AltumAPI) {
     var vm = this;
 
     // bindable variables
@@ -223,6 +223,17 @@
           break;
       }
     }
+
+    /**
+     * resetRecommendations
+     * @description Re-initializes directive data whenever recommendations are made
+     */
+    function resetRecommendations(oldVal, newVal) {
+      if (oldVal !== newVal) {
+        init();
+      }
+    }
+    $scope.$watch('recPicker.referral', resetRecommendations, true);
   }
 
 })();

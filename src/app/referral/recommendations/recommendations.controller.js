@@ -74,6 +74,7 @@
 
     function init() {
       Resource.get(function (data, headers) {
+        vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
         vm.availableServices = angular.copy(data.items.availableServices);
@@ -154,6 +155,7 @@
           toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
           vm.isSaving = false;
           vm.currIndex = null;
+          vm.recommendedServices = [];
           init();
         });
     }
@@ -245,8 +247,6 @@
           // store altum/program service to be applied on save
           vm.recommendedServices[vm.currIndex].variationSelection.altumService = selection.service.value.altumService;
           vm.recommendedServices[vm.currIndex].variationSelection.programService = selection.service.value.programService;
-        } else {
-          delete vm.recommendedServices[vm.currIndex].variationSelection;
         }
       });
     }
