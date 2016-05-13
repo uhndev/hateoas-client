@@ -14,7 +14,8 @@
         type: 'none',
         category: 'basic',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Service',
@@ -24,49 +25,56 @@
         value: {
           altumService: null,
           programService: null
-        }
+        },
+        values: []
       },
       {
         name: 'Number',
         type: 'number',
         category: 'basic',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Text',
         type: 'text',
         category: 'basic',
         preset: false,
-        value: ''
+        value: '',
+        values: []
       },
       {
         name: 'Date',
         type: 'date',
         category: 'basic',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Physician',
         type: 'physician',
         category: 'model',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Staff',
         type: 'staff',
         category: 'model',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Timeframe',
         type: 'timeframe',
         category: 'model',
         preset: false,
-        value: null
+        value: null,
+        values: []
       },
       {
         name: 'Follow Up',
@@ -76,7 +84,8 @@
         value: {
           physician: null,
           timeframe: null
-        }
+        },
+        values: []
       },
       {
         name: 'Measure',
@@ -88,7 +97,8 @@
           quantity: null,
           pricePerUnit: null,
           measurement: null
-        }
+        },
+        values: []
       },
       {
         name: 'Menu',
@@ -99,7 +109,8 @@
           prompt: '',
           href: '',
           icon: ''
-        }
+        },
+        values: []
       }
     ])
     .controller('VariationsEditorController', VariationsEditorController)
@@ -130,6 +141,8 @@
     vm.toggle = toggle;
     vm.newSubItem = newSubItem;
     vm.applyTypeChange = applyTypeChange;
+    vm.newPreset = newPreset;
+    vm.removePreset = removePreset;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -167,6 +180,25 @@
       };
       nodeData.nodes.push(newNode);
       scope.expand();
+    }
+
+    /**
+     * newPreset
+     * @description applies the preset value to the values array
+     * @param node
+     */
+    function newPreset(node) {
+      node.data.values.push(node.data.value);
+      node.data.value = _.find(VARIATION_TYPES,{type: node.type}).value;
+    }
+
+    /**
+     * removePreset
+     * @description removes preset value from values array
+     * @param node
+     */
+    function removePreset(node,index) {
+      _.pullAt(node.data.values,index);
     }
 
     /**
