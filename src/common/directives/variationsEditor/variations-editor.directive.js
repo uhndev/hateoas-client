@@ -194,7 +194,7 @@
 
     /**
      * removePreset
-     * @description removes preset value the values array
+     * @description removes preset value from values array
      * @param node
      */
     function removePreset(node,index) {
