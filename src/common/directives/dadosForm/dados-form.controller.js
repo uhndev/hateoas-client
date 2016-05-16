@@ -43,12 +43,16 @@
       }
 
       vm.currentQuestion++;
+
       if (vm.currentQuestion >= vm.form.questions.length) {
+
         vm.currentQuestion = vm.form.questions.length - 1;
         vm.returned = false;
         $scope.$emit('NextFormRequest');
+        $scope.$broadcast('NextIndicator');
       }
       vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
+
     }
 
     /**
@@ -63,10 +67,13 @@
       }
 
       vm.currentQuestion--;
+
       if (vm.currentQuestion < 0) {
         vm.currentQuestion = 0;
         vm.returned = true;
         $scope.$emit('PrevFormRequest');
+        $scope.$broadcast('PrevIndicator');
+
       }
       vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     }
@@ -209,6 +216,7 @@
         var question = _.find(vm.form.questions, function (q) {
           return q.name == name;
         });
+
         if (question !== undefined) {
           question.value = answer;
         }

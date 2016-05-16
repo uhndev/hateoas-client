@@ -18,6 +18,7 @@
     'dados.common.directives.subjectForms',
     'dados.common.directives.surveyBuilder',
     'dados.common.directives.validationCheck',
-    'dados.common.directives.userEditor'
+    'dados.common.directives.userEditor',
+    'dados.common.directives.progressbar'
   ]);
 })();
