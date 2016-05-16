@@ -68,23 +68,28 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      $scope.tableParams = new NgTableParams({
-          page: 1,              // show first page
-          count: 10             // count per page
-        }, {
-          total: vm.list.length,
-          getData: function ($defer, params) {
-            var FOData = getFOData(vm.list, params);
-            params.total(FOData.length); // set total for recalc pagination
 
-            if ($scope.reverse === true) {
-              $defer.resolve(FOData.slice(((Math.ceil(FOData.length / params.count())) - params.page()) * params.count(), (Math.ceil(FOData.length / params.count()) * params.count()) - ((params.page() - 1) * params.count())));
-            }
-            if ($scope.reverse === false) {
-              $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+      var div = Math.floor(vm.list.length / 10);
+
+      var num = Math.ceil(vm.list.length / div);
+
+      $scope.tableParams = new NgTableParams({
+        page: 1,              // show first page
+        count: num <= 10 || num < 19 ? num : 10          // count per page
+      }, {
+        total: vm.list.length,
+        getData: function ($defer, params) {
+          var FOData = getFOData(vm.list, params);
+          params.total(FOData.length); // set total for recalc pagination
+
+          if ($scope.reverse === true) {
+            $defer.resolve(FOData.slice(((Math.ceil(FOData.length / params.count())) - params.page()) * params.count(), (Math.ceil(FOData.length / params.count()) * params.count()) - ((params.page() - 1) * params.count())));
           }
-        });
+          if ($scope.reverse === false) {
+            $defer.resolve(FOData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+          }
+        }
+      });
       $scope.tableParams.settings().$scope = $scope;
 
     }
@@ -271,6 +276,7 @@
 
     function getFOData(data, params) {
       var orderedData = data;
+
       if ($scope.predicate.field !== '') {
         orderedData = $filter('orderBy')(data, $rootScope.natural($scope.predicate.field));
       }
@@ -335,6 +341,12 @@
      * Order a selected column
      */
     $scope.order = function(predicate) {
+      var div = Math.floor(vm.list.length / 10);
+
+      var num = Math.ceil(vm.list.length / div);
+
+      $scope.tableParams.count(num <= 10 || num < 19 ? num : 10);
+
       getFOData(vm.list, null);
       $scope.predicate = predicate;
       $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
