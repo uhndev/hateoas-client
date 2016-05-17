@@ -13,10 +13,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -117,20 +117,21 @@
       var Resource = $resource(vm.url);
 
       Resource.get(function (data, headers) {
-        vm.resource = angular.copy(data);
+        vm.referral = angular.copy(data.items);
+
         //email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
-            claim: vm.resource.items.claimNumber,
-            client: vm.resource.items.client_displayName
+            claim: vm.referral.claimNumber,
+            client: vm.referral.client_displayName
           },
           options: {
-            subject:  'Altum CMS Communication for' + ' ' + vm.resource.items.client_displayName
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.client_displayName
           }
         };
 
-        vm.referralNotes = AltumAPI.Referral.get({id: vm.resource.items.id, populate: 'notes'});
+        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
@@ -142,6 +143,11 @@
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+
+        if (vm.referral.program) {
+          vm.recommendedServices = [];
+          vm.referral.availableServices = RecommendationsService.parseAvailableServices({}, data.items.availableServices);
+        }
       });
     }
 
@@ -162,7 +168,7 @@
             return angular.copy(service);
           },
           ApprovedServices: function() {
-            return angular.copy(vm.resource.items.approvedServices);
+            return angular.copy(vm.referral.approvedServices);
           }
         }
       });

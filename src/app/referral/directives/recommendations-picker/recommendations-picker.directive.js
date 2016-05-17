@@ -29,7 +29,10 @@
         currIndex: '=',           // current selected index in recommendedServices array
         availableServices: '=',   // array of available services to pick from
         recommendedServices: '=', // array of selected services to recommend
-        searchQuery: '='          // string bound for fuzzy searching available services
+        searchQuery: '=',         // string bound for fuzzy searching available services,
+        config: '<?'              // object containing two attributes which can configure the picker:
+        // 1) configurable labels for each recommendation tab title
+        // 2) boolean flag denoting whether programService information should be available
       },
       controller: 'RecommendationsPickerController',
       controllerAs: 'recPicker',
@@ -37,9 +40,9 @@
     })
     .controller('RecommendationsPickerController', RecommendationsPickerController);
 
-  RecommendationsPickerController.$inject = ['$scope', 'AltumAPIService'];
+  RecommendationsPickerController.$inject = ['AltumAPIService', 'RecommendationsService'];
 
-  function RecommendationsPickerController($scope, AltumAPI) {
+  function RecommendationsPickerController(AltumAPI, RecommendationsService) {
     var vm = this;
 
     // bindable variables
@@ -49,6 +52,15 @@
     vm.availableServices = vm.availableServices || [];
     vm.recommendedServices = vm.recommendedServices || [];
     vm.searchQuery = vm.searchQuery || '';
+
+    // default configuration for the recommendations-picker
+    vm.config = vm.config || {
+      showBillingInfo: false,
+      labels: {
+        'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS',
+        'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES'
+      }
+    };
     vm.accordionStatus = {};
 
     // bindable methods
@@ -64,52 +76,9 @@
 
     function init() {
       if (vm.referral.program && vm.availableServices.length) {
-        parseAvailableServices();
+        vm.recommendedServices = [];
+        vm.availableServices = RecommendationsService.parseAvailableServices(vm.service, vm.availableServices);
       }
-    }
-
-    /**
-     * getSharedServices
-     * @description Returns shared service data for all prospective recommended services
-     * @returns {Object}
-     */
-    function getSharedServices() {
-      return {
-        physician: vm.service.physician,
-        staff: vm.service.staff,
-        staffCollection: vm.service.staffCollection,
-        workStatus: vm.service.workStatus,
-        prognosis: vm.service.prognosis,
-        prognosisTimeframe: vm.service.prognosisTimeframe,
-        visitService: vm.service.visitService,
-        serviceDate: vm.service.serviceDate
-      };
-    }
-
-    /**
-     * parseAvailableServices
-     * @description Fetches the available list of services to an empty set of the referral's programs's available services
-     */
-    function parseAvailableServices() {
-      vm.recommendedServices = [];
-      // available services denote all program services across each retrieved altum service
-      // sorting respective program services by serviceCateogry takes place in the html template
-      vm.availableServices = _.map(vm.availableServices, function (altumProgramService) {
-        // append each altumProgramService's altumProgramServices to the list of available prospective services
-        return _.merge(getSharedServices(), {
-          name: altumProgramService.altumServiceName,
-          altumService: altumProgramService.id,
-          programService: altumProgramService.programService,
-          serviceCategory: altumProgramService.serviceCategory,
-          serviceCategoryName: altumProgramService.serviceCategoryName,
-          serviceDate: new Date(),
-          serviceVariation: altumProgramService.serviceVariation,
-          site: null,
-          hasTelemedicine: altumProgramService.hasTelemedicine,
-          approvalNeeded: altumProgramService.approvalNeeded,
-          approvalRequired: altumProgramService.approvalRequired
-        });
-      });
     }
 
     /**
@@ -150,14 +119,16 @@
         delete service.variationSelection;
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
-        vm.recommendedServices.push(_.merge(service, getSharedServices()));
+        vm.recommendedServices.push(_.merge(service, RecommendationsService.getSharedServices(vm.service)));
         var toPopulate = ['sites', 'staffTypes'];
         if (service.serviceVariation) { // populate variations if applicable
           toPopulate.push('serviceVariation');
         }
 
+        var altumServiceID = _.has(service.altumService, 'id') ? service.altumService.id : service.altumService;
+
         // upon recommending service, fetch additional info needed for visit panels like sites and staffTypes
-        AltumAPI.AltumService.get({id: service.altumService, populate: toPopulate}, function (data) {
+        AltumAPI.AltumService.get({id: altumServiceID, populate: toPopulate}, function (data) {
           if (data.serviceVariation) {
             _.last(vm.recommendedServices).serviceVariation = angular.copy(data.serviceVariation);
           }
@@ -223,17 +194,6 @@
           break;
       }
     }
-
-    /**
-     * resetRecommendations
-     * @description Re-initializes directive data whenever recommendations are made
-     */
-    function resetRecommendations(oldVal, newVal) {
-      if (oldVal !== newVal) {
-        init();
-      }
-    }
-    $scope.$watch('recPicker.referral', resetRecommendations, true);
   }
 
 })();
