@@ -36,7 +36,7 @@
       var last = _.last(_.pathnameToArray(cleanPath));
 
       // create possible template arrays based on if its a list view or item view
-      if (pathArr.length % 2 === 0) {
+      if (pathArr.length % 2 !== 0) {
         var templates = _.map(VIEW_MODULES, function(module) {
           return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
         });
