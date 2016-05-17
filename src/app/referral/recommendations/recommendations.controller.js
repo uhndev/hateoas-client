@@ -10,15 +10,16 @@
       'dados.header.service',
       'dados.common.services.altum',
       'dados.common.directives.focusIf',
-      'altum.referral.recommendationsPicker'
+      'altum.referral.recommendationsPicker',
+      'altum.referral.serviceDetail'
     ])
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$q', '$resource', '$uibModal', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService'
   ];
 
-  function RecommendationsController($q, $resource, $uibModal, $location, API, HeaderService, AltumAPI, toastr) {
+  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService) {
     var vm = this;
     var ReferralServices;
 
@@ -57,6 +58,7 @@
     vm.accordionStatus = {};
     vm.sharedService = {};
     vm.referralNotes = [];
+    vm.currIndex = null;
     vm.recommendedServices = [];
     vm.availableServices = [];
 
@@ -65,8 +67,6 @@
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
     vm.swapPanelOrder = swapPanelOrder;
-    vm.openVariationModal = openVariationModal;
-    vm.openMap = openMap;
 
     init();
 
@@ -81,16 +81,18 @@
         vm.referralNotes = angular.copy(data.items.notes);
 
         // load physician in from referraldetail
-        vm.sharedService.physician = data.items.physician || null;
-        vm.sharedService.staffCollection = {};
-        vm.sharedService.staff = [];
-        vm.sharedService.workStatus = null;
-        vm.sharedService.prognosis = null;
-        vm.sharedService.prognosisTimeframe = null;
-        vm.sharedService.visitService = null;
-        vm.sharedService.serviceDate = new Date();
+        vm.sharedService = {
+          physician: data.items.physician || null,
+          staffCollection: {},
+          staff: [],
+          workStatus: null,
+          prognosis: null,
+          prognosisTimeframe: null,
+          visitService: null,
+          serviceDate: new Date()
+        };
 
-        //email fields for sending email from note directive
+        // email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
@@ -110,6 +112,11 @@
 
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+
+        if (vm.referral.program) {
+          vm.recommendedServices = [];
+          vm.availableServices = RecommendationsService.parseAvailableServices(vm.sharedService, data.items.availableServices);
+        }
       });
     }
 
@@ -196,107 +203,6 @@
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.serviceDetail = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
       vm.serviceOrder.recommendedServices = vm.serviceOrder.recommendedServices ^ vm.serviceOrder.serviceDetail;
-    }
-
-    /**
-     * openVariationModal
-     * @description Click handler for new/edit functionality for variations.  Will pass in
-     *              an empty base variation if creating new.
-     * @param canEdit
-     */
-    function openVariationModal(canEdit) {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: 'servicevariation/variationModal.tpl.html',
-        controller: 'VariationModalController',
-        controllerAs: 'varmodal',
-        bindToController: true,
-        windowClass: 'variations-modal-window',
-        resolve: {
-          displayMode: function () {
-            return true;
-          },
-          Variation: function () {
-            return vm.recommendedServices[vm.currIndex].serviceVariation;
-          },
-          Selection: function () {
-            var variations = angular.copy(vm.recommendedServices[vm.currIndex].variationSelection);
-            return variations ? variations.changes : null;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (selection) {
-        // store selected variations
-        vm.recommendedServices[vm.currIndex].variationSelection = {
-          changes: angular.copy(selection)
-        };
-
-        // if service was selected as a variation, update appropriate data
-        if (_.has(selection, 'service')) {
-          // rename service in recommended services tab
-          AltumAPI.AltumService.get({id: selection.service.value.altumService, populate: 'sites'}, function (altumService) {
-            vm.recommendedServices[vm.currIndex].variationSelection.name = altumService.name;
-
-            if (altumService.sites.length > 0) {
-              vm.recommendedServices[vm.currIndex].availableSites = altumService.sites;
-              vm.recommendedServices[vm.currIndex].siteDictionary = _.indexBy(altumService.sites, 'id');
-            }
-          });
-
-          // store altum/program service to be applied on save
-          vm.recommendedServices[vm.currIndex].variationSelection.altumService = selection.service.value.altumService;
-          vm.recommendedServices[vm.currIndex].variationSelection.programService = selection.service.value.programService;
-        }
-      });
-    }
-
-    /**
-     * openMap
-     * @description opens a modal window for the mapModal site picker
-     */
-    function openMap() {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'map-modal-window',
-        templateUrl: 'referral/triage/mapModal.tpl.html',
-        controller: 'MapModalController',
-        controllerAs: 'mapmodal',
-        bindToController: true,
-        size: 'lg',
-        resolve: {
-          selectedSite: function () {
-            if (!_.isEmpty(vm.selectedSite)) {
-              return AltumAPI.Site.get({
-                id: rec.recommendedServices[rec.currIndex].site,
-                populate: 'address'
-              }).$promise;
-            } else {
-              return null;
-            }
-          },
-          sites: function () {
-            return AltumAPI.Site.query({
-              where: {
-                id: _.pluck(vm.recommendedServices[vm.currIndex].availableSites, 'id')
-              }
-            }).$promise;
-          },
-          referral: function () {
-            return {
-              title: vm.referral.client_displayName,
-              addressID: vm.referral.client_address,
-              addressName: _.values(_.pick(vm.referral, 'client_address1', 'client_address2', 'client_city', 'client_province', 'client_postalCode', 'client_country')).join(' '),
-              latitude: vm.referral.client_latitude,
-              longitude: vm.referral.client_longitude
-            };
-          }
-        }
-      });
-
-      modalInstance.result.then(function (selectedSite) {
-        vm.recommendedServices[vm.currIndex].site = angular.copy(selectedSite.id);
-      });
     }
 
   }

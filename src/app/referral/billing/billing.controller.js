@@ -19,6 +19,13 @@
       groupBy: vm.DEFAULT_GROUP_BY,
       subGroupBy: vm.DEFAULT_SUBGROUP_BY
     };
+    vm.recommendationsConfig = {
+      showBillingInfo: true,
+      labels: {
+        'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_SERVICES',
+        'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.SERVICES_TO_BE_ADDED'
+      }
+    };
 
     vm.openServiceEditor = openServiceEditor;
 
@@ -41,7 +48,7 @@
             return AltumAPI.Service.get({id: service.id, populate: 'staff'}).$promise;
           },
           ApprovedServices: function() {
-            return angular.copy($scope.services.resource.items.approvedServices);
+            return angular.copy($scope.services.referral.approvedServices);
           }
         }
       });

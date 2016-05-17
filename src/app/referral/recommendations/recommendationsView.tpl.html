@@ -18,108 +18,18 @@
     <referral-summary referral-data="rec.referral"></referral-summary>
   </div>
 
-  <altum-notebook ng-if="rec.referralNotes" notes="rec.referralNotes"
-                  collection="{'referral': rec.referral.id}" email-info="rec.emailInfo"></altum-notebook>
+  <altum-notebook ng-if="rec.referralNotes"
+                  notes="rec.referralNotes"
+                  collection="{'referral': rec.referral.id}"
+                  email-info="rec.emailInfo"></altum-notebook>
 
   <div layout="row" layout-md="column">
 
     <div flex="25" flex-md="100" flex-order="{{rec.serviceOrder.serviceDetail}}" id="shared-detail-panel" layout="column">
       <!-- Selected Service Detail Panel -->
-      <div class="panel panel-primary" uib-collapse="!rec.recommendedServices[rec.currIndex]">
-        <div class="panel-heading">
-          <h3 class="panel-title" ng-if="rec.recommendedServices[rec.currIndex]">
-            <i class="fa fa-file-o"></i>
-            <b>Selected Service:</b> {{rec.recommendedServices[rec.currIndex].name}}
-          <span class="glyphicon glyphicon-transfer selectable pull-right"
-                ng-click="rec.swapPanelOrder()"></span>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].availableSites.length > 0">
-            <label>
-              <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
-              <span class="fa fa-map-marker fa-lg selectable" ng-click="rec.openMap()"></span>
-            </label>
-            <select ng-model="rec.recommendedServices[rec.currIndex].site" class="form-control"
-                    ng-options="site.id as site.name for site in rec.recommendedServices[rec.currIndex].availableSites">
-            </select>
-          </div>
-          <div class="form-group" ng-if="rec.recommendedServices[rec.currIndex].serviceVariation">
-            <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_VARIATIONS</label>
-            <span class="fa fa-cog fa-lg selectable" ng-click="rec.openVariationModal()"></span>
-            <br/>
-            <ul>
-              <li ng-repeat="(key, selection) in rec.recommendedServices[rec.currIndex].variationSelection.changes">
-                <div ng-switch="key">
-                  <span ng-switch-when="service">
-                    <b>Selected: </b> {{rec.recommendedServices[rec.currIndex].variationSelection.name}}
-                  </span>
-                  <span ng-switch-when="followup">
-                    <b>{{selection.title}}: </b> {{selection.name}}
-                  </span>
-                  <span ng-switch-when="physician">
-                    <b>{{selection.title}}: </b> {{selection.name}}
-                  </span>
-                  <span ng-switch-when="staff">
-                    <b>{{selection.title}}: </b> {{selection.name}}
-                  </span>
-                  <span ng-switch-when="timeframe">
-                    <b>{{selection.title}}: </b> {{selection.name}}
-                  </span>
-                  <span ng-switch-when="date">
-                    <b>{{selection.name}}: </b> {{selection.value | date:'fullDate'}}
-                  </span>
-                  <span ng-switch-when="measure">
-                    <b>{{selection.name}}: </b>
-                    <ul>
-                      <li ng-repeat="(measureKey, measureVal) in selection.value">
-                        <b>{{measureKey}}: </b> {{measureVal}}
-                      </li>
-                    </ul>
-                  </span>
-                  <span ng-switch-default>
-                    <b>{{selection.name}}: </b> {{selection.value | json}}
-                  </span>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <!-- Save for Scheduling -->
-          <!--<div class="form-group" flex ng-repeat="staffType in rec.recommendedServices[rec.currIndex].availableStaffTypes">-->
-          <!--<label translate>Select {{staffType.name}}:</label>-->
-          <!--<select-loader-->
-          <!--url="staff"-->
-          <!--query="staffType.baseQuery"-->
-          <!--is-atomic="false"-->
-          <!--is-disabled="false"-->
-          <!--ng-model="rec.recommendedServices[rec.currIndex].staffCollection[staffType.name]"-->
-          <!--ng-change="rec.setStaffSelections(rec.recommendedServices[rec.currIndex], staffType.name)"-->
-          <!--labels="displayName">-->
-          <!--</select-loader>-->
-          <!--</div>-->
-          <div class="form-group">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].approvalNeeded"
-                           ng-checked="rec.recommendedServices[rec.currIndex].approvalNeeded || rec.recommendedServices[rec.currIndex].approvalRequired"
-                           ng-disabled="rec.recommendedServices[rec.currIndex].approvalRequired"/>
-                    Approval {{rec.recommendedServices[rec.currIndex].approvalRequired ? "Required" : "Needed" }}
-                  </label>
-                </div>
-              </div>
-              <div class="col-md-6" ng-if="rec.recommendedServices[rec.currIndex].hasTelemedicine">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" ng-model="rec.recommendedServices[rec.currIndex].telemedicine" /> Via Telemedicine
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <service-detail referral="rec.referral"
+                      service="rec.recommendedServices[rec.currIndex]">
+      </service-detail>
       <!-- End Selected Service Detail Panel -->
 
       <!-- Shared Service Detail Selectors -->

@@ -1,7 +1,7 @@
 <md-tabs id="referral-tabs" md-dynamic-height md-border-bottom>
   <md-tab ng-disabled="!recPicker.referral.program" ng-click="recPicker.currIndex = null">
     <md-tab-label>
-      <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS</span>
+      <span translate="{{recPicker.config.labels.available}}"></span>
       ({{recPicker.availableServices.length}})
     </md-tab-label>
     <md-tab-body>
@@ -30,7 +30,13 @@
                   <div class="checkbox" ng-repeat="service in block">
                     <label>
                       <input type="checkbox" ng-checked="recPicker.isServiceRecommended(service)"
-                             ng-click="recPicker.toggleService(service)"/> {{service.name}}
+                             ng-click="recPicker.toggleService(service)"/>
+                      <span uib-popover-template="'referral/directives/recommendations-picker/service-billing-detail.tpl.html'"
+                            popover-enable="recPicker.config.showBillingInfo"
+                            popover-title="{{ 'APP.REFERRAL.BILLING.LABELS.BILLING_INFO' | translate}}"
+                            popover-trigger="mouseenter" popover-append-to-body="true">
+                        {{service.name}}
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -43,7 +49,7 @@
   </md-tab>
   <md-tab ng-disabled="!recPicker.referral.program || recPicker.recommendedServices.length === 0">
     <md-tab-label>
-      <span translate>APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES</span>
+      <span translate="{{recPicker.config.labels.recommended}}"></span>
       ({{recPicker.recommendedServices.length}})
     </md-tab-label>
     <md-tab-body>
