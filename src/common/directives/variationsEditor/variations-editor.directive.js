@@ -169,7 +169,7 @@
     /**
      * expandOnMouseHover
      * @description hover handler for expanding a node in the ui-tree.
-     * @param event, nodeScope
+     * @param event nodeScope
      */
     function expandOnMouseHover (event, nodeScope) {
       if (event.buttons) {
