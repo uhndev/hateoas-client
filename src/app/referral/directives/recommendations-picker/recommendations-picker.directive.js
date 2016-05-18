@@ -12,7 +12,7 @@
  *    </recommendations-picker>
  *
  */
-(function() {
+(function () {
   angular
     .module('altum.referral.recommendationsPicker', [
       'ui.bootstrap',

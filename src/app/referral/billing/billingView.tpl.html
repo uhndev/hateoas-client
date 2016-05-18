@@ -5,15 +5,19 @@
         <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
         <small>{{services.referral.client_displayName}}</small>
       </h2>
+
       <div id="Query" flex class="clearfix">
-        <form>
-          <div class="form-group no-margin has-feedback has-feedback-left">
-            <i class="no-top form-control-feedback fa fa-search"></i>
-            <input type="text" class="form-control"
-                   placeholder="{{ 'APP.REFERRAL.SERVICES.LABELS.SEARCH_REFERRED_SERVICES' | translate }}"
-                   ng-model="services.search"/>
-          </div>
-        </form>
+        <div class="input-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'APP.REFERRAL.SERVICES.LABELS.SEARCH_REFERRED_SERVICES' | translate }}"
+                 ng-model="services.search"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" ng-click="billing.openServicePicker()">
+              <i class="fa fa-plus"></i> <span translate>APP.REFERRAL.BILLING.LABELS.ADD_SERVICES</span>
+            </button>
+          </span>
+        </div>
         <br/>
       </div>
 
@@ -106,25 +110,5 @@
         </div>
       </uib-accordion-group>
     </uib-accordion>
-
-    <div layout="row">
-      <div flex="25" flex-md="100">
-        <service-detail referral="services.referral"
-                        service="services.recommendedServices[services.currIndex]">
-        </service-detail>
-      </div>
-      <div flex>
-        <recommendations-picker ng-if="services.referral"
-                                referral="services.referral"
-                                service="services.sharedService"
-                                curr-index="services.currIndex"
-                                available-services="services.referral.availableServices"
-                                recommended-services="services.recommendedServices"
-                                search-query="services.search"
-                                config="billing.recommendationsConfig">
-        </recommendations-picker>
-      </div>
-    </div>
-
   </div>
 </div>
