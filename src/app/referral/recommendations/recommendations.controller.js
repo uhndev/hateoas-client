@@ -32,12 +32,6 @@
     // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
 
-    // fields that are used during configuration of recommended services that will be deleted before POSTing
-    vm.configFields = [
-      'availableSites', 'availableStaffTypes', 'siteDictionary',
-      'staffCollection', 'serviceVariation', 'variationSelection'
-    ];
-
     // configuration object for the service-editor component
     vm.serviceEditorConfig = {
       disabled: {
@@ -127,35 +121,7 @@
     function saveServices() {
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
-          // for recommended services that have variations selected, apply to object to be sent to server
-          if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
-            _.each(service.variationSelection.changes, function (value, key) {
-              switch (key) {
-                case 'service':
-                  service.altumService = service.variationSelection.altumService;
-                  service.programService = service.variationSelection.programService;
-                  service.name = service.variationSelection.name;
-                  break;
-                case 'followup':
-                  service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
-                  service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
-                  break;
-                default:
-                  // otherwise, variation is of type number/text/date/physician/staff/timeframe/measure
-                  // where the respective backend column name will be <type>DetailName and value will be <type>Detail
-                  service[key + 'DetailName'] = service.variationSelection.changes[key].name;
-                  service[key + 'Detail'] = service.variationSelection.changes[key].value;
-                  break;
-              }
-            });
-          }
-
-          // clear config data before POSTing
-          _.each(vm.configFields, function (field) {
-            delete service[field];
-          });
-
-          var serviceObj = new ReferralServices(service);
+          var serviceObj = new ReferralServices(RecommendationsService.prepareService(service));
           return serviceObj.$save();
         }))
         .then(function (data) {

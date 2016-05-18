@@ -9,13 +9,18 @@
       'name', 'altumService', 'programService', 'serviceCategory', 'serviceCategoryName',
       'serviceDate', 'serviceVariation', 'site', 'hasTelemedicine', 'approvalNeeded', 'approvalRequired'
     ])
+    .constant('CONFIG_FIELDS', [
+      'availableSites', 'availableStaffTypes', 'siteDictionary',
+      'staffCollection', 'serviceVariation', 'variationSelection'
+    ])
     .service('RecommendationsService', RecommendationsService);
 
-  RecommendationsService.$inject = ['FIELDS'];
+  RecommendationsService.$inject = ['FIELDS', 'CONFIG_FIELDS'];
 
-  function RecommendationsService(FIELDS) {
+  function RecommendationsService(FIELDS, CONFIG_FIELDS) {
     var service = {
       isValidFormat: isValidFormat,
+      prepareService: prepareService,
       getSharedServices: getSharedServices,
       parseAvailableServices: parseAvailableServices
     };
@@ -39,6 +44,43 @@
     }
 
     /**
+     * prepareService
+     * @description Utility function for preparing service objects prior to being POSTed to the server
+     * @param service
+     */
+    function prepareService(service) {
+      // for recommended services that have variations selected, apply to object to be sent to server
+      if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
+        _.each(service.variationSelection.changes, function (value, key) {
+          switch (key) {
+            case 'service':
+              service.altumService = service.variationSelection.altumService;
+              service.programService = service.variationSelection.programService;
+              service.name = service.variationSelection.name;
+              break;
+            case 'followup':
+              service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
+              service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
+              break;
+            default:
+              // otherwise, variation is of type number/text/date/physician/staff/timeframe/measure
+              // where the respective backend column name will be <type>DetailName and value will be <type>Detail
+              service[key + 'DetailName'] = service.variationSelection.changes[key].name;
+              service[key + 'Detail'] = service.variationSelection.changes[key].value;
+              break;
+          }
+        });
+      }
+
+      // clear fields that are used during configuration of recommended services that will be deleted before POSTing
+      _.each(CONFIG_FIELDS, function (field) {
+        delete service[field];
+      });
+
+      return service;
+    }
+
+    /**
      * getSharedServices
      * @description Returns shared service data for all prospective recommended services
      * @param sharedService
@@ -53,7 +95,7 @@
         prognosis: sharedService.prognosis || null,
         prognosisTimeframe: sharedService.prognosisTimeframe || null,
         visitService: sharedService.visitService || null,
-        serviceDate: sharedService.serviceDate || null
+        serviceDate: sharedService.serviceDate || new Date()
       };
     }
 

@@ -28,15 +28,12 @@
               <div flex ng-repeat="block in groupServices | chunkBy: ((groupServices.length / 3) < 1 ? 1 : (groupServices.length / 3))">
                 <div layout="column">
                   <div class="checkbox" ng-repeat="service in block">
-                    <label>
+                    <label uib-popover-template="'referral/directives/recommendations-picker/service-billing-detail.tpl.html'"
+                           popover-enable="recPicker.config.showBillingInfo"
+                           popover-title="{{ 'APP.REFERRAL.BILLING.LABELS.BILLING_INFO' | translate}}"
+                           popover-trigger="mouseenter">
                       <input type="checkbox" ng-checked="recPicker.isServiceRecommended(service)"
-                             ng-click="recPicker.toggleService(service)"/>
-                      <span uib-popover-template="'referral/directives/recommendations-picker/service-billing-detail.tpl.html'"
-                            popover-enable="recPicker.config.showBillingInfo"
-                            popover-title="{{ 'APP.REFERRAL.BILLING.LABELS.BILLING_INFO' | translate}}"
-                            popover-trigger="mouseenter" popover-append-to-body="true">
-                        {{service.name}}
-                      </span>
+                             ng-click="recPicker.toggleService(service)"/> {{service.name}}
                     </label>
                   </div>
                 </div>
@@ -67,7 +64,7 @@
                 <span ng-if="service.availableSites.length > 0 && service.site">
                   ({{service.siteDictionary[service.site].name}})
                 </span>
-                <span class="text-danger" ng-if="service.availableSites.length > 0 && !service.site">
+                <span class="text-danger" ng-if="service.availableSites.length > 0 && !service.site && !recPicker.config.showBillingInfo">
                   * (select site)
                 </span>
               </span>
