@@ -1,0 +1,90 @@
+<md-tabs id="referral-tabs" md-dynamic-height md-border-bottom>
+  <md-tab ng-disabled="!recPicker.referral.program" ng-click="recPicker.currIndex = null">
+    <md-tab-label>
+      <span translate="{{recPicker.config.labels.available}}"></span>
+      ({{recPicker.availableServices.length}})
+    </md-tab-label>
+    <md-tab-body>
+      <p ng-show="!recPicker.referral.program">
+        Please select a program to begin recommending services.
+      </p>
+
+      <!-- List View -->
+      <md-content layout="column" layout-wrap layout-margin layout-padding ng-show="recPicker.referral.program">
+        <uib-accordion close-others="false">
+          <uib-accordion-group
+            ng-repeat="(groupKey, groupServices) in recPicker.availableServices | fuzzy: recPicker.searchQuery | groupBy: 'serviceCategory'"
+            ng-init="recPicker.accordionStatus[groupKey] = true" is-open="recPicker.accordionStatus[groupKey]"
+            panel-class="panel-info">
+            <uib-accordion-heading>
+              <i class="glyphicon" ng-class="{
+                'glyphicon-chevron-right': !recPicker.accordionStatus[groupKey],
+                'glyphicon-chevron-down': recPicker.accordionStatus[groupKey]
+              }"></i>
+              {{groupServices[0].serviceCategoryName}}
+              <span class="pull-right badge">{{groupServices.length}}</span>
+            </uib-accordion-heading>
+            <div layout="row" layout-sm="column">
+              <div flex ng-repeat="block in groupServices | chunkBy: ((groupServices.length / 3) < 1 ? 1 : (groupServices.length / 3))">
+                <div layout="column">
+                  <div class="checkbox" ng-repeat="service in block">
+                    <label>
+                      <input type="checkbox" ng-checked="recPicker.isServiceRecommended(service)"
+                             ng-click="recPicker.toggleService(service)"/>
+                      <span uib-popover-template="'referral/directives/recommendations-picker/service-billing-detail.tpl.html'"
+                            popover-enable="recPicker.config.showBillingInfo"
+                            popover-title="{{ 'APP.REFERRAL.BILLING.LABELS.BILLING_INFO' | translate}}"
+                            popover-trigger="mouseenter" popover-append-to-body="true">
+                        {{service.name}}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </uib-accordion-group>
+        </uib-accordion>
+      </md-content>
+    </md-tab-body>
+  </md-tab>
+  <md-tab ng-disabled="!recPicker.referral.program || recPicker.recommendedServices.length === 0">
+    <md-tab-label>
+      <span translate="{{recPicker.config.labels.recommended}}"></span>
+      ({{recPicker.recommendedServices.length}})
+    </md-tab-label>
+    <md-tab-body>
+      <!-- Recommended Services Tab -->
+      <md-content layout="row" layout-margin>
+        <!-- List of Recommended Services -->
+        <div class="list-group" flex>
+          <div ng-repeat="service in recPicker.recommendedServices"
+               ng-keydown="recPicker.navigateKey($event, $index)" focus-if="$index === recPicker.currIndex"
+               ng-click="recPicker.selectServiceDetail($index)"
+               class="list-group-item service-item selectable"
+               ng-class="{ 'service-active': $index === recPicker.currIndex }">
+              <span>
+                {{service.variationSelection.name || service.name}}
+                <span ng-if="service.availableSites.length > 0 && service.site">
+                  ({{service.siteDictionary[service.site].name}})
+                </span>
+                <span class="text-danger" ng-if="service.availableSites.length > 0 && !service.site">
+                  * (select site)
+                </span>
+              </span>
+              <span class="badge selectable" type="button"
+                    ng-hide="service == recPicker.recommendedServices[recPicker.currIndex]"
+                    ng-click="recPicker.toggleService(service, $event)">
+                <i class="fa fa-times"></i>
+              </span>
+              <span class="badge selectable" type="button"
+                    ng-hide="service == recPicker.recommendedServices[recPicker.currIndex]"
+                    ng-click="recPicker.duplicateService(service, $index, $event)">
+                <i class="fa fa-files-o"></i>
+              </span>
+          </div>
+        </div>
+        <!-- End List of Recommended Services -->
+      </md-content>
+    </md-tab-body>
+  </md-tab>
+</md-tabs>

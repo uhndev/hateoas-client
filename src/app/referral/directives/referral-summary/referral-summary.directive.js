@@ -32,9 +32,8 @@
     var vm = this;
 
     // wait for data to load, then create overview object
-    var unregister = $scope.$watch('summary.referralData', function (oldVal, newVal) {
-      if (oldVal !== newVal) {
-        vm.referralData = vm.referralData || {};
+    var unregister = $scope.$watch('summary.referralData', function (newVal, oldVal) {
+      if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
         // data columns for referral overview table
         vm.referralOverview = {
           'COMMON.MODELS.CLIENT.MRN': vm.referralData.client_mrn,

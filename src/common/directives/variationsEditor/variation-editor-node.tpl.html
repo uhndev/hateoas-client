@@ -1,4 +1,4 @@
-<div ui-tree-handle class="tree-node tree-node-content">
+<div ui-tree-handle class="tree-node tree-node-content" ng-init="varedit.parseNode(node)">
   <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag
      ng-click="varedit.toggle(this)">
         <span class="glyphicon" ng-class="{
@@ -41,12 +41,27 @@
     </a>
   </ng-form>
 
-  <ng-form name="this.nodeForm" ng-show="node.data.preset && visible" data-nodrag novalidate>
+  <ng-form name="this.nodeForm" class="" ng-show="node.data.preset && visible" data-nodrag novalidate>
     <hr/>
     <div ng-if="node.type !== 'none' && node.data.category === 'basic'"
          class="form-group" ng-class="{'has-error': this.nodeForm.metaData.$invalid}">
       <label>{{node.data.name}}</label>
-      <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData" ng-required="node.preset"/>
+
+      <div class="input-group" ng-repeat="(key,presetValue) in node.data.values">
+        <input  type="{{node.type}}" ng-model="presetValue" class="form-control" name="metaData" ng-required="node.preset"/>
+        <a class="btn btn-primary btn-sm variation-btn input-group-addon" ng-click="varedit.removePreset(node,key)">
+          <span class="glyphicon glyphicon-minus"></span>
+        </a>
+      </div>
+      <div>
+        <label>New Preset</label>
+      </div>
+      <div class="input-group">
+      <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData" ng-required="node.preset" />
+      <a class="btn btn-primary btn-sm variation-btn input-group-addon" ng-click="varedit.newPreset(node,node.data.value)">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+        </div>
     </div>
     <ng-form name="nodeDetailForm" class="form-horizontal">
       <div class="form-group" ng-if="node.data.category === 'json' || node.data.category === 'jsonmodel'"

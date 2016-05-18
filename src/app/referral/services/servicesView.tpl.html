@@ -2,7 +2,7 @@
   <div layout="column">
     <h2 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
-      <small>{{services.resource.items.client_displayName}}</small>
+      <small>{{services.referral.client_displayName}}</small>
     </h2>
     <div id="Query" flex class="clearfix">
       <form>
@@ -16,7 +16,7 @@
       <br/>
     </div>
 
-    <referral-summary referral-data="services.resource.items"
+    <referral-summary referral-data="services.referral"
                       bound-groups="services.boundGroupTypes"
                       group-types="services.groupTypes"
                       group-fields="services.groupFields">
@@ -24,7 +24,11 @@
 
   </div>
 
-  <altum-notebook ng-if="services.referralNotes" notes="services.referralNotes.notes" collection="{'referral': services.resource.items.id}"></altum-notebook>
+  <altum-notebook ng-if="services.referralNotes"
+                  notes="services.referralNotes.notes"
+                  collection="{'referral': services.referral.id}"
+                  email-info="services.emailInfo">
+  </altum-notebook>
 
   <uib-accordion close-others="false">
     <uib-accordion-group ng-repeat="(groupKey, groupedServices) in services.services | fuzzy: services.search | groupBy: services.boundGroupTypes.groupBy"
