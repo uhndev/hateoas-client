@@ -1,0 +1,18 @@
+<div ng-controller="ClientController as client" ng-cloak>
+
+    <h2 id="Title">
+        Client Overview
+    </h2>
+
+    <br/>
+
+
+    <simple-table
+            rows="ref.referralInfo.rows"
+            table-data="ref.referralInfo.tableData">
+    </simple-table>
+
+
+    <altum-notebook notes="client.notes" collection="{'client': client.client.id}" email-info="client.emailInfo"></altum-notebook>
+
+</div>

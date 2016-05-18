@@ -1,9 +1,10 @@
-(function () {
+﻿(function () {
   'use strict';
   angular
     .module('altum.client', [
       'dados.common.services.altum',
-      'altum.client.register.controller'
+      'altum.client.register.controller',
+      'altum.client.controller'
     ])
     .config(['$stateProvider', function ($stateProvider) {
 
