@@ -144,6 +144,7 @@
     vm.parseNode = parseNode;
     vm.newPreset = newPreset;
     vm.removePreset = removePreset;
+    vm.expandOnMouseHover = expandOnMouseHover;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -163,6 +164,17 @@
      */
     function toggle(scope) {
       scope.toggle();
+    }
+
+    /**
+     * expandOnMouseHover
+     * @description hover handler for expanding a node in the ui-tree.
+     * @param event, nodeScope
+     */
+    function expandOnMouseHover (event, nodeScope) {
+      if (event.buttons) {
+        nodeScope.expand();
+      }
     }
 
     /**
