@@ -39,17 +39,24 @@
     function openServiceEditor(service) {
       var modalInstance = $uibModal.open({
         animation: true,
-        windowClass: 'variations-modal-window',
         templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
         controller: 'ServiceModalController',
         controllerAs: 'svcmodal',
         bindToController: true,
         resolve: {
           Service: function() {
-            return AltumAPI.Service.get({id: service.id, populate: 'staff'}).$promise;
+            return AltumAPI.Service.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
           },
           ApprovedServices: function() {
             return angular.copy($scope.services.referral.approvedServices);
+          },
+          ServiceEditorConfig: function() {
+            return {
+              disabled: {
+                currentCompletion: true // no need to have completion field when editing
+              },
+              required: {}
+            };
           }
         }
       });
@@ -132,7 +139,6 @@
       });
 
       modalInstance.result.then(function (adhocServices) {
-        console.log(adhocServices);
         $scope.services.init();
       });
     }

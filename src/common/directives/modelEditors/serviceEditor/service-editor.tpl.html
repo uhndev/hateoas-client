@@ -137,11 +137,22 @@
         <ui-select-match placeholder="Select Service Type">
           {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
         </ui-select-match>
-        <ui-select-choices repeat="service.id as service in svc.approvedServices | filter: $select.search">
+        <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
           <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
           <span>({{service.approvalDate | date:'short'}})</span>
         </ui-select-choices>
       </ui-select>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="!svc.configuration.disabled.visitService && !svc.configuration.disabled.currentCompletion && svc.service.visitService">
+    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE_STATUS</label>
+    <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
+    <div ng-class="{'col-md-9': svc.horizontal}">
+      <service-status service="svc.service.visitService"
+                      status-type="completion"
+                      placement="right">
+      </service-status>
     </div>
   </div>
 

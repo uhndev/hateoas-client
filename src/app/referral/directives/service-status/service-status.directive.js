@@ -15,9 +15,9 @@
     .component('serviceStatus', {
       bindings: {
         service: '=',
-        statuses: '=',
-        onUpdate: '&',
-        statusType: '@'  // approval or completion
+        onUpdate: '&?',
+        statusType: '@', // approval or completion
+        placement: '@'   // placement of popover
       },
       templateUrl: 'referral/directives/service-status/service-status.tpl.html',
       controller: 'ServiceStatusController',

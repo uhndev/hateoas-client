@@ -109,9 +109,9 @@
         });
       }
 
-      // set visitService to just ID
-      if (_.has(vm.service.visitService, 'id') && !vm.configuration.disabled.visitService) {
-        vm.service.visitService = vm.service.visitService.id;
+      // set visitService with additional detail from servicedetail
+      if (vm.service.visitService && !vm.configuration.disabled.visitService) {
+        vm.service.visitService = _.find(vm.approvedServices, {id: vm.service.visitService.id});
       }
 
       // populate service variations if applicable
