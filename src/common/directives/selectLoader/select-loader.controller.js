@@ -76,7 +76,7 @@
 
       //assigns allChoices with all available items within the select object
       promise.then(function(data) {
-        if (data.items.length >= maxShowAll) {
+        if (data.total >= maxShowAll) {
           vm.belowLimit = false;
         }
         vm.allChoices = data.items;
