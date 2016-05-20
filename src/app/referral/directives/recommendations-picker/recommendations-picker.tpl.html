@@ -28,12 +28,16 @@
               <div flex ng-repeat="block in groupServices | chunkBy: ((groupServices.length / 3) < 1 ? 1 : (groupServices.length / 3))">
                 <div layout="column">
                   <div class="checkbox" ng-repeat="service in block">
-                    <label uib-popover-template="'referral/directives/recommendations-picker/service-billing-detail.tpl.html'"
-                           popover-enable="recPicker.config.showBillingInfo"
-                           popover-title="{{ 'APP.REFERRAL.BILLING.LABELS.BILLING_INFO' | translate}}"
-                           popover-trigger="mouseenter">
+                    <label>
                       <input type="checkbox" ng-checked="recPicker.isServiceRecommended(service)"
-                             ng-click="recPicker.toggleService(service)"/> {{service.name}}
+                             ng-click="recPicker.toggleService(service)"/>
+                      <span ng-show="recPicker.config.showBillingInfo">
+                        <b>{{service.programServiceCode}} &middot;</b>
+                        <small>{{service.variationSelection.name || service.name}}</small>
+                      </span>
+                      <span ng-hide="recPicker.config.showBillingInfo">
+                        {{service.variationSelection.name || service.name}}
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -60,7 +64,14 @@
                class="list-group-item service-item selectable"
                ng-class="{ 'service-active': $index === recPicker.currIndex }">
               <span>
-                {{service.variationSelection.name || service.name}}
+                <span ng-show="recPicker.config.showBillingInfo">
+                  <b>{{service.programServiceCode}} &middot;</b>
+                  <small>{{service.variationSelection.name || service.name}}</small>
+                </span>
+                <span ng-hide="recPicker.config.showBillingInfo">
+                  {{service.variationSelection.name || service.name}}
+                </span>
+
                 <span ng-if="service.availableSites.length > 0 && service.site">
                   ({{service.siteDictionary[service.site].name}})
                 </span>

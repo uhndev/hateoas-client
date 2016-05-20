@@ -30,7 +30,7 @@
         availableServices: '=',   // array of available services to pick from
         recommendedServices: '=', // array of selected services to recommend
         searchQuery: '=',         // string bound for fuzzy searching available services,
-        config: '<?'              // object containing two attributes which can configure the picker:
+        config: '=?'              // object containing two attributes which can configure the picker:
         // 1) configurable labels for each recommendation tab title
         // 2) boolean flag denoting whether programService information should be available
       },
