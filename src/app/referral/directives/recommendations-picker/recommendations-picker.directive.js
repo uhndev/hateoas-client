@@ -31,8 +31,17 @@
         recommendedServices: '=', // array of selected services to recommend
         searchQuery: '=',         // string bound for fuzzy searching available services,
         config: '=?'              // object containing two attributes which can configure the picker:
-        // 1) configurable labels for each recommendation tab title
-        // 2) boolean flag denoting whether programService information should be available
+        /**
+         * 1) configurable labels for each recommendation tab title
+         * 2) object configurations for toggling different ways of displaying services
+         *    {
+         *      billing: {
+         *        programServiceName: true,
+         *        programServiceCode: false
+         *      },
+         *      ...
+         *    }
+         */
       },
       controller: 'RecommendationsPickerController',
       controllerAs: 'recPicker',
@@ -55,7 +64,6 @@
 
     // default configuration for the recommendations-picker
     vm.config = vm.config || {
-      showBillingInfo: false,
       labels: {
         'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS',
         'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES'

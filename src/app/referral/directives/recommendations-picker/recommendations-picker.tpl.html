@@ -31,13 +31,7 @@
                     <label>
                       <input type="checkbox" ng-checked="recPicker.isServiceRecommended(service)"
                              ng-click="recPicker.toggleService(service)"/>
-                      <span ng-show="recPicker.config.showBillingInfo">
-                        <b>{{service.programServiceCode}} &middot;</b>
-                        <small>{{service.variationSelection.name || service.name}}</small>
-                      </span>
-                      <span ng-hide="recPicker.config.showBillingInfo">
-                        {{service.variationSelection.name || service.name}}
-                      </span>
+                      <span ng-include="'referral/directives/recommendations-picker/recommendations-service-name.tpl.html'"></span>
                     </label>
                   </div>
                 </div>
@@ -64,14 +58,7 @@
                class="list-group-item service-item selectable"
                ng-class="{ 'service-active': $index === recPicker.currIndex }">
               <span>
-                <span ng-show="recPicker.config.showBillingInfo">
-                  <b>{{service.programServiceCode}} &middot;</b>
-                  <small>{{service.variationSelection.name || service.name}}</small>
-                </span>
-                <span ng-hide="recPicker.config.showBillingInfo">
-                  {{service.variationSelection.name || service.name}}
-                </span>
-
+                <span ng-include="'referral/directives/recommendations-picker/recommendations-service-name.tpl.html'"></span>
                 <span ng-if="service.availableSites.length > 0 && service.site">
                   ({{service.siteDictionary[service.site].name}})
                 </span>

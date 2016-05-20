@@ -4,20 +4,22 @@
 <div class="modal-body">
   <div layout="column">
     <div id="Query" flex class="clearfix">
-      <form>
-        <div class="form-group no-margin has-feedback has-feedback-left">
-          <i class="no-top form-control-feedback fa fa-search"></i>
-          <input type="text" class="form-control"
-                 placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
-                 ng-model="adhoc.searchQuery" />
-        </div>
-
-        <div class="checkbox pull-right">
-          <label>
-            <input type="checkbox" ng-model="adhoc.picker.config.showBillingInfo"/> {{'APP.REFERRAL.BILLING.LABELS.TOGGLE_BILLING_CODES' | translate}}
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" class="form-control"
+               placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
+               ng-model="adhoc.searchQuery" />
+        <span class="input-group-addon">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="adhoc.picker.config.billing.programServiceCode"/> {{'APP.REFERRAL.BILLING.LABELS.BILLING_CODES' | translate}}
           </label>
-        </div>
-      </form>
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="adhoc.picker.config.billing.programServiceName"/> {{'APP.REFERRAL.BILLING.LABELS.PROGRAM_SERVICE_NAMES' | translate}}
+          </label>
+        </span>
+      </div>
       <br/>
     </div>
 
