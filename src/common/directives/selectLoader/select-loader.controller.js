@@ -28,6 +28,7 @@
     vm.labels = vm.labels || 'name';
     vm.skip = 0;
     vm.limit = 20;
+    vm.allChoices = [];
 
     // bindable methods
     vm.parseValues = parseValues;
@@ -70,6 +71,10 @@
 
       // initial request for when no ids passed in
       var promise = SelectService.loadSelect(vm.href, vm.baseQuery, {limit: vm.limit}, query);
+      //assigns allChoices with all available items within the select object
+      promise.then(function(data) {
+        vm.allChoices = data.items;
+      });
 
       var searchIds = parseValues(vm.values);
       var hasIds = (vm.isAtomic) ? _.isNumber(searchIds) : !_.isEmpty(searchIds);
