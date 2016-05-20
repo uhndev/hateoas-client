@@ -11,6 +11,12 @@
                  placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
                  ng-model="adhoc.searchQuery" />
         </div>
+
+        <div class="checkbox pull-right">
+          <label>
+            <input type="checkbox" ng-model="adhoc.picker.config.showBillingInfo"/> {{'APP.REFERRAL.BILLING.LABELS.TOGGLE_BILLING_CODES' | translate}}
+          </label>
+        </div>
       </form>
       <br/>
     </div>

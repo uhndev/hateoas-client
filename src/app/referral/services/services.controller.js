@@ -24,13 +24,11 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralNotes = [];
+    vm.accordionStatus = {};
     vm.boundGroupTypes = {
       groupBy: vm.DEFAULT_GROUP_BY,
       subGroupBy: vm.DEFAULT_SUBGROUP_BY
     };
-    vm.approvalStatuses = AltumAPI.Status.query({where: {category: 'approval'}});
-    vm.completionStatuses = AltumAPI.Status.query({where: {category: 'completion'}});
-    vm.accordionStatus = {};
 
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [

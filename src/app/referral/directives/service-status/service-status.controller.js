@@ -43,22 +43,27 @@
     })
     .controller('ServiceStatusController', ServiceStatusController);
 
-  ServiceStatusController.$inject = ['$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
+  ServiceStatusController.$inject = ['$scope', '$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
 
-  function ServiceStatusController($resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
+  function ServiceStatusController($scope, $resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
     var vm = this;
 
     // bindable variables
     var previousStatus = null;
     var statusType = vm.statusType || 'approval';
     vm.defaults = STATUS_TYPES[statusType];
+    vm.onUpdate = vm.onUpdate || fetchStatusHistory;
     vm.currentType = vm.defaults.currentType;
     vm.collection = vm.defaults.collection;
     vm.currentStatus = vm.defaults.currentStatus;
     vm.statusName = vm.defaults.statusName;
+    vm.placement = vm.placement || 'left';
 
     vm.service = vm.service || {};
-    vm.statuses = vm.statuses || {};
+    AltumAPI.Status.query({where: {category: vm.statusType}}, function (statuses) {
+      // get dictionary of statuses
+      vm.statuses = _.indexBy(statuses, 'id');
+    });
     vm.approvalPopover = {
       templateUrl: 'referral/directives/service-status/service-status-detail.tpl.html',
       title: _.startCase(statusType) + ' History'
@@ -74,21 +79,26 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      // get dictionary of statuses
-      vm.statuses = _.indexBy(vm.statuses, 'id');
-
       // check if passed in service object with id without populated approvals/completions, then fetch from server
       if (!vm.service.approvals || !vm.service.completion) {
-        AltumAPI.Service.get({id: vm.service.id, populate: vm.defaults.populate}, function (data) {
-          if (data[vm.collection].length > 0) {
-            previousStatus = data[vm.currentType].status;
-            vm.service[vm.currentStatus] = data[vm.currentType].status;
-            vm.service.iconClass = vm.statuses[data[vm.currentType].status].iconClass;
-            vm.service.rowClass = vm.statuses[data[vm.currentType].status].rowClass;
-            vm.service[vm.collection] = angular.copy(_.sortBy(data[vm.collection], 'createdAt'));
-          }
-        });
+        fetchStatusHistory();
       }
+    }
+
+    /**
+     * fetchStatusHistory
+     * @description Utility function for fetching a service's status history and display classes
+     */
+    function fetchStatusHistory() {
+      AltumAPI.Service.get({id: vm.service.id, populate: vm.defaults.populate}, function (data) {
+        if (data[vm.collection].length > 0) {
+          previousStatus = data[vm.currentType].status;
+          vm.service[vm.currentStatus] = data[vm.currentType].status;
+          vm.service.iconClass = vm.statuses[data[vm.currentType].status].iconClass;
+          vm.service.rowClass = vm.statuses[data[vm.currentType].status].rowClass;
+          vm.service[vm.collection] = angular.copy(_.sortBy(data[vm.collection], 'createdAt'));
+        }
+      });
     }
 
     /**
@@ -171,6 +181,19 @@
         vm.onUpdate();
       });
     }
+
+    /**
+     * watchServiceChange
+     * @description Watches service ids which is changed, should update the status history of the newly selected service
+     * @param newVal
+     * @param oldVal
+     */
+    function watchServiceChange(newVal, oldVal) {
+      if (newVal && newVal.id !== oldVal.id && _.has(newVal, 'id')) {
+        fetchStatusHistory();
+      }
+    }
+    $scope.$watch('serviceStatus.service', watchServiceChange);
   }
 
 })();
