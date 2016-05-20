@@ -1,10 +1,13 @@
     <div id="matrix">
+      <select id="filterSelect" ng-model="distance.initialSelection">
+        <option value ="distance">Distance</option>
+        <option value ="location">Alphabetical</option>
+      </select>
+
       <table id="distanceToSites" class="SiteDistanceTable">
-        <tr>
-          <td ng-repeat="site in distance.sites" ng-click="distance.selectedSite=site;">{{site.displayName}}</td>
-        </tr>
-        <tr>
-          <td ng-repeat="destination in distance.distanceMatrix.rows[0].elements">{{destination.distance.text}}</td>
+        <tr ng-repeat="distanceData in distance.distanceDatas | orderBy : distance.initialSelection">
+          <td ng-click="distance.selectedSite=distanceData.site;">{{ distanceData.location }}</td>
+          <td>{{ distanceData.distance }} KM</td>
         </tr>
       </table>
     </div>
