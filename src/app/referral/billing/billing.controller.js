@@ -52,6 +52,7 @@
           },
           ServiceEditorConfig: function() {
             return {
+              loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
                 currentCompletion: true // no need to have completion field when editing
               },

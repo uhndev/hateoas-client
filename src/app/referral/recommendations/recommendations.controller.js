@@ -34,6 +34,7 @@
 
     // configuration object for the service-editor component
     vm.serviceEditorConfig = {
+      loadVisitServiceData: true,
       disabled: {
         altumService: true,
         programService: true,

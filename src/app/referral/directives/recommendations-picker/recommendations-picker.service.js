@@ -10,7 +10,7 @@
       'serviceDate', 'serviceVariation', 'site', 'hasTelemedicine', 'approvalNeeded', 'approvalRequired'
     ])
     .constant('CONFIG_FIELDS', [
-      'availableSites', 'availableStaffTypes', 'siteDictionary',
+      'availableSites', 'siteDictionary',
       'staffCollection', 'serviceVariation', 'variationSelection'
     ])
     .service('RecommendationsService', RecommendationsService);
