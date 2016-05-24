@@ -128,7 +128,7 @@
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(_.merge(service, RecommendationsService.getSharedServices(vm.service)));
-        var toPopulate = ['sites', 'staffTypes'];
+        var toPopulate = ['sites'];
         if (service.serviceVariation) { // populate variations if applicable
           toPopulate.push('serviceVariation');
         }
@@ -146,14 +146,7 @@
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
           }
 
-          if (data.staffTypes.length > 0) {
-            _.last(vm.recommendedServices).staff = [];
-            _.last(vm.recommendedServices).staffCollection = {};
-            _.last(vm.recommendedServices).availableStaffTypes = _.map(data.staffTypes, function (staffType) {
-              staffType.baseQuery = {staffType: staffType.id};
-              return staffType;
-            });
-          }
+          _.last(vm.recommendedServices).staff = vm.service.staff;
         });
       }
     }

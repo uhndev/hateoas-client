@@ -133,7 +133,7 @@
     <div ng-class="{'col-md-9': svc.horizontal}">
       <ui-select name="visitService" ng-model="svc.service.visitService"
                  ng-required="svc.configuration.required.visitService"
-                 ng-change="svc.setServiceSelections('visitService')" theme="bootstrap">
+                 ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
         <ui-select-match placeholder="Select Service Type">
           {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
         </ui-select-match>

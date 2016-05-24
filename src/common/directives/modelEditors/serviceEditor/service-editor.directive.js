@@ -57,6 +57,7 @@
     // bindable methods
     vm.fetchAltumServiceData = fetchAltumServiceData;
     vm.setServiceSelections = setServiceSelections;
+    vm.setVisitServiceSelections = setVisitServiceSelections;
     vm.setStaffSelections = setStaffSelections;
     vm.hasTimeframe = hasTimeframe;
     vm.openMap = openMap;
@@ -68,6 +69,7 @@
     function init() {
       // merge in default settings
       vm.configuration = {
+        loadVisitServiceData: vm.configuration.loadVisitServiceData,
         disabled: _.merge(defaultConfig.disabled, vm.configuration.disabled),
         required: _.merge(defaultConfig.required, vm.configuration.required)
       };
@@ -130,7 +132,16 @@
       }
 
       // sort staff into respective collections
-      _.each(vm.service.staff, function (staff) {
+      staffSort(vm.service.staff);
+    }
+
+    /**
+     * staffSort
+     * @description Helper function to sort staff arrays into staffCollections which will be bound to dropdowns
+     * @param staffCollection
+     */
+    function staffSort(staffCollection) {
+      _.each(staffCollection, function (staff) {
         if (!_.isArray(vm.service.staffCollection[staff.staffTypeDisplayName])) {
           vm.service.staffCollection[staff.staffTypeDisplayName] = [];
         }
@@ -163,6 +174,25 @@
         recommendedService[attribute] = vm.service[attribute];
         return recommendedService;
       });
+    }
+
+    /**
+     * setVisitServiceSelections
+     * @description Sets visit fields based on past visit services and propagates selections
+     */
+    function setVisitServiceSelections() {
+      if (vm.configuration.loadVisitServiceData) {
+        vm.service.staffCollection = {};
+        AltumAPI.Service.get({id: vm.service.visitService.id, populate: 'staff'}, function (visitService) {
+          staffSort(visitService.staff);
+          _.each(['physician', 'staff', 'workStatus', 'prognosis', 'prognosisTimeframe'], function (field) {
+            vm.service[field] = visitService[field];
+          });
+          setServiceSelections('visitService');
+        });
+      } else {
+        setServiceSelections('visitService');
+      }
     }
 
     /**
