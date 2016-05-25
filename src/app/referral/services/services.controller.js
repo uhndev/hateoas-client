@@ -8,15 +8,15 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'altum.referral.serviceApproval'
+      'altum.referral.serviceStatus'
     ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'toastr'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, toastr) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -24,25 +24,32 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     vm.referralNotes = [];
-    vm.groupBy = vm.DEFAULT_GROUP_BY;
-    vm.subGroupBy = vm.DEFAULT_SUBGROUP_BY;
-    vm.statuses = AltumAPI.Status.query({where: {category: 'approval'}});
     vm.accordionStatus = {};
+    vm.boundGroupTypes = {
+      groupBy: vm.DEFAULT_GROUP_BY,
+      subGroupBy: vm.DEFAULT_SUBGROUP_BY
+    };
 
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [
       {
-        name: 'workStatus',
+        name: 'workStatusName',
         prompt: 'COMMON.MODELS.SERVICE.WORK_STATUS'
       },
       {
-        name: 'prognosis',
+        name: 'prognosisName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS'
       },
       {
-        name: 'prognosisTimeframe',
+        name: 'prognosisTimeframeName',
         prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS_TIMEFRAME'
       }
+    ];
+
+    // array of options denoting which groups can be bound to (vm.boundGroupTypes.groupBy)
+    vm.groupTypes = [
+      {name: 'groupBy', prompt: 'Group'},
+      {name: 'subGroupBy', prompt: 'Subgroup'}
     ];
 
     // data columns for main groups (visits)
@@ -54,6 +61,10 @@
       {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+      },
+      {
+        name: 'completionStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
       },
       {
         name: 'siteName',
@@ -94,6 +105,7 @@
     ];
 
     vm.init = init;
+    vm.openServiceEditor = openServiceEditor;
 
     init();
 
@@ -103,8 +115,21 @@
       var Resource = $resource(vm.url);
 
       Resource.get(function (data, headers) {
-        vm.resource = angular.copy(data);
-        vm.referralNotes = AltumAPI.Referral.get({id: vm.resource.items.id, populate: 'notes'});
+        vm.referral = angular.copy(data.items);
+
+        //email fields for sending email from note directive
+        vm.emailInfo = {
+          template: 'referral',
+          data: {
+            claim: vm.referral.claimNumber,
+            client: vm.referral.client_displayName
+          },
+          options: {
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.client_displayName
+          }
+        };
+
+        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
@@ -114,19 +139,40 @@
           return service;
         });
 
-        // data columns for referral overview table
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': data.items.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': data.items.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': data.items.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': data.items.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': data.items.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': data.items.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': data.items.site_name
-        };
-
         // initialize submenu
         HeaderService.setSubmenu('referral', data.links);
+
+        if (vm.referral.program) {
+          vm.recommendedServices = [];
+          vm.referral.availableServices = RecommendationsService.parseAvailableServices({}, data.items.availableServices);
+        }
+      });
+    }
+
+    /**
+     * openServiceEditor
+     * @description opens a modal window for the serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'variations-modal-window',
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        bindToController: true,
+        resolve: {
+          Service: function() {
+            return angular.copy(service);
+          },
+          ApprovedServices: function() {
+            return angular.copy(vm.referral.approvedServices);
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        vm.init();
       });
     }
   }

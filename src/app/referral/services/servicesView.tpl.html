@@ -1,8 +1,8 @@
-<div class="container-fluid" ng-controller="ServicesController as svc" ng-cloak>
+<div class="container-fluid" ng-controller="ServicesController as services" ng-cloak>
   <div layout="column">
     <h2 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
-      <small>{{svc.resource.items.client_displayName}}</small>
+      <small>{{services.referral.client_displayName}}</small>
     </h2>
     <div id="Query" flex class="clearfix">
       <form>
@@ -10,92 +10,87 @@
           <i class="no-top form-control-feedback fa fa-search"></i>
           <input type="text" class="form-control"
                  placeholder="{{ 'APP.REFERRAL.SERVICES.LABELS.SEARCH_REFERRED_SERVICES' | translate }}"
-                 ng-model="svc.search"/>
+                 ng-model="services.search"/>
         </div>
       </form>
       <br/>
     </div>
-    <div flex ng-show="svc.referralOverview">
-      <table class="table table-condensed summary-table">
-        <tr class="summary-header-row">
-          <th ng-repeat="(label, value) in ::svc.referralOverview" translate>{{label}}</th>
-          <th>Group</th>
-          <th>Subgroup</th>
-        </tr>
-        <tr class="summary-table-row">
-          <td ng-repeat="(label, value) in ::svc.referralOverview">{{::value}}</td>
-          <td ng-style="{'padding-top': 0}">
-            <select class="form-control" ng-model="svc.groupBy">
-              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
-                {{group.prompt}}
-              </option>
-            </select>
-          </td>
-          <td ng-style="{'padding-top': 0}">
-            <select class="form-control" ng-model="svc.subGroupBy">
-              <option value="{{group.name}}" ng-repeat="group in svc.groupFields" translate>
-                {{group.prompt}}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </table>
-    </div>
+
+    <referral-summary referral-data="services.referral"
+                      bound-groups="services.boundGroupTypes"
+                      group-types="services.groupTypes"
+                      group-fields="services.groupFields">
+    </referral-summary>
+
   </div>
 
-  <altum-notebook ng-if="svc.referralNotes" notes="svc.referralNotes.notes" collection="{'referral': svc.resource.items.id}"></altum-notebook>
+  <altum-notebook ng-if="services.referralNotes"
+                  notes="services.referralNotes.notes"
+                  collection="{'referral': services.referral.id}"
+                  email-info="services.emailInfo">
+  </altum-notebook>
 
   <uib-accordion close-others="false">
-    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in svc.services | fuzzy: svc.search | groupBy: svc.groupBy"
-                         ng-init="svc.accordionStatus[groupKey].isOpen = false"
-                         is-open="svc.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in services.services | fuzzy: services.search | groupBy: services.boundGroupTypes.groupBy"
+                         ng-init="services.accordionStatus[groupKey].isOpen = false"
+                         is-open="services.accordionStatus[groupKey].isOpen" panel-class="panel-info">
       <uib-accordion-heading>
         <i class="glyphicon" ng-class="{
-          'glyphicon-chevron-right': !svc.accordionStatus[groupKey].isOpen,
-          'glyphicon-chevron-down': svc.accordionStatus[groupKey].isOpen
-        }"></i>
+        'glyphicon-chevron-right': !services.accordionStatus[groupKey].isOpen,
+        'glyphicon-chevron-down': services.accordionStatus[groupKey].isOpen
+      }"></i>
         {{ groupKey === "null" ? "N/A" : groupKey }}
         <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
       </uib-accordion-heading>
 
       <div layout="column">
         <uib-accordion close-others="false">
-          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: svc.subGroupBy"
-                               ng-init="svc.accordionStatus[groupKey][subGroup].isOpen = false"
-                               is-open="svc.accordionStatus[groupKey][subGroup].isOpen">
+          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: services.boundGroupTypes.subGroupBy"
+                               ng-init="services.accordionStatus[groupKey][subGroup].isOpen = false"
+                               is-open="services.accordionStatus[groupKey][subGroup].isOpen">
             <uib-accordion-heading>
               <i class="glyphicon" ng-class="{
-                  'glyphicon-chevron-right': !svc.accordionStatus[groupKey][subGroup].isOpen,
-                  'glyphicon-chevron-down': svc.accordionStatus[groupKey][subGroup].isOpen
-                }"></i>
+                'glyphicon-chevron-right': !services.accordionStatus[groupKey][subGroup].isOpen,
+                'glyphicon-chevron-down': services.accordionStatus[groupKey][subGroup].isOpen
+              }"></i>
               {{ subGroup === "null" ? "N/A" : subGroup }}
               <span class="pull-right badge">{{subServices.length}}</span>
             </uib-accordion-heading>
             <table class="table table-condensed summary-table">
               <tr class="summary-header-row">
-                <th ng-repeat="summary in svc.summaryFields" translate
+                <th ng-repeat="summary in services.summaryFields" translate
                     ng-if="subServices[0][summary.name]">
                   {{summary.prompt}}
                 </th>
               </tr>
               <tr class="summary-table-row">
-                <td ng-repeat="summary in svc.summaryFields" ng-if="subServices[0][summary.name]">
+                <td ng-repeat="summary in services.summaryFields" ng-if="subServices[0][summary.name]">
                   {{subServices[0][summary.name]}}
                 </td>
               </tr>
             </table>
             <md-divider></md-divider>
-            <table class="table table-condensed" ng-if="svc.accordionStatus[groupKey][subGroup].isOpen" >
+            <table class="table table-condensed" ng-if="services.accordionStatus[groupKey][subGroup].isOpen" >
               <tr>
-                <th ng-repeat="field in svc.visitFields" translate>{{field.prompt}}</th>
-                <th>Approvals</th>
+                <th ng-repeat="field in services.visitFields" translate>{{field.prompt}}</th>
+                <th translate>COMMON.MODELS.SERVICE.APPROVALS</th>
+                <th translate>COMMON.MODELS.SERVICE.COMPLETION</th>
               </tr>
               <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
-                <td ng-repeat="field in svc.visitFields">
+                <td ng-repeat="field in services.visitFields">
                   {{service[field.name]}}
                 </td>
                 <td>
-                  <service-approval service="service" statuses="svc.statuses" on-update="svc.init()"></service-approval>
+                  <service-status service="service"
+                                  on-update="services.init()"
+                                  status-type="approval">
+                  </service-status>
+                </td>
+                <td>
+                  <service-status service="service"
+                                  on-update="services.init()"
+                                  status-type="completion">
+                  </service-status>
                 </td>
               </tr>
             </table>

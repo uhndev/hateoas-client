@@ -35,6 +35,18 @@
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
           'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
+        //email fields for sending email from note directive
+        vm.emailInfo = {
+          template: 'referral',
+          data: {
+            claim: vm.referral.claimNumber,
+            client: vm.referral.clientcontact.displayName
+          },
+          options: {
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName
+          }
+        };
+
         // referral info panel
         vm.referralInfo = {
           rows: {

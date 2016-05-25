@@ -134,6 +134,17 @@
                   </div>
                 </div>
                 <div class="row" ng-if="field.field_hasItems || field.field_hasItem">
+                  <div class="col-md-4"><b>Select All button: </b></div>
+                  <div class="col-md-4">
+                    <label class="radio-inline">
+                      <input type="radio" ng-value="true" ng-selected ng-model="field.field_selectAll"> Yes
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" ng-value="false" ng-model="field.field_selectAll"> No
+                    </label>
+                  </div>
+                </div>
+                <div class="row" ng-if="field.field_hasItems || field.field_hasItem">
                   <div class="col-md-4"><b>Labels to show on selection: </b></div>
                   <div class="col-md-8">
                     <input type="text" ng-model="field.field_labels" class="form-control"

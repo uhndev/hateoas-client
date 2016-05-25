@@ -2,14 +2,18 @@
   top: 30px;
 }
 
+.modal-body{
+  overflow: auto;
+}
+
 ui-gmap-google-map {
   float:left;
   margin-right: 15px;
 }
 
 .angular-google-map-container {
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 300px;
 }
 
 .selectedRow {
@@ -22,7 +26,7 @@ ui-gmap-google-map {
 
 #directionsDiv {
   overflow-y: scroll;
-  height:400px;
+  height:275px;
   right:30px;
   margin-left:10px;
 }
@@ -31,6 +35,28 @@ ui-gmap-google-map {
   margin-bottom: 50px;
 }
 
+#travelDiv{
+  font-size: 8px;
+}
+
+#filterSelect{
+  margin: 3px;
+}
+.SiteDistanceTable{
+  margin: 3px;
+}
+
+.SiteDistanceTable td{
+  background-color: #6ebaf7;
+  padding: 3px;
+  border: 1px solid #ffffff;
+}
+
+.SiteDistanceTable td:first-child:hover{
+  background-color: #005fbf;
+  color: #ffffff;
+}
+/*
 .SiteDistanceTable {
   margin: 0px;
   padding: 0px;
@@ -102,7 +128,6 @@ ui-gmap-google-map {
   background: -o-linear-gradient(top, #aad4ff, ffffff);
 
   background-color: #aad4ff;
-
   border: 1px solid #000000;
   border-width: 0px 1px 1px 0px;
   text-align: left;
@@ -163,3 +188,4 @@ ui-gmap-google-map {
 tr:hover {
   background-color: #ffa;
 }
+*/

@@ -22,6 +22,7 @@
       <div ng-repeat="note in notebook.notes | orderBy:'createdAt': true track by $index">
         <altum-note note="note"
                     collection="notebook.collection"
+                    email-info="notebook.emailInfo"
                     on-remove="notebook.removeElement(notebook.notes, note)">
         </altum-note>
       </div>

@@ -27,7 +27,7 @@
     // bindable variables
     vm.geoDistance = null;
     vm.googleMaps = null;
-
+    vm.distanceDatas = [];
     // google distance placeholders for distance call
     vm.distanceMatrix = [];
     vm.destinationDistance = {};
@@ -65,12 +65,17 @@
           });
           calculateDistances();
         });
+
+        //initialize initial select value for sites
+        vm.initialSelection = 'distance';
+
       });
     }
 
     /**
      * [calculateDistances]
      * calculates the distance Matrix from the currently selected referall's origin and all of altum's sites
+     * and constructs distanceData that holds sites and distance
      */
     function calculateDistances() {
       // distanceArgs for distanceMatrix call
@@ -80,8 +85,18 @@
         travelMode: vm.googleMaps.TravelMode.DRIVING
       };
 
-      vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix) {
-        vm.distanceMatrix = matrix;
+      vm.geoDistance.getDistanceMatrix(distanceArgs, function (matrix,status) {
+        //constructs distanceData object that combines site and distance from currently selected referall to all of altum's sites
+        if (status == vm.googleMaps.DistanceMatrixStatus.OK) {
+          vm.distanceMatrix = matrix;
+          _.each(vm.sites, function (site, index) {
+            vm.distanceDatas.push({
+              location: site.displayName,
+              distance: parseInt(matrix.rows[0].elements[index].distance.text.replace(' km','')),
+              site: site
+            });
+          });
+        }
       });
     }
   }
