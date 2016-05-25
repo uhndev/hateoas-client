@@ -22,7 +22,6 @@
     </ui-select>
   </div>
   <div ng-switch-default>
-    <button id="selectAll" class="btn btn-default" ng-if="select.belowLimit" ng-click="select.values = select.allChoices"> Add all </button>
     <ui-select multiple ng-disabled="select.isDisabled" ng-model="select.values" theme="bootstrap"
                on-remove="select.fetchData($select.search, $select)">
       <ui-select-match placeholder="{{select.placeholder | translate}}">{{$item[select.labels]}}</ui-select-match>

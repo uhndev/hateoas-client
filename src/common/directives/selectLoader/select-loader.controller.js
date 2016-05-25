@@ -29,7 +29,6 @@
     vm.labels = vm.labels || 'name';
     vm.skip = 0;
     vm.limit = 20;
-    vm.belowLimit = true;
     vm.allChoices = [];
 
     // bindable methods
@@ -76,9 +75,6 @@
 
       //assigns allChoices with all available items within the select object
       promise.then(function(data) {
-        if (data.total >= maxShowAll) {
-          vm.belowLimit = false;
-        }
         vm.allChoices = data.items;
       });
 
