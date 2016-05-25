@@ -33,6 +33,8 @@
           });
           vm.formOrder = _.intersection(data.items.formOrder, vm.formVersions);
 
+          $scope.$broadcast('IndicatorsSum', vm.formOrder.length);
+
           if (_.isArray(vm.formOrder) && vm.formOrder.length) {
             // reset formOrder index (open form in the session)
             vm.current = 0;
