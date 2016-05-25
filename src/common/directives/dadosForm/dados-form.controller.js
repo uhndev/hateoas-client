@@ -3,13 +3,14 @@
 
   angular
     .module('dados.common.directives.dadosForm.controller', [
-      'dados.common.directives.dadosForm.service'
+      'dados.common.directives.dadosForm.service',
+      'dados.common.directives.dadosForm.revokeModal.controller'
     ])
     .controller('DadosFormController', DadosFormController);
 
-  DadosFormController.$inject = ['$scope', 'AnswerSetService'];
+  DadosFormController.$inject = ['$scope', '$uibModal', 'AnswerSetService'];
 
-  function DadosFormController($scope, AnswerSetService) {
+  function DadosFormController($scope, $uibModal, AnswerSetService) {
     var vm = this;
 
     // bindable variables
@@ -119,11 +120,24 @@
      * @description Expires the old answerSet
      */
     function revokeForm() {
-      AnswerSetService.save({
-        answers: vm.answers,
-        scheduleID: vm.form.scheduleID,
-        formID: vm.form.id,
-      }, onAnswerSetRevoked);
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'directives/dadosForm/modal/revokeModal.tpl.html',
+        controller: 'RevokeModalController',
+        controllerAs: 'revoke',
+        bindToController: true
+      });
+
+      modalInstance.result.then(function (result) {
+        vm.answers.revokeReason = result;
+
+        AnswerSetService.save({
+          answers: vm.answers,
+          scheduleID: vm.form.scheduleID,
+          formID: vm.form.id,
+        }, onAnswerSetRevoked);
+      });
+
     }
 
     /**
