@@ -45,15 +45,10 @@
          * @description Event that fires from a given controller
          *              when an indicator is completed.
          */
-        scope.$on('NextIndicator', function() {
-          if (indicatorOrder < indicators.length - 1) {
-            scope.value = indicators[indicatorOrder];
-            indicatorOrder++;
+        scope.$on('NextIndicator', function(event, completed) {
 
-          }else {
-            scope.value = 100;
+          scope.value = completed;
 
-          }
         });
 
         /**
@@ -62,6 +57,7 @@
          *              when an indicator is started.
          */
         scope.$on('PrevIndicator', function() {
+
           if (indicatorOrder !== 0 < 0 && indicatorOrder !== 0) {
             indicatorOrder--;
             scope.value = indicators[indicatorOrder];
