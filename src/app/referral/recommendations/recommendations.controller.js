@@ -72,8 +72,6 @@
         vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.availableServices = angular.copy(data.items.availableServices);
-        vm.referralNotes = angular.copy(data.items.notes);
 
         // load physician in from referraldetail
         vm.sharedService = {
