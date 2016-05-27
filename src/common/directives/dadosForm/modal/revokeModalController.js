@@ -1,3 +1,9 @@
+/**
+ * @name RevokeModalController
+ * @description Controller for simple modal instance that drives form revoke process.
+                Returns revoke reason.
+ */
+
 (function() {
   'use strict';
 
@@ -21,11 +27,19 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * revoke
+     * @description Proceeds with revoke, returns reason to parent controller
+     */
     function revoke() {
       toastr.success('The form was unsigned!', 'DADOS Form');
       $uibModalInstance.close(vm.reason);
     }
 
+    /**
+     * cancel
+     * @description Cancels the process, closes modal window
+     */
     function cancel() {
       $uibModalInstance.dismiss('cancel');
     }
