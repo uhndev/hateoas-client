@@ -11,7 +11,7 @@
     .module('altum.referral.serviceDetail', [])
     .component('serviceDetail', {
       bindings: {
-        referral: '=',  // bound referral containing client information
+        referral: '<',  // bound referral containing client information
         service: '='    // single service object containing details
       },
       controller: 'ServiceDetailController',
