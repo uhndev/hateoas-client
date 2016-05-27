@@ -17,7 +17,6 @@
     vm.answerSet = {};
     vm.returned = false;
     vm.signed = false;
-    vm.block = 0;
     vm.completed = 0;
     vm.percCompleted = 0;
     vm.answers.order = 0;
@@ -47,47 +46,40 @@
      */
     function nextQuestion() {
 
-      if (!block()) {
-        vm.answers.order++;
+      vm.answers.order++;
 
-        vm.prev = false;
-        if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
-          saveFormAnswers();
-        }
-        vm.currentQuestion++;
+      vm.prev = false;
+      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
+        saveFormAnswers();
+      }
+      vm.currentQuestion++;
 
-        vm.answers.n0 = vm.answers.acum + vm.percCompleted;
+      vm.answers.n0 = vm.answers.acum + vm.percCompleted;
+
+      if (vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
+        vm.answers.n0 = 100;
+      }
+
+      $scope.$broadcast('NextIndicator', vm.answers.n0);
+
+      if (vm.currentQuestion >= vm.form.questions.length) {
+
+        vm.currentQuestion = vm.form.questions.length - 1;
 
         if (vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
+          vm.answers.order = vm.answers.questionsSize - 1;
           vm.answers.n0 = 100;
+        } else {
+          vm.answers.order = 0;
         }
 
-        $scope.$broadcast('NextIndicator', vm.answers.n0);
+        vm.returned = false;
 
-        if (vm.currentQuestion >= vm.form.questions.length) {
+        $scope.$emit('NextFormRequest');
+        vm.answers.id = vm.form.id;
 
-          vm.currentQuestion = vm.form.questions.length - 1;
-
-          if (vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
-            vm.answers.order = vm.answers.questionsSize - 1;
-            vm.answers.n0 = 100;
-          } else {
-            vm.answers.order = 0;
-          }
-
-          vm.returned = false;
-
-          $scope.$emit('NextFormRequest');
-          vm.answers.id = vm.form.id;
-
-        }
-        vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
-      }else if (block()) {
-        vm.block--;
-        if (vm.block < 0) {
-          vm.block = 0;
-        }
       }
+      vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     }
 
     /**
@@ -103,7 +95,6 @@
       }
 
       vm.currentQuestion--;
-      vm.block++;
 
       if (vm.currentQuestion < 0) {
         vm.currentQuestion = 0;
@@ -230,7 +221,7 @@
 
         vm.currentQuestion = 0;
 
-        if (vm.prev === false && !block()) {
+        if (vm.prev === false) {
 
           if (vm.answers.order < vm.answers.questionsSize && vm.answers.order > 0) {
             vm.currentQuestion = vm.answers.order;
@@ -322,19 +313,5 @@
 
       vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     });
-
-    /**
-     * block
-     * @description blocks completion indicator on prevQuestion
-     */
-    function block() {
-      if (vm.block > 0) {
-
-        return true;
-      }else {
-
-        return false;
-      }
-    }
   }
 })();
