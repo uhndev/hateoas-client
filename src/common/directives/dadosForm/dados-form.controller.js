@@ -306,7 +306,7 @@
 
         vm.currentQuestion = 0;
 
-        if (vm.prev === false && !vm.lockCompletionIndicator) {
+        if (!vm.prev && !vm.lockCompletionIndicator) {
 
           calculateCompletionIndicator(newForm);
 
