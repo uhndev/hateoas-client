@@ -104,9 +104,11 @@
            * @description Adds recommended services to the referral
            */
           function saveRecommendedServices() {
-            var ReferralServices = $resource([API.url(), 'referral', vm.picker.referral.id, 'services'].join('/'));
             $q.all(_.map(vm.picker.recommendedServices, function (service) {
-                var serviceObj = new ReferralServices(RecommendationsService.prepareService(service));
+                // set approval not needed and referral id
+                service.referral = vm.picker.referral.id;
+                service.approvalNeeded = false;
+                var serviceObj = new AltumAPI.BillingGroup(RecommendationsService.prepareService(service));
                 return serviceObj.$save();
               }))
               .then(function (data) {

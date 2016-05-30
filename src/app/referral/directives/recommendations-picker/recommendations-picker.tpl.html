@@ -62,6 +62,9 @@
                 <span ng-if="service.availableSites.length > 0 && service.site">
                   ({{service.siteDictionary[service.site].name}})
                 </span>
+                <span ng-if="service.repeatable && service.totalItems > 1">
+                  &times; {{service.totalItems}}
+                </span>
                 <span class="text-danger" ng-if="service.availableSites.length > 0 && !service.site && !recPicker.config.showBillingInfo">
                   * (select site)
                 </span>
