@@ -16,8 +16,8 @@
     vm.answers =
     {
       formOrder: [],
+      formCompleted: [],
       order:0,
-      questions:0,
       questionsSize: 0,
       completed: 0,
       percCompleted: 0,
@@ -28,7 +28,15 @@
     vm.returned = false;
     vm.signed = false;
     vm.prev = false;
+    vm.lockCompletionIndicator = false;
+    vm.lockOrder = false;
+    vm.lastForm = [];
+    vm.lastQuestion = 0;
+    vm.isCompleted = false;
+    vm.nextForm = false;
+    vm.formCompleted = [];
     vm.acum = 0;
+    vm.addLast = 0;
 
     if (!vm.mode) {
       vm.mode = 'multi';
@@ -51,34 +59,68 @@
      */
     function nextQuestion() {
 
-      vm.answers.order++;
-
       vm.prev = false;
+
       if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
         saveFormAnswers();
       }
       vm.currentQuestion++;
 
-      // verifies if inquiry is completed
-      var isCompleted = vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize ? true : false;
+      if (vm.lockCompletionIndicator === false) {
 
-      //total percentage
-      vm.answers.totalPercentage = isCompleted ? vm.answers.totalPercentage = 100 : vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
+        vm.answers.order++;
+        calculateCompletionIndicator(vm.form);
 
-      $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
+        if (vm.lockOrder === false && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
+          vm.isCompleted = true;
+          vm.answers.totalPercentage = 100;
+        }else if (vm.lockOrder === true && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize) {
+          vm.isCompleted = true;
+          vm.answers.totalPercentage = 100;
+          vm.lockOrder = false;
+        }else {
+          //adds question percentage to total percentage
+          vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
+        }
+
+        $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
+
+        nextForm();
+
+      }else if (vm.lockCompletionIndicator === true) {
+        nextForm();
+      }
+    }
+
+    /**
+     * nextForm
+     * @description Function for next Form
+     */
+    function nextForm() {
+
+      if (_.inArray(vm.lastForm, vm.form.id) && vm.currentQuestion === vm.lastQuestion) {
+        vm.lockCompletionIndicator = false;
+        vm.addLast = 0;
+        vm.lockOrder = true;
+      }
 
       if (vm.currentQuestion >= vm.form.questions.length) {
 
         vm.currentQuestion = vm.form.questions.length - 1;
-
         // if inquiry is completed the question order will be questionsize-1
-        var isOrderCompleted = isCompleted ? vm.answers.order = vm.answers.questionsSize - 1 : vm.answers.order = 0;
-
+        if (vm.isCompleted) {
+          vm.answers.order = vm.answers.questionsSize - 1;
+          vm.isCompleted = false;
+        }else {
+          vm.answers.order = 0;
+        }
         vm.returned = false;
-
         $scope.$emit('NextFormRequest');
         vm.answers.id = vm.form.id;
+        vm.nextForm = true;
 
+      }else {
+        vm.nextForm = false;
       }
       vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     }
@@ -93,6 +135,13 @@
       vm.prev = true;
       if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
         saveFormAnswers();
+      }
+
+      vm.lockCompletionIndicator = true;
+      if (vm.addLast === 0) {
+        vm.addLast++;
+        vm.lastForm.push(vm.form.id);
+        vm.lastQuestion = vm.currentQuestion;
       }
 
       vm.currentQuestion--;
@@ -214,6 +263,46 @@
     });
 
     /**
+     * calculateCompletionIndicator
+     * @description calculates the total percentage and percentage per question
+     */
+    function calculateCompletionIndicator(newForm) {
+
+      //verifies the current question order and associate the new order
+      if (vm.answers.order < vm.answers.questionsSize && vm.answers.order > 0) {
+        vm.currentQuestion = vm.answers.order;
+      }
+      //verifies the current total percentage is > 0 and calculate the total percentage
+      if (vm.answers.totalPercentage > 0) {
+        vm.answers.completed = Math.ceil(vm.answers.toComplete * (vm.answers.totalPercentage / 100));
+        // associate question percentage to total percentage
+        vm.answers.acum = vm.answers.completed;
+      }
+      //control forms completed
+      if (!_.inArray(vm.answers.formCompleted, newForm.id)) {
+        vm.answers.formCompleted.push(newForm.id);
+      }
+
+      vm.answers.completed = vm.answers.formCompleted.length;
+
+      //calculates the nominal percentage position
+      var per2 = (vm.answers.completed) / vm.answers.toComplete * 100;
+
+      //difference of the total nominal percentage with the total real percentage
+      vm.acum = per2 - vm.percCompleted;
+
+      //associate the actual form id
+      vm.answers.id = newForm.id;
+
+      //associate the question size
+      vm.answers.questionsSize = newForm.questions.length;
+
+      // calculates the real percentage per question
+      vm.answers.acum = Math.floor(vm.acum / vm.answers.questionsSize);
+
+    }
+
+    /**
      * $scope.$watch on dadosForm.form
      * @description Function sets up the form and tries to load answerSet if it was provided with id.
      */
@@ -222,37 +311,9 @@
 
         vm.currentQuestion = 0;
 
-        if (vm.prev === false) {
+        if (vm.prev === false && vm.lockCompletionIndicator === false) {
 
-          //verifies the current question order and associate the new order
-          var hasQuestions = vm.answers.order < vm.answers.questionsSize && vm.answers.order > 0 ? vm.currentQuestion = vm.answers.order : false;
-
-          //verifies the current total percentage is > 0 and calculate the total percentage position
-          var hasPercentage = vm.answers.totalPercentage > 0 ? vm.answers.completed = Math.ceil(vm.answers.toComplete * (vm.answers.totalPercentage / 100)) : false;
-
-          // associate the actual percentage position to the incremented value (answers.acum)
-          var incrementedPercentage = hasPercentage ? vm.answers.acum = vm.answers.completed : false;
-
-          // verifies if inquiry is completed and increment vm.answers.completed
-          var notCompleted = vm.answers.completed <= vm.answers.toComplete ? vm.answers.completed += 1 : false;
-
-          // if vm.answers.completed surpass vm.answers.toComplete it will ajust to vm.answers.toComplete
-          var completeSurpassed = vm.answers.completed > vm.answers.toComplete ? vm.answers.completed = vm.answers.toComplete : false;
-
-          //calculates the nominal percentage position
-          var per2 = (vm.answers.completed) / vm.answers.toComplete * 100;
-
-          //difference of the total nominal percentage with the total real percentage is the total percentage to be incremented
-          vm.acum = per2 - vm.percCompleted;
-
-          //associate the actual form id
-          vm.answers.id = newForm.id;
-
-          //associate the question size
-          vm.answers.questionsSize = newForm.questions.length;
-
-          // calculates the real percentage per question
-          vm.answers.acum = Math.floor(vm.acum / vm.answers.questionsSize);
+          calculateCompletionIndicator(newForm);
 
           //saves
           if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
@@ -296,8 +357,8 @@
      */
     $scope.$on('AnswerSetLoaded', function (e) {
 
-      //returns the order index of a specific form
-      var orderIndex = vm.answers.formOrder.indexOf(vm.answers.id);
+      //returns the order index of the last form completed
+      var orderIndex = vm.answers.formOrder.indexOf(_.last(vm.answers.formCompleted));
 
       if ((orderIndex - 1) > -1) {
         $scope.$emit('NextFormRequest', (orderIndex - 1));
