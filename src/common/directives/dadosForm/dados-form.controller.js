@@ -15,6 +15,7 @@
     // bindable variables
     vm.answers =
     {
+      id: null,
       formOrder: [],
       formCompleted: [],
       order:0,
@@ -33,9 +34,6 @@
     vm.lastForm = [];
     vm.lastQuestion = 0;
     vm.isCompleted = false;
-    vm.nextForm = false;
-    vm.formCompleted = [];
-    vm.acum = 0;
     vm.addLast = 0;
 
     if (!vm.mode) {
@@ -66,15 +64,15 @@
       }
       vm.currentQuestion++;
 
-      if (vm.lockCompletionIndicator === false) {
+      if (!vm.lockCompletionIndicator) {
 
         vm.answers.order++;
         calculateCompletionIndicator(vm.form);
 
-        if (vm.lockOrder === false && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
+        if (!vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
           vm.isCompleted = true;
           vm.answers.totalPercentage = 100;
-        }else if (vm.lockOrder === true && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize) {
+        }else if (vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize) {
           vm.isCompleted = true;
           vm.answers.totalPercentage = 100;
           vm.lockOrder = false;
@@ -87,7 +85,7 @@
 
         nextForm();
 
-      }else if (vm.lockCompletionIndicator === true) {
+      }else if (vm.lockCompletionIndicator) {
         nextForm();
       }
     }
@@ -117,11 +115,8 @@
         vm.returned = false;
         $scope.$emit('NextFormRequest');
         vm.answers.id = vm.form.id;
-        vm.nextForm = true;
-
-      }else {
-        vm.nextForm = false;
       }
+
       vm.currentAnswer = vm.form.questions[vm.currentQuestion].value;
     }
 
@@ -289,7 +284,7 @@
       var per2 = (vm.answers.completed) / vm.answers.toComplete * 100;
 
       //difference of the total nominal percentage with the total real percentage
-      vm.acum = per2 - vm.percCompleted;
+      var acum = per2 - vm.percCompleted;
 
       //associate the actual form id
       vm.answers.id = newForm.id;
@@ -298,7 +293,7 @@
       vm.answers.questionsSize = newForm.questions.length;
 
       // calculates the real percentage per question
-      vm.answers.acum = Math.floor(vm.acum / vm.answers.questionsSize);
+      vm.answers.acum = Math.floor(acum / vm.answers.questionsSize);
 
     }
 
@@ -311,7 +306,7 @@
 
         vm.currentQuestion = 0;
 
-        if (vm.prev === false && vm.lockCompletionIndicator === false) {
+        if (vm.prev === false && !vm.lockCompletionIndicator) {
 
           calculateCompletionIndicator(newForm);
 
