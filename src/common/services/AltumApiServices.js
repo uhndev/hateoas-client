@@ -27,6 +27,7 @@
     .service('ServiceVariationService', ServiceVariationService)
     .service('ServiceCategoryService', ServiceCategoryService)
     .service('ServiceService', ServiceService)
+    .service('BillingGroupService', BillingGroupService)
     .service('StaffService', StaffService)
     .service('StaffTypeService', StaffTypeService)
     .service('NoteService', NoteService)
@@ -38,7 +39,7 @@
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
     PhysicianService, PayorService, WorkStatusService, PrognosisService, ProgramServiceService,
     AltumServiceService, AltumProgramServices, ServiceVariationService, ServiceCategoryService,
-    AltumAPIService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
+    AltumAPIService, BillingGroupService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
     CityService, PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
     AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
@@ -110,6 +111,10 @@
     return ResourceFactory.create(API.url('servicecategory'));
   }
 
+  function BillingGroupService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('billinggroup'));
+  }
+
   function ServiceService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('service'));
   }
@@ -172,6 +177,7 @@
       'AltumProgramServices': ResourceFactory.create(API.url('altumprogramservices')),
       'ServiceVariation': ResourceFactory.create(API.url('servicevariation')),
       'ServiceCategory': ResourceFactory.create(API.url('servicecategory')),
+      'BillingGroup': ResourceFactory.create(API.url('billinggroup')),
       'Service': ResourceFactory.create(API.url('service')),
       'Staff' : ResourceFactory.create(API.url('staff')),
       'StaffType' : ResourceFactory.create(API.url('staffType'), {cache: true}),

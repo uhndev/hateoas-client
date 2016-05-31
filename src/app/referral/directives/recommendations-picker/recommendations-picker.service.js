@@ -10,7 +10,7 @@
       'serviceDate', 'serviceVariation', 'site', 'hasTelemedicine', 'approvalNeeded', 'approvalRequired'
     ])
     .constant('CONFIG_FIELDS', [
-      'availableSites', 'siteDictionary',
+      'availableSites', 'siteDictionary', 'repeatable', 'totalItems',
       'staffCollection', 'serviceVariation', 'variationSelection'
     ])
     .service('RecommendationsService', RecommendationsService);
@@ -49,6 +49,12 @@
      * @param service
      */
     function prepareService(service) {
+      // initialize billing group data
+      var billingGroup = {
+        billingGroupName: service.name + ' Billing Group',
+        totalItems: service.totalItems || 1
+      };
+
       // for recommended services that have variations selected, apply to object to be sent to server
       if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
         _.each(service.variationSelection.changes, function (value, key) {
@@ -77,7 +83,10 @@
         delete service[field];
       });
 
-      return service;
+      // set billing group templateService
+      billingGroup.templateService = angular.copy(service);
+
+      return billingGroup;
     }
 
     /**
@@ -88,6 +97,7 @@
      */
     function getSharedServices(sharedService) {
       return {
+        referral: sharedService.referral || null,
         physician: sharedService.physician || null,
         staff: sharedService.staff || null,
         staffCollection: sharedService.staffCollection || {},
@@ -123,6 +133,7 @@
             serviceVariation: altumProgramService.serviceVariation,
             site: null,
             hasTelemedicine: altumProgramService.hasTelemedicine,
+            repeatable: altumProgramService.repeatable,
             approvalNeeded: altumProgramService.approvalNeeded,
             approvalRequired: altumProgramService.approvalRequired
           });
