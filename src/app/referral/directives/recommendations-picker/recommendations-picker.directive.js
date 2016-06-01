@@ -211,7 +211,7 @@
       if (_.has(vm.config.billing, 'programServiceName') && vm.config.billing.programServiceName) {
         serviceName += '<i>' + service.programServiceName + '</i> <b> &Rightarrow; </b>';
       }
-      serviceName += service.variationSelection ? service.variationSelection.name : service.name;
+      serviceName += service.variationSelection && _.has(service.variationSelection, 'name') ? service.variationSelection.name : service.name;
       return serviceName;
     }
   }
