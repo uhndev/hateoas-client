@@ -39,6 +39,30 @@
             'value': 'completionDate'
           }
         ]
+      },
+      'billing': {
+        'collection': 'billingStatuses',
+        'currentType': 'currentBillingStatus',
+        'currentStatus': 'currentBillingStatusStatus',
+        'statusName': 'billingStatusName',
+        'populate': ['currentBillingStatus', 'billingStatuses'],
+        'detailColumns': [
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.PAID_DATE',
+            'type': 'date',
+            'value': 'paidDate'
+          },
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.DENIED_DATE',
+            'type': 'date',
+            'value': 'deniedDate'
+          },
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.REJECTED_DATE',
+            'type': 'date',
+            'value': 'rejectedDate'
+          }
+        ]
       }
     })
     .controller('ServiceStatusController', ServiceStatusController);
