@@ -28,6 +28,13 @@
       templateUrl: 'referral/directives/service-group/service-group.tpl.html',
       controller: 'ServiceGroupController',
       controllerAs: 'serviceGroup'
-    });
+    })
+    .controller('ServiceGroupController', ServiceGroupController);
+
+  ServiceGroupController.$inject = [];
+
+  function ServiceGroupController() {
+
+  }
 
 })();
