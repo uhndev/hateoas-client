@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('altum.referral.billing', [])
+    .module('altum.referral.billing', ['altum.referral.serviceGroup'])
     .controller('BillingController', BillingController);
 
   BillingController.$inject = [
@@ -26,6 +26,47 @@
         'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.SERVICES_TO_BE_ADDED'
       }
     };
+
+    // data columns for groups (visits)
+    vm.visitFields = [
+      {
+        name: 'altumServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+      },
+      {
+        name: 'physician_displayName',
+        prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
+      },
+      {
+        name: 'siteName',
+        prompt: 'COMMON.MODELS.SERVICE.SITE'
+      },
+      {
+        name: 'serviceDate',
+        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
+      },
+      {
+        name: 'visitServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
+      },
+      {
+        name: 'completion',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+        type: 'status'
+      },
+      {
+        name: 'billing',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
+        type: 'status'
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE',
+        type: 'button',
+        iconClass: 'glyphicon-edit',
+        onClick: openServiceEditor
+      }
+    ];
 
     vm.openServiceEditor = openServiceEditor;
     vm.openServicePicker = openServicePicker;
