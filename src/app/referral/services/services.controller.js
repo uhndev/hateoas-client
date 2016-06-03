@@ -8,15 +8,16 @@
       'toastr',
       'dados.header.service',
       'dados.common.services.altum',
-      'altum.referral.serviceStatus'
+      'altum.referral.serviceStatus',
+      'altum.referral.serviceGroup'
     ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -101,11 +102,20 @@
       {
         name: 'visitServiceName',
         prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
+      },
+      {
+        name: 'approval',
+        prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
+        type: 'status'
+      },
+      {
+        name: 'completion',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+        type: 'status'
       }
     ];
 
     vm.init = init;
-    vm.openServiceEditor = openServiceEditor;
 
     init();
 
@@ -146,33 +156,6 @@
           vm.recommendedServices = [];
           vm.referral.availableServices = RecommendationsService.parseAvailableServices({}, data.items.availableServices);
         }
-      });
-    }
-
-    /**
-     * openServiceEditor
-     * @description opens a modal window for the serviceModal service editor
-     */
-    function openServiceEditor(service) {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'variations-modal-window',
-        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
-        controller: 'ServiceModalController',
-        controllerAs: 'svcmodal',
-        bindToController: true,
-        resolve: {
-          Service: function() {
-            return angular.copy(service);
-          },
-          ApprovedServices: function() {
-            return angular.copy(vm.referral.approvedServices);
-          }
-        }
-      });
-
-      modalInstance.result.then(function (updatedService) {
-        vm.init();
       });
     }
   }

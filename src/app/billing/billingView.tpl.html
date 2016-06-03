@@ -1,7 +1,41 @@
-<div class="container">
-  <br/>
-  <div class="jumbotron">
-    <h2>Under Construction...</h2>
-    <marquee>Coming Soon!</marquee>
+<div ng-controller="GlobalBillingController as globalBilling" ng-cloak class="container-fluid">
+  <h2 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
+    <span translate>APP.BILLING.BILLING_MANAGEMENT</span>
+    <small translate translate-values="{ total: globalBilling.resource.total }">
+      COMMON.HATEOAS.TITLE.TOTAL
+    </small>
+  </h2>
+
+  <div id="Query" class="clearfix">
+    <table class="table table-condensed summary-table">
+      <tr class="summary-header-row">
+        <th translate>APP.BILLING.LABELS.SEARCH</th>
+        <th ng-repeat="groupType in ::globalBilling.groupTypes">{{::groupType.prompt}}</th>
+      </tr>
+      <tr class="summary-table-row">
+        <td width="70%">
+          <query-builder
+            template="globalBilling.resource.template"
+            ng-model="globalBilling.query.where"
+            ng-if="globalBilling.resource.template">
+          </query-builder>
+        </td>
+        <td ng-repeat="groupType in ::globalBilling.groupTypes">
+          <select class="form-control" ng-model="globalBilling.boundGroupTypes[groupType.name]">
+            <option value="{{::groupField.name}}" ng-repeat="groupField in ::globalBilling.groupFields" translate>
+              {{::groupField.prompt}}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </table>
   </div>
+
+  <service-group services="globalBilling.services"
+                 search="globalBilling.search"
+                 bound-group-types="globalBilling.boundGroupTypes"
+                 visit-fields="globalBilling.visitFields"
+                 summary-fields="globalBilling.summaryFields"
+                 on-update="globalBilling.init">
+  </service-group>
 </div>
