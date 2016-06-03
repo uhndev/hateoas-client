@@ -76,8 +76,8 @@
               <table class="table table-condensed" ng-if="services.accordionStatus[groupKey][subGroup].isOpen">
                 <tr>
                   <th ng-repeat="field in services.visitFields" translate>{{field.prompt}}</th>
-                  <th translate>COMMON.MODELS.SERVICE.APPROVALS</th>
                   <th translate>COMMON.MODELS.SERVICE.COMPLETION</th>
+                  <th translate>COMMON.MODELS.SERVICE.BILLING_STATUS</th>
                   <th translate>APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE</th>
                 </tr>
                 <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
@@ -87,13 +87,13 @@
                   <td>
                     <service-status service="service"
                                     on-update="services.init()"
-                                    status-type="approval">
+                                    status-type="completion">
                     </service-status>
                   </td>
                   <td>
                     <service-status service="service"
                                     on-update="services.init()"
-                                    status-type="completion">
+                                    status-type="billing">
                     </service-status>
                   </td>
                   <td>
