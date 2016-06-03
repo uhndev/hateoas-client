@@ -23,7 +23,7 @@
         boundGroupTypes: '=',
         visitFields: '<',
         summaryFields: '<',
-        onInit: '&'
+        onUpdate: '='
       },
       templateUrl: 'referral/directives/service-group/service-group.tpl.html',
       controller: 'ServiceGroupController',

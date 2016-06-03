@@ -24,20 +24,23 @@
             {{ subGroup === "null" ? "N/A" : subGroup }}
             <span class="pull-right badge">{{subServices.length}}</span>
           </uib-accordion-heading>
-          <table class="table table-condensed summary-table">
-            <tr class="summary-header-row">
-              <th ng-repeat="summary in serviceGroup.summaryFields" translate
-                  ng-if="subServices[0][summary.name]">
-                {{summary.prompt}}
-              </th>
-            </tr>
-            <tr class="summary-table-row">
-              <td ng-repeat="summary in serviceGroup.summaryFields" ng-if="subServices[0][summary.name]">
-                {{subServices[0][summary.name]}}
-              </td>
-            </tr>
-          </table>
-          <md-divider></md-divider>
+          <div ng-if="serviceGroup.summaryFields.length">
+            <table class="table table-condensed summary-table">
+              <tr class="summary-header-row">
+                <th ng-repeat="summary in serviceGroup.summaryFields" translate
+                    ng-if="subServices[0][summary.name]">
+                  {{summary.prompt}}
+                </th>
+              </tr>
+              <tr class="summary-table-row">
+                <td ng-repeat="summary in serviceGroup.summaryFields" ng-if="subServices[0][summary.name]">
+                  {{subServices[0][summary.name]}}
+                </td>
+              </tr>
+            </table>
+            <md-divider></md-divider>
+          </div>
+
           <table class="table table-condensed" ng-if="serviceGroup.accordionStatus[groupKey][subGroup].isOpen" >
             <tr>
               <th ng-repeat="field in serviceGroup.visitFields" translate>{{field.prompt}}</th>
@@ -46,7 +49,7 @@
               <td ng-repeat="field in serviceGroup.visitFields" ng-switch="field.type">
                 <service-status ng-switch-when="status"
                                 service="service"
-                                on-update="services.onInit()"
+                                on-update="serviceGroup.onUpdate()"
                                 status-type="{{field.name}}">
                 </service-status>
                 <button ng-switch-when="button"

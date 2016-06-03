@@ -3,17 +3,13 @@
 
   angular
     .module('altum.billing', ['altum.referral.serviceGroup'])
-    .constant('SERVICE_FIELDS', [
-      'altumServiceName', 'programServiceName', 'programName',
-      'siteName', 'code', 'price', 'payorName', 'serviceDate',
-      'visitService', 'statusName', 'completionStatusName', 'billingStatusName'
-    ])
     .controller('GlobalBillingController', GlobalBillingController);
 
-  GlobalBillingController.$inject = ['$scope', '$resource', 'SERVICE_FIELDS', 'API'];
+  GlobalBillingController.$inject = ['$scope', '$resource', 'API'];
 
-  function GlobalBillingController($scope, $resource, SERVICE_FIELDS, API) {
+  function GlobalBillingController($scope, $resource, API) {
     var vm = this;
+    var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
     // bindable variables
     vm.query = {'where': {}};
@@ -24,22 +20,6 @@
       groupBy: 'billingStatusName',
       subGroupBy: 'siteName'
     };
-
-    // data columns for subgroups (encounter) summary table
-    vm.summaryFields = [
-      {
-        name: 'workStatusName',
-        prompt: 'COMMON.MODELS.SERVICE.WORK_STATUS'
-      },
-      {
-        name: 'prognosisName',
-        prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS'
-      },
-      {
-        name: 'prognosisTimeframeName',
-        prompt: 'COMMON.MODELS.SERVICE.PROGNOSIS_TIMEFRAME'
-      }
-    ];
 
     // array of options denoting which groups can be bound to (vm.boundGroupTypes.groupBy)
     vm.groupTypes = [
@@ -62,18 +42,25 @@
         prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
       },
       {
+        name: 'billingStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS'
+      },
+      {
         name: 'siteName',
         prompt: 'COMMON.MODELS.SERVICE.SITE'
       },
       {
-        name: 'altumServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+        name: 'client_displayName',
+        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
       },
       {
-        name: 'physician_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
+        name: 'programServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
       }
     ];
+
+    // data columns for subgroups (encounter) summary table
+    vm.summaryFields = [];
 
     // data columns for groups (visits)
     vm.visitFields = [
@@ -114,8 +101,8 @@
         vm.resource = data;
 
         // remove extraneous template fields
-        vm.resource.template.data = _.filter(vm.resource.template.data, function (field) {
-          return _.contains(SERVICE_FIELDS, field.name);
+        vm.resource.template.data = _.reject(vm.resource.template.data, function (field) {
+          return _.contains(serviceOmitFields, field.name);
         });
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
@@ -128,12 +115,18 @@
       });
     }
 
-    // watch query-builder to filter down service details
-    $scope.$watchCollection('globalBilling.query.where', function(newQuery, oldQuery) {
+    /**
+     * watchQuery
+     * @description watch query-builder to filter down service details
+     * @param newQuery
+     * @param oldQuery
+     */
+    function watchQuery(newQuery, oldQuery) {
       if (newQuery && !_.isEqual(newQuery, oldQuery)) {
         init();
       }
-    });
+    }
+    $scope.$watchCollection('globalBilling.query.where', watchQuery);
   }
 
 })();
