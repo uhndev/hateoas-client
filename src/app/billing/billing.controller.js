@@ -2,7 +2,9 @@
   'use strict';
 
   angular
-    .module('altum.billing', ['altum.referral.serviceGroup'])
+    .module('altum.billing', [
+      'altum.referral.serviceGroup'
+    ])
     .controller('GlobalBillingController', GlobalBillingController);
 
   GlobalBillingController.$inject = ['$scope', '$resource', 'API'];
@@ -12,10 +14,17 @@
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
     // bindable variables
-    vm.query = {'where': {}};
+    vm.query = {
+      where: {},
+      sort: 'createdAt DESC',
+      limit: 25,
+      skip: 0
+    };
+    vm.page = 1;
     vm.template = {};
 
     vm.accordionStatus = {};
+    vm.countsPerPage = [25, 50, 75, 100];
     vm.boundGroupTypes = {
       groupBy: 'billingStatusName',
       subGroupBy: 'siteName'
@@ -29,10 +38,6 @@
 
     // data columns for main groups (visits)
     vm.groupFields = [
-      {
-        name: 'serviceGroupByDate',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
-      },
       {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
@@ -50,12 +55,24 @@
         prompt: 'COMMON.MODELS.SERVICE.SITE'
       },
       {
-        name: 'client_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
+        name: 'programName',
+        prompt: 'COMMON.MODELS.SERVICE.PROGRAM'
+      },
+      {
+        name: 'payorName',
+        prompt: 'COMMON.MODELS.PROGRAM.PAYOR'
       },
       {
         name: 'programServiceName',
         prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
+      },
+      {
+        name: 'client_displayName',
+        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
+      },
+      {
+        name: 'serviceGroupByDate',
+        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       }
     ];
 
@@ -71,6 +88,10 @@
       {
         name: 'code',
         prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
+      },
+      {
+        name: 'price',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
       },
       {
         name: 'programServiceName',
@@ -89,6 +110,7 @@
 
     // bindable methods
     vm.init = init;
+    vm.onPageChange = onPageChange;
 
     init();
 
@@ -116,6 +138,14 @@
     }
 
     /**
+     * onPageChange
+     * @description On change handler for pagination controls, will recalculate skip value for waterline query
+     */
+    function onPageChange() {
+      vm.query.skip = ((vm.page - 1) * vm.query.limit);
+    }
+
+    /**
      * watchQuery
      * @description watch query-builder to filter down service details
      * @param newQuery
@@ -126,7 +156,7 @@
         init();
       }
     }
-    $scope.$watchCollection('globalBilling.query.where', watchQuery);
+    $scope.$watchCollection('globalBilling.query', watchQuery);
   }
 
 })();
