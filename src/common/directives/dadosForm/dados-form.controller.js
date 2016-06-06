@@ -59,36 +59,66 @@
 
       vm.prev = false;
 
-      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
-        saveFormAnswers();
-      }
+      isChanged();
+
       vm.currentQuestion++;
 
       switch (true) {
-        case !vm.lockCompletionIndicator :
 
-          vm.answers.order++;
-          calculateCompletionIndicator(vm.form);
-          switch (true) {
-            case !vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize :
-              vm.isCompleted = true;
-              vm.answers.totalPercentage = 100;
-              break;
-            case vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize :
-              vm.isCompleted = true;
-              vm.answers.totalPercentage = 100;
-              vm.lockOrder = false;
-              break;
-            default:
-              //adds question percentage to total percentage
-              vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
-          }
+        case !vm.lockCompletionIndicator && !vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.answers.order + 1 === vm.answers.questionsSize :
+          reCalculateCompletionIndicator();
+          markCompleted();
+          $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
+          nextForm();
+          break;
+
+        case !vm.lockCompletionIndicator && vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize :
+          reCalculateCompletionIndicator();
+          markCompleted();
+          vm.lockOrder = false;
           $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
           nextForm();
           break;
         case vm.lockCompletionIndicator :
           nextForm();
           break;
+
+        default :
+          reCalculateCompletionIndicator();
+          //adds question percentage to total percentage
+          vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
+          $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
+          nextForm();
+          break;
+
+      }
+    }
+
+    /**
+     * reCalculateCompletionIndicator
+     * @description  Recalculates completion indicator, increments answer order.
+     */
+    function reCalculateCompletionIndicator() {
+      vm.answers.order++;
+      calculateCompletionIndicator(vm.form);
+    }
+
+    /**
+     * markCompleted
+     * @description  Marks survey completed
+     */
+    function markCompleted() {
+      vm.isCompleted = true;
+      vm.answers.totalPercentage = 100;
+    }
+
+    function isCompleted() {
+      // if inquiry is completed the question order will be questionsize-1
+      if (vm.isCompleted) {
+        vm.answers.order = vm.answers.questionsSize - 1;
+        vm.isCompleted = false;
+      }else {
+        vm.answers.order = 0;
       }
     }
 
@@ -107,13 +137,7 @@
       if (vm.currentQuestion >= vm.form.questions.length) {
 
         vm.currentQuestion = vm.form.questions.length - 1;
-        // if inquiry is completed the question order will be questionsize-1
-        if (vm.isCompleted) {
-          vm.answers.order = vm.answers.questionsSize - 1;
-          vm.isCompleted = false;
-        }else {
-          vm.answers.order = 0;
-        }
+        isCompleted();
         vm.returned = false;
         $scope.$emit('NextFormRequest');
         vm.answers.id = vm.form.id;
@@ -130,9 +154,8 @@
      */
     function prevQuestion() {
       vm.prev = true;
-      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
-        saveFormAnswers();
-      }
+
+      isChanged();
 
       vm.lockCompletionIndicator = true;
       if (vm.addLast === 0) {
@@ -300,6 +323,30 @@
     }
 
     /**
+     * isChanged
+     * @description Saves question answer when is changed
+     */
+    function isChanged() {
+      //saves
+      if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
+        saveFormAnswers();
+      }
+    }
+
+    /**
+     * defineQuestionOrder
+     * @description Mark the question order to the last saved question order
+     */
+    function defineQuestionOrder() {
+
+      if (vm.answers.order !== undefined || vm.answers.order !== null) {
+        vm.currentQuestion = vm.answers.order;
+      } else {
+        vm.currentQuestion = 0;
+      }
+    }
+
+    /**
      * $scope.$watch on dadosForm.form
      * @description Function sets up the form and tries to load answerSet if it was provided with id.
      */
@@ -311,11 +358,7 @@
         if (!vm.prev && !vm.lockCompletionIndicator) {
 
           calculateCompletionIndicator(newForm);
-
-          //saves
-          if (vm.form.questions[vm.currentQuestion].value !== vm.currentAnswer) {
-            saveFormAnswers();
-          }
+          isChanged();
         }
 
         if (vm.returned) {
@@ -328,11 +371,7 @@
             vm.answerSetID = vm.answerSet.id;
             vm.answers = vm.answerSet.answers;
 
-            if (vm.answers.order !== undefined || vm.answers.order !== null) {
-              vm.currentQuestion = vm.answers.order;
-            } else {
-              vm.currentQuestion = 0;
-            }
+            defineQuestionOrder();
 
             if (_.isBoolean(vm.answerSet.signed)) {
               vm.signed = vm.answerSet.signed;
