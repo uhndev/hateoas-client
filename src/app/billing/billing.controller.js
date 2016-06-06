@@ -2,7 +2,10 @@
   'use strict';
 
   angular
-    .module('altum.billing', ['altum.referral.serviceGroup'])
+    .module('altum.billing', [
+      'ui.sortable',
+      'altum.referral.serviceGroup'
+    ])
     .controller('GlobalBillingController', GlobalBillingController);
 
   GlobalBillingController.$inject = ['$scope', '$resource', 'API'];
@@ -12,10 +15,17 @@
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
     // bindable variables
-    vm.query = {'where': {}};
+    vm.query = {
+      where: {},
+      sort: 'createdAt DESC',
+      limit: 25,
+      skip: 0
+    };
+    vm.page = 1;
     vm.template = {};
 
     vm.accordionStatus = {};
+    vm.countsPerPage = [25, 50, 75, 100];
     vm.boundGroupTypes = {
       groupBy: 'billingStatusName',
       subGroupBy: 'siteName'
@@ -73,6 +83,10 @@
         prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
       },
       {
+        name: 'price',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+      },
+      {
         name: 'programServiceName',
         prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
       },
@@ -89,6 +103,7 @@
 
     // bindable methods
     vm.init = init;
+    vm.onPageChange = onPageChange;
 
     init();
 
@@ -116,6 +131,14 @@
     }
 
     /**
+     * onPageChange
+     * @description On change handler for pagination controls, will recalculate skip value for waterline query
+     */
+    function onPageChange() {
+      vm.query.skip = ((vm.page - 1) * vm.query.limit);
+    }
+
+    /**
      * watchQuery
      * @description watch query-builder to filter down service details
      * @param newQuery
@@ -126,7 +149,7 @@
         init();
       }
     }
-    $scope.$watchCollection('globalBilling.query.where', watchQuery);
+    $scope.$watchCollection('globalBilling.query', watchQuery);
   }
 
 })();
