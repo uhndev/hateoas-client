@@ -41,18 +41,49 @@
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-         * addSubject
-         * @description Click handler for creating a subject enrollment in the study
-         */
+     * addSubject
+     * @description Click handler for creating a subject enrollment in the study
+     */
     function addSubject() {
-      var enrollment = new SubjectEnrollment(vm.newSubject);
+      switch (true) {
+
+        case vm.newSubject.user !== undefined :
+
+          enrollExistingSubject();
+          break;
+
+        default :
+
+          enrollSubject(vm.newSubject);
+      }
+    }
+
+    /**
+     * enrollExistingSubject
+     * @description enroll existing subject to multiple studies
+     */
+    function enrollExistingSubject() {
+      var subjectEnroll = {rel: 'newEnroll', subjectNumber: vm.newSubject.id, study: vm.study, collectionCentre: vm.newSubject.collectionCentre};
+      vm.newSubject.subject = vm.newSubject.id;
+      delete vm.newSubject.id;
+      enrollSubject(_.extend(vm.newSubject, subjectEnroll));
+    }
+
+    /**
+     * enrollSubject
+     * @description enroll subject to a study
+     * @param newSubject - the subject to enroll
+     */
+    function enrollSubject(newSubject) {
+
+      var enrollment = new SubjectEnrollment(newSubject);
       enrollment.$save()
         .then(function() {
           toastr.success('Added subject to study!', 'Subject Enrollment');
         }).finally(function () {
-          vm.newSubject = {};
-          $uibModalInstance.close();
-        });
+        vm.newSubject = {};
+        $uibModalInstance.close();
+      });
     }
 
     /**
