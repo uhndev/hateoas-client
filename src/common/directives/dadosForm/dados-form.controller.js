@@ -79,6 +79,7 @@
           $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
           nextForm();
           break;
+
         case vm.lockCompletionIndicator :
           nextForm();
           break;
