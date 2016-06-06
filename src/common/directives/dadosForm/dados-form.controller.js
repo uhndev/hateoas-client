@@ -64,29 +64,31 @@
       }
       vm.currentQuestion++;
 
-      if (!vm.lockCompletionIndicator) {
+      switch (true) {
+        case !vm.lockCompletionIndicator :
 
-        vm.answers.order++;
-        calculateCompletionIndicator(vm.form);
-
-        if (!vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize) {
-          vm.isCompleted = true;
-          vm.answers.totalPercentage = 100;
-        }else if (vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize) {
-          vm.isCompleted = true;
-          vm.answers.totalPercentage = 100;
-          vm.lockOrder = false;
-        }else {
-          //adds question percentage to total percentage
-          vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
-        }
-
-        $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
-
-        nextForm();
-
-      }else if (vm.lockCompletionIndicator) {
-        nextForm();
+          vm.answers.order++;
+          calculateCompletionIndicator(vm.form);
+          switch (true) {
+            case !vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.answers.order === vm.answers.questionsSize :
+              vm.isCompleted = true;
+              vm.answers.totalPercentage = 100;
+              break;
+            case vm.lockOrder && vm.answers.completed === vm.answers.toComplete && vm.lastQuestion + 1 === vm.answers.questionsSize :
+              vm.isCompleted = true;
+              vm.answers.totalPercentage = 100;
+              vm.lockOrder = false;
+              break;
+            default:
+              //adds question percentage to total percentage
+              vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
+          }
+          $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
+          nextForm();
+          break;
+        case vm.lockCompletionIndicator :
+          nextForm();
+          break;
       }
     }
 
