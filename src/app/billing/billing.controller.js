@@ -3,7 +3,6 @@
 
   angular
     .module('altum.billing', [
-      'ui.sortable',
       'altum.referral.serviceGroup'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
