@@ -11,14 +11,26 @@
       'altum.referral.serviceStatus',
       'altum.referral.serviceGroup'
     ])
+    .constant('REFERRAL_SERVICE_VISIT_FIELDS', [
+      'altumServiceName', 'physician_displayName', 'siteName', 'serviceDate', 'visitServiceName'
+    ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService',
+    'RecommendationsService', 'REFERRAL_SERVICE_VISIT_FIELDS'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, RecommendationsService) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI,
+                              RecommendationsService, REFERRAL_SERVICE_VISIT_FIELDS) {
     var vm = this;
+
+    var templateFilterFields = [
+      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
+      'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
+    ];
+
     vm.DEFAULT_GROUP_BY = 'statusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
 
@@ -29,6 +41,11 @@
     vm.boundGroupTypes = {
       groupBy: vm.DEFAULT_GROUP_BY,
       subGroupBy: vm.DEFAULT_SUBGROUP_BY
+    };
+
+    // object of flags to be managed in referral-summary
+    vm.flagConfig = {
+      fields: false
     };
 
     // data columns for subgroups (encounter) summary table
@@ -86,38 +103,7 @@
     ];
 
     // data columns for groups (visits)
-    vm.visitFields = [
-      {
-        name: 'altumServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
-      },
-      {
-        name: 'physician_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
-      },
-      {
-        name: 'siteName',
-        prompt: 'COMMON.MODELS.SERVICE.SITE'
-      },
-      {
-        name: 'serviceDate',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
-      },
-      {
-        name: 'visitServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
-      },
-      {
-        name: 'approval',
-        prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
-        type: 'status'
-      },
-      {
-        name: 'completion',
-        prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
-        type: 'status'
-      }
-    ];
+    vm.visitFields = [];
 
     vm.init = init;
 
@@ -142,6 +128,32 @@
             subject:  'Altum CMS Communication for' + ' ' + vm.referral.client_displayName
           }
         };
+
+        // setup array of fields to choose from for referral services
+        vm.templateFieldOptions = _.filter(data.template.data, function (field) {
+          return _.contains(templateFilterFields, field.name);
+        });
+
+        // setup array of fields to choose from for referral billing
+        vm.billingFieldOptions = _.reject(vm.templateFieldOptions, function (field) {
+          return _.contains(['billingCount'], field.name);
+        });
+
+        // configure visit fields for referral services subgroup tables and add statuses
+        vm.visitFields = _.filter(data.template.data, function (field) {
+          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
+        }).concat([
+          {
+            name: 'approval',
+            prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
+            type: 'status'
+          },
+          {
+            name: 'completion',
+            prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+            type: 'status'
+          }
+        ]);
 
         vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
