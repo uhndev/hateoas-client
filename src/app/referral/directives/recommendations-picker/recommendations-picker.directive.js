@@ -24,10 +24,10 @@
     ])
     .component('recommendationsPicker', {
       bindings: {
-        referral: '=',            // bound referral containing client information
+        referral: '<',            // bound referral containing client information
         service: '=',             // shared service object
         currIndex: '=',           // current selected index in recommendedServices array
-        availableServices: '=',   // array of available services to pick from
+        availableServices: '<',   // array of available services to pick from
         recommendedServices: '=', // array of selected services to recommend
         searchQuery: '=',         // string bound for fuzzy searching available services,
         config: '=?'              // object containing two attributes which can configure the picker:
@@ -77,6 +77,7 @@
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
     vm.navigateKey = navigateKey;
+    vm.renderServiceName = renderServiceName;
 
     init();
 
@@ -194,6 +195,24 @@
           }
           break;
       }
+    }
+
+    /**
+     * renderServiceName
+     * @description Instead of adding more bindings to the view, we prepare the service item name string here
+     * @param service
+     * @returns {string}
+     */
+    function renderServiceName(service) {
+      var serviceName = '';
+      if (_.has(vm.config.billing, 'programServiceCode') && vm.config.billing.programServiceCode) {
+        serviceName += '<b>' + service.programServiceCode + ' &Rightarrow; </b>';
+      }
+      if (_.has(vm.config.billing, 'programServiceName') && vm.config.billing.programServiceName) {
+        serviceName += '<i>' + service.programServiceName + '</i> <b> &Rightarrow; </b>';
+      }
+      serviceName += service.variationSelection && _.has(service.variationSelection, 'name') ? service.variationSelection.name : service.name;
+      return serviceName;
     }
   }
 

@@ -1,0 +1,67 @@
+<uib-accordion close-others="false">
+  <uib-accordion-group ng-repeat="(groupKey, groupedServices) in serviceGroup.services | fuzzy: serviceGroup.search | groupBy: serviceGroup.boundGroupTypes.groupBy"
+                       ng-init="serviceGroup.accordionStatus[groupKey].isOpen = false"
+                       is-open="serviceGroup.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+    <uib-accordion-heading>
+      <i class="glyphicon" ng-class="{
+        'glyphicon-chevron-right': !serviceGroup.accordionStatus[groupKey].isOpen,
+        'glyphicon-chevron-down': serviceGroup.accordionStatus[groupKey].isOpen
+      }"></i>
+      {{ groupKey === "null" ? "N/A" : groupKey }}
+      <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
+    </uib-accordion-heading>
+
+    <div layout="column">
+      <uib-accordion close-others="false">
+        <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: serviceGroup.boundGroupTypes.subGroupBy"
+                             ng-init="serviceGroup.accordionStatus[groupKey][subGroup].isOpen = false"
+                             is-open="serviceGroup.accordionStatus[groupKey][subGroup].isOpen">
+          <uib-accordion-heading>
+            <i class="glyphicon" ng-class="{
+                'glyphicon-chevron-right': !serviceGroup.accordionStatus[groupKey][subGroup].isOpen,
+                'glyphicon-chevron-down': serviceGroup.accordionStatus[groupKey][subGroup].isOpen
+              }"></i>
+            {{ subGroup === "null" ? "N/A" : subGroup }}
+            <span class="pull-right badge">{{subServices.length}}</span>
+          </uib-accordion-heading>
+          <div ng-if="serviceGroup.summaryFields.length">
+            <table class="table table-condensed summary-table">
+              <tr class="summary-header-row">
+                <th ng-repeat="summary in serviceGroup.summaryFields" translate
+                    ng-if="subServices[0][summary.name]">
+                  {{summary.prompt}}
+                </th>
+              </tr>
+              <tr class="summary-table-row">
+                <td ng-repeat="summary in serviceGroup.summaryFields" ng-if="subServices[0][summary.name]">
+                  {{subServices[0][summary.name]}}
+                </td>
+              </tr>
+            </table>
+            <md-divider></md-divider>
+          </div>
+
+          <table class="table table-condensed" ng-if="serviceGroup.accordionStatus[groupKey][subGroup].isOpen" >
+            <tr>
+              <th ng-repeat="field in serviceGroup.visitFields" translate>{{field.prompt}}</th>
+            </tr>
+            <tr ng-repeat="service in subServices | orderBy: 'itemCount'" class="{{service.rowClass}}">
+              <td ng-repeat="field in serviceGroup.visitFields" ng-switch="field.type">
+                <service-status ng-switch-when="status"
+                                service="service"
+                                on-update="serviceGroup.onUpdate()"
+                                status-type="{{field.name}}">
+                </service-status>
+                <button ng-switch-when="button"
+                        class="btn btn-primary btn-sm" ng-click="field.onClick(service)">
+                  <span class="glyphicon {{field.iconClass}}"></span>
+                </button>
+                <span ng-switch-default>{{service[field.name] || '-'}}</span>
+              </td>
+            </tr>
+          </table>
+        </uib-accordion-group>
+      </uib-accordion>
+    </div>
+  </uib-accordion-group>
+</uib-accordion>

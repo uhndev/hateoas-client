@@ -30,73 +30,11 @@
                   email-info="services.emailInfo">
   </altum-notebook>
 
-  <uib-accordion close-others="false">
-    <uib-accordion-group ng-repeat="(groupKey, groupedServices) in services.services | fuzzy: services.search | groupBy: services.boundGroupTypes.groupBy"
-                         ng-init="services.accordionStatus[groupKey].isOpen = false"
-                         is-open="services.accordionStatus[groupKey].isOpen" panel-class="panel-info">
-      <uib-accordion-heading>
-        <i class="glyphicon" ng-class="{
-        'glyphicon-chevron-right': !services.accordionStatus[groupKey].isOpen,
-        'glyphicon-chevron-down': services.accordionStatus[groupKey].isOpen
-      }"></i>
-        {{ groupKey === "null" ? "N/A" : groupKey }}
-        <span class="pull-right">Total: {{groupedServices.length}} Recommended Service(s)</span>
-      </uib-accordion-heading>
-
-      <div layout="column">
-        <uib-accordion close-others="false">
-          <uib-accordion-group ng-repeat="(subGroup, subServices) in groupedServices | groupBy: services.boundGroupTypes.subGroupBy"
-                               ng-init="services.accordionStatus[groupKey][subGroup].isOpen = false"
-                               is-open="services.accordionStatus[groupKey][subGroup].isOpen">
-            <uib-accordion-heading>
-              <i class="glyphicon" ng-class="{
-                'glyphicon-chevron-right': !services.accordionStatus[groupKey][subGroup].isOpen,
-                'glyphicon-chevron-down': services.accordionStatus[groupKey][subGroup].isOpen
-              }"></i>
-              {{ subGroup === "null" ? "N/A" : subGroup }}
-              <span class="pull-right badge">{{subServices.length}}</span>
-            </uib-accordion-heading>
-            <table class="table table-condensed summary-table">
-              <tr class="summary-header-row">
-                <th ng-repeat="summary in services.summaryFields" translate
-                    ng-if="subServices[0][summary.name]">
-                  {{summary.prompt}}
-                </th>
-              </tr>
-              <tr class="summary-table-row">
-                <td ng-repeat="summary in services.summaryFields" ng-if="subServices[0][summary.name]">
-                  {{subServices[0][summary.name]}}
-                </td>
-              </tr>
-            </table>
-            <md-divider></md-divider>
-            <table class="table table-condensed" ng-if="services.accordionStatus[groupKey][subGroup].isOpen" >
-              <tr>
-                <th ng-repeat="field in services.visitFields" translate>{{field.prompt}}</th>
-                <th translate>COMMON.MODELS.SERVICE.APPROVALS</th>
-                <th translate>COMMON.MODELS.SERVICE.COMPLETION</th>
-              </tr>
-              <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
-                <td ng-repeat="field in services.visitFields">
-                  {{service[field.name]}}
-                </td>
-                <td>
-                  <service-status service="service"
-                                  on-update="services.init()"
-                                  status-type="approval">
-                  </service-status>
-                </td>
-                <td>
-                  <service-status service="service"
-                                  on-update="services.init()"
-                                  status-type="completion">
-                  </service-status>
-                </td>
-              </tr>
-            </table>
-          </uib-accordion-group>
-        </uib-accordion>
-      </div>
-    </uib-accordion-group>
-  </uib-accordion>
+  <service-group services="services.services"
+                 search="services.search"
+                 bound-group-types="services.boundGroupTypes"
+                 visit-fields="services.visitFields"
+                 summary-fields="services.summaryFields"
+                 on-update="services.init">
+  </service-group>
 </div>
