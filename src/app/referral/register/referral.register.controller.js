@@ -49,7 +49,7 @@
         $state.go('hateoas');
       },
       function (err) {
-        toastr.error('failed to create the referral')
+        toastr.error('failed to create the referral');
         console.log('failed to created the referral');
       });
     }
