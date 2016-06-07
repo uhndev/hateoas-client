@@ -1,0 +1,229 @@
+<div class="container">
+  <div id="page-heading">
+    <h2>Referral Info</h2>
+  </div>
+
+  </br>
+
+  <form name="referralregister" novalidate>
+    <div class="form-horizontal">
+      <div class="row">
+        <div class="col-lg-6">
+          <fieldset>
+            <legend>Manage Referral</legend>
+            <div class="row">
+              <div class="col-md-1"><img src="/assets/img/patienticon.png" height="50"></div>
+              <div class="col-md-12">
+
+                <div class="form-group">
+                  <label class="control-label" for="client">Client:</label>
+                  <select-loader
+                      url="client"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.client"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="site">Site:</label>
+                  <select-loader
+                      url="site"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.site"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="program">Program:</label>
+                  <select-loader
+                      url="program"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.program"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="physician">Physician:</label>
+                  <select-loader
+                      url="physician"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.physician"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="staff">Staff:</label>
+                  <select-loader
+                      url="staff"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.staff"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="payors">Payors:</label>
+                  <select-loader
+                      url="payor"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      ng-model="RC.referral.payors"
+                      labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Referral Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.referralDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened1" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened1 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Clinic Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.clinicDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened2" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened2 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Accident Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.accidentDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened3" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened3 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Receive Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.receiveDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened4" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened4 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Sent Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.sentDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened5" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened5 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Discharge Date:</label>
+                  <div class="col-md-13">
+                    <p class="input-group">
+                      <input type="text"
+                             ng-model="RC.referral.dischargeDate"
+                             class="form-control"
+                             uib-datepicker-popup
+                             type="datetime-local"
+                             is-open="RC.opened6" required/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="RC.opened6 = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"> Recommendations made:
+                      <input type="checkbox" ng-model="RC.referral.recommendationsMade"></input>
+                    </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button ng-click="RC.referralAdd(isValid)" type="submit" ng-if="!RC.referral.id"
+              ng-disabled="referralForm.$invalid"
+              class="btn btn-primary"><i></i> Add
+      </button>
+      <button ng-click="RC.save(isValid)" type="submit" ng-if="RC.referral.id"
+              ng-disabled="referralForm.$invalid && RC.referral.$invalid"
+              class="btn btn-primary"><i></i> Save
+      </button>
+      <button ng-click="RC.cancel()" ng-disabled="RC.referral.$invalid"
+              class="btn">Cancel
+      </button>
+    </div>
+  </form>
+</div>
