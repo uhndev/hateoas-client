@@ -30,7 +30,8 @@
         $state.go('hateoas');
       },
       function (err) {
-        console.log('Updating client ' + 'failed. ' + err);
+        toastr.error('Updating referral ' + 'failed. ' + err);
+        console.log('Updating referral ' + 'failed. ' + err);
       });
     }
 
@@ -48,7 +49,8 @@
         $state.go('hateoas');
       },
       function (err) {
-        console.log('failed to created the client');
+        toastr.error('failed to create the referral')
+        console.log('failed to created the referral');
       });
     }
 
@@ -62,7 +64,10 @@
       $state.go('hateoas');
     }
 
-    //backbutton watcher
+    /**
+     *backbutton watcher
+     *@description this is used to keep track of when the back button is pressed, takes user back to referral pageTitle
+     */
     $scope.$on('$locationChangeStart', function (e, currentHref, prevHref) {
       if ($state.is('newReferral') || $state.is('editReferral') && prevHref !== currentHref) {
         DefaultRoute.resolve();
