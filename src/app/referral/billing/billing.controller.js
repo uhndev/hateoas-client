@@ -11,7 +11,7 @@
 
   function BillingController($uibModal, $scope, AltumAPI) {
     var vm = this;
-    vm.DEFAULT_GROUP_BY = 'completionStatusName';
+    vm.DEFAULT_GROUP_BY = 'billingStatusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
 
     // bindable variables
@@ -34,10 +34,6 @@
         prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
       },
       {
-        name: 'physician_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
-      },
-      {
         name: 'siteName',
         prompt: 'COMMON.MODELS.SERVICE.SITE'
       },
@@ -46,8 +42,16 @@
         prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       },
       {
-        name: 'visitServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
+        name: 'code',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
+      },
+      {
+        name: 'price',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+      },
+      {
+        name: 'billingCount',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
       },
       {
         name: 'completion',

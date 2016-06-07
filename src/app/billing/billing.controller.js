@@ -26,8 +26,8 @@
     vm.accordionStatus = {};
     vm.countsPerPage = [25, 50, 75, 100];
     vm.boundGroupTypes = {
-      groupBy: 'billingStatusName',
-      subGroupBy: 'siteName'
+      groupBy: 'client_displayName',
+      subGroupBy: 'billingStatusName'
     };
 
     // array of options denoting which groups can be bound to (vm.boundGroupTypes.groupBy)
@@ -94,12 +94,12 @@
         prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
       },
       {
-        name: 'programServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
-      },
-      {
         name: 'altumServiceName',
         prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+      },
+      {
+        name: 'billingCount',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
       },
       {
         name: 'billing',

@@ -56,16 +56,16 @@
     // data columns for main groups (visits)
     vm.groupFields = [
       {
-        name: 'serviceGroupByDate',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
-      },
-      {
         name: 'statusName',
         prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
       },
       {
         name: 'completionStatusName',
         prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
+      },
+      {
+        name: 'billingStatusName',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS'
       },
       {
         name: 'siteName',
@@ -78,6 +78,10 @@
       {
         name: 'physician_displayName',
         prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
+      },
+      {
+        name: 'serviceGroupByDate',
+        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
       }
     ];
 
