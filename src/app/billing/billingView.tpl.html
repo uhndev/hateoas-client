@@ -41,7 +41,8 @@
 
   <uib-pagination total-items="globalBilling.resource.total"
                   items-per-page="globalBilling.query.limit"
-                  rotate="false" force-ellipses="true"
+                  boundary-link-numbers="true"
+                  max-size="10" rotate="false" force-ellipses="true"
                   ng-model="globalBilling.page"
                   ng-change="globalBilling.onPageChange()">
   </uib-pagination>

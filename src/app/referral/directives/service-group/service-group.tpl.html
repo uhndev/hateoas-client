@@ -45,7 +45,7 @@
             <tr>
               <th ng-repeat="field in serviceGroup.visitFields" translate>{{field.prompt}}</th>
             </tr>
-            <tr ng-repeat="service in subServices | orderBy: 'createdAt'" class="{{service.rowClass}}">
+            <tr ng-repeat="service in subServices | orderBy: 'itemCount'" class="{{service.rowClass}}">
               <td ng-repeat="field in serviceGroup.visitFields" ng-switch="field.type">
                 <service-status ng-switch-when="status"
                                 service="service"
