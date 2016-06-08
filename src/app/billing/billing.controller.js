@@ -13,9 +13,9 @@
     ])
     .controller('GlobalBillingController', GlobalBillingController);
 
-  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'GLOBAL_BILLING_VISIT_FIELDS', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
+  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
 
-  function GlobalBillingController($scope, $resource, API, GLOBAL_BILLING_VISIT_FIELDS, GLOBAL_BILLING_TEMPLATE_FIELDS) {
+  function GlobalBillingController($scope, $resource, API, GLOBAL_BILLING_TEMPLATE_FIELDS) {
     var vm = this;
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
