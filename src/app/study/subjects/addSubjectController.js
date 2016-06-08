@@ -45,13 +45,6 @@
          * @description Click handler for creating a subject enrollment in the study
          */
     function addSubject() {
-
-      if (!_.isEmpty(vm.newSubject.subject)) {
-        var existentSubject = _.pick(vm.newSubject.subject[0], 'id', 'user');
-        delete vm.newSubject.subject;
-        vm.newSubject.subject = existentSubject;
-      }
-
       var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment.$save()
         .then(function() {
