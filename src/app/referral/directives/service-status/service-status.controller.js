@@ -8,6 +8,7 @@
     ])
     .constant('STATUS_TYPES', {
       'approval': {
+        'model': 'approval',
         'collection': 'approvals',
         'currentType': 'currentApproval',
         'currentStatus': 'currentStatus',
@@ -22,6 +23,7 @@
         ]
       },
       'completion': {
+        'model': 'completion',
         'collection': 'completion',
         'currentType': 'currentCompletion',
         'currentStatus': 'currentCompletionStatus',
@@ -41,6 +43,7 @@
         ]
       },
       'billing': {
+        'model': 'billingstatus',
         'collection': 'billingStatuses',
         'currentType': 'currentBillingStatus',
         'currentStatus': 'currentBillingStatusStatus',
@@ -65,9 +68,11 @@
         ]
       }
     })
-    .controller('ServiceStatusController', ServiceStatusController);
+    .controller('ServiceStatusController', ServiceStatusController)
+    .controller('ApprovalConfirmationModal', ApprovalConfirmationModal);
 
   ServiceStatusController.$inject = ['$scope', '$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
+  ApprovalConfirmationModal.$inject = ['$uibModalInstance', 'newStatus', 'statusType', 'statusTemplateForm', 'TemplateService'];
 
   function ServiceStatusController($scope, $resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
     var vm = this;
@@ -142,52 +147,15 @@
         var modalInstance = $uibModal.open({
           animation: true,
           template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
-          controller: function ApprovalConfirmationModal($uibModalInstance, newStatus, statusTemplateForm, TemplateService) {
-            var vm = this;
-            vm.newStatus = newStatus;
-            vm.statusTemplateForm = statusTemplateForm;
-
-            vm.statusData = {
-              status: newStatus.id
-            };
-
-            // set required fields to null in approval object
-            _.each(vm.newStatus.rules.requires[statusType], function (field) {
-              vm.statusData[field] = null;
-            });
-
-            /**
-             * isFieldRequired
-             * @description Returns true if field is required in confirmation form
-             * @param field
-             * @returns {Boolean}
-             */
-            vm.isFieldRequired = function (field) {
-              return _.contains(vm.newStatus.rules.requires[statusType], field);
-            };
-
-            /**
-             * confirm
-             * @description Returns the approval object upon confirmation
-             */
-            vm.confirm = function () {
-              var answers = _.merge(vm.statusData, TemplateService.formToObject(vm.statusTemplateForm));
-              $uibModalInstance.close(answers);
-            };
-
-            /**
-             * cancel
-             * @description cancels and closes the modal window
-             */
-            vm.cancel = function () {
-              $uibModalInstance.dismiss();
-            };
-          },
+          controller: 'ApprovalConfirmationModal',
           controllerAs: 'ac',
           bindToController: true,
           resolve: {
             newStatus: function () {
               return vm.statuses[vm.service[vm.currentStatus]];
+            },
+            statusType: function () {
+              return statusType;
             },
             statusTemplateForm: function (TemplateService) {
               var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
@@ -229,11 +197,7 @@
      * @param approvalObj
      */
     function saveApprovalStatus(approvalObj) {
-      var newApproval = new ServiceApproval(approvalObj);
-      newApproval.$save(function (approval) {
-        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service[vm.currentStatus]].name, 'Services');
-        vm.onUpdate();
-      });
+
     }
 
     /**
@@ -248,6 +212,48 @@
       }
     }
     $scope.$watch('serviceStatus.service', watchServiceChange);
+  }
+
+  function ApprovalConfirmationModal($uibModalInstance, newStatus, statusType, statusTemplateForm, TemplateService) {
+    var vm = this;
+    vm.newStatus = newStatus;
+    vm.statusTemplateForm = statusTemplateForm;
+
+    vm.statusData = {
+      status: newStatus.id
+    };
+
+    // set required fields to null in approval object
+    _.each(vm.newStatus.rules.requires[statusType], function (field) {
+      vm.statusData[field] = null;
+    });
+
+    /**
+     * isFieldRequired
+     * @description Returns true if field is required in confirmation form
+     * @param field
+     * @returns {Boolean}
+     */
+    vm.isFieldRequired = function (field) {
+      return _.contains(vm.newStatus.rules.requires[statusType], field);
+    };
+
+    /**
+     * confirm
+     * @description Returns the approval object upon confirmation
+     */
+    vm.confirm = function () {
+      var answers = _.merge(vm.statusData, TemplateService.formToObject(vm.statusTemplateForm));
+      $uibModalInstance.close(answers);
+    };
+
+    /**
+     * cancel
+     * @description cancels and closes the modal window
+     */
+    vm.cancel = function () {
+      $uibModalInstance.dismiss();
+    };
   }
 
 })();
