@@ -37,28 +37,28 @@
         // data columns for referral overview table
         vm.referralOverview = [
           {
-            value: vm.referralData.client_mrn,
-            prompt:"COMMON.MODELS.CLIENT.MRN"
+            value:vm.referralData.client_mrn,
+            prompt:'COMMON.MODELS.CLIENT.MRN'
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.CLIENT',
-            value: vm.referralData.client_displayName
+            value:vm.referralData.client_displayName
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.CLAIM_NUMBER',
-            value: vm.referralData.claimNumber
+            value:vm.referralData.claimNumber
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.PROGRAM',
-            value: vm.referralData.program_name
+            value:vm.referralData.program_name
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.PHYSICIAN',
-            value: vm.referralData.physician_name
+            value:vm.referralData.physician_name
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.STAFF',
-            value: vm.referralData.staff_name
+            value:vm.referralData.staff_name
           },
           {
             prompt:'COMMON.MODELS.REFERRAL.SITE',
