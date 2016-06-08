@@ -6,9 +6,6 @@
       'ui.sortable',
       'altum.referral.serviceGroup'
     ])
-    .constant('GLOBAL_BILLING_VISIT_FIELDS', [
-      'client_displayName', 'code', 'price', 'altumServiceName', 'billingCount'
-    ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',

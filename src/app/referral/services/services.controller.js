@@ -11,18 +11,13 @@
       'altum.referral.serviceStatus',
       'altum.referral.serviceGroup'
     ])
-    .constant('REFERRAL_SERVICE_VISIT_FIELDS', [
-      'altumServiceName', 'physician_displayName', 'siteName', 'visitServiceName', 'serviceDate'
-    ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService',
-    'RecommendationsService', 'REFERRAL_SERVICE_VISIT_FIELDS'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI,
-                              RecommendationsService, REFERRAL_SERVICE_VISIT_FIELDS) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
