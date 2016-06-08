@@ -38,6 +38,7 @@
     // bindable methods
     vm.addSubject = addSubject;
     vm.cancel = cancel;
+
     ///////////////////////////////////////////////////////////////////////////
 
     /**
