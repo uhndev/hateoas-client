@@ -8,6 +8,7 @@
     ])
     .constant('STATUS_TYPES', {
       'approval': {
+        'model': 'approval',
         'collection': 'approvals',
         'currentType': 'currentApproval',
         'currentStatus': 'currentStatus',
@@ -22,6 +23,7 @@
         ]
       },
       'completion': {
+        'model': 'completion',
         'collection': 'completion',
         'currentType': 'currentCompletion',
         'currentStatus': 'currentCompletionStatus',
@@ -41,6 +43,7 @@
         ]
       },
       'billing': {
+        'model': 'billingstatus',
         'collection': 'billingStatuses',
         'currentType': 'currentBillingStatus',
         'currentStatus': 'currentBillingStatusStatus',
@@ -194,11 +197,7 @@
      * @param approvalObj
      */
     function saveApprovalStatus(approvalObj) {
-      var newApproval = new ServiceApproval(approvalObj);
-      newApproval.$save(function (approval) {
-        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service[vm.currentStatus]].name, 'Services');
-        vm.onUpdate();
-      });
+
     }
 
     /**

@@ -137,7 +137,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-    function init(templateFields, visitFields) {
+    function init() {
       var Resource = $resource(vm.url);
 
       Resource.get(function (data, headers) {

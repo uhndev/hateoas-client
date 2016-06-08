@@ -33,31 +33,26 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'AltumAPIService', 'STATUS_TYPES'];
+  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES'];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, AltumAPI, STATUS_TYPES) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES) {
     var vm = this;
-    var Approval = $resource(API.url('approval'), {}, {
-      'query': {method: 'GET', isArray: false}
-    });
-    var Completion = $resource(API.url('completion'), {}, {
-      'query': {method: 'GET', isArray: false}
-    });
-    var BillingStatus = $resource(API.url('billingstatus'), {}, {
-      'query': {method: 'GET', isArray: false}
+    var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
+      'save' : {method: 'POST', isArray: false}
     });
 
+    // bindable variables
     vm.templates = {};
-    Approval.query({where: {id: 0}, limit: 1}, function (approval) {
-      vm.templates.approval = approval.template;
-    });
-    Completion.query({where: {id: 0}, limit: 1}, function (completion) {
-      vm.templates.completion = completion.template;
-    });
-    BillingStatus.query({where: {id: 0}, limit: 1}, function (billingStatus) {
-      vm.templates.billing = billingStatus.template;
+    _.each(['approval', 'completion', 'billing'], function (statusType) {
+      var StatusType = $resource(API.url(STATUS_TYPES[statusType].model), {}, {
+        'query': {method: 'GET', isArray: false}
+      });
+      StatusType.query({where: {id: 0}, limit: 1}, function (data) {
+        vm.templates[statusType] = data.template;
+      });
     });
 
+    // bindable methods
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
@@ -70,9 +65,12 @@
       var filteredStatuses = _.filter(['approval', 'completion', 'billing'], function(field) {
         return _.contains(_.map(vm.visitFields, 'name'), field);
       });
-      AltumAPI.Status.query({where: {category: filteredStatuses}}, function (statuses) {
-        vm.statuses = _.groupBy(statuses, 'category');
-      });
+
+      if (filteredStatuses.length) {
+        AltumAPI.Status.query({where: {category: filteredStatuses}}, function (statuses) {
+          vm.statuses = _.groupBy(statuses, 'category');
+        });
+      }
     }
 
     /**
@@ -129,8 +127,8 @@
                     return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
                   });
                   var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                  form.form_title = 'Status Confirmation';
-                  form.form_submitText = 'Change Status';
+                  form.form_title = 'Bulk Status Change';
+                  form.form_submitText = 'Change Statuses';
                   return form;
                 }
               }
@@ -168,9 +166,26 @@
      * @param approvalObj
      */
     function saveStatuses(services, category, approvalObj) {
-      console.log(services.length, STATUS_TYPES[category].collection, approvalObj);
+      var bulkStatusChange = new BulkStatusChange({
+        model: STATUS_TYPES[category].model,
+        newStatuses: _.map(services, function (service) {
+          return _.merge({service: service.id}, approvalObj);
+        })
+      });
+
+      bulkStatusChange.$save(function (updatedStatuses) {
+        toastr.success(services.length + ' service(s) updated to: ' + vm.statusSelections[category].name, 'Services');
+        vm.statusSelections[category] = null;
+        vm.onUpdate();
+      });
     }
 
+    /**
+     * watchVisitFields
+     * @description When visitFields change, may need to fetch additional statuses for dropdowns
+     * @param newVal
+     * @param oldVal
+     */
     function watchVisitFields(newVal, oldVal) {
       if (newVal !== oldVal) {
         init();
