@@ -16,18 +16,15 @@
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService'
+    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService', 'AltumAPIService'
   ];
 
-  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService) {
+  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService, AltumAPI) {
     var vm = this;
-    var ReferralServices;
 
     // bindable variables
     vm.url = API.url() + $location.path();
     var Resource = $resource(vm.url);
-    var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
-    ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
 
     // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
@@ -75,6 +72,7 @@
 
         // load physician in from referraldetail
         vm.sharedService = {
+          referral: data.items.id,
           physician: data.items.physician || null,
           staffCollection: {},
           staff: [],
@@ -120,7 +118,7 @@
     function saveServices() {
       vm.isSaving = true;
       $q.all(_.map(vm.recommendedServices, function (service) {
-          var serviceObj = new ReferralServices(RecommendationsService.prepareService(service));
+          var serviceObj = new AltumAPI.BillingGroup(RecommendationsService.prepareService(service));
           return serviceObj.$save();
         }))
         .then(function (data) {

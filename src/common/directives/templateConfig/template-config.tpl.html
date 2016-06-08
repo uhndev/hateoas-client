@@ -1,0 +1,27 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title" translate>COMMON.DIRECTIVES.TEMPLATE_CONFIG.LABELS.FIELD_CONFIGURATION</h3>
+  </div>
+  <div class="panel-body">
+    <strong translate>COMMON.DIRECTIVES.TEMPLATE_CONFIG.LABELS.AVAILABLE_FIELDS</strong>:
+    <div class="well well-sm template-container"
+         ui-sortable="templateConfig.sortingOptions"
+         ng-model="templateConfig.availableFields">
+        <span ng-repeat="field in templateConfig.availableFields track by $index"
+              type="button" class="btn btn-default btn-xs permission-btn" translate>
+          {{field.prompt}}
+        </span>
+    </div>
+
+    <strong translate>COMMON.DIRECTIVES.TEMPLATE_CONFIG.LABELS.VISIBLE_FIELDS</strong>:
+    <div class="well well-sm template-container"
+         ui-sortable="templateConfig.sortingOptions"
+         ng-model="templateConfig.visibleFields">
+        <span ng-repeat="field in templateConfig.visibleFields"
+              ng-click="templateConfig.removeField(field, $index)"
+              type="button" class="btn btn-info btn-xs permission-btn">
+            {{field.prompt | translate}} <i class="fa fa-times"></i>
+        </span>
+    </div>
+  </div>
+</div>

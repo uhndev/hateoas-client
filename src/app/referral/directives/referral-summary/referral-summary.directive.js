@@ -19,7 +19,8 @@
         referralData: '<',    // default referral object
         boundGroups: '=?',    // object where groupType.name is bound outward
         groupTypes: '<?',     // array of names and prompts that can be bound
-        groupFields: '<?'     // array of configuration data groups that can be chosen from
+        groupFields: '<?',    // array of configuration data groups that can be chosen from
+        configFlags: '=?'     // optional object containing flags that can be toggled
       },
       controller: 'ReferralSummaryController',
       controllerAs: 'summary',
@@ -44,6 +45,11 @@
           'COMMON.MODELS.REFERRAL.STAFF': vm.referralData.staff_name,
           'COMMON.MODELS.REFERRAL.SITE': vm.referralData.site_name
         };
+
+        if (vm.configFlags) { // keys of configFlags become table headers
+          vm.flagOptions = _.keys(vm.configFlags);
+        }
+
         unregister(); // unregister watcher
       }
     });

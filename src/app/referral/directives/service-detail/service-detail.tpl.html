@@ -15,6 +15,12 @@
               ng-options="site.id as site.name for site in detail.service.availableSites">
       </select>
     </div>
+    <div class="form-group" ng-if="detail.service.repeatable">
+      <label translate>
+        APP.REFERRAL.RECOMMENDATIONS.LABELS.NUMBER_OF_SESSIONS
+      </label>
+      <input type="number" class="form-control" ng-model="detail.service.totalItems" min="0"/>
+    </div>
     <div class="form-group" ng-if="detail.service.serviceVariation">
       <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_VARIATIONS</label>
       <span class="fa fa-cog fa-lg selectable" ng-click="detail.openVariationModal()"></span>

@@ -6,6 +6,7 @@
     'altum.referral.recommendations',
     'altum.referral.serviceStatus',
     'altum.referral.services',
-    'altum.referral.billing'
+    'altum.referral.billing',
+    'altum.referral.register'
   ]);
 })();
