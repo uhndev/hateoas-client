@@ -102,9 +102,6 @@
       }
     ];
 
-    // data columns for groups (visits)
-    vm.visitFields = [];
-
     vm.init = init;
 
     init();
@@ -130,17 +127,19 @@
         };
 
         // setup array of fields to choose from for referral services
-        vm.templateFieldOptions = _.filter(data.template.data, function (field) {
+        vm.templateFieldOptions = vm.templateFieldOptions || _.filter(data.template.data, function (field) {
           return _.contains(templateFilterFields, field.name);
         });
 
         // setup array of fields to choose from for referral billing
-        vm.billingFieldOptions = _.reject(vm.templateFieldOptions, function (field) {
+        vm.billingFieldOptions = vm.billingFieldOptions || _.reject(vm.templateFieldOptions, function (field) {
           return _.contains(['billingCount'], field.name);
         });
 
         // configure visit fields for referral services subgroup tables and add statuses
-        vm.visitFields = _.filter(data.template.data.concat([
+        vm.visitFields = vm.visitFields || _.filter(data.template.data, function (field) {
+          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
+        }).concat([
           {
             name: 'approval',
             prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
@@ -151,9 +150,7 @@
             prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
             type: 'status'
           }
-        ]), function (field) {
-          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
-        });
+        ]);
 
         vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 

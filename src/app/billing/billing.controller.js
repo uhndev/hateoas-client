@@ -88,9 +88,6 @@
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [];
 
-    // data columns for groups (visits)
-    vm.visitFields = [];
-
     // bindable methods
     vm.init = init;
     vm.onPageChange = onPageChange;
@@ -106,12 +103,12 @@
         vm.resource = data;
 
         // remove extraneous template fields
-        vm.resource.template.data = _.reject(vm.resource.template.data, function (field) {
+        vm.resource.template.data = vm.resource.template.data || _.reject(vm.resource.template.data, function (field) {
           return _.contains(serviceOmitFields, field.name);
         });
 
         // configure visit fields for global billing subgroup tables and add billing status
-        vm.visitFields = _.filter(data.template.data, function (field) {
+        vm.visitFields = vm.visitFields || _.filter(data.template.data, function (field) {
           return _.contains(GLOBAL_BILLING_VISIT_FIELDS, field.name);
         }).concat([
           {
@@ -122,7 +119,7 @@
         ]);
 
         // setup array of fields to choose from in template-config
-        vm.templateFieldOptions = _.filter(vm.resource.template.data, function (field) {
+        vm.templateFieldOptions = vm.templateFieldOptions || _.filter(vm.resource.template.data, function (field) {
           return _.contains(GLOBAL_BILLING_TEMPLATE_FIELDS, field.name);
         }).concat([
           {

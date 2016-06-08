@@ -21,7 +21,7 @@
         services: '=',
         search: '=',
         boundGroupTypes: '=',
-        visitFields: '<',
+        visitFields: '=',
         summaryFields: '<',
         onUpdate: '='
       },
