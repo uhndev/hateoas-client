@@ -29,7 +29,7 @@
     vm.newSubject = {study: study.id};
     vm.study = study;
     vm.centreHref = centreHref;
-    vm.view = false;
+    vm.toggleAddSubjectView = false;
     vm.statuses = ENROLLMENT_STATUSES;
     StudyUser.query({studyID: study.id}).$promise.then(function (data) {
       vm.studyUsers = {user: _.pluck(data, 'id')};
@@ -38,8 +38,6 @@
     // bindable methods
     vm.addSubject = addSubject;
     vm.cancel = cancel;
-    vm.checked = checked;
-
     ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -71,14 +69,6 @@
     function cancel() {
       vm.newSubject = {};
       $uibModalInstance.dismiss('cancel');
-    }
-
-    function checked() {
-      if (vm.view) {
-        vm.view = false;
-      }else {
-        vm.view = true;
-      }
     }
   }
 })();

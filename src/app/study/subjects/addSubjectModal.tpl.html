@@ -1,17 +1,17 @@
 <div class="modal-header">
   <h3 class="modal-title" translate>COMMON.MODELS.STUDY.SUBJECTS.ADD</h3>
   <div class="checkbox">
-    <input data-toggle="toggle" ng-click="addSubject.checked()" data-onstyle="primary" type="checkbox">
+    <input data-toggle="toggle" ng-click="addSubject.toggleAddSubjectView= !addSubject.toggleAddSubjectView" data-onstyle="primary" type="checkbox">
     <label translate>
       COMMON.MODELS.STUDY.SUBJECTS.EXISTENT_SUBJECT
     </label>
   </div>
 </div>
 <div class="modal-body">
-  <user-editor ng-if = "!addSubject.view" horizontal="true" can-generate-password="true" user="addSubject.newSubject"></user-editor>
+  <user-editor ng-if = "!addSubject.toggleAddSubjectView" horizontal="true" can-generate-password="true" user="addSubject.newSubject"></user-editor>
   <hr/>
   <ng-form name="enrollmentForm" class="form-horizontal" novalidate>
-    <div class="form-group" ng-if = "addSubject.view">
+    <div class="form-group" ng-if = "addSubject.toggleAddSubjectView">
       <label for="subject" class="col-sm-3 control-label" translate>COMMON.MODELS.STUDY.SUBJECTS.SUBJECT</label>
       <div class="col-sm-9">
         <select-loader
