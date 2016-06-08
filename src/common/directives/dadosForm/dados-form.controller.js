@@ -29,6 +29,7 @@
     vm.returned = false;
     vm.signed = false;
     vm.prev = false;
+    vm.percCompleted = 0;
     vm.lockCompletionIndicator = false;
     vm.lockOrder = false;
     vm.lastForm = [];
@@ -88,6 +89,7 @@
           reCalculateCompletionIndicator();
           //adds question percentage to total percentage
           vm.answers.totalPercentage = vm.answers.acum + vm.percCompleted;
+          vm.percCompleted = vm.answers.totalPercentage;
           $scope.$broadcast('NextIndicator', vm.answers.totalPercentage);
           nextForm();
           break;
@@ -106,7 +108,7 @@
 
     /**
      * markCompleted
-     * @description  Marks survey completed
+     * @description  Mark survey completed
      */
     function markCompleted() {
       vm.isCompleted = true;
@@ -335,44 +337,29 @@
     }
 
     /**
-     * defineQuestionOrder
-     * @description Mark the question order to the last saved question order
-     */
-    function defineQuestionOrder() {
-
-      if (vm.answers.order !== undefined || vm.answers.order !== null) {
-        vm.currentQuestion = vm.answers.order;
-      } else {
-        vm.currentQuestion = 0;
-      }
-    }
-
-    /**
      * $scope.$watch on dadosForm.form
      * @description Function sets up the form and tries to load answerSet if it was provided with id.
      */
     $scope.$watch('dadosForm.form', function(newForm, oldForm) {
-      if (newForm && !_.isEqual(newForm, oldForm)) {
 
-        vm.currentQuestion = 0;
+      vm.currentQuestion = 0;
 
-        if (!vm.prev && !vm.lockCompletionIndicator) {
-
-          calculateCompletionIndicator(newForm);
-          isChanged();
-        }
-
-        if (vm.returned) {
-          vm.currentQuestion = vm.form.questions.length - 1;
-        }
-
-        if (_.has(vm.form, 'answerSetID')) {
+      if (newForm && !_.isEqual(newForm, oldForm) && !vm.prev && !vm.lockCompletionIndicator) {
+        calculateCompletionIndicator(newForm);
+        isChanged();
+      }
+      if (newForm && !_.isEqual(newForm, oldForm) && vm.returned) {
+        vm.currentQuestion = vm.form.questions.length - 1;
+      }
+      switch (true) {
+        case newForm && !_.isEqual(newForm, oldForm) && _.has(vm.form, 'answerSetID') :
           AnswerSetService.get({id: vm.form.answerSetID}, function (data) {
+
             vm.answerSet = data.items;
             vm.answerSetID = vm.answerSet.id;
             vm.answers = vm.answerSet.answers;
-
-            defineQuestionOrder();
+            vm.percCompleted = vm.answers.totalPercentage;
+            vm.currentQuestion = vm.answers.order;
 
             if (_.isBoolean(vm.answerSet.signed)) {
               vm.signed = vm.answerSet.signed;
@@ -380,10 +367,10 @@
             // notify that answers array was updated
             $scope.$broadcast('AnswerSetLoaded');
           });
-        } else {
+          break;
+        default :
           // reset answerSet anyway in case answerSetID is not set
           vm.answerSet = {};
-        }
       }
     });
 
@@ -408,6 +395,7 @@
         var question = _.find(vm.form.questions, function (q) {
           return q.name == name;
         });
+
         if (question !== undefined) {
           question.value = answer;
         }
