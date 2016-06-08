@@ -35,15 +35,38 @@
     var unregister = $scope.$watch('summary.referralData', function (newVal, oldVal) {
       if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
         // data columns for referral overview table
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': vm.referralData.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': vm.referralData.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': vm.referralData.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': vm.referralData.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': vm.referralData.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': vm.referralData.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': vm.referralData.site_name
-        };
+        vm.referralOverview = [
+          {
+            value: vm.referralData.client_mrn,
+            prompt:"COMMON.MODELS.CLIENT.MRN"
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.CLIENT',
+            value: vm.referralData.client_displayName
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.CLAIM_NUMBER',
+            value: vm.referralData.claimNumber
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.PROGRAM',
+            value: vm.referralData.program_name
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.PHYSICIAN',
+            value: vm.referralData.physician_name
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.STAFF',
+            value: vm.referralData.staff_name
+          },
+          {
+            prompt:'COMMON.MODELS.REFERRAL.SITE',
+            value: vm.referralData.site_name
+          }
+
+        ];
+        console.log(vm.referralOverview);
         unregister(); // unregister watcher
       }
     });

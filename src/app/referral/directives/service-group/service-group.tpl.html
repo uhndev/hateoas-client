@@ -28,7 +28,8 @@
             <table class="table table-condensed summary-table">
               <tr class="summary-header-row">
                 <th ng-repeat="summary in serviceGroup.summaryFields" translate
-                    ng-if="subServices[0][summary.name]">
+                    ng-if="subServices[0][summary.name]"
+                    context-translator="{{summary.prompt}}">
                   {{summary.prompt}}
                 </th>
               </tr>
@@ -43,7 +44,7 @@
 
           <table class="table table-condensed" ng-if="serviceGroup.accordionStatus[groupKey][subGroup].isOpen" >
             <tr>
-              <th ng-repeat="field in serviceGroup.visitFields" translate>{{field.prompt}}</th>
+              <th ng-repeat="field in serviceGroup.visitFields" translate context-translator="{{field.prompt}}">{{field.prompt}}</th>
             </tr>
             <tr ng-repeat="service in subServices | orderBy: 'itemCount'" class="{{service.rowClass}}">
               <td ng-repeat="field in serviceGroup.visitFields" ng-switch="field.type">

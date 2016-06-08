@@ -1,11 +1,11 @@
 <div flex ng-show="summary.referralOverview">
   <table class="table table-condensed summary-table">
     <tr class="summary-header-row">
-      <th ng-repeat="(label, value) in summary.referralOverview" translate>{{::label}}</th>
-      <th ng-repeat="groupType in ::summary.groupTypes">{{::groupType.prompt}}</th>
+      <th ng-repeat="referralOverview in summary.referralOverview" translate context-translator="{{referralOverview.prompt}}">{{referralOverview.prompt}}</th>
+      <th ng-repeat="groupType in ::summary.groupTypes" translate context-translator="{{groupType.prompt}}">{{groupType.prompt}}</th>
     </tr>
     <tr class="summary-table-row">
-      <td ng-repeat="(label, value) in summary.referralOverview">{{::value}}</td>
+      <td ng-repeat="referralOverview in summary.referralOverview">{{referralOverview.value}}</td>
       <td ng-style="{'padding-top': 0}" ng-repeat="groupType in ::summary.groupTypes">
         <select class="form-control" ng-model="summary.boundGroups[groupType.name]">
           <option value="{{::groupField.name}}" ng-repeat="groupField in ::summary.groupFields" translate>
