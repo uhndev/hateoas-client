@@ -11,18 +11,13 @@
       'altum.referral.serviceStatus',
       'altum.referral.serviceGroup'
     ])
-    .constant('REFERRAL_SERVICE_VISIT_FIELDS', [
-      'altumServiceName', 'physician_displayName', 'siteName', 'serviceDate', 'visitServiceName', 'approval', 'completion'
-    ])
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService',
-    'RecommendationsService', 'REFERRAL_SERVICE_VISIT_FIELDS'
+    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI,
-                              RecommendationsService, REFERRAL_SERVICE_VISIT_FIELDS) {
+  function ServicesController($resource, $location, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
@@ -102,6 +97,40 @@
       }
     ];
 
+    // configure visit fields for referral services subgroup tables and add statuses
+    vm.visitFields = [
+      {
+        name: 'altumServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+      },
+      {
+        name: 'physician_displayName',
+        prompt: 'COMMON.MODELS.SERVICE.PHYSICIAN'
+      },
+      {
+        name: 'siteName',
+        prompt: 'COMMON.MODELS.SERVICE.SITE'
+      },
+      {
+        name: 'visitServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.VISIT_SERVICE'
+      },
+      {
+        name: 'serviceDate',
+        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
+      },
+      {
+        name: 'approval',
+        prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
+        type: 'status'
+      },
+      {
+        name: 'completion',
+        prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+        type: 'status'
+      }
+    ];
+
     vm.init = init;
 
     init();
@@ -136,29 +165,12 @@
           return _.contains(['billingCount'], field.name);
         });
 
-        // configure visit fields for referral services subgroup tables and add statuses
-        vm.visitFields = vm.visitFields || _.filter(data.template.data, function (field) {
-          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
-        }).concat([
-          {
-            name: 'approval',
-            prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
-            type: 'status'
-          },
-          {
-            name: 'completion',
-            prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
-            type: 'status'
-          }
-        ]);
-
         vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
           service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
-          service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
           return service;
         });
 

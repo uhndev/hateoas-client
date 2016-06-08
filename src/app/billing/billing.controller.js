@@ -6,12 +6,9 @@
       'ui.sortable',
       'altum.referral.serviceGroup'
     ])
-    .constant('GLOBAL_BILLING_VISIT_FIELDS', [
-      'client_displayName', 'code', 'price', 'altumServiceName', 'billingCount'
-    ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
-      'prognosisTimeframeName', 'serviceDate', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
@@ -88,6 +85,35 @@
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [];
 
+    // configure visit fields for global billing subgroup tables and add billing status
+    vm.visitFields = [
+      {
+        name: 'client_displayName',
+        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
+      },
+      {
+        name: 'code',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
+      },
+      {
+        name: 'price',
+        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+      },
+      {
+        name: 'altumServiceName',
+        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+      },
+      {
+        name: 'billingCount',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
+      },
+      {
+        name: 'billing',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
+        type: 'status'
+      }
+    ];
+
     // bindable methods
     vm.init = init;
     vm.onPageChange = onPageChange;
@@ -106,17 +132,6 @@
         vm.resource.template.data = vm.resource.template.data || _.reject(vm.resource.template.data, function (field) {
           return _.contains(serviceOmitFields, field.name);
         });
-
-        // configure visit fields for global billing subgroup tables and add billing status
-        vm.visitFields = vm.visitFields || _.filter(data.template.data, function (field) {
-          return _.contains(GLOBAL_BILLING_VISIT_FIELDS, field.name);
-        }).concat([
-          {
-            name: 'billing',
-            prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
-            type: 'status'
-          }
-        ]);
 
         // setup array of fields to choose from in template-config
         vm.templateFieldOptions = vm.templateFieldOptions || _.filter(vm.resource.template.data, function (field) {
