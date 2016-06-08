@@ -12,7 +12,7 @@
       'altum.referral.serviceGroup'
     ])
     .constant('REFERRAL_SERVICE_VISIT_FIELDS', [
-      'altumServiceName', 'physician_displayName', 'siteName', 'serviceDate', 'visitServiceName'
+      'altumServiceName', 'physician_displayName', 'siteName', 'serviceDate', 'visitServiceName', 'approval', 'completion'
     ])
     .controller('ServicesController', ServicesController);
 
@@ -111,7 +111,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-    function init() {
+    function init(templateFields, visitFields) {
       var Resource = $resource(vm.url);
 
       Resource.get(function (data, headers) {
@@ -140,9 +140,7 @@
         });
 
         // configure visit fields for referral services subgroup tables and add statuses
-        vm.visitFields = _.filter(data.template.data, function (field) {
-          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
-        }).concat([
+        vm.visitFields = _.filter(data.template.data.concat([
           {
             name: 'approval',
             prompt: 'COMMON.MODELS.SERVICE.APPROVALS',
@@ -153,7 +151,9 @@
             prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
             type: 'status'
           }
-        ]);
+        ]), function (field) {
+          return _.contains(REFERRAL_SERVICE_VISIT_FIELDS, field.name);
+        });
 
         vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
