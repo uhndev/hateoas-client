@@ -97,57 +97,56 @@
     function applyStatusChanges(services, category) {
       var affectedServices = _.filter(services, {isSelected: true});
 
-      if (vm.statusSelections[category]) {
-        // only show popup when changing to Approved status
-        if (vm.statusSelections[category].requiresConfirmation) {
-          var modalInstance = $uibModal.open({
-            animation: true,
-            template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
-            controller: 'ApprovalConfirmationModal',
-            controllerAs: 'ac',
-            bindToController: true,
-            resolve: {
-              newStatus: function () {
-                return vm.statusSelections[category];
-              },
-              statusType: function () {
-                return category;
-              },
-              statusTemplateForm: function (TemplateService) {
-                var newStatus = angular.copy(vm.statusSelections[category]);
+      // only show popup when changing to Approved status
+      if (vm.statusSelections[category] && vm.statusSelections[category].requiresConfirmation) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
+          controller: 'ApprovalConfirmationModal',
+          controllerAs: 'ac',
+          bindToController: true,
+          resolve: {
+            newStatus: function () {
+              return vm.statusSelections[category];
+            },
+            statusType: function () {
+              return category;
+            },
+            statusTemplateForm: function (TemplateService) {
+              var newStatus = angular.copy(vm.statusSelections[category]);
 
-                // if overrideForm set, fetch systemform from API
-                if (newStatus.overrideForm) {
-                  var SystemForm = $resource(API.url() + '/systemform');
-                  return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
-                    return data.items;
-                  });
-                }
-                // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
-                else {
-                  var filteredStatusTemplate = angular.copy(vm.templates[category]);
-                  filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                    return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
-                  });
-                  var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                  form.form_title = 'Bulk Status Change';
-                  form.form_submitText = 'Change Statuses';
-                  return form;
-                }
+              // if overrideForm set, fetch systemform from API
+              if (newStatus.overrideForm) {
+                var SystemForm = $resource(API.url() + '/systemform');
+                return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
+                  return data.items;
+                });
+              }
+              // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
+              else {
+                var filteredStatusTemplate = angular.copy(vm.templates[category]);
+                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
+                  return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
+                });
+                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
+                form.form_title = 'Bulk Status Change';
+                form.form_submitText = 'Change Statuses';
+                return form;
               }
             }
-          });
+          }
+        });
 
-          modalInstance.result.then(function (answers) {
-            saveStatuses(affectedServices, category, answers);
-          }, function () {
-            // if cancelled, revert back to previous selection
-            vm.statusSelections[category] = null;
-          });
-        } else {
-          // otherwise just save the new status changes for all selected services
-          saveStatuses(affectedServices, category, {status: vm.statusSelections[category].id});
-        }
+        modalInstance.result.then(function (answers) {
+          saveStatuses(affectedServices, category, answers);
+        }, function () {
+          // if cancelled, revert back to previous selection
+          vm.statusSelections[category] = null;
+        });
+      }
+      else if (vm.statusSelections[category]) {
+        // otherwise just save the new status changes for all selected services
+        saveStatuses(affectedServices, category, {status: vm.statusSelections[category].id});
       }
     }
 
