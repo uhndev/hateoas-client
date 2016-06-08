@@ -15,7 +15,9 @@
   'use strict';
 
   angular
-    .module('altum.referral.serviceGroup', [])
+    .module('altum.referral.serviceGroup', [
+      'altum.referral.serviceStatus.controller'
+    ])
     .component('serviceGroup', {
       bindings: {
         services: '=',
@@ -31,9 +33,9 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'AltumAPIService'];
+  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'AltumAPIService', 'STATUS_TYPES'];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, AltumAPI) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, AltumAPI, STATUS_TYPES) {
     var vm = this;
     var Approval = $resource(API.url('approval'), {}, {
       'query': {method: 'GET', isArray: false}
@@ -92,55 +94,59 @@
      * @param category
      */
     function applyStatusChanges(services, category) {
-      // only show popup when changing to Approved status
-      if (vm.statusSelections[category].requiresConfirmation) {
-        var modalInstance = $uibModal.open({
-          animation: true,
-          template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
-          controller: 'ApprovalConfirmationModal',
-          controllerAs: 'ac',
-          bindToController: true,
-          resolve: {
-            newStatus: function () {
-              return vm.statusSelections[category];
-            },
-            statusType: function () {
-              return category;
-            },
-            statusTemplateForm: function (TemplateService) {
-              var newStatus = angular.copy(vm.statusSelections[category]);
+      var affectedServices = _.filter(services, {isSelected: true});
 
-              // if overrideForm set, fetch systemform from API
-              if (newStatus.overrideForm) {
-                var SystemForm = $resource(API.url() + '/systemform');
-                return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
-                  return data.items;
-                });
-              }
-              // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
-              else {
-                var filteredStatusTemplate = angular.copy(vm.templates[category]);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                form.form_title = 'Status Confirmation';
-                form.form_submitText = 'Change Status';
-                return form;
+      if (vm.statusSelections[category]) {
+        // only show popup when changing to Approved status
+        if (vm.statusSelections[category].requiresConfirmation) {
+          var modalInstance = $uibModal.open({
+            animation: true,
+            template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
+            controller: 'ApprovalConfirmationModal',
+            controllerAs: 'ac',
+            bindToController: true,
+            resolve: {
+              newStatus: function () {
+                return vm.statusSelections[category];
+              },
+              statusType: function () {
+                return category;
+              },
+              statusTemplateForm: function (TemplateService) {
+                var newStatus = angular.copy(vm.statusSelections[category]);
+
+                // if overrideForm set, fetch systemform from API
+                if (newStatus.overrideForm) {
+                  var SystemForm = $resource(API.url() + '/systemform');
+                  return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
+                    return data.items;
+                  });
+                }
+                // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
+                else {
+                  var filteredStatusTemplate = angular.copy(vm.templates[category]);
+                  filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
+                    return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
+                  });
+                  var form = TemplateService.parseToForm({}, filteredStatusTemplate);
+                  form.form_title = 'Status Confirmation';
+                  form.form_submitText = 'Change Status';
+                  return form;
+                }
               }
             }
-          }
-        });
+          });
 
-        modalInstance.result.then(function (answers) {
-          saveStatuses(services, category, answers);
-        }, function () {
-          // if cancelled, revert back to previous selection
-          vm.statusSelections[category] = null;
-        });
-      } else {
-        // otherwise just save the new status changes for all services
-        saveStatuses(services, category, {status: vm.statusSelections[category].id});
+          modalInstance.result.then(function (answers) {
+            saveStatuses(affectedServices, category, answers);
+          }, function () {
+            // if cancelled, revert back to previous selection
+            vm.statusSelections[category] = null;
+          });
+        } else {
+          // otherwise just save the new status changes for all selected services
+          saveStatuses(affectedServices, category, {status: vm.statusSelections[category].id});
+        }
       }
     }
 
@@ -162,7 +168,7 @@
      * @param approvalObj
      */
     function saveStatuses(services, category, approvalObj) {
-      console.log(services.length, category, approvalObj);
+      console.log(services.length, STATUS_TYPES[category].collection, approvalObj);
     }
 
     function watchVisitFields(newVal, oldVal) {

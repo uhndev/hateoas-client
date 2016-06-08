@@ -42,23 +42,6 @@
             <md-divider></md-divider>
           </div>
 
-          <table class="table table-condensed summary-table">
-            <tr class="summary-header-row">
-              <th ng-repeat="(category, statuses) in serviceGroup.statuses" translate>
-                Set Selected {{category}}
-              </th>
-            </tr>
-            <tr class="summary-table-row">
-              <td ng-style="{'padding-top': 0}" ng-repeat="(category, statuses)  in serviceGroup.statuses">
-                <select class="form-control" ng-model="serviceGroup.statusSelections[category]"
-                        ng-change="serviceGroup.applyStatusChanges(subServices, category)"
-                        ng-disabled="!serviceGroup.isStatusDisabled(subServices)"
-                        ng-options="status as status.displayName for status in statuses">
-                </select>
-              </td>
-            </tr>
-          </table>
-
           <table class="table table-condensed" ng-if="serviceGroup.accordionStatus[groupKey][subGroup].isOpen" >
             <tr>
               <th>
@@ -82,6 +65,23 @@
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>
+              </td>
+            </tr>
+          </table>
+
+          <table class="table table-condensed summary-table">
+            <tr class="summary-header-row">
+              <th ng-repeat="(category, statuses) in serviceGroup.statuses" translate>
+                Set {{category}} Statuses:
+              </th>
+            </tr>
+            <tr class="summary-table-row">
+              <td ng-style="{'padding-top': 0}" ng-repeat="(category, statuses)  in serviceGroup.statuses">
+                <select class="form-control" ng-model="serviceGroup.statusSelections[category]"
+                        ng-change="serviceGroup.applyStatusChanges(subServices, category)"
+                        ng-disabled="!serviceGroup.isStatusDisabled(subServices)"
+                        ng-options="status as status.displayName for status in statuses">
+                </select>
               </td>
             </tr>
           </table>
