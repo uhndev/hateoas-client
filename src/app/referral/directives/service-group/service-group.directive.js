@@ -71,6 +71,9 @@
           vm.statuses = _.groupBy(statuses, 'category');
         });
       }
+
+      // if no statuses are visible, hide checkboxes
+      vm.checkboxesVisible = filteredStatuses.length > 0;
     }
 
     /**
