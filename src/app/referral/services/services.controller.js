@@ -97,6 +97,11 @@
       }
     ];
 
+    vm.billingGroupFields = angular.copy(vm.groupFields).concat([{
+      name: 'billingGroupName',
+      prompt: 'COMMON.MODELS.SERVICE.BILLING_GROUP'
+    }]);
+
     // configure visit fields for referral services subgroup tables and add statuses
     vm.visitFields = [
       {

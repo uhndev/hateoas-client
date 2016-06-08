@@ -73,6 +73,10 @@
         prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
       },
       {
+        name: 'billingGroupName',
+        prompt: 'COMMON.MODELS.SERVICE.BILLING_GROUP'
+      },
+      {
         name: 'client_displayName',
         prompt: 'COMMON.MODELS.SERVICE.CLIENT'
       },

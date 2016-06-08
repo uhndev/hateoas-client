@@ -197,7 +197,11 @@
      * @param approvalObj
      */
     function saveApprovalStatus(approvalObj) {
-
+      var newApproval = new ServiceApproval(approvalObj);
+      newApproval.$save(function (approval) {
+        toastr.success(vm.service.displayName + ' status updated to: ' + vm.statuses[vm.service[vm.currentStatus]].name, 'Services');
+        vm.onUpdate();
+      });
     }
 
     /**
