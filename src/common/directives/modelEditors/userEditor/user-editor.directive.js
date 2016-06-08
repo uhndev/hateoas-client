@@ -22,9 +22,9 @@
       controllerAs: 'user'
     });
 
-  UserEditorController.$inject = ['$scope','$resource','UserService', 'toastr', '$attrs'];
+  UserEditorController.$inject = ['UserService', 'toastr'];
 
-  function UserEditorController($scope, $resource, UserService, toastr, $attrs) {
+  function UserEditorController(UserService, toastr) {
     var vm = this;
 
     // bindable variables
@@ -32,7 +32,7 @@
     vm.horizontal = vm.horizontal == 'true' || false;
     vm.showSaveButton = vm.showSaveButton == 'true' || false;
     vm.canGeneratePassword = vm.canGeneratePassword == 'true' || false;
-    $scope.view = $attrs.user;
+
     // bindable methods
     vm.updateUser = updateUser;
 
@@ -57,19 +57,13 @@
     function updateUser() {
       var user = new UserService(vm.user);
       user.$update({id: vm.user.id})
-        .then(function () {
+        .then(function() {
           toastr.success('Updated user profile!', 'User Profile');
         })
         .finally(function () {
           delete vm.user.password;
         });
     }
-
-    $scope.change = function() {
-      UserService.get({id: _.values(_.pluck(vm.user.subject, ['user']))}).$promise.then(function (user) {
-        var buildSubject = _.extend(user,vm.user.subject[0]);
-        vm.user = angular.copy(buildSubject);
-      });
-    };
   }
+
 })();

@@ -29,6 +29,7 @@
     vm.newSubject = {study: study.id};
     vm.study = study;
     vm.centreHref = centreHref;
+    vm.view = false;
     vm.statuses = ENROLLMENT_STATUSES;
     StudyUser.query({studyID: study.id}).$promise.then(function (data) {
       vm.studyUsers = {user: _.pluck(data, 'id')};
@@ -37,53 +38,30 @@
     // bindable methods
     vm.addSubject = addSubject;
     vm.cancel = cancel;
+    vm.checked = checked;
 
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * addSubject
-     * @description Click handler for creating a subject enrollment in the study
-     */
+         * addSubject
+         * @description Click handler for creating a subject enrollment in the study
+         */
     function addSubject() {
-      switch (true) {
 
-        case vm.newSubject.user !== undefined :
-
-          enrollExistingSubject();
-          break;
-
-        default :
-
-          enrollSubject(vm.newSubject);
+      if (!_.isEmpty(vm.newSubject.subject)) {
+        var existentSubject = _.pick(vm.newSubject.subject[0], 'id', 'user');
+        delete vm.newSubject.subject;
+        vm.newSubject.subject = existentSubject;
       }
-    }
 
-    /**
-     * enrollExistingSubject
-     * @description enroll existing subject to multiple studies
-     */
-    function enrollExistingSubject() {
-      var subjectEnroll = {rel: 'newEnroll', subjectNumber: vm.newSubject.id, study: vm.study, collectionCentre: vm.newSubject.collectionCentre};
-      vm.newSubject.subject = vm.newSubject.id;
-      delete vm.newSubject.id;
-      enrollSubject(_.extend(vm.newSubject, subjectEnroll));
-    }
-
-    /**
-     * enrollSubject
-     * @description enroll subject to a study
-     * @param newSubject - the subject to enroll
-     */
-    function enrollSubject(newSubject) {
-
-      var enrollment = new SubjectEnrollment(newSubject);
+      var enrollment = new SubjectEnrollment(vm.newSubject);
       enrollment.$save()
         .then(function() {
           toastr.success('Added subject to study!', 'Subject Enrollment');
         }).finally(function () {
-        vm.newSubject = {};
-        $uibModalInstance.close();
-      });
+          vm.newSubject = {};
+          $uibModalInstance.close();
+        });
     }
 
     /**
@@ -93,6 +71,14 @@
     function cancel() {
       vm.newSubject = {};
       $uibModalInstance.dismiss('cancel');
+    }
+
+    function checked() {
+      if (vm.view) {
+        vm.view = false;
+      }else {
+        vm.view = true;
+      }
     }
   }
 })();
