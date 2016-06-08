@@ -11,6 +11,7 @@
       <tr class="summary-header-row">
         <th translate>APP.BILLING.LABELS.SEARCH</th>
         <th ng-repeat="groupType in ::globalBilling.groupTypes">{{::groupType.prompt}}</th>
+        <th translate>APP.BILLING.LABELS.FIELDS</th>
       </tr>
       <tr class="summary-table-row">
         <td width="70%">
@@ -27,9 +28,26 @@
             </option>
           </select>
         </td>
+        <td>
+          <button type="button" class="btn" ng-class="{
+                    'btn-info': globalBilling.showConfigureFields,
+                    'btn-default': !globalBilling.showConfigureFields
+                  }"
+                  ng-click="globalBilling.showConfigureFields = !globalBilling.showConfigureFields">
+            <i class="fa" ng-class="{
+              'fa-cog': !globalBilling.showConfigureFields,
+              'fa-chevron-down': globalBilling.showConfigureFields
+            }"></i>
+          </button>
+        </td>
       </tr>
     </table>
   </div>
+
+  <template-config uib-collapse="!globalBilling.showConfigureFields"
+                   available-fields="globalBilling.templateFieldOptions"
+                   visible-fields="globalBilling.visitFields">
+  </template-config>
 
   <service-group services="globalBilling.services"
                  search="globalBilling.search"
@@ -42,7 +60,9 @@
   <uib-pagination total-items="globalBilling.resource.total"
                   items-per-page="globalBilling.query.limit"
                   boundary-link-numbers="true"
-                  max-size="10" rotate="false" force-ellipses="true"
+                  max-size="10"
+                  rotate="false"
+                  force-ellipses="true"
                   ng-model="globalBilling.page"
                   ng-change="globalBilling.onPageChange()">
   </uib-pagination>
