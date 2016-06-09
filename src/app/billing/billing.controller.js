@@ -3,13 +3,19 @@
 
   angular
     .module('altum.billing', [
+      'ui.sortable',
       'altum.referral.serviceGroup'
+    ])
+    .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
+      'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
+      'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
 
-  GlobalBillingController.$inject = ['$scope', '$resource', 'API'];
+  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
 
-  function GlobalBillingController($scope, $resource, API) {
+  function GlobalBillingController($scope, $resource, API, GLOBAL_BILLING_TEMPLATE_FIELDS) {
     var vm = this;
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
@@ -79,7 +85,7 @@
     // data columns for subgroups (encounter) summary table
     vm.summaryFields = [];
 
-    // data columns for groups (visits)
+    // configure visit fields for global billing subgroup tables and add billing status
     vm.visitFields = [
       {
         name: 'client_displayName',
@@ -123,9 +129,25 @@
         vm.resource = data;
 
         // remove extraneous template fields
-        vm.resource.template.data = _.reject(vm.resource.template.data, function (field) {
+        vm.resource.template.data = vm.resource.template.data || _.reject(vm.resource.template.data, function (field) {
           return _.contains(serviceOmitFields, field.name);
         });
+
+        // setup array of fields to choose from in template-config
+        vm.templateFieldOptions = vm.templateFieldOptions || _.filter(vm.resource.template.data, function (field) {
+          return _.contains(GLOBAL_BILLING_TEMPLATE_FIELDS, field.name);
+        }).concat([
+          {
+            name: 'approval',
+            prompt: 'COMMON.MODELS.SERVICE.APPROVAL',
+            type: 'status'
+          },
+          {
+            name: 'completion',
+            prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+            type: 'status'
+          }
+        ]);
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(vm.resource.items, function (service) {
