@@ -19,7 +19,8 @@
         referralData: '<',    // default referral object
         boundGroups: '=?',    // object where groupType.name is bound outward
         groupTypes: '<?',     // array of names and prompts that can be bound
-        groupFields: '<?'     // array of configuration data groups that can be chosen from
+        groupFields: '<?',    // array of configuration data groups that can be chosen from
+        configFlags: '=?'     // optional object containing flags that can be toggled
       },
       controller: 'ReferralSummaryController',
       controllerAs: 'summary',
@@ -30,43 +31,47 @@
 
   function ReferralSummaryController($scope) {
     var vm = this;
-
     // wait for data to load, then create overview object
     var unregister = $scope.$watch('summary.referralData', function (newVal, oldVal) {
       if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
         // data columns for referral overview table
+
         vm.referralOverview = [
           {
             value:vm.referralData.client_mrn,
-            prompt:'COMMON.MODELS.CLIENT.MRN'
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.MRN'
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.CLIENT',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.CLIENT',
             value:vm.referralData.client_displayName
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.CLAIM_NUMBER',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.CLAIM_NUMBER',
             value:vm.referralData.claimNumber
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.PROGRAM',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.PROGRAM',
             value:vm.referralData.program_name
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.PHYSICIAN',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.PHYSICIAN',
             value:vm.referralData.physician_name
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.STAFF',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.STAFF',
             value:vm.referralData.staff_name
           },
           {
-            prompt:'COMMON.MODELS.REFERRAL.SITE',
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.SITE',
             value: vm.referralData.site_name
           }
-
         ];
-        console.log(vm.referralOverview);
+
+        if (vm.configFlags) { // keys of configFlags become table headers
+          vm.flagOptions = _.keys(vm.configFlags);
+          vm.flagOptionsPrompt = vm.flagOptions.map(function (elements) { return 'APP.REFERRAL.CONFIG.LABELS.' + elements.toUpperCase(); });
+        }
+
         unregister(); // unregister watcher
       }
     });

@@ -3,6 +3,7 @@
     <tr class="summary-header-row">
       <th ng-repeat="referralOverview in summary.referralOverview" translate context-translator="{{referralOverview.prompt}}">{{referralOverview.prompt}}</th>
       <th ng-repeat="groupType in ::summary.groupTypes" translate context-translator="{{groupType.prompt}}">{{groupType.prompt}}</th>
+      <th ng-repeat="flag in summary.flagOptionsPrompt" translate context-translator="{{flag}}">{{flag}}</th>
     </tr>
     <tr class="summary-table-row">
       <td ng-repeat="referralOverview in summary.referralOverview">{{referralOverview.value}}</td>
@@ -12,6 +13,18 @@
             {{::groupField.prompt}}
           </option>
         </select>
+      </td>
+      <td ng-style="{'padding-top': 0}" ng-repeat="flag in summary.flagOptions">
+        <button type="button" class="btn" ng-class="{
+                  'btn-info': summary.configFlags[flag],
+                  'btn-default': !summary.configFlags[flag]
+                }"
+                ng-click="summary.configFlags[flag] = !summary.configFlags[flag]">
+          <i class="fa" ng-class="{
+              'fa-cog': !summary.configFlags[flag],
+              'fa-chevron-down': summary.configFlags[flag]
+            }"></i>
+        </button>
       </td>
     </tr>
   </table>
