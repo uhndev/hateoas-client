@@ -157,7 +157,7 @@
             statusType: function () {
               return statusType;
             },
-            statusTemplateForm: function (TemplateService) {
+            statusTemplateForm: function (TemplateService, StatusFormService) {
               var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
 
               // if overrideForm set, fetch systemform from API
@@ -173,9 +173,28 @@
                   return _.contains(vm.statuses[vm.service[vm.currentStatus]].rules.requires[statusType], field.name);
                 });
                 var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                form.form_title = 'Status Confirmation';
-                form.form_submitText = 'Change Status';
-                return form;
+
+                return StatusFormService.query({where: {
+                  status: vm.service[vm.currentStatus],
+                  or: [
+                    {payor: vm.service.payor},
+                    {programservice: vm.service.programService}
+                  ]
+                }, populate: 'systemform'}).$promise.then(function (statusForms) {
+                  // append any form questions coming from payor or programservice
+                  _.each(statusForms, function (statusForm) {
+                    form.form_questions = form.form_questions.concat(statusForm.systemform.form_questions);
+                  });
+
+                  // re-index field ids
+                  for (var i = 1; i <= form.form_questions.length; i++) {
+                    form.form_questions[i - 1].field_id = i;
+                  }
+
+                  form.form_title = 'Status Confirmation';
+                  form.form_submitText = 'Change Status';
+                  return form;
+                });
               }
             }
           }
