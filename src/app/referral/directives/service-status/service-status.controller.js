@@ -174,16 +174,38 @@
                 });
                 var form = TemplateService.parseToForm({}, filteredStatusTemplate);
 
-                return StatusFormService.query({where: {
-                  status: vm.service[vm.currentStatus],
-                  or: [
-                    {payor: vm.service.payor},
-                    {programservice: vm.service.programService}
-                  ]
-                }, populate: 'systemform'}).$promise.then(function (statusForms) {
+                var queryObj = {
+                  where: {
+                    status: vm.service[vm.currentStatus]
+                  },
+                  populate: 'systemform'
+                };
+
+                // build waterline query
+                switch (true) {
+                  case _.isNumber(vm.service.payor) && _.isNumber(vm.service.programService):
+                    queryObj.where.or = [
+                      {payor: vm.service.payor},
+                      {programservice: vm.service.programService}
+                    ];
+                    break;
+                  case _.isNumber(vm.service.payor):
+                    queryObj.where.payor = vm.service.payor;
+                    break;
+                  case _.isNumber(vm.service.programService):
+                    queryObj.where.programservice = vm.service.programService;
+                    break;
+                  default:
+                    break;
+                }
+
+                return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
                   // append any form questions coming from payor or programservice
                   _.each(statusForms, function (statusForm) {
-                    form.form_questions = form.form_questions.concat(statusForm.systemform.form_questions);
+                    form.form_questions = form.form_questions.concat(_.map(statusForm.systemform.form_questions, function (field) {
+                      field.isAdditionalData = true;
+                      return field;
+                    }));
                   });
 
                   // re-index field ids
@@ -234,6 +256,7 @@
         fetchStatusHistory();
       }
     }
+
     $scope.$watch('serviceStatus.service', watchServiceChange);
   }
 
@@ -266,6 +289,14 @@
      * @description Returns the approval object upon confirmation
      */
     vm.confirm = function () {
+      // sort out fields concatenated from payor/programservice status forms
+      var additionalForm = angular.copy(vm.statusTemplateForm);
+      additionalForm.form_questions = _.filter(additionalForm.form_questions, {isAdditionalData: true});
+
+      // filter out status specific fields
+      vm.statusTemplateForm.form_questions = _.reject(vm.statusTemplateForm.form_questions, {isAdditionalData: true});
+
+      vm.statusData.additionalData = TemplateService.formToObject(additionalForm);
       var answers = _.merge(vm.statusData, TemplateService.formToObject(vm.statusTemplateForm));
       $uibModalInstance.close(answers);
     };

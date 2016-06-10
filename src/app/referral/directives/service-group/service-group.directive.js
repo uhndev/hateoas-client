@@ -129,17 +129,42 @@
                   return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
                 });
                 var form = TemplateService.parseToForm({}, filteredStatusTemplate);
+                var queryObj = {
+                  where: {
+                    status: vm.statusSelections[category].id
+                  },
+                  populate: 'systemform'
+                };
 
-                return StatusFormService.query({where: {
-                  status: vm.statusSelections[category].id,
-                  or: [
-                    {payor: _.map(services, 'payor')},
-                    {programservice: _.map(services, 'programService')}
-                  ]
-                }, populate: 'systemform'}).$promise.then(function (statusForms) {
+                // pluck out relevant ids for payors and programServices
+                var payors = _.filter(_.map(services, 'payor'));
+                var programServices = _.filter(_.map(services, 'programService'));
+
+                // build waterline query
+                switch (true) {
+                  case payors.length > 0 && programServices.length > 0:
+                    queryObj.where.or = [
+                      {payor: payors},
+                      {programservice: programServices}
+                    ];
+                    break;
+                  case payors.length > 0:
+                    queryObj.where.payor = payors;
+                    break;
+                  case programServices.length > 0:
+                    queryObj.where.programservice = programServices;
+                    break;
+                  default:
+                    break;
+                }
+
+                return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
                   // append any form questions coming from payor or programservice
                   _.each(statusForms, function (statusForm) {
-                    form.form_questions = form.form_questions.concat(statusForm.systemform.form_questions);
+                    form.form_questions = form.form_questions.concat(_.map(statusForm.systemform.form_questions, function (field) {
+                      field.isAdditionalData = true;
+                      return field;
+                    }));
                   });
 
                   // re-index field ids
