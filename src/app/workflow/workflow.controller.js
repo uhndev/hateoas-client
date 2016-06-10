@@ -3,7 +3,8 @@
   angular
     .module('dados.workflow.controller', [])
     .constant('DEFAULT_LINK', {
-      path: '',
+      model: '',
+      path: [],
       links: [],
       queries: [],
       template: {}

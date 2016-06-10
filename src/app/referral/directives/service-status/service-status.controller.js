@@ -157,7 +157,7 @@
             statusType: function () {
               return statusType;
             },
-            statusTemplateForm: function (TemplateService) {
+            statusTemplateForm: function (StatusFormFactory) {
               var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
 
               // if overrideForm set, fetch systemform from API
@@ -168,14 +168,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on status.rules
               else {
-                var filteredStatusTemplate = angular.copy(vm.statusTemplate);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statuses[vm.service[vm.currentStatus]].rules.requires[statusType], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                form.form_title = 'Status Confirmation';
-                form.form_submitText = 'Change Status';
-                return form;
+                return StatusFormFactory.buildStatusForm(vm.statusTemplate, newStatus, statusType, vm.service);
               }
             }
           }
@@ -215,6 +208,7 @@
         fetchStatusHistory();
       }
     }
+
     $scope.$watch('serviceStatus.service', watchServiceChange);
   }
 
@@ -247,6 +241,14 @@
      * @description Returns the approval object upon confirmation
      */
     vm.confirm = function () {
+      // sort out fields concatenated from payor/programservice status forms
+      var additionalForm = angular.copy(vm.statusTemplateForm);
+      additionalForm.form_questions = _.filter(additionalForm.form_questions, {isAdditionalData: true});
+
+      // filter out status specific fields
+      vm.statusTemplateForm.form_questions = _.reject(vm.statusTemplateForm.form_questions, {isAdditionalData: true});
+
+      vm.statusData.additionalData = TemplateService.formToObject(additionalForm);
       var answers = _.merge(vm.statusData, TemplateService.formToObject(vm.statusTemplateForm));
       $uibModalInstance.close(answers);
     };

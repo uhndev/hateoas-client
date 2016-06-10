@@ -112,7 +112,7 @@
             statusType: function () {
               return category;
             },
-            statusTemplateForm: function (TemplateService) {
+            statusTemplateForm: function (StatusFormFactory) {
               var newStatus = angular.copy(vm.statusSelections[category]);
 
               // if overrideForm set, fetch systemform from API
@@ -124,14 +124,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
               else {
-                var filteredStatusTemplate = angular.copy(vm.templates[category]);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                form.form_title = 'Bulk Status Change';
-                form.form_submitText = 'Change Statuses';
-                return form;
+                return StatusFormFactory.buildStatusForm(vm.templates[category], newStatus, category, services);
               }
             }
           }
