@@ -41,44 +41,26 @@
         populate: 'systemform'
       };
 
-      if (_.isArray(service)) { // build waterline query if multiple services
-        // pluck out relevant ids for payors and programServices
-        var payors = _.filter(_.map(service, 'payor'));
-        var programServices = _.filter(_.map(service, 'programService'));
+      // pluck out relevant ids for payors and programServices
+      var payorData = _.isArray(service) ? _.filter(_.map(service, 'payor')) : service.payor;
+      var programServiceData = _.isArray(service) ? _.filter(_.map(service, 'programService')) : service.programService;
 
-        switch (true) {
-          case payors.length > 0 && programServices.length > 0:
-            queryObj.where.or = [
-              {payor: payors},
-              {programservice: programServices}
-            ];
-            break;
-          case payors.length > 0:
-            queryObj.where.payor = payors;
-            break;
-          case programServices.length > 0:
-            queryObj.where.programservice = programServices;
-            break;
-          default:
-            break;
-        }
-      } else { // build waterline query if single service
-        switch (true) {
-          case _.isNumber(service.payor) && _.isNumber(service.programService):
-            queryObj.where.or = [
-              {payor: service.payor},
-              {programservice: service.programService}
-            ];
-            break;
-          case _.isNumber(service.payor):
-            queryObj.where.payor = service.payor;
-            break;
-          case _.isNumber(service.programService):
-            queryObj.where.programservice = service.programService;
-            break;
-          default:
-            break;
-        }
+      // build waterline query if multiple services
+      switch (true) {
+        case !_.isUndefined(payorData) && !_.isUndefined(programServiceData):
+          queryObj.where.or = [
+            {payor: payorData},
+            {programservice: programServiceData}
+          ];
+          break;
+        case !_.isUndefined(payorData):
+          queryObj.where.payor = payorData;
+          break;
+        case !_.isUndefined(programServiceData):
+          queryObj.where.programservice = programServiceData;
+          break;
+        default:
+          break;
       }
 
       return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
