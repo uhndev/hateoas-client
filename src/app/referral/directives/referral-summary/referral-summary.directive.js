@@ -23,7 +23,7 @@
         configFlags: '=?'     // optional object containing flags that can be toggled
       },
       controller: 'ReferralSummaryController',
-      controllerAs: 'summary',
+      controllerAs: 'referralSummary',
       templateUrl: 'referral/directives/referral-summary/referral-summary.tpl.html'
     });
 
@@ -32,7 +32,7 @@
   function ReferralSummaryController($scope) {
     var vm = this;
     // wait for data to load, then create overview object
-    var unregister = $scope.$watch('summary.referralData', function (newVal, oldVal) {
+    var unregister = $scope.$watch('referralSummary.referralData', function (newVal, oldVal) {
       if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
         // data columns for referral overview table
 
