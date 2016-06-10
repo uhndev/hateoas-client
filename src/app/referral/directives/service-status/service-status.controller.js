@@ -157,7 +157,7 @@
             statusType: function () {
               return statusType;
             },
-            statusTemplateForm: function (TemplateService, StatusFormService) {
+            statusTemplateForm: function (StatusFormFactory) {
               var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
 
               // if overrideForm set, fetch systemform from API
@@ -168,55 +168,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on status.rules
               else {
-                var filteredStatusTemplate = angular.copy(vm.statusTemplate);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statuses[vm.service[vm.currentStatus]].rules.requires[statusType], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-
-                var queryObj = {
-                  where: {
-                    status: vm.service[vm.currentStatus]
-                  },
-                  populate: 'systemform'
-                };
-
-                // build waterline query
-                switch (true) {
-                  case _.isNumber(vm.service.payor) && _.isNumber(vm.service.programService):
-                    queryObj.where.or = [
-                      {payor: vm.service.payor},
-                      {programservice: vm.service.programService}
-                    ];
-                    break;
-                  case _.isNumber(vm.service.payor):
-                    queryObj.where.payor = vm.service.payor;
-                    break;
-                  case _.isNumber(vm.service.programService):
-                    queryObj.where.programservice = vm.service.programService;
-                    break;
-                  default:
-                    break;
-                }
-
-                return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
-                  // append any form questions coming from payor or programservice
-                  _.each(statusForms, function (statusForm) {
-                    form.form_questions = form.form_questions.concat(_.map(statusForm.systemform.form_questions, function (field) {
-                      field.isAdditionalData = true;
-                      return field;
-                    }));
-                  });
-
-                  // re-index field ids
-                  for (var i = 1; i <= form.form_questions.length; i++) {
-                    form.form_questions[i - 1].field_id = i;
-                  }
-
-                  form.form_title = 'Status Confirmation';
-                  form.form_submitText = 'Change Status';
-                  return form;
-                });
+                return StatusFormFactory.buildStatusForm(vm.statusTemplate, newStatus, statusType, vm.service);
               }
             }
           }

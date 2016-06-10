@@ -112,7 +112,7 @@
             statusType: function () {
               return category;
             },
-            statusTemplateForm: function (TemplateService, StatusFormService) {
+            statusTemplateForm: function (StatusFormFactory) {
               var newStatus = angular.copy(vm.statusSelections[category]);
 
               // if overrideForm set, fetch systemform from API
@@ -124,58 +124,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
               else {
-                var filteredStatusTemplate = angular.copy(vm.templates[category]);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statusSelections[category].rules.requires[category], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                var queryObj = {
-                  where: {
-                    status: vm.statusSelections[category].id
-                  },
-                  populate: 'systemform'
-                };
-
-                // pluck out relevant ids for payors and programServices
-                var payors = _.filter(_.map(services, 'payor'));
-                var programServices = _.filter(_.map(services, 'programService'));
-
-                // build waterline query
-                switch (true) {
-                  case payors.length > 0 && programServices.length > 0:
-                    queryObj.where.or = [
-                      {payor: payors},
-                      {programservice: programServices}
-                    ];
-                    break;
-                  case payors.length > 0:
-                    queryObj.where.payor = payors;
-                    break;
-                  case programServices.length > 0:
-                    queryObj.where.programservice = programServices;
-                    break;
-                  default:
-                    break;
-                }
-
-                return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
-                  // append any form questions coming from payor or programservice
-                  _.each(statusForms, function (statusForm) {
-                    form.form_questions = form.form_questions.concat(_.map(statusForm.systemform.form_questions, function (field) {
-                      field.isAdditionalData = true;
-                      return field;
-                    }));
-                  });
-
-                  // re-index field ids
-                  for (var i = 1; i <= form.form_questions.length; i++) {
-                    form.form_questions[i - 1].field_id = i;
-                  }
-
-                  form.form_title = 'Bulk Status Change';
-                  form.form_submitText = 'Change Statuses';
-                  return form;
-                });
+                return StatusFormFactory.buildStatusForm(vm.templates[category], newStatus, category, services);
               }
             }
           }
