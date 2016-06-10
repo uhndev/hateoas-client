@@ -16,6 +16,17 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * buildStatusForm
+     * @description Accepts hateoasTemplate, new status object, category and service(s)
+     *              to build a new systemform with concatenated fields that can come from
+     *              payor specific StatusForms or programservice specific StatusForms
+     * @param statusTemplate
+     * @param newStatus
+     * @param category
+     * @param service
+     * @returns {Object|Promise}
+     */
     function buildStatusForm(statusTemplate, newStatus, category, service) {
       var filteredStatusTemplate = angular.copy(statusTemplate);
       filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
