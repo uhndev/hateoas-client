@@ -1,0 +1,26 @@
+<div ng-if="ac.statusTemplateForm.length">
+  <div ng-repeat="form in ac.statusTemplateForm">
+    <form-directive ng-if="$index === ac.page-1" form="form" hide-buttons="true"></form-directive>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-md-6">
+        <uib-pagination class="pull-left"
+                        total-items="ac.statusTemplateForm.length"
+                        ng-model="ac.page"
+                        ng-change="ac.change()"
+                        items-per-page="1">
+        </uib-pagination>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-primary right" type="button" ng-click="ac.confirm()" translate>
+          APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.SAVE
+        </button>
+        <button class="btn btn-warning right" type="button" ng-click="ac.cancel()" translate>
+          APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form-directive ng-if="!ac.statusTemplateForm.length" form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>
