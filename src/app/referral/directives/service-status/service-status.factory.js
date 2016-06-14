@@ -86,6 +86,7 @@
 
       return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
         if (_.isArray(service)) {
+          // if an array of services, query the StatusForm table for service matching payor OR matching programservice
           return _.map(service, function (serviceObj) {
             var serviceStatusForms = _.filter(statusForms, function (statusForm) {
               return (serviceObj.programService === statusForm.programservice || serviceObj.payor === statusForm.payor);
@@ -93,6 +94,7 @@
             return parseStatusForms(serviceStatusForms, serviceObj);
           });
         } else {
+          // otherwise just return parsed form for single service
           return parseStatusForms(statusForms, service);
         }
       });

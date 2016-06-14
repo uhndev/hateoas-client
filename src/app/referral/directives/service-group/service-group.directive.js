@@ -94,6 +94,8 @@
      * @description On change handler for summary status pickers, should update statuses for all services in subServices
      * @param services
      * @param category
+     * @param groupKey
+     * @param subGroup
      */
     function applyStatusChanges(services, category, groupKey, subGroup) {
       var affectedServices = _.filter(services, {isSelected: true});
