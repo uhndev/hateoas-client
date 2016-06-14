@@ -79,7 +79,7 @@
             <tr class="summary-table-row">
               <td ng-style="{'padding-top': 0}" ng-repeat="(category, statuses)  in serviceGroup.statuses">
                 <select class="form-control" ng-model="serviceGroup.statusSelections[category]"
-                        ng-change="serviceGroup.applyStatusChanges(subServices, category)"
+                        ng-change="serviceGroup.applyStatusChanges(subServices, category, groupKey, subGroup)"
                         ng-disabled="!serviceGroup.isStatusDisabled(subServices)"
                         ng-options="status as status.displayName for status in statuses">
                 </select>

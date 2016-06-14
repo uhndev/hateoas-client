@@ -16,7 +16,8 @@
 
   angular
     .module('altum.referral.serviceGroup', [
-      'altum.referral.serviceStatus.controller'
+      'altum.referral.serviceStatus.controller',
+      'altum.referral.serviceStatus.confirmation.controller'
     ])
     .component('serviceGroup', {
       bindings: {
@@ -93,17 +94,19 @@
      * @description On change handler for summary status pickers, should update statuses for all services in subServices
      * @param services
      * @param category
+     * @param groupKey
+     * @param subGroup
      */
-    function applyStatusChanges(services, category) {
+    function applyStatusChanges(services, category, groupKey, subGroup) {
       var affectedServices = _.filter(services, {isSelected: true});
 
       // only show popup when changing to Approved status
       if (vm.statusSelections[category] && vm.statusSelections[category].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
-          template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
+          templateUrl: 'referral/directives/service-status/service-status-confirmation.tpl.html',
           controller: 'ApprovalConfirmationModal',
-          controllerAs: 'ac',
+          controllerAs: 'confirmationModal',
           bindToController: true,
           resolve: {
             newStatus: function () {
@@ -124,7 +127,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on vm.statusSelections[category].rules
               else {
-                return StatusFormFactory.buildStatusForm(vm.templates[category], newStatus, category, services);
+                return StatusFormFactory.buildStatusForm(vm.templates[category], newStatus, category, affectedServices);
               }
             }
           }
@@ -132,6 +135,7 @@
 
         modalInstance.result.then(function (answers) {
           saveStatuses(affectedServices, category, answers);
+          vm.accordionStatus[groupKey][subGroup].selectedAll = false;
         }, function () {
           // if cancelled, revert back to previous selection
           vm.statusSelections[category] = null;
@@ -163,8 +167,8 @@
     function saveStatuses(services, category, approvalObj) {
       var bulkStatusChange = new BulkStatusChange({
         model: STATUS_TYPES[category].model,
-        newStatuses: _.map(services, function (service) {
-          return _.merge({service: service.id}, approvalObj);
+        newStatuses: _.map(services, function (service, index) {
+          return _.merge({service: service.id}, _.isArray(approvalObj) ? approvalObj[index] : approvalObj);
         })
       });
 

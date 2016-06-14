@@ -49,7 +49,7 @@
     // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
     if ($scope.field.field_type == 'date') {
       // check for invalid doe dates
-      if (_.isEmpty($scope.field.field_value)) {
+      if (!moment($scope.field.field_value).isValid()) {
         delete $scope.field.field_value;
       } else {
         if (angular.isString($scope.field.field_value)) {
