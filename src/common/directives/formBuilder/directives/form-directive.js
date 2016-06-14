@@ -39,6 +39,7 @@
       link: linker,
       scope: {
         form:'=',
+        hideButtons: '@',
         onSubmit:'&',
         onCancel:'&'
       }

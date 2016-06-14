@@ -32,7 +32,6 @@
       filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
         return _.contains(newStatus.rules.requires[category], field.name);
       });
-      var form = TemplateService.parseToForm({}, filteredStatusTemplate);
 
       var queryObj = {
         where: {
@@ -63,23 +62,41 @@
           break;
       }
 
-      return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
+      var parseStatusForms = function(statusForms, serviceObj) {
+        var form = TemplateService.parseToForm({}, filteredStatusTemplate);
         // append any form questions coming from payor or programservice
-        _.each(statusForms, function (statusForm) {
-          form.form_questions = form.form_questions.concat(_.map(statusForm.systemform.form_questions, function (field) {
+        form.form_questions = _.reduce(statusForms, function (result, statusForm) {
+          var statusFormFields = _.map(statusForm.systemform.form_questions, function (field) {
             field.isAdditionalData = true;
             return field;
-          }));
-        });
+          });
+          return result.concat(statusFormFields);
+        }, form.form_questions);
 
         // re-index field ids
-        for (var i = 1; i <= form.form_questions.length; i++) {
-          form.form_questions[i - 1].field_id = i;
-        }
+        _.each(form.form_questions, function (question, index) {
+          question.field_id = index + 1;
+        });
 
-        form.form_title = _.isArray(service) ? 'Bulk Status Change' : 'Status Confirmation';
-        form.form_submitText = _.isArray(service) ? 'Change Statuses' : 'Change Status';
+        form.form_title = 'Status Confirmation ' + serviceObj.displayName;
+        form.form_name = _.snakeCase(serviceObj.displayName) + '_form';
+        form.form_submitText = 'Change Status';
         return form;
+      };
+
+      return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
+        if (_.isArray(service)) {
+          // if an array of services, query the StatusForm table for service matching payor OR matching programservice
+          return _.map(service, function (serviceObj) {
+            var serviceStatusForms = _.filter(statusForms, function (statusForm) {
+              return (serviceObj.programService === statusForm.programservice || serviceObj.payor === statusForm.payor);
+            });
+            return parseStatusForms(serviceStatusForms, serviceObj);
+          });
+        } else {
+          // otherwise just return parsed form for single service
+          return parseStatusForms(statusForms, service);
+        }
       });
     }
   }
