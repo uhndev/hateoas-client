@@ -5,26 +5,30 @@
     .module('altum.referral.serviceStatus.confirmation.controller', [])
     .controller('ApprovalConfirmationModal', ApprovalConfirmationModal);
 
-  ApprovalConfirmationModal.$inject = ['$scope', '$uibModalInstance', 'newStatus', 'statusType', 'statusTemplateForm', 'TemplateService'];
+  ApprovalConfirmationModal.$inject = ['$uibModalInstance', 'newStatus', 'statusType', 'statusTemplateForm', 'TemplateService'];
 
-  function ApprovalConfirmationModal($scope, $uibModalInstance, newStatus, statusType, statusTemplateForm, TemplateService) {
+  function ApprovalConfirmationModal($uibModalInstance, newStatus, statusType, statusTemplateForm, TemplateService) {
     var vm = this;
 
     // bindable variables
     vm.page = 1;
     vm.newStatus = newStatus;
     vm.statusTemplateForm = statusTemplateForm;
-    vm.answerPage = _.map(statusTemplateForm, function (form) {
-      return {additionalData: {}};
-    });
-    vm.statusData = {
-      status: newStatus.id
-    };
 
-    // set required fields to null in approval object
-    _.each(vm.newStatus.rules.requires[statusType], function (field) {
-      vm.statusData[field] = null;
-    });
+    init();
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      // break up each statusForm into object value
+      _.each(statusTemplateForm, function (templateForm, index) {
+        // re-index field ids
+        _.each(templateForm.form_questions, function (question, index) {
+          question.field_id = index + 1;
+        });
+        vm[templateForm.form_name + index] = angular.copy(templateForm);
+      });
+    }
 
     /**
      * isFieldRequired
@@ -57,15 +61,11 @@
         return _.merge(statusData, TemplateService.formToObject(statusForm));
       };
 
-      if (_.isArray(statusTemplateForm)) {
-        $uibModalInstance.close(_.map(vm.answerPage, function (answers) {
-          return _.merge({
-            status: newStatus.id
-          }, answers);
-        }));
-      } else {
-        $uibModalInstance.close(parseTemplateForm(vm.statusTemplateForm));
-      }
+      var answersToSave = _.isArray(statusTemplateForm) ? _.map(vm.statusTemplateForm, function (statusForm, index) {
+        return parseTemplateForm(vm[statusForm.form_name + index]);
+      }) : parseTemplateForm(vm.statusTemplateForm);
+
+      $uibModalInstance.close(answersToSave);
     };
 
     /**
@@ -75,47 +75,6 @@
     vm.cancel = function () {
       $uibModalInstance.dismiss();
     };
-
-    /**
-     * changePage
-     * @description Click handler for changing pages, will clear field_values and apply any saved
-     *              answers to the current form on the current page.
-     */
-    vm.change = function() {
-      _.each(vm.statusTemplateForm, function (form) {
-        _.each(form.form_questions, function (question) {
-          delete question.field_value;
-        });
-      });
-
-      _.each(vm.statusTemplateForm[vm.page - 1].form_questions, function (question) {
-        if (question.isAdditionalData) {
-          question.field_value = angular.copy(vm.answerPage[vm.page - 1].additionalData[question.field_name]);
-        } else {
-          question.field_value = angular.copy(vm.answerPage[vm.page - 1][question.field_name]);
-        }
-      });
-    };
-
-    /**
-     * saveFormAnswers
-     * @description Watcher on array of statusForms; will save progress as answers are entered in
-     * @param newVal
-     * @param oldVal
-     */
-    function saveFormAnswers(newVal, oldVal) {
-      if (oldVal !== newVal && _.isArray(statusTemplateForm)) {
-        console.log(newVal);
-        _.each(newVal.form_questions, function (question) {
-          if (question.isAdditionalData) {
-            vm.answerPage[vm.page - 1].additionalData[question.field_name] = question.field_value;
-          } else {
-            vm.answerPage[vm.page - 1][question.field_name] = question.field_value;
-          }
-        });
-      }
-    }
-    $scope.$watch('ac.statusTemplateForm[ac.page-1]', saveFormAnswers, true);
   }
 
 })();

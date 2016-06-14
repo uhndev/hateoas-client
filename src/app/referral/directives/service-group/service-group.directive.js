@@ -95,7 +95,7 @@
      * @param services
      * @param category
      */
-    function applyStatusChanges(services, category) {
+    function applyStatusChanges(services, category, groupKey, subGroup) {
       var affectedServices = _.filter(services, {isSelected: true});
 
       // only show popup when changing to Approved status
@@ -104,7 +104,7 @@
           animation: true,
           templateUrl: 'referral/directives/service-status/service-status-confirmation.tpl.html',
           controller: 'ApprovalConfirmationModal',
-          controllerAs: 'ac',
+          controllerAs: 'confirmationModal',
           bindToController: true,
           resolve: {
             newStatus: function () {
@@ -133,6 +133,7 @@
 
         modalInstance.result.then(function (answers) {
           saveStatuses(affectedServices, category, answers);
+          vm.accordionStatus[groupKey][subGroup].selectedAll = false;
         }, function () {
           // if cancelled, revert back to previous selection
           vm.statusSelections[category] = null;

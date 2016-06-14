@@ -145,9 +145,12 @@
       if (vm.statuses[vm.service[vm.currentStatus]].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
-          template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
+          template: '<form-directive form="confirmationModal.statusTemplateForm" ' +
+          'on-submit="confirmationModal.confirm()" ' +
+          'on-cancel="confirmationModal.cancel()">' +
+          '</form-directive>',
           controller: 'ApprovalConfirmationModal',
-          controllerAs: 'ac',
+          controllerAs: 'confirmationModal',
           bindToController: true,
           resolve: {
             newStatus: function () {
