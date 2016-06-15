@@ -10,14 +10,15 @@
       <div class="row">
         <div class="col-lg-6">
           <fieldset>
-            <legend>Manage Referral</legend>
+            <legend>Referral Info</legend>
             <div class="row">
-              <div class="col-md-1"><img src="/assets/img/patienticon.png" height="50"></div>
-              <div class="col-md-12">
+              <div class="col-md-1"><span class="glyphicon glyphicon-user"></span></div>
+              <div class="col-md-11">
 
                 <div class="form-group">
-                  <label class="control-label" for="client">Client:</label>
+                  <label class="control-label  col-md-3" for="client">Client:</label>
                   <select-loader
+                      class="col-md-9"
                       url="client"
                       is-atomic="true"
                       is-disabled="false"
@@ -28,8 +29,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="site">Site:</label>
+                  <label class="control-label col-md-3" for="site">Site:</label>
                   <select-loader
+                      class="col-md-9"
                       url="site"
                       is-atomic="true"
                       is-disabled="false"
@@ -40,8 +42,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="program">Program:</label>
+                  <label class="control-label col-md-3" for="program">Program:</label>
                   <select-loader
+                      class="col-md-9"
                       url="program"
                       is-atomic="true"
                       is-disabled="false"
@@ -52,8 +55,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="physician">Physician:</label>
+                  <label class="control-label col-md-3" for="physician">Physician:</label>
                   <select-loader
+                      class="col-md-9"
                       url="physician"
                       is-atomic="true"
                       is-disabled="false"
@@ -64,8 +68,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="staff">Staff:</label>
+                  <label class="control-label col-md-3" for="staff">Staff:</label>
                   <select-loader
+                      class="col-md-9"
                       url="staff"
                       is-atomic="true"
                       is-disabled="false"
@@ -76,8 +81,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="payors">Payors:</label>
+                  <label class="control-label col-md-3" for="payors">Payors:</label>
                   <select-loader
+                      class="col-md-9"
                       url="payor"
                       is-atomic="true"
                       is-disabled="false"
@@ -86,10 +92,20 @@
                       labels="displayName">
                   </select-loader>
                 </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
 
+          <div class ="col-lg-6">
+            <fieldset>
+              <legend>Dates</legend>
+              <div class="row">
+                <div class="col-md-1"><span class="glyphicon glyphicon-calendar"></span></div>
+                <div class="col-md-11">
                 <div class="form-group">
-                  <label class="control-label">Referral Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Referral Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.referralDate"
@@ -107,8 +123,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Clinic Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Clinic Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.clinicDate"
@@ -126,8 +142,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Accident Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Accident Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.accidentDate"
@@ -145,8 +161,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Receive Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Receive Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.receiveDate"
@@ -164,8 +180,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Sent Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Sent Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.sentDate"
@@ -183,8 +199,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Discharge Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3">Discharge Date:</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.dischargeDate"
@@ -202,9 +218,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"> Recommendations made:
-                      <input type="checkbox" ng-model="RC.referral.recommendationsMade"></input>
-                    </label>
+                    <label class="control-label col-md-3"> Recommendations made:</label>
+                    <input class="col-md-1" type="checkbox" ng-model="RC.referral.recommendationsMade"></input>
                 </div>
               </div>
             </div>
@@ -212,6 +227,7 @@
         </div>
       </div>
     </div>
+
     <div class="modal-footer">
       <button ng-click="RC.referralAdd(isValid)" type="submit" ng-if="!RC.referral.id"
               ng-disabled="referralForm.$invalid"
