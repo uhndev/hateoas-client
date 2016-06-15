@@ -40,28 +40,6 @@
         populate: 'systemform'
       };
 
-      // pluck out relevant ids for payors and programServices
-      var payorData = _.isArray(service) ? _.filter(_.map(service, 'payor')) : service.payor;
-      var programServiceData = _.isArray(service) ? _.filter(_.map(service, 'programService')) : service.programService;
-
-      // build waterline query if multiple services
-      switch (true) {
-        case !_.isUndefined(payorData) && !_.isUndefined(programServiceData):
-          queryObj.where.or = [
-            {payor: payorData},
-            {programservice: programServiceData}
-          ];
-          break;
-        case !_.isUndefined(payorData):
-          queryObj.where.payor = payorData;
-          break;
-        case !_.isUndefined(programServiceData):
-          queryObj.where.programservice = programServiceData;
-          break;
-        default:
-          break;
-      }
-
       var parseStatusForms = function(statusForms, serviceObj) {
         var form = TemplateService.parseToForm({}, filteredStatusTemplate);
         // append any form questions coming from payor or programservice
@@ -83,6 +61,30 @@
         form.form_submitText = 'Change Status';
         return form;
       };
+
+      // pluck out relevant ids for payors and programServices
+      var payorData = _.isArray(service) ? _.filter(_.map(service, 'payor')) : service.payor;
+      var programServiceData = _.isArray(service) ? _.filter(_.map(service, 'programService')) : service.programService;
+
+      // build waterline query if multiple services
+      switch (true) {
+        case _.isNumber(payorData) || _.isArray(payorData) &&
+             _.isNumber(programServiceData) || _.isArray(programServiceData):
+          queryObj.where.or = [
+            {payor: payorData},
+            {programservice: programServiceData}
+          ];
+          break;
+        case !_.isUndefined(payorData):
+          queryObj.where.payor = payorData;
+          break;
+        case !_.isUndefined(programServiceData):
+          queryObj.where.programservice = programServiceData;
+          break;
+        default:
+          // otherwise if no payor/programservice data, just parseforms
+          return _.isArray(service) ? _.map(service, parseStatusForms) : parseStatusForms(service);
+      }
 
       return StatusFormService.query(queryObj).$promise.then(function (statusForms) {
         if (_.isArray(service)) {
