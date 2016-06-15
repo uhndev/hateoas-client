@@ -17,6 +17,8 @@
     init();
     //For later functionality
     function init() {
+      vm.referralTitle = 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO';
+      vm.dateTitle = 'APP.REFERRAL.REGISTRATION.LABELS.DATE';
     }
 
     /**
