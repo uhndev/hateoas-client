@@ -69,6 +69,7 @@
         vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
+        vm.referralNotes = AltumAPI.Note.query({where:{referral: data.items.id}});
 
         // load physician in from referraldetail
         vm.sharedService = {
