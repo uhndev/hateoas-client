@@ -25,6 +25,9 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     var Resource = $resource(vm.url);
+    var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
+      'save' : {method: 'POST', isArray: false}
+    });
 
     // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
@@ -118,17 +121,17 @@
      */
     function saveServices() {
       vm.isSaving = true;
-      $q.all(_.map(vm.recommendedServices, function (service) {
-          var serviceObj = new AltumAPI.BillingGroup(RecommendationsService.prepareService(service));
-          return serviceObj.$save();
-        }))
-        .then(function (data) {
-          toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
-          vm.isSaving = false;
-          vm.currIndex = null;
-          vm.recommendedServices = [];
-          init();
-        });
+      var bulkRecommendServices = new BulkRecommendServices({
+        newBillingGroups: _.map(vm.recommendedServices, RecommendationsService.prepareService)
+      });
+
+      bulkRecommendServices.$save(function (data) {
+        toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
+        vm.isSaving = false;
+        vm.currIndex = null;
+        vm.recommendedServices = [];
+        init();
+      });
     }
 
     /**

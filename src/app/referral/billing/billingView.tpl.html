@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller="ServicesController as services" ng-cloak>
+  <div class="loading-screen" ng-show="!services.referral"></div>
   <div ng-controller="BillingController as billing">
     <div layout="column">
       <h2 flex id="Title">
