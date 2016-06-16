@@ -1,4 +1,5 @@
 <div ng-controller="GlobalBillingController as globalBilling" ng-cloak class="container-fluid">
+  <div class="loading-screen" ng-show="!globalBilling.resource"></div>
   <h2 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
     <span translate>APP.BILLING.BILLING_MANAGEMENT</span>
     <small translate translate-values="{ total: globalBilling.resource.total }">
