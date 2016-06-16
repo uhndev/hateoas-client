@@ -14,10 +14,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, API, HeaderService, AltumAPI, RecommendationsService) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
@@ -106,23 +106,28 @@
     vm.visitFields = [
       {
         name: 'altumServiceName',
-        prompt: 'APP.REFERRAL.SERVICES.LABELS.ALTUM_SERVICE'
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.ALTUM_SERVICE',
+        type: 'string'
       },
       {
         name: 'physician_displayName',
-        prompt: 'APP.REFERRAL.SERVICES.LABELS.PHYSICIAN'
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.PHYSICIAN',
+        type: 'string'
       },
       {
         name: 'siteName',
-        prompt: 'APP.REFERRAL.SERVICES.LABELS.SITE'
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.SITE',
+        type: 'string'
       },
       {
         name: 'visitServiceName',
-        prompt: 'APP.REFERRAL.SERVICES.LABELS.VISIT_SERVICE'
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.VISIT_SERVICE',
+        type: 'string'
       },
       {
         name: 'serviceDate',
-        prompt: 'APP.REFERRAL.SERVICES.LABELS.SERVICE_DATE'
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.SERVICE_DATE',
+        type: 'datetime'
       },
       {
         name: 'approval',
@@ -133,10 +138,26 @@
         name: 'completion',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.COMPLETION',
         type: 'status'
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.EDIT',
+        type: 'button',
+        iconClass: 'glyphicon-edit',
+        onClick: openServiceEditor
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
+        type: 'button',
+        iconClass: 'glyphicon-plus',
+        onClick: openRecommendationsPicker
       }
     ];
 
     vm.init = init;
+    vm.openServiceEditor = openServiceEditor;
+    vm.openRecommendationsPicker = openRecommendationsPicker;
 
     init();
 
@@ -179,7 +200,6 @@
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
           service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
-          service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
           return service;
         });
 
@@ -190,6 +210,137 @@
           vm.recommendedServices = [];
           vm.referral.availableServices = RecommendationsService.parseAvailableServices({}, data.items.availableServices);
         }
+      });
+    }
+
+    /**
+     * openServiceEditor
+     * @description opens a modal window for the serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        bindToController: true,
+        resolve: {
+          Service: function() {
+            return AltumAPI.Service.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
+          },
+          ApprovedServices: function() {
+            return angular.copy(vm.referral.approvedServices);
+          },
+          ServiceEditorConfig: function() {
+            return {
+              loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
+              disabled: {
+                currentCompletion: true // no need to have completion field when editing
+              },
+              required: {}
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        init();
+      });
+    }
+
+    /**
+     * openRecommendationsPicker
+     * @description opens a modal window for the recommendations picker to add adhoc services
+     */
+    function openRecommendationsPicker(selectedService) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'variations-modal-window',
+        templateUrl: 'referral/billing/addServicesModal.tpl.html',
+        controller: function (PickerConfig, $q, $resource, API, $uibModalInstance, RecommendationsService, toastr) {
+          var vm = this;
+          var billingGroup = PickerConfig.service.billingGroup;
+
+          // bindable variables
+          vm.picker = PickerConfig;
+          vm.searchQuery = null;
+          // configuration object for the service-editor component
+          vm.serviceEditorConfig = {
+            loadVisitServiceData: true,
+            disabled: {
+              altumService: true,
+              programService: true
+            },
+            required: {}
+          };
+
+          // bindable methods
+          vm.saveRecommendedServices = saveRecommendedServices;
+          vm.cancel = cancel;
+
+          /////////////////////////////////////////////////////////////////////
+
+          /**
+           * saveRecommendedServices
+           * @description Adds recommended services to the referral
+           */
+          function saveRecommendedServices() {
+            var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
+              'save' : {method: 'POST', isArray: false}
+            });
+            console.log(_.map(vm.picker.recommendedServices, function (service) {
+              service.referral = vm.picker.referral.id;
+              service.approvalNeeded = false;
+              service.billingGroup = billingGroup;
+              return RecommendationsService.prepareService(service);
+            }));
+
+            // var bulkRecommendServices = new BulkRecommendServices({
+            //   newBillingGroups: _.map(vm.picker.recommendedServices, function (service) {
+            //     service.referral = vm.picker.referral.id;
+            //     service.approvalNeeded = false;
+            //     return RecommendationsService.prepareService(service);
+            //   })
+            // });
+            //
+            // bulkRecommendServices.$save(function (data) {
+            //   toastr.success('Added services to referral for client: ' + vm.picker.referral.client_displayName, 'Billing');
+            //   $uibModalInstance.close(data);
+            // });
+          }
+
+          /**
+           * cancel
+           * @description cancels and closes the modal window
+           */
+          function cancel() {
+            $uibModalInstance.dismiss('cancel');
+          }
+        },
+        controllerAs: 'adhoc',
+        bindToController: true,
+        resolve: {
+          PickerConfig: function () {
+            return {
+              referral: vm.referral,
+              service: selectedService,
+              currIndex: vm.currIndex,
+              availableServices: vm.referral.availableServices,
+              recommendedServices: vm.referral.recommendedServices,
+              config: {
+                showBillingInfo: false,
+                labels: {
+                  'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_SERVICES',
+                  'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.SERVICES_TO_BE_ADDED'
+                }
+              }
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (adhocServices) {
+        init();
       });
     }
   }

@@ -65,6 +65,7 @@
                         class="btn btn-primary btn-sm" ng-click="field.onClick(service)">
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
+                <span ng-switch-when="datetime">{{service[field.name] | date:'fullDate'}}</span>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>
               </td>
             </tr>
