@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller="ServicesController as services" ng-cloak>
+  <div class="loading-screen" ng-show="!services.referral"></div>
   <div layout="column">
     <h2 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for

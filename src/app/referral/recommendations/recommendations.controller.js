@@ -25,7 +25,7 @@
     // bindable variables
     vm.url = API.url() + $location.path();
     var Resource = $resource(vm.url);
-    var BulkRecommendServices = $resource(API.url('service/bulkRecommendServices'), {}, {
+    var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
       'save' : {method: 'POST', isArray: false}
     });
 
