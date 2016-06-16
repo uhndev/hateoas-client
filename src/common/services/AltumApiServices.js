@@ -28,6 +28,7 @@
     .service('ServiceCategoryService', ServiceCategoryService)
     .service('ServiceService', ServiceService)
     .service('BillingGroupService', BillingGroupService)
+    .service('StatusFormService', StatusFormService)
     .service('StaffService', StaffService)
     .service('StaffTypeService', StaffTypeService)
     .service('NoteService', NoteService)
@@ -42,7 +43,7 @@
     AltumAPIService, BillingGroupService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
     CityService, PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
-    AltumAPIService, ServiceService, StaffService, StaffTypeService, NoteService, NoteTypeService
+    AltumAPIService, ServiceService, StatusFormService, StaffService, StaffTypeService, NoteService, NoteTypeService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
@@ -119,6 +120,10 @@
     return ResourceFactory.create(API.url('service'));
   }
 
+  function StatusFormService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('statusform'));
+  }
+
   function StaffService(ResourceFactory, API) {
     return ResourceFactory.create(API.url('staff'));
   }
@@ -179,6 +184,7 @@
       'ServiceCategory': ResourceFactory.create(API.url('servicecategory')),
       'BillingGroup': ResourceFactory.create(API.url('billinggroup')),
       'Service': ResourceFactory.create(API.url('service')),
+      'StatusForm' : ResourceFactory.create(API.url('statusform')),
       'Staff' : ResourceFactory.create(API.url('staff')),
       'StaffType' : ResourceFactory.create(API.url('staffType'), {cache: true}),
       'Note' : ResourceFactory.create(API.url('note')),

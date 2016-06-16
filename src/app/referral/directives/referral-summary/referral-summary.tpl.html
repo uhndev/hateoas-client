@@ -1,28 +1,28 @@
-<div flex ng-show="summary.referralOverview">
+<div flex ng-show="referralSummary.referralOverview">
   <table class="table table-condensed summary-table">
     <tr class="summary-header-row">
-      <th ng-repeat="(label, value) in summary.referralOverview" translate>{{::label}}</th>
-      <th ng-repeat="groupType in ::summary.groupTypes">{{::groupType.prompt}}</th>
-      <th ng-repeat="flag in summary.flagOptions" translate>{{::flag}}</th>
+      <th ng-repeat="referralOverview in referralSummary.referralOverview" translate context-translator="{{referralOverview.prompt}}">{{referralOverview.prompt}}</th>
+      <th ng-repeat="groupType in ::referralSummary.groupTypes" translate context-translator="{{groupType.prompt}}">{{groupType.prompt}}</th>
+      <th ng-repeat="flag in referralSummary.flagOptionsPrompt" translate context-translator="{{flag}}">{{flag}}</th>
     </tr>
     <tr class="summary-table-row">
-      <td ng-repeat="(label, value) in summary.referralOverview">{{::value}}</td>
-      <td ng-style="{'padding-top': 0}" ng-repeat="groupType in ::summary.groupTypes">
-        <select class="form-control" ng-model="summary.boundGroups[groupType.name]">
-          <option value="{{::groupField.name}}" ng-repeat="groupField in ::summary.groupFields" translate>
+      <td ng-repeat="referralOverview in referralSummary.referralOverview">{{referralOverview.value}}</td>
+      <td ng-style="{'padding-top': 0}" ng-repeat="groupType in ::referralSummary.groupTypes">
+        <select class="form-control" ng-model="referralSummary.boundGroups[groupType.name]">
+          <option value="{{::groupField.name}}" ng-repeat="groupField in ::referralSummary.groupFields" translate>
             {{::groupField.prompt}}
           </option>
         </select>
       </td>
-      <td ng-style="{'padding-top': 0}" ng-repeat="flag in summary.flagOptions">
+      <td ng-style="{'padding-top': 0}" ng-repeat="flag in referralSummary.flagOptions">
         <button type="button" class="btn" ng-class="{
-                  'btn-info': summary.configFlags[flag],
-                  'btn-default': !summary.configFlags[flag]
+                  'btn-info': referralSummary.configFlags[flag],
+                  'btn-default': !referralSummary.configFlags[flag]
                 }"
-                ng-click="summary.configFlags[flag] = !summary.configFlags[flag]">
+                ng-click="referralSummary.configFlags[flag] = !referralSummary.configFlags[flag]">
           <i class="fa" ng-class="{
-              'fa-cog': !summary.configFlags[flag],
-              'fa-chevron-down': summary.configFlags[flag]
+              'fa-cog': !referralSummary.configFlags[flag],
+              'fa-chevron-down': referralSummary.configFlags[flag]
             }"></i>
         </button>
       </td>

@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller="RecommendationsController as rec" ng-cloak>
+  <div class="loading-screen" ng-show="rec.isSaving || !rec.referral"></div>
   <div layout="column">
     <h2 id="Title" flex>
       <span translate>APP.REFERRAL.RECOMMENDATIONS.REFERRAL_RECOMMENDATIONS</span>
@@ -18,8 +19,8 @@
     <referral-summary referral-data="rec.referral"></referral-summary>
   </div>
 
-  <altum-notebook ng-if="rec.referral.notes"
-                  notes="rec.referral.notes"
+  <altum-notebook ng-if="rec.referralNotes"
+                  notes="rec.referralNotes"
                   collection="{'referral': rec.referral.id}"
                   email-info="rec.emailInfo"></altum-notebook>
 

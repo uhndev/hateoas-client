@@ -142,6 +142,7 @@
     vm.newSubItem = newSubItem;
     vm.applyTypeChange = applyTypeChange;
     vm.parseNode = parseNode;
+    vm.canAddPreset = canAddPreset;
     vm.newPreset = newPreset;
     vm.removePreset = removePreset;
     vm.expandOnMouseHover = expandOnMouseHover;
@@ -196,13 +197,25 @@
     }
 
     /**
+     * canAddPreset
+     * @description Returns true if newPreset stored in node.data.value can be added to the preset options
+     * @param node
+     * @returns {boolean}
+     */
+    function canAddPreset(node) {
+      return (!_.contains(node.data.values, node.data.value)) && node.data.value;
+    }
+
+    /**
      * newPreset
      * @description applies the preset value to the values array
      * @param node
      */
     function newPreset(node) {
-      node.data.values.push(node.data.value);
-      node.data.value = _.find(VARIATION_TYPES,{type: node.type}).value;
+      if (canAddPreset(node)) {
+        node.data.values.push(node.data.value);
+        node.data.value = _.find(VARIATION_TYPES,{type: node.type}).value;
+      }
     }
 
     /**
