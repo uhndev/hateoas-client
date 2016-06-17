@@ -5,9 +5,7 @@
     .module('altum.labelPrint', ['altum.labelPrint.controller'])
     .component('altumLabelPrint', {
       bindings: {
-        ip: '@',
-        referralInfo: '=',
-        copies: '='
+        referralInfo: '='
       },
       templateUrl: 'directives/labelPrint/altum-label.tpl.html',
       controller: 'LabelPrintController',

@@ -8,13 +8,14 @@
     .module('altum.labelPrint.controller', ['dados.constants'])
     .controller('LabelPrintController', LabelPrintController);
 
-  LabelPrintController.$inject = [];
+  LabelPrintController.$inject = ['$http','toastr'];
 
-  function LabelPrintController() {
+  function LabelPrintController($http, toastr) {
     var vm = this;
 
     // bindable variables
-
+    vm.copies = 1;
+    vm.printer = {};
     // bindable methods
     vm.printLabel = printLabel;
 
@@ -24,15 +25,23 @@
      * @description Function to print Label
      */
     function printLabel() {
+      
+      var interpreter = vm.referralInfo.client_interpreter ? 'Yes' : 'No';
       var zpl = '^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR5,5~SD15^JUS^LRN^CI0^XZ ^XA';
-      zpl += '^MMT ^PW812 ^LL0305 ^LS0 ^FT771,246^A0I,51,50^FH\^FD' + vm.referralInfo.clientcontact.firstName + ' ' + vm.referralInfo.clientcontact.middleName + ' ' + vm.referralInfo.clientcontact.lastName + '^FS';
-      zpl += '^FT768,206^A0I,28,28^FH\^FDGender: ' + vm.referralInfo.clientcontact.gender + '^FS';
-      zpl += ' ^FT510,206^A0I,28,28^FH\^FD' + 'program' + '^FS';
-      zpl += ' ^FT230,205^A0I,28,28^FH\^FDMRN:  12345678^FS ^FT766,167^A0I,28,28^FH\^FD78 ATWOOD AVE. GEORGETOWN^FS ^FT766,133^A0I,28,28^FH\^FDON     L7G 6A1     416-566-7661^FS ^FT766,99^A0I,28,28^FH\^FDWSIB:  26982941     Reg Date:  14/01/16^FS ^FT766,65^A0I,28,28^FH\^FDLanguage:  ENGLISH    Interpreter:  No^FS ^FT766,31^A0I,28,28^FH\^FDAcc/Loss Date:  09/06/14     Birth:  13/12/1978^FS';
+      zpl += '^MMT ^PW812 ^LL0305 ^LS0 ^FT771,246^A0I,51,50^FH\^FD' + vm.referralInfo.client_firstName.toUpperCase() + ' ' + vm.referralInfo.client_lastName.toUpperCase() + '^FS';
+      zpl += '^FT768,206^A0I,28,28^FH\^FDGender: ' + vm.referralInfo.client_gender + '^FS';
+      zpl += '^FT510,206^A0I,28,28^FH\^FD' + vm.referralInfo.program_name + '^FS';
+      zpl += '^FT211,262^A0I,28,28^FH\^FDMRN: ' + vm.referralInfo.client_mrn + '^FS';
+      zpl += '^FT766,167^A0I,28,28^FH\^FD' + vm.referralInfo.client_address1 + '. ' + vm.referralInfo.client_cityName + '^FS'; 
+      zpl += '^FT766,133^A0I,28,28^FH\^FD' + vm.referralInfo.client_province + ' ' + vm.referralInfo.client_postalCode + ' ' + vm.referralInfo.client_homePhone + '^FS'; 
+      zpl += '^FT766,99^A0I,28,28^FH\^FDCLAIM: ' + vm.referralInfo.claimNumber + '    Ref Date:  ' + moment(vm.referralInfo.referralDate).format("DD/MM/YYYY") + '^FS';
+      zpl += '^FT766,65^A0I,28,28^FH\^FDLanguage: ' + vm.referralInfo.client_language + '  ' +  'Interpreter:  ' + interpreter + '^FS';
+      zpl += '^FT766,31^A0I,28,28^FH\^FDAcc/Loss Date:  ' + moment(vm.referralInfo.accidentDate).format("DD/MM/YYYY") + '  Birth:  ' + moment(vm.referralInfo.client_dateOfBirth).format("DD/MM/YYYY") + '^FS';
       zpl += '^PQ' + vm.copies + ',0,1,Y';
       zpl += '^XZ';
-      var ip_addr = vm.ip;
+      var ip_addr = vm.printer.IP;
       var url = 'http://' + ip_addr + '/pstprnt';
+     // var Resource = $resource(url);
       var method = 'POST';
       var async = true;
       var request = new XMLHttpRequest();
@@ -42,8 +51,17 @@
 
       // Actually sends the request to the server.
       request.send(zpl);
-      //alert(vm.referralInfo.clientcontact.firstName);
 
+      request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+         
+            toastr.success("Your label has printed");
+          } else {
+            toastr.error('failed');
+          }
+        
+      };
+     
     }
   }
 
