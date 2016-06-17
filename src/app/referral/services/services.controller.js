@@ -288,25 +288,21 @@
             var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
               'save' : {method: 'POST', isArray: false}
             });
-            console.log(_.map(vm.picker.recommendedServices, function (service) {
-              service.referral = vm.picker.referral.id;
-              service.approvalNeeded = false;
-              service.billingGroup = billingGroup;
-              return RecommendationsService.prepareService(service);
-            }));
 
-            // var bulkRecommendServices = new BulkRecommendServices({
-            //   newBillingGroups: _.map(vm.picker.recommendedServices, function (service) {
-            //     service.referral = vm.picker.referral.id;
-            //     service.approvalNeeded = false;
-            //     return RecommendationsService.prepareService(service);
-            //   })
-            // });
-            //
-            // bulkRecommendServices.$save(function (data) {
-            //   toastr.success('Added services to referral for client: ' + vm.picker.referral.client_displayName, 'Billing');
-            //   $uibModalInstance.close(data);
-            // });
+            var bulkRecommendServices = new BulkRecommendServices({
+              billingGroup: billingGroup,
+              newBillingGroups: _.map(vm.picker.recommendedServices, function (service) {
+                service.referral = vm.picker.referral.id;
+                service.approvalNeeded = false;
+                service.billingGroup = billingGroup;
+                return RecommendationsService.prepareService(service);
+              })
+            });
+
+            bulkRecommendServices.$save(function (data) {
+              toastr.success('Added services to referral for client: ' + vm.picker.referral.client_displayName, 'Billing');
+              $uibModalInstance.close(data);
+            });
           }
 
           /**
