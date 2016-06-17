@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller="ServicesController as services" ng-cloak>
+  <div class="loading-screen" ng-show="!services.referral"></div>
   <div layout="column">
     <h2 flex id="Title">
       <span translate>APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
@@ -19,9 +20,9 @@
     <referral-summary referral-data="services.referral"
                       bound-groups="services.boundGroupTypes"
                       group-types="services.groupTypes"
-                      group-fields="services.groupFields">
+                      group-fields="services.groupFields"
+                      config-flags="services.flagConfig">
     </referral-summary>
-
   </div>
 
   <altum-notebook ng-if="services.referralNotes"
@@ -29,6 +30,11 @@
                   collection="{'referral': services.referral.id}"
                   email-info="services.emailInfo">
   </altum-notebook>
+
+  <template-config ng-if="services.flagConfig.fields"
+                   available-fields="services.templateFieldOptions"
+                   visible-fields="services.visitFields">
+  </template-config>
 
   <service-group services="services.services"
                  search="services.search"

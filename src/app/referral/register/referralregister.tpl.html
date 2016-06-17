@@ -1,6 +1,6 @@
 <div class="container">
   <div id="page-heading">
-    <h2>Referral Info</h2>
+    <h2>Referral</h2>
   </div>
 
   </br>
@@ -10,14 +10,15 @@
       <div class="row">
         <div class="col-lg-6">
           <fieldset>
-            <legend>Manage Referral</legend>
+            <legend context-translator="{{RC.translatableTitles.referralTitle}}" translate>{{RC.translatableTitles.referralTitle}}</legend>
             <div class="row">
-              <div class="col-md-1"><img src="/assets/img/patienticon.png" height="50"></div>
-              <div class="col-md-12">
+              <div class="col-md-1"><span class="glyphicon glyphicon-user"></span></div>
+              <div class="col-md-11">
 
                 <div class="form-group">
-                  <label class="control-label" for="client">Client:</label>
+                  <label class="control-label  col-md-3" for="client" context-translator="{{RC.translatableTitles.client}}" translate>{{RC.translatableTitles.client}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="client"
                       is-atomic="true"
                       is-disabled="false"
@@ -28,8 +29,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="site">Site:</label>
+                  <label class="control-label col-md-3" for="site" context-translator="{{RC.translatableTitles.site}}" translate>{{RC.translatableTitles.site}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="site"
                       is-atomic="true"
                       is-disabled="false"
@@ -40,8 +42,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="program">Program:</label>
+                  <label class="control-label col-md-3" for="program" context-translator="{{RC.translatableTitles.program}}" translate>{{RC.translatableTitles.program}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="program"
                       is-atomic="true"
                       is-disabled="false"
@@ -52,8 +55,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="physician">Physician:</label>
+                  <label class="control-label col-md-3" for="physician" context-translator="{{RC.translatableTitles.physician}}" translate>{{RC.translatableTitles.physician}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="physician"
                       is-atomic="true"
                       is-disabled="false"
@@ -64,8 +68,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="staff">Staff:</label>
+                  <label class="control-label col-md-3" for="staff" context-translator="{{RC.translatableTitles.staff}}" translate>{{RC.translatableTitles.staff}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="staff"
                       is-atomic="true"
                       is-disabled="false"
@@ -76,8 +81,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label" for="payors">Payors:</label>
+                  <label class="control-label col-md-3" for="payors" context-translator="{{RC.translatableTitles.payors}}" translate>{{RC.translatableTitles.payors}}</label>
                   <select-loader
+                      class="col-md-9"
                       url="payor"
                       is-atomic="true"
                       is-disabled="false"
@@ -86,10 +92,20 @@
                       labels="displayName">
                   </select-loader>
                 </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
 
+          <div class ="col-lg-6">
+            <fieldset>
+              <legend context-translator="{{RC.translatableTitles.dateTitle}}" translate>{{RC.translatableTitles.dateTitle}}</legend>
+              <div class="row">
+                <div class="col-md-1"><span class="glyphicon glyphicon-calendar"></span></div>
+                <div class="col-md-11">
                 <div class="form-group">
-                  <label class="control-label">Referral Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.referralDate}}" translate>{{RC.translatableTitles.referralDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.referralDate"
@@ -107,8 +123,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Clinic Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3"context-translator="{{RC.translatableTitles.clinicDate}}" translate>{{RC.translatableTitles.clinicDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.clinicDate"
@@ -126,8 +142,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Accident Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.accidentDate}}" translate>{{RC.translatableTitles.accidentDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.accidentDate"
@@ -145,8 +161,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Receive Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.receiveDate}}" translate>{{RC.translatableTitles.receiveDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.receiveDate"
@@ -164,8 +180,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Sent Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.sentDate}}" translate>{{RC.translatableTitles.sentDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.sentDate"
@@ -183,8 +199,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label">Discharge Date:</label>
-                  <div class="col-md-13">
+                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.dischargeDate}}" translate>{{RC.translatableTitles.dischargeDate}}</label>
+                  <div class="col-md-9">
                     <p class="input-group">
                       <input type="text"
                              ng-model="RC.referral.dischargeDate"
@@ -202,9 +218,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"> Recommendations made:
-                      <input type="checkbox" ng-model="RC.referral.recommendationsMade"></input>
-                    </label>
+                    <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.recMade}}" translate>{{RC.translatableTitles.recMade}}</label>
+                    <input class="col-md-1" type="checkbox" ng-model="RC.referral.recommendationsMade"></input>
                 </div>
               </div>
             </div>
@@ -212,6 +227,7 @@
         </div>
       </div>
     </div>
+
     <div class="modal-footer">
       <button ng-click="RC.referralAdd(isValid)" type="submit" ng-if="!RC.referral.id"
               ng-disabled="referralForm.$invalid"

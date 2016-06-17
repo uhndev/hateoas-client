@@ -19,10 +19,11 @@
         referralData: '<',    // default referral object
         boundGroups: '=?',    // object where groupType.name is bound outward
         groupTypes: '<?',     // array of names and prompts that can be bound
-        groupFields: '<?'     // array of configuration data groups that can be chosen from
+        groupFields: '<?',    // array of configuration data groups that can be chosen from
+        configFlags: '=?'     // optional object containing flags that can be toggled
       },
       controller: 'ReferralSummaryController',
-      controllerAs: 'summary',
+      controllerAs: 'referralSummary',
       templateUrl: 'referral/directives/referral-summary/referral-summary.tpl.html'
     });
 
@@ -30,20 +31,47 @@
 
   function ReferralSummaryController($scope) {
     var vm = this;
-
     // wait for data to load, then create overview object
-    var unregister = $scope.$watch('summary.referralData', function (newVal, oldVal) {
+    var unregister = $scope.$watch('referralSummary.referralData', function (newVal, oldVal) {
       if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
         // data columns for referral overview table
-        vm.referralOverview = {
-          'COMMON.MODELS.CLIENT.MRN': vm.referralData.client_mrn,
-          'COMMON.MODELS.REFERRAL.CLIENT': vm.referralData.client_displayName,
-          'COMMON.MODELS.REFERRAL.CLAIM_NUMBER': vm.referralData.claimNumber,
-          'COMMON.MODELS.REFERRAL.PROGRAM': vm.referralData.program_name,
-          'COMMON.MODELS.REFERRAL.PHYSICIAN': vm.referralData.physician_name,
-          'COMMON.MODELS.REFERRAL.STAFF': vm.referralData.staff_name,
-          'COMMON.MODELS.REFERRAL.SITE': vm.referralData.site_name
-        };
+
+        vm.referralOverview = [
+          {
+            value:vm.referralData.client_mrn,
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.MRN'
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.CLIENT',
+            value:vm.referralData.client_displayName
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.CLAIM_NUMBER',
+            value:vm.referralData.claimNumber
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.PROGRAM',
+            value:vm.referralData.program_name
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.PHYSICIAN',
+            value:vm.referralData.physician_name
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.STAFF',
+            value:vm.referralData.staff_name
+          },
+          {
+            prompt:'APP.REFERRAL.REFERRAL-SUMMARY.LABELS.SITE',
+            value: vm.referralData.site_name
+          }
+        ];
+
+        if (vm.configFlags) { // keys of configFlags become table headers
+          vm.flagOptions = _.keys(vm.configFlags);
+          vm.flagOptionsPrompt = vm.flagOptions.map(function (elements) { return 'APP.REFERRAL.CONFIG.LABELS.' + elements.toUpperCase(); });
+        }
+
         unregister(); // unregister watcher
       }
     });

@@ -31,36 +31,36 @@
     vm.visitFields = [
       {
         name: 'altumServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.ALTUM_SERVICE'
       },
       {
         name: 'siteName',
-        prompt: 'COMMON.MODELS.SERVICE.SITE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.SITE'
       },
       {
         name: 'serviceDate',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.SERVICE_DATE'
       },
       {
         name: 'code',
-        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.CODE'
       },
       {
         name: 'price',
-        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.PRICE'
       },
       {
         name: 'billingCount',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_COUNT'
       },
       {
         name: 'completion',
-        prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.COMPLETION',
         type: 'status'
       },
       {
         name: 'billing',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_STATUS',
         type: 'status'
       },
       {

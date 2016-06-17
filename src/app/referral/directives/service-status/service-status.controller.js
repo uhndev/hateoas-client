@@ -4,10 +4,12 @@
   angular
     .module('altum.referral.serviceStatus.controller', [
       'ngResource',
-      'ngMaterial'
+      'ngMaterial',
+      'altum.referral.serviceStatus.confirmation.controller'
     ])
     .constant('STATUS_TYPES', {
       'approval': {
+        'model': 'approval',
         'collection': 'approvals',
         'currentType': 'currentApproval',
         'currentStatus': 'currentStatus',
@@ -22,6 +24,7 @@
         ]
       },
       'completion': {
+        'model': 'completion',
         'collection': 'completion',
         'currentType': 'currentCompletion',
         'currentStatus': 'currentCompletionStatus',
@@ -41,6 +44,7 @@
         ]
       },
       'billing': {
+        'model': 'billingstatus',
         'collection': 'billingStatuses',
         'currentType': 'currentBillingStatus',
         'currentStatus': 'currentBillingStatusStatus',
@@ -141,55 +145,21 @@
       if (vm.statuses[vm.service[vm.currentStatus]].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
-          template: '<form-directive form="ac.statusTemplateForm" on-submit="ac.confirm()" on-cancel="ac.cancel()"></form-directive>',
-          controller: function ApprovalConfirmationModal($uibModalInstance, newStatus, statusTemplateForm, TemplateService) {
-            var vm = this;
-            vm.newStatus = newStatus;
-            vm.statusTemplateForm = statusTemplateForm;
-
-            vm.statusData = {
-              status: newStatus.id
-            };
-
-            // set required fields to null in approval object
-            _.each(vm.newStatus.rules.requires[statusType], function (field) {
-              vm.statusData[field] = null;
-            });
-
-            /**
-             * isFieldRequired
-             * @description Returns true if field is required in confirmation form
-             * @param field
-             * @returns {Boolean}
-             */
-            vm.isFieldRequired = function (field) {
-              return _.contains(vm.newStatus.rules.requires[statusType], field);
-            };
-
-            /**
-             * confirm
-             * @description Returns the approval object upon confirmation
-             */
-            vm.confirm = function () {
-              var answers = _.merge(vm.statusData, TemplateService.formToObject(vm.statusTemplateForm));
-              $uibModalInstance.close(answers);
-            };
-
-            /**
-             * cancel
-             * @description cancels and closes the modal window
-             */
-            vm.cancel = function () {
-              $uibModalInstance.dismiss();
-            };
-          },
-          controllerAs: 'ac',
+          template: '<form-directive form="confirmationModal.statusTemplateForm" ' +
+          'on-submit="confirmationModal.confirm()" ' +
+          'on-cancel="confirmationModal.cancel()">' +
+          '</form-directive>',
+          controller: 'ApprovalConfirmationModal',
+          controllerAs: 'confirmationModal',
           bindToController: true,
           resolve: {
             newStatus: function () {
               return vm.statuses[vm.service[vm.currentStatus]];
             },
-            statusTemplateForm: function (TemplateService) {
+            statusType: function () {
+              return statusType;
+            },
+            statusTemplateForm: function (StatusFormFactory) {
               var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
 
               // if overrideForm set, fetch systemform from API
@@ -200,14 +170,7 @@
               }
               // otherwise, parse newStatus template into a systemform and filter based on status.rules
               else {
-                var filteredStatusTemplate = angular.copy(vm.statusTemplate);
-                filteredStatusTemplate.data = _.filter(filteredStatusTemplate.data, function (field) {
-                  return _.contains(vm.statuses[vm.service[vm.currentStatus]].rules.requires[statusType], field.name);
-                });
-                var form = TemplateService.parseToForm({}, filteredStatusTemplate);
-                form.form_title = 'Status Confirmation';
-                form.form_submitText = 'Change Status';
-                return form;
+                return StatusFormFactory.buildStatusForm(vm.statusTemplate, newStatus, statusType, vm.service);
               }
             }
           }
@@ -247,6 +210,7 @@
         fetchStatusHistory();
       }
     }
+
     $scope.$watch('serviceStatus.service', watchServiceChange);
   }
 

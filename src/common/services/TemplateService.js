@@ -27,7 +27,7 @@
     this.formToObject = function (form) {
       return _.reduce(form.form_questions,
         function (item, question) {
-          item[question.field_name] = question.field_value;
+          item[question.field_name] = _.isUndefined(question.field_value) ? null : question.field_value;
           return item;
         }, {});
     };
