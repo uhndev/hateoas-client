@@ -1,7 +1,7 @@
 <uib-accordion close-others="false">
   <uib-accordion-group ng-repeat="(groupKey, groupedServices) in serviceGroup.services | fuzzy: serviceGroup.search | groupBy: serviceGroup.boundGroupTypes.groupBy"
                        ng-init="serviceGroup.accordionStatus[groupKey].isOpen = false"
-                       is-open="serviceGroup.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+                       is-open="!serviceGroup.accordionStatus[groupKey].isOpen" panel-class="panel-info">
     <uib-accordion-heading>
       <i class="glyphicon" ng-class="{
         'glyphicon-chevron-right': !serviceGroup.accordionStatus[groupKey].isOpen,

@@ -224,6 +224,7 @@
         templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
         controller: 'ServiceModalController',
         controllerAs: 'svcmodal',
+        size: 'lg',
         bindToController: true,
         resolve: {
           Service: function() {
@@ -270,7 +271,8 @@
             loadVisitServiceData: true,
             disabled: {
               altumService: true,
-              programService: true
+              programService: true,
+              variations: true
             },
             required: {}
           };

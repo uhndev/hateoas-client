@@ -38,7 +38,8 @@
       disabled: {
         altumService: true,
         programService: true,
-        site: true
+        site: true,
+        variations: true
       },
       required: {
         visitService: true,

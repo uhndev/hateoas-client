@@ -96,7 +96,8 @@
               altumService: true,
               programService: true,
               site: true,
-              visitService: true
+              visitService: true,
+              variations: true
             },
             required: {}
           };
