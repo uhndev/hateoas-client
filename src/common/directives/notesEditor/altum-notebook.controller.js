@@ -22,6 +22,7 @@
     // bindable methods
     vm.addNote = addNote;
     vm.removeElement = removeElement;
+    console.log(vm.notes);
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -57,4 +58,3 @@
   }
 
 })();
-

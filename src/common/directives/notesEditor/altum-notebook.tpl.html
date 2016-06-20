@@ -19,7 +19,11 @@
           </ul>
         </span>
       </div>
-      <div ng-repeat="note in notebook.notes | orderBy:'createdAt': true track by $index">
+      <div class="form-group no-margin has-feedback has-feedback-left">
+        <i class="no-top form-control-feedback fa fa-search"></i>
+        <input type="text" class="form-control" ng-model="notebook.filter"></input>
+      </div>
+      <div ng-repeat="note in notebook.notes | filter:notebook.filter : orderBy:'createdAt': true track by $index">
         <altum-note note="note"
                     collection="notebook.collection"
                     email-info="notebook.emailInfo"
