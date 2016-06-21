@@ -23,7 +23,8 @@
     var templateFilterFields = [
       'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
-      'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
+      'totalItems', 'approvalDate', 'physicianDisplayName',
+      'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
     ];
 
     vm.DEFAULT_GROUP_BY = 'statusName';

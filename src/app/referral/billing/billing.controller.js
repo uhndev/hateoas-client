@@ -53,8 +53,8 @@
         type: 'string'
       },
       {
-        name: 'completion',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.COMPLETION',
+        name: 'report',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.REPORT_STATUS',
         type: 'status'
       },
       {

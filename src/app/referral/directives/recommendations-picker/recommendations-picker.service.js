@@ -127,6 +127,7 @@
             programService: altumProgramService.programService,
             programServiceName: altumProgramService.programServiceName,
             programServiceCode: altumProgramService.programServiceCode,
+            payorPrice: altumProgramService.programServicePrice,
             serviceCategory: altumProgramService.serviceCategory,
             serviceCategoryName: altumProgramService.serviceCategoryName,
             serviceDate: new Date(),
