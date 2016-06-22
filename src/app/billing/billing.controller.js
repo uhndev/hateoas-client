@@ -101,8 +101,8 @@
         prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
       },
       {
-        name: 'price',
-        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+        name: 'payorPrice',
+        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE'
       },
       {
         name: 'altumServiceName',

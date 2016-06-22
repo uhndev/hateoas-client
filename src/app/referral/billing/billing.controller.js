@@ -43,8 +43,8 @@
         type: 'string'
       },
       {
-        name: 'price',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.PRICE',
+        name: 'payorPrice',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.PAYOR_PRICE',
         type: 'string'
       },
       {
@@ -67,13 +67,50 @@
         prompt: 'APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE',
         type: 'button',
         iconClass: 'glyphicon-edit',
-        onClick: $scope.services.openServiceEditor
+        onClick: openServiceEditor
       }
     ];
 
+    vm.openServiceEditor = openServicePicker;
     vm.openServicePicker = openServicePicker;
 
     ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * openServiceEditor
+     * @description opens a modal window for the billing specific serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        size: 'lg',
+        bindToController: true,
+        resolve: {
+          Service: function() {
+            return AltumAPI.Service.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
+          },
+          ApprovedServices: function() {
+            return angular.copy($scope.services.referral.approvedServices);
+          },
+          ServiceEditorConfig: function() {
+            return {
+              loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
+              disabled: {
+                currentCompletion: true // no need to have completion field when editing,
+              },
+              required: {}
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        $scope.services.init();
+      });
+    }
 
     /**
      * openServicePicker
@@ -97,7 +134,8 @@
               programService: true,
               site: true,
               visitService: true,
-              variations: true
+              variations: true,
+              payorPrice: true
             },
             required: {}
           };
