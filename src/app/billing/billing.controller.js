@@ -9,6 +9,7 @@
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);

@@ -86,6 +86,7 @@
           field_name: list.name,
           field_title: _.startCase(list.name),
           field_userURL: list.type,
+          field_preventCreate: list.preventCreate,
           field_questions: _.map(list[listField], function (dataItem, index) {
             dataItem.field_id = index + 1;
             return transformDeep(dataItem, listField, dataItem.type);

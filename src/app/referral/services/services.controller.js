@@ -23,7 +23,7 @@
     var templateFilterFields = [
       'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
-      'totalItems', 'approvalDate', 'physicianDisplayName',
+      'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
     ];
 
@@ -146,15 +146,14 @@
         type: 'button',
         iconClass: 'glyphicon-edit',
         onClick: openServiceEditor
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
+        type: 'button',
+        iconClass: 'glyphicon-plus',
+        onClick: openRecommendationsPicker
       }
-      // TODO: verify if this is necessary.
-      // {
-      //   name: 'serviceEditor',
-      //   prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
-      //   type: 'button',
-      //   iconClass: 'glyphicon-plus',
-      //   onClick: openRecommendationsPicker
-      // }
     ];
 
     vm.init = init;
