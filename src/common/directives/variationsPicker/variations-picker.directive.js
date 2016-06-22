@@ -67,7 +67,7 @@
         switch (true) {
           // update titles and names slightly for physician/staff/timeframe to display meaningful data
           case node.data.category === 'model':
-            selectedNode.name = nodeCopy.data.value.displayName;
+            selectedNode.title = nodeCopy.data.value.displayName;
             selectedNode.value = nodeCopy.data.value.id;
             break;
             // special case for non-service jsonmodel types, concatenate displayNames

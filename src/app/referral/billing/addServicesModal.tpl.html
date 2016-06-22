@@ -11,7 +11,7 @@
         <input type="text" class="form-control"
                placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
                ng-model="adhoc.searchQuery" />
-        <span class="input-group-addon">
+        <span class="input-group-addon" ng-if="adhoc.picker.config.showBillingInfo">
           <label class="checkbox-inline">
             <input type="checkbox" ng-model="adhoc.picker.config.billing.programServiceCode"/> {{'APP.REFERRAL.BILLING.LABELS.BILLING_CODES' | translate}}
           </label>
@@ -24,28 +24,34 @@
     </div>
 
     <div layout="row" layout-md="column">
-      <div class="panel panel-info" flex="25" flex-md="100" >
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <i class="fa fa-folder-open-o"></i>
-            <b translate>APP.REFERRAL.BILLING.SERVICE_SETTINGS</b>
-            <span> for {{adhoc.picker.recommendedServices.length}} service(s)</span>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <service-editor ng-if="adhoc.picker.referral"
-                          referral="adhoc.picker.referral"
-                          service="adhoc.picker.sharedService"
-                          configuration="adhoc.serviceEditorConfig"
-                          approved-services="adhoc.picker.referral.approvedServices"
-                          recommended-services="adhoc.picker.recommendedServices">
-          </service-editor>
+      <div flex="25" flex-md="100" layout="column">
+        <service-detail referral="adhoc.picker.referral"
+                        service="adhoc.picker.recommendedServices[adhoc.picker.currIndex]">
+        </service-detail>
+
+        <div class="panel panel-info" flex="25" flex-md="100" >
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <i class="fa fa-folder-open-o"></i>
+              <b translate>APP.REFERRAL.BILLING.SERVICE_SETTINGS</b>
+              <span> for {{adhoc.picker.recommendedServices.length}} service(s)</span>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <service-editor ng-if="adhoc.picker.referral"
+                            referral="adhoc.picker.referral"
+                            service="adhoc.picker.service"
+                            configuration="adhoc.serviceEditorConfig"
+                            approved-services="adhoc.picker.referral.approvedServices"
+                            recommended-services="adhoc.picker.recommendedServices">
+            </service-editor>
+          </div>
         </div>
       </div>
 
       <recommendations-picker flex ng-if="adhoc.picker.referral"
                               referral="adhoc.picker.referral"
-                              service="adhoc.picker.sharedService"
+                              service="adhoc.picker.service"
                               curr-index="adhoc.picker.currIndex"
                               available-services="adhoc.picker.availableServices"
                               recommended-services="adhoc.picker.recommendedServices"

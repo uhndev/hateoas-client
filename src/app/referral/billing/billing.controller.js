@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('altum.referral.billing', ['altum.referral.serviceGroup'])
+    .module('altum.referral.billing', ['altum.referral.serviceGroup', 'altum.referral.serviceGroupPreset'])
     .controller('BillingController', BillingController);
 
   BillingController.$inject = [
@@ -19,43 +19,42 @@
       groupBy: vm.DEFAULT_GROUP_BY,
       subGroupBy: vm.DEFAULT_SUBGROUP_BY
     };
-    vm.recommendationsConfig = {
-      showBillingInfo: true,
-      labels: {
-        'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_SERVICES',
-        'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.SERVICES_TO_BE_ADDED'
-      }
-    };
 
     // data columns for groups (visits)
     vm.visitFields = [
       {
         name: 'altumServiceName',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.ALTUM_SERVICE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.ALTUM_SERVICE',
+        type: 'string'
       },
       {
         name: 'siteName',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.SITE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.SITE',
+        type: 'string'
       },
       {
         name: 'serviceDate',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.SERVICE_DATE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.SERVICE_DATE',
+        type: 'datetime'
       },
       {
         name: 'code',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.CODE'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.CODE',
+        type: 'string'
       },
       {
-        name: 'price',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.PRICE'
+        name: 'payorPrice',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.PAYOR_PRICE',
+        type: 'string'
       },
       {
         name: 'billingCount',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_COUNT'
+        prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_COUNT',
+        type: 'string'
       },
       {
-        name: 'completion',
-        prompt: 'APP.REFERRAL.BILLING.LABELS.COMPLETION',
+        name: 'report',
+        prompt: 'APP.REFERRAL.BILLING.LABELS.REPORT_STATUS',
         type: 'status'
       },
       {
@@ -72,14 +71,14 @@
       }
     ];
 
-    vm.openServiceEditor = openServiceEditor;
+    vm.openServiceEditor = openServicePicker;
     vm.openServicePicker = openServicePicker;
 
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * openServiceEditor
-     * @description opens a modal window for the serviceModal service editor
+     * @description opens a modal window for the billing specific serviceModal service editor
      */
     function openServiceEditor(service) {
       var modalInstance = $uibModal.open({
@@ -87,6 +86,7 @@
         templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
         controller: 'ServiceModalController',
         controllerAs: 'svcmodal',
+        size: 'lg',
         bindToController: true,
         resolve: {
           Service: function() {
@@ -99,7 +99,7 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
-                currentCompletion: true // no need to have completion field when editing
+                currentCompletion: true // no need to have completion field when editing,
               },
               required: {}
             };
@@ -133,7 +133,9 @@
               altumService: true,
               programService: true,
               site: true,
-              visitService: true
+              visitService: true,
+              variations: true,
+              payorPrice: true
             },
             required: {}
           };
@@ -149,17 +151,21 @@
            * @description Adds recommended services to the referral
            */
           function saveRecommendedServices() {
-            $q.all(_.map(vm.picker.recommendedServices, function (service) {
-                // set approval not needed and referral id
+            var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
+              'save' : {method: 'POST', isArray: false}
+            });
+            var bulkRecommendServices = new BulkRecommendServices({
+              newBillingGroups: _.map(vm.picker.recommendedServices, function (service) {
                 service.referral = vm.picker.referral.id;
                 service.approvalNeeded = false;
-                var serviceObj = new AltumAPI.BillingGroup(RecommendationsService.prepareService(service));
-                return serviceObj.$save();
-              }))
-              .then(function (data) {
-                toastr.success('Added services to referral for client: ' + vm.picker.referral.client_displayName, 'Billing');
-                $uibModalInstance.close(data);
-              });
+                return RecommendationsService.prepareService(service);
+              })
+            });
+
+            bulkRecommendServices.$save(function (data) {
+              toastr.success('Added services to referral for client: ' + vm.picker.referral.client_displayName, 'Billing');
+              $uibModalInstance.close(data);
+            });
           }
 
           /**
@@ -180,7 +186,13 @@
               currIndex: $scope.services.currIndex,
               availableServices: $scope.services.referral.availableServices,
               recommendedServices: $scope.services.recommendedServices,
-              config: vm.recommendationsConfig
+              config: {
+                showBillingInfo: true,
+                labels: {
+                  'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_SERVICES',
+                  'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.SERVICES_TO_BE_ADDED'
+                }
+              }
             };
           }
         }
