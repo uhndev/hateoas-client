@@ -1,0 +1,9 @@
+<div class="panel">
+  <button type="button" class="btn btn-default btn-sm ng-binding ng-scope"
+          ng-repeat="preset in serviceGroupPreset.serviceGroupPresets" ng-click="serviceGroupPreset.selectGroupPreset(preset)">{{preset.name}}</button>
+  <input type="text" ng-model="serviceGroupPreset.newPresetName">
+  <button type="button" class="btn btn-info"
+          ng-click="serviceGroupPreset.addGroupPreset()">
+    <i class="fa fa-plus"></i>
+  </button>
+</div>

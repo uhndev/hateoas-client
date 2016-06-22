@@ -25,6 +25,11 @@
     </referral-summary>
   </div>
 
+  <service-group-preset bound-group-types="services.boundGroupTypes"
+                        visit-fields="services.visitFields"
+                        summary-fields="services.summaryFields">
+  </service-group-preset>
+
   <altum-notebook ng-if="services.referralNotes"
                   notes="services.referralNotes.notes"
                   collection="{'referral': services.referral.id}"
