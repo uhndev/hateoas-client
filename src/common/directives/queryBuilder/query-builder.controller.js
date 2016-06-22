@@ -92,6 +92,7 @@
           $scope.query = {
             'or': _.reduce($scope.fields, function(result, field) {
               var query = {};
+
               switch (true) {
                 case /date|dateTime|datetime/i.test(field.type):
                   // dont even bother (╯°□°）╯︵ ┻━┻
