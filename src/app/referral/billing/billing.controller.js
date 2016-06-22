@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('altum.referral.billing', ['altum.referral.serviceGroup'])
+    .module('altum.referral.billing', ['altum.referral.serviceGroup', 'altum.referral.serviceGroupPreset'])
     .controller('BillingController', BillingController);
 
   BillingController.$inject = [

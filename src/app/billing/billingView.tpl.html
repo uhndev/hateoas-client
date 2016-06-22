@@ -45,6 +45,11 @@
     </table>
   </div>
 
+  <service-group-preset bound-group-types="globalBilling.boundGroupTypes"
+                        visit-fields="globalBilling.visitFields"
+                        summary-fields="globalBilling.summaryFields">
+  </service-group-preset>
+
   <template-config uib-collapse="!globalBilling.showConfigureFields"
                    available-fields="globalBilling.templateFieldOptions"
                    visible-fields="globalBilling.visitFields">

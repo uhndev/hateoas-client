@@ -4,7 +4,8 @@
   angular
     .module('altum.billing', [
       'ui.sortable',
-      'altum.referral.serviceGroup'
+      'altum.referral.serviceGroup',
+      'altum.referral.serviceGroupPreset'
     ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',

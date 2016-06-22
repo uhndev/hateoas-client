@@ -9,7 +9,8 @@
       'dados.header.service',
       'dados.common.services.altum',
       'altum.referral.serviceStatus',
-      'altum.referral.serviceGroup'
+      'altum.referral.serviceGroup',
+      'altum.referral.serviceGroupPreset'
     ])
     .controller('ServicesController', ServicesController);
 
