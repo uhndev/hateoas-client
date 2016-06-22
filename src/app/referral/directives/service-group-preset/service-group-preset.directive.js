@@ -26,10 +26,11 @@
     })
     .controller('ServiceGroupPresetController', ServiceGroupPresetController);
 
-  ServiceGroupPresetController.$inject = ['$scope', '$resource', 'API', 'toastr'];
+  ServiceGroupPresetController.$inject = ['$scope', '$resource', 'API', 'toastr', 'AuthService'];
 
-  function ServiceGroupPresetController($scope, $resource, API, toastr) {
+  function ServiceGroupPresetController($scope, $resource, API, toastr, AuthService) {
     var vm = this;
+    vm.isAdmin = AuthService.isAdmin();
     vm.newPresetName = 'Default';
 
     var ServicePreset = $resource(API.url('servicepreset'), {}, {
@@ -41,6 +42,7 @@
     // bindable methods
     vm.addGroupPreset = addGroupPreset;
     vm.selectGroupPreset = selectGroupPreset;
+    vm.removePreset = removePreset;
 
     init();
 
@@ -71,9 +73,9 @@
       };
 
       var PresetResource = new ServicePreset(preset);
-      PresetResource.$save(function() {
+      PresetResource.$save(function(response) {
         toastr.success('Configuration preset saved successfully', preset.name);
-        vm.serviceGroupPresets.push(preset);
+        vm.serviceGroupPresets.push(response);
       }, function(response) {
         if (response.status === 400) {
           toastr.error(preset.name + ' already exists', 'Service Preset');
@@ -91,6 +93,23 @@
       vm.boundGroupTypes = angular.copy(item.preset.boundGroupTypes);
       vm.visitFields = angular.copy(item.preset.visitFields);
       vm.summaryFields = angular.copy(item.preset.summaryFields);
+    }
+
+    /**
+     * removePreset
+     * @description Deletes selected service preset
+     * @param name
+     */
+    function removePreset(name) {
+      var toRemove = _.findIndex(vm.serviceGroupPresets, function(preset) {
+        return name == preset.name;
+      });
+
+      if (toRemove !== -1) {
+        ServicePreset.remove({id: vm.serviceGroupPresets[toRemove].id}, function() {
+          vm.serviceGroupPresets.splice(toRemove, 1);
+        });
+      }
     }
   }
 
