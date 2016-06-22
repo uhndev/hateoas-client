@@ -24,7 +24,8 @@
     var templateFilterFields = [
       'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
-      'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
+      'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
+      'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
     ];
 
     vm.DEFAULT_GROUP_BY = 'statusName';
@@ -146,15 +147,14 @@
         type: 'button',
         iconClass: 'glyphicon-edit',
         onClick: openServiceEditor
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
+        type: 'button',
+        iconClass: 'glyphicon-plus',
+        onClick: openRecommendationsPicker
       }
-      // TODO: verify if this is necessary.
-      // {
-      //   name: 'serviceEditor',
-      //   prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
-      //   type: 'button',
-      //   iconClass: 'glyphicon-plus',
-      //   onClick: openRecommendationsPicker
-      // }
     ];
 
     vm.init = init;
@@ -238,7 +238,8 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
-                currentCompletion: true // no need to have completion field when editing
+                currentCompletion: true, // no need to have completion field when editing,
+                payorPrice: true
               },
               required: {}
             };
@@ -273,7 +274,8 @@
             disabled: {
               altumService: true,
               programService: true,
-              variations: true
+              variations: true,
+              payorPrice: true
             },
             required: {}
           };
