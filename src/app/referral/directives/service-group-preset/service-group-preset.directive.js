@@ -26,9 +26,9 @@
     })
     .controller('ServiceGroupPresetController', ServiceGroupPresetController);
 
-  ServiceGroupPresetController.$inject = ['$scope', '$resource', 'API', 'AltumAPIService', 'STATUS_TYPES'];
+  ServiceGroupPresetController.$inject = ['$scope', '$resource', 'API', 'toastr'];
 
-  function ServiceGroupPresetController($scope, $resource, API, AltumAPI, STATUS_TYPES) {
+  function ServiceGroupPresetController($scope, $resource, API, toastr) {
     var vm = this;
     vm.newPresetName = 'Default';
 
@@ -56,6 +56,10 @@
       });
     }
 
+    /**
+     * addGroupPreset
+     * @description Creates preset and tries to save it
+     */
     function addGroupPreset() {
       var preset = {
         name: vm.newPresetName,
@@ -67,15 +71,26 @@
       };
 
       var PresetResource = new ServicePreset(preset);
-      PresetResource.$save();
+      PresetResource.$save(function() {
+        toastr.success('Configuration preset saved successfully', preset.name);
+        vm.serviceGroupPresets.push(preset);
+      }, function(response) {
+        if (response.status === 400) {
+          toastr.error(preset.name + ' already exists', 'Service Preset');
+        }
+      });
 
-      vm.serviceGroupPresets.push(preset);
     }
 
-    function selectGroupPreset(preset) {
-      vm.boundGroupTypes = angular.copy(preset.boundGroupTypes);
-      vm.visitFields = angular.copy(preset.visitFields);
-      vm.summaryFields = angular.copy(preset.summaryFields);
+    /**
+     * selectGroupPreset
+     * @description Sets service group configuration variables that will propagate to the parent controller
+     * @param item
+     */
+    function selectGroupPreset(item) {
+      vm.boundGroupTypes = angular.copy(item.preset.boundGroupTypes);
+      vm.visitFields = angular.copy(item.preset.visitFields);
+      vm.summaryFields = angular.copy(item.preset.summaryFields);
     }
   }
 
