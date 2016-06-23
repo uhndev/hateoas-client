@@ -1,15 +1,18 @@
-<div class="panel">
+<div id="service-preset-container">
   <div ng-repeat="preset in serviceGroupPreset.serviceGroupPresets" class="service-preset-item">
     <button type="button" class="btn btn-default btn-sm"
-            ng-click="serviceGroupPreset.selectGroupPreset(preset)">{{preset.name}}</button>
-    <i ng-if="serviceGroupPreset.isAdmin" class="fa fa-times selectable"
-       ng-click="serviceGroupPreset.removePreset(preset.name)" role="button"></i>
+            ng-click="serviceGroupPreset.selectGroupPreset(preset)">
+      {{preset.name}}
+      <i ng-if="serviceGroupPreset.isAdmin" class="fa fa-times selectable"
+         ng-click="serviceGroupPreset.removePreset(preset.name)" role="button"></i>
+    </button>
   </div>
   <div ng-if="serviceGroupPreset.isAdmin" class="service-preset-item">
-    <input type="text" ng-model="serviceGroupPreset.newPresetName">
     <button type="button" class="btn btn-info btn-sm"
             ng-click="serviceGroupPreset.addGroupPreset()">
       <i class="fa fa-plus"></i>
+      <span translate context-translator="APP.REFERRAL.SERVICES.LABELS.SAVE_PRESET">
+        APP.REFERRAL.SERVICES.LABELS.SAVE_PRESET</span>
     </button>
   </div>
 </div>

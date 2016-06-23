@@ -63,25 +63,28 @@
      * @description Creates preset and tries to save it
      */
     function addGroupPreset() {
-      var preset = {
-        name: vm.newPresetName,
-        preset: {
-          boundGroupTypes: angular.copy(vm.boundGroupTypes),
-          visitFields: angular.copy(vm.visitFields),
-          summaryFields: angular.copy(vm.summaryFields)
-        }
-      };
+      var defaultName = _.startCase(vm.boundGroupTypes.groupBy) + '/' + _.startCase(vm.boundGroupTypes.subGroupBy);
+      var newPresetName = prompt('Please enter a new label for this preset: ', defaultName);
+      if (!_.isEmpty(newPresetName)) {
+        var preset = {
+          name: newPresetName,
+          preset: {
+            boundGroupTypes: angular.copy(vm.boundGroupTypes),
+            visitFields: angular.copy(vm.visitFields),
+            summaryFields: angular.copy(vm.summaryFields)
+          }
+        };
 
-      var PresetResource = new ServicePreset(preset);
-      PresetResource.$save(function(response) {
-        toastr.success('Configuration preset saved successfully', preset.name);
-        vm.serviceGroupPresets.push(response);
-      }, function(response) {
-        if (response.status === 400) {
-          toastr.error(preset.name + ' already exists', 'Service Preset');
-        }
-      });
-
+        var PresetResource = new ServicePreset(preset);
+        PresetResource.$save(function (response) {
+          toastr.success('Configuration preset saved successfully', preset.name);
+          vm.serviceGroupPresets.push(response);
+        }, function (response) {
+          if (response.status === 400) {
+            toastr.error(preset.name + ' already exists', 'Service Preset');
+          }
+        });
+      }
     }
 
     /**
@@ -111,6 +114,7 @@
         });
       }
     }
+
   }
 
 })();

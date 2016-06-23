@@ -20,8 +20,13 @@
             </button>
           </span>
         </div>
-        <br/>
       </div>
+
+      <service-group-preset ng-show="services.referral"
+                            bound-group-types="billing.boundGroupTypes"
+                            visit-fields="billing.visitFields"
+                            summary-fields="services.summaryFields">
+      </service-group-preset>
 
       <referral-summary referral-data="services.referral"
                         bound-groups="billing.boundGroupTypes"
@@ -30,11 +35,6 @@
                         config-flags="services.flagConfig">
       </referral-summary>
     </div>
-
-    <service-group-preset bound-group-types="billing.boundGroupTypes"
-                          visit-fields="billing.visitFields"
-                          summary-fields="services.summaryFields">
-    </service-group-preset>
 
     <altum-notebook ng-if="services.referralNotes"
                     notes="services.referralNotes.notes"
