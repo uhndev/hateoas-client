@@ -52,7 +52,7 @@
       // Actually sends the request to the server.
       request.send(zpl);
 
-      //checking the status of the request for if the label printed.
+      //checking the xmlhttprequest response 4 = OK and the label printed.
       request.onreadystatechange = function() {
         if (request.readyState === 4) {
 
