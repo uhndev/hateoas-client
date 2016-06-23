@@ -19,7 +19,6 @@
     vm.noteTypes = NoteType.query();
     var resource = $resource(API.url('note'), {}, {'query':{method: 'GET', isArray: false, params:vm.collection}});
 
-    //vm.refNotes = vm.notes || [];
     // bindable methods
     vm.addNote = addNote;
     vm.removeElement = removeElement;
