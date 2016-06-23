@@ -11,7 +11,6 @@
   function EmailService(API, $http, toastr) {
     return {
       sendEmail: function (emailData) {
-
         $http.post(API.url() + '/email', emailData).then(function success(response) {
           toastr.success('Email sent');
 

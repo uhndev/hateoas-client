@@ -25,7 +25,6 @@
     function init() {
       var Resource = $resource(vm.url);
       ReferralServices = $resource(vm.url + '/services');
-
       Resource.get(function (data, headers) {
         vm.allow = headers('allow');
         vm.template = data.template;
