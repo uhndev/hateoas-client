@@ -57,6 +57,35 @@
         </div>
       </div>
 
+      <div class="form-group" ng-if="!svc.configuration.disabled.visitService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <ui-select name="visitService" ng-model="svc.service.visitService"
+                     ng-required="svc.configuration.required.visitService"
+                     ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
+            <ui-select-match placeholder="Select Service Type">
+              {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+            </ui-select-match>
+            <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
+              <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
+              <span>({{service.approvalDate | date:'short'}})</span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!svc.configuration.disabled.visitService && !svc.configuration.disabled.currentCompletion && svc.service.visitService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE_STATUS</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <service-status service="svc.service.visitService"
+                          status-type="completion"
+                          placement="right">
+          </service-status>
+        </div>
+      </div>
+
       <div class="form-group" ng-if="!svc.configuration.disabled.physician">
         <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
           COMMON.MODELS.SERVICE.PHYSICIAN
@@ -131,35 +160,6 @@
                   ng-required="svc.requires.prognosisTimeframe && svc.configuration.required.prognosisTimeframe"
                   ng-options="timeframe.id as timeframe.name for timeframe in svc.availableTimeframes">
           </select>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="!svc.configuration.disabled.visitService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
-        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
-        <div ng-class="{'col-md-9': svc.horizontal}">
-          <ui-select name="visitService" ng-model="svc.service.visitService"
-                     ng-required="svc.configuration.required.visitService"
-                     ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
-            <ui-select-match placeholder="Select Service Type">
-              {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
-            </ui-select-match>
-            <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
-              <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-              <span>({{service.approvalDate | date:'short'}})</span>
-            </ui-select-choices>
-          </ui-select>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="!svc.configuration.disabled.visitService && !svc.configuration.disabled.currentCompletion && svc.service.visitService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE_STATUS</label>
-        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
-        <div ng-class="{'col-md-9': svc.horizontal}">
-          <service-status service="svc.service.visitService"
-                          status-type="completion"
-                          placement="right">
-          </service-status>
         </div>
       </div>
 

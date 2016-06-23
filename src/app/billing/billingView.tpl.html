@@ -8,7 +8,7 @@
   </h2>
 
   <div id="Query" class="clearfix">
-    <table class="table table-condensed summary-table">
+    <table id="global-billing-summary-table" class="table table-condensed summary-table">
       <tr class="summary-header-row">
         <th translate>APP.BILLING.LABELS.SEARCH</th>
         <th ng-repeat="groupType in ::globalBilling.groupTypes">{{::groupType.prompt}}</th>
@@ -45,7 +45,8 @@
     </table>
   </div>
 
-  <service-group-preset bound-group-types="globalBilling.boundGroupTypes"
+  <service-group-preset ng-show="globalBilling.resource"
+                        bound-group-types="globalBilling.boundGroupTypes"
                         visit-fields="globalBilling.visitFields"
                         summary-fields="globalBilling.summaryFields">
   </service-group-preset>
