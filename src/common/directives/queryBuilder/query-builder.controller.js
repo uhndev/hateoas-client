@@ -94,18 +94,8 @@
               var query = {};
               switch (true) {
                 case /date|dateTime|datetime/i.test(field.type):
-                  try {
-                    var dateObj = new Date(value);
-                    if (dateObj.getFullYear().toString().length <= 4) {
-                      query[field.name] = {'>=': dateObj.toISOString()};
-                      return result.concat(query);
-                    }
-                    return result;
-                  } catch (e) {
-                    // if value not date, do not concat
-                    return result;
-                  }
-                  break;
+                  // dont even bother (╯°□°）╯︵ ┻━┻
+                  return result;
 
                 case /integer|number|mrn/i.test(field.type):
                   query[field.name] = parseInt(value, 10);

@@ -27,7 +27,7 @@
     this.formToObject = function (form) {
       return _.reduce(form.form_questions,
         function (item, question) {
-          item[question.field_name] = question.field_value;
+          item[question.field_name] = _.isUndefined(question.field_value) ? null : question.field_value;
           return item;
         }, {});
     };
@@ -86,6 +86,7 @@
           field_name: list.name,
           field_title: _.startCase(list.name),
           field_userURL: list.type,
+          field_preventCreate: list.preventCreate,
           field_questions: _.map(list[listField], function (dataItem, index) {
             dataItem.field_id = index + 1;
             return transformDeep(dataItem, listField, dataItem.type);

@@ -2,7 +2,10 @@
   <h3 id="Title" class="modal-title">Edit Service</h3>
 </div>
 <div class="modal-body">
-  <service-editor service="svcmodal.service" approved-services="svcmodal.approvedServices"></service-editor>
+  <service-editor service="svcmodal.service"
+                  approved-services="svcmodal.approvedServices"
+                  configuration="svcmodal.editorConfig">
+  </service-editor>
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" ng-click="svcmodal.saveService()">

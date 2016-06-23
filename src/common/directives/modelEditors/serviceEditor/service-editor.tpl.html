@@ -1,171 +1,207 @@
 <ng-form name="serviceForm" ng-class="{'form-horizontal': svc.horizontal}" novalidate>
-  <div class="form-group" ng-if="!svc.configuration.disabled.altumService">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-      COMMON.MODELS.SERVICE.ALTUM_SERVICE
-    </label>
-    <span class="text-danger pull-right" ng-if="serviceForm.altumService.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select-loader
-        name="altumService"
-        url="altumservice"
-        is-atomic="true"
-        is-disabled="false"
-        ng-model="svc.service.altumService"
-        ng-required="svc.configuration.required.altumService"
-        labels="displayName">
-      </select-loader>
-    </div>
-  </div>
+  <a ng-href class="pull-right" ng-if="!svc.configuration.disabled.variations"
+     ng-click="svc.toggleVariations = !svc.toggleVariations">
+    {{svc.toggleVariations ? 'Hide' : 'Show'}} Variations
+  </a>
+  <br ng-if="!svc.configuration.disabled.variations"/>
+  <div class="row">
+    <div ng-class="{'col-md-6': svc.toggleVariations, 'col-md-12': !svc.toggleVariations}">
+      <div class="form-group" ng-if="!svc.configuration.disabled.altumService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
+          COMMON.MODELS.SERVICE.ALTUM_SERVICE
+        </label>
+        <span class="text-danger pull-right" ng-if="serviceForm.altumService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select-loader
+            name="altumService"
+            url="altumservice"
+            is-atomic="true"
+            is-disabled="false"
+            ng-model="svc.service.altumService"
+            ng-required="svc.configuration.required.altumService"
+            labels="displayName">
+          </select-loader>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.programService">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-      COMMON.MODELS.SERVICE.PROGRAM_SERVICE
-    </label>
-    <span class="text-danger pull-right" ng-if="serviceForm.programService.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select-loader
-        name="programService"
-        url="programservice"
-        is-atomic="true"
-        is-disabled="false"
-        ng-model="svc.service.programService"
-        ng-required="svc.configuration.required.programService"
-        labels="displayName">
-      </select-loader>
-    </div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.programService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
+          COMMON.MODELS.SERVICE.PROGRAM_SERVICE
+        </label>
+        <span class="text-danger pull-right" ng-if="serviceForm.programService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select-loader
+            name="programService"
+            url="programservice"
+            is-atomic="true"
+            is-disabled="false"
+            ng-model="svc.service.programService"
+            ng-required="svc.configuration.required.programService"
+            labels="displayName">
+          </select-loader>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="svc.availableSites.length > 0 && !svc.configuration.disabled.site">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
-      <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
-      <span class="fa fa-map-marker fa-lg selectable" ng-click="svc.openMap()"></span>
-    </label>
-    <span class="text-danger pull-right" ng-if="serviceForm.site.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select name="site" class="form-control"
-              ng-model="svc.service.site"
-              ng-required="svc.configuration.required.site"
-              ng-options="site.id as site.name for site in svc.availableSites">
-      </select>
-    </div>
-  </div>
+      <div class="form-group" ng-if="svc.availableSites.length > 0 && !svc.configuration.disabled.site">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+          <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
+          <span class="fa fa-map-marker fa-lg selectable" ng-click="svc.openMap()"></span>
+        </label>
+        <span class="text-danger pull-right" ng-if="serviceForm.site.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select name="site" class="form-control"
+                  ng-model="svc.service.site"
+                  ng-required="svc.configuration.required.site"
+                  ng-options="site.id as site.name for site in svc.availableSites">
+          </select>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.physician">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-      COMMON.MODELS.SERVICE.PHYSICIAN
-    </label>
-    <span class="text-danger pull-right" ng-if="serviceForm.physician.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select-loader
-        name="physician"
-        url="physician"
-        is-atomic="true"
-        is-disabled="false"
-        ng-model="svc.service.physician"
-        ng-required="svc.configuration.required.physician"
-        ng-change="svc.setServiceSelections('physician')"
-        labels="displayName">
-      </select-loader>
-    </div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.visitService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <ui-select name="visitService" ng-model="svc.service.visitService"
+                     ng-required="svc.configuration.required.visitService"
+                     ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
+            <ui-select-match placeholder="Select Service Type">
+              {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+            </ui-select-match>
+            <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
+              <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
+              <span>({{service.approvalDate | date:'short'}})</span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
 
-  <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes" ng-if="!svc.configuration.disabled.staff">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>{{staffType.name}}</label>
-    <span class="text-danger pull-right" ng-if="serviceForm[staffType.name].$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select-loader
-        name="{{staffType.name}}"
-        url="staff"
-        query="staffType.baseQuery"
-        is-atomic="false"
-        is-disabled="false"
-        ng-model="svc.service.staffCollection[staffType.name]"
-        ng-required="svc.configuration.required.staff"
-        ng-change="svc.setStaffSelections(staffType.name)"
-        labels="displayName">
-      </select-loader>
-    </div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.visitService && !svc.configuration.disabled.currentCompletion && svc.service.visitService">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE_STATUS</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <service-status service="svc.service.visitService"
+                          status-type="completion"
+                          placement="right">
+          </service-status>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.workStatus">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
-    <span class="text-danger pull-right" ng-if="serviceForm.workStatus.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select name="workStatus" class="form-control"
-              ng-model="svc.service.workStatus"
-              ng-required="svc.configuration.required.workStatus"
-              ng-change="svc.setServiceSelections('workStatus')"
-              ng-options="workstatus.id as workstatus.name for workstatus in svc.availableWorkstatus">
-      </select></div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.physician">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
+          COMMON.MODELS.SERVICE.PHYSICIAN
+        </label>
+        <span class="text-danger pull-right" ng-if="serviceForm.physician.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select-loader
+            name="physician"
+            url="physician"
+            is-atomic="true"
+            is-disabled="false"
+            ng-model="svc.service.physician"
+            ng-required="svc.configuration.required.physician"
+            ng-change="svc.setServiceSelections('physician')"
+            labels="displayName">
+          </select-loader>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.prognosis">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
-    <span class="text-danger pull-right" ng-if="serviceForm.prognosis.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select name="prognosis" class="form-control"
-              ng-model="svc.service.prognosis"
-              ng-required="svc.configuration.required.prognosis"
-              ng-change="svc.setServiceSelections('prognosis')"
-              ng-options="prognosis.id as prognosis.name for prognosis in svc.availablePrognosis">
-      </select></div>
-  </div>
+      <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes" ng-if="!svc.configuration.disabled.staff">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>{{staffType.name}}</label>
+        <span class="text-danger pull-right" ng-if="serviceForm[staffType.name].$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select-loader
+            name="{{staffType.name}}"
+            url="staff"
+            query="staffType.baseQuery"
+            is-atomic="false"
+            is-disabled="false"
+            ng-model="svc.service.staffCollection[staffType.name]"
+            ng-required="svc.configuration.required.staff"
+            ng-change="svc.setStaffSelections(staffType.name)"
+            labels="displayName">
+          </select-loader>
+        </div>
+      </div>
 
-  <div class="form-group" ng-if="svc.hasTimeframe() && !svc.configuration.disabled.prognosisTimeframe">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
-      <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
-      <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
-    </label>
-    <span class="text-danger pull-right" ng-if="serviceForm.prognosisTimeframe.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <select name="prognosisTimeframe" class="form-control"
-              ng-model="svc.service.prognosisTimeframe"
-              ng-change="svc.setServiceSelections('prognosisTimeframe')"
-              ng-required="svc.requires.prognosisTimeframe && svc.configuration.required.prognosisTimeframe"
-              ng-options="timeframe.id as timeframe.name for timeframe in svc.availableTimeframes">
-      </select>
-    </div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.workStatus">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.workStatus.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select name="workStatus" class="form-control"
+                  ng-model="svc.service.workStatus"
+                  ng-required="svc.configuration.required.workStatus"
+                  ng-change="svc.setServiceSelections('workStatus')"
+                  ng-options="workstatus.id as workstatus.name for workstatus in svc.availableWorkstatus">
+          </select></div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.visitService">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
-    <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <ui-select name="visitService" ng-model="svc.service.visitService"
-                 ng-required="svc.configuration.required.visitService"
-                 ng-change="svc.setServiceSelections('visitService')" theme="bootstrap">
-        <ui-select-match placeholder="Select Service Type">
-          {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
-        </ui-select-match>
-        <ui-select-choices repeat="service.id as service in svc.approvedServices | filter: $select.search">
-          <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-          <span>({{service.approvalDate | date:'short'}})</span>
-        </ui-select-choices>
-      </ui-select>
-    </div>
-  </div>
+      <div class="form-group" ng-if="!svc.configuration.disabled.prognosis">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.prognosis.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select name="prognosis" class="form-control"
+                  ng-model="svc.service.prognosis"
+                  ng-required="svc.configuration.required.prognosis"
+                  ng-change="svc.setServiceSelections('prognosis')"
+                  ng-options="prognosis.id as prognosis.name for prognosis in svc.availablePrognosis">
+          </select></div>
+      </div>
 
-  <div class="form-group" ng-if="!svc.configuration.disabled.serviceDate">
-    <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
-    <span class="text-danger pull-right" ng-if="serviceForm.serviceDate.$invalid"> * required</span>
-    <div ng-class="{'col-md-9': svc.horizontal}">
-      <p class="input-group">
-        <input name="serviceDate" type="text"
-               ng-model="svc.service.serviceDate"
-               ng-required="svc.configuration.required.serviceDate"
-               ng-change="svc.setServiceSelections('serviceDate')"
-               value="{{ svc.service.serviceDate | date:'fullDate' }}"
-               class="form-control"
-               uib-datepicker-popup
-               type="datetime-local"
-               is-open="svc.opened"
-               required disabled format-date/>
+      <div class="form-group" ng-if="svc.hasTimeframe() && !svc.configuration.disabled.prognosisTimeframe">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+          <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
+          <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
+        </label>
+        <span class="text-danger pull-right" ng-if="serviceForm.prognosisTimeframe.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <select name="prognosisTimeframe" class="form-control"
+                  ng-model="svc.service.prognosisTimeframe"
+                  ng-change="svc.setServiceSelections('prognosisTimeframe')"
+                  ng-required="svc.requires.prognosisTimeframe && svc.configuration.required.prognosisTimeframe"
+                  ng-options="timeframe.id as timeframe.name for timeframe in svc.availableTimeframes">
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!svc.configuration.disabled.serviceDate">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.serviceDate.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <p class="input-group">
+            <input name="serviceDate" type="text"
+                   ng-model="svc.service.serviceDate"
+                   ng-required="svc.configuration.required.serviceDate"
+                   ng-change="svc.setServiceSelections('serviceDate')"
+                   value="{{ svc.service.serviceDate | date:'fullDate' }}"
+                   class="form-control"
+                   uib-datepicker-popup
+                   type="datetime-local"
+                   is-open="svc.opened"
+                   required disabled format-date/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="svc.opened = true">
             <i class="glyphicon glyphicon-calendar"></i>
           </button>
         </span>
-      </p>
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!svc.configuration.disabled.payorPrice">
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PAYOR_PRICE</label>
+        <span class="text-danger pull-right" ng-if="serviceForm.payorPrice.$invalid"> * required</span>
+        <div ng-class="{'col-md-9': svc.horizontal}">
+          <input type="number"
+                 name="payorPrice" class="form-control"
+                 ng-model="svc.service.payorPrice"
+                 ng-required="svc.configuration.required.payorPrice"/>
+        </div>
+      </div>
+    </div>
+
+    <div ng-class="{'col-md-6': svc.toggleVariations}" ng-if="!svc.configuration.disabled.variations"
+         uib-collapse="!svc.toggleVariations">
+      <service-variation-editor service="svc.service"></service-variation-editor>
     </div>
   </div>
 </ng-form>

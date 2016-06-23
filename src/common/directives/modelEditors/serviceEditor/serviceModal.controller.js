@@ -4,14 +4,15 @@
     .module('dados.common.directives.serviceEditor')
     .controller('ServiceModalController', ServiceModalController);
 
-  ServiceModalController.$inject = ['$uibModalInstance', 'Service', 'ApprovedServices', 'AltumAPIService', 'toastr'];
+  ServiceModalController.$inject = ['$uibModalInstance', 'Service', 'ApprovedServices', 'ServiceEditorConfig', 'AltumAPIService', 'toastr'];
 
-  function ServiceModalController($uibModalInstance, Service, ApprovedServices, AltumAPI, toastr) {
+  function ServiceModalController($uibModalInstance, Service, ApprovedServices, ServiceEditorConfig, AltumAPI, toastr) {
     var vm = this;
 
     // bindable variables
     vm.service = Service;
     vm.approvedServices = ApprovedServices;
+    vm.editorConfig = ServiceEditorConfig;
 
     // bindable methods
     vm.saveService = saveService;

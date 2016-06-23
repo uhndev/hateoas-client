@@ -12,7 +12,7 @@
  *    </recommendations-picker>
  *
  */
-(function() {
+(function () {
   angular
     .module('altum.referral.recommendationsPicker', [
       'ui.bootstrap',
@@ -24,15 +24,24 @@
     ])
     .component('recommendationsPicker', {
       bindings: {
-        referral: '=',            // bound referral containing client information
+        referral: '<',            // bound referral containing client information
         service: '=',             // shared service object
         currIndex: '=',           // current selected index in recommendedServices array
-        availableServices: '=',   // array of available services to pick from
+        availableServices: '<',   // array of available services to pick from
         recommendedServices: '=', // array of selected services to recommend
         searchQuery: '=',         // string bound for fuzzy searching available services,
-        config: '<?'              // object containing two attributes which can configure the picker:
-        // 1) configurable labels for each recommendation tab title
-        // 2) boolean flag denoting whether programService information should be available
+        config: '=?'              // object containing two attributes which can configure the picker:
+        /**
+         * 1) configurable labels for each recommendation tab title
+         * 2) object configurations for toggling different ways of displaying services
+         *    {
+         *      billing: {
+         *        programServiceName: true,
+         *        programServiceCode: false
+         *      },
+         *      ...
+         *    }
+         */
       },
       controller: 'RecommendationsPickerController',
       controllerAs: 'recPicker',
@@ -55,7 +64,6 @@
 
     // default configuration for the recommendations-picker
     vm.config = vm.config || {
-      showBillingInfo: false,
       labels: {
         'available': 'APP.REFERRAL.RECOMMENDATIONS.TABS.AVAILABLE_RECOMMENDATIONS',
         'recommended': 'APP.REFERRAL.RECOMMENDATIONS.TABS.RECOMMENDED_SERVICES'
@@ -69,6 +77,7 @@
     vm.toggleService = toggleService;
     vm.selectServiceDetail = selectServiceDetail;
     vm.navigateKey = navigateKey;
+    vm.renderServiceName = renderServiceName;
 
     init();
 
@@ -120,7 +129,7 @@
         vm.recommendedServices = _.without(vm.recommendedServices, service);
       } else {
         vm.recommendedServices.push(_.merge(service, RecommendationsService.getSharedServices(vm.service)));
-        var toPopulate = ['sites', 'staffTypes'];
+        var toPopulate = ['sites'];
         if (service.serviceVariation) { // populate variations if applicable
           toPopulate.push('serviceVariation');
         }
@@ -138,14 +147,7 @@
             _.last(vm.recommendedServices).siteDictionary = _.indexBy(data.sites, 'id');
           }
 
-          if (data.staffTypes.length > 0) {
-            _.last(vm.recommendedServices).staff = [];
-            _.last(vm.recommendedServices).staffCollection = {};
-            _.last(vm.recommendedServices).availableStaffTypes = _.map(data.staffTypes, function (staffType) {
-              staffType.baseQuery = {staffType: staffType.id};
-              return staffType;
-            });
-          }
+          _.last(vm.recommendedServices).staff = vm.service.staff;
         });
       }
     }
@@ -193,6 +195,24 @@
           }
           break;
       }
+    }
+
+    /**
+     * renderServiceName
+     * @description Instead of adding more bindings to the view, we prepare the service item name string here
+     * @param service
+     * @returns {string}
+     */
+    function renderServiceName(service) {
+      var serviceName = '';
+      if (_.has(vm.config.billing, 'programServiceCode') && vm.config.billing.programServiceCode) {
+        serviceName += '<b>' + service.programServiceCode + ' &Rightarrow; </b>';
+      }
+      if (_.has(vm.config.billing, 'programServiceName') && vm.config.billing.programServiceName) {
+        serviceName += '<i>' + service.programServiceName + '</i> <b> &Rightarrow; </b>';
+      }
+      serviceName += service.variationSelection && _.has(service.variationSelection, 'name') ? service.variationSelection.name : service.name;
+      return serviceName;
     }
   }
 

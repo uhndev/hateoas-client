@@ -17,6 +17,7 @@
         url: '@',
         query: '=',
         isAtomic: '=',
+        selectAll: '=',
         isDisabled: '=',
         bindObject: '@?',
         values: '=ngModel',
@@ -35,6 +36,17 @@
             scope.$parent.$eval(attributes.ngChange);
           }
         };
+        //creates the add all button only if the select all option is set to true
+        if (scope.select.selectAll) {
+          var selectContainer = element.parents('.form-group').children('div').first();
+          var selectButton = angular.element ('<button id="selectAll" class="btn btn-default"> Select All </button>');
+          scope.select.allValues = function() {
+            scope.select.values = scope.select.allChoices;
+            scope.$apply();
+          };
+          selectContainer.before(selectButton);
+          selectButton.bind('click', scope.select.allValues);
+        }
       }
     };
   }

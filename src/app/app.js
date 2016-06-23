@@ -39,6 +39,7 @@
 
       // Altum/ARM
       'altum.referral',
+      'altum.billing',
       'altum.client',
       'altum.triage',
       'altum.servicevariation',

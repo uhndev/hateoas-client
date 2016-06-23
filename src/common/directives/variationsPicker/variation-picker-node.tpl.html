@@ -1,22 +1,29 @@
 <div ui-tree-handle class="tree-node tree-node-content" ng-init="varpicker.parseNode(node)">
-  <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" ng-click="varpicker.toggle(this)">
-    <span class="glyphicon" ng-class="{
-      'glyphicon-chevron-right': collapsed,
-      'glyphicon-chevron-down': !collapsed
-    }"></span>
-  </a>
-  <label ng-click="visible = !visible" ng-class="{'text-danger': this.nodeForm.$invalid}" >
-    {{node.title}}
+  <form class="form-inline" data-nodrag novalidate>
+    <div class="form-group">
+      <label ng-click="visible = !visible" ng-class="{'text-danger': this.nodeForm.$invalid}" >
+        <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" ng-click="varpicker.toggle(this)">
+          <span class="glyphicon" ng-class="{
+            'glyphicon-chevron-right': collapsed,
+            'glyphicon-chevron-down': !collapsed
+          }"></span>
+        </a>
+        {{node.title}}
+      <span class="glyphicon" ng-class="{
+        'glyphicon-ok': visible && !node.data.preset && node.type !== 'none',
+        'glyphicon-pencil': !visible && !node.data.preset && node.type !== 'none'
+      }"></span>
+      </label>
+    </div>
 
-    <select ng-if="node.data.category == 'basic'" ng-model="node.data.value" ng-options="option as option for option in node.data.values" >
-    </select>
-    <span class="glyphicon" ng-class="{
-      'glyphicon-ok': visible && !node.data.preset && node.type !== 'none',
-      'glyphicon-pencil': !visible && !node.data.preset && node.type !== 'none'
-    }"></span>
-  </label>
+    <div class="form-group" ng-if="node.data.category == 'basic' && node.data.preset && node.data.values.length">
+      <select ng-model="node.data.value"
+              class="form-control"
+              ng-options="option as option for option in node.data.values">
+      </select>
+    </div>
 
-  <button ng-if="node.type !== 'none'" type="button" class="btn btn-sm pull-right" ng-class="{
+    <button ng-if="node.type !== 'none'" type="button" class="btn btn-sm pull-right" ng-class="{
       'btn-primary': varpicker.selection[node.type].id !== node.id,
       'btn-success': varpicker.selection[node.type].id === node.id
     }" ng-click="varpicker.selectNode(node)" ng-disabled="this.nodeForm.$invalid">
@@ -24,7 +31,8 @@
       'glyphicon-plus': varpicker.selection[node.type].id !== node.id,
       'glyphicon-ok': varpicker.selection[node.type].id === node.id
     }"></span>
-  </button>
+    </button>
+  </form>
 
   <ng-form name="this.nodeForm" class="form-horizontal" ng-show="!node.data.preset && visible && node.type !== 'none'"
            novalidate>

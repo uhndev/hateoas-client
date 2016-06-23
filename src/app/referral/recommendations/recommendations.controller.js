@@ -16,34 +16,31 @@
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService'
+    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService', 'AltumAPIService'
   ];
 
-  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService) {
+  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService, AltumAPI) {
     var vm = this;
-    var ReferralServices;
 
     // bindable variables
     vm.url = API.url() + $location.path();
     var Resource = $resource(vm.url);
-    var baseReferralUrl = _.pathnameToArray($location.path()).slice(0, -1).join('/');
-    ReferralServices = $resource([API.url(), baseReferralUrl, 'services'].join('/'));
+    var BulkRecommendServices = $resource(API.url('billinggroup/bulkRecommend'), {}, {
+      'save' : {method: 'POST', isArray: false}
+    });
 
     // fields that are required in order to make recommendations
     vm.validityFields = ['visitService', 'serviceDate'];
 
-    // fields that are used during configuration of recommended services that will be deleted before POSTing
-    vm.configFields = [
-      'availableSites', 'availableStaffTypes', 'siteDictionary',
-      'staffCollection', 'serviceVariation', 'variationSelection'
-    ];
-
     // configuration object for the service-editor component
     vm.serviceEditorConfig = {
+      loadVisitServiceData: true,
       disabled: {
         altumService: true,
         programService: true,
-        site: true
+        site: true,
+        variations: true,
+        payorPrice: true
       },
       required: {
         visitService: true,
@@ -77,11 +74,11 @@
         vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.availableServices = angular.copy(data.items.availableServices);
-        vm.referralNotes = angular.copy(data.items.notes);
+        vm.referralNotes = AltumAPI.Note.query({where:{referral: data.items.id}});
 
         // load physician in from referraldetail
         vm.sharedService = {
+          referral: data.items.id,
           physician: data.items.physician || null,
           staffCollection: {},
           staff: [],
@@ -126,45 +123,17 @@
      */
     function saveServices() {
       vm.isSaving = true;
-      $q.all(_.map(vm.recommendedServices, function (service) {
-          // for recommended services that have variations selected, apply to object to be sent to server
-          if (_.has(service, 'serviceVariation') && _.has(service, 'variationSelection')) {
-            _.each(service.variationSelection.changes, function (value, key) {
-              switch (key) {
-                case 'service':
-                  service.altumService = service.variationSelection.altumService;
-                  service.programService = service.variationSelection.programService;
-                  service.name = service.variationSelection.name;
-                  break;
-                case 'followup':
-                  service.followupPhysicianDetail = service.variationSelection.changes[key].value.physician;
-                  service.followupTimeframeDetail = service.variationSelection.changes[key].value.timeframe;
-                  break;
-                default:
-                  // otherwise, variation is of type number/text/date/physician/staff/timeframe/measure
-                  // where the respective backend column name will be <type>DetailName and value will be <type>Detail
-                  service[key + 'DetailName'] = service.variationSelection.changes[key].name;
-                  service[key + 'Detail'] = service.variationSelection.changes[key].value;
-                  break;
-              }
-            });
-          }
+      var bulkRecommendServices = new BulkRecommendServices({
+        newBillingGroups: _.map(vm.recommendedServices, RecommendationsService.prepareService)
+      });
 
-          // clear config data before POSTing
-          _.each(vm.configFields, function (field) {
-            delete service[field];
-          });
-
-          var serviceObj = new ReferralServices(service);
-          return serviceObj.$save();
-        }))
-        .then(function (data) {
-          toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
-          vm.isSaving = false;
-          vm.currIndex = null;
-          vm.recommendedServices = [];
-          init();
-        });
+      bulkRecommendServices.$save(function (data) {
+        toastr.success('Added services to referral for client: ' + vm.referral.client_displayName, 'Recommendations');
+        vm.isSaving = false;
+        vm.currIndex = null;
+        vm.recommendedServices = [];
+        init();
+      });
     }
 
     /**

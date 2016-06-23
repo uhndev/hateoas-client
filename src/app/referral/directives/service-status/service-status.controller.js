@@ -4,10 +4,12 @@
   angular
     .module('altum.referral.serviceStatus.controller', [
       'ngResource',
-      'ngMaterial'
+      'ngMaterial',
+      'altum.referral.serviceStatus.confirmation.controller'
     ])
     .constant('STATUS_TYPES', {
       'approval': {
+        'model': 'approval',
         'collection': 'approvals',
         'currentType': 'currentApproval',
         'currentStatus': 'currentStatus',
@@ -22,6 +24,7 @@
         ]
       },
       'completion': {
+        'model': 'completion',
         'collection': 'completion',
         'currentType': 'currentCompletion',
         'currentStatus': 'currentCompletionStatus',
@@ -39,26 +42,66 @@
             'value': 'completionDate'
           }
         ]
+      },
+      'billing': {
+        'model': 'billingstatus',
+        'collection': 'billingStatuses',
+        'currentType': 'currentBillingStatus',
+        'currentStatus': 'currentBillingStatusStatus',
+        'statusName': 'billingStatusName',
+        'populate': ['currentBillingStatus', 'billingStatuses'],
+        'detailColumns': [
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.PAID_DATE',
+            'type': 'date',
+            'value': 'paidDate'
+          },
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.DENIED_DATE',
+            'type': 'date',
+            'value': 'deniedDate'
+          },
+          {
+            'name': 'COMMON.MODELS.BILLING_STATUS.REJECTED_DATE',
+            'type': 'date',
+            'value': 'rejectedDate'
+          }
+        ]
+      },
+      'report': {
+        'model': 'reportstatus',
+        'collection': 'reportStatuses',
+        'currentType': 'currentReportStatus',
+        'currentStatus': 'currentReportStatusStatus',
+        'statusName': 'reportStatusName',
+        'populate': ['currentReportStatus', 'reportStatuses'],
+        'detailColumns': []
       }
     })
     .controller('ServiceStatusController', ServiceStatusController);
 
-  ServiceStatusController.$inject = ['$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
+  ServiceStatusController.$inject = ['$scope', '$resource', 'AltumAPIService', 'API', '$uibModal', 'toastr', 'STATUS_TYPES'];
 
-  function ServiceStatusController($resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
+  function ServiceStatusController($scope, $resource, AltumAPI, API, $uibModal, toastr, STATUS_TYPES) {
     var vm = this;
 
     // bindable variables
     var previousStatus = null;
     var statusType = vm.statusType || 'approval';
     vm.defaults = STATUS_TYPES[statusType];
+    vm.onUpdate = vm.onUpdate || fetchStatusHistory;
     vm.currentType = vm.defaults.currentType;
     vm.collection = vm.defaults.collection;
     vm.currentStatus = vm.defaults.currentStatus;
     vm.statusName = vm.defaults.statusName;
+    vm.placement = vm.placement || 'left';
 
     vm.service = vm.service || {};
-    vm.statuses = vm.statuses || {};
+    vm.statusTemplate = {};
+    AltumAPI.Status.query({where: {category: vm.statusType}}, function (statuses) {
+      // get dictionary of statuses
+      vm.statuses = _.indexBy(statuses, 'id');
+    });
     vm.approvalPopover = {
       templateUrl: 'referral/directives/service-status/service-status-detail.tpl.html',
       title: _.startCase(statusType) + ' History'
@@ -67,6 +110,8 @@
     // bindable methods
     vm.updateApprovalStatus = updateApprovalStatus;
 
+    var SystemForm = $resource(API.url() + '/systemform');
+    var ServiceStatus = $resource(API.url() + '/service');
     var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
 
     init();
@@ -74,21 +119,29 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      // get dictionary of statuses
-      vm.statuses = _.indexBy(vm.statuses, 'id');
-
       // check if passed in service object with id without populated approvals/completions, then fetch from server
-      if (!vm.service.approvals || !vm.service.completion) {
-        AltumAPI.Service.get({id: vm.service.id, populate: vm.defaults.populate}, function (data) {
-          if (data[vm.collection].length > 0) {
-            previousStatus = data[vm.currentType].status;
-            vm.service[vm.currentStatus] = data[vm.currentType].status;
-            vm.service.iconClass = vm.statuses[data[vm.currentType].status].iconClass;
-            vm.service.rowClass = vm.statuses[data[vm.currentType].status].rowClass;
-            vm.service[vm.collection] = angular.copy(_.sortBy(data[vm.collection], 'createdAt'));
-          }
-        });
+      if (!vm.service.approvals || !vm.service.completion || !vm.service.billingStatuses || !vm.service.reportStatuses) {
+        fetchStatusHistory();
       }
+    }
+
+    /**
+     * fetchStatusHistory
+     * @description Utility function for fetching a service's status history and display classes
+     */
+    function fetchStatusHistory() {
+      ServiceStatus.get({id: vm.service.id, populate: vm.defaults.populate}, function (data) {
+        if (data.items[vm.collection].length > 0) {
+          previousStatus = data.items[vm.currentType].status;
+          vm.service[vm.currentStatus] = data.items[vm.currentType].status;
+          vm.service.iconClass = vm.statuses[data.items[vm.currentType].status].iconClass;
+          vm.service.rowClass = vm.statuses[data.items[vm.currentType].status].rowClass;
+          vm.service[vm.collection] = angular.copy(_.sortBy(data.items[vm.collection], 'createdAt'));
+
+          // fetch hateoas template for new status type and filter fields based on rules
+          vm.statusTemplate = _.find(data.template.data, {name: vm.currentType});
+        }
+      });
     }
 
     /**
@@ -101,50 +154,33 @@
       if (vm.statuses[vm.service[vm.currentStatus]].requiresConfirmation) {
         var modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'referral/directives/service-status/status-confirmation.tpl.html',
-          controller: function ApprovalConfirmationModal($uibModalInstance, newStatus) {
-            var vm = this;
-            vm.newStatus = newStatus;
-            vm.approval = {
-              status: newStatus.id
-            };
-
-            // set required fields to null in approval object
-            _.each(vm.newStatus.rules.requires[statusType], function (field) {
-              vm.approval[field] = null;
-            });
-
-            /**
-             * isFieldRequired
-             * @description Returns true if field is required in confirmation form
-             * @param field
-             * @returns {Boolean}
-             */
-            vm.isFieldRequired = function (field) {
-              return _.contains(vm.newStatus.rules.requires[statusType], field);
-            };
-
-            /**
-             * confirm
-             * @description Returns the approval object upon confirmation
-             */
-            vm.confirm = function () {
-              $uibModalInstance.close(vm.approval);
-            };
-
-            /**
-             * cancel
-             * @description cancels and closes the modal window
-             */
-            vm.cancel = function () {
-              $uibModalInstance.dismiss();
-            };
-          },
-          controllerAs: 'ac',
+          template: '<form-directive form="confirmationModal.statusTemplateForm" ' +
+          'on-submit="confirmationModal.confirm()" ' +
+          'on-cancel="confirmationModal.cancel()">' +
+          '</form-directive>',
+          controller: 'ApprovalConfirmationModal',
+          controllerAs: 'confirmationModal',
           bindToController: true,
           resolve: {
             newStatus: function () {
               return vm.statuses[vm.service[vm.currentStatus]];
+            },
+            statusType: function () {
+              return statusType;
+            },
+            statusTemplateForm: function (StatusFormFactory) {
+              var newStatus = angular.copy(vm.statuses[vm.service[vm.currentStatus]]);
+
+              // if overrideForm set, fetch systemform from API
+              if (newStatus.overrideForm) {
+                return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
+                  return data.items;
+                });
+              }
+              // otherwise, parse newStatus template into a systemform and filter based on status.rules
+              else {
+                return StatusFormFactory.buildStatusForm(vm.statusTemplate, newStatus, statusType, vm.service);
+              }
             }
           }
         });
@@ -171,6 +207,20 @@
         vm.onUpdate();
       });
     }
+
+    /**
+     * watchServiceChange
+     * @description Watches service ids which is changed, should update the status history of the newly selected service
+     * @param newVal
+     * @param oldVal
+     */
+    function watchServiceChange(newVal, oldVal) {
+      if (newVal && newVal.id !== oldVal.id && _.has(newVal, 'id')) {
+        fetchStatusHistory();
+      }
+    }
+
+    $scope.$watch('serviceStatus.service', watchServiceChange);
   }
 
 })();

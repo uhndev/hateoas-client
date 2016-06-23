@@ -1,4 +1,5 @@
-<div ui-tree-handle class="tree-node tree-node-content" ng-init="varedit.parseNode(node)">
+<div ui-tree-handle class="tree-node tree-node-content" ng-init="varedit.parseNode(node)"
+     ng-mouseover="varedit.expandOnMouseHover($event, this)">
   <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag
      ng-click="varedit.toggle(this)">
         <span class="glyphicon" ng-class="{
@@ -28,7 +29,8 @@
     <div class="form-group">
       <div class="checkbox">
         <label>
-          <input type="checkbox" ng-model="node.data.preset"/> Has Preset
+          <input type="checkbox" ng-model="node.data.preset"/>
+          <span translate>COMMON.DIRECTIVES.VARIATIONS_EDITOR.LABELS.HAS_PRESET</span>
         </label>
       </div>
     </div>
@@ -45,42 +47,55 @@
     <hr/>
     <div ng-if="node.type !== 'none' && node.data.category === 'basic'"
          class="form-group" ng-class="{'has-error': this.nodeForm.metaData.$invalid}">
-      <label>{{node.data.name}}</label>
-
-      <div class="input-group" ng-repeat="(key,presetValue) in node.data.values">
-        <input  type="{{node.type}}" ng-model="presetValue" class="form-control" name="metaData" ng-required="node.preset"/>
-        <a class="btn btn-primary btn-sm variation-btn input-group-addon" ng-click="varedit.removePreset(node,key)">
-          <span class="glyphicon glyphicon-minus"></span>
-        </a>
-      </div>
-      <div>
-        <label>New Preset</label>
-      </div>
-      <div class="input-group">
-      <input type="{{node.type}}" ng-model="node.data.value" class="form-control" name="metaData" ng-required="node.preset" />
-      <a class="btn btn-primary btn-sm variation-btn input-group-addon" ng-click="varedit.newPreset(node,node.data.value)">
-        <span class="glyphicon glyphicon-plus"></span>
-      </a>
+      <label>{{node.title}} {{node.data.name}} Options</label>
+      <div class="form-group" ng-repeat="(key, presetValue) in node.data.values">
+        <div class="input-group">
+          <input type="{{node.type}}" ng-model="presetValue" class="form-control input-sm" name="metaData"
+                 ng-required="node.preset"/>
+          <span class="input-group-btn">
+            <button class="btn btn-primary btn-sm variation-btn" type="button"
+                    ng-click="varedit.removePreset(node, key)">
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+          </span>
         </div>
-    </div>
-    <ng-form name="nodeDetailForm" class="form-horizontal">
-      <div class="form-group" ng-if="node.data.category === 'json' || node.data.category === 'jsonmodel'"
-           ng-repeat="(key, value) in node.data.value" ng-class="{'has-error': nodeDetailForm[key].$invalid}">
-        <label class="col-sm-2 control-label">{{key}}</label>
-        <div class="col-sm-10">
-          <input type="text" ng-if="node.data.category === 'json'"
-                 ng-model="node.data.value[key]" class="form-control" name="{{key}}"/>
+      </div>
 
-          <select-loader
-            ng-if="node.data.category === 'jsonmodel'"
-            name="{{key}}"
-            ng-required="node.data.preset"
-            url="{{key}}"
-            is-atomic="true"
-            is-disabled="false"
-            ng-model="node.data.value[key]"
-            labels="displayName">
-          </select-loader>
+      <div class="form-group">
+        <label translate>COMMON.DIRECTIVES.VARIATIONS_EDITOR.LABELS.NEW_PRESET</label>
+        <div class="input-group">
+          <input type="{{node.type}}" ng-model="node.data.value" class="form-control input-sm"
+                 ng-keypress="($event.which === 13) ? varedit.newPreset(node) : 0"
+                 name="metaData" ng-required="node.preset"/>
+          <span class="input-group-btn">
+            <button class="btn btn-primary btn-sm variation-btn" type="button"
+                    ng-disabled="!varedit.canAddPreset(node)" ng-click="varedit.newPreset(node)">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <ng-form name="nodeDetailForm" class="form-horizontal">
+      <div ng-if="node.data.category === 'json' || node.data.category === 'jsonmodel'">
+        <div class="form-group" ng-repeat="(key, value) in node.data.value"
+             ng-class="{'has-error': nodeDetailForm[key].$invalid}">
+          <label class="col-sm-2 control-label">{{key}}</label>
+          <div class="col-sm-10">
+            <input type="text" ng-if="node.data.category === 'json'"
+                   ng-model="node.data.value[key]" class="form-control" name="{{key}}"/>
+            <select-loader
+              ng-if="node.data.category === 'jsonmodel'"
+              name="{{key}}"
+              ng-required="node.data.preset"
+              url="{{key}}"
+              is-atomic="true"
+              is-disabled="false"
+              ng-model="node.data.value[key]"
+              labels="displayName">
+            </select-loader>
+          </div>
         </div>
       </div>
 
@@ -104,6 +119,7 @@
 </div>
 
 <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-  <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'directives/variationsEditor/variation-editor-node.tpl.html'">
+  <li ng-repeat="node in node.nodes" ui-tree-node
+      ng-include="'directives/variationsEditor/variation-editor-node.tpl.html'">
   </li>
 </ol>
