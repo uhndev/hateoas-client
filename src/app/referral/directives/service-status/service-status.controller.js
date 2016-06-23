@@ -67,6 +67,15 @@
             'value': 'rejectedDate'
           }
         ]
+      },
+      'report': {
+        'model': 'reportstatus',
+        'collection': 'reportStatuses',
+        'currentType': 'currentReportStatus',
+        'currentStatus': 'currentReportStatusStatus',
+        'statusName': 'reportStatusName',
+        'populate': ['currentReportStatus', 'reportStatuses'],
+        'detailColumns': []
       }
     })
     .controller('ServiceStatusController', ServiceStatusController);
@@ -111,7 +120,7 @@
 
     function init() {
       // check if passed in service object with id without populated approvals/completions, then fetch from server
-      if (!vm.service.approvals || !vm.service.completion || !vm.service.billingStatuses) {
+      if (!vm.service.approvals || !vm.service.completion || !vm.service.billingStatuses || !vm.service.reportStatuses) {
         fetchStatusHistory();
       }
     }

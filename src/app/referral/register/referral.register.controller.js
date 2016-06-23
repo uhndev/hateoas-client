@@ -1,55 +1,57 @@
 (function () {
   'use strict';
   angular
-  .module('altum.referral.register.controller',[])
-  .controller('ReferralRegisterController', ReferralRegisterController);
+    .module('altum.referral.register.controller', [])
+    .controller('ReferralRegisterController', ReferralRegisterController);
 
-  ReferralRegisterController.$inject = ['$scope', '$location','$state', 'DefaultRouteService','resolvedReferral', '$resource', 'toastr', 'AltumAPIService'];
+  ReferralRegisterController.$inject = [
+    '$scope', '$location', '$state', 'DefaultRouteService', 'resolvedReferral', 'toastr', 'AltumAPIService'
+  ];
 
-  function ReferralRegisterController ($scope, $location, $state, DefaultRoute, resolvedReferral, $resource, toastr, AltumAPIService) {
+  function ReferralRegisterController($scope, $location, $state, DefaultRoute, resolvedReferral, toastr, AltumAPIService) {
     var vm = this;
+
+    // bindable variables
     vm.referral = resolvedReferral;
-    //functions
+    vm.translatableTitles = {
+      referralTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
+      dateTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATES',
+      client: 'APP.REFERRAL.REGISTRATION.LABELS.CLIENT',
+      claimNumber: 'APP.REFERRAL.REGISTRATION.LABELS.CLAIM_NUMBER',
+      site: 'APP.REFERRAL.REGISTRATION.LABELS.SITE',
+      program: 'APP.REFERRAL.REGISTRATION.LABELS.PROGRAM',
+      physician: 'APP.REFERRAL.REGISTRATION.LABELS.PHYSICIAN',
+      staff: 'APP.REFERRAL.REGISTRATION.LABELS.STAFF',
+      payors: 'APP.REFERRAL.REGISTRATION.LABELS.PAYORS',
+      referralDate: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATE',
+      clinicDate: 'APP.REFERRAL.REGISTRATION.LABELS.CLINIC_DATE',
+      accidentDate: 'APP.REFERRAL.REGISTRATION.LABELS.ACCIDENT_DATE',
+      receiveDate: 'APP.REFERRAL.REGISTRATION.LABELS.RECEIVE_DATE',
+      sentDate: 'APP.REFERRAL.REGISTRATION.LABELS.SENT_DATE',
+      dischargeDate: 'APP.REFERRAL.REGISTRATION.LABELS.DISCHARGE_DATE',
+      recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE'
+    };
+
+    // bindable methods
     vm.save = save;
     vm.referralAdd = referralAdd;
     vm.cancel = cancel;
 
-    init();
-    //For later functionality
-    function init() {
-      vm.translatableTitles = {
-        referralTitle:'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
-        dateTitle:'APP.REFERRAL.REGISTRATION.LABELS.DATE',
-        client:'APP.REFERRAL.REGISTRATION.LABELS.CLIENT',
-        site:'APP.REFERRAL.REGISTRATION.LABELS.SITE',
-        program:'APP.REFERRAL.REGISTRATION.LABELS.PROGRAM',
-        physician:'APP.REFERRAL.REGISTRATION.LABELS.PHYSICIAN',
-        staff:'APP.REFERRAL.REGISTRATION.LABELS.STAFF',
-        payors:'APP.REFERRAL.REGISTRATION.LABELS.PAYORS',
-        referralDate:'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATE',
-        clinicDate:'APP.REFERRAL.REGISTRATION.LABELS.CLINIC_DATE',
-        accidentDate:'APP.REFERRAL.REGISTRATION.LABELS.ACCIDENT_DATE',
-        receiveDate:'APP.REFERRAL.REGISTRATION.LABELS.RECEIVE_DATE',
-        sentDate:'APP.REFERRAL.REGISTRATION.LABELS.SENT_DATE',
-        dischargeDate:'APP.REFERRAL.REGISTRATION.LABELS.DISCHARGE_DATE',
-        recMade:'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE'
-      };
-    }
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
-    * save function
-    * @description to save a pre-existing referralState
-    */
+     * save function
+     * @description to save a pre-existing referralState
+     */
     function save() {
       vm.referral.$update().then(function (resp) {
-        toastr.success('Updated referral ' + resp.items.id + '!');
-        $location.path('/referral');
-        $state.go('hateoas');
-      },
-      function (err) {
-        toastr.error('Updating referral ' + 'failed. ' + err);
-        console.log('Updating referral ' + 'failed. ' + err);
-      });
+          toastr.success('Updated referral information for client: ' + resp.items.displayName + '!', 'Referral');
+          $location.path('/referral');
+          $state.go('hateoas');
+        },
+        function (err) {
+          toastr.error('Failed to update referral for client: ' + vm.referral.displayName + '.  Please try again later.', 'Referral');
+        });
     }
 
     /**
@@ -58,17 +60,18 @@
      * @param isValid
      */
     function referralAdd(isValid) {
-      var newReferral = new AltumAPIService.Referral();
-      _.extend(newReferral, vm.referral);
-      newReferral.$save().then(function (resp) {
-        toastr.success('New referral created');
-        $location.path('/referral');
-        $state.go('hateoas');
-      },
-      function (err) {
-        toastr.error('failed to create the referral');
-        console.log('failed to created the referral');
-      });
+      if (isValid) {
+        var newReferral = new AltumAPIService.Referral();
+        _.extend(newReferral, vm.referral);
+        newReferral.$save().then(function (resp) {
+            toastr.success('Created new referral for client: ' + resp.items.displayName + '!', 'Referral');
+            $location.path('/referral');
+            $state.go('hateoas');
+          },
+          function (err) {
+            toastr.error('Failed to create referral, please try again later.', 'Referral');
+          });
+      }
     }
 
     /**
@@ -82,8 +85,8 @@
     }
 
     /**
-     *backbutton watcher
-     *@description this is used to keep track of when the back button is pressed, takes user back to referral pageTitle
+     * backbutton watcher
+     * @description this is used to keep track of when the back button is pressed, takes user back to referral pageTitle
      */
     $scope.$on('$locationChangeStart', function (e, currentHref, prevHref) {
       if ($state.is('newReferral') || $state.is('editReferral') && prevHref !== currentHref) {

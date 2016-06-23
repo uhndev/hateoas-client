@@ -1,15 +1,17 @@
 <div id="Controls" class="pull-right">
   <div class="btn-group">
-    <!--<button type="button" class="btn btn-default">-->
-      <!--<i class="fa fa-folder-o"></i>-->
-      <!--<sp
-      an translate>COMMON.HATEOAS.CONTROLS.OPEN_BTN</span>-->
-    <!--</button>-->
+    <a ng-href="#/client/{{hateoas.selected.id}}" type="button" class="btn btn-default"
+       ng-disabled="!!!hateoas.selected.id">
+      <i class="fa fa-folder-o"></i>
+      <span translate>COMMON.HATEOAS.CONTROLS.OPEN_BTN</span>
+    </a>
     <button type="button" class="btn btn-default" ui-sref="newClient">
       <i class="fa fa-file-o"></i>
       <span translate>COMMON.HATEOAS.CONTROLS.NEW_BTN</span>
     </button>
-    <button type="button" class="btn btn-default" ng-disabled="!hateoas.selected.id" ui-sref="editClient({id: hateoas.selected.id})">
+
+    <button type="button" class="btn btn-default"
+            ui-sref="editClient({id: hateoas.selected.id})" ng-disabled="!!!hateoas.selected.id">
       <i class="fa fa-floppy-o"></i>
       <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
     </button>

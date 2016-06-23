@@ -1,0 +1,46 @@
+<ng-form name="variationForm" ng-class="{'form-horizontal': variationEditor.horizontal}" novalidate>
+  <p ng-show="variationEditor.availableFields.length === 0">
+    No variations data to display.
+  </p>
+  <ng-form ng-repeat="field in variationEditor.availableFields" name="{{field.name}}">
+    <div ng-if="node.type !== 'none' && field.category === 'basic'" class="form-group">
+      <label class="control-label" ng-class="{'col-md-3': variationEditor.horizontal}" translate>
+        {{variationEditor.service[field.type + 'DetailName']}}
+      </label>
+      <div ng-class="{'col-md-9': variationEditor.horizontal}">
+        <input type="{{field.type}}" ng-model="variationEditor.service[field.type + 'Detail']" class="form-control" />
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="field.category === 'model'">
+      <label class="control-label" ng-class="{'col-md-3': variationEditor.horizontal}" translate>
+        {{variationEditor.service[field.type + 'DetailName']}}
+      </label>
+      <div ng-class="{'col-md-9': variationEditor.horizontal}">
+        <select-loader
+          url="{{field.type}}"
+          is-atomic="true"
+          is-disabled="false"
+          ng-model="variationEditor.service[field.type + 'Detail']"
+          labels="displayName">
+        </select-loader>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="field.type === 'measure'">
+      <label class="control-label" ng-class="{'col-md-3': variationEditor.horizontal}" translate>
+        {{variationEditor.service.measureDetailName}}
+      </label>
+      <div class="well well-sm">
+        <div ng-repeat="(key, value) in field.value track by $index">
+          <label class="control-label" ng-class="{'col-md-3': variationEditor.horizontal}" translate>
+            {{key}}
+          </label>
+          <div ng-class="{'col-md-9': variationEditor.horizontal}">
+            <input type="text" ng-model="variationEditor.service.measureDetail[key]" class="form-control" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-form>
+</ng-form>

@@ -1,14 +1,13 @@
 <div ui-tree-handle class="tree-node tree-node-content" ng-init="varpicker.parseNode(node)">
-  <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" ng-click="varpicker.toggle(this)">
-    <span class="glyphicon" ng-class="{
-      'glyphicon-chevron-right': collapsed,
-      'glyphicon-chevron-down': !collapsed
-    }"></span>
-  </a>
-
   <form class="form-inline" data-nodrag novalidate>
     <div class="form-group">
       <label ng-click="visible = !visible" ng-class="{'text-danger': this.nodeForm.$invalid}" >
+        <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" ng-click="varpicker.toggle(this)">
+          <span class="glyphicon" ng-class="{
+            'glyphicon-chevron-right': collapsed,
+            'glyphicon-chevron-down': !collapsed
+          }"></span>
+        </a>
         {{node.title}}
       <span class="glyphicon" ng-class="{
         'glyphicon-ok': visible && !node.data.preset && node.type !== 'none',

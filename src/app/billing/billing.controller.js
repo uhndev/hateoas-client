@@ -4,11 +4,13 @@
   angular
     .module('altum.billing', [
       'ui.sortable',
-      'altum.referral.serviceGroup'
+      'altum.referral.serviceGroup',
+      'altum.referral.serviceGroupPreset'
     ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
@@ -100,8 +102,8 @@
         prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
       },
       {
-        name: 'price',
-        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.PRICE'
+        name: 'payorPrice',
+        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE'
       },
       {
         name: 'altumServiceName',
