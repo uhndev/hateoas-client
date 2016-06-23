@@ -102,6 +102,7 @@
           msg: vm.note.text
         },
         options: {
+          from: 'altumdonotreply@uhn.ca',
           to: _.pluck(vm.toList, 'email'),
           // subject: 'Altum CMS Communication'
         }

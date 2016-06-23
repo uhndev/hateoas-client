@@ -1,4 +1,6 @@
 <div id="Controls" class="pull-right">
+
+
   <div class="btn-group">
     <a ng-href="#/referral/{{hateoas.selected.id}}" type="button" class="btn btn-default"
        ng-disabled="!!!hateoas.selected.id">
@@ -19,4 +21,7 @@
       <!--<span translate>COMMON.HATEOAS.CONTROLS.ARCHIVE_BTN</span>-->
     <!--</button>-->
   </div>
+</div>
+<div>
+  <altum-label-print referral-info="hateoas.selected" copies="copies"></altum-label-print>
 </div>
