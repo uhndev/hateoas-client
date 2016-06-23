@@ -12,37 +12,34 @@
   function AltumNotebookController(Note, NoteType, $resource, API) {
     var vm = this;
     // bindable variables
-    vm.url = API.url() + '/note';
     vm.notes = vm.notes || [];
     vm.collection = vm.collection || {};
-    console.log(vm.notes);
-
+    vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
     vm.noteTypes = NoteType.query();
+    vm.resource = $resource(API.url('note'), {},
+    {'query': {
+      method: 'GET',
+      isArray: false,
+      params:{
+        referral:vm.collection.referral
+      }
+    }});
+
     //vm.refNotes = vm.notes || [];
     // bindable methods
     vm.addNote = addNote;
     vm.removeElement = removeElement;
+    vm.search = search;
 
-    /*init();
+    init();
     ///////////////////////////////////////////////////////////////////////////
-    function init(){
-      var resource = $resource(API.url('note'), {},
-      {'query': {
-        method: 'GET',
-        isArray: false,
-        params:{
-          referral:vm.collection.referral
-        }
-      }});
 
-      resource.query({limit:10},function(data,header){
-        console.log(data);
-        angular.copy(data.items, vm.refNotes);
-        console.log(vm.refNotes);
+    function init() {
+      vm.resource.query(function(data, header) {
+        vm.template = angular.copy(data.template.data);
       });
-
-    }*/
+    }
     /**
      * addNote
      * @description Function to add note to the notes array only
@@ -73,11 +70,37 @@
       }
     }
 
+    /**
+     * search
+     * @description function used for searching notes when there are 30+ notes and a query is needed
+     * @param value
+     */
     function search(value) {
-      //resource.query({where:{text:{'contains':value}}}, function(data,header){
-      //vm.notes = angular.copy(data.items);
-      console.log(vm.notes);
-      //});
+      var number = parseInt(value);
+      var query = {'where':{}};
+      query.where = {
+        'or' : _.reduce(vm.template, function(result, field) {
+          var fieldInput = {};
+
+          switch (true) {
+
+            case /date|dateTime|datetime/i.test(field.type):
+              return result;
+
+            case /string|text/i.test(field.type):
+              fieldInput[field.name] = {'contains':value};
+
+              return result.concat(fieldInput);
+
+            default:
+              return result;
+          }
+        }, [])
+      };
+
+      vm.resource.query(query, function(data,header) {
+        vm.notes = angular.copy(data.items);
+      });
     }
   }
 
