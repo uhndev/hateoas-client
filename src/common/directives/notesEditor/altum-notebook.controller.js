@@ -8,8 +8,8 @@
     .module('altum.notebook.controller', [])
     .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['NoteService', 'NoteTypeService', '$resource', 'API'];
-  function AltumNotebookController(Note, NoteType, $resource, API) {
+  AltumNotebookController.$inject = ['NoteService', 'NoteTypeService', '$resource', 'API', 'toastr'];
+  function AltumNotebookController(Note, NoteType, $resource, API, toastr) {
     var vm = this;
     // bindable variables
     vm.notes = vm.notes || [];
@@ -17,14 +17,7 @@
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
     vm.noteTypes = NoteType.query();
-    vm.resource = $resource(API.url('note'), {},
-    {'query': {
-      method: 'GET',
-      isArray: false,
-      params:{
-        referral:vm.collection.referral
-      }
-    }});
+    var resource = $resource(API.url('note'), {}, {'query':{method: 'GET', isArray: false, params:vm.collection}});
 
     //vm.refNotes = vm.notes || [];
     // bindable methods
@@ -36,8 +29,9 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      vm.resource.query(function(data, header) {
+      resource.query(function(data, header) {
         vm.template = angular.copy(data.template.data);
+        vm.resource = angular.copy(data);
       });
     }
     /**
@@ -47,13 +41,17 @@
      * @returns {*}
      */
     function addNote(type) {
-      if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
-        vm.notes.push({
-          $edit: true,
-          text: null,
-          // noteType: type.id
-          noteType: type
-        });
+      if (!_.isEmpty(vm.filterNormal)) {
+        toastr.warning('Clear the search field first');
+      }else {
+        if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
+          vm.notes.push({
+            $edit: true,
+            text: null,
+            // noteType: type.id
+            noteType: type
+          });
+        }
       }
     }
 
@@ -76,12 +74,11 @@
      * @param value
      */
     function search(value) {
-      var number = parseInt(value);
-      var query = {'where':{}};
-      query.where = {
-        'or' : _.reduce(vm.template, function(result, field) {
+      //this way vm.collection does not get overwritten
+      var query = {where:{referral:vm.collection.referral}};
+      if (!_.isEmpty(value)) {
+        query.where.or = _.reduce(vm.template, function(result, field) {
           var fieldInput = {};
-
           switch (true) {
 
             case /date|dateTime|datetime/i.test(field.type):
@@ -89,16 +86,14 @@
 
             case /string|text/i.test(field.type):
               fieldInput[field.name] = {'contains':value};
-
               return result.concat(fieldInput);
 
             default:
               return result;
           }
-        }, [])
-      };
-
-      vm.resource.query(query, function(data,header) {
+        }, []);
+      }
+      resource.query(query, function(data,header) {
         vm.notes = angular.copy(data.items);
       });
     }
