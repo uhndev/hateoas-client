@@ -39,7 +39,8 @@
         altumService: true,
         programService: true,
         site: true,
-        variations: true
+        variations: true,
+        payorPrice: true
       },
       required: {
         visitService: true,

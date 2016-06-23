@@ -15,8 +15,13 @@
                  ng-model="services.search"/>
         </div>
       </form>
-      <br/>
     </div>
+
+    <service-group-preset ng-show="services.referral"
+                          bound-group-types="services.boundGroupTypes"
+                          visit-fields="services.visitFields"
+                          summary-fields="services.summaryFields">
+    </service-group-preset>
 
     <referral-summary referral-data="services.referral"
                       bound-groups="services.boundGroupTypes"
@@ -25,11 +30,6 @@
                       config-flags="services.flagConfig">
     </referral-summary>
   </div>
-
-  <service-group-preset bound-group-types="services.boundGroupTypes"
-                        visit-fields="services.visitFields"
-                        summary-fields="services.summaryFields">
-  </service-group-preset>
 
   <altum-notebook ng-if="services.referralNotes"
                   notes="services.referralNotes.notes"
