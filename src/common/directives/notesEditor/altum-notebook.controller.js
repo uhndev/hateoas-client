@@ -8,22 +8,39 @@
     .module('altum.notebook.controller', [])
     .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['NoteService', 'NoteTypeService'];
-
-  function AltumNotebookController(Note, NoteType) {
+  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API', 'toastr'];
+  function AltumNotebookController(NoteType, $resource, API, toastr) {
     var vm = this;
 
     // bindable variables
-    vm.notes = vm.notes || [];
     vm.collection = vm.collection || {};
+    vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
     vm.noteTypes = NoteType.query();
+    var NoteResource = $resource(API.url('note'), {}, {
+      'query': {
+        method: 'GET', isArray: false
+      }
+    });
 
     // bindable methods
     vm.addNote = addNote;
     vm.removeElement = removeElement;
+    vm.search = search;
 
+    init();
     ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      NoteResource.query({
+        where: vm.collection,
+        sort: 'createdAt DESC'
+      }, function (data, header) {
+        vm.template = angular.copy(data.template.data);
+        vm.resource = angular.copy(data);
+        vm.notes = angular.copy(data.items);
+      });
+    }
 
     /**
      * addNote
@@ -32,13 +49,19 @@
      * @returns {*}
      */
     function addNote(type) {
-      if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
-        vm.notes.push({
-          $edit: true,
-          text: null,
-          // noteType: type.id
-          noteType: type
-        });
+      if (!_.isEmpty(vm.filterNormal)) {
+        toastr.warning('Clear the search field first');
+      } else {
+        if (_.all(vm.notes, function (note) {
+            return _.has(note, 'id');
+          })) {
+          vm.notes.push({
+            $edit: true,
+            text: null,
+            // noteType: type.id
+            noteType: type
+          });
+        }
       }
     }
 
@@ -53,6 +76,29 @@
       if (index > -1) {
         array.splice(index, 1);
       }
+    }
+
+    /**
+     * search
+     * @description function used for searching notes when there are 30+ notes and a query is needed
+     * @param value
+     */
+    function search(value) {
+      //this way vm.collection does not get overwritten
+      var query = {
+        where: {referral: vm.collection.referral},
+        sort: 'createdAt DESC'
+      };
+
+      if (!_.isEmpty(value)) {
+        query.where.or = [
+          {displayName: {'contains': value}},
+          {text: {'contains': value}}
+        ];
+      }
+      NoteResource.query(query, function (data, header) {
+        vm.notes = angular.copy(data.items);
+      });
     }
   }
 
