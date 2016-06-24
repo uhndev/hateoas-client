@@ -33,7 +33,6 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
-    vm.referralNotes = [];
     vm.accordionStatus = {};
     vm.boundGroupTypes = {
       groupBy: vm.DEFAULT_GROUP_BY,
@@ -196,8 +195,6 @@
         // changes the prompt values for templateFields and billing fields so that the path is correct
         vm.templateFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.SERVICES.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
         vm.billingFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.BILLING.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
-
-        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
