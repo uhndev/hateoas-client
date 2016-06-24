@@ -5,7 +5,6 @@
     .module('altum.notebook', ['altum.notebook.controller'])
     .component('altumNotebook', {
       bindings: {
-        notes: '=',
         collection: '=',
         emailInfo: '='
       },

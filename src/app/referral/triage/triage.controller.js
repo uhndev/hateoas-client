@@ -24,7 +24,6 @@
         isProvider: true
       }
     });
-    vm.referral = {};
     vm.selectedProgram = null;
     vm.selectedPhysician = null;
     vm.selectedStaff = null;

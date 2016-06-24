@@ -8,16 +8,20 @@
     .module('altum.notebook.controller', [])
     .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['NoteService', 'NoteTypeService', '$resource', 'API', 'toastr'];
-  function AltumNotebookController(Note, NoteType, $resource, API, toastr) {
+  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API', 'toastr'];
+  function AltumNotebookController(NoteType, $resource, API, toastr) {
     var vm = this;
+
     // bindable variables
-    vm.notes = vm.notes || [];
     vm.collection = vm.collection || {};
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
     vm.noteTypes = NoteType.query();
-    var resource = $resource(API.url('note'), {}, {'query':{method: 'GET', isArray: false, params:vm.collection}});
+    var NoteResource = $resource(API.url('note'), {}, {
+      'query': {
+        method: 'GET', isArray: false
+      }
+    });
 
     // bindable methods
     vm.addNote = addNote;
@@ -28,11 +32,16 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      resource.query(function(data, header) {
+      NoteResource.query({
+        where: vm.collection,
+        sort: 'createdAt DESC'
+      }, function (data, header) {
         vm.template = angular.copy(data.template.data);
         vm.resource = angular.copy(data);
+        vm.notes = angular.copy(data.items);
       });
     }
+
     /**
      * addNote
      * @description Function to add note to the notes array only
@@ -42,8 +51,10 @@
     function addNote(type) {
       if (!_.isEmpty(vm.filterNormal)) {
         toastr.warning('Clear the search field first');
-      }else {
-        if (_.all(vm.notes, function (note) { return _.has(note, 'id'); })) {
+      } else {
+        if (_.all(vm.notes, function (note) {
+            return _.has(note, 'id');
+          })) {
           vm.notes.push({
             $edit: true,
             text: null,
@@ -74,25 +85,18 @@
      */
     function search(value) {
       //this way vm.collection does not get overwritten
-      var query = {where:{referral:vm.collection.referral}};
+      var query = {
+        where: {referral: vm.collection.referral},
+        sort: 'createdAt DESC'
+      };
+
       if (!_.isEmpty(value)) {
-        query.where.or = _.reduce(vm.template, function(result, field) {
-          var fieldInput = {};
-          switch (true) {
-
-            case /date|dateTime|datetime/i.test(field.type):
-              return result;
-
-            case /string|text/i.test(field.type):
-              fieldInput[field.name] = {'contains':value};
-              return result.concat(fieldInput);
-
-            default:
-              return result;
-          }
-        }, []);
+        query.where.or = [
+          {displayName: {'contains': value}},
+          {text: {'contains': value}}
+        ];
       }
-      resource.query(query, function(data,header) {
+      NoteResource.query(query, function (data, header) {
         vm.notes = angular.copy(data.items);
       });
     }
