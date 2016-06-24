@@ -19,11 +19,18 @@
           </ul>
         </span>
       </div>
-      <div class="form-group has-feedback has-feedback-left">
+      <div class="form-group has-feedback has-feedback-left" ng-if="notebook.resource.total <= 30">
         <i class="no-top form-control-feedback fa fa-search"></i>
-        <input type="text" class="form-control" ng-model="notebook.filter"></input>
+        <input type="text" class="form-control" ng-model="notebook.filterNormal"></input>
+
       </div>
-      <div ng-repeat="note in notebook.notes | filter:notebook.filter : orderBy:'createdAt': true track by $index">
+
+      <div class="form-group has-feedback has-feedback-left" ng-if="notebook.resource.total > 30">
+        <i class="no-top form-control-feedback fa fa-search"></i>
+        <input type="text" class="form-control" ng-model="notebook.filterQuery" ng-change="notebook.search(notebook.filterQuery)"/>
+      </div>
+
+      <div ng-repeat="note in notebook.notes | filter:notebook.filterNormal: orderBy:'createdAt': true track by $index">
         <altum-note note="note"
                     collection="notebook.collection"
                     email-info="notebook.emailInfo"

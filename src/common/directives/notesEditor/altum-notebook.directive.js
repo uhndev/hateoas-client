@@ -14,4 +14,3 @@
       templateUrl: 'directives/notesEditor/altum-notebook.tpl.html'
     });
 })();
-
