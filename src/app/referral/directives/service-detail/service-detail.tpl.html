@@ -1,0 +1,99 @@
+<div class="panel panel-primary" ng-if="detail.service && detail.referral">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <i class="fa fa-file-o"></i>
+      <b>Selected Service:</b> {{detail.service.name}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class="form-group" ng-if="detail.service.availableSites.length > 0">
+      <label>
+        <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
+        <span class="fa fa-map-marker fa-lg selectable" ng-click="detail.openMap()"></span>
+      </label>
+      <select ng-model="detail.service.site" class="form-control"
+              ng-options="site.id as site.name for site in detail.service.availableSites">
+      </select>
+    </div>
+    <div class="form-group" ng-if="detail.service.repeatable">
+      <label translate>
+        APP.REFERRAL.RECOMMENDATIONS.LABELS.NUMBER_OF_SESSIONS
+      </label>
+      <input type="number" class="form-control" ng-model="detail.service.totalItems" min="0"/>
+    </div>
+    <div class="form-group" ng-if="detail.service.serviceVariation">
+      <label translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_VARIATIONS</label>
+      <span class="fa fa-cog fa-lg selectable" ng-click="detail.openVariationModal()"></span>
+      <br/>
+      <ul>
+        <li ng-repeat="(key, selection) in detail.service.variationSelection.changes">
+          <div ng-switch="key">
+            <span ng-switch-when="service">
+              <b>Selected: </b> {{detail.service.variationSelection.name}}
+            </span>
+            <span ng-switch-when="followup">
+              <b>{{selection.title}}: </b> {{selection.name}}
+            </span>
+            <span ng-switch-when="physician">
+              <b>{{selection.name}}: </b> {{selection.title}}
+            </span>
+            <span ng-switch-when="staff">
+              <b>{{selection.name}}: </b> {{selection.title}}
+            </span>
+            <span ng-switch-when="timeframe">
+              <b>{{selection.title}}: </b> {{selection.name}}
+            </span>
+            <span ng-switch-when="date">
+              <b>{{selection.name}}: </b> {{selection.value | date:'fullDate'}}
+            </span>
+            <span ng-switch-when="measure">
+              <b>{{selection.name}}: </b>
+              <ul>
+                <li ng-repeat="(measureKey, measureVal) in selection.value">
+                  <b>{{measureKey}}: </b> {{measureVal}}
+                </li>
+              </ul>
+            </span>
+            <span ng-switch-default>
+              <b>{{selection.name}}: </b> {{selection.value | json}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- Save for Scheduling -->
+    <!--<div class="form-group" flex ng-repeat="staffType in detail.service.availableStaffTypes">-->
+    <!--<label translate>Select {{staffType.name}}:</label>-->
+    <!--<select-loader-->
+    <!--url="staff"-->
+    <!--query="staffType.baseQuery"-->
+    <!--is-atomic="false"-->
+    <!--is-disabled="false"-->
+    <!--ng-model="detail.service.staffCollection[staffType.name]"-->
+    <!--ng-change="detail.setStaffSelections(detail.service, staffType.name)"-->
+    <!--labels="displayName">-->
+    <!--</select-loader>-->
+    <!--</div>-->
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="detail.service.approvalNeeded"
+                     ng-checked="detail.service.approvalNeeded || detail.service.approvalRequired"
+                     ng-disabled="detail.service.approvalRequired"/>
+              Approval {{detail.service.approvalRequired ? "Required" : "Needed" }}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6" ng-if="detail.service.hasTelemedicine">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="detail.service.telemedicine" /> Via Telemedicine
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

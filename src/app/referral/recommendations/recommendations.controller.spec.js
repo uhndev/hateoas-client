@@ -25,6 +25,8 @@ describe('Controller: RecommendationsController Tests', function() {
         'claim': 6,
         'site': 9,
         'program': 6,
+        'claimNumber': 123,
+        'client_displayName': 'Mr Test Subject',
         'availableServices': [
           {
             'serviceCategory': 2,
@@ -92,41 +94,41 @@ describe('Controller: RecommendationsController Tests', function() {
             'programName': '[TEST] WSIB Back and Neck Program',
             'sites': [
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'TWH',
-               'name': 'TWH',
-               'id': 1,
-               'address': 1
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'TWH',
+              'name': 'TWH',
+              'id': 1,
+              'address': 1
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Hamilton',
-               'name': 'Hamilton',
-               'id': 3,
-               'address': 3
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Hamilton',
+              'name': 'Hamilton',
+              'id': 3,
+              'address': 3
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Barrie',
-               'name': 'Barrie',
-               'id': 8,
-               'address': 8
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Barrie',
+              'name': 'Barrie',
+              'id': 8,
+              'address': 8
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Ajax',
-               'name': 'Ajax',
-               'id': 9,
-               'address': 9
-             }
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Ajax',
+              'name': 'Ajax',
+              'id': 9,
+              'address': 9
+            }
            ]
           },
           {
@@ -140,33 +142,33 @@ describe('Controller: RecommendationsController Tests', function() {
             'programName': '[TEST] WSIB Back and Neck Program',
             'sites': [
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Hamilton',
-               'name': 'Hamilton',
-               'phone': null,
-               'id': 3,
-               'address': 3
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Hamilton',
+              'name': 'Hamilton',
+              'phone': null,
+              'id': 3,
+              'address': 3
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Sudbury',
-               'name': 'Sudbury',
-               'id': 6,
-               'address': 6
-             },
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Sudbury',
+              'name': 'Sudbury',
+              'id': 6,
+              'address': 6
+            },
              {
-               'altumServices': [],
-               'siteServices': [],
-               'siteStaff': [],
-               'displayName': 'Barrie',
-               'name': 'Barrie',
-               'id': 8,
-               'address': 8
-             }
+              'altumServices': [],
+              'siteServices': [],
+              'siteStaff': [],
+              'displayName': 'Barrie',
+              'name': 'Barrie',
+              'id': 8,
+              'address': 8
+            }
            ]
           }
         ],
@@ -189,6 +191,7 @@ describe('Controller: RecommendationsController Tests', function() {
     httpBackend.whenGET('http://localhost:1337/api/servicetype').respond();
     httpBackend.whenGET('http://localhost:1337/api/staffType').respond();
     httpBackend.whenGET('http://localhost:1337/api/note?referral=1').respond();
+    httpBackend.whenGET('http://localhost:1337/api/note?where=%7B%22referral%22:1%7D').respond();
     httpBackend.whenGET('http://localhost:1337/api/staffType?where=%7B%22isProvider%22:true%7D').respond();
 
     httpBackend.flush();
@@ -206,43 +209,32 @@ describe('Controller: RecommendationsController Tests', function() {
         expect(availableService.altumService).not.toBeNull();
         expect(availableService.programService).not.toBeNull();
         expect(availableService.serviceCategory).not.toBeNull();
-        expect(availableService.site).toBeNull();
         expect(availableService.approvalNeeded).toBeFalsy();
-        if (availableService.sites) {
-          expect(availableService.siteDictionary).not.toBeNull();
-        }
       });
     });
 
-    it('should add available services to the recommendedServices array', function() {
-      recCtrl.toggleService(recCtrl.availableServices[0]);
-      recCtrl.toggleService(recCtrl.availableServices[1]);
-      expect(recCtrl.recommendedServices.length).toEqual(2);
+    it('should apply selection to all recommended services for shared services', function() {
+      recCtrl.sharedService.physician = 1;
+      _.each(recCtrl.recommendedServices, function (service) {
+        expect(service.physician).toEqual(1);
+      });
     });
 
-    it('should un-recommend a service and make it available to be recommended again', function() {
-      recCtrl.toggleService(recCtrl.availableServices[0]);
-      expect(recCtrl.recommendedServices.length).toEqual(1);
+    it('should apply staff selection to all recommended services for shared services', function () {
+      recCtrl.sharedService.staffCollection = {
+        'Clinician': [1, 2]
+      };
+      _.each(recCtrl.recommendedServices, function (service) {
+        expect(service.staff).toEqual([1, 2]);
+      });
     });
+
   });
 
   describe('Detail selection for recommended services', function() {
 
-    it('should not be available if not all fields have been selected', function() {
-      // adds all available services to recommended
-      recCtrl.availableServices.map(function (availableService) {
-        recCtrl.toggleService(availableService);
-      });
-
-      expect(recCtrl.areServicesValid()).toBeFalsy();
-      expect(recCtrl.recommendedServices.length).toEqual(7);
-    });
-
     it('should apply to all recommended services when selections are made in detail panel', function() {
       expect(recCtrl.validityFields.length).toEqual(2);
-      recCtrl.validityFields.forEach(function (field) {
-        recCtrl.setServiceSelections(field);
-      });
 
       recCtrl.recommendedServices.forEach(function (recommendedService) {
         recCtrl.validityFields.forEach(function (field) {

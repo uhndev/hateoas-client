@@ -1,19 +1,19 @@
-<div ng-controller="ReferralController as ref" ng-cloak>
-
-  <h2 id="Title">
-    Referral Overview
+<div class="container-fluid" ng-controller="ReferralController as ref" ng-cloak>
+  <h2 id="Title" translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW">
+    APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW
   </h2>
 
   <br/>
 
-  <simple-table
-    rows="ref.referralInfo.rows"
-    table-data="ref.referralInfo.tableData">
+  <simple-table rows="ref.referralInfo.rows"
+                table-data="ref.referralInfo.tableData">
   </simple-table>
 
-
-  <altum-notebook ng-if="ref.referral" notes="ref.referral.notes" collection="{'referral': ref.referral.id}"></altum-notebook>
-
+  <altum-notebook ng-if="ref.referral"
+                  notes="ref.referral.notes"
+                  collection="{'referral': ref.referral.id}"
+                  email-info="ref.emailInfo">
+  </altum-notebook>
 </div>
 
 

@@ -1,0 +1,70 @@
+<div class="modal-header">
+  <h3 class="modal-title" translate>APP.REFERRAL.BILLING.LABELS.AD_HOC_SERVICES</h3>
+</div>
+<div class="modal-body">
+  <div layout="column">
+    <div id="Query" flex class="clearfix">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" class="form-control"
+               placeholder="{{ 'APP.REFERRAL.RECOMMENDATIONS.LABELS.SEARCH_AVAILABLE_RECOMMENDATIONS' | translate }}"
+               ng-model="adhoc.searchQuery" />
+        <span class="input-group-addon" ng-if="adhoc.picker.config.showBillingInfo">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="adhoc.picker.config.billing.programServiceCode"/> {{'APP.REFERRAL.BILLING.LABELS.BILLING_CODES' | translate}}
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="adhoc.picker.config.billing.programServiceName"/> {{'APP.REFERRAL.BILLING.LABELS.PROGRAM_SERVICE_NAMES' | translate}}
+          </label>
+        </span>
+      </div>
+    </div>
+
+    <div layout="row" layout-md="column">
+      <div flex="25" flex-md="100" layout="column">
+        <service-detail referral="adhoc.picker.referral"
+                        service="adhoc.picker.recommendedServices[adhoc.picker.currIndex]">
+        </service-detail>
+
+        <div class="panel panel-info" flex="25" flex-md="100" >
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <i class="fa fa-folder-open-o"></i>
+              <b translate>APP.REFERRAL.BILLING.SERVICE_SETTINGS</b>
+              <span> for {{adhoc.picker.recommendedServices.length}} service(s)</span>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <service-editor ng-if="adhoc.picker.referral"
+                            referral="adhoc.picker.referral"
+                            service="adhoc.picker.service"
+                            configuration="adhoc.serviceEditorConfig"
+                            approved-services="adhoc.picker.referral.approvedServices"
+                            recommended-services="adhoc.picker.recommendedServices">
+            </service-editor>
+          </div>
+        </div>
+      </div>
+
+      <recommendations-picker flex ng-if="adhoc.picker.referral"
+                              referral="adhoc.picker.referral"
+                              service="adhoc.picker.service"
+                              curr-index="adhoc.picker.currIndex"
+                              available-services="adhoc.picker.availableServices"
+                              recommended-services="adhoc.picker.recommendedServices"
+                              search-query="adhoc.searchQuery"
+                              config="adhoc.picker.config">
+      </recommendations-picker>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" ng-click="adhoc.saveRecommendedServices()" translate>
+    APP.REFERRAL.BILLING.LABELS.ADD_SERVICES
+  </button>
+  <button type="button" class="btn btn-warning" ng-click="adhoc.cancel()" translate>
+    APP.REFERRAL.BILLING.LABELS.CANCEL
+  </button>
+</div>

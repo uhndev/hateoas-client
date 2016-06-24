@@ -35,16 +35,21 @@
       var cleanPath = cleanURL(path);
       var last = _.last(_.pathnameToArray(cleanPath));
 
-      var modules = ((pathArr.length % 2) === 0) ? ITEM_MODULES : VIEW_MODULES;
+      // create possible template arrays based on if its a list view or item view
+      if (pathArr.length % 2 !== 0) {
+        var templates = _.map(VIEW_MODULES, function(module) {
+          return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
+        });
+        templates.push(
+          [cleanPath.substring(1), '/', last, 'View.tpl.html'].join('')
+        );
 
-      var templates = _.map(modules, function(module) {
-        return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
-      });
-      templates.push(
-        [cleanPath.substring(1), '/', last, 'View.tpl.html'].join('')
-      );
-
-      return templates;
+        return templates;
+      } else {
+        return _.map(ITEM_MODULES, function(module) {
+          return [cleanPath.substring(1), '/', last, 'View', module, '.tpl.html'].join('');
+        });
+      }
     }
 
     /**

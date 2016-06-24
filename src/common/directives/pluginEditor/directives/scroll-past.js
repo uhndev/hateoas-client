@@ -15,7 +15,7 @@
  * @description Directive to emulate fixed element position
  */
 
- (function() {
+(function() {
   'use strict';
 
   angular

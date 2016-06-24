@@ -14,7 +14,8 @@ describe('WorkflowController', function() {
     });
 
     it('should represent a link object', function() {
-      expect(_.isString(linkConstant.path)).toBeTruthy();
+      expect(_.isString(linkConstant.model)).toBeTruthy();
+      expect(_.isArray(linkConstant.path)).toBeTruthy();
       expect(_.isArray(linkConstant.links)).toBeTruthy();
       expect(_.isArray(linkConstant.queries)).toBeTruthy();
       expect(_.isArray(linkConstant.template)).not.toBeTruthy();

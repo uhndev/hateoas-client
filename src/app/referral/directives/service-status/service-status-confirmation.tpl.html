@@ -1,0 +1,33 @@
+<div ng-if="confirmationModal.statusTemplateForm.length">
+  <div ng-repeat="form in confirmationModal.statusTemplateForm">
+    <form-directive ng-if="$index === confirmationModal.page-1"
+                    form="confirmationModal[form.form_name + $index]"
+                    hide-buttons="true">
+    </form-directive>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-md-6">
+        <uib-pagination class="pull-left" ng-style="{'margin': 0}"
+                        ng-if="confirmationModal.statusTemplateForm.length > 1"
+                        total-items="confirmationModal.statusTemplateForm.length"
+                        ng-model="confirmationModal.page"
+                        items-per-page="1">
+        </uib-pagination>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-primary right" type="button" ng-click="confirmationModal.confirm()" translate>
+          APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.SAVE
+        </button>
+        <button class="btn btn-warning right" type="button" ng-click="confirmationModal.cancel()" translate>
+          APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form-directive ng-if="!confirmationModal.statusTemplateForm.length"
+                form="confirmationModal.statusTemplateForm"
+                on-submit="confirmationModal.confirm()"
+                on-cancel="confirmationModal.cancel()">
+</form-directive>

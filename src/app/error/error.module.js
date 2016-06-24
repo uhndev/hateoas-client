@@ -38,28 +38,32 @@
   ErrorStateController.$inject = ['$scope', '$state', 'DefaultRouteService'];
 
   function ErrorStateController($scope, $state, DefaultRoute) {
-      var vm = this;
+    var vm = this;
 
-      // bindable variables
-      vm.previousUrl = '';
-      vm.pageTitle = $state.current.data.pageTitle;
+    // bindable variables
+    vm.previousUrl = '';
+    vm.pageTitle = $state.current.data.pageTitle;
 
-      // bindable methods
-      vm.goHome = goHome;
+    // bindable methods
+    vm.goHome = goHome;
 
-      /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
 
-      function goHome() {
-        DefaultRoute.navigateHome();
-      }
-
-      // hitting back button triggers this event, which should then try to resolve whatever the previous state was
-      $scope.$on('$locationChangeStart', function(e, currentHref, prevHref) {
-        vm.previousUrl = prevHref;
-        if ($state.is('forbidden') || $state.is('notfound') || $state.is('servererror') && prevHref !== currentHref) {
-          DefaultRoute.resolve();
-        }
-      });
+    /**
+     * goHome
+     * @description Goes home
+     */
+    function goHome() {
+      DefaultRoute.navigateHome();
     }
+
+    // hitting back button triggers this event, which should then try to resolve whatever the previous state was
+    $scope.$on('$locationChangeStart', function(e, currentHref, prevHref) {
+      vm.previousUrl = prevHref;
+      if ($state.is('forbidden') || $state.is('notfound') || $state.is('servererror') && prevHref !== currentHref) {
+        DefaultRoute.resolve();
+      }
+    });
+  }
 
 })();

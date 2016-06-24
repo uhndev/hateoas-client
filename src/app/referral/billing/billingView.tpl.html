@@ -1,0 +1,58 @@
+<div class="container-fluid" ng-controller="ServicesController as services" ng-cloak>
+  <div class="loading-screen" ng-show="!services.referral"></div>
+  <div ng-controller="BillingController as billing">
+    <div layout="column">
+      <h2 flex id="Title">
+        <span translate context-translator="APP.REFERRAL.SERVICES.REFERRED_SERVICES">
+          APP.REFERRAL.SERVICES.REFERRED_SERVICES</span>&nbsp;for
+        <small>{{services.referral.client_displayName}}</small>
+      </h2>
+
+      <div id="Query" flex class="clearfix">
+        <div class="input-group no-margin has-feedback has-feedback-left">
+          <i class="no-top form-control-feedback fa fa-search"></i>
+          <input type="text" class="form-control"
+                 placeholder="{{ 'APP.REFERRAL.SERVICES.LABELS.SEARCH_REFERRED_SERVICES' | translate }}"
+                 ng-model="services.search"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" ng-click="billing.openServicePicker()">
+              <i class="fa fa-plus"></i> <span translate>APP.REFERRAL.BILLING.LABELS.ADD_SERVICES</span>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <service-group-preset ng-show="services.referral"
+                            bound-group-types="billing.boundGroupTypes"
+                            visit-fields="billing.visitFields"
+                            summary-fields="services.summaryFields">
+      </service-group-preset>
+
+      <referral-summary referral-data="services.referral"
+                        bound-groups="billing.boundGroupTypes"
+                        group-types="services.groupTypes"
+                        group-fields="services.billingGroupFields"
+                        config-flags="services.flagConfig">
+      </referral-summary>
+    </div>
+
+    <altum-notebook ng-if="services.referralNotes"
+                    notes="services.referralNotes.notes"
+                    collection="{'referral': services.referral.id}"
+                    email-info="services.emailInfo">
+    </altum-notebook>
+
+    <template-config ng-if="services.flagConfig.fields"
+                     available-fields="services.billingFieldOptions"
+                     visible-fields="billing.visitFields">
+    </template-config>
+
+    <service-group services="services.services"
+                   search="services.search"
+                   bound-group-types="billing.boundGroupTypes"
+                   visit-fields="billing.visitFields"
+                   summary-fields="services.summaryFields"
+                   on-update="services.init">
+    </service-group>
+  </div>
+</div>

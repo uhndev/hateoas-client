@@ -8,23 +8,23 @@ describe('Controller: CreateController Tests', function() {
     'form_submitText': 'Get To',
     'form_cancelText': 'Da Choppa',
     'form_questions': [
-			{
-  'field_id': 1,
-  'field_name': 'my_form_textfield_1',
-  'field_title': 'New textfield field 1',
-  'field_type': 'textfield',
-  'field_value': '',
-  'field_placeholder': 'Enter a textfield value',
-  'field_validation': {
-    'rule': 'none',
-    'expression': ''
-  },
-  'field_helpertext': 'missing input or invalid',
-  'field_hasOptions': false,
-  'field_required': true,
-  'field_buffer': []
-			}
-		]
+    {
+      'field_id': 1,
+      'field_name': 'my_form_textfield_1',
+      'field_title': 'New textfield field 1',
+      'field_type': 'textfield',
+      'field_value': '',
+      'field_placeholder': 'Enter a textfield value',
+      'field_validation': {
+        'rule': 'none',
+        'expression': ''
+      },
+      'field_helpertext': 'missing input or invalid',
+      'field_hasOptions': false,
+      'field_required': true,
+      'field_buffer': []
+    }
+  ]
   };
 
   beforeEach(module('dados.common.directives.formBuilder'));

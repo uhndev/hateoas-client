@@ -1,5 +1,6 @@
 (function () {
   angular.module('dados.common.directives', [
+    'dados.common.directives.modelEditors',
     'dados.common.directives.contextTranslator',
     'dados.common.directives.dadosError',
     'dados.common.directives.siteMap',
@@ -20,8 +21,11 @@
     'dados.common.directives.simpleTable',
     'dados.common.directives.subjectForms',
     'dados.common.directives.surveyBuilder',
+    'dados.common.directives.templateConfig',
     'dados.common.directives.validationCheck',
+    'dados.common.directives.variationsEditor',
+    'dados.common.directives.variationsPicker',
     'altum.common.directives.notebook',
-    'dados.common.directives.userEditor'
+    'altum.common.directives.labelPrint'
   ]);
 })();
