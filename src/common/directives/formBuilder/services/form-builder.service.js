@@ -35,6 +35,11 @@
           hasOptions: true
         },
         {
+          name : 'time',
+          value : 'Time',
+          value_type: ''
+        },
+        {
           name : 'date',
           value : 'Date',
           value_type: ''
