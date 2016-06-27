@@ -73,8 +73,9 @@
 
           <table class="table table-condensed summary-table">
             <tr class="summary-header-row">
-              <th ng-repeat="(category, statuses) in serviceGroup.statuses" translate>
-                Set {{category}} Statuses:
+              <th ng-repeat="(category, statuses) in serviceGroup.statuses"
+                  translate context-translator="{{serviceGroup.statusTitles[category]}}">
+                {{serviceGroup.statusTitles[category]}}
               </th>
             </tr>
             <tr class="summary-table-row">
