@@ -19,6 +19,9 @@
       'altum.referral.serviceStatus.controller',
       'altum.referral.serviceStatus.confirmation.controller'
     ])
+    .constant('STATUS_CATEGORIES', [
+      'approval', 'completion', 'billing', 'report'
+    ])
     .component('serviceGroup', {
       bindings: {
         services: '=',
@@ -34,9 +37,9 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES'];
+  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
     var vm = this;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
@@ -44,7 +47,8 @@
 
     // bindable variables
     vm.templates = {};
-    _.each(['approval', 'completion', 'billing'], function (statusType) {
+    vm.statusTitles = {};
+    _.each(STATUS_CATEGORIES, function (statusType) {
       var StatusType = $resource(API.url(STATUS_TYPES[statusType].model), {}, {
         'query': {method: 'GET', isArray: false}
       });
@@ -63,13 +67,16 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var filteredStatuses = _.filter(['approval', 'completion', 'billing'], function(field) {
+      var filteredStatuses = _.filter(STATUS_CATEGORIES, function(field) {
         return _.contains(_.map(vm.visitFields, 'name'), field);
       });
 
       if (filteredStatuses.length) {
         AltumAPI.Status.query({where: {category: filteredStatuses}}, function (statuses) {
           vm.statuses = _.groupBy(statuses, 'category');
+        });
+        _.each(filteredStatuses, function(category) {
+          vm.statusTitles[category] = 'APP.REFERRAL.DIRECTIVES.SERVICE_GROUP.LABELS.SET_' + category.toUpperCase() + '_STATUSES';
         });
       }
 

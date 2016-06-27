@@ -3,6 +3,6 @@
         ng-change="serviceStatus.updateApprovalStatus()"
         uib-popover-template="serviceStatus.approvalPopover.templateUrl"
         popover-trigger="mouseenter"
-        popover-title="{{::serviceStatus.approvalPopover.title}}"
+        popover-title="{{::serviceStatus.approvalPopover.title | translate}}"
         popover-placement="{{::serviceStatus.placement}}">
 </select>

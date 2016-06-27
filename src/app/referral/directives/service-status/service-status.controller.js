@@ -15,6 +15,7 @@
         'currentStatus': 'currentStatus',
         'statusName': 'statusName',
         'populate': ['currentApproval', 'approvals'],
+        'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.APPROVAL_HISTORY',
         'detailColumns': [
           {
             'name': 'COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID',
@@ -30,6 +31,7 @@
         'currentStatus': 'currentCompletionStatus',
         'statusName': 'completionStatusName',
         'populate': ['currentCompletion', 'completion'],
+        'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.COMPLETION_HISTORY',
         'detailColumns': [
           {
             'name': 'COMMON.MODELS.COMPLETION.CANCELLATION_DATE',
@@ -50,6 +52,7 @@
         'currentStatus': 'currentBillingStatusStatus',
         'statusName': 'billingStatusName',
         'populate': ['currentBillingStatus', 'billingStatuses'],
+        'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.BILLING_HISTORY',
         'detailColumns': [
           {
             'name': 'COMMON.MODELS.BILLING_STATUS.PAID_DATE',
@@ -75,6 +78,7 @@
         'currentStatus': 'currentReportStatusStatus',
         'statusName': 'reportStatusName',
         'populate': ['currentReportStatus', 'reportStatuses'],
+        'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.REPORT_HISTORY',
         'detailColumns': []
       }
     })
@@ -104,7 +108,7 @@
     });
     vm.approvalPopover = {
       templateUrl: 'referral/directives/service-status/service-status-detail.tpl.html',
-      title: _.startCase(statusType) + ' History'
+      title: vm.defaults.historyTitle
     };
 
     // bindable methods
