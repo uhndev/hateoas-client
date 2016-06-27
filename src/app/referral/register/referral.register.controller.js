@@ -13,6 +13,7 @@
 
     // bindable variables
     vm.referral = resolvedReferral;
+    console.log(vm.referral);
     vm.translatableTitles = {
       referralTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
       dateTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATES',
