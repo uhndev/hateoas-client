@@ -49,19 +49,20 @@
      * @returns {*}
      */
     function addNote(type) {
-      if (!_.isEmpty(vm.filterNormal)) {
-        toastr.warning('Clear the search field first');
-      } else {
-        if (_.all(vm.notes, function (note) {
-            return _.has(note, 'id');
-          })) {
-          vm.notes.push({
-            $edit: true,
-            text: null,
-            // noteType: type.id
-            noteType: type
-          });
-        }
+      //Clear the search field
+      if (!_.isEmpty(vm.filterNormal) || !_.isEmpty(vm.filterQuery)) {
+        vm.filterNormal = '';
+        vm.filterQuery = '';
+      }
+      if (_.all(vm.notes, function (note) {
+          return _.has(note, 'id');
+        })) {
+        vm.notes.push({
+          $edit: true,
+          text: null,
+          // noteType: type.id
+          noteType: type
+        });
       }
     }
 
