@@ -12,8 +12,15 @@
 
     // bindable variables
     vm.page = 1;
+    vm.applyAll = false;
     vm.newStatus = newStatus;
     vm.statusTemplateForm = statusTemplateForm;
+
+    // bindable methods
+    vm.isFieldRequired = isFieldRequired;
+    vm.saveAnswers = saveAnswers;
+    vm.cancel = cancel;
+    vm.applyAll = applyAll;
 
     init();
 
@@ -36,15 +43,15 @@
      * @param field
      * @returns {Boolean}
      */
-    vm.isFieldRequired = function (field) {
+    function isFieldRequired(field) {
       return _.contains(vm.newStatus.rules.requires[statusType], field);
-    };
+    }
 
     /**
-     * confirm
+     * saveAnswers
      * @description Returns the approval object upon confirmation
      */
-    vm.confirm = function () {
+    function saveAnswers() {
       var parseTemplateForm = function (statusForm) {
         var statusData = {
           status: newStatus.id
@@ -66,15 +73,31 @@
       }) : parseTemplateForm(vm.statusTemplateForm);
 
       $uibModalInstance.close(answersToSave);
-    };
+    }
 
     /**
      * cancel
      * @description cancels and closes the modal window
      */
-    vm.cancel = function () {
+    function cancel() {
       $uibModalInstance.dismiss();
-    };
+    }
+
+    /**
+     * applyAll
+     * @description On click will attempt to apply answers on current form to all forms.
+     */
+    function applyAll() {
+      if (statusTemplateForm.length > 1) {
+        // create object of filled out answers for current form on page
+        var currentAnswers = TemplateService.formToObject(vm[statusTemplateForm[vm.page - 1].form_name + (vm.page - 1)]);
+
+        // apply answers to all forms on subsequent pages
+        _.each(statusTemplateForm, function (templateForm, index) {
+          TemplateService.loadAnswerSet(currentAnswers, {}, {items: vm[templateForm.form_name + index]});
+        });
+      }
+    }
   }
 
 })();
