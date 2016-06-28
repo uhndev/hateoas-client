@@ -29,7 +29,6 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
-
         var clientData = _.pick(vm.referral.clientcontact, 'MRN','gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
           'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');

@@ -5,18 +5,24 @@
 
   <br/>
 
-  <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION</h3>
-  <simple-table rows="ref.referralInfo.rowsClient"
-                table-data="ref.referralInfo.tableDataClient">
-  </simple-table>
+  <div class="row">
+    <div class="col-lg-6">
+      <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION</h3>
+      <simple-table rows="ref.referralInfo.rowsClient"
+                    table-data="ref.referralInfo.tableDataClient">
+      </simple-table>
+    </div>
 
-  <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION</h3>
-  <simple-table rows="ref.referralInfo.rowsReferral"
-                table-data="ref.referralInfo.tableDataReferral">
-  </simple-table>
+    <div class="col-lg-6">
+        <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION</h3>
+        <simple-table rows="ref.referralInfo.rowsReferral"
+                    table-data="ref.referralInfo.tableDataReferral">
+        </simple-table>
+    </div>
 
   <altum-notebook ng-if="ref.referral"
                   collection="{'referral': ref.referral.id}"
                   email-info="ref.emailInfo">
   </altum-notebook>
+</div>
 </div>
