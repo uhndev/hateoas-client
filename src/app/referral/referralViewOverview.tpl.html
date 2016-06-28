@@ -5,8 +5,14 @@
 
   <br/>
 
-  <simple-table rows="ref.referralInfo.rows"
-                table-data="ref.referralInfo.tableData">
+  <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.CLIENT_INFORMATION</h3>
+  <simple-table rows="ref.referralInfo.rowsClient"
+                table-data="ref.referralInfo.tableDataClient">
+  </simple-table>
+
+  <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION</h3>
+  <simple-table rows="ref.referralInfo.rowsReferral"
+                table-data="ref.referralInfo.tableDataReferral">
   </simple-table>
 
   <altum-notebook ng-if="ref.referral"
