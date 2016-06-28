@@ -12,7 +12,6 @@
 
     // bindable variables
     vm.page = 1;
-    vm.applyAll = false;
     vm.newStatus = newStatus;
     vm.statusTemplateForm = statusTemplateForm;
 
