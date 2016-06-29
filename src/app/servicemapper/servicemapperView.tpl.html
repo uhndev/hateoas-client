@@ -33,7 +33,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">
                 <b>{{serviceMap[tab.url].selected.displayName}}</b> &Rightarrow;
-                 Mapped <span translate>{{serviceMap.tabs[tab.url === 'altumservice' ? 0 : 1].heading}}</span>
+                 Mapped <span translate>{{serviceMap.mappings[tab.url].heading}}</span>(s)
               </h3>
             </div>
             <div class="panel-body">
@@ -80,7 +80,7 @@
                 <div class="col-md-4">
                   <button type="button" class="btn btn-primary pull-right"
                           ng-click="serviceMap.openAddService()">
-                    <i class="fa fa-plus-circle"></i> <span translate>{{serviceMap.tabs[tab.url === 'altumservice' ? 0 : 1].heading}}</span>
+                    <i class="fa fa-plus-circle"></i> <span translate>{{serviceMap.mappings[tab.url].heading}}</span>
                   </button>
                   <div class="clearfix"></div>
                 </div>

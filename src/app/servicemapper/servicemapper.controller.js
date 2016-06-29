@@ -47,6 +47,20 @@
     // bindable variables
     vm.current = 'programservice';
     vm.currentIndex = 0;
+    vm.mappings = {
+      'programservice': {
+        heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICE',
+        association: 'altumservice',
+        collection: 'AHServices',
+        populate: ['sites', 'staffTypes']
+      },
+      'altumservice': {
+        heading: 'APP.SERVICEMAPPER.TABS.PROGRAM_SERVICE',
+        association: 'programservice',
+        collection: 'programServices'
+      }
+    };
+
     _.each(['altumservice', 'programservice'], function (tab, idx) {
       vm[tab] = {
         index: idx,
@@ -112,12 +126,20 @@
       var modalInstance = $uibModal.open(_.merge({
         resolve: {
           serviceForm: function ($resource) {
-            var formType = vm.current === 'altumservice' ? 'programservice' : 'altumservice';
-            var SystemForm = $resource(vm[formType].resource.template.href);
-            return SystemForm.get().$promise.then(function (data) {
-              var form = data;
-              TemplateService.loadAnswerSet(service, data.template, form);
-              return form.items;
+            var query = {id: service.id};
+            var Resource = (vm.current === 'altumservice') ? ProgramService : AltumService;
+            if (vm.mappings[vm.current].populate) {
+              query.populate = vm.mappings[vm.current].populate;
+            }
+
+            return Resource.get(query).$promise.then(function (serviceData) {
+              var formType = vm.mappings[vm.current].association;
+              var SystemForm = $resource(vm[formType].resource.template.href);
+              return SystemForm.get().$promise.then(function (data) {
+                var form = data;
+                TemplateService.loadAnswerSet(serviceData, vm[formType].resource.template, form);
+                return form.items;
+              });
             });
           }
         }
@@ -139,7 +161,7 @@
     function removeService(service) {
       if (confirm('Are you sure you want to remove this mapping: ' + service.displayName + ' from ' + vm[vm.current].selected.displayName + '?')) {
         var savedSelected = vm[vm.current].selected.id;
-        var collection = (vm.current === 'altumservice') ? 'programServices' : 'AHServices';
+        var collection = vm.mappings[vm.current].collection;
         var Service = $resource([API.url(), vm.current, vm[vm.current].selected.id, collection, service.id].join('/'));
         Service.remove(function (data) {
           toastr.success('Removed service mapping for ' + vm[vm.current].selected.displayName, 'Service Mapper');
@@ -153,7 +175,7 @@
      * @description Creates a mapping between existing altum/program services
      */
     function addExistingService() {
-      var collection = (vm.current === 'altumservice') ? 'programServices' : 'AHServices';
+      var collection = vm.mappings[vm.current].collection;
       if (!_.map(vm[vm.current].selected[collection], 'id').includes(vm.selectedService.id)) {
         var savedSelected = vm[vm.current].selected.id;
         var Service = $resource([API.url(), vm.current, vm[vm.current].selected.id, collection, vm.selectedService.id].join('/'));
@@ -176,7 +198,7 @@
       var modalInstance = $uibModal.open(_.merge({
         resolve: {
           serviceForm: function ($resource) {
-            var formType = vm.current === 'altumservice' ? 'programservice' : 'altumservice';
+            var formType = vm.mappings[vm.current].association;
             var SystemForm = $resource(vm[formType].resource.template.href);
             return SystemForm.get().$promise.then(function (data) {
               return data.items;
@@ -187,7 +209,7 @@
 
       modalInstance.result.then(function (result) {
         var savedSelected = vm[vm.current].selected.id;
-        var collection = (vm.current === 'altumservice') ? 'programServices' : 'AHServices';
+        var collection = vm.mappings[vm.current].collection;
         var Service = $resource([API.url(), vm.current, vm[vm.current].selected.id, collection].join('/'));
         Service.save(result, function (data) {
           toastr.success('Added service mapping for ' + vm[vm.current].selected.displayName, 'Service Mapper');
