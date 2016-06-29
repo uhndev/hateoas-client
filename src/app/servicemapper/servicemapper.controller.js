@@ -73,6 +73,7 @@
     // each tab includes a fetchDetailInfo function to be called when selecting a row from a table.
     vm.tabs = [
       {
+        disabled: false,
         heading: 'APP.SERVICEMAPPER.TABS.PROGRAM_SERVICES',
         url: 'programservice',
         services: 'AHServices',
@@ -84,18 +85,19 @@
           }
           return data;
         }
+      },
+      {
+        disabled: true,
+        heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICES',
+        url: 'altumservice',
+        services: 'programServices',
+        onResourceLoaded: function (data) {
+          if (data) {
+            data.template.data = _.filter(data.template.data, {name: 'name'});
+          }
+          return data;
+        }
       }
-      // {
-      //   heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICES',
-      //   url: 'altumservice',
-      //   services: 'programServices',
-      //   onResourceLoaded: function (data) {
-      //     if (data) {
-      //       data.template.data = _.filter(data.template.data, {name: 'name'});
-      //     }
-      //     return data;
-      //   }
-      // }
     ];
 
     // bindable methods

@@ -13,7 +13,8 @@
   </div>
 
   <uib-tabset active="serviceMap.currentIndex">
-    <uib-tab ng-repeat="tab in serviceMap.tabs track by $index" ng-click="serviceMap.selectTab(tab)" index="$index">
+    <uib-tab ng-repeat="tab in serviceMap.tabs track by $index" ng-click="serviceMap.selectTab(tab)"
+             index="$index" disable="tab.disabled" ng-hide="tab.disabled">
       <uib-tab-heading translate>
         {{tab.heading}}
       </uib-tab-heading>
