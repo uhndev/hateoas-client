@@ -14,7 +14,7 @@
       'dados.access.service'
     ])
     .constant({
-      'ADMIN_PAGES': ['/systemformbuilder', '/formbuilder', '/access', '/translation', '/workflow']
+      'ADMIN_PAGES': ['/systemformbuilder', '/formbuilder', '/access', '/translation', '/workflow', '/servicemapper']
     })
     .service('AuthService', AuthService);
 

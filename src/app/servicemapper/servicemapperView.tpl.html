@@ -1,0 +1,94 @@
+<div class="container-fluid" ng-controller="ServiceMapperController as serviceMap">
+  <h2 id="Title" translate>
+    APP.HEADER.MENU.SERVICE_MAPPER
+  </h2>
+  <div id="Query" class="clearfix">
+    <query-builder
+      template="serviceMap[serviceMap.current].resource.template"
+      queries="serviceMap[serviceMap.current].resource.queries"
+      headers="serviceMap[serviceMap.current].headers"
+      ng-model="serviceMap[serviceMap.current].query.where"
+      ng-if="serviceMap[serviceMap.current].resource.template">
+    </query-builder>
+  </div>
+
+  <uib-tabset active="serviceMap.currentIndex">
+    <uib-tab ng-repeat="tab in serviceMap.tabs track by $index" ng-click="serviceMap.selectTab(tab)" index="$index">
+      <uib-tab-heading translate>
+        {{tab.heading}}
+      </uib-tab-heading>
+      <div class="row">
+        <div class="col-md-5">
+          <hateoas-table
+            url="{{tab.url}}"
+            query="serviceMap[tab.url].query"
+            selected="serviceMap[tab.url].selected"
+            allow="serviceMap[tab.url].allow"
+            resource="serviceMap[tab.url].resource"
+            on-resource-loaded="tab.onResourceLoaded">
+          </hateoas-table>
+        </div>
+        <div class="col-md-7">
+          <div class="panel panel-info" ng-if="serviceMap[tab.url].selected">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <b>{{serviceMap[tab.url].selected.displayName}}</b> &Rightarrow;
+                 Mapped <span translate>{{serviceMap.mappings[tab.url].heading}}</span>(s)
+              </h3>
+            </div>
+            <div class="panel-body">
+              <ul class="list-unstyled">
+                <li ng-repeat="service in serviceMap[tab.url].selected[tab.services]">
+                  <div class="panel panel-default permissions-detail-panel">
+                    <div class="panel-heading">
+                      <b>{{service.displayName}}</b>
+                      <span class="pull-right">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="serviceMap.editService(service)">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="serviceMap.removeService(service)">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </span>
+                      <div class="clearfix"></div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="panel-footer">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <select-loader
+                      url="{{tab.url === 'altumservice' ? 'programservice' : 'altumservice'}}"
+                      is-atomic="true"
+                      is-disabled="false"
+                      bind-object="true"
+                      query="serviceMap.filterQuery"
+                      ng-model="serviceMap.selectedService"
+                      labels="displayName">
+                    </select-loader>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-primary"
+                              ng-click="serviceMap.addExistingService()" ng-disabled="!serviceMap.selectedService">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <button type="button" class="btn btn-primary pull-right"
+                          ng-click="serviceMap.openAddService()">
+                    <i class="fa fa-plus-circle"></i> <span translate>{{serviceMap.mappings[tab.url].heading}}</span>
+                  </button>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uib-tab>
+  </uib-tabset>
+</div>
