@@ -84,18 +84,18 @@
           }
           return data;
         }
-      },
-      {
-        heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICES',
-        url: 'altumservice',
-        services: 'programServices',
-        onResourceLoaded: function (data) {
-          if (data) {
-            data.template.data = _.filter(data.template.data, {name: 'name'});
-          }
-          return data;
-        }
       }
+      // {
+      //   heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICES',
+      //   url: 'altumservice',
+      //   services: 'programServices',
+      //   onResourceLoaded: function (data) {
+      //     if (data) {
+      //       data.template.data = _.filter(data.template.data, {name: 'name'});
+      //     }
+      //     return data;
+      //   }
+      // }
     ];
 
     // bindable methods
