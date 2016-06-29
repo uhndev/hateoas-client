@@ -159,7 +159,7 @@
         var modalInstance = $uibModal.open({
           animation: true,
           template: '<form-directive form="confirmationModal.statusTemplateForm" ' +
-          'on-submit="confirmationModal.confirm()" ' +
+          'on-submit="confirmationModal.saveAnswers()" ' +
           'on-cancel="confirmationModal.cancel()">' +
           '</form-directive>',
           controller: 'ApprovalConfirmationModal',
