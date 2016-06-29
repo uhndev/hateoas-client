@@ -8,17 +8,10 @@
     </label>&nbsp;
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value"></span>
 
-    <p class="input-group">
-      <uib-timepicker ng-model="field.field_value"
-                      ng-required="field.field_required"
-                      minute-step="15"
-                      show-spinners="false">
-      </uib-timepicker>
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="opened = true"><i
-          class="glyphicon glyphicon-calendar"></i></button>
-      </span>
-    </p>
+    <uib-timepicker ng-model="field.field_value"
+                    ng-required="field.field_required"
+                    show-spinners="false">
+    </uib-timepicker>
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
