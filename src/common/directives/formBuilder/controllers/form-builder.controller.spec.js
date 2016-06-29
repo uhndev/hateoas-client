@@ -61,7 +61,7 @@ describe('Controller: CreateController Tests', function() {
         ctrl.addField.new = type;
         ctrl.addNewField();
       });
-      expect(ctrl.form.form_questions.length).toEqual(14);
+      expect(ctrl.form.form_questions.length).toEqual(15);
 
       _.each(ctrl.form.form_questions, function(question) {
         ctrl.deleteField(1);

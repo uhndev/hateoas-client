@@ -131,6 +131,11 @@
         type: 'datetime'
       },
       {
+        name: 'report',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
+        type: 'status'
+      },
+      {
         name: 'approval',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.APPROVALS',
         type: 'status'
@@ -186,12 +191,10 @@
         vm.templateFieldOptions = vm.templateFieldOptions || _.filter(data.template.data, function (field) {
           return _.contains(templateFilterFields, field.name);
         });
-
         // setup array of fields to choose from for referral billing (creates a clone of repeating elements for billing)
         vm.billingFieldOptions = _.cloneDeep(vm.billingFieldOptions || _.reject(vm.templateFieldOptions, function (field) {
           return _.contains(['billingCount'], field.name);
         }));
-
         // changes the prompt values for templateFields and billing fields so that the path is correct
         vm.templateFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.SERVICES.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
         vm.billingFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.BILLING.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
