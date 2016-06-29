@@ -42,6 +42,6 @@
 <!-- Render only one form if not bulk editing -->
 <form-directive ng-if="!confirmationModal.statusTemplateForm.length"
                 form="confirmationModal.statusTemplateForm"
-                on-submit="confirmationModal.confirm()"
+                on-submit="confirmationModal.saveAnswers()"
                 on-cancel="confirmationModal.cancel()">
 </form-directive>
