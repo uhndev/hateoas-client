@@ -40,11 +40,11 @@
         programService: true,
         site: true,
         variations: true,
-        payorPrice: true,
-        serviceDate: true
+        payorPrice: true
       },
       required: {
-        visitService: true
+        visitService: true,
+        serviceDate: true
       }
     };
 
