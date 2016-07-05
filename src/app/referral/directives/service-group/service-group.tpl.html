@@ -67,7 +67,8 @@
                 </button>
                 <span ng-switch-when="datetime">{{service[field.name] | date:'fullDate'}}</span>
                 <span ng-switch-when="price">
-                  <input type="text"
+                  <input type="number"
+                         class="form-control"
                          ng-model="service[field.name]"
                          ng-model-options="{debounce: 500, updateOn: 'blur'}"
                          ng-change="serviceGroup.savePrice(service[field.name], service)"/>
