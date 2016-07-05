@@ -131,6 +131,11 @@
         type: 'datetime'
       },
       {
+        name: 'report',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
+        type: 'status'
+      },
+      {
         name: 'approval',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.APPROVALS',
         type: 'status'

@@ -193,11 +193,8 @@
      * @param service
      */
     function savePrice(price, service) {
-      var ServiceApproval = $resource(API.url() + '/service/' + service.id);
-      var newService = new ServiceApproval({
-        payorPrice: parseInt(price)
-      });
-      newService.$save(function(result) {
+      var Service = new AltumAPI.Service({payorPrice: parseFloat(price)});
+      Service.$update({id: service.id}, function(result) {
         toastr.success('Service price updated to ' + price);
         vm.onUpdate();
       });

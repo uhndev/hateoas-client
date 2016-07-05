@@ -69,7 +69,7 @@
                 <span ng-switch-when="price">
                   <input type="text"
                          ng-model="service[field.name]"
-                         ng-model-options="{debounce: 500}"
+                         ng-model-options="{debounce: 500, updateOn: 'blur'}"
                          ng-change="serviceGroup.savePrice(service[field.name], service)"/>
                 </span>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>
