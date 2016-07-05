@@ -124,7 +124,6 @@
     var SystemForm = $resource(API.url() + '/systemform');
     var ServiceStatus = $resource(API.url() + '/service');
     var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
-
     init();
 
     ///////////////////////////////////////////////////////////////////////////

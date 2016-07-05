@@ -61,7 +61,7 @@
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
-
+    vm.savePrice = savePrice;
     init();
 
     ///////////////////////////////////////////////////////////////////////////
@@ -182,6 +182,20 @@
       bulkStatusChange.$save(function (updatedStatuses) {
         toastr.success(services.length + ' service(s) updated to: ' + vm.statusSelections[category].name, 'Services');
         vm.statusSelections[category] = null;
+        vm.onUpdate();
+      });
+    }
+
+    /**
+     * savePrice
+     * @description saves the payor price of the service on change by updatedService
+     * @param price
+     * @param service
+     */
+    function savePrice(price, service) {
+      var Service = new AltumAPI.Service({payorPrice: parseFloat(price)});
+      Service.$update({id: service.id}, function(result) {
+        toastr.success('Service price updated to ' + price);
         vm.onUpdate();
       });
     }
