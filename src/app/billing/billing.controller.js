@@ -103,7 +103,8 @@
       },
       {
         name: 'payorPrice',
-        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE'
+        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE',
+        type: 'price'
       },
       {
         name: 'altumServiceName',
