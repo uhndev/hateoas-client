@@ -66,6 +66,12 @@
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
                 <span ng-switch-when="datetime">{{service[field.name] | date:'fullDate'}}</span>
+                <span ng-switch-when="price">
+                  <input type="text"
+                         ng-model="service[field.name]"
+                         ng-model-options="{debounce: 500}"
+                         ng-change="serviceGroup.savePrice(service[field.name], service)"/>
+                </span>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>
               </td>
             </tr>

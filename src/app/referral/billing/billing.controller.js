@@ -45,7 +45,7 @@
       {
         name: 'payorPrice',
         prompt: 'APP.REFERRAL.BILLING.LABELS.PAYOR_PRICE',
-        type: 'string'
+        type: 'price'
       },
       {
         name: 'billingCount',
