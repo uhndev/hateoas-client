@@ -13,6 +13,7 @@
 
     // bindable variables
     vm.referral = resolvedReferral;
+    console.log(vm.referral);
     vm.translatableTitles = {
       referralTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
       dateTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATES',
@@ -29,7 +30,8 @@
       receiveDate: 'APP.REFERRAL.REGISTRATION.LABELS.RECEIVE_DATE',
       sentDate: 'APP.REFERRAL.REGISTRATION.LABELS.SENT_DATE',
       dischargeDate: 'APP.REFERRAL.REGISTRATION.LABELS.DISCHARGE_DATE',
-      recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE'
+      recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE',
+      referralComments: 'APP.REFERRAL.REGISTRATION.LABELS.COMMENTS'
     };
 
     // bindable methods
@@ -62,9 +64,10 @@
     function referralAdd(isValid) {
       if (isValid) {
         var newReferral = new AltumAPIService.Referral();
+        console.log(newReferral);
         _.extend(newReferral, vm.referral);
         newReferral.$save().then(function (resp) {
-            toastr.success('Created new referral for client: ' + resp.items.displayName + '!', 'Referral');
+            toastr.success('Created new referral for client: ' + resp.displayName + '!', 'Referral');
             $location.path('/referral');
             $state.go('hateoas');
           },

@@ -129,6 +129,19 @@
                     labels="displayName">
                   </select-loader>
                 </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3" for="ContactComments"
+                         context-translator="{{RC.translatableTitles.referralComments}}" translate>
+                    {{RC.translatableTitles.referralComments}}
+                  </label>
+                  <div class="col-md-9">
+                    <textarea class="form-control" ng-model="RC.referral.referralComments"
+                              id="referralComments" rows="5" style="resize: none">
+                    </textarea>
+                  </div>
+                </div>
+
               </div>
             </div>
           </fieldset>
@@ -295,6 +308,7 @@
                          translate>{{RC.translatableTitles.recMade}}</label>
                   <input class="col-md-1" type="checkbox" ng-model="RC.referral.recommendationsMade"/>
                 </div>
+
               </div>
             </div>
           </fieldset>
