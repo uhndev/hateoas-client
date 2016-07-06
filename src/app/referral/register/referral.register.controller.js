@@ -63,7 +63,6 @@
     function referralAdd(isValid) {
       if (isValid) {
         var newReferral = new AltumAPIService.Referral();
-        console.log(newReferral);
         _.extend(newReferral, vm.referral);
         newReferral.$save().then(function (resp) {
             toastr.success('Created new referral for client: ' + resp.displayName + '!', 'Referral');
