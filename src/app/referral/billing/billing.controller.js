@@ -135,7 +135,8 @@
               site: true,
               visitService: true,
               variations: true,
-              payorPrice: true
+              payorPrice: true,
+              serviceDate: true
             },
             required: {}
           };

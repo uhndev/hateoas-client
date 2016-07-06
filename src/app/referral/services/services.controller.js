@@ -23,7 +23,7 @@
 
     var templateFilterFields = [
       'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
-      'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount', 'completionDate',
       'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
     ];
@@ -95,6 +95,10 @@
       {
         name: 'serviceGroupByDate',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.SERVICE_DATE'
+      },
+      {
+        name: 'completionGroupByDate',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.COMPLETION_DATE'
       }
     ];
 
@@ -201,7 +205,10 @@
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
-          service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
+          _.each(['service', 'completion'], function (type) {
+            service[type + 'GroupByDate'] = service[type + 'Date'] ? moment(service[type + 'Date']).startOf('day').format('dddd, MMMM Do YYYY') : 'null';
+            service[type + 'Date'] = service[type + 'Date'] ? moment(service[type + 'Date']).format('MMM D, YYYY h:mm a') : '-';
+          });
           return service;
         });
 
@@ -275,7 +282,8 @@
               altumService: true,
               programService: true,
               variations: true,
-              payorPrice: true
+              payorPrice: true,
+              serviceDate: true
             },
             required: {}
           };

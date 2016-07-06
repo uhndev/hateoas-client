@@ -55,7 +55,7 @@
             });
 
             // data massage as needed
-            var massagedData = vm.onResourceLoaded(angular.copy(data));
+            var massagedData = vm.onResourceLoaded(angular.copy(data), headers);
 
             vm.template = massagedData.template;
             vm.resource = angular.copy(massagedData);

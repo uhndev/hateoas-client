@@ -12,6 +12,7 @@
   function ServiceMapperController(AltumService, ProgramService, TemplateService, $resource, toastr, API, $uibModal) {
     var vm = this;
 
+    var enableLimit = 1; // starting count before enabling AltumService view
     var modalSettings = {
       animation: true,
       template: '<form-directive form="modalForm.serviceForm" ' +
@@ -47,6 +48,10 @@
     // bindable variables
     vm.current = 'programservice';
     vm.currentIndex = 0;
+    vm.permissions = {
+      altumservice: '',
+      programservice: ''
+    };
     vm.mappings = {
       'programservice': {
         heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICE',
@@ -77,8 +82,9 @@
         heading: 'APP.SERVICEMAPPER.TABS.PROGRAM_SERVICES',
         url: 'programservice',
         services: 'AHServices',
-        onResourceLoaded: function (data) {
+        onResourceLoaded: function (data, headers) {
           if (data) {
+            vm.permissions.programservice = headers('allow');
             data.template.data = _.filter(data.template.data, function (field) {
               return ['displayName', 'program', 'payor'].includes(field.name);
             });
@@ -91,8 +97,9 @@
         heading: 'APP.SERVICEMAPPER.TABS.ALTUM_SERVICES',
         url: 'altumservice',
         services: 'programServices',
-        onResourceLoaded: function (data) {
+        onResourceLoaded: function (data, headers) {
           if (data) {
+            vm.permissions.altumservice = headers('allow');
             data.template.data = _.filter(data.template.data, {name: 'name'});
           }
           return data;
@@ -106,6 +113,7 @@
     vm.removeService = removeService;
     vm.addExistingService = addExistingService;
     vm.openAddService = openAddService;
+    vm.enableAltumServiceView = enableAltumServiceView;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -218,6 +226,17 @@
           angular.copy(data.items[collection], _.find(vm[vm.current].resource.items, {id: savedSelected})[collection]);
         });
       });
+    }
+
+    /**
+     * enableAltumServiceView
+     * @description To enable altumservice view, click Title, hit the ~ key 5 times
+     * @param event
+     */
+    function enableAltumServiceView(event) {
+      if (event.keyCode === 126 && enableLimit++ >= 5 && vm.tabs[1].disabled) {
+        vm.tabs[1].disabled = false;
+      }
     }
   }
 
