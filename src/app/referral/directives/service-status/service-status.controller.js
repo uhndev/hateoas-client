@@ -247,7 +247,7 @@
             data = approval[detailColumn.value];
             break;
           case 'date':
-            data = moment(approval[detailColumn.value]).format('MMM d, YYYY h:mm a');
+            data = moment(approval[detailColumn.value]).utc().format('MMM D, YYYY');
             break;
           default: break;
         }

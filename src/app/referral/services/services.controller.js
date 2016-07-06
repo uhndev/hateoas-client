@@ -205,10 +205,10 @@
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
-          _.each(['service', 'completion'], function (type) {
-            service[type + 'GroupByDate'] = service[type + 'Date'] ? moment(service[type + 'Date']).startOf('day').format('dddd, MMMM Do YYYY') : 'null';
-            service[type + 'Date'] = service[type + 'Date'] ? moment(service[type + 'Date']).format('MMM D, YYYY h:mm a') : '-';
-          });
+          service.serviceGroupByDate = service.serviceDate ? moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY') : 'null';
+          service.serviceDate = service.serviceDate ? moment(service.serviceDate).format('MMM D, YYYY h:mm a') : '-';
+          service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
+          service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
           return service;
         });
 
