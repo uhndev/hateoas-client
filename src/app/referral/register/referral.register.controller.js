@@ -29,7 +29,8 @@
       receiveDate: 'APP.REFERRAL.REGISTRATION.LABELS.RECEIVE_DATE',
       sentDate: 'APP.REFERRAL.REGISTRATION.LABELS.SENT_DATE',
       dischargeDate: 'APP.REFERRAL.REGISTRATION.LABELS.DISCHARGE_DATE',
-      recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE'
+      recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE',
+      referralComments: 'APP.REFERRAL.REGISTRATION.LABELS.COMMENTS'
     };
 
     // bindable methods
@@ -64,7 +65,7 @@
         var newReferral = new AltumAPIService.Referral();
         _.extend(newReferral, vm.referral);
         newReferral.$save().then(function (resp) {
-            toastr.success('Created new referral for client: ' + resp.items.displayName + '!', 'Referral');
+            toastr.success('Created new referral for client: ' + resp.displayName + '!', 'Referral');
             $location.path('/referral');
             $state.go('hateoas');
           },
