@@ -5,7 +5,9 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-address1" type="text" name="address1" class="form-control"
-             ng-model="addr.resource.address.address1" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.address1"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 
@@ -15,7 +17,9 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-address2" type="text" name="address2" class="form-control"
-             ng-model="addr.resource.address.address2" ng-blur="addr.canUpdateGeocode(addressForm.$valid)"/>
+             ng-model="addr.resource.address.address2"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)"/>
     </div>
   </div>
 
@@ -43,7 +47,9 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-province" type="text" name="province" class="form-control"
-             ng-model="addr.resource.address.province" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.province"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 
@@ -53,7 +59,9 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-postalCode" type="text" name="postalCode" class="form-control"
-             ng-model="addr.resource.address.postalCode" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.postalCode"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 
@@ -63,7 +71,9 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-country" type="text" name="country" class="form-control"
-             ng-model="addr.resource.address.country" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.country"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 

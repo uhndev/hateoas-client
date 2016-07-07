@@ -14,8 +14,8 @@
     var vm = this;
 
     vm.client = resolvedClient;
-    vm.prefixes = _.find(resolvedPerson.template.data, {name: 'prefix'}).value;
-    vm.genders = _.find(resolvedPerson.template.data, {name: 'gender'}).value;
+    vm.prefixes = _.find(resolvedPerson.data, {name: 'prefix'}).value;
+    vm.genders = _.find(resolvedPerson.data, {name: 'gender'}).value;
     vm.cancelClientAdd = cancelClientAdd;
     vm.addEmployee = addEmployee;
     vm.removeEmployment = removeEmployment;
