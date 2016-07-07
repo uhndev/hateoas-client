@@ -37,9 +37,11 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'];
+  ServiceGroupController.$inject = [
+    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES', 'TemplateService'
+  ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES, TemplateService) {
     var vm = this;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
@@ -49,12 +51,10 @@
     vm.templates = {};
     vm.statusTitles = {};
     _.each(STATUS_CATEGORIES, function (statusType) {
-      var StatusType = $resource(API.url(STATUS_TYPES[statusType].model), {}, {
-        'query': {method: 'GET', isArray: false}
-      });
-      StatusType.query({where: {id: 0}, limit: 1}, function (data) {
-        vm.templates[statusType] = data.template;
-      });
+      TemplateService.fetchTemplate(STATUS_TYPES[statusType].model)
+        .then(function (template) {
+          vm.templates[statusType] = template;
+        });
     });
 
     // bindable methods
