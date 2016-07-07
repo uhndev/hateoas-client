@@ -195,7 +195,7 @@
     function savePrice(price, service) {
       var Service = new AltumAPI.Service({payorPrice: parseFloat(price)});
       Service.$update({id: service.id}, function(result) {
-        toastr.success('Service price updated to ' + price);
+        toastr.success(service.displayName + ' price updated to ' + price, 'Services');
         vm.onUpdate();
       });
     }
