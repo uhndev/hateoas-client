@@ -12,132 +12,144 @@
           <fieldset>
             <legend>
               <i class="fa fa-user"></i>
-              <span translate context-translator="{{RC.translatableTitles.referralTitle}}">
-                {{RC.translatableTitles.referralTitle}}
+              <span translate context-translator="{{referralRegister.translatableTitles.referralTitle}}">
+                {{referralRegister.translatableTitles.referralTitle}}
               </span>
             </legend>
             <div class="row">
               <div class="col-md-11">
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error' : referralForm.client.$invalid && !referralForm.client.$pristine}">
                   <label class="control-label col-md-3" for="client"
-                         translate context-translator="{{RC.translatableTitles.client}}">
-                    {{RC.translatableTitles.client}}
+                         translate context-translator="{{referralRegister.translatableTitles.client}}">
+                    {{referralRegister.translatableTitles.client}}
                   </label>
                   <select-loader
+                    id="client"
                     name="client"
                     class="col-md-9"
                     url="client"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="RC.referral.client"
+                    ng-model="referralRegister.referral.client"
                     labels="displayName" required>
                   </select-loader>
-                  <span class="pull-right required-error"
-                        ng-show="referralForm.client.$invalid && !referralForm.client.$pristine">
-                    * required
-                  </span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error' : referralForm.claimNumber.$invalid && !referralForm.claimNumber.$pristine}">
                   <label class="control-label col-md-3" for="claimNumber"
-                         translate context-translator="{{RC.translatableTitles.claimNumber}}">
-                    {{RC.translatableTitles.claimNumber}}
+                         translate context-translator="{{referralRegister.translatableTitles.claimNumber}}">
+                    {{referralRegister.translatableTitles.claimNumber}}
                   </label>
                   <div class="col-md-9">
-                    <input type="text" class="form-control" name="claimNumber"
-                           ng-model="RC.referral.claimNumber" placeholder="Claim Number" required/>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.claimNumber.$invalid && !referralForm.claimNumber.$pristine">
-                      * required
-                    </span>
+                    <input id="claimNumber" type="text" class="form-control" name="claimNumber"
+                           ng-model="referralRegister.referral.claimNumber" placeholder="Claim Number" required/>
+                  </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : referralForm.policyNumber.$invalid && !referralForm.policyNumber.$pristine}">
+                  <label class="control-label col-md-3" for="policyNumber"
+                         translate context-translator="{{referralRegister.translatableTitles.policyNumber}}">
+                    {{referralRegister.translatableTitles.policyNumber}}
+                  </label>
+                  <div class="col-md-9">
+                    <input id="policyNumber" type="text" class="form-control" name="policyNumber"
+                           ng-model="referralRegister.referral.policyNumber" placeholder="Policy Number" />
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3" for="site"
-                         translate context-translator="{{RC.translatableTitles.site}}">
-                    {{RC.translatableTitles.site}}
+                         translate context-translator="{{referralRegister.translatableTitles.site}}">
+                    {{referralRegister.translatableTitles.site}}
                   </label>
                   <select-loader
+                    id="site"
                     name="site"
                     class="col-md-9"
                     url="site"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="RC.referral.site"
+                    ng-model="referralRegister.referral.site"
                     labels="displayName">
                   </select-loader>
                 </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3" for="program"
-                         translate context-translator="{{RC.translatableTitles.program}}">
-                    {{RC.translatableTitles.program}}</label>
+                         translate context-translator="{{referralRegister.translatableTitles.program}}">
+                    {{referralRegister.translatableTitles.program}}</label>
                   <select-loader
+                    id="program"
                     name="program"
                     class="col-md-9"
                     url="program"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="RC.referral.program"
+                    ng-model="referralRegister.referral.program"
                     labels="displayName">
                   </select-loader>
                 </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3" for="physician"
-                         translate context-translator="{{RC.translatableTitles.physician}}">
-                    {{RC.translatableTitles.physician}}
+                         translate context-translator="{{referralRegister.translatableTitles.physician}}">
+                    {{referralRegister.translatableTitles.physician}}
                   </label>
                   <select-loader
+                    id="physician"
+                    name="physician"
                     class="col-md-9"
                     url="physician"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="RC.referral.physician"
+                    ng-model="referralRegister.referral.physician"
                     labels="displayName">
                   </select-loader>
                 </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3" for="staff"
-                         translate context-translator="{{RC.translatableTitles.staff}}">
-                    {{RC.translatableTitles.staff}}
+                         translate context-translator="{{referralRegister.translatableTitles.staff}}">
+                    {{referralRegister.translatableTitles.staff}}
                   </label>
                   <select-loader
+                    id="staff"
+                    name="staff"
                     class="col-md-9"
                     url="staff"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="RC.referral.staff"
+                    ng-model="referralRegister.referral.staff"
                     labels="displayName">
                   </select-loader>
                 </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3" for="payors"
-                         context-translator="{{RC.translatableTitles.payors}}" translate>
-                    {{RC.translatableTitles.payors}}
+                         context-translator="{{referralRegister.translatableTitles.payors}}" translate>
+                    {{referralRegister.translatableTitles.payors}}
                   </label>
                   <select-loader
+                    id="payors"
+                    name="payors"
                     class="col-md-9"
                     url="payor"
                     is-atomic="false"
                     is-disabled="false"
                     bind-object="true"
-                    ng-model="RC.referral.payors"
+                    ng-model="referralRegister.referral.payors"
                     labels="displayName">
                   </select-loader>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" for="ContactComments"
-                         context-translator="{{RC.translatableTitles.referralComments}}" translate>
-                    {{RC.translatableTitles.referralComments}}
+                  <label class="control-label col-md-3" for="referralComments"
+                         context-translator="{{referralRegister.translatableTitles.referralComments}}" translate>
+                    {{referralRegister.translatableTitles.referralComments}}
                   </label>
                   <div class="col-md-9">
-                    <textarea class="form-control" ng-model="RC.referral.referralComments"
-                              id="referralComments" rows="5" style="resize: none">
+                    <textarea class="form-control" ng-model="referralRegister.referral.referralComments"
+                              id="referralComments" name="referralComments" rows="5" style="resize: none">
                     </textarea>
                   </div>
                 </div>
@@ -151,162 +163,155 @@
           <fieldset>
             <legend>
               <i class="fa fa-calendar"></i>
-              <span translate context-translator="{{RC.translatableTitles.dateTitle}}">
-                {{RC.translatableTitles.dateTitle}}
+              <span translate context-translator="{{referralRegister.translatableTitles.dateTitle}}">
+                {{referralRegister.translatableTitles.dateTitle}}
               </span>
             </legend>
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.referralDate}}"
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.referralDate}}"
                          translate>
-                    {{RC.translatableTitles.referralDate}}
+                    {{referralRegister.translatableTitles.referralDate}}
                   </label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="referralDate"
-                             ng-model="RC.referral.referralDate"
+                             ng-model="referralRegister.referral.referralDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened1" disabled required format-date/>
+                             is-open="referralRegister.opened1" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened1 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened1 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.referralDate.$invalid && !referralForm.referralDate.$pristine">
-                      * required
-                    </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.clinicDate}}"
-                         translate>{{RC.translatableTitles.clinicDate}}</label>
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.clinicDate}}"
+                         translate>{{referralRegister.translatableTitles.clinicDate}}</label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="clinicDate"
-                             ng-model="RC.referral.clinicDate"
+                             ng-model="referralRegister.referral.clinicDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened2" disabled required format-date/>
+                             is-open="referralRegister.opened2" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened2 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened2 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.clinicDate.$invalid && !referralForm.clinicDate.$pristine">
-                      * required
-                    </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.accidentDate}}"
-                         translate>{{RC.translatableTitles.accidentDate}}</label>
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.accidentDate}}"
+                         translate>{{referralRegister.translatableTitles.accidentDate}}</label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="accidentDate"
-                             ng-model="RC.referral.accidentDate"
+                             ng-model="referralRegister.referral.accidentDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened3" disabled required format-date/>
+                             is-open="referralRegister.opened3" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened3 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened3 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.accidentDate.$invalid && !referralForm.accidentDate.$pristine">
-                      * required
-                    </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.receiveDate}}"
-                         translate>{{RC.translatableTitles.receiveDate}}</label>
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.receiveDate}}"
+                         translate>{{referralRegister.translatableTitles.receiveDate}}</label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="receiveDate"
-                             ng-model="RC.referral.receiveDate"
+                             ng-model="referralRegister.referral.receiveDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened4" disabled required format-date/>
+                             is-open="referralRegister.opened4" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened4 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened4 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.receiveDate.$invalid && !referralForm.receiveDate.$pristine">
-                      * required
-                    </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.sentDate}}"
-                         translate>{{RC.translatableTitles.sentDate}}</label>
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.sentDate}}"
+                         translate>{{referralRegister.translatableTitles.sentDate}}</label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="sentDate"
-                             ng-model="RC.referral.sentDate"
+                             ng-model="referralRegister.referral.sentDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened5" disabled required format-date/>
+                             is-open="referralRegister.opened5" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened5 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened5 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                    <span class="pull-right required-error"
-                          ng-show="referralForm.sentDate.$invalid && !referralForm.sentDate.$pristine">
-                      * required
-                    </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.dischargeDate}}"
-                         translate>{{RC.translatableTitles.dischargeDate}}</label>
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.dischargeDate}}"
+                         translate>{{referralRegister.translatableTitles.dischargeDate}}</label>
                   <div class="col-md-9">
                     <p class="input-group">
                       <input name="dischargeDate"
-                             ng-model="RC.referral.dischargeDate"
+                             ng-model="referralRegister.referral.dischargeDate"
                              class="form-control"
                              uib-datepicker-popup
                              type="date"
-                             is-open="RC.opened6" disabled required format-date/>
+                             is-open="referralRegister.opened6" disabled format-date/>
                       <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="RC.opened6 = true">
+                          <button type="button" class="btn btn-default" ng-click="referralRegister.opened6 = true">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                       </span>
                     </p>
-                      <span class="pull-right required-error"
-                            ng-show="referralForm.dischargeDate.$invalid && !referralForm.dischargeDate.$pristine">
-                        * required
-                      </span>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{RC.translatableTitles.recMade}}"
-                         translate>{{RC.translatableTitles.recMade}}</label>
-                  <input class="col-md-1" type="checkbox" ng-model="RC.referral.recommendationsMade"/>
+                  <label class="control-label col-md-3" for="status"
+                         context-translator="{{referralRegister.translatableTitles.status}}" translate>
+                    {{referralRegister.translatableTitles.status}}
+                  </label>
+                  <select-loader
+                    id="status"
+                    class="col-md-9"
+                    url="status"
+                    query="{'category': 'referral'}"
+                    is-atomic="true"
+                    is-disabled="false"
+                    ng-model="referralRegister.referral.status"
+                    labels="displayName">
+                  </select-loader>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.recMade}}"
+                         translate>{{referralRegister.translatableTitles.recMade}}</label>
+                  <input class="col-md-1" type="checkbox" ng-model="referralRegister.referral.recommendationsMade"/>
                 </div>
 
               </div>
@@ -317,21 +322,21 @@
     </div>
 
     <div class="modal-footer">
-      <button ng-click="RC.referralAdd(referralForm.$valid)" type="submit" ng-if="!RC.referral.id"
+      <button ng-click="referralRegister.referralAdd(referralForm.$valid)" type="submit" ng-if="!referralRegister.referral.id"
               ng-disabled="referralForm.$invalid" class="btn btn-primary">
         <i class="fa fa-floppy-o"></i>
       <span translate context-translator="APP.REFERRAL.REGISTER.LABELS.CREATE_REFERRAL">
         APP.REFERRAL.REGISTER.LABELS.CREATE_REFERRAL
       </span>
       </button>
-      <button ng-click="RC.save(isValid)" type="submit" ng-if="RC.referral.id"
+      <button ng-click="referralRegister.save(isValid)" type="submit" ng-if="referralRegister.referral.id"
               ng-disabled="referralForm.$invalid" class="btn btn-primary">
         <i class="fa fa-floppy-o"></i>
       <span translate context-translator="APP.REFERRAL.REGISTER.LABELS.UPDATE_REFERRAL">
         APP.REFERRAL.REGISTER.LABELS.UPDATE_REFERRAL
       </span>
       </button>
-      <button ng-click="RC.cancel()" ng-disabled="RC.referral.$invalid"
+      <button ng-click="referralRegister.cancel()" ng-disabled="referralRegister.referral.$invalid"
               class="btn btn-default">
         <i class="fa fa-ban"></i>
       <span translate context-translator="APP.REFERRAL.REGISTER.LABELS.CANCEL">

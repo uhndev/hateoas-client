@@ -34,7 +34,7 @@
         },
         templateUrl: 'clientregister/clientregister.tpl.html',
         controller: 'ClientRegisterController',
-        controllerAs: 'CR'
+        controllerAs: 'clientRegister'
       };
 
       $stateProvider

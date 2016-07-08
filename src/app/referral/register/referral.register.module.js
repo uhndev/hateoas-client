@@ -17,7 +17,7 @@
         },
         templateUrl: 'referral/register/referralregister.tpl.html',
         controller: 'ReferralRegisterController',
-        controllerAs: 'RC'
+        controllerAs: 'referralRegister'
       };
 
       $stateProvider

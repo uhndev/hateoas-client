@@ -1,8 +1,8 @@
 <div class="container">
-  <h2 ng-if="CR.client.id" id="Title">
-    {{CR.client.person.prefix}} {{CR.client.person.firstName}} {{CR.client.person.lastName}}
+  <h2 ng-if="clientRegister.client.id" id="Title">
+    {{clientRegister.client.person.prefix}} {{clientRegister.client.person.firstName}} {{clientRegister.client.person.lastName}}
   </h2>
-  <h2 ng-if="!CR.client.id" id="Title" translate context-translator="APP.CLIENTREGISTER.LABELS.NEW_CLIENT">
+  <h2 ng-if="!clientRegister.client.id" id="Title" translate context-translator="APP.CLIENTREGISTER.LABELS.NEW_CLIENT">
     APP.CLIENTREGISTER.LABELS.NEW_CLIENT
   </h2>
 
@@ -16,40 +16,34 @@
           <div class="row">
             <div class="col-md-1"><img src="/assets/img/name.png" height="50"/></div>
             <div class="col-md-11">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': clientForm.MRN.$invalid}">
                 <label class="control-label col-md-3" for="MRN">MRN</label>
                 <div class="col-md-9">
-                  <input id="MRN" class="form-control" name="MRN" ng-model="CR.client.MRN"
-                         validation-check criteria="{model: 'client', id: CR.client.id, attribute: 'MRN'}"
+                  <input id="MRN" class="form-control" name="MRN" ng-model="clientRegister.client.MRN"
+                         validation-check criteria="{model: 'client', id: clientRegister.client.id, attribute: 'MRN'}"
                          ng-minlength="3" ng-maxlength="8" type="text" required
                          ng-pattern="/^(\d)+$/"/>
                   <span class="pull-right required-error" ng-show="clientForm.MRN.$error.pattern">Numbers only, please.</span>
                   <span class="pull-right required-error" ng-show="clientForm.MRN.$error.maxlength">MRN is too long.</span>
                   <span class="pull-right required-error" ng-show="clientForm.MRN.$invalid && !clientForm.MRN.$pristine">MRN must be unique</span>
-                  <span class="pull-right required-error" ng-show="clientForm.MRN.$error.required">MRN is required.</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-md-3" for="salutation">Salutation</label>
-                <div class="col-md-9">
-                  <select id="salutation" name="prefix" class="form-control" placeholder="Salutation"
-                          ng-model="CR.client.person.prefix" required>
-                    <option ng-repeat="item in CR.prefixes">{{item}}</option>
-                  </select>
-                  <span class="pull-right required-error" ng-show="clientForm.prefix.$invalid">
-                    * required
-                  </span>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': clientForm.prefix.$invalid}">
+                <label class="control-label col-md-3" for="salutation">Salutation</label>
+                <div class="col-md-9">
+                  <select id="salutation" name="prefix" class="form-control" placeholder="Salutation"
+                          ng-model="clientRegister.client.person.prefix" required>
+                    <option ng-repeat="item in clientRegister.prefixes">{{item}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-class="{'has-error': clientForm.firstName.$invalid}">
                 <label class="control-label col-md-3" for="firstName">First Name</label>
                 <div class="col-md-9">
                   <input id="firstName" name="firstName" class="form-control"
-                         ng-model="CR.client.person.firstName" type="text" required/>
-                  <span class="pull-right required-error" ng-show="clientForm.firstName.$invalid">
-                    * required
-                  </span>
+                         ng-model="clientRegister.client.person.firstName" type="text" required/>
                 </div>
               </div>
 
@@ -57,18 +51,15 @@
                 <label class="control-label col-md-3" for="middleName">Middle Name</label>
                 <div class="col-md-9">
                   <input id="middleName" name="middleName" class="form-control"
-                         ng-model="CR.client.person.middleName" type="text"/>
+                         ng-model="clientRegister.client.person.middleName" type="text"/>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': clientForm.lastName.$invalid}">
                 <label class="control-label col-md-3" for="lastName">Last Name</label>
                 <div class="col-md-9">
                   <input id="lastName" class="form-control" name="lastName"
-                         ng-model="CR.client.person.lastName" type="text" required/>
-                  <span class="pull-right required-error" ng-show="clientForm.lastName.$invalid">
-                    * required
-                  </span>
+                         ng-model="clientRegister.client.person.lastName" type="text" required/>
                 </div>
               </div>
             </div>
@@ -81,7 +72,7 @@
           <div class="row">
             <div class="col-md-1"><img src="/assets/img/home.png" height="50"/></div>
             <div class="col-md-11">
-              <address-editor horizontal="true" resource="CR.client.person"></address-editor>
+              <address-editor horizontal="true" resource="clientRegister.client.person"></address-editor>
             </div>
           </div>
         </fieldset>
@@ -98,7 +89,7 @@
               <div class="form-group">
                 <label class="control-label col-md-3" for="homePhone">Home Phone</label>
                 <div class="col-md-9">
-                  <input class="form-control" ng-model="CR.client.person.homePhone"
+                  <input class="form-control" ng-model="clientRegister.client.person.homePhone"
                          id="homePhone" name="homePhone" type="text"/>
                 </div>
               </div>
@@ -106,7 +97,7 @@
               <div class="form-group">
                 <label class="control-label col-md-3" for="fax">Fax</label>
                 <div class="col-md-9">
-                  <input id="fax" name="fax" type="text" class="form-control" ng-model="CR.client.person.fax"/>
+                  <input id="fax" name="fax" type="text" class="form-control" ng-model="clientRegister.client.person.fax"/>
                 </div>
               </div>
 
@@ -114,7 +105,7 @@
                 <label class="control-label col-md-3" for="otherPhone">Other Phone</label>
                 <div class="col-md-9">
                   <input class="form-control" id="otherPhone" name="otherPhone"
-                         ng-model="CR.client.person.otherPhone" type="text"/>
+                         ng-model="clientRegister.client.person.otherPhone" type="text"/>
                 </div>
               </div>
             </div>
@@ -128,21 +119,18 @@
           <div class="row">
             <div class="col-md-1"><img src="/assets/img/email.png" height="50"/></div>
             <div class="col-md-11">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': clientForm.homeEmail.$invalid}">
                 <label class="control-label col-md-3" for="homeEmail">Home Email</label>
                 <div class="col-md-9">
-                  <input class="form-control" ng-model="CR.client.person.homeEmail"
+                  <input class="form-control" ng-model="clientRegister.client.person.homeEmail"
                          id="homeEmail" name="homeEmail" type="email" required/>
-                  <span class="pull-right required-error" ng-show="clientForm.homeEmail.$invalid">
-                    * required
-                  </span>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="control-label col-md-3" for="ContactComments">Comments</label>
                 <div class="col-md-9">
-                  <textarea class="form-control" ng-model="CR.client.person.contactComments"
+                  <textarea class="form-control" ng-model="clientRegister.client.person.contactComments"
                             id="ContactComments" rows="5" style="resize: none">
                   </textarea>
                 </div>
@@ -170,21 +158,21 @@
                     is-atomic="true"
                     is-disabled="false"
                     bind-object="true"
-                    ng-model="CR.client.person.familyDoctor"
+                    ng-model="clientRegister.client.person.familyDoctor"
                     labels="displayName">
                   </select-loader>
                   <div class="col-md-1"></div>
-                  <div class="well" ng-if="CR.client.person.familyDoctor.id">
+                  <div class="well" ng-if="clientRegister.client.person.familyDoctor.id">
                     <div class="form-group">
                       <label class="col-md-3" for="pphone">Phone: </label>
                       <div class="col-md-9" id="pphone">
-                        {{CR.client.person.familyDoctor.person.daytimePhone}}
+                        {{clientRegister.client.person.familyDoctor.person.daytimePhone}}
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3" for="pfax">Fax: </label>
                       <div class="col-md-9" id="pfax">
-                        {{CR.client.person.familyDoctor.person.Fax}}
+                        {{clientRegister.client.person.familyDoctor.person.Fax}}
                       </div>
                     </div>
                   </div>
@@ -205,7 +193,7 @@
                 <label class="control-label col-md-3" for="EmerFirstName">First Name</label>
                 <div class="col-md-9">
                   <input class="form-control"
-                         ng-model="CR.client.person.primaryEmergencyContact.firstName"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.firstName"
                          id="EmerFirstName"
                          name="EmerFirstName" type="text"/>
                 </div>
@@ -215,7 +203,7 @@
                 <label class="control-label col-md-3" for="EmerLastName">Last Name</label>
                 <div class="col-md-9">
                   <input class="form-control"
-                         ng-model="CR.client.person.primaryEmergencyContact.lastName"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.lastName"
                          id="EmerLastName"
                          name="EmerLastName" type="text"/>
                 </div>
@@ -225,7 +213,7 @@
                 <label class="control-label col-md-3" for="Relationship">Relationship</label>
                 <div class="col-md-9">
                   <input class="form-control"
-                         ng-model="CR.client.person.primaryEmergencyContact.relationship"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.relationship"
                          id="Relationship"
                          name="Relationship" type="text"/>
                 </div>
@@ -235,7 +223,7 @@
                 <label class="control-label col-md-3" for="EmerPhone">Phone</label>
                 <div class="col-md-9">
                   <input class="form-control"
-                         ng-model="CR.client.person.primaryEmergencyContact.phone"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.phone"
                          id="EmerPhone"
                          name="EmerPhone" type="text"/>
                 </div>
@@ -256,36 +244,33 @@
               <div class="form-group">
                 <label class="control-label col-md-3" for="Gender">Gender</label>
                 <div class="col-md-9">
-                  <select class="form-control" id="Gender" ng-model="CR.client.person.gender" name="Gender">
-                    <option ng-repeat="item in CR.genders">{{item}}</option>
+                  <select class="form-control" id="Gender" ng-model="clientRegister.client.person.gender" name="Gender">
+                    <option ng-repeat="item in clientRegister.genders">{{item}}</option>
                   </select>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': clientForm.dateOfBirth.$invalid}">
                 <label class="control-label col-md-3">Birth Date</label>
                 <div class="col-md-9">
                   <p class="input-group">
                     <input type="date" name="dateOfBirth"
-                           ng-model="CR.client.person.dateOfBirth"
+                           ng-model="clientRegister.client.person.dateOfBirth"
                            class="form-control"
                            uib-datepicker-popup
-                           is-open="CR.opened" disabled required format-date/>
+                           is-open="clientRegister.opened" disabled required format-date/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="CR.opened = true">
+                        <button type="button" class="btn btn-default" ng-click="clientRegister.opened = true">
                           <i class="glyphicon glyphicon-calendar"></i>
                         </button>
                     </span>
                   </p>
-                  <span class="pull-right required-error" ng-show="clientForm.dateOfBirth.$invalid">
-                    * required
-                  </span>
                 </div>
               </div>
               <div class="form-group">
                 <label class="control-label col-md-3" for="Language">Language</label>
                 <div class="col-md-9">
-                  <input class="form-control" ng-model="CR.client.person.language" id="Language"
+                  <input class="form-control" ng-model="clientRegister.client.person.language" id="Language"
                          name="Language" type="text"/>
                 </div>
               </div>
@@ -294,7 +279,7 @@
                 <label class="control-label col-md-3" for="Interpreter">Interpreter</label>
                 <div class="col-md-9">
                   <div class="checkbox">
-                    <input type="checkbox" ng-model="CR.client.person.requiresInterpreter">
+                    <input type="checkbox" ng-model="clientRegister.client.person.requiresInterpreter">
                   </div>
                 </div>
               </div>
@@ -307,7 +292,7 @@
         <fieldset>
           <legend>
             Employment/School Information
-            <i class="pull-right fa fa-plus-circle selectable" ng-click="CR.addEmployee()"></i>
+            <i class="pull-right fa fa-plus-circle selectable" ng-click="clientRegister.addEmployee()"></i>
           </legend>
           <div class="row">
             <div class="col-md-2">
@@ -315,10 +300,10 @@
             </div>
             <div class="col-md-10">
               <uib-accordion>
-                <uib-accordion-group ng-repeat="em in CR.client.person.employments track by $index">
+                <uib-accordion-group ng-repeat="em in clientRegister.client.person.employments track by $index">
                   <uib-accordion-heading>
                     {{em.company.displayName || "Please Choose Company"}}
-                    <i class="pull-right fa fa-trash-o fa-lg" ng-click="CR.removeEmployment($index, $event)"></i>
+                    <i class="pull-right fa fa-trash-o fa-lg" ng-click="clientRegister.removeEmployment($index, $event)"></i>
                   </uib-accordion-heading>
                   <form>
                     <div class="form-group">
@@ -394,7 +379,7 @@
     </div>
 
     <div class="modal-footer">
-      <button ng-click="CR.save(isValid)" type="submit" ng-if="CR.client.id"
+      <button ng-click="clientRegister.save(isValid)" type="submit" ng-if="clientRegister.client.id"
               ng-disabled="clientForm.$invalid || clientForm.$pristine"
               class="btn btn-primary">
         <i class="fa fa-floppy-o"></i>
@@ -402,7 +387,7 @@
           APP.CLIENTREGISTER.LABELS.UPDATE_CLIENT
         </span>
       </button>
-      <button ng-click="CR.clientAdd(isValid)" type="submit" ng-if="!CR.client.id"
+      <button ng-click="clientRegister.clientAdd(isValid)" type="submit" ng-if="!clientRegister.client.id"
               ng-disabled="clientForm.$invalid"
               class="btn btn-primary">
         <i class="fa fa-floppy-o"></i>
@@ -410,7 +395,7 @@
           APP.CLIENTREGISTER.LABELS.REGISTER_CLIENT
         </span>
       </button>
-      <button ng-click="CR.cancelClientAdd()" class="btn btn-default">
+      <button ng-click="clientRegister.cancelClientAdd()" class="btn btn-default">
         <i class="fa fa-ban"></i>
         <span translate context-translator="APP.CLIENTREGISTER.LABELS.CANCEL">
           APP.CLIENTREGISTER.LABELS.CANCEL
