@@ -31,7 +31,7 @@
         vm.referral = angular.copy(data.items);
         var clientData = _.pick(vm.referral.clientcontact, 'MRN','gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
         var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
-          'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
+          'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
         //email fields for sending email from note directive
         vm.emailInfo = {
@@ -53,6 +53,8 @@
             'physician': {title: 'COMMON.MODELS.REFERRAL.PHYSICIAN', type: 'physician'},
             'staff': {title: 'COMMON.MODELS.REFERRAL.STAFF', type: 'staff'},
             'referralContact': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_CONTACT', type: 'employee'},
+            'claimNumber': {title: 'COMMON.MODELS.REFERRAL.CLAIM_NUMBER, type: 'text'},
+            'policyNumber': {title: 'COMMON.MODELS.REFERRAL.POLICY_NUMBER, type: 'text'},
             'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
             'clinicDate': {title: 'COMMON.MODELS.REFERRAL.CLINIC_DATE', type: 'date'},
             'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
