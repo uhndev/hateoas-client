@@ -1,0 +1,19 @@
+<ng-form name="sub_form">
+  <div class="form-group">
+    <label for="field.field_id">
+      {{field.field_id}})
+    </label>
+    <label for="field.field_id" translate>
+     {{field.field_title}}
+    </label>&nbsp;
+    <span class="glyphicon glyphicon-ok" ng-show="field.field_value"></span>
+
+    <uib-timepicker ng-model="field.field_value"
+                    ng-required="field.field_required"
+                    show-spinners="false">
+    </uib-timepicker>
+    <div ng-show="!sub_form.$pristine">
+      <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
+    </div>
+  </div>
+</ng-form>

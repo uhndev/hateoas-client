@@ -1,7 +1,7 @@
 <uib-accordion close-others="false">
   <uib-accordion-group ng-repeat="(groupKey, groupedServices) in serviceGroup.services | fuzzy: serviceGroup.search | groupBy: serviceGroup.boundGroupTypes.groupBy"
-                       ng-init="serviceGroup.accordionStatus[groupKey].isOpen = false"
-                       is-open="!serviceGroup.accordionStatus[groupKey].isOpen" panel-class="panel-info">
+                       ng-init="serviceGroup.accordionStatus[groupKey].isOpen = true"
+                       is-open="serviceGroup.accordionStatus[groupKey].isOpen" panel-class="panel-info">
     <uib-accordion-heading>
       <i class="glyphicon" ng-class="{
         'glyphicon-chevron-right': !serviceGroup.accordionStatus[groupKey].isOpen,
@@ -65,7 +65,13 @@
                         class="btn btn-primary btn-sm" ng-click="field.onClick(service)">
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
-                <span ng-switch-when="datetime">{{service[field.name] | date:'fullDate'}}</span>
+                <span ng-switch-when="price">
+                  <input type="number"
+                         class="form-control"
+                         ng-model="service[field.name]"
+                         ng-model-options="{debounce: 500, updateOn: 'blur'}"
+                         ng-change="serviceGroup.savePrice(service[field.name], service)"/>
+                </span>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>
               </td>
             </tr>

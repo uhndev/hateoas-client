@@ -37,9 +37,11 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'];
+  ServiceGroupController.$inject = [
+    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES', 'TemplateService'
+  ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES, TemplateService) {
     var vm = this;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
@@ -49,19 +51,17 @@
     vm.templates = {};
     vm.statusTitles = {};
     _.each(STATUS_CATEGORIES, function (statusType) {
-      var StatusType = $resource(API.url(STATUS_TYPES[statusType].model), {}, {
-        'query': {method: 'GET', isArray: false}
-      });
-      StatusType.query({where: {id: 0}, limit: 1}, function (data) {
-        vm.templates[statusType] = data.template;
-      });
+      TemplateService.fetchTemplate(STATUS_TYPES[statusType].model)
+        .then(function (template) {
+          vm.templates[statusType] = template;
+        });
     });
 
     // bindable methods
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
-
+    vm.savePrice = savePrice;
     init();
 
     ///////////////////////////////////////////////////////////////////////////
@@ -182,6 +182,20 @@
       bulkStatusChange.$save(function (updatedStatuses) {
         toastr.success(services.length + ' service(s) updated to: ' + vm.statusSelections[category].name, 'Services');
         vm.statusSelections[category] = null;
+        vm.onUpdate();
+      });
+    }
+
+    /**
+     * savePrice
+     * @description saves the payor price of the service on change by updatedService
+     * @param price
+     * @param service
+     */
+    function savePrice(price, service) {
+      var Service = new AltumAPI.Service({payorPrice: parseFloat(price)});
+      Service.$update({id: service.id}, function(result) {
+        toastr.success(service.displayName + ' price updated to ' + price, 'Services');
         vm.onUpdate();
       });
     }

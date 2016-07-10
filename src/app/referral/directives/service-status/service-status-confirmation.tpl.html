@@ -1,3 +1,4 @@
+<!-- Render multiple paginated forms if bulk editing -->
 <div ng-if="confirmationModal.statusTemplateForm.length">
   <div ng-repeat="form in confirmationModal.statusTemplateForm">
     <form-directive ng-if="$index === confirmationModal.page-1"
@@ -12,22 +13,35 @@
                         ng-if="confirmationModal.statusTemplateForm.length > 1"
                         total-items="confirmationModal.statusTemplateForm.length"
                         ng-model="confirmationModal.page"
-                        items-per-page="1">
+                        items-per-page="1"
+                        boundary-link-numbers="true"
+                        max-size="10"
+                        rotate="false"
+                        force-ellipses="true">
         </uib-pagination>
       </div>
       <div class="col-md-6">
-        <button class="btn btn-primary right" type="button" ng-click="confirmationModal.confirm()" translate>
+        <button ng-if="confirmationModal.statusTemplateForm.length > 1"
+                class="btn btn-info right" type="button" ng-click="confirmationModal.applyAll()"
+                translate context-translator="APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.APPLY_ALL">
+          APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.APPLY_ALL
+        </button>
+        <button class="btn btn-primary right" type="button" ng-click="confirmationModal.saveAnswers()"
+                translate context-translator="APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.SAVE">
           APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.SAVE
         </button>
-        <button class="btn btn-warning right" type="button" ng-click="confirmationModal.cancel()" translate>
+        <button class="btn btn-warning right" type="button" ng-click="confirmationModal.cancel()"
+                translate context-translator="APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CANCEL">
           APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CANCEL
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Render only one form if not bulk editing -->
 <form-directive ng-if="!confirmationModal.statusTemplateForm.length"
                 form="confirmationModal.statusTemplateForm"
-                on-submit="confirmationModal.confirm()"
+                on-submit="confirmationModal.saveAnswers()"
                 on-cancel="confirmationModal.cancel()">
 </form-directive>

@@ -9,11 +9,8 @@
 
       var clientState = {
         resolve: {
-          resolvedPerson: function ($resource, $stateParams, API) {
-            var Person = $resource(API.url('person'), {}, {
-              'query': {method: 'GET', isArray: false}
-            });
-            return Person.query({where: {id: 0}, limit: 1}).$promise;
+          resolvedPerson: function (TemplateService) {
+            return TemplateService.fetchTemplate('person');
           },
           resolvedClient: function (ClientService, $stateParams) {
             if (!$stateParams.id) {
@@ -37,7 +34,7 @@
         },
         templateUrl: 'clientregister/clientregister.tpl.html',
         controller: 'ClientRegisterController',
-        controllerAs: 'CR'
+        controllerAs: 'clientRegister'
       };
 
       $stateProvider

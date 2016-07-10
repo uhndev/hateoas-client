@@ -67,7 +67,7 @@
           address: _.values(_.pick(vm.resource.address, 'address1', 'address2', 'city', 'province', 'postalCode', 'country')).join(' ')
         }, function (location) {
           vm.geocodesLoading = false;
-          if (location.status === 'OK') {
+          if (location.length) {
             var latitude = _.first(location).geometry.location.lat();
             var longitude = _.first(location).geometry.location.lng();
             vm.resource.address.latitude = latitude;

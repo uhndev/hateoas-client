@@ -8,15 +8,17 @@
     .module('altum.notebook.controller', [])
     .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API', 'toastr'];
-  function AltumNotebookController(NoteType, $resource, API, toastr) {
+  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API'];
+  function AltumNotebookController(NoteType, $resource, API) {
     var vm = this;
 
     // bindable variables
     vm.collection = vm.collection || {};
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
-    vm.noteTypes = NoteType.query();
+    NoteType.query(function (noteTypes) {
+      vm.noteTypes = _.indexBy(noteTypes, 'id');
+    });
     var NoteResource = $resource(API.url('note'), {}, {
       'query': {
         method: 'GET', isArray: false
@@ -49,19 +51,19 @@
      * @returns {*}
      */
     function addNote(type) {
-      if (!_.isEmpty(vm.filterNormal)) {
-        toastr.warning('Clear the search field first');
-      } else {
-        if (_.all(vm.notes, function (note) {
-            return _.has(note, 'id');
-          })) {
-          vm.notes.push({
-            $edit: true,
-            text: null,
-            // noteType: type.id
-            noteType: type
-          });
-        }
+      //Clear the search field
+      if (!_.isEmpty(vm.filterNormal) || !_.isEmpty(vm.filterQuery)) {
+        vm.filterNormal = '';
+        vm.filterQuery = '';
+      }
+      if (_.all(vm.notes, function (note) {
+          return _.has(note, 'id');
+        })) {
+        vm.notes.push({
+          $edit: true,
+          text: null,
+          noteType: type
+        });
       }
     }
 

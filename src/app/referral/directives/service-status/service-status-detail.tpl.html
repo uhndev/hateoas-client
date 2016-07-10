@@ -1,11 +1,11 @@
 <table class="table table-condensed table-bordered table-responsive">
   <thead>
     <tr>
-      <th translate>COMMON.MODELS.APPROVAL.STATUS</th>
-      <th translate>COMMON.MODELS.APPROVAL.CREATED_AT</th>
-      <th ng-repeat="column in ::serviceStatus.defaults.detailColumns" translate>
-        {{::column.name}}
+      <th translate>APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.STATUS</th>
+      <th ng-if="serviceStatus.defaults.detailColumns.name" translate>
+        {{::serviceStatus.defaults.detailColumns.name}}
       </th>
+      <th translate>APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CHANGED</th>
     </tr>
   </thead>
   <tbody>
@@ -14,12 +14,11 @@
       <td class="text-nowrap">
         <b>{{::approval.displayName}}</b>
       </td>
-      <td>
-        <small>{{::approval.createdAt | date: 'MMM d, y h:mm a'}}</small>
+      <td class="text-nowrap" ng-if="serviceStatus.defaults.detailColumns.name">
+        <small>{{serviceStatus.renderStatusData(approval)}}</small>
       </td>
-      <td class="text-nowrap" ng-repeat="column in ::serviceStatus.defaults.detailColumns">
-        <span ng-if="column.type === 'text'">{{::approval[column.value] || "-"}}</span>
-        <small ng-if="column.type === 'date'">{{::approval[column.value] | date: 'MMM d, y' || "-"}}</small>
+      <td>
+        <small am-time-ago="approval.createdAt"></small>
       </td>
     </tr>
   </tbody>

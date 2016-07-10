@@ -3,10 +3,11 @@
  */
 (function () {
   'use strict';
-  angular.module('dados.common.services.template', [])
+  angular
+    .module('dados.common.services.template', ['dados.constants'])
     .service('TemplateService', TemplateService);
 
-  function TemplateService() {
+  function TemplateService($http, API) {
     var TYPE_MAP = {
       'string': 'textfield',
       'text': 'textfield',
@@ -172,7 +173,7 @@
       }
 
       if (!_.isEmpty(item)) {
-        var questions = _.map(form.items.form_questions,
+        form.items.form_questions = _.map(form.items.form_questions,
           function (question) {
             if (_.has(item, question.field_name)) {
               question.field_modelID = item.id;
@@ -181,9 +182,22 @@
 
             return question;
           });
-
-        form.items.form_questions = questions;
       }
+    };
+
+    /**
+     * fetchTemplate
+     * @description Returns a hateoas template given a model name
+     * @param modelName
+     */
+    this.fetchTemplate = function (modelName) {
+      return $http({
+        url: API.url() + '/fetchtemplate/' + modelName,
+        method: 'GET',
+        cache: true
+      }).then(function (results) {
+        return results.data.template;
+      });
     };
   }
 })();

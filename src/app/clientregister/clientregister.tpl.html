@@ -1,424 +1,406 @@
 <div class="container">
-  <div id="page-heading">
-    <h2 ng-if="CR.client.id" id="Title"> {{CR.client.person.firstName}} {{CR.client.person.lastName}} </h2>
-    <h2 ng-if="!CR.client.id" id="Title">New Client</h2>
-  </div>
+  <h2 ng-if="clientRegister.client.id" id="Title">
+    {{clientRegister.client.person.prefix}} {{clientRegister.client.person.firstName}} {{clientRegister.client.person.lastName}}
+  </h2>
+  <h2 ng-if="!clientRegister.client.id" id="Title" translate context-translator="APP.CLIENTREGISTER.LABELS.NEW_CLIENT">
+    APP.CLIENTREGISTER.LABELS.NEW_CLIENT
+  </h2>
 
   <br/>
 
-  <form name="clientForm" novalidate>
-    <div class="form-horizontal">
-      <div class="row">
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Name</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/name.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="MRN">MRN</label>
-                  <div class="col-md-9">
-                    <input class="form-control" name="MRN" ng-model="CR.client.MRN"
-                           validation-check criteria="{model: 'client', id: CR.client.id, attribute: 'MRN'}"
-                           ng-minlength="3" ng-maxlength="8" type="text" ng-required="true"
-                           ng-pattern="/^(\d)+$/"/>
-                    <div ng-show="clientForm.MRN.$error.pattern">Numbers only, please.</div>
-                    <div ng-show="clientForm.MRN.$error.maxlength">MRN is too long.</div>
-                    <div ng-show="clientForm.MRN.$invalid && !clientForm.MRN.$pristine">MRN must be unique</div>
-                    <div ng-show="clientForm.$submitted || clientForm.MRN.$touched">
-                      <div ng-show="clientForm.MRN.$error.required">MRN is required.</div>
-                    </div>
-                  </div>
+  <ng-form name="clientForm" novalidate class="form-horizontal">
+    <div class="row">
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Name</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/name.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group" ng-class="{'has-error': clientForm.MRN.$invalid}">
+                <label class="control-label col-md-3" for="MRN">MRN</label>
+                <div class="col-md-9">
+                  <input id="MRN" class="form-control" name="MRN" ng-model="clientRegister.client.MRN"
+                         validation-check criteria="{model: 'client', id: clientRegister.client.id, attribute: 'MRN'}"
+                         ng-minlength="3" ng-maxlength="8" type="text" required
+                         ng-pattern="/^(\d)+$/"/>
+                  <span class="pull-right required-error" ng-show="clientForm.MRN.$error.pattern">Numbers only, please.</span>
+                  <span class="pull-right required-error" ng-show="clientForm.MRN.$error.maxlength">MRN is too long.</span>
+                  <span class="pull-right required-error" ng-show="clientForm.MRN.$invalid && !clientForm.MRN.$pristine">MRN must be unique</span>
                 </div>
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Salutation">Salutation</label>
-                  <div class="col-md-9">
-                    <select class="form-control" placeholder="Salutation"
-                            ng-model="CR.client.person.prefix" id="Salutation" ng-required="true">
-                      <option ng-repeat="item in CR.prefixes">{{item}}</option>
-                    </select>
-                  </div>
+              </div>
+
+              <div class="form-group" ng-class="{'has-error': clientForm.prefix.$invalid}">
+                <label class="control-label col-md-3" for="salutation">Salutation</label>
+                <div class="col-md-9">
+                  <select id="salutation" name="prefix" class="form-control" placeholder="Salutation"
+                          ng-model="clientRegister.client.person.prefix" required>
+                    <option ng-repeat="item in clientRegister.prefixes">{{item}}</option>
+                  </select>
                 </div>
+              </div>
 
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="FirstName">First Name</label>
-                  <div class="col-md-9">
-                    <input class="form-control" ng-model="CR.client.person.firstName"
-                           name="FirstName"
-                           type="text" ng-required="true"/>
-                    <div ng-show="clientForm.$submitted || clientForm.FirstName.$touched">
-                      <div ng-show="clientForm.FirstName.$error.required">First Name is
-                        required.
-                      </div>
-                    </div>
-                  </div>
+              <div class="form-group" ng-class="{'has-error': clientForm.firstName.$invalid}">
+                <label class="control-label col-md-3" for="firstName">First Name</label>
+                <div class="col-md-9">
+                  <input id="firstName" name="firstName" class="form-control"
+                         ng-model="clientRegister.client.person.firstName" type="text" required/>
                 </div>
+              </div>
 
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="MiddleName">Middle Name</label>
-                  <div class="col-md-9">
-                    <input class="form-control" id="MiddleName"
-                           ng-model="CR.client.person.middleName"
-                           name="MiddleName" type="text"/>
-
-                  </div>
+              <div class="form-group">
+                <label class="control-label col-md-3" for="middleName">Middle Name</label>
+                <div class="col-md-9">
+                  <input id="middleName" name="middleName" class="form-control"
+                         ng-model="clientRegister.client.person.middleName" type="text"/>
                 </div>
+              </div>
 
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="LastName">Last Name</label>
-                  <div class="col-md-9">
-                    <input class="form-control" ng-model="CR.client.person.lastName" name="LastName"
-                           type="text" ng-required="true"/>
-                    <div ng-show="clientForm.$submitted || clientForm.LastName.$touched">
-                      <div ng-show="clientForm.LastName.$error.required">Last Name is required.
-                      </div>
-                    </div>
-                  </div>
+              <div class="form-group" ng-class="{'has-error': clientForm.lastName.$invalid}">
+                <label class="control-label col-md-3" for="lastName">Last Name</label>
+                <div class="col-md-9">
+                  <input id="lastName" class="form-control" name="lastName"
+                         ng-model="clientRegister.client.person.lastName" type="text" required/>
                 </div>
               </div>
             </div>
-          </fieldset>
-        </div>
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Address</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/home.png" height="50"/></div>
-              <div class="col-md-11">
-                <address-editor horizontal="true" resource="CR.client.person"></address-editor>
-              </div>
-            </div>
-          </fieldset>
-        </div>
+          </div>
+        </fieldset>
       </div>
-
-      <br/>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Phone numbers</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/phone.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="HomePhone">Home Phone</label>
-                  <div class="col-md-9">
-                    <input class="form-control" ng-model="CR.client.person.homePhone"
-                           name="HomePhone" type="text" value=""/>
-                  </div>
-                </div>
-
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Fax">Fax</label>
-                  <div class="col-md-9">
-                    <input class="form-control" id="Fax" ng-model="CR.client.person.fax" name="Fax"
-                           type="text" value=""/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="OtherPhone">Other Phone</label>
-                  <div class="col-md-9">
-                    <input class="form-control" id="OtherPhone"
-                           ng-model="CR.client.person.otherPhone"
-                           name="OtherPhone" type="text" value=""/>
-                  </div>
-                </div>
-              </div>
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Address</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/home.png" height="50"/></div>
+            <div class="col-md-11">
+              <address-editor horizontal="true" resource="clientRegister.client.person"></address-editor>
             </div>
-
-          </fieldset>
-        </div>
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Email</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/email.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="homeEmail">Home Email</label>
-                  <div class="col-md-9">
-                    <input class="form-control" ng-model="CR.client.person.homeEmail"
-                           name="homeEmail"
-                           type="email" ng-required="true"/>
-
-                    <div ng-show="clientForm.$submitted || clientForm.homeEmail.$touched">
-                      <span ng-show="clientForm.homeEmail.$error.required">Tell us your email.</span>
-                      <span ng-show="clientForm.homeEmail.$error.email">This is not a valid email.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="ContactComments">Comments</label>
-                  <div class="col-md-9">
-                    <textarea class="form-control" ng-model="CR.client.person.contactComments"
-                              id="ContactComments" rows="5" style="resize: none">
-                    </textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </fieldset>
-        </div>
-      </div>
-
-      <br/>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Family Doctor</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/doctor.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="physician">Family Doctor</label>
-                  <div class="col-md-9">
-                    <select-loader
-                      url="physician"
-                      is-atomic="true"
-                      is-disabled="false"
-                      bind-object="true"
-                      ng-model="CR.client.person.familyDoctor"
-                      labels="displayName">
-                    </select-loader>
-                    <div class="col-md-1"></div>
-                    <div class="well" ng-if="CR.client.person.familyDoctor.id">
-                      <div class="form-group">
-                        <label class="col-md-3" for="pphone">Phone: </label>
-                        <div class="col-md-9" id="pphone">
-                          {{CR.client.person.familyDoctor.person.daytimePhone}}
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="col-md-3" for="pfax">Fax: </label>
-                        <div class="col-md-9" id="pfax">
-                          {{CR.client.person.familyDoctor.person.Fax}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Emergency Contact</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/ambulance.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="EmerFirstName">First Name</label>
-                  <div class="col-md-9">
-                    <input class="form-control"
-                           ng-model="CR.client.person.primaryEmergencyContact.firstName"
-                           id="EmerFirstName"
-                           name="EmerFirstName" type="text" value=""/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="EmerLastName">Last Name</label>
-                  <div class="col-md-9">
-                    <input class="form-control"
-                           ng-model="CR.client.person.primaryEmergencyContact.lastName"
-                           id="EmerLastName"
-                           name="EmerLastName" type="text" value=""/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Relationship">Relationship</label>
-                  <div class="col-md-9">
-                    <input class="form-control"
-                           ng-model="CR.client.person.primaryEmergencyContact.relationship"
-                           id="Relationship"
-                           name="Relationship" type="text" value=""/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="EmerPhone">Phone</label>
-                  <div class="col-md-9">
-                    <input class="form-control"
-                           ng-model="CR.client.person.primaryEmergencyContact.phone"
-                           id="EmerPhone"
-                           name="EmerPhone" type="text" value=""/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-
-      <br/>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>Basic Information</legend>
-            <div class="row">
-              <div class="col-md-1"><img src="/assets/img/demographic.png" height="50"/></div>
-              <div class="col-md-11">
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Gender">Gender</label>
-                  <div class="col-md-9">
-                    <select class="form-control" id="Gender" ng-model="CR.client.person.gender"
-                            name="Gender">
-                      <option ng-repeat="item in CR.genders">{{item}}</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3">Birth Date</label>
-                  <div class="col-md-9">
-                    <p class="input-group">
-                      <input type="text"
-                             ng-model="CR.client.person.dateOfBirth"
-                             class="form-control"
-                             uib-datepicker-popup
-                             type="datetime-local"
-                             is-open="CR.opened" required/>
-                      <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" ng-click="CR.opened = true">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                          </button>
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Language">Language</label>
-                  <div class="col-md-9">
-                    <input class="form-control" ng-model="CR.client.person.language" id="Language"
-                           name="Language" type="text" value=""/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3" for="Interpreter">Interpreter</label>
-                  <div class="col-md-9">
-                    <div class="checkbox">
-                      <input type="checkbox" ng-model="CR.client.person.requiresInterpreter">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="col-lg-6">
-          <fieldset>
-            <legend>
-              Employment/School Information
-              <i class="pull-right fa fa-plus-circle selectable" ng-click="CR.addEmployee()"></i>
-            </legend>
-            <div class="row">
-              <div class="col-md-2">
-                <img src="/assets/img/job.png" height="50"/>
-              </div>
-              <div class="col-md-10">
-                <uib-accordion>
-                  <uib-accordion-group ng-repeat="em in CR.client.person.employments track by $index">
-                    <uib-accordion-heading>
-                      {{em.company.displayName || "Please Choose Company"}}
-                      <i class="pull-right fa fa-trash-o fa-lg" ng-click="CR.removeEmployment($index, $event)"></i>
-                    </uib-accordion-heading>
-                    <form>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="employer">Employer</label>
-                        <div class="col-md-9">
-                          <select-loader
-                            url="company"
-                            is-atomic="true"
-                            is-disabled="false"
-                            bind-object="true"
-                            ng-model="em.company"
-                            labels="displayName">
-                          </select-loader>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="WorkPhone">
-                          Work Phone
-                        </label>
-                        <div class="col-md-9">
-                          <input class="form-control" id="WorkPhone"
-                                 ng-model="em.workPhone"
-                                 name="WorkPhone" type="text" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="WorkEmail">
-                          Work Email
-                        </label>
-                        <div class="col-md-9">
-                          <input class="form-control" id="WorkEmail"
-                                 ng-model="em.workEmail"
-                                 name="WorkEmail" type="email" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="Occupation">
-                          Occupation
-                        </label>
-                        <div class="col-md-9">
-                          <input class="form-control" id="Occupation"
-                                 ng-model="em.occupation"
-                                 name="Occupation" type="text" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="OccuType">
-                          Occupation Type
-                        </label>
-                        <div class="col-md-9">
-                          <input class="form-control" id="OccuType"
-                                 ng-model="em.occupationType"
-                                 name="OccuType" type="text" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3" for="OccuSector">
-                          Occupation Sector
-                        </label>
-                        <div class="col-md-9">
-                          <input class="form-control" id="OccuSector"
-                                 ng-model="em.occupationSector"
-                                 name="OccuSector" type="text" value=""/>
-                        </div>
-                      </div>
-                    </form>
-                  </uib-accordion-group>
-                </uib-accordion>
-              </div>
-            </div>
-          </fieldset>
-        </div>
+          </div>
+        </fieldset>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Phone numbers</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/phone.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group">
+                <label class="control-label col-md-3" for="homePhone">Home Phone</label>
+                <div class="col-md-9">
+                  <input class="form-control" ng-model="clientRegister.client.person.homePhone"
+                         id="homePhone" name="homePhone" type="text"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="fax">Fax</label>
+                <div class="col-md-9">
+                  <input id="fax" name="fax" type="text" class="form-control" ng-model="clientRegister.client.person.fax"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="otherPhone">Other Phone</label>
+                <div class="col-md-9">
+                  <input class="form-control" id="otherPhone" name="otherPhone"
+                         ng-model="clientRegister.client.person.otherPhone" type="text"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Email</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/email.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group" ng-class="{'has-error': clientForm.homeEmail.$invalid}">
+                <label class="control-label col-md-3" for="homeEmail">Home Email</label>
+                <div class="col-md-9">
+                  <input class="form-control" ng-model="clientRegister.client.person.homeEmail"
+                         id="homeEmail" name="homeEmail" type="email" required/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="ContactComments">Comments</label>
+                <div class="col-md-9">
+                  <textarea class="form-control" ng-model="clientRegister.client.person.contactComments"
+                            id="ContactComments" rows="5" style="resize: none">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Family Doctor</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/doctor.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group">
+                <label class="control-label col-md-3" for="physician">Family Doctor</label>
+                <div class="col-md-9">
+                  <select-loader
+                    id="physician"
+                    url="physician"
+                    is-atomic="true"
+                    is-disabled="false"
+                    bind-object="true"
+                    ng-model="clientRegister.client.person.familyDoctor"
+                    labels="displayName">
+                  </select-loader>
+                  <div class="col-md-1"></div>
+                  <div class="well" ng-if="clientRegister.client.person.familyDoctor.id">
+                    <div class="form-group">
+                      <label class="col-md-3" for="pphone">Phone: </label>
+                      <div class="col-md-9" id="pphone">
+                        {{clientRegister.client.person.familyDoctor.person.daytimePhone}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-3" for="pfax">Fax: </label>
+                      <div class="col-md-9" id="pfax">
+                        {{clientRegister.client.person.familyDoctor.person.Fax}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Emergency Contact</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/ambulance.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group">
+                <label class="control-label col-md-3" for="EmerFirstName">First Name</label>
+                <div class="col-md-9">
+                  <input class="form-control"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.firstName"
+                         id="EmerFirstName"
+                         name="EmerFirstName" type="text"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="EmerLastName">Last Name</label>
+                <div class="col-md-9">
+                  <input class="form-control"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.lastName"
+                         id="EmerLastName"
+                         name="EmerLastName" type="text"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="Relationship">Relationship</label>
+                <div class="col-md-9">
+                  <input class="form-control"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.relationship"
+                         id="Relationship"
+                         name="Relationship" type="text"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="EmerPhone">Phone</label>
+                <div class="col-md-9">
+                  <input class="form-control"
+                         ng-model="clientRegister.client.person.primaryEmergencyContact.phone"
+                         id="EmerPhone"
+                         name="EmerPhone" type="text"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>Basic Information</legend>
+          <div class="row">
+            <div class="col-md-1"><img src="/assets/img/demographic.png" height="50"/></div>
+            <div class="col-md-11">
+              <div class="form-group">
+                <label class="control-label col-md-3" for="Gender">Gender</label>
+                <div class="col-md-9">
+                  <select class="form-control" id="Gender" ng-model="clientRegister.client.person.gender" name="Gender">
+                    <option ng-repeat="item in clientRegister.genders">{{item}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-class="{'has-error': clientForm.dateOfBirth.$invalid}">
+                <label class="control-label col-md-3">Birth Date</label>
+                <div class="col-md-9">
+                  <p class="input-group">
+                    <input type="date" name="dateOfBirth"
+                           ng-model="clientRegister.client.person.dateOfBirth"
+                           class="form-control"
+                           uib-datepicker-popup
+                           is-open="clientRegister.opened" disabled required format-date/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="clientRegister.opened = true">
+                          <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3" for="Language">Language</label>
+                <div class="col-md-9">
+                  <input class="form-control" ng-model="clientRegister.client.person.language" id="Language"
+                         name="Language" type="text"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3" for="Interpreter">Interpreter</label>
+                <div class="col-md-9">
+                  <div class="checkbox">
+                    <input type="checkbox" ng-model="clientRegister.client.person.requiresInterpreter">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="col-lg-6">
+        <fieldset>
+          <legend>
+            Employment/School Information
+            <i class="pull-right fa fa-plus-circle selectable" ng-click="clientRegister.addEmployee()"></i>
+          </legend>
+          <div class="row">
+            <div class="col-md-2">
+              <img src="/assets/img/job.png" height="50"/>
+            </div>
+            <div class="col-md-10">
+              <uib-accordion>
+                <uib-accordion-group ng-repeat="em in clientRegister.client.person.employments track by $index">
+                  <uib-accordion-heading>
+                    {{em.company.displayName || "Please Choose Company"}}
+                    <i class="pull-right fa fa-trash-o fa-lg" ng-click="clientRegister.removeEmployment($index, $event)"></i>
+                  </uib-accordion-heading>
+                  <form>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="employer">Employer</label>
+                      <div class="col-md-9">
+                        <select-loader
+                          url="company"
+                          is-atomic="true"
+                          is-disabled="false"
+                          bind-object="true"
+                          ng-model="em.company"
+                          labels="displayName">
+                        </select-loader>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="WorkPhone">
+                        Work Phone
+                      </label>
+                      <div class="col-md-9">
+                        <input class="form-control" id="WorkPhone"
+                               ng-model="em.workPhone"
+                               name="WorkPhone" type="text"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="WorkEmail">
+                        Work Email
+                      </label>
+                      <div class="col-md-9">
+                        <input class="form-control" id="WorkEmail"
+                               ng-model="em.workEmail"
+                               name="WorkEmail" type="email"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="Occupation">
+                        Occupation
+                      </label>
+                      <div class="col-md-9">
+                        <input class="form-control" id="Occupation"
+                               ng-model="em.occupation"
+                               name="Occupation" type="text"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="OccuType">
+                        Occupation Type
+                      </label>
+                      <div class="col-md-9">
+                        <input class="form-control" id="OccuType"
+                               ng-model="em.occupationType"
+                               name="OccuType" type="text"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="OccuSector">
+                        Occupation Sector
+                      </label>
+                      <div class="col-md-9">
+                        <input class="form-control" id="OccuSector"
+                               ng-model="em.occupationSector"
+                               name="OccuSector" type="text"/>
+                      </div>
+                    </div>
+                  </form>
+                </uib-accordion-group>
+              </uib-accordion>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
     <div class="modal-footer">
-      <button ng-click="CR.save(isValid)" type="submit" ng-if="CR.client.id"
-              ng-disabled="clientForm.$invalid && CR.client.$invalid"
-              class="btn btn-primary"><i></i> Save
+      <button ng-click="clientRegister.save(isValid)" type="submit" ng-if="clientRegister.client.id"
+              ng-disabled="clientForm.$invalid || clientForm.$pristine"
+              class="btn btn-primary">
+        <i class="fa fa-floppy-o"></i>
+        <span translate context-translator="APP.CLIENTREGISTER.LABELS.UPDATE_CLIENT">
+          APP.CLIENTREGISTER.LABELS.UPDATE_CLIENT
+        </span>
       </button>
-      <button ng-click="CR.clientAdd(isValid)" type="submit" ng-if="!CR.client.id"
+      <button ng-click="clientRegister.clientAdd(isValid)" type="submit" ng-if="!clientRegister.client.id"
               ng-disabled="clientForm.$invalid"
-              class="btn btn-primary"><i></i> Add
+              class="btn btn-primary">
+        <i class="fa fa-floppy-o"></i>
+        <span translate context-translator="APP.CLIENTREGISTER.LABELS.REGISTER_CLIENT">
+          APP.CLIENTREGISTER.LABELS.REGISTER_CLIENT
+        </span>
       </button>
-      <button ng-click="CR.cancelClientAdd()" ng-disabled="CR.client.$invalid"
-              class="btn">Cancel
+      <button ng-click="clientRegister.cancelClientAdd()" class="btn btn-default">
+        <i class="fa fa-ban"></i>
+        <span translate context-translator="APP.CLIENTREGISTER.LABELS.CANCEL">
+          APP.CLIENTREGISTER.LABELS.CANCEL
+        </span>
       </button>
     </div>
-  </form>
+  </ng-form>
 </div>
