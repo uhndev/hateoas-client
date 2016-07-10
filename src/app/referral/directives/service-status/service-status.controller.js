@@ -16,13 +16,16 @@
         'statusName': 'statusName',
         'populate': ['currentApproval', 'approvals'],
         'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.APPROVAL_HISTORY',
-        'detailColumns': [
-          {
-            'name': 'COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID',
-            'type': 'text',
-            'value': 'externalID'
-          }
-        ]
+        'detailColumns': {
+          'name': 'COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID',
+          'values': [
+            {
+              'name': 'COMMON.MODELS.APPROVAL.EXTERNAL_APPROVAL_ID',
+              'type': 'text',
+              'value': 'externalID'
+            }
+          ]
+        }
       },
       'completion': {
         'model': 'completion',
@@ -32,18 +35,21 @@
         'statusName': 'completionStatusName',
         'populate': ['currentCompletion', 'completion'],
         'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.COMPLETION_HISTORY',
-        'detailColumns': [
-          {
-            'name': 'COMMON.MODELS.COMPLETION.CANCELLATION_DATE',
-            'type': 'date',
-            'value': 'cancellationDate'
-          },
-          {
-            'name': 'COMMON.MODELS.COMPLETION.COMPLETION_DATE',
-            'type': 'date',
-            'value': 'completionDate'
-          }
-        ]
+        'detailColumns': {
+          'name': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.COMPLETION.DATE',
+          'values': [
+            {
+              'name': 'COMMON.MODELS.COMPLETION.DATE',
+              'type': 'date',
+              'value': 'cancellationDate'
+            },
+            {
+              'name': 'COMMON.MODELS.COMPLETION.DATE',
+              'type': 'date',
+              'value': 'completionDate'
+            }
+          ]
+        }
       },
       'billing': {
         'model': 'billingstatus',
@@ -53,23 +59,23 @@
         'statusName': 'billingStatusName',
         'populate': ['currentBillingStatus', 'billingStatuses'],
         'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.BILLING_HISTORY',
-        'detailColumns': [
-          {
-            'name': 'COMMON.MODELS.BILLING_STATUS.PAID_DATE',
-            'type': 'date',
-            'value': 'paidDate'
-          },
-          {
-            'name': 'COMMON.MODELS.BILLING_STATUS.DENIED_DATE',
-            'type': 'date',
-            'value': 'deniedDate'
-          },
-          {
-            'name': 'COMMON.MODELS.BILLING_STATUS.REJECTED_DATE',
-            'type': 'date',
-            'value': 'rejectedDate'
-          }
-        ]
+        'detailColumns': {
+          'name': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.BILLING_STATUS.DATE',
+          'values': [
+            {
+              'type': 'date',
+              'value': 'paidDate'
+            },
+            {
+              'type': 'date',
+              'value': 'deniedDate'
+            },
+            {
+              'type': 'date',
+              'value': 'rejectedDate'
+            }
+          ]
+        }
       },
       'report': {
         'model': 'reportstatus',
@@ -79,7 +85,7 @@
         'statusName': 'reportStatusName',
         'populate': ['currentReportStatus', 'reportStatuses'],
         'historyTitle': 'APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.REPORT_HISTORY',
-        'detailColumns': []
+        'detailColumns': {}
       }
     })
     .controller('ServiceStatusController', ServiceStatusController);
@@ -113,18 +119,18 @@
 
     // bindable methods
     vm.updateApprovalStatus = updateApprovalStatus;
+    vm.renderStatusData = renderStatusData;
 
     var SystemForm = $resource(API.url() + '/systemform');
     var ServiceStatus = $resource(API.url() + '/service');
     var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
-
     init();
 
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      // check if passed in service object with id without populated approvals/completions, then fetch from server
-      if (!vm.service.approvals || !vm.service.completion || !vm.service.billingStatuses || !vm.service.reportStatuses) {
+      // check if passed in service object with id without populated collections, then fetch from server
+      if (!vm.service[vm.collection]) {
         fetchStatusHistory();
       }
     }
@@ -222,6 +228,31 @@
       if (newVal && newVal.id !== oldVal.id && _.has(newVal, 'id')) {
         fetchStatusHistory();
       }
+    }
+
+    /**
+     * renderStatusData
+     * @description Returns array of status data based on non-null values set in detailColumns
+     * @param approval
+     */
+    function renderStatusData(approval) {
+      var data = '-';
+      var detailColumn =  _.find(vm.defaults.detailColumns.values, function (column) {
+        return approval && !_.isNull(approval[column.value]);
+      });
+
+      if (detailColumn) {
+        switch (detailColumn.type) {
+          case 'text':
+            data = approval[detailColumn.value];
+            break;
+          case 'date':
+            data = moment(approval[detailColumn.value]).utc().format('MMM D, YYYY');
+            break;
+          default: break;
+        }
+      }
+      return data;
     }
 
     $scope.$watch('serviceStatus.service', watchServiceChange);

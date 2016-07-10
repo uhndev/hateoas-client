@@ -1,4 +1,4 @@
-<div style="padding: 0 10px 0px 5px">
+<div class="note-container">
   <div class="note">
     <div>
       <span class="date">
@@ -40,7 +40,7 @@
          class="markdown-body" btf-markdown="at.note.text"></div>
 
     <div ng-show="at.note.$edit" ng-model="at.note.text"
-         ng-style="{ 'height': at.getLineHeight() + 'px', 'background-color': at.note.noteType.backGroundColor }"
+         ng-style="{ 'height': at.getLineHeight() + 'px' }"
          ui-ace="{
            useWrapMode: true,
            showGutter: false,
@@ -50,8 +50,13 @@
            onBlur: at.updateNote
          }">
     </div>
+
     <div>
-      CreatedBy: {{ at.note.displayName}} <span class="pull-right">{{at.note.noteType.name}}</span>
+      CreatedBy: {{ at.note.displayName}}
+      <span class="pull-right" ng-style="{'color': at.notebook.noteTypes[at.note.noteType].backgroundColour}">
+        {{at.notebook.noteTypes[at.note.noteType].name}}
+      </span>
     </div>
+
   </div>
 </div>

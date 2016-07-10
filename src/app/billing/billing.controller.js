@@ -10,7 +10,7 @@
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
       'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
-      'currentCompletionPhysicianName', 'currentCompletionStaffName',
+      'currentCompletionPhysicianName', 'currentCompletionStaffName', 'completionDate',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
@@ -48,43 +48,47 @@
     vm.groupFields = [
       {
         name: 'statusName',
-        prompt: 'COMMON.MODELS.SERVICE.CURRENT_STATUS'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.CURRENT_STATUS'
       },
       {
         name: 'completionStatusName',
-        prompt: 'COMMON.MODELS.SERVICE.COMPLETION_STATUS'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.COMPLETION_STATUS'
       },
       {
         name: 'billingStatusName',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.BILLING_STATUS'
       },
       {
         name: 'siteName',
-        prompt: 'COMMON.MODELS.SERVICE.SITE'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.SITE'
       },
       {
         name: 'programName',
-        prompt: 'COMMON.MODELS.SERVICE.PROGRAM'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.PROGRAM'
       },
       {
         name: 'payorName',
-        prompt: 'COMMON.MODELS.PROGRAM.PAYOR'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.PAYOR'
       },
       {
         name: 'programServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.PROGRAM_SERVICE'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.PROGRAM_SERVICE'
       },
       {
         name: 'billingGroupName',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_GROUP'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.BILLING_GROUP'
       },
       {
         name: 'client_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.CLIENT'
       },
       {
         name: 'serviceGroupByDate',
-        prompt: 'COMMON.MODELS.SERVICE.SERVICE_DATE'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.SERVICE_DATE'
+      },
+      {
+        name: 'completionGroupByDate',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.COMPLETION_DATE'
       }
     ];
 
@@ -103,7 +107,8 @@
       },
       {
         name: 'payorPrice',
-        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE'
+        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE',
+        type: 'price'
       },
       {
         name: 'altumServiceName',
@@ -157,8 +162,10 @@
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(vm.resource.items, function (service) {
-          service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
-          service.serviceDate = moment(service.serviceDate).format('MMM D, YYYY h:mm a');
+          service.serviceGroupByDate = service.serviceDate ? moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY') : 'null';
+          service.serviceDate = service.serviceDate ? moment(service.serviceDate).format('MMM D, YYYY h:mm a') : '-';
+          service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
+          service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
           service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
           return service;
         });

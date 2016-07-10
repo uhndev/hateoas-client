@@ -1,5 +1,5 @@
 <div class="container-fluid" ng-controller="ServiceMapperController as serviceMap">
-  <h2 id="Title" translate>
+  <h2 id="Title" translate ng-keypress="serviceMap.enableAltumServiceView($event)" tabindex="0">
     APP.HEADER.MENU.SERVICE_MAPPER
   </h2>
   <div id="Query" class="clearfix">
@@ -10,6 +10,16 @@
       ng-model="serviceMap[serviceMap.current].query.where"
       ng-if="serviceMap[serviceMap.current].resource.template">
     </query-builder>
+  </div>
+
+  <div id="Controls" class="align-right">
+    <hateoas-controls
+      ng-if="serviceMap.permissions[serviceMap.current]"
+      data-template="serviceMap[serviceMap.current].resource.template"
+      data-href="{{serviceMap[serviceMap.current].resource.referrer}}"
+      data-permissions="serviceMap.permissions[serviceMap.current]"
+      data-item="serviceMap[serviceMap.current].selected">
+    </hateoas-controls>
   </div>
 
   <uib-tabset active="serviceMap.currentIndex">

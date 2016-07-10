@@ -14,8 +14,8 @@
     var vm = this;
 
     vm.client = resolvedClient;
-    vm.prefixes = _.find(resolvedPerson.template.data, {name: 'prefix'}).value;
-    vm.genders = _.find(resolvedPerson.template.data, {name: 'gender'}).value;
+    vm.prefixes = _.find(resolvedPerson.data, {name: 'prefix'}).value;
+    vm.genders = _.find(resolvedPerson.data, {name: 'gender'}).value;
     vm.cancelClientAdd = cancelClientAdd;
     vm.addEmployee = addEmployee;
     vm.removeEmployment = removeEmployment;
@@ -89,7 +89,7 @@
      */
     function save() {
       vm.client.$update().then(function (resp) {
-        toastr.success('Updated client ' + resp.id + '!');
+        toastr.success('Updated client: ' + resp.items.displayName + '!', 'Client Registration');
         $location.path('/client');
         $state.go('hateoas');
       },
@@ -108,7 +108,7 @@
       newClient.MRN = vm.client.MRN;
       newClient.person = vm.client.person;
       newClient.$save().then(function (resp) {
-        toastr.success('New client created');
+        toastr.success('Registered new client: ' + resp.displayName + '!', 'Client Registration');
         $location.path('/client');
         $state.go('hateoas');
       },
