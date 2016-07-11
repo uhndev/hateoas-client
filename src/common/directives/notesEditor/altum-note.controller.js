@@ -41,12 +41,14 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      _.map(vm.notebook.notes, function (note) {
-        note.$edit = false;
-      });
-      vm.note.$edit = true;
-      vm.original = angular.copy(vm.note);
-      vm.editor.focus();
+      if (vm.notebook.permissions.update) {
+        _.map(vm.notebook.notes, function (note) {
+          note.$edit = false;
+        });
+        vm.note.$edit = true;
+        vm.original = angular.copy(vm.note);
+        vm.editor.focus();
+      }
     }
 
     /**

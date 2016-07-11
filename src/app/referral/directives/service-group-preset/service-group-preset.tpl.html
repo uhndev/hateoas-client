@@ -3,11 +3,11 @@
     <button type="button" class="btn btn-default btn-sm"
             ng-click="serviceGroupPreset.selectGroupPreset(preset)">
       {{preset.name}}
-      <i ng-if="serviceGroupPreset.isAdmin" class="fa fa-times selectable"
+      <i ng-if="serviceGroupPreset.permissions.delete" class="fa fa-times selectable"
          ng-click="serviceGroupPreset.removePreset(preset.name)" role="button"></i>
     </button>
   </div>
-  <div ng-if="serviceGroupPreset.isAdmin" class="service-preset-item">
+  <div ng-if="serviceGroupPreset.permissions.create" class="service-preset-item">
     <button type="button" class="btn btn-info btn-sm"
             ng-click="serviceGroupPreset.addGroupPreset()">
       <i class="fa fa-plus"></i>

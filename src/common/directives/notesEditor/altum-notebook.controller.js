@@ -16,6 +16,7 @@
     vm.collection = vm.collection || {};
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
+    vm.permissions = {};
     NoteType.query(function (noteTypes) {
       vm.noteTypes = _.indexBy(noteTypes, 'id');
     });
@@ -37,7 +38,10 @@
       NoteResource.query({
         where: vm.collection,
         sort: 'createdAt DESC'
-      }, function (data, header) {
+      }, function (data, headers) {
+        _.each(headers('allow').split(','), function (permission) {
+          vm.permissions[permission] = true;
+        });
         vm.template = angular.copy(data.template.data);
         vm.resource = angular.copy(data);
         vm.notes = angular.copy(data.items);
