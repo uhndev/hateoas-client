@@ -20,9 +20,9 @@
       controllerAs: 'addr'
     });
 
-  AddressEditorController.$inject = ['AltumAPIService', 'uiGmapGoogleMapApi'];
+  AddressEditorController.$inject = ['$scope', 'AltumAPIService', 'uiGmapGoogleMapApi'];
 
-  function AddressEditorController(AltumAPI, uiGmapGoogleMapApi) {
+  function AddressEditorController($scope, AltumAPI, uiGmapGoogleMapApi) {
     var vm = this;
 
     // bindable variables
@@ -66,16 +66,18 @@
         vm.geocoder.geocode({
           address: _.values(_.pick(vm.resource.address, 'address1', 'address2', 'city', 'province', 'postalCode', 'country')).join(' ')
         }, function (location) {
-          vm.geocodesLoading = false;
-          if (location.length) {
-            var latitude = _.first(location).geometry.location.lat();
-            var longitude = _.first(location).geometry.location.lng();
-            vm.resource.address.latitude = latitude;
-            vm.resource.address.longitude = longitude;
-          } else {
-            delete vm.resource.address.latitude;
-            delete vm.resource.address.longitude;
-          }
+          $scope.$apply(function () {
+            vm.geocodesLoading = false;
+            if (location.length) {
+              var latitude = _.first(location).geometry.location.lat();
+              var longitude = _.first(location).geometry.location.lng();
+              vm.resource.address.latitude = latitude;
+              vm.resource.address.longitude = longitude;
+            } else {
+              vm.resource.address.latitude = 'Invalid Address';
+              vm.resource.address.longitude = 'Invalid Address';
+            }
+          });
         });
       }
     }

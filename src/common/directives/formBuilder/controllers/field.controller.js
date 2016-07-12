@@ -48,13 +48,16 @@
     // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker
     // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
     if ($scope.field.field_type == 'date') {
-      // check for invalid doe dates
-      if (!moment($scope.field.field_value).isValid()) {
-        delete $scope.field.field_value;
-      } else {
-        if (angular.isString($scope.field.field_value)) {
+      switch (true) {
+        case !moment($scope.field.field_value).isValid():
+          delete $scope.field.field_value;
+          break;
+        case angular.isString($scope.field.field_value):
           $scope.field.field_value = new Date($scope.field.field_value);
-        }
+          break;
+        default:
+          $scope.field.field_value = new Date();
+          break;
       }
     }
 
