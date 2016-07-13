@@ -33,6 +33,8 @@
           });
           vm.formOrder = _.intersection(data.items.formOrder, vm.formVersions);
 
+          $scope.$broadcast('IndicatorsSum', vm.formOrder);
+
           if (_.isArray(vm.formOrder) && vm.formOrder.length) {
             // reset formOrder index (open form in the session)
             vm.current = 0;
@@ -63,7 +65,10 @@
      * @description Event that fires from dadosForm controller
      *              when last question on the current form is reached.
      */
-    $scope.$on('NextFormRequest', function () {
+    $scope.$on('NextFormRequest', function (event, formOrder) {
+      if (formOrder !== undefined) {
+        vm.current = formOrder;
+      }
       if (vm.current < vm.formOrder.length - 1) {
         vm.current++;
         loadForm();

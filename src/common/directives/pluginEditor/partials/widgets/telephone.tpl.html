@@ -3,6 +3,7 @@
 	name="{{ widget.name }}"
 	ng-maxlength="{{widget.properties.maxlength}}"
 	title="{{widget.properties.title}}"
+  ng-disabled="disabledWhen"
 	ng-model="widgetModel.value"
 	placeholder="{{widget.properties.title}}"
 	size="{{widget.properties.size}}"

@@ -29,6 +29,7 @@
     vm.newSubject = {study: study.id};
     vm.study = study;
     vm.centreHref = centreHref;
+    vm.toggleAddSubjectView = false;
     vm.statuses = ENROLLMENT_STATUSES;
     StudyUser.query({studyID: study.id}).$promise.then(function (data) {
       vm.studyUsers = {user: _.pluck(data, 'id')};

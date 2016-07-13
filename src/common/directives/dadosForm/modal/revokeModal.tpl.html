@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h3 class="modal-title">Revoke Form</h3>
+</div>
+<div class="modal-body">
+  <ng-form name="userForm" class="form-horizontal" novalidate>
+    <div class="form-group">
+      <label for="revokeReason" class="col-sm-3 control-label" translate>Please provide a reason:</label>
+      <div class="col-sm-9">
+        <input id="revokeReason" name="revokeReason" type="text" class="form-control" ng-model="revoke.reason"
+               ng-required="true"/>
+      </div>
+    </div>
+  </ng-form>
+</div>
+<div class="modal-footer">
+  <button type="submit" id="revokeBtn" class="btn btn-primary"
+          ng-disabled="userForm.$invalid" ng-click="revoke.revoke()">
+    Revoke
+  </button>
+  <button type="button" id="cancelBtn" class="btn btn-warning" ng-click="revoke.cancel()">
+    Cancel
+  </button>
+</div>
