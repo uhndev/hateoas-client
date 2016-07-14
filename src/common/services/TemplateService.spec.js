@@ -337,7 +337,7 @@ describe('TemplateService', function() {
   });
 
   it('has 4 methods', function() {
-    expect(_.keys(SERVICE)).toEqual(['formToObject', 'parseToForm', 'loadAnswerSet']);
+    expect(_.keys(SERVICE)).toEqual(['formToObject', 'parseToForm', 'loadAnswerSet', 'fetchTemplate']);
   });
 
   it('converts a form to a data object with formToObject', function() {

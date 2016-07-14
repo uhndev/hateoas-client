@@ -1,7 +1,8 @@
 <md-tabs id="referral-tabs" md-dynamic-height md-border-bottom>
   <md-tab ng-disabled="!recPicker.referral.program" ng-click="recPicker.currIndex = null">
     <md-tab-label>
-      <span translate="{{::recPicker.config.labels.available}}"></span>
+      <span translate="{{::recPicker.config.labels.available}}"
+            context-translator="{{::recPicker.config.labels.available}}"></span>
       ({{::recPicker.availableServices.length}})
     </md-tab-label>
     <md-tab-body>
@@ -44,7 +45,8 @@
   </md-tab>
   <md-tab ng-disabled="!recPicker.referral.program || recPicker.recommendedServices.length === 0">
     <md-tab-label>
-      <span translate="{{recPicker.config.labels.recommended}}"></span>
+      <span translate="{{::recPicker.config.labels.recommended}}"
+            context-translator="{{::recPicker.config.labels.recommended}}"></span>
       ({{recPicker.recommendedServices.length}})
     </md-tab-label>
     <md-tab-body>
@@ -70,12 +72,10 @@
                 </span>
               </span>
               <span class="badge selectable" type="button"
-                    ng-hide="service == recPicker.recommendedServices[recPicker.currIndex]"
                     ng-click="recPicker.toggleService(service, $event)">
                 <i class="fa fa-times"></i>
               </span>
               <span class="badge selectable" type="button"
-                    ng-hide="service == recPicker.recommendedServices[recPicker.currIndex]"
                     ng-click="recPicker.duplicateService(service, $index, $event)">
                 <i class="fa fa-files-o"></i>
               </span>

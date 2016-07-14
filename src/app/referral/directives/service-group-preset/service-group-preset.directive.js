@@ -26,11 +26,12 @@
     })
     .controller('ServiceGroupPresetController', ServiceGroupPresetController);
 
-  ServiceGroupPresetController.$inject = ['$scope', '$resource', 'API', 'toastr', 'AuthService'];
+  ServiceGroupPresetController.$inject = ['$resource', 'API', 'toastr'];
 
-  function ServiceGroupPresetController($scope, $resource, API, toastr, AuthService) {
+  function ServiceGroupPresetController($resource, API, toastr) {
     var vm = this;
-    vm.isAdmin = AuthService.isAdmin();
+
+    vm.permissions = {};
     vm.newPresetName = 'Default';
 
     var ServicePreset = $resource(API.url('servicepreset'), {}, {
@@ -49,7 +50,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      ServicePreset.get(function(data) {
+      ServicePreset.get(function(data, headers) {
+        _.each(headers('allow').split(','), function (permission) {
+          vm.permissions[permission] = true;
+        });
         if (_.has(data, 'items')) {
           vm.serviceGroupPresets = data.items;
         } else {

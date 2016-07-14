@@ -6,24 +6,34 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         NOTES
-        <span class="icons pull-right" uib-dropdown>
+        <span class="icons pull-right" uib-dropdown ng-if="notebook.permissions.create">
           <a ng-href uib-dropdown-toggle>
             <span class="fa fa-plus-circle fa-2x"></span>
           </a>
           <ul uib-dropdown-menu>
-            <li ng-repeat="type in notebook.noteTypes">
-              <a ng-href ng-click="notebook.addNote(type)">
-                <i class="{{type.iconClass}}"></i> {{type.name}}
+            <li ng-repeat="(noteTypeID, noteType) in notebook.noteTypes">
+              <a ng-href ng-click="notebook.addNote(noteTypeID)">
+                <i class="{{noteType.iconClass}}"></i> {{noteType.name}}
               </a>
             </li>
           </ul>
         </span>
       </div>
+
       <div class="form-group has-feedback has-feedback-left">
         <i class="no-top form-control-feedback fa fa-search"></i>
-        <input type="text" class="form-control" ng-model="notebook.filter"></input>
+        <input type="text" class="form-control"
+               ng-if="notebook.resource.total <= 30"
+               ng-model="notebook.filterNormal" />
+        <input type="text" class="form-control"
+               ng-if="notebook.resource.total > 30"
+               ng-model="notebook.filterQuery"
+               ng-change="notebook.search(notebook.filterQuery)"
+               ng-model-options="{debounce: 500}"/>
       </div>
-      <div ng-repeat="note in notebook.notes | filter:notebook.filter : orderBy:'createdAt': true track by $index">
+
+      <div ng-repeat="note in notebook.notes | filter:notebook.filterNormal track by $index"
+           ng-style="{'border-left': '4px solid ' + notebook.noteTypes[note.noteType].backgroundColour}">
         <altum-note note="note"
                     collection="notebook.collection"
                     email-info="notebook.emailInfo"

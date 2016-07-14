@@ -44,6 +44,7 @@
       'altum.triage',
       'altum.servicevariation',
       'altum.report',
+      'altum.servicemapper',
 
       // dados subject portal
       'dados.subjectportal',

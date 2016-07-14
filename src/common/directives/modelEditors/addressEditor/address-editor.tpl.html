@@ -1,11 +1,13 @@
 <ng-form name="addressForm" ng-claass="addr.horizontal" novalidate ng-cloak>
-  <div class="form-group" ng-class="{ 'has-error' : addressForm.address1.$invalid && addressForm.address1.$touched}">
+  <div class="form-group" ng-class="{ 'has-error' : addressForm.address1.$invalid}">
     <label class="control-label" ng-class="{'col-md-3': addr.horizontal}" for="address-editor-address1">
       <span translate>COMMON.MODELS.ADDRESS.ADDRESS1</span>
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-address1" type="text" name="address1" class="form-control"
-             ng-model="addr.resource.address.address1" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.address1"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 
@@ -15,11 +17,13 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-address2" type="text" name="address2" class="form-control"
-             ng-model="addr.resource.address.address2" ng-blur="addr.canUpdateGeocode(addressForm.$valid)"/>
+             ng-model="addr.resource.address.address2"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)"/>
     </div>
   </div>
 
-  <div class="form-group" ng-class="{ 'has-error' : addressForm.city.$invalid && addressForm.city.$touched}">
+  <div class="form-group" ng-class="{ 'has-error' : addressForm.city.$invalid}">
     <label class="control-label" ng-class="{'col-md-3': addr.horizontal}" for="address-editor-city">
        <span translate>COMMON.MODELS.ADDRESS.CITY</span>
     </label>
@@ -37,13 +41,15 @@
     </div>
   </div>
 
-  <div class="form-group" ng-class="{ 'has-error' : addressForm.province.$invalid && addressForm.province.$touched }">
+  <div class="form-group" ng-class="{ 'has-error' : addressForm.province.$invalid }">
     <label class="control-label" ng-class="{'col-md-3': addr.horizontal}" for="address-editor-province">
        <span translate>COMMON.MODELS.ADDRESS.PROVINCE</span>
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-province" type="text" name="province" class="form-control"
-             ng-model="addr.resource.address.province" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.province"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 
@@ -53,17 +59,21 @@
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-postalCode" type="text" name="postalCode" class="form-control"
-             ng-model="addr.resource.address.postalCode" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.postalCode"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)"/>
     </div>
   </div>
 
-  <div class="form-group" ng-class="{ 'has-error' : addressForm.country.$invalid && addressForm.country.$touched }">
+  <div class="form-group" ng-class="{ 'has-error' : addressForm.country.$invalid }">
     <label class="control-label" ng-class="{'col-md-3': addr.horizontal}" for="address-editor-country">
       <span translate>COMMON.MODELS.ADDRESS.COUNTRY</span>
     </label>
     <div ng-class="{'col-md-9': addr.horizontal}">
       <input id="address-editor-country" type="text" name="country" class="form-control"
-             ng-model="addr.resource.address.country" ng-blur="addr.canUpdateGeocode(addressForm.$valid)" required/>
+             ng-model="addr.resource.address.country"
+             ng-model-options="{debounce: 500}"
+             ng-change="addr.canUpdateGeocode(addressForm.$valid)" required/>
     </div>
   </div>
 

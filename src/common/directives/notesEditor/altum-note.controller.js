@@ -41,12 +41,31 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      _.map(vm.notebook.notes, function (note) {
-        note.$edit = false;
-      });
-      vm.note.$edit = true;
-      vm.original = angular.copy(vm.note);
-      vm.editor.focus();
+      if (vm.notebook.permissions.update) {
+        _.map(vm.notebook.notes, function (note) {
+          note.$edit = false;
+        });
+        vm.note.$edit = true;
+        vm.original = angular.copy(vm.note);
+        vm.editor.focus();
+      }
+    }
+
+    /**
+     * enableAndFocusEditor
+     * @description function set focus on ACE editor when creating new note and put the cursor on end of the line.
+     */
+
+    function enableAndFocusEditor(editor) {
+      if (editor) {
+        editor.focus();
+        var session = editor.getSession();
+        //Get the number of lines
+        var count = session.getLength();
+        //Go to end of the last line
+        editor.gotoLine(count, session.getLine(count-1).length);
+        editor.setReadOnly(false);
+      }
     }
 
     /**
@@ -131,10 +150,12 @@
 
       _editor.$blockScrolling = Infinity;
 
+      enableAndFocusEditor(_editor);
+
       // Events
-      _editor.on('focus', function () {
+     /* _editor.on('focus', function () {
         selectEdit();
-      });
+      }); */
     }
 
     /**

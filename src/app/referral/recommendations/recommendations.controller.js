@@ -16,10 +16,10 @@
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$q', '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService', 'AltumAPIService'
+    '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService'
   ];
 
-  function RecommendationsController($q, $resource, $location, API, HeaderService, toastr, RecommendationsService, AltumAPI) {
+  function RecommendationsController($resource, $location, API, HeaderService, toastr, RecommendationsService) {
     var vm = this;
 
     // bindable variables
@@ -40,11 +40,11 @@
         programService: true,
         site: true,
         variations: true,
-        payorPrice: true
+        payorPrice: true,
+        serviceDate: true
       },
       required: {
-        visitService: true,
-        serviceDate: true
+        visitService: true
       }
     };
 
@@ -54,7 +54,6 @@
     };
     vm.accordionStatus = {};
     vm.sharedService = {};
-    vm.referralNotes = [];
     vm.currIndex = null;
     vm.recommendedServices = [];
     vm.availableServices = [];
@@ -74,7 +73,6 @@
         vm.sharedService = {};
         vm.resource = angular.copy(data);
         vm.referral = angular.copy(data.items);
-        vm.referralNotes = AltumAPI.Note.query({where:{referral: data.items.id}});
 
         // load physician in from referraldetail
         vm.sharedService = {

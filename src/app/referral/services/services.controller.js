@@ -23,7 +23,7 @@
 
     var templateFilterFields = [
       'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
-      'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
+      'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount', 'completionDate',
       'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
     ];
@@ -33,7 +33,6 @@
 
     // bindable variables
     vm.url = API.url() + $location.path();
-    vm.referralNotes = [];
     vm.accordionStatus = {};
     vm.boundGroupTypes = {
       groupBy: vm.DEFAULT_GROUP_BY,
@@ -96,6 +95,10 @@
       {
         name: 'serviceGroupByDate',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.SERVICE_DATE'
+      },
+      {
+        name: 'completionGroupByDate',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.COMPLETION_DATE'
       }
     ];
 
@@ -130,6 +133,11 @@
         name: 'serviceDate',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.SERVICE_DATE',
         type: 'datetime'
+      },
+      {
+        name: 'report',
+        prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
+        type: 'status'
       },
       {
         name: 'approval',
@@ -187,21 +195,20 @@
         vm.templateFieldOptions = vm.templateFieldOptions || _.filter(data.template.data, function (field) {
           return _.contains(templateFilterFields, field.name);
         });
-
         // setup array of fields to choose from for referral billing (creates a clone of repeating elements for billing)
         vm.billingFieldOptions = _.cloneDeep(vm.billingFieldOptions || _.reject(vm.templateFieldOptions, function (field) {
           return _.contains(['billingCount'], field.name);
         }));
-
         // changes the prompt values for templateFields and billing fields so that the path is correct
         vm.templateFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.SERVICES.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
         vm.billingFieldOptions.map(function (element) { element.prompt = 'APP.REFERRAL.BILLING.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
 
-        vm.referralNotes = AltumAPI.Referral.get({id: vm.referral.id, populate: 'notes'});
-
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(data.items.recommendedServices, function (service) {
-          service.serviceGroupByDate = moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY');
+          service.serviceGroupByDate = service.serviceDate ? moment(service.serviceDate).startOf('day').format('dddd, MMMM Do YYYY') : 'null';
+          service.serviceDate = service.serviceDate ? moment(service.serviceDate).format('MMM D, YYYY h:mm a') : '-';
+          service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
+          service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
           return service;
         });
 
@@ -275,7 +282,8 @@
               altumService: true,
               programService: true,
               variations: true,
-              payorPrice: true
+              payorPrice: true,
+              serviceDate: true
             },
             required: {}
           };

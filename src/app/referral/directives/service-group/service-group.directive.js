@@ -19,6 +19,9 @@
       'altum.referral.serviceStatus.controller',
       'altum.referral.serviceStatus.confirmation.controller'
     ])
+    .constant('STATUS_CATEGORIES', [
+      'approval', 'completion', 'billing', 'report'
+    ])
     .component('serviceGroup', {
       bindings: {
         services: '=',
@@ -34,9 +37,11 @@
     })
     .controller('ServiceGroupController', ServiceGroupController);
 
-  ServiceGroupController.$inject = ['$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES'];
+  ServiceGroupController.$inject = [
+    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES', 'TemplateService'
+  ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES, TemplateService) {
     var vm = this;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
@@ -44,32 +49,34 @@
 
     // bindable variables
     vm.templates = {};
-    _.each(['approval', 'completion', 'billing'], function (statusType) {
-      var StatusType = $resource(API.url(STATUS_TYPES[statusType].model), {}, {
-        'query': {method: 'GET', isArray: false}
-      });
-      StatusType.query({where: {id: 0}, limit: 1}, function (data) {
-        vm.templates[statusType] = data.template;
-      });
+    vm.statusTitles = {};
+    _.each(STATUS_CATEGORIES, function (statusType) {
+      TemplateService.fetchTemplate(STATUS_TYPES[statusType].model)
+        .then(function (template) {
+          vm.templates[statusType] = template;
+        });
     });
 
     // bindable methods
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
-
+    vm.savePrice = savePrice;
     init();
 
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var filteredStatuses = _.filter(['approval', 'completion', 'billing'], function(field) {
+      var filteredStatuses = _.filter(STATUS_CATEGORIES, function(field) {
         return _.contains(_.map(vm.visitFields, 'name'), field);
       });
 
       if (filteredStatuses.length) {
         AltumAPI.Status.query({where: {category: filteredStatuses}}, function (statuses) {
           vm.statuses = _.groupBy(statuses, 'category');
+        });
+        _.each(filteredStatuses, function(category) {
+          vm.statusTitles[category] = 'APP.REFERRAL.DIRECTIVES.SERVICE_GROUP.LABELS.SET_' + category.toUpperCase() + '_STATUSES';
         });
       }
 
@@ -175,6 +182,20 @@
       bulkStatusChange.$save(function (updatedStatuses) {
         toastr.success(services.length + ' service(s) updated to: ' + vm.statusSelections[category].name, 'Services');
         vm.statusSelections[category] = null;
+        vm.onUpdate();
+      });
+    }
+
+    /**
+     * savePrice
+     * @description saves the payor price of the service on change by updatedService
+     * @param price
+     * @param service
+     */
+    function savePrice(price, service) {
+      var Service = new AltumAPI.Service({payorPrice: parseFloat(price)});
+      Service.$update({id: service.id}, function(result) {
+        toastr.success(service.displayName + ' price updated to ' + price, 'Services');
         vm.onUpdate();
       });
     }

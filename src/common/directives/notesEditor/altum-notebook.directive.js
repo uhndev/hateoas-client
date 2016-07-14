@@ -5,7 +5,6 @@
     .module('altum.notebook', ['altum.notebook.controller'])
     .component('altumNotebook', {
       bindings: {
-        notes: '=',
         collection: '=',
         emailInfo: '='
       },
@@ -14,4 +13,3 @@
       templateUrl: 'directives/notesEditor/altum-notebook.tpl.html'
     });
 })();
-
