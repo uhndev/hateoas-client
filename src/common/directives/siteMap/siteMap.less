@@ -1,15 +1,14 @@
-.mapDiv {
-  top: 30px;
+#mapDirections{
+  margin:0px;
 }
-
-ui-gmap-google-map {
-  float:left;
-  margin-right: 15px;
-}
-
+// ui-gmap-google-map {
+//   float:left;
+//   margin-right: 15px;
+// }
+//
 .angular-google-map-container {
-  height: 300px;
-  width: 300px;
+  height: 375px;
+  width: inherit;
 }
 
 .selectedRow {
@@ -22,9 +21,8 @@ ui-gmap-google-map {
 
 #directionsDiv {
   overflow-y: scroll;
-  height:275px;
-  right:30px;
-  margin-left:10px;
+  font-size: 12px;
+  height:350px;
 }
 
 #sitesDiv {
@@ -38,8 +36,23 @@ ui-gmap-google-map {
 #filterSelect{
   margin: 3px;
 }
+#myMap{
+  padding: 1px;
+}
+#siteMap{
+  padding-left: 1px;
+}
+#matrix{
+  padding-right: 1px;
+}
+#distanceSelector{
+  padding-right: 1px;
+}
 .SiteDistanceTable{
   margin: 3px;
+}
+#distanceTableSmall{
+  display: none;
 }
 
 .SiteDistanceTable td{
@@ -48,7 +61,7 @@ ui-gmap-google-map {
   border: 1px solid #ffffff;
 }
 
-.SiteDistanceTable td:first-child:hover{
+#distanceTableLarge td:first-child:hover{
   background-color: #005fbf;
   color: #ffffff;
 }
@@ -185,3 +198,33 @@ tr:hover {
   background-color: #ffa;
 }
 */
+
+//If the screen becomes too small, styling for horizontal layout
+@media  (max-width: 991px){
+  #directionsDiv{
+    font-size: 16px;
+    height:300px;
+  }
+  #distanceTableLarge{
+    display: none;
+  }
+  #distanceTableSmall{
+    display: table;
+  }
+  #filterSelect{
+    margin-left:112px;
+  }
+  #travelDiv{
+    font-size:15px;
+  }
+  .angular-google-map-container {
+    margin:-35px 5px 0px 5px;
+  }
+  .SiteDistanceTable{
+      margin:auto;
+    tr:first-child td:hover{
+      background-color: #005fbf;
+      color: #ffffff;
+    }
+  }
+}
