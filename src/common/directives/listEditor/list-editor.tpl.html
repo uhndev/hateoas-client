@@ -5,7 +5,7 @@
       <!-- Header Columns for Data -->
       <th ng-repeat="column in ledit.columns track by $index" class="sortable text-left"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}"
-          ng-click="ledit.sortTable(column)">
+          ng-click="order(column)">
         <button ng-hide="ledit.editCol || ledit.editRow || ledit.canEditItem || ledit.canDelCol"
                 type="button" class="pull-left close"
                 ng-if="ledit.canEdit"
@@ -14,11 +14,11 @@
         </button>
         <span class="pull-left" ng-if="!column.$edit">
           {{column.title}}&nbsp;
-          <i ng-class="{
-            'fa fa-sort-asc': ledit.isSortBy(column.field, 'asc'),
-            'fa fa-sort-desc': ledit.isSortBy(column.field, 'desc')
-          }"></i>
         </span>
+        <i ng-class="{
+            'fa fa-sort-asc': reverse===false? true : false,
+            'fa fa-sort-desc': reverse===true? true : false}"></i>
+        <span class="sortorder" ng-show="predicate === column" ng-class="{reverse:reverse}"></span>
 
         <div ng-if="column.$edit">
           <input type="text" class="form-control"
@@ -67,7 +67,7 @@
     </tr>
     </thead>
     <tbody ng-form="ledit.colForm">
-    <tr ng-repeat="item in $data track by $index" ng-class="{selectEdit: item.$edit && ledit.canEditItem}" ng-form="ledit.rowForm_{{$index}}">
+    <tr ng-repeat="item in $data | orderBy:predicate:reverse track by $index" ng-class="{selectEdit: item.$edit && ledit.canEditItem}" ng-form="ledit.rowForm_{{$index}}">
       <!-- Render each cell per row of data -->
       <td ng-repeat="column in ledit.columns track by $index"
           ng-class="{selectEdit: column.$edit && ledit.canEditItem}">

@@ -23,6 +23,7 @@
     'dados.common.directives.surveyBuilder',
     'dados.common.directives.templateConfig',
     'dados.common.directives.validationCheck',
+    'dados.common.directives.progressbar',
     'dados.common.directives.variationsEditor',
     'dados.common.directives.variationsPicker',
     'altum.common.directives.notebook',

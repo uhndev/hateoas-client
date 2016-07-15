@@ -16,7 +16,7 @@ describe('Controller: RecommendationsController Tests', function() {
     AltumAPI = $injector.get('AltumAPIService');
     toastr = $injector.get('toastr');
     scope.vm = recCtrl;
-    httpBackend.whenGET('http://localhost:1337/api/referral/1/recommendations').respond({
+    httpBackend.whenGET(API.base() + '/api/referral/1/recommendations').respond({
       'version': '1.0',
       'href': 'http://localhost:1337/api/referral',
       'referrer': 'http://localhost:1337/api/referral/1',
@@ -186,13 +186,13 @@ describe('Controller: RecommendationsController Tests', function() {
       'queries': [],
       'total': 5
     });
-    httpBackend.whenGET('http://localhost:1337/api/prognosis').respond();
-    httpBackend.whenGET('http://localhost:1337/api/timeframe').respond();
-    httpBackend.whenGET('http://localhost:1337/api/servicetype').respond();
-    httpBackend.whenGET('http://localhost:1337/api/staffType').respond();
-    httpBackend.whenGET('http://localhost:1337/api/note?referral=1').respond();
-    httpBackend.whenGET('http://localhost:1337/api/note?where=%7B%22referral%22:1%7D').respond();
-    httpBackend.whenGET('http://localhost:1337/api/staffType?where=%7B%22isProvider%22:true%7D').respond();
+    httpBackend.whenGET(API.base() + '/api/prognosis').respond();
+    httpBackend.whenGET(API.base() + '/api/timeframe').respond();
+    httpBackend.whenGET(API.base() + '/api/servicetype').respond();
+    httpBackend.whenGET(API.base() + '/api/staffType').respond();
+    httpBackend.whenGET(API.base() + '/api/note?referral=1').respond();
+    httpBackend.whenGET(API.base() + '/api/note?where=%7B%22referral%22:1%7D').respond();
+    httpBackend.whenGET(API.base() + '/api/staffType?where=%7B%22isProvider%22:true%7D').respond();
 
     httpBackend.flush();
   }));

@@ -6,6 +6,7 @@
       'ui.router',
       'toastr',
       'ngAnimate',
+      'naturalSort',
       'ngResource',
       'ngSanitize',
       'ngMaterial',

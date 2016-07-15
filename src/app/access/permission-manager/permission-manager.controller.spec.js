@@ -1,13 +1,13 @@
 describe('Controller: Permission Manager Tests', function() {
 
-  var scope, permissionctrl, PermissionService, toastr, $httpBackend;
+  var scope, permissionctrl, API, PermissionService, toastr, $httpBackend;
 
   beforeEach(function() {
-    module('dados.access', 'dados.access.service', 'toastr');
+    module('dados.access', 'dados.access.service', 'toastr', 'dados.constants');
   });
 
-  beforeEach(inject(function($injector, _$controller_,  _$rootScope_, _toastr_, _PermissionService_) {
-
+  beforeEach(inject(function($injector, _$controller_,  _$rootScope_, _toastr_, _PermissionService_, _API_) {
+    API = _API_;
     $httpBackend = $injector.get('$httpBackend');
 
     var dummy =
@@ -45,8 +45,8 @@ describe('Controller: Permission Manager Tests', function() {
       }
     };
 
-    $httpBackend.when('PUT', 'http://localhost:1337/api/permission/37').respond(200);
-    $httpBackend.when('DELETE', 'http://localhost:1337/api/permission/37').respond(200);
+    $httpBackend.when('PUT', API.base() + '/api/permission/37').respond(200);
+    $httpBackend.when('DELETE', API.base() + '/api/permission/37').respond(200);
     scope = _$rootScope_.$new();
     PermissionService = _PermissionService_;
     toastr = _toastr_;
@@ -81,7 +81,7 @@ describe('Controller: Permission Manager Tests', function() {
 
       expect(permissionctrl.permission.criteria.where.name).toBe('TEST');
       permissionctrl.updatePermission();
-      $httpBackend.expectPUT('http://localhost:1337/api/permission/37');
+      $httpBackend.expectPUT(API.base() + '/api/permission/37');
       $httpBackend.flush();
     });
   });
@@ -113,7 +113,7 @@ describe('Controller: Permission Manager Tests', function() {
       };
 
       permissionctrl.revokePermission();
-      $httpBackend.expectDELETE('http://localhost:1337/api/permission/37');
+      $httpBackend.expectDELETE(API.base() + '/api/permission/37');
       $httpBackend.flush();
     });
   });

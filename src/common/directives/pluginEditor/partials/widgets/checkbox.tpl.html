@@ -9,6 +9,7 @@
 				ng-name="widget.name + '_' + $index"
 				title="{{ option.name }}"
 				ng-true-value="'{{ option.value }}'"
+        ng-disabled="disabledWhen"
 				ng-model="widgetModel.value[$index]"
 				ng-checked="widgetModel.value[$index] == option.value"
 			 />
