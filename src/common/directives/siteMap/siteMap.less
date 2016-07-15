@@ -65,6 +65,36 @@
   background-color: #005fbf;
   color: #ffffff;
 }
+
+//If the screen becomes too small, styling for horizontal layout
+@media  (max-width: 991px){
+  #directionsDiv{
+    font-size: 16px;
+    height:300px;
+  }
+  #distanceTableLarge{
+    display: none;
+  }
+  #distanceTableSmall{
+    display: table;
+  }
+  #filterSelect{
+    margin-left:112px;
+  }
+  #travelDiv{
+    font-size:15px;
+  }
+  .angular-google-map-container {
+    margin:-35px 5px 0px 5px;
+  }
+  .SiteDistanceTable{
+      margin:auto;
+    tr:first-child td:hover{
+      background-color: #005fbf;
+      color: #ffffff;
+    }
+  }
+}
 /*
 .SiteDistanceTable {
   margin: 0px;
@@ -198,33 +228,3 @@ tr:hover {
   background-color: #ffa;
 }
 */
-
-//If the screen becomes too small, styling for horizontal layout
-@media  (max-width: 991px){
-  #directionsDiv{
-    font-size: 16px;
-    height:300px;
-  }
-  #distanceTableLarge{
-    display: none;
-  }
-  #distanceTableSmall{
-    display: table;
-  }
-  #filterSelect{
-    margin-left:112px;
-  }
-  #travelDiv{
-    font-size:15px;
-  }
-  .angular-google-map-container {
-    margin:-35px 5px 0px 5px;
-  }
-  .SiteDistanceTable{
-      margin:auto;
-    tr:first-child td:hover{
-      background-color: #005fbf;
-      color: #ffffff;
-    }
-  }
-}
