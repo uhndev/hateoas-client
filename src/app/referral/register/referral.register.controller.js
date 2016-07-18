@@ -14,7 +14,7 @@
     // bindable variables
     vm.referral = resolvedReferral;
     vm.translatableTitles = {
-      dateCreated: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_CREATED_AT',
+      dateCreated: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_CREATED',
       referralTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
       dateTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATES',
       client: 'APP.REFERRAL.REGISTRATION.LABELS.CLIENT',
