@@ -10,10 +10,11 @@
 
   function ReferralRegisterController($scope, $location, $state, DefaultRoute, resolvedReferral, toastr, AltumAPIService) {
     var vm = this;
-
+    vm.currentDate = new Date();
     // bindable variables
     vm.referral = resolvedReferral;
     vm.translatableTitles = {
+      dateCreated: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_CREATED',
       referralTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_INFO',
       dateTitle: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_DATES',
       client: 'APP.REFERRAL.REGISTRATION.LABELS.CLIENT',

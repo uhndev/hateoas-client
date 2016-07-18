@@ -14,7 +14,6 @@
   function ReferralController($resource, $location, API, HeaderService) {
     var vm = this;
     var ReferralServices;
-
     // bindable variables
     vm.url = API.url() + $location.path();
 
@@ -30,9 +29,8 @@
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
         var clientData = _.pick(vm.referral.clientcontact, 'MRN','gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
-        var referralData = _.pick(vm.referral, 'program', 'site', 'physician', 'staff', 'referralContact',
+        var referralData = _.pick(vm.referral, 'createdAt','program', 'site', 'physician', 'staff', 'referralContact',
           'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
-
         //email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
@@ -48,6 +46,7 @@
         // referral info panel
         vm.referralInfo = {
           rowsReferral: {
+            'createdAt': {title: 'COMMON.MODELS.REFERRAL.CREATED_AT', type:'date'},
             'program': {title: 'COMMON.MODELS.REFERRAL.PROGRAM', type: 'program'},
             'site': {title: 'COMMON.MODELS.REFERRAL.SITE', type: 'site'},
             'physician': {title: 'COMMON.MODELS.REFERRAL.PHYSICIAN', type: 'physician'},
