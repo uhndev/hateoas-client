@@ -63,11 +63,10 @@
         //Get the number of lines
         var count = session.getLength();
         //Go to end of the last line
-        editor.gotoLine(count, session.getLine(count-1).length);
+        editor.gotoLine(count, session.getLine(count - 1).length);
         editor.setReadOnly(false);
       }
     }
-
 
     /**
      * updateNote
@@ -151,12 +150,11 @@
 
       _editor.$blockScrolling = Infinity;
 
-
-     enableAndFocusEditor(_editor);
+      enableAndFocusEditor(_editor);
       // Events
-     /* _editor.on('focus', function () {
-        selectEdit();
-      }); */
+      /* _editor.on('focus', function () {
+         selectEdit();
+       }); */
     }
 
     /**
@@ -174,4 +172,3 @@
   }
 
 })();
-
