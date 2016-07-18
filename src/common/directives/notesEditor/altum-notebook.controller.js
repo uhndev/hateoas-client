@@ -67,6 +67,7 @@
           $edit: true,
           text: null,
           noteType: type
+
         });
       }
     }
