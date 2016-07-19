@@ -16,7 +16,7 @@
     var ReferralServices;
     // bindable variables
     vm.url = API.url() + $location.path();
-
+    vm.absUrl = $location.absUrl();
     init();
 
     ///////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,8 @@
           template: 'referral',
           data: {
             claim: vm.referral.claimNumber,
-            client: vm.referral.clientcontact.displayName
+            client: vm.referral.clientcontact.displayName,
+            url: vm.absUrl
           },
           options: {
             subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName

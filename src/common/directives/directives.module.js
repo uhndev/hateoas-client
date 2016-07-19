@@ -27,6 +27,7 @@
     'dados.common.directives.variationsEditor',
     'dados.common.directives.variationsPicker',
     'altum.common.directives.notebook',
+    'angular-visualize-directive',
     'altum.common.directives.labelPrint'
   ]);
 })();

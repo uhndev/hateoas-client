@@ -32,7 +32,7 @@
                ng-model-options="{debounce: 500}"/>
       </div>
 
-      <div ng-repeat="note in notebook.notes | filter:notebook.filterNormal track by $index"
+      <div ng-repeat="note in notebook.notes | orderBy:'createdAt':true | filter:notebook.filterNormal"
            ng-style="{'border-left': '4px solid ' + notebook.noteTypes[note.noteType].backgroundColour}">
         <altum-note note="note"
                     collection="notebook.collection"

@@ -18,14 +18,14 @@
 
     // bindable variables
     vm.email = true;
-    vm.original = {};
-    vm.toList = [];
-    // buffer for checking if note changed
+    vm.original = {};                                  // buffer for checking if note changed
+    vm.toList = [];                                    // list of users to send email to
     vm.note = vm.note || null;                         // note binding
     vm.onSave = vm.onSave || angular.noop;             // callback upon adding note to collection
     vm.onUpdate = vm.onUpdate || angular.noop;         // callback upon editing note in place
-    vm.collection = vm.collection || {};              // collection object i.e. { referral: 1 }
-    vm.emailInfo = vm.emailInfo || {};                 //email fields
+    vm.collection = vm.collection || {};               // collection object i.e. { referral: 1 }
+    vm.emailInfo = vm.emailInfo || {};                 // email fields
+
     // bindable methods
     vm.selectEdit = selectEdit;
     vm.updateNote = updateNote;

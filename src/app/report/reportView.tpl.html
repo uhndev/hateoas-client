@@ -1,0 +1,36 @@
+<div ng-controller="RecommendationReportController">
+   <!-- <div id="pagination" class="control paging" role="application">
+        <button id="page_first" type="submit" aria-label="First" class="button action square move toLeft up" disabled="disabled"><span class="wrap"><span class="icon"></span></span></button>
+        <button id="page_prev" type="submit" aria-label="Previous" class="button action square move left up" disabled="disabled"><span class="wrap"><span class="icon"></span></span></button>
+        <label class="control input text inline" for="page_current" aria-label="Current Page">
+            <span class="wrap">Page</span>
+            <input class="" id="page_current" type="text" name="currentPage" value="">
+            <span class="wrap" id="page_total">of &nbsp;29</span>
+        </label>
+        <button id="page_next" type="submit" aria-label="Next" class="button action square move right up"><span class="wrap"><span class="icon"></span></span></button>
+        <button id="page_last" type="submit" aria-label="Last" class="button action square move toRight up"><span class="wrap"><span class="icon"></span></span></button>
+    </div>
+    <div id="reportZoom" class="control zoom">
+        <span class="divider first"></span>
+        <button id="zoom_out" aria-label="Zoom Out" class="button action square move zoomOut up"><span class="wrap"><span class="icon"></span></span></button>
+        <button id="zoom_in" aria-label="Zoom In" class="button action square move zoomIn up"><span class="wrap"><span class="icon"></span></span></button>
+        <label for="zoom_value" class="control input textPlus inline">
+            <input id="zoom_value" type="text" value="100%" name="zoom_value" aria-label="Zoom Options">
+            <button id="zoom_value_button" class="button disclosure" aria-label="Zoom Options">
+                <span class="icon"></span>
+            </button>
+        </label>
+        <!-- <span class="divider last"></span>
+    </div> -->
+    <button id="plus">+</button>
+    <button id="minus">-</button>
+    <button id="width">Fit Width</button>
+    <button id="height">Fit Height</button>
+    <button id="page">Fit Page</button>
+
+    <button id="previousPage">Previous Page</button><button id="nextPage">Next Page</button>
+    <button id="button" disabled>Export</button>
+    <select id="statusSelector"></select>
+    <div id="spinner"></div>
+    <visualize id='report' resource='report.resource' params='report.params'></visualize>
+</div>
