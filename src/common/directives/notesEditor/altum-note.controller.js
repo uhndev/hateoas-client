@@ -55,16 +55,13 @@
      * enableAndFocusEditor
      * @description function set focus on ACE editor when creating new note and put the cursor on end of the line.
      */
-
     function enableAndFocusEditor(editor) {
       if (editor) {
         editor.focus();
-        var session = editor.getSession();
         //Get the number of lines
-        var count = session.getLength();
+        var count = vm.session.getLength();
         //Go to end of the last line
-        editor.gotoLine(count, session.getLine(count - 1).length);
-        editor.setReadOnly(false);
+        editor.gotoLine(count, vm.session.getLine(count - 1).length);
       }
     }
 
@@ -83,7 +80,6 @@
         } else {
           if (vm.note.text) {
             Note.save(_.merge(vm.note, vm.collection), function (newNote) {
-
               _.merge(_.last(vm.notebook.notes), newNote);
               vm.onSave();
               toastr.success('Note successfully added to collection!', 'Notes');
@@ -122,16 +118,13 @@
         },
         options: {
           from: 'altumdonotreply@uhn.ca',
-          to: _.pluck(vm.toList, 'email'),
-          // subject: 'Altum CMS Communication'
+          to: _.pluck(vm.toList, 'email')
         }
-
       };
 
       _.merge(emailData, vm.emailInfo);
 
       EmailService.sendEmail(emailData);
-
     }
 
     /**
@@ -145,16 +138,19 @@
       vm.editor = _editor;
 
       // Editor part
-      var _session = _editor.getSession();
-      var _renderer = _editor.renderer;
+      vm.session = _editor.getSession();
+      vm.renderer = _editor.renderer;
 
       _editor.$blockScrolling = Infinity;
 
-      enableAndFocusEditor(_editor);
+      if (vm.note.$edit) {
+        enableAndFocusEditor(_editor);
+      }
+
       // Events
-      /* _editor.on('focus', function () {
-         selectEdit();
-       }); */
+      _editor.on('focus', function () {
+        selectEdit();
+      });
     }
 
     /**

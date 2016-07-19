@@ -39,7 +39,7 @@
             client: vm.referral.clientcontact.displayName
           },
           options: {
-            subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName
+            subject: 'Altum CMS Communication'
           }
         };
 
