@@ -11,6 +11,17 @@
       ng-if="am[am.current].resource.template">
     </query-builder>
   </div>
+
+  <div id="Controls" class="align-right">
+    <hateoas-controls
+      ng-if="am.current === 'role' && am.rolePermissions"
+      data-template="am[am.current].resource.template"
+      data-href="{{am[am.current].resource.referrer}}"
+      data-permissions="am.rolePermissions"
+      data-item="am[am.current].selected">
+    </hateoas-controls>
+  </div>
+
   <uib-tabset active="am.currentIndex">
     <uib-tab ng-repeat="tab in am.tabs track by $index" ng-click="am.selectTab(tab)" index="$index">
       <uib-tab-heading translate>
@@ -29,49 +40,46 @@
           </hateoas-table>
         </div>
         <div class="col-md-8" ng-if="am.detailInfo">
-          <!-- GROUP/MODEL/ROLE PANEL START -->
-          <div ng-if="am.current !== 'user'" class="panel panel-info">
-            <div class="panel-heading" ng-switch="am.current">
-              <h3 class="panel-title pull-left" ng-switch-when="group">
-                <span translate>APP.ACCESS.HEADINGS.SHOWING_DEFAULT_ROLE_PERMISSIONS_FOR_GROUP</span>
-                : <strong>{{am[tab.url].selected.displayName}}</strong>
-              </h3>
-              <h3 class="panel-title pull-left" ng-switch-when="model">
-                <span translate>APP.ACCESS.BUTTONS.ROLE_PERMISSION</span>
-                : <strong>{{am[tab.url].selected.name}}</strong>
-              </h3>
-              <h3 class="panel-title pull-left" ng-switch-when="role">
-                <span translate>APP.ACCESS.HEADINGS.SHOWING_PERMISSIONS_FOR_ROLE</span>
-                : <strong>{{am[tab.url].selected.displayName}}</strong>
-              </h3>
-              <button type="button" class="btn btn-primary btn-xs pull-right"
-                      ng-if="am.current === 'role'" ng-click="am.openAddPermission()">
-                <i class="fa fa-plus"></i> <span translate>APP.ACCESS.BUTTONS.ROLE_PERMISSION</span>
-              </button>
-              <div class="clearfix"></div>
+          <!-- MODEL/ROLE PANEL START -->
+          <div ng-if="am.current === 'model' || am.current === 'role'" class="panel panel-info">
+            <div class="panel-heading">
+              <div ng-class="{'input-group': am.current === 'role'}">
+                <input type="text" class="form-control input-sm" ng-model="am.search" ng-if="am.current === 'model'"
+                       placeholder="{{'APP.ACCESS.HEADINGS.SHOWING_ROLE_PERMISSIONS_FOR_MODEL' | translate}} : {{am[tab.url].selected.name}}"/>
+                <input type="text" class="form-control input-sm" ng-model="am.search" ng-if="am.current === 'role'"
+                       placeholder="{{'APP.ACCESS.HEADINGS.SHOWING_PERMISSIONS_FOR_ROLE' | translate}} : {{am[tab.url].selected.displayName}}"/>
+                <span ng-if="am.current === 'role'" class="input-group-btn">
+                  <button type="button" class="btn btn-primary btn-sm"
+                          ng-if="am.current === 'role'" ng-click="am.openAddPermission()">
+                    <i class="fa fa-plus"></i> <span translate>APP.ACCESS.BUTTONS.ROLE_PERMISSION</span>
+                  </button>
+                </span>
+              </div>
             </div>
             <div class="panel-body" layout="column">
-              <div flex ng-repeat="(action, permissions) in am.detailInfo | groupBy: 'action' track by $index">
+              <div flex ng-repeat="(action, permissions) in am.detailInfo | groupBy: 'action'">
                 <b>{{action | uppercase}}</b>
                 <md-divider></md-divider><br/>
-                <div ng-repeat="permission in permissions track by $index">
+                <div ng-repeat="permission in permissions | filter:am.search | orderBy: 'model.name'">
                   <permission-manager permission="permission" on-remove="am.removeElement(am.detailInfo, permission)"></permission-manager>
                 </div>
               </div>
             </div>
           </div>
-          <!-- GROUP/MODEL/ROLE PANEL END -->
+          <!-- MODEL/ROLE PANEL END -->
 
-          <!-- USER PANEL START -->
-          <div ng-if="am.current === 'user'">
+          <!-- GROUP/USER PANEL START -->
+          <div ng-if="am.current === 'user' || am.current === 'group'">
             <div class="panel panel-info">
               <div class="panel-heading">
-                <span translate>APP.ACCESS.HEADINGS.SHOWING_ROLES_FOR_USERS</span>
-                : <strong>{{am[tab.url].selected.displayName}}</strong>
+                <input type="text" class="form-control input-sm" ng-model="am.search" ng-if="am.current === 'group'"
+                       placeholder="{{'APP.ACCESS.HEADINGS.SHOWING_DEFAULT_ROLE_PERMISSIONS_FOR_GROUP' | translate}} : {{am[tab.url].selected.displayName}}"/>
+                <input type="text" class="form-control input-sm" ng-model="am.search" ng-if="am.current === 'user'"
+                       placeholder="{{'APP.ACCESS.HEADINGS.SHOWING_ROLES_FOR_USERS' | translate}} : {{am[tab.url].selected.displayName}}"/>
               </div>
               <div class="panel-body">
                 <uib-accordion>
-                  <uib-accordion-group ng-repeat="(role, rolePermissions) in am.detailInfo.roles | groupBy: 'roleName' track by $index"
+                  <uib-accordion-group ng-repeat="(role, rolePermissions) in am.detailInfo.roles | groupBy: 'roleName'"
                                        ng-init="am.accordionStatus[role].isOpen = false"
                                        is-open="am.accordionStatus[role].isOpen">
                     <uib-accordion-heading>
@@ -80,13 +88,19 @@
                         'glyphicon-chevron-down': am.accordionStatus[role].isOpen
                       }"></i>
                       {{role}}
+                      <button type="button" class="btn btn-danger btn-xs pull-right"
+                              ng-click="am.removeRoleFromCollection(rolePermissions[0].role, $event)">
+                        <i class="fa fa-times"></i>
+                      </button>
+                      <div class="clearfix"></div>
                     </uib-accordion-heading>
-                    <div ng-repeat="(action, permissions) in rolePermissions | groupBy: 'action' track by $index">
+                    <div ng-repeat="(action, permissions) in rolePermissions | groupBy: 'action'">
                       <b>{{action | uppercase}}</b>
                       <md-divider></md-divider><br/>
-                      <div ng-repeat="permission in permissions track by $index">
+                      <div ng-repeat="permission in permissions | filter:am.search | orderBy: 'model.name'">
                         <permission-manager permission="permission"
-                                            on-remove="am.removeElement(am.detailInfo.roles, permission)"></permission-manager>
+                                            on-remove="am.removeElement(am.detailInfo.roles, permission)">
+                        </permission-manager>
                       </div>
                     </div>
                   </uib-accordion-group>
@@ -105,16 +119,17 @@
                   </div>
                   <div flex>
                     <button type="button" class="btn btn-success btn-sm pull-right"
-                            ng-disabled="!am.selectedNewRole" ng-click="am.addUserToRole()">
+                            ng-disabled="!am.selectedNewRole" ng-click="am.addRoleToCollection()">
                       <i class="fa fa-plus"></i>
-                      <span translate>APP.ACCESS.BUTTONS.ADD_USER_TO_ROLE</span>
+                      <span ng-if="am.current === 'group'" translate>APP.ACCESS.BUTTONS.ADD_ROLE_TO_GROUP</span>
+                      <span ng-if="am.current === 'user'" translate>APP.ACCESS.BUTTONS.ADD_USER_TO_ROLE</span>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="panel panel-info">
+            <div class="panel panel-info" ng-if="am.current === 'user'">
               <div class="panel-heading">
                 <h3 class="panel-title pull-left">
                   Showing Specific Permissions for User: <strong>{{am[tab.url].selected.displayName}}</strong>
@@ -126,11 +141,13 @@
                 <div class="clearfix"></div>
               </div>
               <div class="panel-body" layout="column">
-                <div flex ng-repeat="(action, permissions) in am.detailInfo.permissions | groupBy: 'action' track by $index">
+                <div flex ng-repeat="(action, permissions) in am.detailInfo.permissions | groupBy: 'action'">
                   <b>{{action | uppercase}}</b>
                   <md-divider></md-divider><br/>
-                  <div ng-repeat="permission in permissions track by $index">
-                    <permission-manager permission="permission" on-remove="am.removeElement(am.detailInfo.permissions, permission)"></permission-manager>
+                  <div ng-repeat="permission in permissions | filter:am.search | orderBy: 'model.name'">
+                    <permission-manager permission="permission"
+                                        on-remove="am.removeElement(am.detailInfo.permissions, permission)">
+                    </permission-manager>
                   </div>
                 </div>
               </div>

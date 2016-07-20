@@ -143,7 +143,13 @@ describe('Controller: AccessManagementController Tests', function() {
     UserRoles = _UserRoles_;
     GroupService = _GroupService_;
     uibModal = _$uibModal_;
-    accessctrl = _$controller_('AccessManagementController', {$uibModal: uibModal, GroupService: GroupService, PermissionService: PermissionService, UserRoles: UserRoles, UserPermissions: UserPermissions});
+    accessctrl = _$controller_('AccessManagementController', {
+      $uibModal: uibModal,
+      GroupService: GroupService,
+      PermissionService: PermissionService,
+      UserRoles: UserRoles,
+      UserPermissions: UserPermissions
+    });
     scope.vm = accessctrl;
   }));
 
