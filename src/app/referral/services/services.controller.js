@@ -307,7 +307,6 @@
               billingGroup: billingGroup,
               newBillingGroups: _.map(vm.picker.recommendedServices, function (service) {
                 service.referral = vm.picker.referral.id;
-                service.approvalNeeded = false;
                 service.billingGroup = billingGroup;
                 return RecommendationsService.prepareService(service);
               })
