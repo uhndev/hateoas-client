@@ -169,13 +169,21 @@
             </legend>
             <div class="row">
               <div class="col-md-12">
-                <div class="form-group">
-                  <label  class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.dateCreated}}"
-                         translate>
+                <div class="form-group" ng-if="referralRegister.referral.id">
+                  <label class="control-label col-md-3"
+                         translate context-translator="{{referralRegister.translatableTitles.dateCreated}}">
                     {{referralRegister.translatableTitles.dateCreated}}
                   </label>
-                  <span type="date" class="col-md-9">{{referralRegister.referral.createdAt || referralRegister.currentDate | date:'EEEE, MMMM d, y'}}</span>
+                  <div class="col-md-9">
+                    <h5 ng-if="referralRegister.referral.createdAt">
+                      {{referralRegister.referral.createdAt | date:'EEEE, MMMM d, y'}}
+                    </h5>
+                    <h5 ng-if="!referralRegister.referral.createdAt">
+                      {{referralRegister.referral.referralDate | date:'EEEE, MMMM d, y'}}
+                    </h5>
+                  </div>
                 </div>
+
                 <div class="form-group">
                   <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.referralDate}}"
                          translate>
