@@ -12,9 +12,8 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend>Name</legend>
+          <legend><span class="glyphicon glyphicon-user"></span> Name</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/name.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': clientForm.MRN.$invalid}">
                 <label class="control-label col-md-3" for="MRN">MRN</label>
@@ -68,9 +67,8 @@
       </div>
       <div class="col-lg-6">
         <fieldset>
-          <legend>Address</legend>
+          <legend><span class="glyphicon glyphicon-home"></span> Address</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/home.png" height="50"/></div>
             <div class="col-md-11">
               <address-editor horizontal="true" resource="clientRegister.client.person"></address-editor>
             </div>
@@ -82,9 +80,8 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend>Phone numbers</legend>
+          <legend><span class="glyphicon glyphicon-phone-alt"></span> Phone numbers</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/phone.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group">
                 <label class="control-label col-md-3" for="homePhone">Home Phone</label>
@@ -115,9 +112,8 @@
       </div>
       <div class="col-lg-6">
         <fieldset>
-          <legend>Email</legend>
+          <legend><span class="glyphicon glyphicon-envelope"></span> Email</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/email.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': clientForm.homeEmail.$invalid}">
                 <label class="control-label col-md-3" for="homeEmail">Home Email</label>
@@ -145,9 +141,8 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend>Family Doctor</legend>
+          <legend><span class="glyphicon glyphicon-user"></span> Family Doctor</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/doctor.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group">
                 <label class="control-label col-md-3" for="physician">Family Doctor</label>
@@ -185,9 +180,8 @@
 
       <div class="col-lg-6">
         <fieldset>
-          <legend>Emergency Contact</legend>
+          <legend><span class="glyphicon glyphicon-plus"></span> Emergency Contact</legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/ambulance.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group">
                 <label class="control-label col-md-3" for="EmerFirstName">First Name</label>
@@ -237,9 +231,10 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend>Basic Information</legend>
+          <legend>
+            <span class="glyphicon glyphicon-info-sign"></span> Basic Information
+          </legend>
           <div class="row">
-            <div class="col-md-1"><img src="/assets/img/demographic.png" height="50"/></div>
             <div class="col-md-11">
               <div class="form-group">
                 <label class="control-label col-md-3" for="Gender">Gender</label>
@@ -291,14 +286,12 @@
       <div class="col-lg-6">
         <fieldset>
           <legend>
-            Employment/School Information
+            <span class="glyphicon glyphicon-briefcase"></span>
+             Employment/School Information
             <i class="pull-right fa fa-plus-circle selectable" ng-click="clientRegister.addEmployee()"></i>
           </legend>
           <div class="row">
-            <div class="col-md-2">
-              <img src="/assets/img/job.png" height="50"/>
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-11">
               <uib-accordion>
                 <uib-accordion-group ng-repeat="em in clientRegister.client.person.employments track by $index">
                   <uib-accordion-heading>

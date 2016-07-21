@@ -175,7 +175,9 @@
       $cookies.remove('user');
       return $resource(Auth.LOGOUT_API, {}, {
         'query' : {method: 'GET', isArray: false}
-      }).query();
+      }).query(function () {
+        window.location.reload();
+      });
     }
 
   }

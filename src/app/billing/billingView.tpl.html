@@ -56,7 +56,9 @@
                    visible-fields="globalBilling.visitFields">
   </template-config>
 
-  <service-group services="globalBilling.services"
+  <service-group ng-if="globalBilling.services"
+                 services="globalBilling.services"
+                 template="globalBilling.resource.template"
                  search="globalBilling.search"
                  bound-group-types="globalBilling.boundGroupTypes"
                  visit-fields="globalBilling.visitFields"

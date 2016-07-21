@@ -70,6 +70,7 @@
                          class="form-control"
                          ng-model="service[field.name]"
                          ng-model-options="{debounce: 500, updateOn: 'blur'}"
+                         ng-disabled="serviceGroup.preventUpdatePrice(field.name)"
                          ng-change="serviceGroup.savePrice(service[field.name], service)"/>
                 </span>
                 <span ng-switch-default>{{service[field.name] || '-'}}</span>

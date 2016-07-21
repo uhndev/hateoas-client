@@ -9,7 +9,7 @@
       },
       templateUrl: 'directives/labelPrint/altum-label.tpl.html',
       controller: 'LabelPrintController',
-      controllerAs: 'alp'
+      controllerAs: 'label'
     });
 
 })();

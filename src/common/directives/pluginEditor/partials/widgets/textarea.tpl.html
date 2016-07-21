@@ -1,6 +1,7 @@
 <textarea
 	id="uuid:{{ widget.name }}"
 	name="{{ widget.name }}"
+  ng-disabled="disabledWhen"
 	ng-model="widgetModel.value"
 	ng-maxlength="{{widget.properties.maxlength}}"
 	title="{{widget.properties.title}}"

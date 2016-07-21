@@ -10,9 +10,12 @@
              ng-minlength="5"
              placeholder="johndoe" required>
       <p ng-show="userForm.username.$invalid && !userForm.username.$pristine"
-         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME</p>
+         class="pull-right required-error"
+         translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME>
+      </p>
     </div>
   </div>
+
   <div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
     <label for="email" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
       COMMON.MODELS.USER.EMAIL
@@ -112,7 +115,9 @@
         <input name="dob" type="date" class="form-control" uib-datepicker-popup
                ng-model="user.user.dob" is-open="user.openedDOB" disabled format-date/>
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="user.openedDOB = true"><i class="glyphicon glyphicon-calendar"></i></button>
+          <button type="button" class="btn btn-default" ng-click="user.openedDOB = true">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
         </span>
       <p ng-show="userForm.dob.$invalid && !userForm.dob.$pristine"
          class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT

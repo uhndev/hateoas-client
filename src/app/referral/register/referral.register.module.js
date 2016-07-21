@@ -11,7 +11,7 @@
             if ($stateParams.id) {
               return AltumAPIService.Referral.get({id: $stateParams.id}).$promise;
             } else {
-              return {};
+              return {referralContacts: []};
             }
           }
         },

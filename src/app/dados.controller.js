@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -44,7 +44,7 @@
       });
     }
 
-    $scope.$on('$locationChangeStart', function(e, current, prev) {
+    $scope.$on('$locationChangeStart', function (e, current, prev) {
       var page = $location.path();
       var prevBaseUrl = _.parseUrl($location, prev)[0];     // e.g. /study
       var basePath = _.pathnameToArray($location.path());
@@ -52,7 +52,7 @@
       if (prevBaseUrl !== currBaseUrl) { // clear submenu if base path changes
         Header.clearSubmenu();
       }
-      if (page.charAt(page.length -  1) == '/') { // remove trailing slashes if they exist
+      if (page.charAt(page.length - 1) == '/') { // remove trailing slashes if they exist
         $location.url(page.slice(0, -1));
       }
       if (Auth.isAuthenticated() && !Auth.isAdmin() && Auth.isAdminPage(page)) {
@@ -60,7 +60,7 @@
       }
     });
 
-    $scope.$on('$locationChangeSuccess', function(e, current, prev) {
+    $scope.$on('$locationChangeSuccess', function (e, current, prev) {
       // construct pageTitle from location url
       setPageTitle();
     });
@@ -71,7 +71,7 @@
     });
 
     // on authorization event fired, navigate to home state
-    $rootScope.$on('events.authorized', function() {
+    $rootScope.$on('events.authorized', function () {
       DefaultRoute.route();
     });
   }

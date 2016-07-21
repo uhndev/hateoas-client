@@ -3,20 +3,22 @@
 </div>
 <div class="modal-body">
   <ng-form name="siteForm" id="siteForm" class="siteForm" novalidate>
-    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-      <distance-matrix selected-site="mapmodal.selectedSite"
-                       origin="mapmodal.origin"
-                       sites="mapmodal.sites"
-                       destination-icon="assets/img/hospital-building.png">
-      </distance-matrix>
-    </div>
-    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-      <site-map map-ready="mapmodal.mapReady"
+    <div class="row">
+        <distance-matrix selected-site="mapmodal.selectedSite"
+                        origin="mapmodal.origin"
+                        sites="mapmodal.sites"
+                        destination-icon="assets/img/hospital-building.png"
+                        class="col-md-3"
+                        id="distanceSelector">
+        </distance-matrix>
+        <site-map map-ready="mapmodal.mapReady"
                 map="mapmodal.map"
                 selected-site="mapmodal.selectedSite"
                 selected-client-marker="mapmodal.selectedClientMarker"
-                markers="mapmodal.markers">
-      </site-map>
+                markers="mapmodal.markers"
+                class="col-md-9"
+                id="siteMap">
+        </site-map>
     </div>
   </ng-form>
 </div>

@@ -4,10 +4,19 @@
         <option value ="location">Alphabetical</option>
       </select>
 
-      <table id="distanceToSites" class="SiteDistanceTable">
+      <table id="distanceTableLarge" class="SiteDistanceTable">
         <tr ng-repeat="distanceData in distance.distanceDatas | orderBy : distance.initialSelection">
           <td ng-click="distance.selectedSite=distanceData.site;">{{ distanceData.location }}</td>
           <td>{{ distanceData.distance }} KM</td>
+        </tr>
+      </table>
+      <table id="distanceTableSmall" class="SiteDistanceTable">
+        <tr>
+          <td ng-repeat="distanceData in distance.distanceDatas | orderBy : distance.initialSelection"
+              ng-click="distance.selectedSite=distanceData.site;">{{ distanceData.location }}</td>
+        </tr>
+        <tr>
+          <td ng-repeat="distanceData in distance.distanceDatas | orderBy : distance.initialSelection">{{ distanceData.distance }} KM</td>
         </tr>
       </table>
     </div>

@@ -3,6 +3,9 @@
     <ui-widget ng-if="dadosForm.form.questions[dadosForm.currentQuestion].template" widget="dadosForm.form.questions[dadosForm.currentQuestion]"
                widget-model="dadosForm.form.questions[dadosForm.currentQuestion]"
                class="panel-body"></ui-widget>
+    <div>
+      <uib-progressbar value="value">{{value}}%</uib-progressbar>
+    </div>
     <div class="btn-group btn-group-justified">
       <a href="#" class="btn btn-success" ng-click="dadosForm.prevQuestion()"
               ng-disabled="dadosForm.isSaving">
@@ -17,16 +20,24 @@
   <div ng-if="dadosForm.mode !== 'single'">
     <h2 id="Title">{{dadosForm.form.name}}</h2>
     <ol class="form-horizontal" ng-model="dadosForm.form.questions" class="ui-grid" style="padding-top: 30px;">
-      <li ng-repeat="widget in dadosForm.form.questions track by $index" class="panel panel-default" ng-style="widget.css">
+      <li ng-repeat="widget in dadosForm.form.questions track by $index" class="panel" ng-style="widget.css">
         <ui-widget ng-if="widget.template" widget="widget"
-                   widget-model="widget"
-                   class="panel-body"></ui-widget>
+                   widget-model="widget" disabled-when="dadosForm.signed"></ui-widget>
       </li>
     </ol>
-    <button class="btn btn-default pull-right" ng-model="dadosForm.isSaving"
-            ng-click="dadosForm.saveFormAnswers()" ng-disabled="dadosForm.isSaving">
+    <button class="btn btn-danger m-l-2 pull-right"
+            ng-click="dadosForm.revokeForm()" ng-show="dadosForm.signed">
+      Revoke
+    </button>
+    <button class="btn btn-success m-l-2 pull-right"
+            ng-click="dadosForm.signForm()" ng-show="dadosForm.hasAnswers()" ng-disabled="dadosForm.signed">
+      Sign
+    </button>
+    <button class="btn btn-default m-l-2 pull-right" ng-model="dadosForm.isSaving"
+            ng-click="dadosForm.saveFormAnswers()" ng-show="!dadosForm.signed" ng-disabled="dadosForm.isSaving">
       <span class="glyphicon glyphicon-floppy-disk" uib-tooltip="Save form"></span>
       Save
     </button>
   </div>
 </ng-form>
+
