@@ -25,6 +25,7 @@
     .component('serviceGroup', {
       bindings: {
         services: '=',
+        template: '=',
         search: '=',
         boundGroupTypes: '=',
         visitFields: '=',
@@ -38,10 +39,10 @@
     .controller('ServiceGroupController', ServiceGroupController);
 
   ServiceGroupController.$inject = [
-    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES', 'TemplateService'
+    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'
   ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES, TemplateService) {
+  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
     var vm = this;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
@@ -50,11 +51,8 @@
     // bindable variables
     vm.templates = {};
     vm.statusTitles = {};
-    _.each(STATUS_CATEGORIES, function (statusType) {
-      TemplateService.fetchTemplate(STATUS_TYPES[statusType].model)
-        .then(function (template) {
-          vm.templates[statusType] = template;
-        });
+    _.each(['approval', 'completion', 'billingstatus', 'reportstatus'], function (statusType) {
+      vm.templates[statusType] = _.find(vm.template.data, {type: statusType}).data;
     });
 
     // bindable methods
@@ -62,6 +60,8 @@
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
     vm.savePrice = savePrice;
+    vm.preventUpdatePrice = preventUpdatePrice;
+
     init();
 
     ///////////////////////////////////////////////////////////////////////////
@@ -198,6 +198,15 @@
         toastr.success(service.displayName + ' price updated to ' + price, 'Services');
         vm.onUpdate();
       });
+    }
+
+    /**
+     * preventUpdatePrice
+     * @description Function returns true if fieldName not included in blacklisted attributes
+     * @param fieldName
+     */
+    function preventUpdatePrice(fieldName) {
+      return vm.template.blacklist.update && _.contains(vm.template.blacklist.update, fieldName);
     }
 
     /**

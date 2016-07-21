@@ -46,7 +46,9 @@
                      visible-fields="billing.visitFields">
     </template-config>
 
-    <service-group services="services.services"
+    <service-group ng-if="services.services && services.template"
+                   services="services.services"
+                   template="services.template"
                    search="services.search"
                    bound-group-types="billing.boundGroupTypes"
                    visit-fields="billing.visitFields"
