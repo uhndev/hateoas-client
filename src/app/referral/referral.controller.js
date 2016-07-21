@@ -36,7 +36,8 @@
           template: 'referral',
           data: {
             claim: vm.referral.claimNumber,
-            client: vm.referral.clientcontact.displayName
+            client: vm.referral.clientcontact.displayName,
+            url: vm.url
           },
           options: {
             subject: 'Altum CMS Communication'
