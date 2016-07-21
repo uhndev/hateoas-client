@@ -74,6 +74,19 @@
             'homeEmail': {title: 'COMMON.MODELS.CLIENT.EMAIL', type: 'text'},
             'homePhone': {title: 'COMMON.MODELS.CLIENT.PHONE', type: 'integer'},
           },
+          referralContacts: _.map(vm.referral.referralContacts, function (contact) {
+            return {
+              rows: {
+                'displayName': {title: 'COMMON.MODELS.EMPLOYEE.NAME', type: 'text'},
+                'workPhone': {title: 'COMMON.MODELS.EMPLOYEE.WORK_PHONE', type: 'text'},
+                'workEmail': {title: 'COMMON.MODELS.EMPLOYEE.WORK_EMAIL', type: 'text'},
+                'occupation': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION', type: 'text'},
+                'occupationType': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION_TYPE', type: 'text'},
+                'occupationSector': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION_SECTOR', type: 'text'}
+              },
+              tableData: _.objToPair(_.pick(contact, 'displayName', 'workPhone', 'workEmail', 'occupation', 'occupationType', 'occupationSector'))
+            };
+          }),
           tableDataReferral: _.objToPair(referralData),
           tableDataClient: _.objToPair(clientData)
         };
