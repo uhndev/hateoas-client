@@ -28,9 +28,10 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
-        var clientData = _.pick(vm.referral.clientcontact, 'MRN','gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
-        var referralData = _.pick(vm.referral, 'createdAt','program', 'site', 'physician', 'staff', 'referralContact',
+        var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
+        var referralData = _.pick(vm.referral, 'createdAt', 'program', 'site', 'physician', 'staff', 'referralContact',
           'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
+
         //email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
