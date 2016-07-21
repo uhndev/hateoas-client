@@ -178,13 +178,15 @@
 
       Resource.get(function (data, headers) {
         vm.referral = angular.copy(data.items);
+        vm.template = data.template;
 
         // email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
             claim: vm.referral.claimNumber,
-            client: vm.referral.client_displayName
+            client: vm.referral.client_displayName,
+            url: encodeURI(vm.url)
           },
           options: {
             subject: 'Altum CMS Communication'

@@ -41,7 +41,7 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      if (vm.notebook.permissions.update) {
+      if (vm.notebook.permissions.update || !vm.note.id) {
         _.map(vm.notebook.notes, function (note) {
           note.$edit = false;
         });
