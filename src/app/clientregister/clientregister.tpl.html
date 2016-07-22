@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class ="glyphicon glyphicon-user"/> Name</legend>
+          <legend><span class="glyphicon glyphicon-user"></span> Name</legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': clientForm.MRN.$invalid}">
@@ -67,7 +67,7 @@
       </div>
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-home"/> Address</legend>
+          <legend><span class="glyphicon glyphicon-home"></span> Address</legend>
           <div class="row">
             <div class="col-md-11">
               <address-editor horizontal="true" resource="clientRegister.client.person"></address-editor>
@@ -80,7 +80,7 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-phone-alt"/> Phone numbers</legend>
+          <legend><span class="glyphicon glyphicon-phone-alt"></span> Phone numbers</legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group">
@@ -112,7 +112,7 @@
       </div>
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-envelope"/> Email</legend>
+          <legend><span class="glyphicon glyphicon-envelope"></span> Email</legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': clientForm.homeEmail.$invalid}">
@@ -141,7 +141,7 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-user"/> Family Doctor</legend>
+          <legend><span class="glyphicon glyphicon-user"></span> Family Doctor</legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group">
@@ -180,7 +180,7 @@
 
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-plus"/> Emergency Contact</legend>
+          <legend><span class="glyphicon glyphicon-plus"></span> Emergency Contact</legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group">
@@ -231,7 +231,9 @@
     <div class="row">
       <div class="col-lg-6">
         <fieldset>
-          <legend><span class="glyphicon glyphicon-info-sign"/> Basic Information</legend>
+          <legend>
+            <span class="glyphicon glyphicon-info-sign"></span> Basic Information
+          </legend>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group">
@@ -284,12 +286,12 @@
       <div class="col-lg-6">
         <fieldset>
           <legend>
-            <span class="glyphicon glyphicon-briefcase"/>
+            <span class="glyphicon glyphicon-briefcase"></span>
              Employment/School Information
             <i class="pull-right fa fa-plus-circle selectable" ng-click="clientRegister.addEmployee()"></i>
           </legend>
           <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-11">
               <uib-accordion>
                 <uib-accordion-group ng-repeat="em in clientRegister.client.person.employments track by $index">
                   <uib-accordion-heading>

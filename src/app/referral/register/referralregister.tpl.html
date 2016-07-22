@@ -185,8 +185,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3" context-translator="{{referralRegister.translatableTitles.referralDate}}"
-                         translate>
+                  <label class="control-label col-md-3"
+                         translate context-translator="{{referralRegister.translatableTitles.referralDate}}">
                     {{referralRegister.translatableTitles.referralDate}}
                   </label>
                   <div class="col-md-9">
@@ -332,6 +332,38 @@
               </div>
             </div>
           </fieldset>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="row">
+        <div class="col-md-12">
+          <legend>
+            <span class="glyphicon glyphicon-briefcase"></span>
+            <span context-translator="{{referralRegister.translatableTitles.referralContacts}}" translate>
+              {{referralRegister.translatableTitles.referralContacts}}
+            </span>
+            <i class="fa fa-plus-circle selectable pull-right" ng-click="referralRegister.referral.referralContacts.push({})"></i>
+          </legend>
+
+          <div class="panel panel-info" id="referralContacts" ng-repeat="employee in referralRegister.referral.referralContacts">
+            <div class="panel-heading selectable" ng-click="employee.isCollapsed = !employee.isCollapsed">
+              <i class="glyphicon" ng-class="{
+                'glyphicon-chevron-right': !employee.isCollapsed,
+                'glyphicon-chevron-down': employee.isCollapsed
+              }"></i>
+              <span>
+                {{employee.occupation ? employee.occupation + ' - ' + employee.person.prefix + ' ' + employee.person.firstName + ' ' + employee.person.lastName : 'Please enter employee information'}}
+                <span class="glyphicon glyphicon-trash pull-right" ng-click="referralRegister.removeEmployment($index, $event)"></span>
+              </span>
+
+              <div class="clearfix"></div>
+            </div>
+            <div class="panel-body" uib-collapse="!employee.isCollapsed">
+              <employee-editor employee="employee"></employee-editor>
+            </div>
+          </div>
         </div>
       </div>
     </div>

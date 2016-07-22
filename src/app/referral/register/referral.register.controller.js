@@ -33,13 +33,15 @@
       dischargeDate: 'APP.REFERRAL.REGISTRATION.LABELS.DISCHARGE_DATE',
       status: 'APP.REFERRAL.REGISTRATION.LABELS.STATUS',
       recMade: 'APP.REFERRAL.REGISTRATION.LABELS.RECOMMENDATIONS_MADE',
-      referralComments: 'APP.REFERRAL.REGISTRATION.LABELS.COMMENTS'
+      referralComments: 'APP.REFERRAL.REGISTRATION.LABELS.COMMENTS',
+      referralContacts: 'APP.REFERRAL.REGISTRATION.LABELS.REFERRAL_CONTACTS'
     };
 
     // bindable methods
     vm.save = save;
     vm.referralAdd = referralAdd;
     vm.cancel = cancel;
+    vm.removeEmployment = removeEmployment;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +88,20 @@
       vm.referral = null;
       $location.path('/referral');
       $state.go('hateoas');
+    }
+
+    /**
+     * removeEmployment
+     * @description Removes an employment accordion from the work section
+     * @param index
+     * @param event
+     */
+    function removeEmployment(index, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      vm.referral.referralContacts.splice(index, 1);
     }
 
     /**

@@ -164,10 +164,23 @@
     function fetchGroupRoles(item) {
       if (select(item)) {
         vm.selectedNewRole = null;
-        Group.get({id: vm[vm.current].selected.id, populate: 'roles'}, function (data) {
+        fetchGroupPermissions(vm[vm.current].selected.id);
+      }
+    }
+
+    /**
+     * fetchGroupPermissions
+     * @description Private function for fetching group permissions objects
+     * @param groupID
+     */
+    function fetchGroupPermissions(groupID) {
+      Group.get({id: groupID, populate: 'roles'}, function (data) {
+        if (data.roles.length) {
           Permission.query({
+            where: {
+              role: _.pluck(data.roles, 'id')
+            },
             limit: 1000,
-            role: _.pluck(data.roles, 'id'),
             populate: ['model', 'role', 'criteria']
           }, function (rolePermissions) {
             vm.detailInfo = {
@@ -177,8 +190,10 @@
               })
             };
           });
-        });
-      }
+        } else {
+          vm.detailInfo = {};
+        }
+      });
     }
 
     /**
@@ -231,20 +246,7 @@
               vm.detailInfo = UserPermissions.get({id: vm.user.selected.id});
               break;
             case 'group':
-              Group.get({id: vm[vm.current].selected.id, populate: 'roles'}, function (data) {
-                Permission.query({
-                  limit: 1000,
-                  role: _.pluck(data.roles, 'id'),
-                  populate: ['model', 'role', 'criteria']
-                }, function (rolePermissions) {
-                  vm.detailInfo = {
-                    roles: _.map(rolePermissions, function (rolePermission) {
-                      rolePermission.roleName = rolePermission.role.name;
-                      return rolePermission;
-                    })
-                  };
-                });
-              });
+              fetchGroupPermissions(vm[vm.current].selected.id);
               break;
             default: break;
           }
