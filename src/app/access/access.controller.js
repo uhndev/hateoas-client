@@ -177,8 +177,10 @@
       Group.get({id: groupID, populate: 'roles'}, function (data) {
         if (data.roles.length) {
           Permission.query({
+            where: {
+              role: _.pluck(data.roles, 'id')
+            },
             limit: 1000,
-            role: _.pluck(data.roles, 'id'),
             populate: ['model', 'role', 'criteria']
           }, function (rolePermissions) {
             vm.detailInfo = {
