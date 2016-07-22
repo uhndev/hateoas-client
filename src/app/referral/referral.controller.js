@@ -6,7 +6,7 @@
       'ngMaterial',
       'ngResource',
       'dados.header.service',
-      "dados.common.config"
+      'dados.common.config'
     ])
     .controller('ReferralController', ReferralController);
 
@@ -38,7 +38,7 @@
           data: {
             claim: vm.referral.claimNumber,
             client: vm.referral.clientcontact.displayName,
-            url: encodeURI(BASE.protocol +'://' + BASE.host + '/#' + $location.path())
+            url: encodeURI(BASE.protocol + '://' + BASE.host + '/#' + $location.path())
           },
           options: {
             subject: 'Altum CMS Communication'
