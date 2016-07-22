@@ -10,9 +10,9 @@
     ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'BASE'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
 
-  function ReferralController($resource, $location, API, HeaderService, BASE) {
+  function ReferralController($resource, $location, API, HeaderService) {
     var vm = this;
     var ReferralServices;
     // bindable variables
@@ -39,7 +39,7 @@
           data: {
             claim: vm.referral.claimNumber,
             client: vm.referral.clientcontact.displayName,
-            url: encodeURI(BASE.protocol + '://' + BASE.host + '/#' + $location.path())
+            url: encodeURI($location.absUrl())
           },
           options: {
             subject: 'Altum CMS Communication'
