@@ -40,9 +40,6 @@
             person: vm.client.personId,
             populate: 'company'
           });
-          if (_.has(data.familyDoctor, 'person')) {
-            vm.client.person.familyDoctor.person = AltumAPIService.Person.get({id: data.familyDoctor.person});
-          }
           if (data.primaryEmergencyContact) {
             vm.client.person.primaryEmergencyContact = AltumAPIService.EmergencyContact.get({id: data.primaryEmergencyContact});
           }

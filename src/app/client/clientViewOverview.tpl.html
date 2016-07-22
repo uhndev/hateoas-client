@@ -1,0 +1,28 @@
+<div class="container-fluid" ng-controller="ClientController as clientOverview" ng-cloak>
+  <div class="row">
+    <div class="col-md-11">
+      <h2 id="Title">
+        <span translate context-translator="APP.CLIENT.OVERVIEW.LABELS.CLIENT_OVERVIEW">
+          APP.CLIENT.OVERVIEW.LABELS.CLIENT_OVERVIEW
+        </span>: {{clientOverview.client.displayName}}
+      </h2>
+    </div>
+    <div class="col-md-1">
+      <div id="Controls">
+        <br/>
+        <button type="button" class="btn btn-default pull-right"
+                ui-sref="editClient({id: clientOverview.client.id})" ng-disabled="!!!clientOverview.client.id">
+          <i class="fa fa-edit"></i>
+          <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <simple-table rows="clientOverview.clientInfo.rowsClient"
+                table-data="clientOverview.clientInfo.tableDataClient">
+  </simple-table>
+
+</div>
