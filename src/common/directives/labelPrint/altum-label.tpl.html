@@ -4,7 +4,7 @@
            ng-model="label.copies" ng-disabled="!label.printer" placeholder="Copies"/>
   <span class="input-group-btn">
     <button type="button" class="btn btn-default"
-            ng-disabled="!label.referralInfo" ng-click="label.printLabel()">
+            ng-disabled="!label.referralInfo || !label.printer" ng-click="label.printLabel()">
       <i class="glyphicon glyphicon-print"></i>
     </button>
   </span>

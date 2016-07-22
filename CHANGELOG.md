@@ -7,6 +7,7 @@
 * [FEATURE] ARM-570, ARM-647: Reporting DB/Jasper Reports
 * [FEATURE] ARM-371: ANZIO Reports
 * [FEATURE] ARM-410: Configurable, dynamic completion forms for statuses
+* [FEATURE] ARM-446: Ability to edit recommendations
 * [FEATURE] ARM-456: Service Variations
 * [FEATURE] Misc enhancements to Access Management
 * [FEATURE] Role/Permissions based restrictions on payorPrice update

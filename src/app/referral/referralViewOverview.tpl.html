@@ -1,17 +1,20 @@
 <div class="container-fluid" ng-controller="ReferralController as ref" ng-cloak>
-  <h2 id="Title" translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW">
-    APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW
-  </h2>
-
-  <div id="Controls">
-    <button type="button" class="btn btn-default pull-right"
-            ui-sref="editReferral({id: ref.referral.id})" ng-disabled="!!!ref.referral.id">
-      <i class="fa fa-edit"></i>
-      <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
-    </button>
-
-    <altum-label-print referral-info="ref.referral" copies="ref.copies"></altum-label-print>
-    <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-11">
+      <h2 id="Title" translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW">
+        APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW
+      </h2>
+    </div>
+    <div class="col-md-1">
+      <div id="Controls">
+        <br/>
+        <button type="button" class="btn btn-default pull-right"
+                ui-sref="editReferral({id: ref.referral.id})" ng-disabled="!!!ref.referral.id">
+          <i class="fa fa-edit"></i>
+          <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <hr/>
