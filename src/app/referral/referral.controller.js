@@ -5,13 +5,14 @@
     .module('altum.referral.controller', [
       'ngMaterial',
       'ngResource',
-      'dados.header.service'
+      'dados.header.service',
+      "dados.common.config"
     ])
     .controller('ReferralController', ReferralController);
 
-  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService'];
+  ReferralController.$inject = ['$resource', '$location', 'API', 'HeaderService', 'BASE'];
 
-  function ReferralController($resource, $location, API, HeaderService) {
+  function ReferralController($resource, $location, API, HeaderService, BASE) {
     var vm = this;
     var ReferralServices;
     // bindable variables
@@ -37,12 +38,13 @@
           data: {
             claim: vm.referral.claimNumber,
             client: vm.referral.clientcontact.displayName,
-            url: encodeURI(vm.url)
+            url: encodeURI(BASE.protocol +'://' + BASE.host + '/#' + $location.path())
           },
           options: {
             subject: 'Altum CMS Communication'
           }
         };
+
         // referral info panel
         vm.referralInfo = {
           rowsReferral: {
