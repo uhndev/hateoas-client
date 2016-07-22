@@ -93,7 +93,7 @@
           data: {
             claim: vm.referral.claimNumber,
             client: vm.referral.client_displayName,
-            url: encodeURI(vm.url)
+            url: encodeURI($location.absUrl())
           },
           options: {
             subject: 'Altum CMS Communication'
