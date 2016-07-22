@@ -5,8 +5,7 @@
     .module('altum.referral.controller', [
       'ngMaterial',
       'ngResource',
-      'dados.header.service',
-      'dados.common.config'
+      'dados.header.service'
     ])
     .controller('ReferralController', ReferralController);
 
