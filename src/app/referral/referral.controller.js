@@ -38,12 +38,13 @@
           data: {
             claim: vm.referral.claimNumber,
             client: vm.referral.clientcontact.displayName,
-            url: encodeURI(vm.url)
+            url: encodeURI($location.absUrl())
           },
           options: {
             subject: 'Altum CMS Communication'
           }
         };
+
         // referral info panel
         vm.referralInfo = {
           rowsReferral: {
