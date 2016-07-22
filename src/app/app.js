@@ -39,6 +39,8 @@
       'dados.translation',
 
       // Altum/ARM
+      'altum.client',
+      'altum.client.overview',
       'altum.referral',
       'altum.billing',
       'altum.client',

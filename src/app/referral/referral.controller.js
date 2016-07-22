@@ -13,7 +13,7 @@
 
   function ReferralController($resource, $location, API, HeaderService) {
     var vm = this;
-    var ReferralServices;
+
     // bindable variables
     vm.url = API.url() + $location.path();
 
@@ -23,7 +23,6 @@
 
     function init() {
       var Resource = $resource(vm.url);
-      ReferralServices = $resource(vm.url + '/services');
       Resource.get(function (data, headers) {
         vm.allow = headers('allow');
         vm.template = data.template;
@@ -32,7 +31,7 @@
         var referralData = _.pick(vm.referral, 'createdAt', 'program', 'site', 'physician', 'staff', 'referralContact',
           'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
 
-        //email fields for sending email from note directive
+        // email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
