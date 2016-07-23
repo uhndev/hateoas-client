@@ -2,12 +2,14 @@
   'use strict';
 
   angular
-    .module('dados.access', [])
+    .module('dados.access', ['dados.access.service', 'toastr'])
     .controller('AccessManagementController', AccessManagementController);
 
-  AccessManagementController.$inject = ['$uibModal', 'GroupService', 'PermissionService', 'UserRoles', 'UserPermissions'];
+  AccessManagementController.$inject = [
+    '$uibModal', 'GroupService', 'GroupRolesService', 'PermissionService', 'UserRoles', 'UserPermissions', 'toastr'
+  ];
 
-  function AccessManagementController($uibModal, Group, Permission, UserRoles, UserPermissions) {
+  function AccessManagementController($uibModal, Group, GroupRoles, Permission, UserRoles, UserPermissions, toastr) {
     var vm = this;
 
     // bindable variables
@@ -52,7 +54,8 @@
         heading: 'APP.ACCESSMANAGEMENT.TABS.BY_ROLE',
         url: 'role',
         fetchDetailInfo: fetchRolePermissions,
-        onResourceLoaded: function(data) {
+        onResourceLoaded: function(data, headers) {
+          vm.rolePermissions = headers('allow');
           return data;
         }
       },
@@ -86,7 +89,8 @@
     // bindable methods
     vm.selectTab = selectTab;
     vm.removeElement = removeElement;
-    vm.addUserToRole = addUserToRole;
+    vm.addRoleToCollection = addRoleToCollection;
+    vm.removeRoleFromCollection = removeRoleFromCollection;
     vm.openAddPermission = openAddPermission;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -101,6 +105,7 @@
      * @param tab
      */
     function selectTab(tab) {
+      delete vm.search;
       vm.current = tab.url;
       vm.detailInfo = null;
       vm.currentIndex = vm[tab.url].index;
@@ -140,6 +145,7 @@
      * fetchPermissionsBy
      * @description Utility function for querying the Permissions table for a given criteria
      * @param model
+     * @param id
      */
     function fetchPermissionsBy(model, id) {
       var queryObj = {
@@ -157,10 +163,37 @@
      */
     function fetchGroupRoles(item) {
       if (select(item)) {
-        Group.get({id: vm[vm.current].selected.id, populate: 'roles'}, function (data) {
-          vm.detailInfo = Permission.query({role: _.pluck(data.roles, 'id'), populate: ['model', 'role', 'criteria']});
-        });
+        vm.selectedNewRole = null;
+        fetchGroupPermissions(vm[vm.current].selected.id);
       }
+    }
+
+    /**
+     * fetchGroupPermissions
+     * @description Private function for fetching group permissions objects
+     * @param groupID
+     */
+    function fetchGroupPermissions(groupID) {
+      Group.get({id: groupID, populate: 'roles'}, function (data) {
+        if (data.roles.length) {
+          Permission.query({
+            where: {
+              role: _.pluck(data.roles, 'id')
+            },
+            limit: 1000,
+            populate: ['model', 'role', 'criteria']
+          }, function (rolePermissions) {
+            vm.detailInfo = {
+              roles: _.map(rolePermissions, function (rolePermission) {
+                rolePermission.roleName = rolePermission.role.name;
+                return rolePermission;
+              })
+            };
+          });
+        } else {
+          vm.detailInfo = {};
+        }
+      });
     }
 
     /**
@@ -198,17 +231,49 @@
     }
 
     /**
-     * addUserToRole
+     * addRoleToCollection
      * @description Click handler for adding a user to a given role selected from select-loader on user tab.
      */
-    function addUserToRole() {
-      if (vm.selectedNewRole) {
-        var userRole = new UserRoles();
-        userRole.userID = vm.user.selected.id;
-        userRole.roleID = vm.selectedNewRole;
-        userRole.$save().then(function () {
+    function addRoleToCollection() {
+      if (!_.map(vm.detailInfo.roles, 'id').includes(vm.selectedNewRole)) {
+        var collectionRole = vm.current === 'group' ? new GroupRoles() : new UserRoles();
+        collectionRole[vm.current === 'group' ? 'groupID' : 'userID'] = vm[vm.current].selected.id;
+        collectionRole.roleID = vm.selectedNewRole;
+        collectionRole.$save().then(function () {
           vm.selectedNewRole = null;
-          vm.detailInfo = UserPermissions.get({id: vm.user.selected.id});
+          switch (vm.current) {
+            case 'user':
+              vm.detailInfo = UserPermissions.get({id: vm.user.selected.id});
+              break;
+            case 'group':
+              fetchGroupPermissions(vm[vm.current].selected.id);
+              break;
+            default: break;
+          }
+        });
+      } else {
+        toastr.warning('Role already exists in ' + vm.current + ' ' + vm[vm.current].selected.displayName, 'Access Management');
+        vm.selectedNewRole = null;
+      }
+    }
+
+    /**
+     * removeRoleFromCollection
+     * @description Removes a role from an user/group
+     */
+    function removeRoleFromCollection(role, event) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (confirm('Are you sure you want to remove the role ' + role.displayName + ' from ' + vm[vm.current].selected.displayName + '?')) {
+        var collectionRole = vm.current === 'group' ? new GroupRoles() : new UserRoles();
+        collectionRole[vm.current === 'group' ? 'groupID' : 'userID'] = vm[vm.current].selected.id;
+        collectionRole.roleID = role.id;
+        collectionRole.$delete(function (data) {
+          vm.detailInfo = null;
+          var savedSelected = angular.copy(vm[vm.current].selected);
+          vm[vm.current].selected = null;
+          toastr.success('Removed role ' + role.name +  ' from ' + savedSelected.displayName, 'Access Management');
+          _.find(vm.tabs, {url: vm.current}).fetchDetailInfo(savedSelected);
         });
       }
     }

@@ -7,13 +7,13 @@
     .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
-    '$scope', '$uibModal', '$location', 'API', 'HateoasUtils', 'toastr'
+    '$scope', '$rootScope', '$uibModal', '$location', 'API', 'HateoasUtils', 'toastr'
   ];
 
   /**
    * Controller for the directive
    */
-  function HateoasControlsController($scope, $uibModal, $location,
+  function HateoasControlsController($scope, $rootScope, $uibModal, $location,
                                      API, HateoasUtils, toastr) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
@@ -31,7 +31,7 @@
         Service.archive(item).then(function (data) {
           toastr.success('Item successfully archived!', 'Success');
           $scope.$emit('submenu.clear');
-          $scope.$emit('hateoas.client.refresh');
+          $rootScope.$broadcast('hateoas.client.refresh');
         });
       }
     }
@@ -60,7 +60,7 @@
         var api = newItem.href || $scope.href;
         Service.commit(api, newItem).then(function(data) {
           toastr.success('Item successfully updated!', 'Success');
-          $scope.$emit('hateoas.client.refresh');
+          $rootScope.$broadcast('hateoas.client.refresh');
           modalScope.$destroy();
         });
       });

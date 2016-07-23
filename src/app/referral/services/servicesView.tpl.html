@@ -41,7 +41,9 @@
                    visible-fields="services.visitFields">
   </template-config>
 
-  <service-group services="services.services"
+  <service-group ng-if="services.services && services.template"
+                 services="services.services"
+                 template="services.template"
                  search="services.search"
                  bound-group-types="services.boundGroupTypes"
                  visit-fields="services.visitFields"

@@ -1,4 +1,5 @@
 <input type="text"
+  ng-disabled="disabledWhen"
 	ng-model="widgetModel.value"
 	id="uuid:{{ widget.name }}"
 	name="{{ widget.name }}"
@@ -13,6 +14,6 @@
 	ng-pattern="{{widget.properties.pattern }}"
 />
 <!--  datalist id="uuid:{{plugin.id}}:{{ widget.id }}:list">
-	<option ng-repeat="option in widget.properties.options" 
+	<option ng-repeat="option in widget.properties.options"
 		value="{{option.name}}" label="{{option.value}}"></option>
 </datalist -->

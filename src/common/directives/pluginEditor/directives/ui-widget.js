@@ -103,6 +103,7 @@
       scope: {
         widget : '=',
         widgetModel : '=',
+        disabledWhen : '=',
         hideLabel: '&',
         editMode: '&'
       },

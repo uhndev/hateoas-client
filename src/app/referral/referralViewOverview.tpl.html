@@ -1,9 +1,23 @@
 <div class="container-fluid" ng-controller="ReferralController as ref" ng-cloak>
-  <h2 id="Title" translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW">
-    APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW
-  </h2>
+  <div class="row">
+    <div class="col-md-11">
+      <h2 id="Title" translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW">
+        APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_OVERVIEW
+      </h2>
+    </div>
+    <div class="col-md-1">
+      <div id="Controls">
+        <br/>
+        <button type="button" class="btn btn-default pull-right"
+                ui-sref="editReferral({id: ref.referral.id})" ng-disabled="!!!ref.referral.id">
+          <i class="fa fa-edit"></i>
+          <span translate>COMMON.HATEOAS.CONTROLS.EDIT_BTN</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <br/>
+  <hr/>
 
   <div class="row">
     <div class="col-lg-6">
@@ -14,15 +28,25 @@
     </div>
 
     <div class="col-lg-6">
-        <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION</h3>
-        <simple-table rows="ref.referralInfo.rowsReferral"
-                    table-data="ref.referralInfo.tableDataReferral">
-        </simple-table>
+      <h3 translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION">APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_INFORMATION</h3>
+      <simple-table rows="ref.referralInfo.rowsReferral"
+                  table-data="ref.referralInfo.tableDataReferral">
+      </simple-table>
     </div>
+  </div>
+
+  <h3 ng-if="ref.referralInfo.referralContacts.length"
+      translate context-translator="APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_CONTACTS">
+    APP.REFERRAL.OVERVIEW.LABELS.REFERRAL_CONTACTS
+  </h3>
+  <div layout="row" layout-padding>
+    <div flex ng-repeat="contact in ref.referralInfo.referralContacts">
+      <simple-table rows="contact.rows" table-data="contact.tableData"></simple-table>
+    </div>
+  </div>
 
   <altum-notebook ng-if="ref.referral"
                   collection="{'referral': ref.referral.id}"
                   email-info="ref.emailInfo">
   </altum-notebook>
-</div>
 </div>

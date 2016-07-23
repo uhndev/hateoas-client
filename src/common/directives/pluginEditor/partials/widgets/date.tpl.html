@@ -2,6 +2,7 @@
     class="form-control"
 	uib-datepicker-popup
 	show-weeks="false"
+  ng-disabled="disabledWhen"
 	ng-model="widgetModel.value"
 	name="{{ widget.name }}"
 	id="uuid:{{ widget.name }}"

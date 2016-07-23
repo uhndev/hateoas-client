@@ -2,12 +2,14 @@ describe('AuthService', function() {
   var AuthService;
   var $httpBackend;
   var $cookies;
+  var API;
 
   beforeEach(function() {
     module('dados.auth.service');
   });
 
   beforeEach(inject(function($injector) {
+    API = $injector.get('API');
     $httpBackend = $injector.get('$httpBackend');
     $cookies = $injector.get('$cookies');
     AuthService = $injector.get('AuthService');
@@ -55,7 +57,7 @@ describe('AuthService', function() {
           invoked = true;
         };
         var error = function() {};
-        $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();
+        $httpBackend.expectPOST(API.base() + '/auth/local').respond();
         AuthService.login({}, success, error);
         $httpBackend.flush();
         expect(invoked).toBeTruthy();
@@ -66,7 +68,7 @@ describe('AuthService', function() {
           $cookies.put('user', {'user': 'bar', group:'admin'});
         };
         var error = function() {};
-        $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();
+        $httpBackend.expectPOST(API.base() + '/auth/local').respond();
         AuthService.login({}, success, error);
         $httpBackend.flush();
         expect($cookies.get('user')).toBeDefined();
@@ -77,7 +79,7 @@ describe('AuthService', function() {
       it('should make a request and invoke callback', function() {
         var success = function() {};
         var error = function() {};
-        $httpBackend.expectGET('http://localhost:1337/logout').respond();
+        $httpBackend.expectGET(API.base() + '/logout').respond();
         AuthService.logout(success, error);
         $httpBackend.flush();
         expect($cookies.get('user')).toBeUndefined();
