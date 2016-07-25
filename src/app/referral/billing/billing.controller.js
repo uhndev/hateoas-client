@@ -89,8 +89,9 @@
         size: 'lg',
         bindToController: true,
         resolve: {
-          Service: function() {
-            return AltumAPI.Service.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
+          Service: function($resource, API) {
+            var ServiceResource = $resource(API.url() + '/service');
+            return ServiceResource.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
           },
           ApprovedServices: function() {
             return angular.copy($scope.services.referral.approvedServices);
@@ -135,7 +136,6 @@
               site: true,
               visitService: true,
               variations: true,
-              payorPrice: true,
               serviceDate: true
             },
             required: {}

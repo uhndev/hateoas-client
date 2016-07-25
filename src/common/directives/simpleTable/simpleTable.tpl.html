@@ -14,7 +14,7 @@
         <pre>{{item.value | json}}</pre>
       </div>
       <div ng-switch-when="date">
-        {{item.value | date:'EEEE, MMMM d, y'}}
+        {{item.value | date:'EEEE, MMMM d, y':'UTC'}}
       </div>
       <div ng-switch-when="datetime">
         {{item.value | date:'EEEE, MMMM d, y'}}
