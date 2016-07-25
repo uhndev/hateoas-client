@@ -186,17 +186,6 @@
           </p>
         </div>
       </div>
-
-      <div class="form-group" ng-if="!svc.configuration.disabled.payorPrice">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PAYOR_PRICE</label>
-        <span class="text-danger pull-right" ng-if="serviceForm.payorPrice.$invalid"> * required</span>
-        <div ng-class="{'col-md-9': svc.horizontal}">
-          <input type="number"
-                 name="payorPrice" class="form-control"
-                 ng-model="svc.service.payorPrice"
-                 ng-required="svc.configuration.required.payorPrice"/>
-        </div>
-      </div>
     </div>
 
     <div ng-class="{'col-md-6': svc.toggleVariations}" ng-if="!svc.configuration.disabled.variations"

@@ -40,7 +40,6 @@
         programService: true,
         site: true,
         variations: true,
-        payorPrice: true,
         serviceDate: true
       },
       required: {

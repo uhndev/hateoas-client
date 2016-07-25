@@ -10,7 +10,8 @@
     var vm = this;
 
     // bindable variables
-    vm.service = Service;
+    vm.service = Service.items;
+    vm.template = Service.template;
     vm.approvedServices = ApprovedServices;
     vm.editorConfig = ServiceEditorConfig;
 
@@ -18,7 +19,21 @@
     vm.saveService = saveService;
     vm.cancel = cancel;
 
+    init();
+
     ///////////////////////////////////////////////////////////////////////////
+
+    function init() {
+      // remove fields from service object if set in blacklist
+      _.map(['create', 'update'], function (action) {
+        if (_.has(Service.template, 'blacklist') && !_.isEmpty(Service.template.blacklist) &&
+            _.has(vm.service, Service.template.blacklist[action]) && Service.template.blacklist[action].length) {
+          _.each(Service.template.blacklist[action], function (fieldName) {
+            delete vm.service[fieldName];
+          });
+        }
+      });
+    }
 
     /**
      * saveService
