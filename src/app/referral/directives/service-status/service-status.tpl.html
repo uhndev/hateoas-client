@@ -1,4 +1,5 @@
 <select class="form-control" ng-model="serviceStatus.service[serviceStatus.currentStatus]"
+        ng-mouseenter="serviceStatus.init()"
         ng-options="status.id as status.name for status in serviceStatus.statuses"
         ng-change="serviceStatus.updateApprovalStatus()"
         uib-popover-template="serviceStatus.approvalPopover.templateUrl"
