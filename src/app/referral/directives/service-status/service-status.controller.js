@@ -118,13 +118,13 @@
     };
 
     // bindable methods
+    vm.init = init;
     vm.updateApprovalStatus = updateApprovalStatus;
     vm.renderStatusData = renderStatusData;
 
     var SystemForm = $resource(API.url() + '/systemform');
     var ServiceStatus = $resource(API.url() + '/service');
     var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
-    init();
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +145,7 @@
           previousStatus = data.items[vm.currentType].status;
           vm.service[vm.currentStatus] = data.items[vm.currentType].status;
           vm.service.iconClass = vm.statuses[data.items[vm.currentType].status].iconClass;
-          vm.service.rowClass = vm.statuses[data.items[vm.currentType].status].rowClass;
+          // vm.service.rowClass = vm.statuses[data.items[vm.currentType].status].rowClass;
           vm.service[vm.collection] = angular.copy(_.sortBy(data.items[vm.collection], 'createdAt'));
 
           // fetch hateoas template for new status type and filter fields based on rules
