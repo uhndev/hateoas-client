@@ -27,11 +27,11 @@ module.exports = {
       }
     },
     uat: {
-      url: 'http://10.3.128.49:1338',
+      url: 'http://10.7.8.121:1338',
       constants: {
         BASE: {
           protocol: 'http',
-          host : '10.3.128.49',
+          host : '10.7.8.121',
           port: '1338',
           prefix: '/api'
         }
