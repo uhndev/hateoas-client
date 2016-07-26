@@ -31,7 +31,8 @@
         var referralData = _.pick(vm.referral, 'createdAt','program', 'site', 'physician', 'staff', 'referralContact', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
         _.extend(referralData, _.pick(vm.referral.policy, 'number'));
         _.extend(referralData, _.pick(vm.referral.claim, 'claimNumber'));
-        //email fields for sending email from note directive
+
+        // email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
@@ -40,7 +41,7 @@
             url: encodeURI($location.absUrl())
           },
           options: {
-            subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName
+            subject: 'Altum CMS Communication'
           }
         };
 
