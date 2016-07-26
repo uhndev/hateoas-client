@@ -27,11 +27,11 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
-        var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
-        var referralData = _.pick(vm.referral, 'createdAt', 'program', 'site', 'physician', 'staff', 'referralContact',
-          'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
-
-        // email fields for sending email from note directive
+        var clientData = _.pick(vm.referral.clientcontact, 'MRN','gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
+        var referralData = _.pick(vm.referral, 'createdAt','program', 'site', 'physician', 'staff', 'referralContact', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
+        _.extend(referralData, _.pick(vm.referral.policy, 'number'));
+        _.extend(referralData, _.pick(vm.referral.claim, 'claimNumber'));
+        //email fields for sending email from note directive
         vm.emailInfo = {
           template: 'referral',
           data: {
@@ -40,7 +40,7 @@
             url: encodeURI($location.absUrl())
           },
           options: {
-            subject: 'Altum CMS Communication'
+            subject:  'Altum CMS Communication for' + ' ' + vm.referral.clientcontact.displayName
           }
         };
 
@@ -54,7 +54,7 @@
             'staff': {title: 'COMMON.MODELS.REFERRAL.STAFF', type: 'staff'},
             'referralContact': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_CONTACT', type: 'employee'},
             'claimNumber': {title: 'COMMON.MODELS.REFERRAL.CLAIM_NUMBER', type: 'text'},
-            'policyNumber': {title: 'COMMON.MODELS.REFERRAL.POLICY_NUMBER', type: 'text'},
+            'number': {title: 'COMMON.MODELS.REFERRAL.POLICY_NUMBER', type: 'text'},
             'referralDate': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_DATE', type: 'date'},
             'clinicDate': {title: 'COMMON.MODELS.REFERRAL.CLINIC_DATE', type: 'date'},
             'accidentDate': {title: 'COMMON.MODELS.REFERRAL.ACCIDENT_DATE', type: 'date'},
@@ -74,19 +74,6 @@
             'homeEmail': {title: 'COMMON.MODELS.CLIENT.EMAIL', type: 'text'},
             'homePhone': {title: 'COMMON.MODELS.CLIENT.PHONE', type: 'integer'},
           },
-          referralContacts: _.map(vm.referral.referralContacts, function (contact) {
-            return {
-              rows: {
-                'displayName': {title: 'COMMON.MODELS.EMPLOYEE.NAME', type: 'text'},
-                'workPhone': {title: 'COMMON.MODELS.EMPLOYEE.WORK_PHONE', type: 'text'},
-                'workEmail': {title: 'COMMON.MODELS.EMPLOYEE.WORK_EMAIL', type: 'text'},
-                'occupation': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION', type: 'text'},
-                'occupationType': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION_TYPE', type: 'text'},
-                'occupationSector': {title: 'COMMON.MODELS.EMPLOYEE.OCCUPATION_SECTOR', type: 'text'}
-              },
-              tableData: _.objToPair(_.pick(contact, 'displayName', 'workPhone', 'workEmail', 'occupation', 'occupationType', 'occupationSector'))
-            };
-          }),
           tableDataReferral: _.objToPair(referralData),
           tableDataClient: _.objToPair(clientData)
         };
