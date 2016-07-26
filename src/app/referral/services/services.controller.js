@@ -237,8 +237,9 @@
         size: 'lg',
         bindToController: true,
         resolve: {
-          Service: function() {
-            return AltumAPI.Service.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
+          Service: function($resource, API) {
+            var ServiceResource = $resource(API.url() + '/service');
+            return ServiceResource.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
           },
           ApprovedServices: function() {
             return angular.copy(vm.referral.approvedServices);
@@ -247,8 +248,7 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
-                currentCompletion: true, // no need to have completion field when editing,
-                payorPrice: true
+                currentCompletion: true, // no need to have completion field when editing
               },
               required: {}
             };
@@ -284,7 +284,6 @@
               altumService: true,
               programService: true,
               variations: true,
-              payorPrice: true,
               serviceDate: true
             },
             required: {}

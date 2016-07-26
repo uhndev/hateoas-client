@@ -29,7 +29,7 @@
         vm.referral = angular.copy(data.items);
         var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
         var referralData = _.pick(vm.referral, 'createdAt', 'program', 'site', 'physician', 'staff', 'referralContact',
-          'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName');
+          'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName', 'referralComments');
 
         // email fields for sending email from note directive
         vm.emailInfo = {
@@ -61,7 +61,8 @@
             'sentDate': {title: 'COMMON.MODELS.REFERRAL.SENT_DATE', type: 'date'},
             'receiveDate': {title: 'COMMON.MODELS.REFERRAL.RECEIVE_DATE', type: 'date'},
             'dischargeDate': {title: 'COMMON.MODELS.REFERRAL.DISCHARGE_DATE', type: 'date'},
-            'statusName': {title: 'COMMON.MODELS.REFERRAL.STATUS', type: 'text'}
+            'statusName': {title: 'COMMON.MODELS.REFERRAL.STATUS', type: 'text'},
+            'referralComments': {title: 'COMMON.MODELS.REFERRAL.REFERRAL_COMMENTS', type: 'text'}
           },
           rowsClient: {
             'MRN': {title: 'COMMON.MODELS.CLIENT.MRN', type: 'text'},
@@ -72,7 +73,7 @@
             'city': {title: 'COMMON.MODELS.CLIENT.CITY', type: 'text'},
             'postalCode': {title:'COMMON.MODELS.CLIENT.POSTAL_CODE', type:'text'},
             'homeEmail': {title: 'COMMON.MODELS.CLIENT.EMAIL', type: 'text'},
-            'homePhone': {title: 'COMMON.MODELS.CLIENT.PHONE', type: 'integer'},
+            'homePhone': {title: 'COMMON.MODELS.CLIENT.PHONE', type: 'integer'}
           },
           referralContacts: _.map(vm.referral.referralContacts, function (contact) {
             return {

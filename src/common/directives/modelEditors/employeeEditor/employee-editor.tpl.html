@@ -51,11 +51,62 @@
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.company.$invalid}">
-                <label for="company" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
-                  COMMON.MODELS.EMPLOYEE.COMPANY
+                <label for="company" class="control-label" ng-class="{'col-md-3': employee.horizontal}">
+                  <span translate>COMMON.MODELS.EMPLOYEE.COMPANY</span>
                 </label>
+
+                <div class="checkbox pull-right">
+                  <label>
+                    <input type="checkbox" ng-model="employee.showCreate"
+                           ng-change="employee.employee.company = null"/> Create New
+                  </label>
+                </div>
+
                 <div ng-class="{'col-md-9': employee.horizontal}">
+                  <div class="well" ng-if="employee.showCreate">
+                    <div class="form-group" ng-class="{'has-error': employeeForm.name.$invalid}">
+                      <label for="name" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                        COMMON.MODELS.COMPANY.NAME
+                      </label>
+                      <div ng-class="{'col-md-9': employee.horizontal}">
+                        <input id="name" type="text" name="name" class="form-control"
+                               data-ng-model="employee.employee.company.name" required />
+                      </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': employeeForm.phone.$invalid}">
+                      <label for="phone" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                        COMMON.MODELS.COMPANY.PHONE
+                      </label>
+                      <div ng-class="{'col-md-9': employee.horizontal}">
+                        <input id="phone" type="text" name="phone" class="form-control"
+                               data-ng-model="employee.employee.company.phone" />
+                      </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': employeeForm.fax.$invalid}">
+                      <label for="fax" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                        COMMON.MODELS.COMPANY.FAX
+                      </label>
+                      <div ng-class="{'col-md-9': employee.horizontal}">
+                        <input id="fax" type="text" name="fax" class="form-control"
+                               data-ng-model="employee.employee.company.fax" />
+                      </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': employeeForm.email.$invalid}">
+                      <label for="email" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                        COMMON.MODELS.COMPANY.EMAIL
+                      </label>
+                      <div ng-class="{'col-md-9': employee.horizontal}">
+                        <input id="email" type="text" name="email" class="form-control"
+                               data-ng-model="employee.employee.company.email" />
+                      </div>
+                    </div>
+                  </div>
+
                   <select-loader
+                    ng-if="!employee.showCreate"
                     id="company"
                     name="company"
                     url="company"
