@@ -1,4 +1,4 @@
-  <div class="container-fluid" ng-controller="HateoasController as hateoas">
+<div class="container-fluid" ng-controller="HateoasController as hateoas">
   <h2 id="Title">
     <span translate>{{ pageTitle }}</span>
     <small translate translate-values="{ total: hateoas.resource.total }">
@@ -27,29 +27,29 @@
 
   <table id="Collection" ng-table="tableParams" class="table table-hover table-mc-light-blue ng-table-responsive">
     <thead>
-      <tr>
-        <th ng-repeat="column in hateoas.template.data track by $index"
-          ng-if="!column.data" class="sortable"
-          context-translator="{{column.prompt}}"
-          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')">
-          <span translate>{{ column.prompt }}</span> <i ng-class="{
-            'fa fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
-            'fa fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
-          }"></i>
-        </th>
-      </tr>
+    <tr>
+      <th ng-repeat="column in hateoas.template.data track by $index"
+          ng-click="tableParams.sorting(column.name, tableParams.isSortBy(column.name, 'asc') ? 'desc' : 'asc')"
+          ng-if="!column.data" class="sortable selectable" ng-class="{'info': tableParams.isSortBy(column.name)}">
+        <span translate context-translator="{{column.prompt}}">{{ column.prompt }}</span>
+        <i class="fa pull-right" ng-class="{
+          'fa-sort-asc': tableParams.isSortBy(column.name, 'asc'),
+          'fa-sort-desc': tableParams.isSortBy(column.name, 'desc')
+        }"></i>
+      </th>
+    </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in $data track by $index"
+    <tr ng-repeat="item in $data track by $index"
         ng-click="hateoas.select(item)"
         class="selectable"
         ng-class="{'active': item === hateoas.selected}">
-        <td ng-repeat="column in hateoas.template.data track by $index"
+      <td ng-repeat="column in hateoas.template.data track by $index"
           ng-if="!column.data"
           sortable="column.name">
-          {{ item[column.name] | formatter:column }}
-        </td>
-      </tr>
+        {{ item[column.name] | formatter:column }}
+      </td>
+    </tr>
     </tbody>
   </table>
 </div>
