@@ -1,7 +1,9 @@
 (function () {
   'use strict';
   angular
-    .module('altum.referral.register.controller', [])
+    .module('altum.referral.register.controller', [
+      'dados.common.directives.employeeEditor'
+    ])
     .controller('ReferralRegisterController', ReferralRegisterController);
 
   ReferralRegisterController.$inject = [
