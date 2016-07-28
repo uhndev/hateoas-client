@@ -58,7 +58,7 @@
           template: 'referral',
           data: {
             claim: vm.referral.claimNumber,
-            client: vm.referral.client_displayName,
+            client: vm.referral.clientcontact.displayName,
             url: encodeURI($location.absUrl())
           },
           options: {
