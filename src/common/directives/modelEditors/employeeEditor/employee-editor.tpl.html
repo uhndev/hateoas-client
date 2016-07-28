@@ -1,16 +1,16 @@
 <div class="container-fluid">
-  <ng-form name="employeeForm" ng-class="{'form-horizontal': employee.horizontal}" novalidate>
+  <ng-form name="employeeForm" ng-class="{'form-horizontal': employeeEditor.horizontal}" novalidate>
     <div class="row">
       <div class="col-md-6">
         <fieldset>
           <div class="row">
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': employeeForm.prefix.$invalid}">
-                <label for="prefix" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="prefix" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.PERSON.PREFIX
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
-                  <select id="prefix" name="prefix" class="form-control" ng-model="employee.employee.person.prefix" required>
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
+                  <select id="prefix" name="prefix" class="form-control" ng-model="employeeEditor.employee.person.prefix" required>
                     <option value="" disabled>Select a prefix</option>
                     <option value="Mr." label="Mr.">Mr.</option>
                     <option value="Mrs." label="Mrs.">Mrs.</option>
@@ -21,86 +21,86 @@
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.firstName.$invalid}">
-                <label for="firstName" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="firstName" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.PERSON.FIRST_NAME
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="firstName" type="text" name="firstName" class="form-control"
-                         data-ng-model="employee.employee.person.firstName" required />
+                         data-ng-model="employeeEditor.employee.person.firstName" required />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.middleName.$invalid}">
-                <label for="middleName" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="middleName" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.PERSON.MIDDLE_NAME
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="middleName" type="text" name="middleName" class="form-control"
-                         data-ng-model="employee.employee.person.middleName" />
+                         data-ng-model="employeeEditor.employee.person.middleName" />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.lastName.$invalid}">
-                <label for="lastName" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="lastName" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.PERSON.LAST_NAME
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="lastName" type="text" name="lastName" class="form-control"
-                         data-ng-model="employee.employee.person.lastName" required />
+                         data-ng-model="employeeEditor.employee.person.lastName" required />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.company.$invalid}">
-                <label for="company" class="control-label" ng-class="{'col-md-3': employee.horizontal}">
+                <label for="company" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}">
                   <span translate>COMMON.MODELS.EMPLOYEE.COMPANY</span>
                 </label>
 
                 <div class="checkbox pull-right">
                   <label>
-                    <input type="checkbox" ng-model="employee.showCreate"
-                           ng-change="employee.employee.company = null"/> Create New
+                    <input type="checkbox" ng-model="employeeEditor.showCreate"
+                           ng-change="employeeEditor.employee.company = null"/> Create New
                   </label>
                 </div>
 
-                <div ng-class="{'col-md-9': employee.horizontal}">
-                  <div class="well" ng-if="employee.showCreate">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
+                  <div class="well" ng-if="employeeEditor.showCreate">
                     <div class="form-group" ng-class="{'has-error': employeeForm.name.$invalid}">
-                      <label for="name" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                      <label for="name" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                         COMMON.MODELS.COMPANY.NAME
                       </label>
-                      <div ng-class="{'col-md-9': employee.horizontal}">
+                      <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                         <input id="name" type="text" name="name" class="form-control"
-                               data-ng-model="employee.employee.company.name" required />
+                               data-ng-model="employeeEditor.employee.company.name" required />
                       </div>
                     </div>
 
                     <div class="form-group" ng-class="{'has-error': employeeForm.phone.$invalid}">
-                      <label for="phone" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                      <label for="phone" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                         COMMON.MODELS.COMPANY.PHONE
                       </label>
-                      <div ng-class="{'col-md-9': employee.horizontal}">
+                      <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                         <input id="phone" type="text" name="phone" class="form-control"
-                               data-ng-model="employee.employee.company.phone" />
+                               data-ng-model="employeeEditor.employee.company.phone" />
                       </div>
                     </div>
 
                     <div class="form-group" ng-class="{'has-error': employeeForm.fax.$invalid}">
-                      <label for="fax" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                      <label for="fax" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                         COMMON.MODELS.COMPANY.FAX
                       </label>
-                      <div ng-class="{'col-md-9': employee.horizontal}">
+                      <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                         <input id="fax" type="text" name="fax" class="form-control"
-                               data-ng-model="employee.employee.company.fax" />
+                               data-ng-model="employeeEditor.employee.company.fax" />
                       </div>
                     </div>
 
                     <div class="form-group" ng-class="{'has-error': employeeForm.email.$invalid}">
-                      <label for="email" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                      <label for="email" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                         COMMON.MODELS.COMPANY.EMAIL
                       </label>
-                      <div ng-class="{'col-md-9': employee.horizontal}">
+                      <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                         <input id="email" type="text" name="email" class="form-control"
-                               data-ng-model="employee.employee.company.email" />
+                               data-ng-model="employeeEditor.employee.company.email" />
                       </div>
                     </div>
                   </div>
@@ -112,10 +112,17 @@
                     url="company"
                     is-atomic="true"
                     is-disabled="false"
-                    ng-model="employee.employee.company"
+                    ng-model="employeeEditor.employee.company"
                     labels="displayName">
                   </select-loader>
                 </div>
+              </div>
+
+              <div class="form-group" ng-if="employeeEditor.employee.id">
+                <br/>
+                <button type="submit" class="btn btn-primary" ng-click="employeeEditor.updateEmployee()" ng-disabled="employeeForm.$pristine">
+                  <i class="fa fa-floppy-o"></i> {{ !employeeForm.$pristine ? 'Save Changes' : 'No Changes to Save' }}
+                </button>
               </div>
             </div>
           </div>
@@ -127,52 +134,52 @@
           <div class="row">
             <div class="col-md-11">
               <div class="form-group" ng-class="{'has-error': employeeForm.workPhone.$invalid}">
-                <label for="workPhone" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="workPhone" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.EMPLOYEE.WORK_PHONE
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="workPhone" type="text" name="workPhone" class="form-control"
-                         data-ng-model="employee.employee.workPhone" />
+                         data-ng-model="employeeEditor.employee.workPhone" />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.workEmail.$invalid}">
-                <label for="workEmail" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="workEmail" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.EMPLOYEE.WORK_EMAIL
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="workEmail" type="text" name="workEmail" class="form-control"
-                         data-ng-model="employee.employee.workEmail" />
+                         data-ng-model="employeeEditor.employee.workEmail" />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.occupation.$invalid}">
-                <label for="occupation" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="occupation" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.EMPLOYEE.OCCUPATION
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="occupation" type="text" name="occupation" class="form-control"
-                         data-ng-model="employee.employee.occupation" required/>
+                         data-ng-model="employeeEditor.employee.occupation" required/>
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.occupationType.$invalid}">
-                <label for="occupationType" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="occupationType" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.EMPLOYEE.OCCUPATION_TYPE
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="occupationType" type="text" name="occupationType" class="form-control"
-                         data-ng-model="employee.employee.occupationType" />
+                         data-ng-model="employeeEditor.employee.occupationType" />
                 </div>
               </div>
 
               <div class="form-group" ng-class="{'has-error': employeeForm.occupationSector.$invalid}">
-                <label for="occupationSector" class="control-label" ng-class="{'col-md-3': employee.horizontal}" translate>
+                <label for="occupationSector" class="control-label" ng-class="{'col-md-3': employeeEditor.horizontal}" translate>
                   COMMON.MODELS.EMPLOYEE.OCCUPATION_SECTOR
                 </label>
-                <div ng-class="{'col-md-9': employee.horizontal}">
+                <div ng-class="{'col-md-9': employeeEditor.horizontal}">
                   <input id="occupationSector" type="text" name="occupationSector" class="form-control"
-                         data-ng-model="employee.employee.occupationSector" />
+                         data-ng-model="employeeEditor.employee.occupationSector" />
                 </div>
               </div>
             </div>
