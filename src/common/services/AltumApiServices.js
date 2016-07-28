@@ -27,6 +27,8 @@
     .service('ServiceVariationService', ServiceVariationService)
     .service('ServiceCategoryService', ServiceCategoryService)
     .service('ServiceService', ServiceService)
+    .service('CompanyService', CompanyService)
+    .service('EmployeeService', EmployeeService)
     .service('BillingGroupService', BillingGroupService)
     .service('StatusFormService', StatusFormService)
     .service('StaffService', StaffService)

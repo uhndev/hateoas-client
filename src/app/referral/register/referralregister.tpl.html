@@ -347,22 +347,39 @@
             <i class="fa fa-plus-circle selectable pull-right" ng-click="referralRegister.referral.referralContacts.push({})"></i>
           </legend>
 
-          <div class="panel panel-info" id="referralContacts" ng-repeat="employee in referralRegister.referral.referralContacts">
-            <div class="panel-heading selectable" ng-click="employee.isCollapsed = !employee.isCollapsed">
-              <i class="glyphicon" ng-class="{
-                'glyphicon-chevron-right': !employee.isCollapsed,
-                'glyphicon-chevron-down': employee.isCollapsed
+          <div class="panel panel-info" ng-repeat="employeeObj in referralRegister.referral.referralContacts">
+            <div class="panel-heading selectable" ng-click="employeeObj.isCollapsed = !employeeObj.isCollapsed">
+              <i class="selectable glyphicon" ng-class="{
+                'glyphicon-chevron-right': !employeeObj.isCollapsed,
+                'glyphicon-chevron-down': employeeObj.isCollapsed
               }"></i>
               <span>
-                {{employee.occupation ? employee.occupation + ' - ' + employee.person.prefix + ' ' + employee.person.firstName + ' ' + employee.person.lastName : 'Please enter employee information'}}
+                {{employeeObj.occupation ? employeeObj.occupation + ' - ' + employeeObj.person.prefix + ' ' + employeeObj.person.firstName + ' ' + employeeObj.person.lastName : 'Please enter employee information'}}
                 <span class="glyphicon glyphicon-trash pull-right" ng-click="referralRegister.removeEmployment($index, $event)"></span>
               </span>
-
               <div class="clearfix"></div>
             </div>
-            <div class="panel-body" uib-collapse="!employee.isCollapsed">
-              <employee-editor employee="employee"></employee-editor>
+            <div class="panel-body" uib-collapse="!employeeObj.isCollapsed">
+              <employee-editor employee="employeeObj"></employee-editor>
             </div>
+          </div>
+
+          <div class="input-group">
+            <select-loader
+              url="employee"
+              is-atomic="true"
+              is-disabled="false"
+              bind-object="true"
+              ng-model="referralRegister.existingEmployee"
+              labels="displayName">
+            </select-loader>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-primary"
+                      ng-click="referralRegister.referral.referralContacts.push(referralRegister.existingEmployee); referralRegister.existingEmployee = null"
+                      ng-disabled="!referralRegister.existingEmployee">
+                <i class="fa fa-plus"></i> Add Existing Contact
+              </button>
+            </span>
           </div>
         </div>
       </div>
