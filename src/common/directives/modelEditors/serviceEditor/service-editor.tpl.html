@@ -168,14 +168,14 @@
         <span class="text-danger pull-right" ng-if="serviceForm.serviceDate.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <p class="input-group">
-            <input name="serviceDate" type="text"
+            <input name="serviceDate"
                    ng-model="svc.service.serviceDate"
                    ng-required="svc.configuration.required.serviceDate"
                    ng-change="svc.setServiceSelections('serviceDate')"
                    value="{{ svc.service.serviceDate | date:'fullDate' }}"
                    class="form-control"
                    uib-datepicker-popup
-                   type="datetime-local"
+                   type="datetime"
                    is-open="svc.opened"
                    required disabled format-date/>
         <span class="input-group-btn">

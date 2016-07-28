@@ -32,8 +32,14 @@
       ngModelController.$parsers.push(function (viewValue) {
         // undo the timezone adjustment we did during the formatting
         viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        // we just want a local date in ISO format
-        return viewValue.toISOString().substring(0, 10);
+
+        if (_.has(attr, 'type') && attr.type === 'datetime-local' || attr.type === 'datetime') {
+          // we just want a local datetime in ISO format
+          return viewValue;
+        } else {
+          // we just want a local date in ISO format
+          return viewValue.toISOString().substring(0, 10);
+        }
       });
 
       // called with a 'yyyy-mm-dd' string to format
