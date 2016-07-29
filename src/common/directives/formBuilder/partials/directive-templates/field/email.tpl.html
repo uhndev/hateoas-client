@@ -1,5 +1,5 @@
 <ng-form name="sub_form">
-  <div class="form-group">
+  <div class="form-group" ng-class="{'has-error': sub_form.$invalid && !sub_form.$pristine}">
     <label for="field.field_id">
       {{field.field_id}})
     </label>
@@ -14,13 +14,17 @@
            name="{{field.field_name}}"
            class="form-control"
            ng-model="field.field_value"
-           value="field.field_value"
            ng-required="field.field_required"
-    >
+           value="field.field_value"
+           validation-check criteria="{
+             model: field.field_validation.unique,
+             id: field.field_modelID,
+             attribute: field.field_name
+           }" />
     <div ng-show="!sub_form.$pristine">
       <span class="pull-right required-error"
-            ng-show="(field.field_required && !field.field_value) || showValidateError">
-        * {{field.field_helpertext | translate}}
+            ng-show="(field.field_required && !field.field_value) || sub_form.$invalid">
+          * {{field.field_helpertext | translate}}
       </span>
     </div>
   </div>
