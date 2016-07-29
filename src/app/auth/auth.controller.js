@@ -38,10 +38,10 @@
           expires: new Date(now.getTime() + (3600000 * user.token.expires))
         });
         AuthService.setAuthenticated();
-        if (user.user.firstLogin) {
+        if (user.user.expiredPassword) {
           $location.url('/user/' + user.user.id);
           $state.go('hateoas');
-          toastr.warning('Please change the initial password');
+          toastr.warning('Your password has expired, please change it to something new');
         }
       }
     };
