@@ -55,14 +55,10 @@
           vm.zpl += '^XZ';
           break;
         default:
-          alert("please choose the label type from the list");
+          alert('please choose the label type from the list');
           break;
 
-
-
       }
-
-
 
       var ip_addr = vm.printer.IP;
       var url = 'http://' + ip_addr + '/pstprnt';
