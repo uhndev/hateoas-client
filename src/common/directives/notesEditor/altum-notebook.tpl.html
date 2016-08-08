@@ -32,7 +32,7 @@
                ng-model-options="{debounce: 500}"/>
       </div>
 
-      <div ng-repeat="note in notebook.notes | orderBy: 'createdAt': true | filter:notebook.filterNormal"
+      <div ng-hide="notebook.loadingNotes" ng-repeat="note in notebook.notes | orderBy: 'createdAt': true | filter:notebook.filterNormal"
            ng-style="{'border-left': '5px solid ' + notebook.noteTypes[note.noteType].backgroundColour}">
         <altum-note note="note"
                     collection="notebook.collection"
@@ -40,6 +40,11 @@
                     on-remove="notebook.removeElement(notebook.notes, note)">
         </altum-note>
       </div>
+
+      <div class="loading-screen" ng-show="notebook.loadingNotes"></div>
+
+      <a class="pull-right" ng-href ng-if="notebook.resource.count < notebook.resource.total && !notebook.filterQuery"
+         ng-click="notebook.search(notebook.filterQuery)">Load All...</a>
     </div>
   </div>
 </div>
