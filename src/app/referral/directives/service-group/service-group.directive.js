@@ -20,7 +20,7 @@
       'altum.referral.serviceStatus.confirmation.controller'
     ])
     .constant('STATUS_CATEGORIES', [
-      'approval', 'completion', 'billing', 'report'
+      'approval', 'completion', 'billingstatus', 'reportstatus'
     ])
     .component('serviceGroup', {
       bindings: {
@@ -52,7 +52,9 @@
     vm.templates = {};
     vm.statusTitles = {};
     _.each(['approval', 'completion', 'billingstatus', 'reportstatus'], function (statusType) {
-      vm.templates[statusType] = _.find(vm.template.data, {type: statusType}).data;
+      vm.templates[statusType] = {
+        data: _.find(vm.template.data, {type: statusType}).data
+      };
     });
 
     // bindable methods

@@ -53,12 +53,12 @@
         type: 'string'
       },
       {
-        name: 'report',
+        name: 'reportstatus',
         prompt: 'APP.REFERRAL.BILLING.LABELS.REPORT_STATUS',
         type: 'status'
       },
       {
-        name: 'billing',
+        name: 'billingstatus',
         prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_STATUS',
         type: 'status'
       },

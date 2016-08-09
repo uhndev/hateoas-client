@@ -135,7 +135,7 @@
         type: 'datetime'
       },
       {
-        name: 'report',
+        name: 'reportstatus',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
         type: 'status'
       },

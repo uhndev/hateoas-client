@@ -119,7 +119,7 @@
         prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
       },
       {
-        name: 'billing',
+        name: 'billingstatus',
         prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
         type: 'status'
       }
