@@ -65,7 +65,7 @@
       {
         name: 'serviceEditor',
         prompt: 'APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE',
-        type: 'button',
+        type: 'editButton',
         iconClass: 'glyphicon-edit',
         onClick: openServiceEditor
       }

@@ -174,9 +174,7 @@
           service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
 
           // conditionally disable edit buttons depending on ACLs set on servicedetail
-          if (_.has(data.template, 'where') && _.has(data.template.where, 'update')) {
-            service.updateDisabled = !QueryParser.evaluate(data.template.where.update, service);
-          }
+          service.updateDisabled = (_.has(data.template, 'where') && _.has(data.template.where, 'update')) ? !QueryParser.evaluate(data.template.where.update, service) : false;
           return service;
         });
       });
