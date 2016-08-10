@@ -51,7 +51,7 @@
           ]
         }
       },
-      'billing': {
+      'billingstatus': {
         'model': 'billingstatus',
         'collection': 'billingStatuses',
         'currentType': 'currentBillingStatus',
@@ -77,7 +77,7 @@
           ]
         }
       },
-      'report': {
+      'reportstatus': {
         'model': 'reportstatus',
         'collection': 'reportStatuses',
         'currentType': 'currentReportStatus',
@@ -98,6 +98,10 @@
     // bindable variables
     var previousStatus = null;
     var statusType = vm.statusType || 'approval';
+    var SystemForm = $resource(API.url() + '/systemform');
+    var ServiceStatus = $resource(API.url() + '/service');
+    var ServiceApproval;
+
     vm.defaults = STATUS_TYPES[statusType];
     vm.onUpdate = vm.onUpdate || fetchStatusHistory;
     vm.currentType = vm.defaults.currentType;
@@ -105,6 +109,7 @@
     vm.currentStatus = vm.defaults.currentStatus;
     vm.statusName = vm.defaults.statusName;
     vm.placement = vm.placement || 'left';
+    vm.disabled = vm.disabled || false;
 
     vm.service = vm.service || {};
     vm.statusTemplate = {};
@@ -122,13 +127,10 @@
     vm.updateApprovalStatus = updateApprovalStatus;
     vm.renderStatusData = renderStatusData;
 
-    var SystemForm = $resource(API.url() + '/systemform');
-    var ServiceStatus = $resource(API.url() + '/service');
-    var ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
-
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      ServiceApproval = $resource(API.url() + '/service/' + vm.service.id + '/' + vm.collection);
       // check if passed in service object with id without populated collections, then fetch from server
       if (!vm.service[vm.collection]) {
         fetchStatusHistory();

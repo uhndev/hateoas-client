@@ -17,7 +17,8 @@
         service: '=',
         onUpdate: '&?',
         statusType: '@', // approval or completion
-        placement: '@'   // placement of popover
+        placement: '@',  // placement of popover
+        disabled: '=?'
       },
       templateUrl: 'referral/directives/service-status/service-status.tpl.html',
       controller: 'ServiceStatusController',

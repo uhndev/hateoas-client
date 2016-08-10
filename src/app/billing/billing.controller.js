@@ -15,9 +15,9 @@
     ])
     .controller('GlobalBillingController', GlobalBillingController);
 
-  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
+  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'QueryParser', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
 
-  function GlobalBillingController($scope, $resource, API, GLOBAL_BILLING_TEMPLATE_FIELDS) {
+  function GlobalBillingController($scope, $resource, API, QueryParser, GLOBAL_BILLING_TEMPLATE_FIELDS) {
     var vm = this;
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
 
@@ -119,7 +119,7 @@
         prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
       },
       {
-        name: 'billing',
+        name: 'billingstatus',
         prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
         type: 'status'
       }
@@ -157,6 +157,11 @@
             name: 'completion',
             prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
             type: 'status'
+          },
+          {
+            name: 'reportstatus',
+            prompt: 'COMMON.MODELS.SERVICE.REPORT_STATUS',
+            type: 'status'
           }
         ]);
 
@@ -167,6 +172,11 @@
           service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
           service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
           service.visitServiceName = (service.visitService) ? service.visitService.displayName : '-';
+
+          // conditionally disable edit buttons depending on ACLs set on servicedetail
+          if (_.has(data.template, 'where') && _.has(data.template.where, 'update')) {
+            service.updateDisabled = !QueryParser.evaluate(data.template.where.update, service);
+          }
           return service;
         });
       });

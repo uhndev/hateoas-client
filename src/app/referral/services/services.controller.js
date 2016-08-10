@@ -15,10 +15,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
+    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'QueryParser', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
+  function ServicesController($resource, $location, $uibModal, API, HeaderService, QueryParser, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
@@ -135,7 +135,7 @@
         type: 'datetime'
       },
       {
-        name: 'report',
+        name: 'reportstatus',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
         type: 'status'
       },
@@ -152,14 +152,14 @@
       {
         name: 'serviceEditor',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.EDIT',
-        type: 'button',
+        type: 'editButton',
         iconClass: 'glyphicon-edit',
         onClick: openServiceEditor
       },
       {
-        name: 'serviceEditor',
+        name: 'recommendationsPicker',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
-        type: 'button',
+        type: 'recommendButton',
         iconClass: 'glyphicon-plus',
         onClick: openRecommendationsPicker
       }
@@ -211,6 +211,11 @@
           service.serviceDate = service.serviceDate ? moment(service.serviceDate).format('MMM D, YYYY h:mm a') : '-';
           service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
           service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
+
+          // conditionally disable edit buttons depending on ACLs set on servicedetail
+          if (_.has(data.template, 'where') && _.has(data.template.where, 'update')) {
+            service.updateDisabled = !QueryParser.evaluate(data.template.where.update, service);
+          }
           return service;
         });
 

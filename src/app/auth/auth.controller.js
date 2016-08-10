@@ -11,9 +11,9 @@
     ])
     .controller('AuthController', AuthController);
 
-  AuthController.$inject = ['$location', '$state', '$cookies', 'AuthService'];
+  AuthController.$inject = ['$location', '$state', '$cookies', 'AuthService','toastr'];
 
-  function AuthController($location, $state, $cookies, AuthService) {
+  function AuthController($location, $state, $cookies, AuthService, toastr) {
     var vm = this;
     vm.error = '';
 
@@ -26,7 +26,8 @@
     /**
      * [success]
      * Success callback following attempted login by user; on success, user info and token
-     * are stored in cookie with expiration set in ms.
+     * are stored in cookie with expiration set in ms. Furthermore if it is the first time the user
+     * is logging on, they will be redirected to update page to change thier password
      * @param  {Object} user response from server containing user, group, and token
      * @return {Null}
      */
@@ -37,6 +38,11 @@
           expires: new Date(now.getTime() + (3600000 * user.token.expires))
         });
         AuthService.setAuthenticated();
+        if (user.user.expiredPassword) {
+          $location.url('/user/' + user.user.id);
+          $state.go('hateoas');
+          toastr.warning('Your password has expired, please change it to something new');
+        }
       }
     };
 
@@ -62,4 +68,3 @@
   }
 
 })();
-
