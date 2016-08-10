@@ -9,7 +9,8 @@
       },
       bindings: {
         note: '=',
-        collection: '=',
+        relations: '=',
+        collection: '@',
         emailInfo: '=',
         onUpdate: '&?',
         onRemove: '&',
@@ -21,4 +22,3 @@
     });
 
 })();
-

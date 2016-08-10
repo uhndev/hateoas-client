@@ -8,9 +8,9 @@
     ])
     .controller('NoteController', NoteController);
 
-  NoteController.$inject = ['NoteService', '$http', 'toastr', 'EmailService', 'API'];
+  NoteController.$inject = ['NoteService', '$http', 'toastr', 'EmailService', 'API', 'AuthService'];
 
-  function NoteController(Note, $http, toastr, EmailService, API) {
+  function NoteController(Note, $http, toastr, EmailService, API, AuthService) {
     var vm = this;
     var lineHeight = 12;                               // default line height in ace-editor
     var bufferHeight = 50;                             // extra space in ace-editor
@@ -21,7 +21,8 @@
     vm.original = {};
     vm.toList = [];
     // buffer for checking if note changed
-    vm.note = vm.note || null;                         // note binding
+    vm.note = vm.note || null;
+    vm.relations = vm.relations || null;                       // note binding
     vm.onSave = vm.onSave || angular.noop;             // callback upon adding note to collection
     vm.onUpdate = vm.onUpdate || angular.noop;         // callback upon editing note in place
     vm.collection = vm.collection || {};              // collection object i.e. { referral: 1 }
@@ -33,6 +34,7 @@
     vm.emailNote = emailNote;
     vm.aceLoaded = aceLoaded;
     vm.getLineHeight = getLineHeight;
+    vm.isDisabled = isDisabled;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -163,6 +165,20 @@
         return vm.note.text.split(/\r\n|\r|\n/).length * lineHeight + bufferHeight;
       } else {
         return defaultHeight;
+      }
+    }
+
+    /**
+     * isDisabled
+     * @description Checks the relation type to see if it is owner, and also if the current logged in id matches the note id
+     * @returns {boolean}
+     */
+    function isDisabled() {
+      var currentUserId = AuthService.currentUser.id;
+      if (vm.relations.update == 'owner' && currentUserId == vm.note.createdBy) {
+        return false;
+      }else {
+        return true;
       }
     }
   }

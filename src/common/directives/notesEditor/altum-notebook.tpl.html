@@ -35,6 +35,7 @@
       <div ng-hide="notebook.loadingNotes" ng-repeat="note in notebook.notes | orderBy: 'createdAt': true | filter:notebook.filterNormal"
            ng-style="{'border-left': '5px solid ' + notebook.noteTypes[note.noteType].backgroundColour}">
         <altum-note note="note"
+                    relations="notebook.relations"
                     collection="notebook.collection"
                     email-info="notebook.emailInfo"
                     on-remove="notebook.removeElement(notebook.notes, note)">
