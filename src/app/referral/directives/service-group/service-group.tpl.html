@@ -59,6 +59,7 @@
                 <service-status ng-switch-when="status"
                                 service="service"
                                 on-update="serviceGroup.onUpdate()"
+                                disabled="service.updateDisabled && field.name != 'reportstatus' && field.name != 'billingstatus'"
                                 status-type="{{field.name}}">
                 </service-status>
                 <button ng-switch-when="editButton"

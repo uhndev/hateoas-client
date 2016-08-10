@@ -109,6 +109,7 @@
     vm.currentStatus = vm.defaults.currentStatus;
     vm.statusName = vm.defaults.statusName;
     vm.placement = vm.placement || 'left';
+    vm.disabled = vm.disabled || false;
 
     vm.service = vm.service || {};
     vm.statusTemplate = {};
