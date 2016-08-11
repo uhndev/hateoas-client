@@ -22,7 +22,6 @@
     vm.toList = [];
     // buffer for checking if note changed
     vm.note = vm.note || null;                         // note binding
-    vm.relations = vm.relations || {};               // relations of each note
     vm.onSave = vm.onSave || angular.noop;             // callback upon adding note to collection
     vm.onUpdate = vm.onUpdate || angular.noop;         // callback upon editing note in place
     vm.collection = vm.collection || {};               // collection object i.e. { referral: 1 }
