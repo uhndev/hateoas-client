@@ -8,9 +8,9 @@
     ])
     .controller('NoteController', NoteController);
 
-  NoteController.$inject = ['NoteService', '$http', 'toastr', 'EmailService', 'API'];
+  NoteController.$inject = ['NoteService', '$http', 'toastr', 'EmailService', 'API', 'AuthService'];
 
-  function NoteController(Note, $http, toastr, EmailService, API) {
+  function NoteController(Note, $http, toastr, EmailService, API, AuthService) {
     var vm = this;
     var lineHeight = 12;                               // default line height in ace-editor
     var bufferHeight = 50;                             // extra space in ace-editor
@@ -24,7 +24,7 @@
     vm.note = vm.note || null;                         // note binding
     vm.onSave = vm.onSave || angular.noop;             // callback upon adding note to collection
     vm.onUpdate = vm.onUpdate || angular.noop;         // callback upon editing note in place
-    vm.collection = vm.collection || {};              // collection object i.e. { referral: 1 }
+    vm.collection = vm.collection || {};               // collection object i.e. { referral: 1 }
     vm.emailInfo = vm.emailInfo || {};                 //email fields
     // bindable methods
     vm.selectEdit = selectEdit;
@@ -41,7 +41,10 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      if (vm.notebook.permissions.update || !vm.note.id) {
+      var currentUserId = AuthService.currentUser.id;
+      var noteUpdate = vm.notebook.resource.template.relations.update;
+      if ((vm.notebook.permissions.update && noteUpdate === 'role') ||
+          (vm.notebook.permissions.update && noteUpdate === 'owner' && currentUserId == vm.note.createdBy) || !vm.note.id) {
         _.map(vm.notebook.notes, function (note) {
           note.$edit = false;
         });
