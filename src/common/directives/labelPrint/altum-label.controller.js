@@ -40,9 +40,9 @@
           vm.zpl += '^FT211,262^A0I,28,28^FH\^FDMRN: ' + vm.referralInfo.client_mrn + '^FS';
           vm.zpl += '^FT766,167^A0I,28,28^FH\^FD' + vm.referralInfo.client_address1 + '. ' + vm.referralInfo.client_cityName + '^FS';
           vm.zpl += '^FT766,133^A0I,28,28^FH\^FD' + vm.referralInfo.client_province + ' ' + vm.referralInfo.client_postalCode + ' ' + vm.referralInfo.client_homePhone + '^FS';
-          vm.zpl += '^FT766,99^A0I,28,28^FH\^FDCLAIM: ' + vm.referralInfo.claimNumber + '    Ref Date:  ' + moment(vm.referralInfo.referralDate).format('DD/MM/YYYY') + '^FS';
+          vm.zpl += '^FT766,99^A0I,28,28^FH\^FDCLAIM: ' + vm.referralInfo.claimNumber + '    Ref Date:  ' + moment(vm.referralInfo.referralDate).utc().format('DD/MM/YYYY') + '^FS';
           vm.zpl += '^FT766,65^A0I,28,28^FH\^FDLanguage: ' + vm.referralInfo.client_language + '  ' + 'Interpreter:  ' + interpreter + '^FS';
-          vm.zpl += '^FT766,31^A0I,28,28^FH\^FDAcc/Loss Date:  ' + moment(vm.referralInfo.accidentDate).format('DD/MM/YYYY') + '  Birth:  ' + moment(vm.referralInfo.client_dateOfBirth).format('DD/MM/YYYY') + '^FS';
+          vm.zpl += '^FT766,31^A0I,28,28^FH\^FDAcc/Loss Date:  ' + moment(vm.referralInfo.accidentDate).utc().format('DD/MM/YYYY') + '  Birth:  ' + moment(vm.referralInfo.client_dateOfBirth).utc().format('DD/MM/YYYY') + '^FS';
           vm.zpl += '^PQ' + vm.copies + ',0,1,Y';
           vm.zpl += '^XZ';
           break;
