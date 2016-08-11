@@ -34,7 +34,6 @@
     vm.emailNote = emailNote;
     vm.aceLoaded = aceLoaded;
     vm.getLineHeight = getLineHeight;
-    vm.isDisabled = isDisabled;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +42,10 @@
      * @description Click handler on ng-focus for editing a note
      */
     function selectEdit() {
-      if (vm.notebook.permissions.update || !vm.note.id) {
+      var currentUserId = AuthService.currentUser.id;
+      var noteUpdate = vm.notebook.resource.template.relations.update;
+      if ((vm.notebook.permissions.update && noteUpdate === 'role') ||
+          (vm.notebook.permissions.update && noteUpdate === 'owner' && currentUserId == vm.note.createdBy) || !vm.note.id) {
         _.map(vm.notebook.notes, function (note) {
           note.$edit = false;
         });
@@ -165,20 +167,6 @@
         return vm.note.text.split(/\r\n|\r|\n/).length * lineHeight + bufferHeight;
       } else {
         return defaultHeight;
-      }
-    }
-
-    /**
-     * isDisabled
-     * @description Checks the relation type to see if it is owner, and also if the current logged in id matches the note id
-     * @returns {boolean}
-     */
-    function isDisabled() {
-      var currentUserId = AuthService.currentUser.id;
-      if (vm.relations.update == 'owner' && currentUserId == vm.note.createdBy) {
-        return false;
-      }else {
-        return true;
       }
     }
   }

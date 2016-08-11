@@ -8,7 +8,7 @@
         <i ng-if="!at.note.$edit && at.notebook.permissions.update" tabindex="-1"
            class="fa fa-pencil fa-lg selectable"
            ng-disabled="at.isDisabled()"
-           ng-click="at.isDisabled() || at.selectEdit()"></i>
+           ng-click="at.selectEdit()"></i>
         <i ng-if="at.note.$edit" tabindex="-1"
            class="fa fa-floppy-o fa-lg selectable"></i>
         <i tabindex="-1"
@@ -38,7 +38,7 @@
       </table>
     </div>
 
-    <div ng-show="!at.note.$edit" ng-disabled="at.isDisabled()" ng-click="at.isDisabled() || at.lineHeight()" ng-focus="at.isDisabled() || at.selectEdit()"
+    <div ng-show="!at.note.$edit" ng-click="at.lineHeight()" ng-focus="at.selectEdit()"
          class="markdown-body" btf-markdown="at.note.text"></div>
 
     <div ng-show="at.note.$edit" ng-model="at.note.text"

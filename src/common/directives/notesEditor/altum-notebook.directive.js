@@ -6,7 +6,6 @@
     .component('altumNotebook', {
       bindings: {
         collection: '=',
-        relations:'@',
         emailInfo: '='
       },
       controller: 'AltumNotebookController',

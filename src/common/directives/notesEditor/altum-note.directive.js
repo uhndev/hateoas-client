@@ -9,7 +9,6 @@
       },
       bindings: {
         note: '=',
-        relations: '=',
         collection: '=',
         emailInfo: '=',
         onUpdate: '&?',

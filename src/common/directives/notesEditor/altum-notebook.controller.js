@@ -45,7 +45,6 @@
         vm.template = angular.copy(data.template.data);
         vm.resource = angular.copy(data);
         vm.notes = angular.copy(data.items);
-        vm.relations = angular.copy(data.template.relations);
       });
     }
 
@@ -91,9 +90,11 @@
      * @param value
      */
     function search(value) {
+      vm.loadingNotes = true;
       //this way vm.collection does not get overwritten
       var query = {
         where: {referral: vm.collection.referral},
+        limit: 1000,
         sort: 'createdAt DESC'
       };
 
@@ -104,6 +105,8 @@
         ];
       }
       NoteResource.query(query, function (data, header) {
+        vm.loadingNotes = false;
+        vm.resource.count = data.count;
         vm.notes = angular.copy(data.items);
       });
     }
