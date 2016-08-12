@@ -167,7 +167,7 @@ module.exports = {
       'vendor/angular-i18n/angular-locale_fr.js',
 
       // plugins
-      'vendor/JSONedit/js/JSONEdit.js',
+      'vendor/JSONedit/js/directives.js',
       'vendor/ui-select/dist/select.min.js'
     ],
     css: [
