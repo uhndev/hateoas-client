@@ -6,10 +6,10 @@
     .controller('BillingController', BillingController);
 
   BillingController.$inject = [
-    '$uibModal', '$scope', 'AltumAPIService'
+    '$uibModal', '$scope'
   ];
 
-  function BillingController($uibModal, $scope, AltumAPI) {
+  function BillingController($uibModal, $scope) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'billingStatusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';

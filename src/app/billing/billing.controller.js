@@ -127,6 +127,7 @@
 
     // bindable methods
     vm.init = init;
+    vm.expandToggle = expandToggle;
     vm.onPageChange = onPageChange;
 
     init();
@@ -178,6 +179,14 @@
           return service;
         });
       });
+    }
+
+    /**
+     * expandToggle
+     * @description Broadcasts event to the service-group directive to expand all subGroups
+     */
+    function expandToggle() {
+      $scope.$broadcast('serviceGroup.expandToggle');
     }
 
     /**

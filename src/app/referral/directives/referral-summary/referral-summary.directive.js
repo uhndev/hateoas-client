@@ -20,17 +20,19 @@
         boundGroups: '=?',    // object where groupType.name is bound outward
         groupTypes: '<?',     // array of names and prompts that can be bound
         groupFields: '<?',    // array of configuration data groups that can be chosen from
-        configFlags: '=?'     // optional object containing flags that can be toggled
+        configFlags: '=?',    // optional object containing flags that can be toggled
+        expandToggle: '@?'    // optional flag denoting whether expandToggle button active
       },
       controller: 'ReferralSummaryController',
       controllerAs: 'referralSummary',
       templateUrl: 'referral/directives/referral-summary/referral-summary.tpl.html'
     });
 
-  ReferralSummaryController.$inject = ['$scope'];
+  ReferralSummaryController.$inject = ['$rootScope', '$scope'];
 
-  function ReferralSummaryController($scope) {
+  function ReferralSummaryController($rootScope, $scope) {
     var vm = this;
+    vm.expandToggle = vm.expandToggle == 'true';
     // wait for data to load, then create overview object
     var unregister = $scope.$watch('referralSummary.referralData', function (newVal, oldVal) {
       if (oldVal !== newVal && _.has(newVal, 'client_mrn')) {
@@ -75,6 +77,11 @@
         unregister(); // unregister watcher
       }
     });
+
+    vm.toggleExpansion = function () {
+      // broadcasts event to the service-group directive to expand all subGroups
+      $rootScope.$broadcast('serviceGroup.expandToggle');
+    };
   }
 
 })();
