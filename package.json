@@ -56,7 +56,8 @@
   "scripts": {
     "lint": "jshint src",
     "jscs": "jscs src",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "e2e-tests": "e2e-tests/run-protractor.sh"
   },
   "pre-commit": [
     "lint",
