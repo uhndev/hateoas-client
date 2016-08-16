@@ -25,6 +25,10 @@
               'fa-chevron-down': referralSummary.configFlags[flag]
             }"></i>
         </button>
+        <button type="button" class="btn btn-default" ng-if="referralSummary.expandToggle"
+                ng-click="referralSummary.toggleExpansion()">
+          <i class="fa fa-arrows-alt"></i>
+        </button>
       </td>
     </tr>
   </table>

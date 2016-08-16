@@ -27,7 +27,7 @@
     vm.baseQuery = vm.query || null;
     vm.placeholder = vm.placeholder || 'COMMON.HATEOAS.QUERY.SEARCH.' + _.startCase(vm.url).toUpperCase();
     vm.labels = vm.labels || 'name';
-    vm.skip = 0;
+    vm.skipWhere = {id: {'>=': 0}};
     vm.limit = 20;
     vm.allChoices = [];
 
@@ -85,14 +85,17 @@
       if (hasIds && !_.isUndefined(searchIds) && _.isEmpty(vm.baseQuery) && !query) {
         var initQuery = {
           limit: vm.limit,
-          skip: vm.skip
+          where: vm.skipWhere
         };
 
         // for singleselect, take range of id - some DEFAULT_RANGE; for multiselect, take min ranged id as lower bound
         if (!loadMore) {
           initQuery.sort = 'id ASC';
           if (vm.isAtomic) {
-            initQuery.skip = (searchIds - DEFAULT_RANGE < 0) ? 0 : searchIds - DEFAULT_RANGE;
+            vm.skipWhere = {
+              id: {'>=': (searchIds - DEFAULT_RANGE < 0) ? 0 : searchIds - DEFAULT_RANGE}
+            };
+            initQuery.where = vm.skipWhere;
           } else {
             initQuery.limit = _.max(searchIds) + vm.limit;
           }

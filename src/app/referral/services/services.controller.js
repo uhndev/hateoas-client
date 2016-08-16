@@ -15,10 +15,10 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'QueryParser', 'RecommendationsService'
+    '$scope', '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'QueryParser', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, $uibModal, API, HeaderService, QueryParser, RecommendationsService) {
+  function ServicesController($scope, $resource, $location, $uibModal, API, HeaderService, QueryParser, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
@@ -154,14 +154,14 @@
         prompt: 'APP.REFERRAL.SERVICES.LABELS.EDIT',
         type: 'editButton',
         iconClass: 'glyphicon-edit',
-        onClick: openServiceEditor
+        eventName: 'referralServices.openServiceEditor'
       },
       {
         name: 'recommendationsPicker',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
         type: 'recommendButton',
         iconClass: 'glyphicon-plus',
-        onClick: openRecommendationsPicker
+        eventName: 'referralServices.openRecommendationsPicker'
       }
     ];
 
@@ -251,7 +251,7 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
-                currentCompletion: true, // no need to have completion field when editing
+                currentCompletion: true  // no need to have completion field when editing
               },
               required: {}
             };
@@ -356,6 +356,22 @@
         init();
       });
     }
+
+    /**
+     * referralServices.openServiceEditor
+     * @description Event listener for opening service editor
+     */
+    $scope.$on('referralServices.openServiceEditor', function (event, data) {
+      openServiceEditor(data);
+    });
+
+    /**
+     * referralServices.openRecommendationsPicker
+     * @description Event listener for opening recommendations picker
+     */
+    $scope.$on('referralServices.openRecommendationsPicker', function (event, data) {
+      openRecommendationsPicker(data);
+    });
   }
 
 })();
