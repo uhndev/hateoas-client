@@ -17,6 +17,7 @@
     'inArray': inArray,
     'isUrl': isUrl,
     'isJson': isJson,
+    'traverse': traverse,
     'sum': sum,
     'capitalizeFirst': capitalizeFirst,
     'objToPair': objToPair,
@@ -69,6 +70,21 @@
       return false;
     }
     return true;
+  }
+
+  /**
+   * traverse
+   * @description Traverses through all nodes of an object
+   * @param object  Object to recurse on
+   * @param cb      Function that accepts the node and key to call upon
+   */
+  function traverse(object, cb) {
+    for (var node in object) {
+      cb(object, node);
+      if (object[node] !== null && typeof(object[node]) == 'object') {
+        traverse(object[node], cb);
+      }
+    }
   }
 
   function sum(arr) {

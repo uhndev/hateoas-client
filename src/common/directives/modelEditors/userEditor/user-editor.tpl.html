@@ -106,24 +106,6 @@
       </p>
     </div>
   </div>
-  <div class="form-group">
-    <label for="dob" class="control-label" ng-class="{'col-md-3': user.horizontal}" translate>
-      COMMON.MODELS.SYSTEM_MODEL.USER.DATE_OF_BIRTH
-    </label>
-    <div ng-class="{'col-md-9': user.horizontal}">
-      <p class="input-group">
-        <input name="dob" type="date" class="form-control" uib-datepicker-popup
-               ng-model="user.user.dob" is-open="user.openedDOB" disabled format-date/>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="user.openedDOB = true">
-            <i class="glyphicon glyphicon-calendar"></i>
-          </button>
-        </span>
-      <p ng-show="userForm.dob.$invalid && !userForm.dob.$pristine"
-         class="pull-right required-error" translate>COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT
-      </p>
-    </div>
-  </div>
 
   <button type="submit" class="pull-right btn btn-primary" ng-if="user.showSaveButton"
           ng-click="user.updateUser()" ng-disabled="userForm.$invalid || userForm.$pristine" translate>Save</button>
