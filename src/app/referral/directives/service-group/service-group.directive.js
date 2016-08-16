@@ -39,11 +39,12 @@
     .controller('ServiceGroupController', ServiceGroupController);
 
   ServiceGroupController.$inject = [
-    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'
+    '$scope', '$rootScope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'
   ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
+  function ServiceGroupController($scope, $rootScope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
     var vm = this;
+    var expandedAll = false;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
       'save' : {method: 'POST', isArray: false}
     });
@@ -61,6 +62,7 @@
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
+    vm.callServiceFunction = callServiceFunction;
     vm.savePrice = savePrice;
     vm.preventUpdatePrice = preventUpdatePrice;
 
@@ -167,6 +169,16 @@
     }
 
     /**
+     * callServiceFunction
+     * @description Broadcasts to given eventName with given data to call on referralServices/referralBilling functions
+     * @param eventName
+     * @param data
+     */
+    function callServiceFunction(eventName, data) {
+      $rootScope.$broadcast(eventName, data);
+    }
+
+    /**
      * saveStatuses
      * @description Private function for making actual save call to service approvals
      * @param services
@@ -223,6 +235,20 @@
       }
     }
     $scope.$watchCollection('serviceGroup.visitFields', watchVisitFields);
+
+    /**
+     * expandToggle
+     * @description On-click handler for expanding all nodes in a service-group
+     */
+    function expandToggle() {
+      expandedAll = !expandedAll;
+      _.traverse(vm.accordionStatus, function(statusObject, key) {
+        if (key === 'isOpen' && _.keys(statusObject).length === 1) {
+          statusObject[key] = expandedAll;
+        }
+      });
+    }
+    $scope.$on('serviceGroup.expandToggle', expandToggle);
   }
 
 })();
