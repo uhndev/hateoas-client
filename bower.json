@@ -49,6 +49,7 @@
     "angular": "1.5.0",
     "angular-cookies": "1.5.0",
     "angular-sanitize": "1.5.0",
-    "angular-simple-logger": "~0.1.5"
+    "angular-simple-logger": "~0.1.5",
+    "angular-ui-sortable": "0.14.3"
   }
 }
