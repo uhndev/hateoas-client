@@ -67,7 +67,7 @@
         prompt: 'APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE',
         type: 'editButton',
         iconClass: 'glyphicon-edit',
-        onClick: openServiceEditor
+        eventName: 'referralBilling.openServiceEditor'
       }
     ];
 
@@ -203,6 +203,22 @@
         $scope.services.init();
       });
     }
+
+    /**
+     * referralBilling.openServiceEditor
+     * @description Event listener for opening service editor
+     */
+    $scope.$on('referralBilling.openServiceEditor', function (event, data) {
+      openServiceEditor(data);
+    });
+
+    /**
+     * referralBilling.openServicePicker
+     * @description Event listener for opening recommendations picker
+     */
+    $scope.$on('referralBilling.openServicePicker', function (event, data) {
+      openServicePicker(data);
+    });
   }
 
 })();

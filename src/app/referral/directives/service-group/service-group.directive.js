@@ -39,10 +39,10 @@
     .controller('ServiceGroupController', ServiceGroupController);
 
   ServiceGroupController.$inject = [
-    '$scope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'
+    '$scope', '$rootScope', '$uibModal', '$resource', 'API', 'toastr', 'AltumAPIService', 'STATUS_TYPES', 'STATUS_CATEGORIES'
   ];
 
-  function ServiceGroupController($scope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
+  function ServiceGroupController($scope, $rootScope, $uibModal, $resource, API, toastr, AltumAPI, STATUS_TYPES, STATUS_CATEGORIES) {
     var vm = this;
     var expandedAll = false;
     var BulkStatusChange = $resource(API.url('service/bulkStatusChange'), {}, {
@@ -62,6 +62,7 @@
     vm.applyAll = applyAll;
     vm.applyStatusChanges = applyStatusChanges;
     vm.isStatusDisabled = isStatusDisabled;
+    vm.callServiceFunction = callServiceFunction;
     vm.savePrice = savePrice;
     vm.preventUpdatePrice = preventUpdatePrice;
 
@@ -165,6 +166,16 @@
      */
     function isStatusDisabled(services) {
       return _.any(services, {isSelected: true});
+    }
+
+    /**
+     * callServiceFunction
+     * @description Broadcasts to given eventName with given data to call on referralServices/referralBilling functions
+     * @param eventName
+     * @param data
+     */
+    function callServiceFunction(eventName, data) {
+      $rootScope.$broadcast(eventName, data);
     }
 
     /**

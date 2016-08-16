@@ -64,11 +64,11 @@
                 </service-status>
                 <button ng-switch-when="editButton"
                         ng-disabled="service.updateDisabled"
-                        class="btn btn-primary btn-sm" ng-click="field.onClick(service)">
+                        class="btn btn-primary btn-sm" ng-click="serviceGroup.callServiceFunction(field.eventName, service)">
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
                 <button ng-switch-when="recommendButton"
-                        class="btn btn-primary btn-sm" ng-click="field.onClick(service)">
+                        class="btn btn-primary btn-sm" ng-click="serviceGroup.callServiceFunction(field.eventName, service)">
                   <span class="glyphicon {{field.iconClass}}"></span>
                 </button>
                 <span ng-switch-when="price">
