@@ -38,7 +38,7 @@
           vm.zpl += '^FT768,206^A0I,28,28^FH\^FDGender: ' + vm.referralInfo.client_gender + '^FS';
           vm.zpl += '^FT510,206^A0I,28,28^FH\^FD' + vm.referralInfo.program_name + '^FS';
           vm.zpl += '^FT211,31^A0I,32,32^FH\^FDMRN: ' + vm.referralInfo.client_mrn + '^FS';
-          if(vm.referralInfo.client_address2)
+          if (vm.referralInfo.client_address2)
           {vm.zpl += '^FT766,167^A0I,28,28^FH\^FD' + vm.referralInfo.client_address2 + '-' + vm.referralInfo.client_address1 + '. ' + vm.referralInfo.client_cityName + '^FS';}
           else {
           vm.zpl += '^FT766,167^A0I,28,28^FH\^FD' + vm.referralInfo.client_address1 + '. ' + vm.referralInfo.client_cityName + '^FS';}
@@ -52,7 +52,7 @@
         case 2:
           vm.zpl = '^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR5,5~SD15^JUS^LRN^CI0^XZ ^XA';
           vm.zpl += '^MMT ^PW812 ^LL0305 ^LS0 ^FT771,246^A0I,51,50^FH\^FD' + vm.referralInfo.client_firstName.toUpperCase() + ' ' + vm.referralInfo.client_lastName.toUpperCase() + '^FS';
-          if(vm.referralInfo.client_address2){
+          if (vm.referralInfo.client_address2) {
             vm.zpl += '^FT766,167^A0I,40,40^FH\^FD' + vm.referralInfo.client_address2 + '-' + vm.referralInfo.client_address1 + '^FS';
           }
           else {
