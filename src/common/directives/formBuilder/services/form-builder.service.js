@@ -85,7 +85,7 @@
         {
           name: 'subform',
           value: 'Sub Form',
-          value_type: null,
+          value_type: {},
           hasItems: true
         },
         {
