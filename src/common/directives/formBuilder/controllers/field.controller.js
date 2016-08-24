@@ -8,9 +8,9 @@
     ])
     .controller('FieldController', FieldController);
 
-  FieldController.$inject = ['$scope'];
+  FieldController.$inject = ['$scope', 'TemplateService', 'AltumAPIService'];
 
-  function FieldController($scope) {
+  function FieldController($scope, TemplateService, AltumAPI) {
 
     // private variables
     var savedSingleSelect = null;
@@ -27,38 +27,67 @@
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
 
-    if ($scope.field.field_type == 'singleselect') {
-      $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
-      savedSingleSelect = angular.copy($scope.field.field_value);
-      $scope.$watch('field.field_questions', function (oldVal, newVal) {
-        if (oldVal !== newVal) {
-          _.each($scope.field.field_questions, function (question) {
-            if (question.field_value) {
-              $scope.field.field_value[question.field_name] = question.field_value;
-            }
-          });
+    switch ($scope.field.field_type) {
+      case 'subform':
+      case 'singleselect':
+        var modelTemplate;
+        // if given model name and field value is number, create subform
+        if ($scope.field.field_userURL && $scope.field.field_type === 'subform') {
+          TemplateService
+            .fetchTemplate($scope.field.field_userURL)
+            .then(function (fetchedTemplate) { // fetch model data from model id
+              modelTemplate = fetchedTemplate;
+              if (_.isNumber($scope.field.field_value)) {
+                return AltumAPI[_.capitalizeFirst($scope.field.field_userURL)].get({
+                  id: $scope.field.field_value
+                }).$promise;
+              } else {
+                return null;
+              }
+            })
+            .then(function (modelData) { // create subform and apply data to form
+              var modelForm = TemplateService.parseToForm(modelData, modelTemplate);
+              $scope.field.field_questions = angular.copy(modelForm.form_questions);
+              if (modelData) {
+                $scope.field.field_value = angular.copy(modelData);
+                _.each($scope.field.field_questions, function (question) {
+                  question.field_value = modelData[question.field_name];
+                });
+              }
+            });
         }
-      }, true);
-    }
 
-    if ($scope.field.field_type == 'multiselect') {
-      $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
-    }
-
-    // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker
-    // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
-    if ($scope.field.field_type == 'date') {
-      switch (true) {
-        case !moment($scope.field.field_value).isValid():
-          delete $scope.field.field_value;
-          break;
-        case angular.isString($scope.field.field_value):
-          $scope.field.field_value = new Date($scope.field.field_value);
-          break;
-        default:
-          $scope.field.field_value = new Date();
-          break;
-      }
+        $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
+        savedSingleSelect = angular.copy($scope.field.field_value);
+        $scope.$watch('field.field_questions', function (oldVal, newVal) {
+          if (oldVal !== newVal) {
+            _.each($scope.field.field_questions, function (question) {
+              if (question.field_value) {
+                $scope.field.field_value[question.field_name] = question.field_value;
+              }
+            });
+          }
+        }, true);
+        break;
+      case 'multiselect':
+        $scope.field.field_baseQuery = $scope.field.field_baseQuery || {};
+        break;
+      case 'date':
+        // version 0.14.3 of angular-bootstrap doesn't accept strings to ng-model for uib-datepicker
+        // so we parse valid dates beforehand: https://github.com/angular-ui/bootstrap/issues/4728
+        switch (true) {
+          case !moment($scope.field.field_value).isValid():
+            delete $scope.field.field_value;
+            break;
+          case angular.isString($scope.field.field_value):
+            $scope.field.field_value = new Date($scope.field.field_value);
+            break;
+          default:
+            $scope.field.field_value = new Date();
+            break;
+        }
+        break;
+      default: break;
     }
 
     function toggleSelectCreate() {
