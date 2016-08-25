@@ -83,6 +83,12 @@
           hasItem: true
         },
         {
+          name: 'subform',
+          value: 'Sub Form',
+          value_type: {},
+          hasItems: true
+        },
+        {
           name: 'json',
           value: 'JSON',
           value_type: {}
