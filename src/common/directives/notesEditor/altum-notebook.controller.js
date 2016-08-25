@@ -43,6 +43,9 @@
           vm.permissions[permission] = true;
         });
         vm.template = angular.copy(data.template.data);
+        _.each(data.items, function (note) {
+          note.noteTypeName = vm.noteTypes[note.noteType].name;
+        });
         vm.resource = angular.copy(data);
         vm.notes = angular.copy(data.items);
       });
@@ -66,7 +69,8 @@
         vm.notes.push({
           $edit: true,
           text: null,
-          noteType: type
+          noteType: type,
+          noteTypeName: vm.noteTypes[type].name
         });
       }
     }
@@ -103,6 +107,13 @@
           {displayName: {'contains': value}},
           {text: {'contains': value}}
         ];
+
+        var noteTypeObject = _.find(vm.noteTypes, {name: value});
+        if (_.has(noteTypeObject, 'id')) {
+          query.where.or.push({
+            noteType: noteTypeObject.id
+          });
+        }
       }
       NoteResource.query(query, function (data, header) {
         vm.loadingNotes = false;
