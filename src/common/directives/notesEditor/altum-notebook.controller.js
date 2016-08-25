@@ -3,15 +3,13 @@
  */
 (function () {
   'use strict';
-
   angular
     .module('altum.notebook.controller', [])
     .controller('AltumNotebookController', AltumNotebookController);
 
-  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API'];
-  function AltumNotebookController(NoteType, $resource, API) {
+  AltumNotebookController.$inject = ['NoteTypeService', '$resource', 'API', '$http', 'AuthService'];
+  function AltumNotebookController(NoteType, $resource, API, $http, AuthService) {
     var vm = this;
-
     // bindable variables
     vm.collection = vm.collection || {};
     vm.template = {};
@@ -110,6 +108,33 @@
         vm.notes = angular.copy(data.items);
       });
     }
-  }
 
+    //service worker functionality, checks to see if its supported, then registers the broweser to the SW and notifications, can add this codebase on first login instead
+    if ('serviceWorker' in navigator) {
+      console.log('Service Worker is supported');
+      navigator.serviceWorker.register('src/common/directives/notesEditor/sw.js').then(function(reg) {
+        //subscribes the user to notifications
+        reg.pushManager.subscribe({
+          userVisibleOnly: true
+        }).then(function(sub) {
+          var split = sub.endpoint.lastIndexOf('/') + 1;
+          var endpoint = sub.endpoint.slice(split);
+          var user = AuthService.currentUser.username;
+          //request for server end to track active user endpoints
+          $http({
+            method: 'POST',
+            url: API.url() + '/notifications',
+            data: {
+              endpoint: endpoint,
+              user: user
+            }
+          }).then(function (results) {
+              console.log('Subscribed');
+            });
+        });
+      }).catch(function(error) {
+          console.log(':^(', error);
+        });
+    }
+  }
 })();

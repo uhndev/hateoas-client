@@ -26,7 +26,9 @@
           token = CookieStore.get('user').token.payload;
         }
         if (token) {
-          config.headers.Authorization = 'Bearer ' + token;
+          if (config.url != 'https://android.googleapis.com/gcm/send') {
+            config.headers.Authorization = 'Bearer ' + token;
+          }
         }
         return config;
       },
