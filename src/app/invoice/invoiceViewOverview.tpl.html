@@ -1,0 +1,19 @@
+<div class="container-fluid" ng-controller="InvoiceController as invoice" ng-cloak>
+  <h2 id="Title">
+    <span translate context-translator="APP.INVOICE.OVERVIEW.LABELS.INVOICE_OVERVIEW">
+      APP.INVOICE.OVERVIEW.LABELS.INVOICE_OVERVIEW
+    </span>:
+    <small>{{invoice.invoice.displayName}}</small>
+  </h2>
+
+  <hr/>
+
+  <pre>{{invoice.invoice | json}}</pre>
+
+  <pre>{{invoice.invoiceServices | json}}</pre>
+
+  <altum-notebook ng-if="invoice.referral"
+                  collection="{'referral': invoice.referral.id}"
+                  email-info="invoice.emailInfo">
+  </altum-notebook>
+</div>
