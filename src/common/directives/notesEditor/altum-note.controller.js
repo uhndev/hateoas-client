@@ -89,6 +89,13 @@
             });
           }
         }
+        //notification to all users that notes has been updated/saved, TODO: can add in more functionality in data body, like which groups to send out to
+        $http({
+          method: 'POST',
+          url: API.url() + '/sendNotification',
+        }).then(function (results) {
+            console.log(results);
+          });
       }
     }
 
