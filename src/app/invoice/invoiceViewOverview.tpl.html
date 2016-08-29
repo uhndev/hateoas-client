@@ -8,9 +8,93 @@
 
   <hr/>
 
-  <pre>{{invoice.invoice | json}}</pre>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.INVOICE_INFORMATION">
+            APP.INVOICE.OVERVIEW.LABELS.INVOICE_INFORMATION
+          </h3>
+        </div>
+        <div class="panel-body">
+          <ng-form name="invoiceForm">
+            <div class="form-group">
+              <label for="invoiceNumber" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.INVOICE_NUMBER">
+                APP.INVOICE.OVERVIEW.LABELS.INVOICE_NUMBER
+              </label>
+              <input id="invoiceNumber" name="invoiceNumber" class="form-control" type="text" ng-model="invoice.invoice.number"/>
+            </div>
 
-  <pre>{{invoice.invoiceServices | json}}</pre>
+            <div class="form-group">
+              <label for="invoicePayor" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.PAYOR">
+                APP.INVOICE.OVERVIEW.LABELS.PAYOR
+              </label>
+              <select-loader
+                id="invoicePayor"
+                name="invoicePayor"
+                url="payor"
+                is-atomic="true"
+                is-disabled="false"
+                ng-model="invoice.invoice.payor"
+                labels="displayName">
+              </select-loader>
+            </div>
+
+            <div class="form-group">
+              <label for="invoiceStatus" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.INVOICE_STATUS">
+                APP.INVOICE.OVERVIEW.LABELS.INVOICE_STATUS
+              </label>
+              <select id="invoiceStatus" name="invoiceStatus" ng-model="invoice.invoice.status" class="form-control"
+                      ng-options="status as status for status in invoice.invoiceStatuses">
+              </select>
+            </div>
+
+            <hr/>
+
+            <button type="submit" class="btn btn-primary pull-right" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.UPDATE_INVOICE"
+                    ng-disabled="invoiceForm.$invalid || invoiceForm.$pristine" ng-click="invoice.updateInvoice()">
+              APP.INVOICE.OVERVIEW.LABELS.UPDATE_INVOICE
+            </button>
+          </ng-form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title" translate context-translator="APP.INVOICE.OVERVIEW.LABELS.INVOICED_SERVICES">
+            APP.INVOICE.OVERVIEW.LABELS.INVOICED_SERVICES
+          </h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-bordered table-hover">
+            <tr>
+              <th ng-repeat="field in invoice.visitFields"
+                  ng-click="invoice.sortType = field.name; invoice.sortReverse = !invoice.sortReverse">
+                <span translate context-translator="{{field.prompt}}">{{field.prompt}}</span>
+                <i class="fa pull-right" ng-class="{
+                  'fa-sort-asc': invoice.sortType === field.name && invoice.sortReverse,
+                  'fa-sort-desc': invoice.sortType === field.name && !invoice.sortReverse,
+                }"></i>
+              </th>
+            </tr>
+            <tr ng-repeat="service in invoice.invoiceServices | orderBy:invoice.sortType:invoice.sortReverse">
+              <td ng-repeat="field in invoice.visitFields" ng-switch="field.type">
+                <span ng-switch-when="date">
+                  {{service[field.name] | date:'EEEE, MMMM d, y':'UTC'}}
+                </span>
+                <span ng-switch-when="datetime">
+                  {{service[field.name] | date:'EEEE, MMMM d, y'}}
+                </span>
+                <span ng-switch-default>{{service[field.name] || '-'}}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <altum-notebook ng-if="invoice.referral"
                   collection="{'referral': invoice.referral.id}"
