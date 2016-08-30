@@ -8,7 +8,7 @@
       'altum.referral.serviceGroupPreset'
     ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
-      'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
+      'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName', 'MRN',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
       'currentCompletionPhysicianName', 'currentCompletionStaffName', 'completionDate',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'

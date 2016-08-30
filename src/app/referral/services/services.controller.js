@@ -22,7 +22,7 @@
     var vm = this;
 
     var templateFilterFields = [
-      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
+      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName', 'MRN',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount', 'completionDate',
       'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
