@@ -13,6 +13,7 @@
     var vm = this;
 
     // bindable variables
+    vm.noteTypeFilter = {};
     vm.collection = vm.collection || {};
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
@@ -103,6 +104,10 @@
           {displayName: {'contains': value}},
           {text: {'contains': value}}
         ];
+
+        if (!_.isEmpty(vm.noteTypeFilter)) {
+          query.where.or.push(vm.noteTypeFilter);
+        }
       }
       NoteResource.query(query, function (data, header) {
         vm.loadingNotes = false;

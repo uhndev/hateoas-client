@@ -32,7 +32,14 @@
                ng-model-options="{debounce: 500}"/>
       </div>
 
-      <div ng-hide="notebook.loadingNotes" ng-repeat="note in notebook.notes | orderBy: 'createdAt': true | filter:notebook.filterNormal"
+      <uib-tabset active="notebook.noteTypeFilter">
+        <uib-tab index="0" heading="All" ng-click="notebook.noteTypeFilter = {}"></uib-tab>
+        <uib-tab index="$index + 1" ng-repeat="noteType in notebook.noteTypes" heading="{{noteType.name}}"
+                 ng-click="notebook.noteTypeFilter.noteType = noteType.id">
+        </uib-tab>
+      </uib-tabset>
+
+      <div ng-hide="notebook.loadingNotes" ng-repeat="note in notebook.notes | orderBy: 'createdAt': true | filter:notebook.filterNormal | filter:notebook.noteTypeFilter:strict"
            ng-style="{'border-left': '5px solid ' + notebook.noteTypes[note.noteType].backgroundColour}">
         <altum-note note="note"
                     collection="notebook.collection"
