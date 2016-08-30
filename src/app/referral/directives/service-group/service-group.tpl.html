@@ -58,7 +58,7 @@
                 }"></i>
               </th>
             </tr>
-            <tr ng-repeat="service in subServices | orderBy: 'itemCount'" class="{{service.rowClass}}">
+            <tr ng-repeat="service in subServices | orderBy:serviceGroup.sortType:serviceGroup.sortReverse" class="{{service.rowClass}}">
               <td ng-if="serviceGroup.checkboxesVisible">
                 <input type="checkbox" ng-model="service.isSelected"/>
               </td>

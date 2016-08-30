@@ -36,7 +36,9 @@
     .service('NoteService', NoteService)
     .service('NoteTypeService', NoteTypeService)
     .service('ClientService', ClientService)
-    .service('PersonService', PersonService);
+    .service('PersonService', PersonService)
+    .service('InvoiceService', InvoiceService)
+    .service('InvoiceServiceDetailService', InvoiceServiceDetailService);
 
   [
     ProgramService, ReferralService, ReferralDetailService, SiteService, AddressService,
@@ -45,7 +47,8 @@
     AltumAPIService, BillingGroupService, ServiceService, NoteService, NoteTypeService, ClientService, PersonService, EmergencyContactService,
     CityService, PhysicianService, PayorService, StatusService, WorkStatusService, PrognosisService, TimeframeService,
     ProgramServiceService, AltumServiceService, AltumProgramServices, ServiceCategoryService, CompanyService, EmployeeService,
-    AltumAPIService, ServiceService, StatusFormService, StaffService, StaffTypeService, NoteService, NoteTypeService
+    AltumAPIService, ServiceService, StatusFormService, StaffService, StaffTypeService, NoteService, NoteTypeService,
+    InvoiceService, InvoiceServiceDetailService
   ].map(function (service) {
     service.$inject = ['ResourceFactory', 'API'];
   });
@@ -166,6 +169,14 @@
     return ResourceFactory.create(API.url('employee'));
   }
 
+  function InvoiceService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('invoice'));
+  }
+
+  function InvoiceServiceDetailService(ResourceFactory, API) {
+    return ResourceFactory.create(API.url('invoiceservicedetail'));
+  }
+
   function AltumAPIService(ResourceFactory, API) {
     return {
       'Program': ResourceFactory.create(API.url('program')),
@@ -196,7 +207,9 @@
       'EmergencyContact': ResourceFactory.create(API.url('emergencyContact')),
       'City': ResourceFactory.create(API.url('city')),
       'Company': ResourceFactory.create(API.url('company')),
-      'Employee': ResourceFactory.create(API.url('employee'))
+      'Employee': ResourceFactory.create(API.url('employee')),
+      'Invoice': ResourceFactory.create(API.url('invoice')),
+      'InvoiceServiceDetail': ResourceFactory.create(API.url('invoiceservicedetail'))
     };
   }
 })();
