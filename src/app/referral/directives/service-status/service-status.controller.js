@@ -125,6 +125,7 @@
     // bindable methods
     vm.init = init;
     vm.updateApprovalStatus = updateApprovalStatus;
+    vm.editStatusType = editStatusType;
     vm.renderStatusData = renderStatusData;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -255,6 +256,69 @@
         }
       }
       return data;
+    }
+
+    /**
+     * editStatusType
+     * @description On click handler for editing a row from the status history table
+     */
+    function editStatusType(statusData) {
+      // only show popup when changing to Approved status
+      if (vm.statuses[statusData.status].requiresConfirmation) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          template: '<form-directive form="confirmationModal.statusTemplateForm" ' +
+          'on-submit="confirmationModal.saveAnswers()" ' +
+          'on-cancel="confirmationModal.cancel()">' +
+          '</form-directive>',
+          controller: 'ApprovalConfirmationModal',
+          controllerAs: 'confirmationModal',
+          bindToController: true,
+          resolve: {
+            newStatus: function () {
+              return vm.statuses[statusData.status];
+            },
+            statusType: function () {
+              return statusType;
+            },
+            statusTemplateForm: function (StatusFormFactory) {
+              var newStatus = angular.copy(vm.statuses[statusData.status]);
+
+              // if overrideForm set, fetch systemform from API
+              if (newStatus.overrideForm) {
+                return SystemForm.get({id: newStatus.overrideForm}).$promise.then(function (data) {
+                  return data.items;
+                });
+              }
+              // otherwise, parse newStatus template into a systemform and filter based on status.rules
+              else {
+                return StatusFormFactory.buildStatusForm(vm.statusTemplate, newStatus, statusType, vm.service)
+                  .then(function (statusForm) {
+                    _.each(statusForm.form_questions, function (question) {
+                      question.field_value = statusData[question.field_name];
+                    });
+                    return statusForm;
+                  });
+              }
+            }
+          }
+        });
+
+        modalInstance.result.then(function (updatedStatusData) {
+          var StatusTypeResource = $resource(API.url() + '/' + vm.statusType + '/:id', {id: '@id'}, {
+            'update': {method: 'PUT'}
+          });
+          // update approval/completion/billingstatus/reportstatus inplace, then update current for selected service
+          StatusTypeResource.update(_.merge(updatedStatusData, {id: statusData.id}), function (approval) {
+            var currentServiceStatus = {id: vm.service.id};
+            currentServiceStatus[vm.currentType] =  vm.service[vm.currentType];
+            AltumAPI.Service.update(currentServiceStatus, function (updatedService) {
+              toastr.success(vm.service.displayName + ' status updated!', 'Services');
+              vm.onUpdate();
+            });
+          });
+        });
+      }
     }
 
     $scope.$watch('serviceStatus.service', watchServiceChange);

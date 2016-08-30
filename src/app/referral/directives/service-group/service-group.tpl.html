@@ -49,7 +49,7 @@
                 <input type="checkbox" ng-model="serviceGroup.accordionStatus[groupKey][subGroup].selectedAll"
                        ng-change="serviceGroup.applyAll(subServices, serviceGroup.accordionStatus[groupKey][subGroup].selectedAll)"/>
               </th>
-              <th ng-repeat="field in serviceGroup.visitFields"
+              <th ng-repeat="field in serviceGroup.visitFields" class="selectable"
                   ng-click="serviceGroup.sortType = field.name; serviceGroup.sortReverse = !serviceGroup.sortReverse">
                 <span translate context-translator="{{field.prompt}}">{{field.prompt}}</span>
                 <i class="fa pull-right" ng-class="{
