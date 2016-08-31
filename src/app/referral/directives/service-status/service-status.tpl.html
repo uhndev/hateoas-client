@@ -3,7 +3,6 @@
      ng-mouseenter="serviceStatus.init()">
   <select class="form-control" ng-model="serviceStatus.service[serviceStatus.currentStatus]"
           uib-popover-template="serviceStatus.approvalPopover.templateUrl"
-          popover-append-to-body="false"
           popover-trigger="none"
           popover-title="{{::serviceStatus.approvalPopover.title | translate}}"
           popover-placement="{{::serviceStatus.placement}}"
