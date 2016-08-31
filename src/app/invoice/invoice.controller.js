@@ -113,7 +113,7 @@
      * @description On change handler for updating an Invoice
      */
     function updateInvoice() {
-      AltumAPI.Invoice.update(_.pick(vm.invoice, 'id', 'number', 'payor', 'status', 'referral'), function (data) {
+      AltumAPI.Invoice.update(_.pick(vm.invoice, 'id', 'number', 'payor', 'comments', 'status', 'referral'), function (data) {
         vm.invoice.displayName = data.items.displayName;
         toastr.success('Successfully updated invoice: ' + vm.invoice.displayName, 'Invoice');
       });

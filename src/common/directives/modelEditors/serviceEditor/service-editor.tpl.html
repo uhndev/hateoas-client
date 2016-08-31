@@ -76,7 +76,7 @@
             </ui-select-match>
             <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
               <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-              <span>({{service.approvalDate | date:'short'}})</span>
+              <span>{{service.billingCount}} ({{service.approvalDate | date:'short'}})</span>
             </ui-select-choices>
           </ui-select>
         </div>
