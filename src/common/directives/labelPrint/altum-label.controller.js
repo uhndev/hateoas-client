@@ -6,18 +6,18 @@
 
   angular
     .module('altum.labelPrint.controller', ['dados.constants'])
+    .constant('DEFAULT_PRINTER_KEY', 'defaults.labelPrint.printer')
     .controller('LabelPrintController', LabelPrintController);
 
-  LabelPrintController.$inject = ['toastr'];
+  LabelPrintController.$inject = ['toastr', 'DEFAULT_PRINTER_KEY', 'localStorageService'];
 
-  function LabelPrintController(toastr) {
+  function LabelPrintController(toastr, DEFAULT_PRINTER_KEY, localStorageService) {
     var vm = this;
 
     // bindable variables
     vm.copies = 1;
-
     vm.type = vm.type || null;
-    vm.printer = vm.printer || null;
+    vm.printer = localStorageService.get(DEFAULT_PRINTER_KEY) ? localStorageService.get(DEFAULT_PRINTER_KEY) : null;
     vm.zpl = null;
 
     // bindable methods
@@ -65,7 +65,6 @@
         default:
           alert('please choose the label type from the list');
           break;
-
       }
 
       var ip_addr = vm.printer.IP;
