@@ -57,7 +57,7 @@
       {
         name: 'payorPrice',
         prompt: 'APP.INVOICE.LABELS.PAYOR_PRICE',
-        type: 'string'
+        type: 'price'
       }
     ];
 
@@ -76,10 +76,13 @@
         vm.template = data.template;
         vm.invoice = angular.copy(data.items);
 
-        vm.invoiceServices = AltumAPI.InvoiceServiceDetail.query({
+        AltumAPI.InvoiceServiceDetail.query({
           where: {
             invoice: data.items.id
           }
+        }, function (invoiceServices) {
+          vm.invoiceServices = invoiceServices;
+          vm.totalPrice = _.sum(_.map(invoiceServices, 'payorPrice'));
         });
 
         var ReferralResource = $resource(API.url() + '/referral/' + data.items.referral);
