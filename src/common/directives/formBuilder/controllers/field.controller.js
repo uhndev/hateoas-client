@@ -42,7 +42,7 @@
                   id: $scope.field.field_value
                 }).$promise;
               } else {
-                return null;
+                return $scope.field.field_value;
               }
             })
             .then(function (modelData) { // create subform and apply data to form
