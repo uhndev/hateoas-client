@@ -66,6 +66,7 @@
                 <service-status ng-switch-when="status"
                                 service="service"
                                 on-update="serviceGroup.onUpdate()"
+                                append-to-element="true"
                                 disabled="service.updateDisabled && field.name != 'reportstatus' && field.name != 'billingstatus'"
                                 status-type="{{field.name}}">
                 </service-status>
