@@ -26,14 +26,15 @@
         controller: 'ServiceStatusController',
         controllerAs: 'serviceStatus',
         bindToController: true,
-        link: function (scope, element) {
-
-          // workaround for angular ui popover bug, will insert history element inside
-          // directive element so that mouseover/mouseleave events still apply on both elements.
-          element.bind('mouseover', function (event) {
-            var historyElement = angular.element($('[uib-popover-template-popup]'));
-            element.children().append(historyElement);
-          });
+        link: function (scope, element, attributes) {
+          if (attributes.appendToElement) {
+            // workaround for angular ui popover bug, will insert history element inside
+            // directive element so that mouseover/mouseleave events still apply on both elements.
+            element.bind('mouseover', function (event) {
+              var historyElement = angular.element($('[uib-popover-template-popup]'));
+              element.children().append(historyElement);
+            });
+          }
         }
       };
     });
