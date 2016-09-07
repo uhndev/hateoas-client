@@ -161,16 +161,17 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      vm.loadingData = true;
       ServiceDetailResource.get(vm.query, function (data) {
         vm.resource = data;
 
         // remove extraneous template fields
-        vm.resource.template.data = vm.resource.template.data || _.reject(vm.resource.template.data, function (field) {
-          return _.contains(serviceOmitFields, field.name);
+        vm.resource.template.data = _.reject(vm.resource.template.data, function (field) {
+          return _.contains(serviceOmitFields, field.name) || _.stringContains(field.name, 'Detail');
         });
 
         // setup array of fields to choose from in template-config
-        vm.templateFieldOptions = vm.templateFieldOptions || _.filter(vm.resource.template.data, function (field) {
+        vm.templateFieldOptions = _.filter(vm.resource.template.data, function (field) {
           return _.contains(GLOBAL_BILLING_TEMPLATE_FIELDS, field.name);
         }).concat([
           {
@@ -205,6 +206,8 @@
           service.updateDisabled = (_.has(data.template, 'where') && _.has(data.template.where, 'update')) ? !QueryParser.evaluate(data.template.where.update, service) : false;
           return service;
         });
+
+        vm.loadingData = false;
       });
     }
 
@@ -288,7 +291,7 @@
         init();
       }
     }
-    $scope.$watchCollection('globalBilling.query', watchQuery);
+    $scope.$watch('globalBilling.query', watchQuery, true);
   }
 
 })();

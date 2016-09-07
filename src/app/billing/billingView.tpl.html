@@ -1,5 +1,5 @@
 <div ng-controller="GlobalBillingController as globalBilling" ng-cloak class="container-fluid">
-  <div class="loading-screen" ng-show="!globalBilling.resource"></div>
+  <div class="loading-screen" ng-show="globalBilling.loadingData"></div>
   <h2 id="Title" context-translator="COMMON.HATEOAS.TITLE.TOTAL">
     <span translate>APP.BILLING.BILLING_MANAGEMENT</span>
     <small translate translate-values="{ total: globalBilling.resource.total }">
@@ -30,20 +30,22 @@
           </select>
         </td>
         <td>
-          <button type="button" class="btn" ng-class="{
+          <div class="btn-group">
+            <button type="button" class="btn" ng-class="{
                     'btn-info': globalBilling.showConfigureFields,
                     'btn-default': !globalBilling.showConfigureFields
                   }"
-                  ng-click="globalBilling.showConfigureFields = !globalBilling.showConfigureFields">
-            <i class="fa" ng-class="{
+                    ng-click="globalBilling.showConfigureFields = !globalBilling.showConfigureFields">
+              <i class="fa" ng-class="{
               'fa-cog': !globalBilling.showConfigureFields,
               'fa-chevron-down': globalBilling.showConfigureFields
             }"></i>
-          </button>
-          <button type="button" class="btn btn-default"
-                  ng-click="globalBilling.expandToggle()">
-            <i class="fa fa-arrows-alt"></i>
-          </button>
+            </button>
+            <button type="button" class="btn btn-default"
+                    ng-click="globalBilling.expandToggle()">
+              <i class="fa fa-arrows-alt"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </table>
