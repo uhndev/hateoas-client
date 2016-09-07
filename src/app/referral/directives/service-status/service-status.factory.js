@@ -64,22 +64,19 @@
 
       // pluck out relevant ids for payors and programServices
       var payorData = _.isArray(service) ? _.filter(_.map(service, 'payor')) : service.payor;
+      var altumServiceData = _.isArray(service) ? _.filter(_.map(service, 'altumService')) : service.altumService;
       var programServiceData = _.isArray(service) ? _.filter(_.map(service, 'programService')) : service.programService;
 
-      // build waterline query if multiple services
+      // build waterline query if multiple services, will query in order of precedence: programService > altumService > payor
       switch (true) {
-        case _.isNumber(payorData) || _.isArray(payorData) &&
-             _.isNumber(programServiceData) || _.isArray(programServiceData):
-          queryObj.where.or = [
-            {payor: payorData},
-            {programservice: programServiceData}
-          ];
-          break;
-        case !_.isUndefined(payorData):
-          queryObj.where.payor = payorData;
-          break;
-        case !_.isUndefined(programServiceData):
+        case _.isArray(programServiceData) ||  _.isNumber(programServiceData):
           queryObj.where.programservice = programServiceData;
+          break;
+        case !programServiceData && (_.isArray(altumServiceData) || _.isNumber(altumServiceData)):
+          queryObj.where.altumservice = altumServiceData;
+          break;
+        case !altumServiceData && (_.isArray(payorData) || _.isNumber(payorData)):
+          queryObj.where.payor = payorData;
           break;
         default:
           // otherwise if no payor/programservice data, just parseforms

@@ -16,10 +16,10 @@
     .controller('RecommendationsController', RecommendationsController);
 
   RecommendationsController.$inject = [
-    '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService'
+    '$resource', '$location', 'API', 'HeaderService', 'toastr', 'RecommendationsService', 'AltumAPIService'
   ];
 
-  function RecommendationsController($resource, $location, API, HeaderService, toastr, RecommendationsService) {
+  function RecommendationsController($resource, $location, API, HeaderService, toastr, RecommendationsService, AltumAPI) {
     var vm = this;
 
     // bindable variables
@@ -58,6 +58,7 @@
     vm.availableServices = [];
 
     // bindable methods
+    vm.saveVisitService = saveVisitService;
     vm.saveServices = saveServices;
     vm.isServiceValid = isServiceValid;
     vm.areServicesValid = areServicesValid;
@@ -112,6 +113,22 @@
           vm.recommendedServices = [];
           vm.availableServices = RecommendationsService.parseAvailableServices(vm.sharedService, data.items.availableServices);
         }
+      });
+    }
+
+    /**
+     * saveVisitService
+     * @description Saves changes for the currently selected visit service
+     */
+    function saveVisitService() {
+      vm.isSaving = true;
+      var visitServiceChanges = angular.copy(vm.sharedService.visitService);
+      _.each(['physician', 'staff', 'workStatus', 'prognosis', 'prognosisTimeframe'], function (field) {
+        visitServiceChanges[field] = vm.sharedService[field];
+      });
+      AltumAPI.Service.update(visitServiceChanges, function (data) {
+        toastr.success('Successfully saved changes to visit service: ' + data.items.displayName, 'Recommendations');
+        vm.isSaving = false;
       });
     }
 
