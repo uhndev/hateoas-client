@@ -54,9 +54,9 @@
     function fetchCache(httpConfig) {
       var dataCache = service.cache[JSON.stringify(httpConfig)];
       if (_.has(dataCache, 'expiry')) {
-        var now = Date.now();
+        var now = new Date();
         // delete from cache if timed out
-        if (dataCache.expiry < now) {
+        if (new Date(dataCache.expiry) < now) {
           delete service.cache[JSON.stringify(httpConfig)];
         } else {
           return dataCache.data;

@@ -11,10 +11,12 @@
   ];
 
   function HateoasModalController($scope, $resource, $uibModalInstance, $q, TemplateService) {
+
     // Loads values into the form.
     function loadValues(form) {
       TemplateService.loadAnswerSet($scope.item, $scope.template, form);
       $scope.form = form.items;
+      $scope.isFormPristine = true;
 
       var method = (_.isEmpty($scope.item)) ? 'create' : 'update';
 
@@ -48,5 +50,18 @@
     };
 
     loadTemplate($scope.template).then(loadValues);
+
+    /**
+     * confirmFormClose
+     * @description The modal.closing event is broadcast to the modal scope before the modal closes,
+     *              we want to confirm the form is dirty if user clicks the backdrop before closing.
+     */
+    function confirmFormClose(event, reason) {
+      if (reason === 'backdrop click' && $scope.modalForm.my_form.$dirty &&
+        !confirm('You have unsaved changes, are you sure you would like to close?')) {
+        event.preventDefault();
+      }
+    }
+    $scope.$on('modal.closing', confirmFormClose);
   }
 })();
