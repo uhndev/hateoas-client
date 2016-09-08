@@ -16,7 +16,6 @@
     function loadValues(form) {
       TemplateService.loadAnswerSet($scope.item, $scope.template, form);
       $scope.form = form.items;
-      $scope.isFormPristine = true;
 
       var method = (_.isEmpty($scope.item)) ? 'create' : 'update';
 
