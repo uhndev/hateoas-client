@@ -1,6 +1,8 @@
 <div class="modal-body">
-  <form-directive form='form' 
-    on-submit='done()' 
-    on-cancel='cancel()'>
-  </form-directive>
+  <ng-form name="modalForm">
+    <form-directive form='form'
+                    on-submit='done()'
+                    on-cancel='cancel()'>
+    </form-directive>
+  </ng-form>
 </div>

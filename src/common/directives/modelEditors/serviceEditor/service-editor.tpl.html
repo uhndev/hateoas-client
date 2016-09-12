@@ -72,7 +72,7 @@
                      ng-required="svc.configuration.required.visitService"
                      ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
             <ui-select-match placeholder="Select Service Type">
-              {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+              {{$select.selected.altumServiceName}} {{$select.selected.billingCount}} ({{$select.selected.approvalDate | date:'short'}})
             </ui-select-match>
             <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
               <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
@@ -98,8 +98,8 @@
 
       <div class="form-group" ng-if="!svc.configuration.disabled.physician">
         <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
-               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PHYSICIAN">
-          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PHYSICIAN
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_PHYSICIAN">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_PHYSICIAN
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.physician.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
@@ -117,7 +117,12 @@
       </div>
 
       <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes" ng-if="!svc.configuration.disabled.staff">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>{{staffType.name}}</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+          <span translate context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_STAFF">
+            COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_STAFF
+          </span>
+          {{staffType.name}}
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm[staffType.name].$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <select-loader

@@ -40,6 +40,7 @@
 
   function ServiceEditorController($scope, AltumAPI, $uibModal, SERVICE_FIELDS) {
     var vm = this;
+    var altumServiceID = _.has(vm.service.altumService, 'id') ? vm.service.altumService.id : vm.service.altumService;
     var defaultConfig = {disabled: {}, required: {}};
     _.each(SERVICE_FIELDS, function (field) {
       defaultConfig.disabled[field] = false;
@@ -55,7 +56,6 @@
     vm.approvedServices = vm.approvedServices || [];
 
     // bindable methods
-    vm.fetchAltumServiceData = fetchAltumServiceData;
     vm.setServiceSelections = setServiceSelections;
     vm.setVisitServiceSelections = setVisitServiceSelections;
     vm.setStaffSelections = setStaffSelections;
@@ -117,7 +117,7 @@
       }
 
       // populate service variations if applicable
-      if (!_.isNull(vm.service.altumService) && !vm.configuration.disabled.altumService) {
+      if (altumServiceID) {
         fetchAltumServiceData();
       }
 
@@ -127,7 +127,7 @@
       }
 
       // parse service date
-      if (angular.isString(vm.service.serviceDate)) {
+      if (!vm.configuration.disabled.serviceDate && angular.isString(vm.service.serviceDate)) {
         vm.service.serviceDate = new Date(vm.service.serviceDate);
       }
 
@@ -155,7 +155,7 @@
      */
     function fetchAltumServiceData() {
       vm.service.altumService = AltumAPI.AltumService.get({
-        id: vm.service.altumService,
+        id: altumServiceID,
         populate: ['serviceVariation', 'sites']
       }, function (altumService) {
         if (altumService.sites.length > 0) {

@@ -15,7 +15,10 @@
   <tbody>
     <tr ng-repeat="approval in ::serviceStatus.service[serviceStatus.collection]"
         ng-click="serviceStatus.editStatusType(approval)"
-        class="selectable {{::serviceStatus.statuses[approval.status].rowClass}}">
+        class="{{::serviceStatus.statuses[approval.status].rowClass}}"
+        ng-class="{
+          'selectable': serviceStatus.statuses[approval.status].requiresConfirmation
+        }">
       <td class="text-nowrap">
         <b>{{::approval.displayName}}</b>
       </td>
