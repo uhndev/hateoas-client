@@ -24,7 +24,6 @@
     // bindable methods
     $scope.toggleSelectCreate = toggleSelectCreate;
     $scope.clearExpr = clearExpr;
-    $scope.validateRule = validateRule;
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
 
@@ -104,27 +103,6 @@
       field.field_min = '';
       field.field_max = '';
       field.field_validation.expression = '';
-    }
-
-    function validateRule(field) {
-      if (field.field_required) {
-        return true;
-      } else {
-        var parentForm = $scope[field.field_name + 'Form'].$$parentForm;
-        if (_.has(field, 'field_rules')) {
-
-          switch (true) {
-            case _.has(field.field_rules, 'requiredWhen') && _.has(field.field_rules.requiredWhen, 'missing'):
-              return _.any(field.field_rules.requiredWhen.missing, function (fieldName) {
-                var modelValue = parentForm[fieldName + 'Form'][fieldName].$modelValue;
-                return _.isNull(modelValue) && _.isUndefined(modelValue);
-              }) && field.field_value;
-            case _.has(field.field_rules, 'requiredWhen') && _.has(field.field_rules.requiredWhen, 'given'):
-              return;
-            default: return;
-          }
-        }
-      }
     }
 
     function validateText(value, field) {
