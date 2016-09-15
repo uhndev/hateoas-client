@@ -1,5 +1,5 @@
-<ng-form name="sub_form">
-  <div class="form-group" ng-class="{'has-error': sub_form.$invalid && !sub_form.$pristine}">
+<ng-form name="{{field.field_name}}Form">
+  <div class="form-group" ng-class="{'has-error': {{field.field_name}}Form.$invalid && !{{field.field_name}}Form.$pristine}">
     <label for="field.field_id">
       {{field.field_id}})
     </label>
@@ -10,7 +10,7 @@
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <input type="email"
            placeholder="{{field.field_placeholder | translate}}"
-           id="field.field_id"
+           id="{{field.field_id}}"
            name="{{field.field_name}}"
            class="form-control"
            ng-model="field.field_value"
@@ -21,9 +21,9 @@
              id: field.field_modelID,
              attribute: field.field_name
            }" />
-    <div ng-show="!sub_form.$pristine">
+    <div ng-show="!{{field.field_name}}Form.$pristine">
       <span class="pull-right required-error"
-            ng-show="(field.field_required && !field.field_value) || sub_form.$invalid">
+            ng-show="(field.field_required && !field.field_value) || {{field.field_name}}Form.$invalid">
           * {{field.field_helpertext | translate}}
       </span>
     </div>
