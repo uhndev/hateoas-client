@@ -1,15 +1,16 @@
-<ng-form name="sub_form" ng-hide="loadError">
+<ng-form name="{{field.field_name}}Form" ng-hide="loadError">
   <div class="form-group">
-    <label for="field.field_id">
+    <label for="{{field.field_id}}">
       {{field.field_id}})
     </label>
-    <label for="field.field_id" translate>
+    <label for="{{field.field_id}}" translate>
       {{field.field_title}}
     </label>&nbsp;
     <span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
     <div class="row-fluid">
       <select-loader
         id="{{field.field_id}}"
+        name="{{field.field_name}}"
         url="{{field.field_userURL}}"
         query="field.field_baseQuery"
         is-atomic="field.field_hasItem"
@@ -20,7 +21,7 @@
         labels="{{field.field_labels || 'displayName'}}">
       </select-loader>
     </div>
-    <div ng-show="!sub_form.$pristine">
+    <div ng-show="!{{field.field_name}}Form.$pristine">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>
