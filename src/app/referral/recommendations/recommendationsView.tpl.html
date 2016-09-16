@@ -55,7 +55,16 @@
             </service-editor>
 
             <br/>
+
+            <button class="btn btn-success pull-right"
+                    ng-if="rec.sharedService.visitService && rec.recommendedServices.length === 0"
+                    ng-disabled="rec.recommendedServices.length > 0 || !rec.areServicesValid() || rec.isSaving"
+                    ng-click="rec.saveVisitService()">
+              Save Changes to Visit Service
+            </button>
+
             <button class="btn btn-primary pull-right"
+                    ng-if="rec.sharedService.visitService && rec.recommendedServices.length > 0"
                     ng-disabled="rec.recommendedServices.length === 0 || !rec.areServicesValid() || rec.isSaving"
                     ng-click="rec.saveServices()">
               Make Recommendations for {{rec.recommendedServices.length}} Service(s)

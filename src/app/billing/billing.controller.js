@@ -8,18 +8,19 @@
       'altum.referral.serviceGroupPreset'
     ])
     .constant('GLOBAL_BILLING_TEMPLATE_FIELDS', [
-      'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName',
+      'programServiceName', 'programName', 'payorName', 'siteName', 'workStatusName', 'prognosisName', 'MRN',
       'prognosisTimeframeName', 'serviceDate', 'visitServiceName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount',
       'currentCompletionPhysicianName', 'currentCompletionStaffName', 'completionDate',
       'totalItems', 'approvalDate', 'statusName', 'completionStatusName', 'billingStatusName', 'physicianDisplayName'
     ])
     .controller('GlobalBillingController', GlobalBillingController);
 
-  GlobalBillingController.$inject = ['$scope', '$resource', 'API', 'QueryParser', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
+  GlobalBillingController.$inject = ['$scope', '$resource', 'API', '$uibModal', 'QueryParser', 'GLOBAL_BILLING_TEMPLATE_FIELDS'];
 
-  function GlobalBillingController($scope, $resource, API, QueryParser, GLOBAL_BILLING_TEMPLATE_FIELDS) {
+  function GlobalBillingController($scope, $resource, API, $uibModal, QueryParser, GLOBAL_BILLING_TEMPLATE_FIELDS) {
     var vm = this;
     var serviceOmitFields = ['createdAt', 'updatedAt', 'createdBy', 'displayName', 'iconClass', 'rowClass'];
+    var ServiceDetailResource = $resource(API.url() + '/servicedetail');
 
     // bindable variables
     vm.query = {
@@ -98,30 +99,55 @@
     // configure visit fields for global billing subgroup tables and add billing status
     vm.visitFields = [
       {
+        name: 'completionDate',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.COMPLETION_DATE'
+      },
+      {
         name: 'client_displayName',
-        prompt: 'COMMON.MODELS.SERVICE.CLIENT'
-      },
-      {
-        name: 'code',
-        prompt: 'COMMON.MODELS.PROGRAM_SERVICE.CODE'
-      },
-      {
-        name: 'payorPrice',
-        prompt: 'COMMON.MODELS.SERVICE.PAYOR_PRICE',
-        type: 'price'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.CLIENT'
       },
       {
         name: 'altumServiceName',
-        prompt: 'COMMON.MODELS.SERVICE.ALTUM_SERVICE'
+        prompt: 'APP.GLOBAL_BILLING.LABELS.ALTUM_SERVICE'
       },
       {
-        name: 'billingCount',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_COUNT'
+        name: 'code',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.CODE'
+      },
+      {
+        name: 'siteName',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.SITE'
+      },
+      {
+        name: 'physicianDisplayName',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.PHYSICIAN'
+      },
+      {
+        name: 'payorPrice',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.PAYOR_PRICE',
+        type: 'price'
+      },
+      {
+        name: 'completion',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.COMPLETION',
+        type: 'status'
+      },
+      {
+        name: 'reportstatus',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.REPORT_STATUS',
+        type: 'status'
       },
       {
         name: 'billingstatus',
-        prompt: 'COMMON.MODELS.SERVICE.BILLING_STATUS',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.BILLING_STATUS',
         type: 'status'
+      },
+      {
+        name: 'serviceEditor',
+        prompt: 'APP.GLOBAL_BILLING.LABELS.EDIT',
+        type: 'editButton',
+        iconClass: 'glyphicon-edit',
+        eventName: 'referralServices.openServiceEditor'
       }
     ];
 
@@ -135,36 +161,38 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      var Resource = $resource(API.url() + '/servicedetail');
-
-      Resource.get(vm.query, function (data) {
+      vm.loadingData = true;
+      ServiceDetailResource.get(vm.query, function (data) {
         vm.resource = data;
 
         // remove extraneous template fields
-        vm.resource.template.data = vm.resource.template.data || _.reject(vm.resource.template.data, function (field) {
-          return _.contains(serviceOmitFields, field.name);
+        vm.resource.template.data = _.reject(vm.resource.template.data, function (field) {
+          return _.contains(serviceOmitFields, field.name) || _.stringContains(field.name, 'Detail');
         });
 
         // setup array of fields to choose from in template-config
-        vm.templateFieldOptions = vm.templateFieldOptions || _.filter(vm.resource.template.data, function (field) {
+        vm.templateFieldOptions = _.filter(vm.resource.template.data, function (field) {
           return _.contains(GLOBAL_BILLING_TEMPLATE_FIELDS, field.name);
         }).concat([
           {
             name: 'approval',
-            prompt: 'COMMON.MODELS.SERVICE.APPROVAL',
+            prompt: 'APP.GLOBAL_BILLING.LABELS.APPROVAL',
             type: 'status'
           },
           {
             name: 'completion',
-            prompt: 'COMMON.MODELS.SERVICE.COMPLETION',
+            prompt: 'APP.GLOBAL_BILLING.LABELS.COMPLETION',
             type: 'status'
           },
           {
             name: 'reportstatus',
-            prompt: 'COMMON.MODELS.SERVICE.REPORT_STATUS',
+            prompt: 'APP.GLOBAL_BILLING.LABELS.REPORT_STATUS',
             type: 'status'
           }
         ]);
+
+        // changes the prompt values for templateFields and billing fields so that the path is correct
+        vm.templateFieldOptions.map(function (element) { element.prompt = 'APP.GLOBAL_BILLING.LABELS.' + element.prompt.toUpperCase().replace(/ /gi,'_'); });
 
         // parse serviceDate dates and add serviceGroupByDate of just the day to use as group key
         vm.services = _.map(vm.resource.items, function (service) {
@@ -178,6 +206,8 @@
           service.updateDisabled = (_.has(data.template, 'where') && _.has(data.template.where, 'update')) ? !QueryParser.evaluate(data.template.where.update, service) : false;
           return service;
         });
+
+        vm.loadingData = false;
       });
     }
 
@@ -198,6 +228,62 @@
     }
 
     /**
+     * openServiceEditor
+     * @description opens a modal window for the serviceModal service editor
+     */
+    function openServiceEditor(service) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'directives/modelEditors/serviceEditor/serviceModal.tpl.html',
+        controller: 'ServiceModalController',
+        controllerAs: 'svcmodal',
+        size: 'lg',
+        bindToController: true,
+        resolve: {
+          Service: function($resource, API) {
+            var ServiceResource = $resource(API.url() + '/service');
+            return ServiceResource.get({id: service.id, populate: ['staff', 'visitService']}).$promise;
+          },
+          ApprovedServices: function() {
+            return ServiceDetailResource.get({
+              where: {
+                referral: service.referral,
+                statusName: 'Approved',
+                visitable: true
+              }
+            }).$promise.then(function (data) {
+              return data.items;
+            });
+          },
+          ServiceEditorConfig: function() {
+            return {
+              loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
+              disabled: {
+                altumService: true,
+                programService: true,
+                serviceDate: true,
+                currentCompletion: true  // no need to have completion field when editing
+              },
+              required: {}
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedService) {
+        init();
+      });
+    }
+
+    /**
+     * referralServices.openServiceEditor
+     * @description Event listener for opening service editor
+     */
+    $scope.$on('referralServices.openServiceEditor', function (event, data) {
+      openServiceEditor(data);
+    });
+
+    /**
      * watchQuery
      * @description watch query-builder to filter down service details
      * @param newQuery
@@ -208,7 +294,7 @@
         init();
       }
     }
-    $scope.$watchCollection('globalBilling.query', watchQuery);
+    $scope.$watch('globalBilling.query', watchQuery, true);
   }
 
 })();

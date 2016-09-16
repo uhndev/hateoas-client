@@ -14,11 +14,12 @@
   angular
     .module('altum.referral.serviceGroupPreset', [
     ])
+    .constant('DEFAULT_SERVICE_PRESET_KEY', 'defaults.servicePreset.preset')
     .component('serviceGroupPreset', {
       bindings: {
         boundGroupTypes: '=',
         visitFields: '=',
-        summaryFields: '=',
+        summaryFields: '='
       },
       templateUrl: 'referral/directives/service-group-preset/service-group-preset.tpl.html',
       controller: 'ServiceGroupPresetController',
@@ -26,23 +27,27 @@
     })
     .controller('ServiceGroupPresetController', ServiceGroupPresetController);
 
-  ServiceGroupPresetController.$inject = ['$resource', 'API', 'toastr'];
+  ServiceGroupPresetController.$inject = ['$resource', 'API', 'toastr', 'DEFAULT_SERVICE_PRESET_KEY', 'localStorageService'];
 
-  function ServiceGroupPresetController($resource, API, toastr) {
+  function ServiceGroupPresetController($resource, API, toastr, DEFAULT_SERVICE_PRESET_KEY, localStorageService) {
     var vm = this;
-
-    vm.permissions = {};
-    vm.newPresetName = 'Default';
-
+    var defaultPresetID = localStorageService.get(DEFAULT_SERVICE_PRESET_KEY);
     var ServicePreset = $resource(API.url('servicepreset'), {}, {
       'save' : {method: 'POST', isArray: false}
     });
 
+    // bindable variables
+    vm.selected = null;
+    vm.permissions = {};
+    vm.newPresetName = 'Default';
     vm.serviceGroupPresets = [];
+    vm.hasDefaultPreset = _.isNumber(defaultPresetID);
 
     // bindable methods
     vm.addGroupPreset = addGroupPreset;
     vm.selectGroupPreset = selectGroupPreset;
+    vm.setPresetDefault = setPresetDefault;
+    vm.unsetPresetDefault = unsetPresetDefault;
     vm.removePreset = removePreset;
 
     init();
@@ -58,6 +63,11 @@
           vm.serviceGroupPresets = data.items;
         } else {
           vm.serviceGroupPresets = data;
+        }
+
+        var defaultPresetData = _.find(vm.serviceGroupPresets, {id: defaultPresetID});
+        if (defaultPresetData) {
+          selectGroupPreset(defaultPresetData);
         }
       });
     }
@@ -97,9 +107,30 @@
      * @param item
      */
     function selectGroupPreset(item) {
+      vm.selected = angular.copy(item);
       vm.boundGroupTypes = angular.copy(item.preset.boundGroupTypes);
       vm.visitFields = angular.copy(item.preset.visitFields);
       vm.summaryFields = angular.copy(item.preset.summaryFields);
+    }
+
+    /**
+     * setPresetDefault
+     * @description Sets selected servicePreset as default in local storage to load up next time
+     */
+    function setPresetDefault() {
+      localStorageService.set(DEFAULT_SERVICE_PRESET_KEY, vm.selected.id);
+      vm.hasDefaultPreset = true;
+      toastr.success('Set new default user preset!', vm.selected.name);
+    }
+
+    /**
+     * unsetPresetDefault
+     * @description Unsets default service preset
+     */
+    function unsetPresetDefault() {
+      localStorageService.remove(DEFAULT_SERVICE_PRESET_KEY);
+      vm.hasDefaultPreset = false;
+      toastr.success('Cleared default user presets!', 'Service Preset');
     }
 
     /**

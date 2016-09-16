@@ -44,6 +44,7 @@
       'altum.referral',
       'altum.billing',
       'altum.client',
+      'altum.invoice',
       'altum.triage',
       'altum.servicevariation',
       'altum.servicemapper',

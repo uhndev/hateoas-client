@@ -38,7 +38,7 @@
       restrict: 'E',
       link: linker,
       scope: {
-        form:'=',
+        form: '=',
         hideButtons: '@',
         onSubmit:'&',
         onCancel:'&'

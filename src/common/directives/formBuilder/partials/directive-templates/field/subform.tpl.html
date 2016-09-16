@@ -1,19 +1,20 @@
-<ng-form name="sub_form" ng-hide="loadError">
+<ng-form name="{{field.field_name}}Form" ng-hide="loadError">
   <div class="form-group">
-    <label for="field.field_id">
+    <label for="{{field.field_id}}">
       {{field.field_id}})
     </label>
-    <label for="field.field_id" translate>
+    <label for="{{field.field_id}}" translate>
       {{field.field_title}}
     </label>&nbsp;
-    <span class="glyphicon glyphicon-ok" ng-show="field.field_value && sub_form.$valid"></span>
+    <span class="glyphicon glyphicon-ok" ng-show="field.field_value && {{field.field_name}}Form.$valid"></span>
     <div class="row-fluid" ng-style="{ 'margin-left': '20px' }">
-      <fieldset class="well" ng-if="!field.field_preventCreate">
+      <fieldset id="{{field.field_id}}" name="{{field.field_name}}"
+                class="well" ng-if="!field.field_preventCreate">
         <field-directive ng-repeat="subfield in field.field_questions track by $index"
                          field="subfield"></field-directive>
       </fieldset>
     </div>
-    <div ng-show="!sub_form.$pristine && sub_form.$invalid">
+    <div ng-show="!{{field.field_name}}Form.$pristine && {{field.field_name}}Form.$invalid">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>

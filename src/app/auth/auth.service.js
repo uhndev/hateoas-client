@@ -19,10 +19,10 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', 'ADMIN_PAGES', '$rootScope', '$state', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
+    'AUTH_API', 'ADMIN_PAGES', 'API', '$http', '$rootScope', '$state', '$resource', '$cookies', 'TABVIEW', 'SUBVIEW', 'GroupService'
   ];
 
-  function AuthService(Auth, ADMIN_PAGES, $rootScope, $state, $resource, $cookies, TABVIEW, SUBVIEW, Group) {
+  function AuthService(Auth, ADMIN_PAGES, API, $http, $rootScope, $state, $resource, $cookies, TABVIEW, SUBVIEW, Group) {
 
     var LoginAuth = $resource(Auth.LOGIN_API);
     var currentUser = {};
@@ -46,7 +46,8 @@
       setAuthenticated: setAuthenticated,
       getRoleLinks: getRoleLinks,
       login: login,
-      logout: logout
+      logout: logout,
+      fetchPermissions: fetchPermissions
     };
 
     // if the user is already authenticated on init (page reload) call set authenticated
@@ -177,6 +178,20 @@
         'query' : {method: 'GET', isArray: false}
       }).query(function () {
         window.location.reload();
+      });
+    }
+
+    /**
+     * fetchPermissions
+     * @description Returns a hateoas template given a model name
+     * @param modelName
+     */
+    function fetchPermissions(modelName) {
+      return $http({
+        url: API.url() + '/fetchpermissions/' + modelName,
+        method: 'GET'
+      }).then(function (results) {
+        return results.data.template;
       });
     }
 

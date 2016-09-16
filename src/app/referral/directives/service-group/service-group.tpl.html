@@ -49,9 +49,16 @@
                 <input type="checkbox" ng-model="serviceGroup.accordionStatus[groupKey][subGroup].selectedAll"
                        ng-change="serviceGroup.applyAll(subServices, serviceGroup.accordionStatus[groupKey][subGroup].selectedAll)"/>
               </th>
-              <th ng-repeat="field in serviceGroup.visitFields" translate context-translator="{{field.prompt}}">{{field.prompt}}</th>
+              <th ng-repeat="field in serviceGroup.visitFields" class="selectable"
+                  ng-click="serviceGroup.sortType = field.name; serviceGroup.sortReverse = !serviceGroup.sortReverse">
+                <span translate context-translator="{{field.prompt}}">{{field.prompt}}</span>
+                <i class="fa pull-right" ng-class="{
+                  'fa-sort-asc': serviceGroup.sortType === field.name && serviceGroup.sortReverse,
+                  'fa-sort-desc': serviceGroup.sortType === field.name && !serviceGroup.sortReverse,
+                }"></i>
+              </th>
             </tr>
-            <tr ng-repeat="service in subServices | orderBy: 'itemCount'" class="{{service.rowClass}}">
+            <tr ng-repeat="service in subServices | orderBy:serviceGroup.sortType:serviceGroup.sortReverse" class="{{service.rowClass}}">
               <td ng-if="serviceGroup.checkboxesVisible">
                 <input type="checkbox" ng-model="service.isSelected"/>
               </td>
@@ -59,6 +66,7 @@
                 <service-status ng-switch-when="status"
                                 service="service"
                                 on-update="serviceGroup.onUpdate()"
+                                append-to-element="true"
                                 disabled="service.updateDisabled && field.name != 'reportstatus' && field.name != 'billingstatus'"
                                 status-type="{{field.name}}">
                 </service-status>

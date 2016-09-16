@@ -22,7 +22,7 @@
     var vm = this;
 
     var templateFilterFields = [
-      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
+      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName', 'MRN',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount', 'completionDate',
       'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
@@ -251,6 +251,9 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
+                altumService: true,
+                programService: true,
+                serviceDate: true,
                 currentCompletion: true  // no need to have completion field when editing
               },
               required: {}
