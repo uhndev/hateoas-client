@@ -22,6 +22,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-json-minify');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
+  var environment = grunt.option('env');
+
   /**
    * Load in our build configuration file.
    */
@@ -260,6 +262,8 @@ module.exports = function (grunt) {
       development: '<%= environments.development %>',
       production: '<%= environments.production %>',
       uat: '<%= environments.uat %>',
+      demo: '<%= environments.demo %>',
+      staging: '<%= environments.staging %>',
       migrate: '<%= environments.migrate %>'
     },
 
@@ -429,6 +433,22 @@ module.exports = function (grunt) {
         replacements: [{
           from: '<development_url>',
           to: '<%= environments.uat.url %>'
+        }]
+      },
+      staging: {
+        src: ['sails-io-settings.tpl'],
+        dest: ['sails-io-settings.js'],
+        replacements: [{
+          from: '<development_url>',
+          to: '<%= environments.staging.url %>'
+        }]
+      },
+      demo: {
+        src: ['sails-io-settings.tpl'],
+        dest: ['sails-io-settings.js'],
+        replacements: [{
+          from: '<development_url>',
+          to: '<%= environments.demo.url %>'
         }]
       },
       migrate: {
@@ -615,6 +635,8 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['build', 'compile']);
   grunt.registerTask('prod', ['build_prod', 'compile']);
   grunt.registerTask('uat', ['build_uat', 'compile']);
+  grunt.registerTask('staging', ['build_staging', 'compile']);
+  grunt.registerTask('demo', ['build_demo', 'compile']);
   grunt.registerTask('migrate', ['build_migrate', 'compile']);
 
   /**
@@ -636,6 +658,18 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build_uat', [
     'clean', 'replace:uat', 'replace:remove_livereload', 'ngconstant:uat', 'html2js', 'jshint', 'less:build',
+    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
+  ]);
+
+  grunt.registerTask('build_staging', [
+    'clean', 'replace:staging', 'replace:remove_livereload', 'ngconstant:staging', 'html2js', 'jshint', 'less:build',
+    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
+  ]);
+
+  grunt.registerTask('build_demo', [
+    'clean', 'replace:demo', 'replace:remove_livereload', 'ngconstant:demo', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
   ]);
