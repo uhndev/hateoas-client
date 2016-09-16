@@ -40,7 +40,11 @@
 
   function ServiceEditorController($scope, AltumAPI, $uibModal, SERVICE_FIELDS) {
     var vm = this;
-    var altumServiceID = _.has(vm.service.altumService, 'id') ? vm.service.altumService.id : vm.service.altumService;
+
+    var altumServiceID = null;
+    if (!_.isNull(vm.service) && _.has(vm.service, 'altumService')) {
+      altumServiceID = _.has(vm.service.altumService, 'id') ? vm.service.altumService.id : vm.service.altumService;
+    }
     var defaultConfig = {disabled: {}, required: {}};
     _.each(SERVICE_FIELDS, function (field) {
       defaultConfig.disabled[field] = false;
