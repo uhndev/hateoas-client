@@ -37,6 +37,28 @@ module.exports = {
         }
       }
     },
+    staging: {
+      url: 'http://10.7.8.119:1338',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : '10.7.8.119',
+          port: '1338',
+          prefix: '/api'
+        }
+      }
+    },
+    demo: {
+      url: 'http://10.7.8.118:1338',
+      constants: {
+        BASE: {
+          protocol: 'http',
+          host : '10.7.8.118',
+          port: '1338',
+          prefix: '/api'
+        }
+      }
+    },
     production: {
       url: 'http://10.3.128.48:1338',
       constants: {
