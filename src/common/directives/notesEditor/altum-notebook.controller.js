@@ -13,6 +13,7 @@
     var vm = this;
 
     // bindable variables
+    vm.noteTypeFilter = {};
     vm.collection = vm.collection || {};
     vm.template = {};
     vm.emailInfo = vm.emailInfo || {};
@@ -90,9 +91,11 @@
      * @param value
      */
     function search(value) {
+      vm.loadingNotes = true;
       //this way vm.collection does not get overwritten
       var query = {
         where: {referral: vm.collection.referral},
+        limit: 1000,
         sort: 'createdAt DESC'
       };
 
@@ -101,8 +104,14 @@
           {displayName: {'contains': value}},
           {text: {'contains': value}}
         ];
+
+        if (!_.isEmpty(vm.noteTypeFilter)) {
+          query.where.or.push(vm.noteTypeFilter);
+        }
       }
       NoteResource.query(query, function (data, header) {
+        vm.loadingNotes = false;
+        vm.resource.count = data.count;
         vm.notes = angular.copy(data.items);
       });
     }

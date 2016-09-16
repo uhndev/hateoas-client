@@ -15,7 +15,7 @@
   <tbody>
   <tr ng-repeat="item in $data track by $index"
       ng-click="hateoas.select(item)"
-      class="selectable"
+      class="hateoas-row selectable"
       ng-class="{'active': item === hateoas.selected}">
     <td ng-repeat="column in hateoas.template.data track by $index"
         ng-if="!column.data"

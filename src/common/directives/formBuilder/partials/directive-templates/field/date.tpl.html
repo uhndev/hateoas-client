@@ -1,4 +1,4 @@
-<ng-form name="sub_form">
+<ng-form name="{{field.field_name}}Form">
   <div class="form-group">
     <label for="field.field_id">
       {{field.field_id}})
@@ -20,11 +20,15 @@
              is-open="opened"
              disabled format-date/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="opened = true"><i
-          class="glyphicon glyphicon-calendar"></i></button>
+        <button type="button" class="btn btn-default" ng-click="opened = true">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="field.field_value = null">
+          <i class="glyphicon glyphicon-remove"></i>
+        </button>
       </span>
     </p>
-    <div ng-show="!sub_form.$pristine">
+    <div ng-show="!{{field.field_name}}Form.$pristine">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>

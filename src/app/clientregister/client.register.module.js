@@ -16,15 +16,7 @@
             if (!$stateParams.id) {
               return {
                 person: {
-                  address: {
-                    city: {}
-                  },
-                  familyDoctor: {
-                    person: {}
-                  },
-                  employments: [],
-                  primaryEmergencyContact: {},
-                  emergencyContacts: []
+                  employments: []
                 }
               };
             } else {

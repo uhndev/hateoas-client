@@ -7,8 +7,9 @@
   <div class="row">
     <div ng-class="{'col-md-6': svc.toggleVariations, 'col-md-12': !svc.toggleVariations}">
       <div class="form-group" ng-if="!svc.configuration.disabled.altumService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-          COMMON.MODELS.SERVICE.ALTUM_SERVICE
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.ALTUM_SERVICE">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.ALTUM_SERVICE
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.altumService.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
@@ -25,8 +26,9 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.programService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-          COMMON.MODELS.SERVICE.PROGRAM_SERVICE
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PROGRAM_SERVICE">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PROGRAM_SERVICE
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.programService.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
@@ -44,7 +46,9 @@
 
       <div class="form-group" ng-if="svc.availableSites.length > 0 && !svc.configuration.disabled.site">
         <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
-          <span translate>APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE</span>:&nbsp;
+          <span translate context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.SELECT_SITE">
+            APP.REFERRAL.RECOMMENDATIONS.LABELS.SELECT_SITE
+          </span>:&nbsp;
           <span class="fa fa-map-marker fa-lg selectable" ng-click="svc.openMap()"></span>
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.site.$invalid"> * required</span>
@@ -58,25 +62,31 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.visitService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.VISIT_SERVICE">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.VISIT_SERVICE
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <ui-select name="visitService" ng-model="svc.service.visitService"
                      ng-required="svc.configuration.required.visitService"
                      ng-change="svc.setVisitServiceSelections()" theme="bootstrap">
             <ui-select-match placeholder="Select Service Type">
-              {{$select.selected.altumServiceName}} ({{$select.selected.approvalDate | date:'short'}})
+              {{$select.selected.altumServiceName}} {{$select.selected.billingCount}} ({{$select.selected.approvalDate | date:'short'}})
             </ui-select-match>
             <ui-select-choices repeat="service in svc.approvedServices | filter: $select.search">
               <span ng-bind-html="service.altumServiceName | highlight: $select.search"></span>
-              <span>({{service.approvalDate | date:'short'}})</span>
+              <span>{{service.billingCount}} ({{service.approvalDate | date:'short'}})</span>
             </ui-select-choices>
           </ui-select>
         </div>
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.visitService && !svc.configuration.disabled.currentCompletion && svc.service.visitService">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.VISIT_SERVICE_STATUS</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.VISIT_SERVICE_STATUS">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.VISIT_SERVICE_STATUS
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm.visitService.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <service-status service="svc.service.visitService"
@@ -87,8 +97,9 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.physician">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>
-          COMMON.MODELS.SERVICE.PHYSICIAN
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_PHYSICIAN">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_PHYSICIAN
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.physician.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
@@ -106,7 +117,12 @@
       </div>
 
       <div class="form-group" ng-repeat="staffType in svc.availableStaffTypes" ng-if="!svc.configuration.disabled.staff">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>{{staffType.name}}</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
+          <span translate context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_STAFF">
+            COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.RECOMMENDED_STAFF
+          </span>
+          {{staffType.name}}
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm[staffType.name].$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <select-loader
@@ -124,7 +140,10 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.workStatus">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.WORK_STATUS</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.WORK_STATUS">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.WORK_STATUS
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm.workStatus.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <select name="workStatus" class="form-control"
@@ -136,7 +155,10 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.prognosis">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.PROGNOSIS</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PROGNOSIS">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PROGNOSIS
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm.prognosis.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <select name="prognosis" class="form-control"
@@ -149,8 +171,8 @@
 
       <div class="form-group" ng-if="svc.hasTimeframe() && !svc.configuration.disabled.prognosisTimeframe">
         <label class="control-label" ng-class="{'col-md-3': svc.horizontal}">
-          <span translate>COMMON.MODELS.SERVICE.PROGNOSIS</span>
-          <span translate>COMMON.MODELS.SERVICE.TIMEFRAME</span>
+          <span translate>COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.PROGNOSIS</span>
+          <span translate>COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.TIMEFRAME</span>
         </label>
         <span class="text-danger pull-right" ng-if="serviceForm.prognosisTimeframe.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
@@ -164,7 +186,10 @@
       </div>
 
       <div class="form-group" ng-if="!svc.configuration.disabled.serviceDate">
-        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate>COMMON.MODELS.SERVICE.SERVICE_DATE</label>
+        <label class="control-label" ng-class="{'col-md-3': svc.horizontal}" translate
+               context-translator="COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.SERVICE_DATE">
+          COMMON.DIRECTIVES.SERVICE_EDITOR.LABELS.SERVICE_DATE
+        </label>
         <span class="text-danger pull-right" ng-if="serviceForm.serviceDate.$invalid"> * required</span>
         <div ng-class="{'col-md-9': svc.horizontal}">
           <p class="input-group">

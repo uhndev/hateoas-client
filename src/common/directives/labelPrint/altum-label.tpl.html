@@ -2,6 +2,7 @@
   <div class="input-group">
     <input type="number" min="1" max="100" class="form-control"
            ng-model="label.copies" ng-disabled="!label.printer" placeholder="Copies"/>
+
   <span class="input-group-btn">
     <button type="button" class="btn btn-default"
             ng-disabled="!label.referralInfo || !label.printer" ng-click="label.printLabel()">
@@ -9,6 +10,17 @@
     </button>
   </span>
   </div>
+</div>
+
+<div class="col-md-2 pull-right">
+  <select-loader
+    url="labelType"
+    is-atomic="true"
+    is-disabled="false"
+    bind-object="true"
+    ng-model="label.type"
+    labels="name">
+  </select-loader>
 </div>
 <div class="col-md-2 pull-right">
   <select-loader

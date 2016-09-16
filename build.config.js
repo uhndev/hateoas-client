@@ -111,8 +111,8 @@ module.exports = {
   vendor_files: {
     js: [
       // angular dependencies
-      'vendor/jquery/jquery.js',
-      'vendor/jquery-ui/ui/jquery-ui.js',
+      'vendor/jquery/dist/jquery.js',
+      'vendor/jquery-ui/jquery-ui.js',
       'vendor/lodash/lodash.js',
       'vendor/showdown/src/showdown.js',
       'vendor/sails.io.js/dist/sails.io.js',
@@ -167,7 +167,7 @@ module.exports = {
       'vendor/angular-i18n/angular-locale_fr.js',
 
       // plugins
-      'vendor/JSONedit/js/JSONEdit.js',
+      'vendor/JSONedit/js/directives.js',
       'vendor/ui-select/dist/select.min.js'
     ],
     css: [

@@ -15,14 +15,14 @@
     .controller('ServicesController', ServicesController);
 
   ServicesController.$inject = [
-    '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'AltumAPIService', 'RecommendationsService'
+    '$scope', '$resource', '$location', '$uibModal', 'API', 'HeaderService', 'QueryParser', 'RecommendationsService'
   ];
 
-  function ServicesController($resource, $location, $uibModal, API, HeaderService, AltumAPI, RecommendationsService) {
+  function ServicesController($scope, $resource, $location, $uibModal, API, HeaderService, QueryParser, RecommendationsService) {
     var vm = this;
 
     var templateFilterFields = [
-      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName',
+      'programServiceName', 'programName', 'payorName', 'workStatusName', 'prognosisName', 'MRN',
       'prognosisTimeframeName', 'billingGroupName', 'billingGroupItemLabel', 'itemCount', 'completionDate',
       'totalItems', 'approvalDate', 'physicianDisplayName', 'currentCompletionPhysicianName', 'currentCompletionStaffName',
       'statusName', 'completionStatusName', 'billingStatusName', 'reportStatusName'
@@ -135,7 +135,7 @@
         type: 'datetime'
       },
       {
-        name: 'report',
+        name: 'reportstatus',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.REPORT_STATUS',
         type: 'status'
       },
@@ -152,16 +152,16 @@
       {
         name: 'serviceEditor',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.EDIT',
-        type: 'button',
+        type: 'editButton',
         iconClass: 'glyphicon-edit',
-        onClick: openServiceEditor
+        eventName: 'referralServices.openServiceEditor'
       },
       {
-        name: 'serviceEditor',
+        name: 'recommendationsPicker',
         prompt: 'APP.REFERRAL.SERVICES.LABELS.RECOMMEND_FROM',
-        type: 'button',
+        type: 'recommendButton',
         iconClass: 'glyphicon-plus',
-        onClick: openRecommendationsPicker
+        eventName: 'referralServices.openRecommendationsPicker'
       }
     ];
 
@@ -211,6 +211,9 @@
           service.serviceDate = service.serviceDate ? moment(service.serviceDate).format('MMM D, YYYY h:mm a') : '-';
           service.completionGroupByDate = service.completionDate ? moment(service.completionDate).utc().format('dddd, MMMM Do YYYY') : 'null';
           service.completionDate = service.completionDate ? moment(service.completionDate).utc().format('MMM D, YYYY') : '-';
+
+          // conditionally disable edit buttons depending on ACLs set on servicedetail
+          service.updateDisabled = (_.has(data.template, 'where') && _.has(data.template.where, 'update')) ? !QueryParser.evaluate(data.template.where.update, service) : false;
           return service;
         });
 
@@ -248,7 +251,10 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
-                currentCompletion: true, // no need to have completion field when editing
+                altumService: true,
+                programService: true,
+                serviceDate: true,
+                currentCompletion: true  // no need to have completion field when editing
               },
               required: {}
             };
@@ -353,6 +359,22 @@
         init();
       });
     }
+
+    /**
+     * referralServices.openServiceEditor
+     * @description Event listener for opening service editor
+     */
+    $scope.$on('referralServices.openServiceEditor', function (event, data) {
+      openServiceEditor(data);
+    });
+
+    /**
+     * referralServices.openRecommendationsPicker
+     * @description Event listener for opening recommendations picker
+     */
+    $scope.$on('referralServices.openRecommendationsPicker', function (event, data) {
+      openRecommendationsPicker(data);
+    });
   }
 
 })();

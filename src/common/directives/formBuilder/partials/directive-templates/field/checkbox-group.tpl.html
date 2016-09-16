@@ -1,21 +1,23 @@
-<ng-form name="sub_form">
+<ng-form name="{{field.field_name}}Form">
   <div class="form-group">
-    <label for="field.field_id">
+    <label for="{{field.field_id}}">
       {{field.field_id}})
     </label>
-    <label for="field.field_id" translate>
+    <label for="{{field.field_id}}" translate>
       {{field.field_title}}
     </label>
     <div class="row-fluid" class="checkbox-inline">
       <label ng-repeat="option in field.field_options track by $index">
-        <input type="checkbox"
+        <input id="{{field.field_id}}"
+               type="checkbox"
+               name="{{field.field_name}}"
                ng-true-value="true"
                ng-false-value="false"
                ng-model="field.field_value[option.option_value]"
-        > {{option.option_title}}&nbsp;
+        /> {{option.option_title}}&nbsp;
       </label>
     </div>
-    <div ng-show="!sub_form.$pristine">
+    <div ng-show="!{{field.field_name}}Form.$pristine">
       <span class="pull-right required-error" ng-show="field.field_required && !field.field_value">* {{field.field_helpertext | translate}}</span>
     </div>
   </div>

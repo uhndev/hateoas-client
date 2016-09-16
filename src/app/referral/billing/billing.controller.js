@@ -6,10 +6,10 @@
     .controller('BillingController', BillingController);
 
   BillingController.$inject = [
-    '$uibModal', '$scope', 'AltumAPIService'
+    '$uibModal', '$scope'
   ];
 
-  function BillingController($uibModal, $scope, AltumAPI) {
+  function BillingController($uibModal, $scope) {
     var vm = this;
     vm.DEFAULT_GROUP_BY = 'billingStatusName';
     vm.DEFAULT_SUBGROUP_BY = 'siteName';
@@ -53,21 +53,21 @@
         type: 'string'
       },
       {
-        name: 'report',
+        name: 'reportstatus',
         prompt: 'APP.REFERRAL.BILLING.LABELS.REPORT_STATUS',
         type: 'status'
       },
       {
-        name: 'billing',
+        name: 'billingstatus',
         prompt: 'APP.REFERRAL.BILLING.LABELS.BILLING_STATUS',
         type: 'status'
       },
       {
         name: 'serviceEditor',
         prompt: 'APP.REFERRAL.BILLING.LABELS.EDIT_SERVICE',
-        type: 'button',
+        type: 'editButton',
         iconClass: 'glyphicon-edit',
-        onClick: openServiceEditor
+        eventName: 'referralBilling.openServiceEditor'
       }
     ];
 
@@ -100,6 +100,9 @@
             return {
               loadVisitServiceData: false, // don't load in previous visit service data when editing on billing page
               disabled: {
+                altumService: true,
+                programService: true,
+                serviceDate: true,
                 currentCompletion: true // no need to have completion field when editing,
               },
               required: {}
@@ -203,6 +206,22 @@
         $scope.services.init();
       });
     }
+
+    /**
+     * referralBilling.openServiceEditor
+     * @description Event listener for opening service editor
+     */
+    $scope.$on('referralBilling.openServiceEditor', function (event, data) {
+      openServiceEditor(data);
+    });
+
+    /**
+     * referralBilling.openServicePicker
+     * @description Event listener for opening recommendations picker
+     */
+    $scope.$on('referralBilling.openServicePicker', function (event, data) {
+      openServicePicker(data);
+    });
   }
 
 })();

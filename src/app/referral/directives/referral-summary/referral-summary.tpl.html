@@ -15,16 +15,22 @@
         </select>
       </td>
       <td ng-style="{'padding-top': 0}" ng-repeat="flag in referralSummary.flagOptions">
-        <button type="button" class="btn" ng-class="{
+        <div class="btn-group">
+          <button type="button" class="btn" ng-class="{
                   'btn-info': referralSummary.configFlags[flag],
                   'btn-default': !referralSummary.configFlags[flag]
                 }"
-                ng-click="referralSummary.configFlags[flag] = !referralSummary.configFlags[flag]">
-          <i class="fa" ng-class="{
+                  ng-click="referralSummary.configFlags[flag] = !referralSummary.configFlags[flag]">
+            <i class="fa" ng-class="{
               'fa-cog': !referralSummary.configFlags[flag],
               'fa-chevron-down': referralSummary.configFlags[flag]
             }"></i>
-        </button>
+          </button>
+          <button type="button" class="btn btn-default" ng-if="referralSummary.expandToggle"
+                  ng-click="referralSummary.toggleExpansion()">
+            <i class="fa fa-arrows-alt"></i>
+          </button>
+        </div>
       </td>
     </tr>
   </table>

@@ -27,7 +27,7 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.referral = angular.copy(data.items);
-        var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'gender', 'displayName', 'dateOfBirth','country','city','postalCode', 'homeEmail','homePhone');
+        var clientData = _.pick(vm.referral.clientcontact, 'MRN', 'gender', 'displayName', 'dateOfBirth', 'address1', 'address2', 'city', 'province', 'postalCode', 'region', 'homeEmail', 'homePhone');
         var referralData = _.pick(vm.referral, 'createdAt', 'program', 'site', 'physician', 'staff', 'referralContact',
           'claimNumber', 'policyNumber', 'referralDate', 'clinicDate', 'accidentDate', 'sentDate', 'receiveDate', 'dischargeDate', 'statusName', 'referralComments');
 
@@ -69,9 +69,12 @@
             'gender': {title: 'COMMON.MODELS.CLIENT.GENDER', type: 'text'},
             'displayName': {title: 'COMMON.MODELS.PERSON.NAME', type: 'text'},
             'dateOfBirth': {title: 'COMMON.MODELS.PERSON.DATE_OF_BIRTH', type: 'date'},
-            'country': {title: 'COMMON.MODELS.CLIENT.COUNTRY', type: 'text'},
+            'address1': {title: 'COMMON.MODELS.CLIENT.ADDRESS_1', type: 'text'},
+            'address2': {title: 'COMMON.MODELS.CLIENT.ADDRESS_2', type: 'text'},
             'city': {title: 'COMMON.MODELS.CLIENT.CITY', type: 'text'},
-            'postalCode': {title:'COMMON.MODELS.CLIENT.POSTAL_CODE', type:'text'},
+            'province': {title: 'COMMON.MODELS.CLIENT.PROVINCE', type: 'text'},
+            'postalCode': {title: 'COMMON.MODELS.CLIENT.POSTAL_CODE', type: 'text'},
+            'region': {title: 'COMMON.MODELS.CLIENT.REGION', type: 'text'},
             'homeEmail': {title: 'COMMON.MODELS.CLIENT.EMAIL', type: 'text'},
             'homePhone': {title: 'COMMON.MODELS.CLIENT.PHONE', type: 'integer'}
           },

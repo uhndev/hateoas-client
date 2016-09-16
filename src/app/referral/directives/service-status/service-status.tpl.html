@@ -1,9 +1,14 @@
-<select class="form-control" ng-model="serviceStatus.service[serviceStatus.currentStatus]"
-        ng-mouseenter="serviceStatus.init()"
-        ng-options="status.id as status.name for status in serviceStatus.statuses"
-        ng-change="serviceStatus.updateApprovalStatus()"
-        uib-popover-template="serviceStatus.approvalPopover.templateUrl"
-        popover-trigger="mouseenter"
-        popover-title="{{::serviceStatus.approvalPopover.title | translate}}"
-        popover-placement="{{::serviceStatus.placement}}">
-</select>
+<div class="service-status-wrapper"
+     ng-mouseover="serviceStatus.isOpen = true" ng-mouseleave="serviceStatus.isOpen = false"
+     ng-mouseenter="serviceStatus.init()">
+  <select class="form-control" ng-model="serviceStatus.service[serviceStatus.currentStatus]"
+          uib-popover-template="serviceStatus.approvalPopover.templateUrl"
+          popover-trigger="none"
+          popover-title="{{::serviceStatus.approvalPopover.title | translate}}"
+          popover-placement="{{::serviceStatus.placement}}"
+          popover-is-open="serviceStatus.isOpen"
+          ng-disabled="serviceStatus.disabled"
+          ng-options="status.id as status.name for status in serviceStatus.statuses"
+          ng-change="serviceStatus.updateApprovalStatus()">
+  </select>
+</div>

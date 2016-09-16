@@ -1,16 +1,24 @@
 <table class="table table-condensed table-bordered table-responsive">
   <thead>
     <tr>
-      <th translate>APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.STATUS</th>
+      <th translate context-translator="APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.STATUS">
+        APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.STATUS
+      </th>
       <th ng-if="serviceStatus.defaults.detailColumns.name" translate>
         {{::serviceStatus.defaults.detailColumns.name}}
       </th>
-      <th translate>APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CHANGED</th>
+      <th translate context-translator="APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CHANGED">
+        APP.REFERRAL.DIRECTIVES.SERVICE_STATUS.LABELS.CHANGED
+      </th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="approval in ::serviceStatus.service[serviceStatus.collection]"
-        class="{{::serviceStatus.statuses[approval.status].rowClass}}">
+        ng-click="serviceStatus.editStatusType(approval)"
+        class="{{::serviceStatus.statuses[approval.status].rowClass}}"
+        ng-class="{
+          'selectable': serviceStatus.statuses[approval.status].requiresConfirmation
+        }">
       <td class="text-nowrap">
         <b>{{::approval.displayName}}</b>
       </td>
@@ -18,7 +26,7 @@
         <small>{{serviceStatus.renderStatusData(approval)}}</small>
       </td>
       <td>
-        <small am-time-ago="approval.createdAt"></small>
+        <small am-time-ago="approval.updatedAt"></small>
       </td>
     </tr>
   </tbody>
